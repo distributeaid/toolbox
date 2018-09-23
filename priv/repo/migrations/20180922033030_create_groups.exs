@@ -9,6 +9,6 @@ defmodule Ferry.Repo.Migrations.CreateGroups do
       timestamps()
     end
 
-      unique_index(:groups, [:name])
+    create unique_index(:groups, [:name])
   end
 end

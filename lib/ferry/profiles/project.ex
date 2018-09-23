@@ -1,21 +1,20 @@
-defmodule Ferry.Profiles.Group do
+defmodule Ferry.Profiles.Project do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Ferry.Profiles.Project
+  alias Ferry.Profiles.Group
 
-
-  schema "groups" do
+  schema "projects" do
     field :name, :string
     field :description, :string
 
-    has_many :projects, Project # on_delete set in database via migration
+    belongs_to :group, Group
 
     timestamps()
   end
 
   @doc false
-  def changeset(group, attrs) do
-    group
+  def changeset(project, attrs) do
+    project
     |> cast(attrs, [:name, :description])
     |> validate_required([:name])
     |> validate_length(:name, min: 1, max: 255)
