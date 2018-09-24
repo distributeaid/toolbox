@@ -205,7 +205,7 @@ defmodule Ferry.Profiles do
 
   """
   def transfer_project(%Project{} = project, %Group{} = group) do
-    throw "Ferry.Profiles.transfer_project is not implemented... yet ;)"
+    throw "Ferry.Profiles.transfer_project/2 is not implemented... yet ;)"
   end
 
   @doc """

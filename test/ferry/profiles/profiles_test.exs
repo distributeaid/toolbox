@@ -21,9 +21,9 @@ defmodule Ferry.ProfilesTest do
     }
 
     @invalid_attrs %{
-      name_nil: %{name: nil},
-      name_too_short: %{name: ""},
-      name_too_long: %{name: "This name is really way too long.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}
+      is_nil: %{name: nil},
+      too_short: %{name: ""},
+      too_long: %{name: "This name is really way too long.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}
     }
 
     def group_fixture(attrs \\ %{}) do
@@ -76,14 +76,14 @@ defmodule Ferry.ProfilesTest do
     end
 
     test "create_group/1 with invalid data returns error changeset" do
-      # name_nil
-      assert {:error, %Ecto.Changeset{}} = Profiles.create_group(@invalid_attrs.name_nil)
+      # is nil
+      assert {:error, %Ecto.Changeset{}} = Profiles.create_group(@invalid_attrs.is_nil)
 
-      # name_too_short
-      assert {:error, %Ecto.Changeset{}} = Profiles.create_group(@invalid_attrs.name_too_short)
+      # too short
+      assert {:error, %Ecto.Changeset{}} = Profiles.create_group(@invalid_attrs.too_short)
 
-      # name_too_long
-      assert {:error, %Ecto.Changeset{}} = Profiles.create_group(@invalid_attrs.name_too_long)
+      # too long
+      assert {:error, %Ecto.Changeset{}} = Profiles.create_group(@invalid_attrs.too_long)
     end
 
     test "update_group/2 with valid data updates the group" do
@@ -98,16 +98,16 @@ defmodule Ferry.ProfilesTest do
     test "update_group/2 with invalid data returns error changeset" do
       group = group_fixture()
       
-      # name_nil
-      assert {:error, %Ecto.Changeset{}} = Profiles.update_group(group, @invalid_attrs.name_nil)
+      # is nil
+      assert {:error, %Ecto.Changeset{}} = Profiles.update_group(group, @invalid_attrs.is_nil)
       assert group == Profiles.get_group!(group.id)
 
-      # name_too_short
-      assert {:error, %Ecto.Changeset{}} = Profiles.update_group(group, @invalid_attrs.name_too_short)
+      # too short
+      assert {:error, %Ecto.Changeset{}} = Profiles.update_group(group, @invalid_attrs.too_short)
       assert group == Profiles.get_group!(group.id)
 
-      #name_too_long
-      assert {:error, %Ecto.Changeset{}} = Profiles.update_group(group, @invalid_attrs.name_too_long)
+      #too long
+      assert {:error, %Ecto.Changeset{}} = Profiles.update_group(group, @invalid_attrs.too_long)
       assert group == Profiles.get_group!(group.id)
     end
 
@@ -116,6 +116,10 @@ defmodule Ferry.ProfilesTest do
       assert {:ok, %Group{}} = Profiles.delete_group(group)
       assert_raise Ecto.NoResultsError, fn -> Profiles.get_group!(group.id) end
     end
+
+    test "delete_group/1 also deletes the group's projects"
+
+    test "delete_group/1 also deletes the group's locations"
 
     test "change_group/1 returns a group changeset" do
       group = group_fixture()
@@ -142,9 +146,9 @@ defmodule Ferry.ProfilesTest do
     }
 
     @invalid_attrs %{
-      name_nil: %{name: nil},
-      name_too_short: %{name: ""},
-      name_too_long: %{name: "This name is really way too long.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}
+      is_nil: %{name: nil},
+      too_short: %{name: ""},
+      too_long: %{name: "This name is really way too long.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}
     }
 
     def project_fixture(%Group{} = group, attrs \\ %{}) do
@@ -229,14 +233,14 @@ defmodule Ferry.ProfilesTest do
     test "create_project/2 with invalid data returns error changeset" do
       group = group_fixture()
 
-      # name_nil
-      assert {:error, %Ecto.Changeset{}} = Profiles.create_project(group, @invalid_attrs.name_nil)
+      # is nil
+      assert {:error, %Ecto.Changeset{}} = Profiles.create_project(group, @invalid_attrs.is_nil)
 
-      # name_too_short
-      assert {:error, %Ecto.Changeset{}} = Profiles.create_project(group, @invalid_attrs.name_too_short)
+      # too short
+      assert {:error, %Ecto.Changeset{}} = Profiles.create_project(group, @invalid_attrs.too_short)
 
-      # name_too_long
-      assert {:error, %Ecto.Changeset{}} = Profiles.create_project(group, @invalid_attrs.name_too_long)
+      # too long
+      assert {:error, %Ecto.Changeset{}} = Profiles.create_project(group, @invalid_attrs.too_long)
     end
 
     test "update_project/2 with valid data updates the project" do
@@ -256,16 +260,16 @@ defmodule Ferry.ProfilesTest do
       group = group_fixture()
       project = project_fixture(group)
 
-      # name_nil
-      assert {:error, %Ecto.Changeset{}} = Profiles.update_project(project, @invalid_attrs.name_nil)
+      # is nil
+      assert {:error, %Ecto.Changeset{}} = Profiles.update_project(project, @invalid_attrs.is_nil)
       assert project == Profiles.get_project!(project.id)
 
-      # name_too_short
-      assert {:error, %Ecto.Changeset{}} = Profiles.update_project(project, @invalid_attrs.name_too_short)
+      # too short
+      assert {:error, %Ecto.Changeset{}} = Profiles.update_project(project, @invalid_attrs.too_short)
       assert project == Profiles.get_project!(project.id)
 
-      # name_too_long
-      assert {:error, %Ecto.Changeset{}} = Profiles.update_project(project, @invalid_attrs.name_too_long)
+      # too long
+      assert {:error, %Ecto.Changeset{}} = Profiles.update_project(project, @invalid_attrs.too_long)
       assert project == Profiles.get_project!(project.id)
     end
 
@@ -275,6 +279,8 @@ defmodule Ferry.ProfilesTest do
       assert {:ok, %Project{}} = Profiles.delete_project(project)
       assert_raise Ecto.NoResultsError, fn -> Profiles.get_project!(project.id) end
     end
+
+    test "delete_project/1 also deletes the project's locations"
 
     test "change_project/1 returns a project changeset" do
       group = group_fixture()
