@@ -3,9 +3,11 @@ defmodule Ferry.Locations do
   The Locations context.
   """
 
+  import Ecto
   import Ecto.Query, warn: false
   alias Ferry.Repo
 
+  alias Ferry.Profiles.{Group, Project}
   alias Ferry.Locations.Address
 
   @doc """
@@ -81,16 +83,32 @@ defmodule Ferry.Locations do
 
   ## Examples
 
-      iex> create_address(%{field: value})
+      iex> create_address(%Group{}, %{field: value})
       {:ok, %Address{}}
 
-      iex> create_address(%{field: bad_value})
+      iex> create_address(%Project{}, %{field: value})
+      {:ok, %Address{}}
+
+      iex> create_address(%Group{}, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+      iex> create_address(%Project{}, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_address(attrs \\ %{}) do
+  def create_address(owner, attrs \\ %{})
+
+  def create_address(%Group{} = group, attrs) do
     %Address{}
     |> Address.changeset(attrs)
+    |> Ecto.Changeset.put_change(:group_id, group.id)
+    |> Repo.insert()
+  end
+
+  def create_address(%Project{} = project, attrs) do
+    %Address{}
+    |> Address.changeset(attrs)
+    |> Ecto.Changeset.put_change(:project_id, project.id)
     |> Repo.insert()
   end
 

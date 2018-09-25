@@ -87,8 +87,9 @@ defmodule Ferry.ProfilesTest do
     end
 
     test "update_group/2 with valid data updates the group" do
-      # typical
       group = group_fixture()
+
+      # typical
       assert {:ok, group} = Profiles.update_group(group, @update_attrs.typical)
       assert %Group{} = group
       assert group.name == @update_attrs.typical.name
@@ -192,11 +193,11 @@ defmodule Ferry.ProfilesTest do
       "returns an empty list if no projects have been created"
 
       # no projects for group
-      project1 = project_fixture(group2)
+      _ = project_fixture(group2)
       assert Profiles.list_projects(group1) == [],
       "returns an empty list if no projects have been created by the group"
 
-      # multiple projects, multiple groups
+      # multiple projects for group
       project2 = project_fixture(group1, %{name: "A Second Project"})
       project3 = project_fixture(group1, %{name: "A Third Project"})
       assert Profiles.list_projects(group1) == [project2, project3]
@@ -245,9 +246,9 @@ defmodule Ferry.ProfilesTest do
 
     test "update_project/2 with valid data updates the project" do
       group = group_fixture()
+      project = project_fixture(group)
 
       # typical
-      project = project_fixture(group)
       assert {:ok, project} = Profiles.update_project(project, @update_attrs.typical)
       assert %Project{} = project
       assert project.name == @update_attrs.typical.name

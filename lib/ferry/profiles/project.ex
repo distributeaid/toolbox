@@ -7,7 +7,7 @@ defmodule Ferry.Profiles.Project do
     field :name, :string
     field :description, :string
 
-    belongs_to :group, Group
+    belongs_to :group, Group # on_delete set in database via migration
 
     timestamps()
   end
