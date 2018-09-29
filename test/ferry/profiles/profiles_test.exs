@@ -118,10 +118,6 @@ defmodule Ferry.ProfilesTest do
       assert_raise Ecto.NoResultsError, fn -> Profiles.get_group!(group.id) end
     end
 
-    test "delete_group/1 also deletes the group's projects"
-
-    test "delete_group/1 also deletes the group's locations"
-
     test "change_group/1 returns a group changeset" do
       group = group_fixture()
       assert %Ecto.Changeset{} = Profiles.change_group(group)
@@ -281,7 +277,7 @@ defmodule Ferry.ProfilesTest do
       assert_raise Ecto.NoResultsError, fn -> Profiles.get_project!(project.id) end
     end
 
-    test "delete_project/1 also deletes the project's locations"
+    test "the database's on_delete:delete_all setting deletes related projects when a group is deleted"
 
     test "change_project/1 returns a project changeset" do
       group = group_fixture()

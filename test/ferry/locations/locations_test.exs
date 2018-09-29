@@ -1,11 +1,12 @@
 defmodule Ferry.LocationsTest do
   use Ferry.DataCase
 
-  alias Ferry.{Profiles, Locations}
+  alias Ferry.Locations
 
   # Addresses
   # ==============================================================================
   describe "addresses" do
+    alias Ferry.Profiles
     alias Ferry.Locations.Address
 
     # Data & Helpers
@@ -182,6 +183,10 @@ defmodule Ferry.LocationsTest do
       assert {:ok, %Address{}} = Locations.delete_address(address)
       assert_raise Ecto.NoResultsError, fn -> Locations.get_address!(address.id) end
     end
+
+    test "the database's on_delete:delete_all setting deletes related addresses when a group is deleted"
+
+    test "the database's on_delete:delete_all setting deletes related addresses when a project is deleted"
 
     test "change_address/1 returns a address changeset" do
       {group, _} = group_and_project_fixtures()
