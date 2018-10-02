@@ -24,18 +24,20 @@ defmodule Ferry.CRM do
   def list_contacts(%Group{} = group) do
     Repo.all(
       from c in Contact,
-        select: c,
         where: c.group_id == ^group.id,
-        order_by: c.id
+        left_join: e in assoc(c, :emails),
+        preload: [emails: e],
+        order_by: [c.id, e.email]
     )
   end
 
   def list_contacts(%Project{} = project) do
     Repo.all(
       from c in Contact,
-        select: c,
         where: c.project_id == ^project.id,
-        order_by: c.id
+        left_join: e in assoc(c, :emails),
+        preload: [emails: e],
+        order_by: [c.id, e.email]
     )
   end
 
@@ -53,7 +55,15 @@ defmodule Ferry.CRM do
       ** (Ecto.NoResultsError)
 
   """
-  def get_contact!(id), do: Repo.get!(Contact, id)
+  def get_contact!(id) do
+    contact_query =
+      from c in Contact,
+        left_join: e in assoc(c, :emails),
+        preload: [emails: e],
+        order_by: [e.email]
+
+    Repo.get!(contact_query, id)
+  end
 
   @doc """
   Creates a contact.

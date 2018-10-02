@@ -3,6 +3,7 @@ defmodule Ferry.Profiles.Project do
   import Ecto.Changeset
   alias Ferry.Profiles.Group
 
+
   schema "projects" do
     field :name, :string
     field :description, :string
