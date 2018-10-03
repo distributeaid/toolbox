@@ -21,8 +21,6 @@ defmodule Ferry.LocationsTest do
       typical: %{label: "New HQ", street: "123 Office Street", city: "Berlin", state: "Brandenburg", country: "Germany", zip_code: "161-AFA"}
     }
 
-    # TODO: Should really be testing these individually so that they don't hide each other.
-    #   ex: nil label isn't caught but the whole invalid test succeeds because nil city/country is caught
     @invalid_attrs %{
       is_nil: %{label: nil, city: nil, country: nil},
       too_short: %{label: "", city: "", country: ""},
@@ -131,8 +129,10 @@ defmodule Ferry.LocationsTest do
       {group, project} = group_and_project_fixtures()
 
       # is nil
-      assert {:error, %Ecto.Changeset{}} = Locations.create_address(group, @invalid_attrs.is_nil)
-      assert {:error, %Ecto.Changeset{}} = Locations.create_address(project, @invalid_attrs.is_nil)
+      assert {:error, changeset = %Ecto.Changeset{}} = Locations.create_address(group, @invalid_attrs.is_nil)
+      assert 3 == changeset.errors |> length
+      assert {:error, changeset = %Ecto.Changeset{}} = Locations.create_address(project, @invalid_attrs.is_nil)
+      assert 3 == changeset.errors |> length
 
       # too short
       assert {:error, %Ecto.Changeset{}} = Locations.create_address(group, @invalid_attrs.too_short)
@@ -165,7 +165,8 @@ defmodule Ferry.LocationsTest do
       address = address_fixture(group)
 
       # is nil
-      assert {:error, %Ecto.Changeset{}} = Locations.update_address(address, @invalid_attrs.is_nil)
+      assert {:error, changeset = %Ecto.Changeset{}} = Locations.update_address(address, @invalid_attrs.is_nil)
+      assert 3 == changeset.errors |> length
       assert address == Locations.get_address!(address.id)
 
       # too short

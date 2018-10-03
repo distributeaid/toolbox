@@ -3,7 +3,7 @@ defmodule Ferry.CRM.Contact do
   import Ecto.Changeset
   alias Ferry.Repo
   alias Ferry.Profiles.{Group, Project}
-  alias Ferry.CRM.Email
+  alias Ferry.CRM.{Email, Phone}
 
 
   schema "contacts" do
@@ -11,6 +11,7 @@ defmodule Ferry.CRM.Contact do
     field :description, :string
 
     has_many :emails, Email, on_replace: :delete # on_delete set in database via migration
+    has_many :phones, Phone, on_replace: :delete # on_delete set in database via migration
 
     belongs_to :group, Group # on_delete set in database via migration
     belongs_to :project, Project # on_delete set in database via migration
@@ -21,9 +22,10 @@ defmodule Ferry.CRM.Contact do
   @doc false
   def changeset(contact, attrs) do
     contact
-    |> Repo.preload(:emails)
+    |> Repo.preload([:emails, :phones])
     |> cast(attrs, [:label, :description])
     |> cast_assoc(:emails, [:required])
+    |> cast_assoc(:phones, [:required])
     |> validate_length(:label, max: 255)
     # TODO: add a changeset check constraint that matches the db one?
     #       https://hexdocs.pm/ecto/Ecto.Changeset.html#check_constraint/3

@@ -136,7 +136,7 @@ defmodule Ferry.Profiles do
     Repo.all(
       from p in Project,
       where: p.group_id == ^group.id,
-      order_by: p.inserted_at
+      order_by: p.id
     )
   end
 

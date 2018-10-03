@@ -5,6 +5,10 @@ defmodule Ferry.CRMTest do
 
   # Contacts
   # ==============================================================================
+  # NOTE: There is nothing that tests the creation / update / deletion of
+  #       associated emails and phone numbers at the same time.  Individual
+  #       tests of those associations is fine for now, but if related bugs pop
+  #       up the associations should be tested together as well.
   describe "contacts" do
     alias Ferry.Profiles
     alias Ferry.CRM.Contact
@@ -211,10 +215,16 @@ defmodule Ferry.CRMTest do
     }
 
     @invalid_emails_attr %{
-      is_nil: %{emails: [nil]},
+      is_nil: %{emails: [
+        %{email: nil}
+      ]},
 
       bad_format: %{emails: [
         %{email: "not_an_email"}
+      ]},
+
+      too_short: %{emails: [
+        %{email: "a@b."}
       ]},
 
       too_long: %{emails: [
@@ -245,8 +255,6 @@ defmodule Ferry.CRMTest do
       {_, project1} = group_and_project_fixtures(1)
       {_, project2} = group_and_project_fixtures(2)
 
-      email1 = %{email: "email1@example.com"}
-      email2 = %{email: "email2@example.com"}
       email3 = %{email: "email3@example.com"}
       email4 = %{email: "email4@example.com"}
 
@@ -297,6 +305,11 @@ defmodule Ferry.CRMTest do
 
       # bad format
       contact_with_invalid_email_attrs = Enum.into(@invalid_emails_attr.bad_format, @valid_attrs.typical)
+      assert {:error, %Ecto.Changeset{}} = CRM.create_contact(group, contact_with_invalid_email_attrs)
+      assert {:error, %Ecto.Changeset{}} = CRM.create_contact(project, contact_with_invalid_email_attrs)
+
+      # too short
+      contact_with_invalid_email_attrs = Enum.into(@invalid_emails_attr.too_short, @valid_attrs.typical)
       assert {:error, %Ecto.Changeset{}} = CRM.create_contact(group, contact_with_invalid_email_attrs)
       assert {:error, %Ecto.Changeset{}} = CRM.create_contact(project, contact_with_invalid_email_attrs)
 
@@ -371,6 +384,10 @@ defmodule Ferry.CRMTest do
       assert {:error, %Ecto.Changeset{}} = CRM.update_contact(contact, @invalid_emails_attr.bad_format)
       assert contact == CRM.get_contact!(contact.id)
 
+      # too short
+      assert {:error, %Ecto.Changeset{}} = CRM.update_contact(contact, @invalid_emails_attr.too_short)
+      assert contact == CRM.get_contact!(contact.id)  
+
       # too long
       assert {:error, %Ecto.Changeset{}} = CRM.update_contact(contact, @invalid_emails_attr.too_long)
       assert contact == CRM.get_contact!(contact.id)
@@ -385,6 +402,240 @@ defmodule Ferry.CRMTest do
       assert [] == Repo.all(
         from e in Email,
           where: e.contact_id == ^contact.id
+      )
+    end
+  end
+
+  # Phones
+  # ==============================================================================  
+  describe "phones" do
+    alias Ferry.CRM.{Contact, Phone}
+
+    # Data & Helpers
+    # ----------------------------------------------------------
+    # These are attributes for the Contact.phones field.
+    @valid_phones_attr %{
+      typical: %{phones: [
+        %{country_code: "+44", number: "7445 823 932"},
+        %{country_code: "+1", number: "(417) 496-2928"}
+      ]}
+    }
+
+    @update_phones_attr %{
+      # 1st and 2nd phones should remain, 3rd phone should be added
+      addition: %{phones: [
+        %{country_code: "+44", number: "7445 823 932"},
+        %{country_code: "+1", number: "(417) 496-2928"},
+        %{country_code: "+1", number: "229-609-0247"}
+      ]},
+
+      # 1st phone should remain, 2nd phone should be removed
+      removal: %{phones: [
+        %{country_code: "+44", number: "7445 823 932"}
+      ]},
+
+      # 1st phone should remain, 2nd phone should be replaced
+      replacement: %{phones: [
+        %{country_code: "+44", number: "7445 823 932"},
+        %{country_code: "+1", number: "229-609-0247"}
+      ]}
+    }
+
+    @invalid_phones_attr %{
+      is_nil: %{phones: [
+        %{country_code: nil, number: nil}
+      ]},
+
+      too_short: %{phones: [
+        %{country_code: "", number: ""}
+      ]},
+
+      too_long: %{phones: [
+        %{
+          country_code: "way too long xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          number: "way too long xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        }
+      ]}
+    }
+
+    # Tests
+    # ----------------------------------------------------------
+
+    test "list_contacts/1 includes phones when returning all contacts for a group" do
+      {group1, _} = group_and_project_fixtures(1)
+      {group2, _} = group_and_project_fixtures(2)
+
+      phone3 = %{country_code: "+30", number: "123 456 7890"}
+      phone4 = %{country_code: "+33", number: "98 76 54 32 11"}
+
+      contact1 = contact_fixture(group1, @valid_phones_attr.typical)
+      contact2 = contact_fixture(group1, %{phones: [phone3]})
+      _ = contact_fixture(group2, %{phones: [phone4]})
+
+      # all phones are included for the specified group
+      contacts = CRM.list_contacts(group1)
+      assert contacts == [contact1, contact2]
+    end
+
+    test "list_contacts/1 includes phones when returning all contacts for a project" do
+      {_, project1} = group_and_project_fixtures(1)
+      {_, project2} = group_and_project_fixtures(2)
+
+      phone3 = %{country_code: "+30", number: "123 456 7890"}
+      phone4 = %{country_code: "+33", number: "98 76 54 32 11"}
+
+      contact1 = contact_fixture(project1, @valid_phones_attr.typical)
+      contact2 = contact_fixture(project1, %{phones: [phone3]})
+      _ = contact_fixture(project2, %{phones: [phone4]})
+
+      # all phones are included for the specified group
+      contacts = CRM.list_contacts(project1)
+      assert contacts == [contact1, contact2]
+    end
+
+    test "get_contact!/1 includes phones when returning the contact with given id" do
+      {group, _} = group_and_project_fixtures()
+      contact = contact_fixture(group, @valid_phones_attr.typical)
+      assert CRM.get_contact!(contact.id) == contact
+    end
+
+    test "create_contact/2 with valid data creates a contact with phones for a group" do
+      {group, _} = group_and_project_fixtures()
+      contact_attrs = Enum.into(@valid_phones_attr.typical, @valid_attrs.typical)
+
+      # typical
+      assert {:ok, %Contact{} = contact} = CRM.create_contact(group, contact_attrs)
+      assert 2 == length(contact.phones)
+      assert Enum.at(contact.phones, 0).country_code == Enum.at(@valid_phones_attr.typical.phones, 0).country_code
+      assert Enum.at(contact.phones, 0).number == Enum.at(@valid_phones_attr.typical.phones, 0).number
+      assert Enum.at(contact.phones, 1).country_code == Enum.at(@valid_phones_attr.typical.phones, 1).country_code
+      assert Enum.at(contact.phones, 1).number == Enum.at(@valid_phones_attr.typical.phones, 1).number
+    end
+
+    test "create_contact/2 with valid data creates a contact with phones for a project" do
+      {_, project} = group_and_project_fixtures()
+      contact_attrs = Enum.into(@valid_phones_attr.typical, @valid_attrs.typical)
+
+      # typical
+      assert {:ok, %Contact{} = contact} = CRM.create_contact(project, contact_attrs)
+      assert 2 == length(contact.phones)
+      assert Enum.at(contact.phones, 0).country_code == Enum.at(@valid_phones_attr.typical.phones, 0).country_code
+      assert Enum.at(contact.phones, 1).country_code == Enum.at(@valid_phones_attr.typical.phones, 1).country_code
+    end
+
+    test "create_contact/1 with invalid phone data returns error changeset" do
+      {group, project} = group_and_project_fixtures()
+
+      # is nil
+      contact_with_invalid_phone_attrs = Enum.into(@invalid_phones_attr.is_nil, @valid_attrs.typical)
+      assert {:error, changeset = %Ecto.Changeset{}} = CRM.create_contact(group, contact_with_invalid_phone_attrs)
+      assert 2 == Enum.at(changeset.changes.phones, 0).errors |> length
+      assert {:error, changeset = %Ecto.Changeset{}} = CRM.create_contact(project, contact_with_invalid_phone_attrs)
+      assert 2 == Enum.at(changeset.changes.phones, 0).errors |> length
+
+      # too short
+      contact_with_invalid_phone_attrs = Enum.into(@invalid_phones_attr.too_short, @valid_attrs.typical)
+      assert {:error, changeset = %Ecto.Changeset{}} = CRM.create_contact(group, contact_with_invalid_phone_attrs)
+      assert 2 == Enum.at(changeset.changes.phones, 0).errors |> length
+      assert {:error, changeset = %Ecto.Changeset{}} = CRM.create_contact(project, contact_with_invalid_phone_attrs)
+      assert 2 == Enum.at(changeset.changes.phones, 0).errors |> length
+
+      # too long
+      contact_with_invalid_phone_attrs = Enum.into(@invalid_phones_attr.too_long, @valid_attrs.typical)
+      assert {:error, changeset = %Ecto.Changeset{}} = CRM.create_contact(group, contact_with_invalid_phone_attrs)
+      assert 2 == Enum.at(changeset.changes.phones, 0).errors |> length
+      assert {:error, changeset = %Ecto.Changeset{}} = CRM.create_contact(project, contact_with_invalid_phone_attrs)
+      assert 2 == Enum.at(changeset.changes.phones, 0).errors |> length
+    end
+
+    # TODO: The update tests actually removes all of the old Phones and adds new
+    #       database entries.  Functionally it doesn't matter- in practice there
+    #       might be a small performance hit.  The test should be updated to
+    #       reflect what happens in practice:
+    #
+    #         - Does the frontend return a list of strings? If so, the update
+    #           tests accurately reflect the behavior and performance.
+    #         - Does the frontend return Phone objects for existing / updated
+    #           entries?  If so the test should be changed to use phone objects.
+    #           Note that adding new phones is reflected accurately either way,
+    #           since those will just be phone strings.
+    test "update_contact/2 with valid data adds new phones" do
+      {group, _} = group_and_project_fixtures()
+      contact_with_phone_attrs = Enum.into(@valid_phones_attr.typical, @valid_attrs.typical)
+      contact = contact_fixture(group, contact_with_phone_attrs)
+
+      # addition
+      assert {:ok, contact} = CRM.update_contact(contact, @update_phones_attr.addition)
+      assert %Contact{} = contact
+      assert 3 == length(contact.phones)
+      assert Enum.at(contact.phones, 0).country_code == Enum.at(@valid_phones_attr.typical.phones, 0).country_code
+      assert Enum.at(contact.phones, 0).number == Enum.at(@valid_phones_attr.typical.phones, 0).number
+      assert Enum.at(contact.phones, 1).country_code == Enum.at(@valid_phones_attr.typical.phones, 1).country_code
+      assert Enum.at(contact.phones, 1).number == Enum.at(@valid_phones_attr.typical.phones, 1).number
+      assert Enum.at(contact.phones, 2).country_code == Enum.at(@update_phones_attr.addition.phones, 2).country_code
+      assert Enum.at(contact.phones, 2).number == Enum.at(@update_phones_attr.addition.phones, 2).number
+    end
+
+    # See note about update_contact/2 phone tests above.
+    test "update_contact/2 with valid data deletes removed phones" do
+      {group, _} = group_and_project_fixtures()
+      contact_with_phone_attrs = Enum.into(@valid_phones_attr.typical, @valid_attrs.typical)
+      contact = contact_fixture(group, contact_with_phone_attrs)
+
+      # removal
+      assert {:ok, contact} = CRM.update_contact(contact, @update_phones_attr.removal)
+      assert %Contact{} = contact
+      assert 1 == length(contact.phones)
+      assert Enum.at(contact.phones, 0).country_code == Enum.at(@valid_phones_attr.typical.phones, 0).country_code
+      assert Enum.at(contact.phones, 0).number == Enum.at(@valid_phones_attr.typical.phones, 0).number
+    end
+
+    # See note about update_contact/2 phone tests above.
+    test "update_contact/2 with valid data replaces changed phones" do
+      {group, _} = group_and_project_fixtures()
+      contact_with_phone_attrs = Enum.into(@valid_phones_attr.typical, @valid_attrs.typical)
+      contact = contact_fixture(group, contact_with_phone_attrs)
+
+      # addition
+      assert {:ok, contact} = CRM.update_contact(contact, @update_phones_attr.replacement)
+      assert %Contact{} = contact
+      assert 2 == length(contact.phones)
+      assert Enum.at(contact.phones, 0).country_code == Enum.at(@valid_phones_attr.typical.phones, 0).country_code
+      assert Enum.at(contact.phones, 0).number == Enum.at(@valid_phones_attr.typical.phones, 0).number
+      assert Enum.at(contact.phones, 1).country_code == Enum.at(@update_phones_attr.replacement.phones, 1).country_code
+      assert Enum.at(contact.phones, 1).number == Enum.at(@update_phones_attr.replacement.phones, 1).number
+    end
+
+    test "update_contact/2 with invalid phone data returns error changeset" do
+      {group, _} = group_and_project_fixtures()
+      contact_with_phone_attrs = Enum.into(@valid_phones_attr.typical, @valid_attrs.typical)
+      contact = contact_fixture(group, contact_with_phone_attrs)
+
+      # is nil
+      assert {:error, changeset = %Ecto.Changeset{}} = CRM.update_contact(contact, @invalid_phones_attr.is_nil)
+      assert 2 == Enum.at(changeset.changes.phones, 2).errors |> length
+      assert contact == CRM.get_contact!(contact.id)
+
+      # too short
+      assert {:error, changeset = %Ecto.Changeset{}} = CRM.update_contact(contact, @invalid_phones_attr.too_short)
+      assert 2 == Enum.at(changeset.changes.phones, 2).errors |> length
+      assert contact == CRM.get_contact!(contact.id)
+
+      # too long
+      assert {:error, changeset = %Ecto.Changeset{}} = CRM.update_contact(contact, @invalid_phones_attr.too_long)
+      assert 2 == Enum.at(changeset.changes.phones, 2).errors |> length
+      assert contact == CRM.get_contact!(contact.id)
+    end
+
+    test "delete_contact/1 also deletes the phones associated with a contact" do
+      {group, _} = group_and_project_fixtures()
+      contact_with_phone_attrs = Enum.into(@valid_phones_attr.typical, @valid_attrs.typical)
+      contact = contact_fixture(group, contact_with_phone_attrs)
+
+      assert {:ok, %Contact{}} = CRM.delete_contact(contact)
+      assert [] == Repo.all(
+        from p in Phone,
+          where: p.contact_id == ^contact.id
       )
     end
   end

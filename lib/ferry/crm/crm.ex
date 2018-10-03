@@ -26,8 +26,9 @@ defmodule Ferry.CRM do
       from c in Contact,
         where: c.group_id == ^group.id,
         left_join: e in assoc(c, :emails),
-        preload: [emails: e],
-        order_by: [c.id, e.email]
+        left_join: p in assoc(c, :phones),
+        preload: [emails: e, phones: p],
+        order_by: [c.id, e.id, p.id]
     )
   end
 
@@ -36,8 +37,9 @@ defmodule Ferry.CRM do
       from c in Contact,
         where: c.project_id == ^project.id,
         left_join: e in assoc(c, :emails),
-        preload: [emails: e],
-        order_by: [c.id, e.email]
+        left_join: p in assoc(c, :phones),
+        preload: [emails: e, phones: p],
+        order_by: [c.id, e.id, p.id]
     )
   end
 
@@ -59,8 +61,9 @@ defmodule Ferry.CRM do
     contact_query =
       from c in Contact,
         left_join: e in assoc(c, :emails),
-        preload: [emails: e],
-        order_by: [e.email]
+        left_join: p in assoc(c, :phones),
+        preload: [emails: e, phones: p],
+        order_by: [e.id, p.id]
 
     Repo.get!(contact_query, id)
   end
@@ -145,4 +148,5 @@ defmodule Ferry.CRM do
   def change_contact(%Contact{} = contact) do
     Contact.changeset(contact, %{})
   end
+
 end
