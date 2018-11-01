@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Distribute Aid</title>
 
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
@@ -12,13 +13,26 @@
   </head>
 
   <body>
-    <header>Hello World</header>
+    <header>
+      <h1>Distribute Aid</h1>
+    </header>
 
-    <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-    <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+    <% if info = get_flash(@conn, :info) do %>
+      <p class="alert is-info" role="alert"><%= info %></p>
+    <% end %>
+
+    <% if error = get_flash(@conn, :error) do %>
+      <p class="alert is-error" role="alert"><%= error %></p>
+    <% end %>
 
     <main role="main">
       <%= render @view_module, @view_template, assigns %>
     </main>
+
+    <footer>
+      <p>
+        The end.
+      </p>
+    </footer>
   </body>
 </html>
