@@ -16,7 +16,7 @@ defmodule FerryWeb.Router do
   scope "/", FerryWeb do
     pipe_through :browser # Use the default browser stack
 
-    get "/", PageController, :index
+    get "/", HomePageController, :index
   end
 
   # Other scopes may use custom stacks.
