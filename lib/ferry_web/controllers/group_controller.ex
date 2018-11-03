@@ -1,13 +1,15 @@
-# Group Controller
-# ==============================================================================
 defmodule FerryWeb.GroupController do
   use FerryWeb, :controller
 
   alias Ferry.Profiles
   alias Ferry.Profiles.Group
 
+  # Group Controller
+  # ==============================================================================
+
   # Show
   # ----------------------------------------------------------
+
   # TODO: add pagination
   def index(conn, _params) do
     groups = Profiles.list_groups()
@@ -25,6 +27,7 @@ defmodule FerryWeb.GroupController do
 
   # Create
   # ----------------------------------------------------------
+
   def new(conn, _params) do
     changeset = Profiles.change_group(%Group{})
     render(conn, "new.html", changeset: changeset)
@@ -45,6 +48,7 @@ defmodule FerryWeb.GroupController do
 
   # Update
   # ----------------------------------------------------------
+
   def edit(conn, %{"id" => id}) do
     group = Profiles.get_group!(id)
     changeset = Profiles.change_group(group)
@@ -66,6 +70,7 @@ defmodule FerryWeb.GroupController do
 
   # Delete
   # ----------------------------------------------------------
+
   def delete(conn, %{"id" => id}) do
     group = Profiles.get_group!(id)
     {:ok, _group} = Profiles.delete_group(group)
@@ -74,4 +79,5 @@ defmodule FerryWeb.GroupController do
     |> put_flash(:info, "Group deleted successfully.")
     |> redirect(to: group_path(conn, :index))
   end
+
 end

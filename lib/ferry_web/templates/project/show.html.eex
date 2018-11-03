@@ -1,0 +1,21 @@
+<h2>
+  Show Project
+  <small>(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</small>
+</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @project.name %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @project.description %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: group_project_path(@conn, :edit, @group, @project) %></span>
+<span><%= link "Back", to: group_project_path(@conn, :index, @group) %></span>

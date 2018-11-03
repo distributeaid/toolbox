@@ -8,6 +8,7 @@ defmodule FerryWeb.GroupControllerTest do
 
   # Data & Helpers
   # ----------------------------------------------------------
+
   @create_attrs %{name: "My Local Refugee Aid Group", description: "We help newcomers!"}
   @update_attrs %{name: "My International Refugee Aid Group", description: "We collect donations!"}
   @invalid_attrs %{name: nil}
@@ -24,7 +25,9 @@ defmodule FerryWeb.GroupControllerTest do
 
   # Show
   # ----------------------------------------------------------
+
   describe "index" do
+    # TODO: actually lists no groups since none are created... test both cases
     test "lists all groups", %{conn: conn} do
       conn = get conn, group_path(conn, :index)
       assert html_response(conn, 200) =~ "Listing Groups"
@@ -48,6 +51,7 @@ defmodule FerryWeb.GroupControllerTest do
 
   # Create
   # ----------------------------------------------------------
+
   describe "new group" do
     test "renders form", %{conn: conn} do
       conn = get conn, group_path(conn, :new)
@@ -74,6 +78,7 @@ defmodule FerryWeb.GroupControllerTest do
 
   # Update
   # ----------------------------------------------------------
+
   describe "edit group" do
     setup [:create_group]
 
@@ -114,6 +119,7 @@ defmodule FerryWeb.GroupControllerTest do
 
   # Delete
   # ----------------------------------------------------------
+
   describe "delete group" do
     setup [:create_group]
 

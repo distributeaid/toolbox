@@ -1,0 +1,39 @@
+<h2>
+  Listing Projects
+  <small>(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</small>
+</h2>
+
+<%= if has_projects? @projects do %>
+  <table class="is-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+  <%= for project <- @projects do %>
+      <tr>
+        <td><%= project.name %></td>
+        <td><%= project.description %></td>
+
+        <td class="text-right">
+          <span><%= link "Show", to: group_project_path(@conn, :show, @group, project), class: "button is-small" %></span>
+          <span><%= link "Edit", to: group_project_path(@conn, :edit, @group, project), class: "button is-small" %></span>
+          <span><%= link "Delete", to: group_project_path(@conn, :delete, @group, project), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
+        </td>
+      </tr>
+  <% end %>
+    </tbody>
+  </table>
+
+<% else %>
+  <p>
+    No projects have been created.
+  </p>
+<% end %>
+
+
+<span><%= link "New Project", to: group_project_path(@conn, :new, @group) %></span>

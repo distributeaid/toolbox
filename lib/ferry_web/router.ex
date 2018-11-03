@@ -18,11 +18,13 @@ defmodule FerryWeb.Router do
 
     get "/", HomePageController, :index
 
-    resources "/groups", GroupController
-      # TODO: move `/group/new` into an admin scope
+    # TODO: move `/group/new` into an admin scope
+    resources "/groups", GroupController do
+      # Nested Resources - https://hexdocs.pm/phoenix/routing.html#nested-resources
+      resources "/projects", ProjectController
+    end
 
-    # TODO: see Nested Resources section of the guide to model relationships in the routes
-    #       https://hexdocs.pm/phoenix/routing.html#nested-resources
+#    resources "/projects", ProjectController, except: [:new, :create]
   end
 
   # TODO: see Scoped Routes section of the guide to handle admin functionality
