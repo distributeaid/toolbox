@@ -17,11 +17,11 @@
       <h1>Distribute Aid</h1>
     </header>
 
-    <% if info = get_flash(@conn, :info) do %>
+    <%= if info = get_flash(@conn, :info) do %>
       <p class="alert is-info" role="alert"><%= info %></p>
     <% end %>
 
-    <% if error = get_flash(@conn, :error) do %>
+    <%= if error = get_flash(@conn, :error) do %>
       <p class="alert is-error" role="alert"><%= error %></p>
     <% end %>
 

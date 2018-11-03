@@ -1,3 +1,3 @@
-defmodule FerryWeb.PageViewTest do
+defmodule FerryWeb.HomePageViewTest do
   use FerryWeb.ConnCase, async: true
 end

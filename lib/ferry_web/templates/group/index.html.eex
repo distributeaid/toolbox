@@ -1,0 +1,36 @@
+<h2>Listing Groups</h2>
+
+<%= if has_groups? @groups do %>
+  <table class="is-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+  <%= for group <- @groups do %>
+      <tr>
+        <td><%= group.name %></td>
+        <td><%= group.description %></td>
+
+        <td>
+          <span><%= link "Show", to: group_path(@conn, :show, group), class: "button is-small" %></span>
+          <span><%= link "Edit", to: group_path(@conn, :edit, group), class: "button is-small" %></span>
+          <span><%= link "Delete", to: group_path(@conn, :delete, group), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
+        </td>
+      </tr>
+  <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<%= if false == has_groups? @groups do %>
+  <p>
+    No groups have been created.
+  </p>
+<% end %>
+
+<span><%= link "New Group", to: group_path(@conn, :new) %></span>
