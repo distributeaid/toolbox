@@ -22,7 +22,8 @@ defmodule FerryWeb.GroupController do
   #       (`debug_errors: true` in config/dev.exs)
   def show(conn, %{"id" => id}) do
     group = Profiles.get_group!(id)
-    render(conn, "show.html", group: group)
+    projects = Profiles.list_projects(group)
+    render(conn, "show.html", group: group, projects: projects)
   end
 
   # Create

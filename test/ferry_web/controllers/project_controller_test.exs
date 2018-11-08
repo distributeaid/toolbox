@@ -41,7 +41,13 @@ defmodule FerryWeb.ProjectControllerTest do
     setup [:create_group]
 
     # TODO: actually lists no projects since none are created... test both cases
-    test "lists all projects", %{conn: conn, group: group} do
+    test "lists all projects", %{conn: conn} do
+      conn = get conn, project_path(conn, :index)
+      assert html_response(conn, 200) =~ "Listing Projects"
+    end
+
+    # TODO: actually lists no projects since none are created... test both cases
+    test "lists all projects for a group", %{conn: conn, group: group} do
       conn = get conn, group_project_path(conn, :index, group)
       assert html_response(conn, 200) =~ "Listing Projects"
     end

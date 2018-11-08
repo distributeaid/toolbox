@@ -20,9 +20,9 @@
         <td><%= project.description %></td>
 
         <td class="text-right">
-          <span><%= link "Show", to: group_project_path(@conn, :show, @group, project), class: "button is-small" %></span>
-          <span><%= link "Edit", to: group_project_path(@conn, :edit, @group, project), class: "button is-small" %></span>
-          <span><%= link "Delete", to: group_project_path(@conn, :delete, @group, project), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
+          <span><%= link "Show", to: group_project_path(@conn, :show, project.group_id, project), class: "button is-small" %></span>
+          <span><%= link "Edit", to: group_project_path(@conn, :edit, project.group_id, project), class: "button is-small" %></span>
+          <span><%= link "Delete", to: group_project_path(@conn, :delete, project.group_id, project), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
         </td>
       </tr>
   <% end %>
@@ -35,5 +35,5 @@
   </p>
 <% end %>
 
-
 <span><%= link "New Project", to: group_project_path(@conn, :new, @group) %></span>
+<span><%= link "Home", to: home_page_path(@conn, :index) %></span>

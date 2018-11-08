@@ -10,13 +10,17 @@ defmodule FerryWeb.ProjectController do
   # Show
   # ----------------------------------------------------------
 
-  # TODO: add `index` function which lists all projects for all groups w/ pagination
-
   # TODO: add pagination?
   def index(conn, %{"group_id" => group_id}) do
     group = Profiles.get_group!(group_id)
     projects = Profiles.list_projects(group)
     render(conn, "index.html", group: group, projects: projects)
+  end
+
+  # TODO: add pagination
+  def index(conn, _params) do
+    projects = Profiles.list_projects()
+    render(conn, "index-all.html", projects: projects)
   end
 
   def show(conn, %{"group_id" => group_id, "id" => id}) do

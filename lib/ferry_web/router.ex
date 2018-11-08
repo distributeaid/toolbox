@@ -25,6 +25,7 @@ defmodule FerryWeb.Router do
     end
 
 #    resources "/projects", ProjectController, except: [:new, :create]
+    resources "/projects", ProjectController, only: [:index]
   end
 
   # TODO: see Scoped Routes section of the guide to handle admin functionality

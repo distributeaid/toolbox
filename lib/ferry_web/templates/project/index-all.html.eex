@@ -1,18 +1,7 @@
-<h2>Show Group</h2>
-
-<ul>
-
-  <li>
-    <strong>Name:</strong>
-    <%= @group.name %>
-  </li>
-
-  <li>
-    <strong>Description:</strong>
-    <%= @group.description %>
-  </li>
-
-</ul>
+<h2>
+  Listing Projects
+  <small>(for all groups)</small>
+</h2>
 
 <%= if has_projects? @projects do %>
   <table class="is-striped">
@@ -46,6 +35,5 @@
   </p>
 <% end %>
 
-<span><%= link "Projects", to: group_project_path(@conn, :index, @group) %></span>
-<span><%= link "Edit", to: group_path(@conn, :edit, @group) %></span>
-<span><%= link "Back", to: group_path(@conn, :index) %></span>
+
+<span><%= link "Home", to: home_page_path(@conn, :index) %></span>
