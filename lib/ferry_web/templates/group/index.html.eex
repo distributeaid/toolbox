@@ -8,6 +8,7 @@
         <th>Description</th>
         <th>Controls</th>
         <th>Projects</th>
+        <th>Links</th>
       </tr>
     </thead>
     <tbody>
@@ -22,6 +23,9 @@
         </td>
         <td>
           <%= link "Projects", to: group_project_path(@conn, :index, group) %>
+        </td>
+        <td>
+          <%= link "Links", to: group_link_path(@conn, :index, group) %>
         </td>
       </tr>
   <% end %>

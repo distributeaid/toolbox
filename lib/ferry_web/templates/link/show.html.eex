@@ -1,0 +1,21 @@
+<h2>
+  Show Link
+  <small>(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</small>
+</h2>
+
+<ul>
+
+  <li>
+    <strong>Category:</strong>
+    <%= @link.category %>
+  </li>
+
+  <li>
+    <strong>Link:</strong>
+    <%= link label_text(@link), to: @link.url %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: group_link_path(@conn, :edit, @link.group_id, @link) %></span>
+<span><%= link "Back", to: group_link_path(@conn, :index, @link.group_id) %></span>

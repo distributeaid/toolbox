@@ -29,8 +29,8 @@ defmodule FerryWeb.ProjectController do
     render(conn, "show.html", group: group, project: project)
   end
 
-    # Create
-    # ----------------------------------------------------------
+  # Create
+  # ----------------------------------------------------------
 
   def new(conn, %{"group_id" => group_id}) do
     group = Profiles.get_group!(group_id)

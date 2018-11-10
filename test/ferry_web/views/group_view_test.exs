@@ -13,6 +13,16 @@ defmodule FerryWeb.GroupViewTest do
     assert GroupView.has_groups? groups
   end
 
+  test "has_links/1 determines if there are links or not" do
+    links = []
+    refute GroupView.has_links? links
+
+    # a pretend project...
+    # since fixtures aren't setup in this testing file yet
+    links = [%{url: "https://example.org"}]
+    assert GroupView.has_links? links
+  end
+
   test "has_projects/1 determines if there are projects or not" do
     projects = []
     refute GroupView.has_projects? projects

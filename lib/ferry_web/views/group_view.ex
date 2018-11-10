@@ -5,6 +5,10 @@ defmodule FerryWeb.GroupView do
     length(groups) > 0
   end
 
+  def has_links?(links) do
+    length(links) > 0
+  end
+
   def has_projects?(projects) do
     length(projects) > 0
   end

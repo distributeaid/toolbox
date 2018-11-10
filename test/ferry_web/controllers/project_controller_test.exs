@@ -63,19 +63,19 @@ defmodule FerryWeb.ProjectControllerTest do
     setup [:create_project]
 
     test "lists the specified group", %{conn: conn, group: group, project: project} do
-      conn = get conn, group_project_path(conn, :show, group.id, project.id)
+      conn = get conn, group_project_path(conn, :show, group, project)
       assert html_response(conn, 200) =~ "Show Project"
     end
 
     test "shows 404 not found for non-existent groups", %{conn: conn, group: _, project: project} do
       assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :show, 1312, project.id)
+        get conn, group_project_path(conn, :show, 1312, project)
       end
     end
 
     test "shows 404 not found for non-existent projects", %{conn: conn, group: group, project: _} do
       assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :show, group.id, 1312)
+        get conn, group_project_path(conn, :show, group, 1312)
       end
     end
   end
@@ -93,7 +93,7 @@ defmodule FerryWeb.ProjectControllerTest do
 
     test "shows 404 not found for non-existent groups", %{conn: conn, group: _} do
       assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :index, 1312)
+        get conn, group_project_path(conn, :new, 1312)
       end
     end
   end
@@ -118,7 +118,7 @@ defmodule FerryWeb.ProjectControllerTest do
 
     test "shows 404 not found for non-existent groups", %{conn: conn, group: _} do
       assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :index, 1312)
+        post conn, group_project_path(conn, :create, 1312), project: @create_attrs
       end
     end
   end
@@ -136,13 +136,13 @@ defmodule FerryWeb.ProjectControllerTest do
 
     test "shows 404 not found for non-existent groups", %{conn: conn, group: _, project: project} do
       assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :show, 1312, project.id)
+        get conn, group_project_path(conn, :edit, 1312, project)
       end
     end
 
     test "shows 404 not found for non-existent projects", %{conn: conn, group: group, project: _} do
       assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :show, group.id, 1312)
+        get conn, group_project_path(conn, :edit, group, 1312)
       end
     end
   end
@@ -165,13 +165,13 @@ defmodule FerryWeb.ProjectControllerTest do
 
     test "shows 404 not found for non-existent groups", %{conn: conn, group: _, project: project} do
       assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :show, 1312, project.id)
+        put conn, group_project_path(conn, :update, 1312, project), project: @update_attrs
       end
     end
 
     test "shows 404 not found for non-existent projects", %{conn: conn, group: group, project: _} do
       assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :show, group.id, 1312)
+        put conn, group_project_path(conn, :update, group, 1312), project: @update_attrs
       end
     end
   end
@@ -192,13 +192,13 @@ defmodule FerryWeb.ProjectControllerTest do
 
     test "shows 404 not found for non-existent groups", %{conn: conn, group: _, project: project} do
       assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :show, 1312, project.id)
+        delete conn, group_project_path(conn, :delete, 1312, project)
       end
     end
 
     test "shows 404 not found for non-existent projects", %{conn: conn, group: group, project: _} do
       assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :show, group.id, 1312)
+        delete conn, group_project_path(conn, :delete, group, 1312)
       end
     end
   end

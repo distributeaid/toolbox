@@ -19,7 +19,7 @@
         <td><%= project.name %></td>
         <td><%= project.description %></td>
 
-        <td class="text-right">
+        <td>
           <span><%= link "Show", to: group_project_path(@conn, :show, project.group_id, project), class: "button is-small" %></span>
           <span><%= link "Edit", to: group_project_path(@conn, :edit, project.group_id, project), class: "button is-small" %></span>
           <span><%= link "Delete", to: group_project_path(@conn, :delete, project.group_id, project), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>

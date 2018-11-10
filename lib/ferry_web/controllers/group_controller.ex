@@ -1,6 +1,7 @@
 defmodule FerryWeb.GroupController do
   use FerryWeb, :controller
 
+  alias Ferry.Links
   alias Ferry.Profiles
   alias Ferry.Profiles.Group
 
@@ -22,8 +23,9 @@ defmodule FerryWeb.GroupController do
   #       (`debug_errors: true` in config/dev.exs)
   def show(conn, %{"id" => id}) do
     group = Profiles.get_group!(id)
+    links = Links.list_links(group)
     projects = Profiles.list_projects(group)
-    render(conn, "show.html", group: group, projects: projects)
+    render(conn, "show.html", group: group, links: links, projects: projects)
   end
 
   # Create

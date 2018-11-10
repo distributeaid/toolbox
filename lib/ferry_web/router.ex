@@ -13,6 +13,7 @@ defmodule FerryWeb.Router do
     plug :accepts, ["json"]
   end
 
+  # Nested Resources - see https://hexdocs.pm/phoenix/routing.html#nested-resources
   scope "/", FerryWeb do
     pipe_through :browser # Use the default browser stack
 
@@ -20,7 +21,7 @@ defmodule FerryWeb.Router do
 
     # TODO: move `/group/new` into an admin scope
     resources "/groups", GroupController do
-      # Nested Resources - https://hexdocs.pm/phoenix/routing.html#nested-resources
+      resources "/links", LinkController
       resources "/projects", ProjectController
     end
 
