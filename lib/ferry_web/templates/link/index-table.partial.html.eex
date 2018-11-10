@@ -1,0 +1,33 @@
+<%= if has_links? @links do %>
+  <table class="is-striped">
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Label</th>
+        <th>Url</th>
+
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+  <%= for link <- @links do %>
+      <tr>
+        <td><%= link.category %></td>
+        <td><%= link.label %></td>
+        <td><%= link.url %></td>
+
+        <td>
+          <span><%= link "Show", to: @owner_link_path.(@conn, :show, @owner, link), class: "button is-small" %></span>
+          <span><%= link "Edit", to: @owner_link_path.(@conn, :edit, @owner, link), class: "button is-small" %></span>
+          <span><%= link "Delete", to: @owner_link_path.(@conn, :delete, @owner, link), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
+        </td>
+      </tr>
+  <% end %>
+    </tbody>
+  </table>
+
+<% else %>
+  <p>
+    No links have been created.
+  </p>
+<% end %>

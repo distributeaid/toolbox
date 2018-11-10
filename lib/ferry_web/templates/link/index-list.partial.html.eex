@@ -1,0 +1,20 @@
+<%= if has_links? @links do %>
+  <%= with links_by_category <- sort_links_by_category(@links) do %>
+
+    <%= for category <- categories(links_by_category) do %>
+      <h3><%= category %></h3>
+      <ul>
+        <%= for link <- links_by_category[category] do %>
+          <li>
+            <%= link label_text(link), to: link.url %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
+  <% end %>
+<% else %>
+  <p>
+    No links have been created.
+  </p>
+<% end %>
