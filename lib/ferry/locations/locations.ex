@@ -3,7 +3,6 @@ defmodule Ferry.Locations do
   The Locations context.
   """
 
-  import Ecto
   import Ecto.Query, warn: false
   alias Ferry.Repo
 

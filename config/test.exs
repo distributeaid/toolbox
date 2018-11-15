@@ -3,7 +3,7 @@ use Mix.Config
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :ferry, FerryWeb.Endpoint,
-  http: [port: 4001],
+  http: [port: 1313],
   server: false
 
 # Print only warnings and errors during test
@@ -17,3 +17,6 @@ config :ferry, Ferry.Repo,
   database: "ferry_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+# Reduce the # of password hashing rounds to speed up the test suite.
+config :bcrypt_elixir, :log_rounds, 4

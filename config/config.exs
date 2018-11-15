@@ -17,6 +17,18 @@ config :ferry, FerryWeb.Endpoint,
   pubsub: [name: Ferry.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+# Configures Guardian
+# NOTE: The `secret_key` is a default value for dev / testing environments.  It
+#       MUST be overridden in prod.secret.exs before depolying the app to a
+#       production environment.
+config :ferry, Ferry.Auth.Guardian,
+       issuer: "ferry",
+       secret_key: "super-secret"
+
+config :ferry, Ferry.Auth.AuthAccessPipeline,
+  module: Ferry.Auth.Guardian,
+  error_handler: Ferry.Auth.AuthErrorHandler
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

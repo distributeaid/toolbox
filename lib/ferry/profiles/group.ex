@@ -1,6 +1,7 @@
 defmodule Ferry.Profiles.Group do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Ferry.Accounts.User
   alias Ferry.Profiles.Project
 
 
@@ -8,6 +9,7 @@ defmodule Ferry.Profiles.Group do
     field :name, :string
     field :description, :string
 
+    has_one :users, User # on_delete set in database via migration
     has_many :projects, Project # on_delete set in database via migration
 
     timestamps()

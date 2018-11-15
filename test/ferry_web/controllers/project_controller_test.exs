@@ -1,82 +1,125 @@
 defmodule FerryWeb.ProjectControllerTest do
   use FerryWeb.ConnCase
 
+  alias Ferry.Accounts
   alias Ferry.Profiles
 
   # Project Controller Tests
   # ==============================================================================
-  
-  # Data & Helpers
+
+  # Data, Helpers, & Setup
   # ----------------------------------------------------------
 
-  @create_attrs %{description: "some description", name: "some name"}
-  @update_attrs %{description: "some updated description", name: "some updated name"}
-  @invalid_attrs %{description: nil, name: nil}
+  @create_attrs %{name: "Kastration", description: "Snip-snip the barbed wire with some handy dandy bolt cutters."}
+  @update_attrs %{name: "Klimb", description: "Up and over their walls!"}
+  @invalid_attrs %{name: nil}
+
+  @user_attrs %{email: "john.brown@example.org", password: "¡ø`¡£`ºª¨˚ß∂∆ƒ ;dsajf"}
 
   def fixture(:group) do
     {:ok, group} = Profiles.create_group(%{name: "My Refugee Aid Group"})
-    group
+    {group}
   end
 
-  def fixture(:project) do
-    group = fixture(:group)
+  def fixture(:user) do
+    {group} = fixture(:group)
+    {:ok, user} = Accounts.create_user(group, @user_attrs)
+    {group, user}
+  end
+
+  def fixture(:project, group) do
     {:ok, project} = Profiles.create_project(group, @create_attrs)
-    {group, project}
+    {project}
   end
 
-  defp create_group(_) do
-    group = fixture(:group)
-    {:ok, group: group}
+  setup do
+    {group, user} = fixture(:user)
+    {project} = fixture(:project, group)
+
+    conn = build_conn()
+    conn = post conn, session_path(conn, :create, @user_attrs)
+    {:ok, conn: conn, group: group, user: user, project: project}
   end
 
-  defp create_project(_) do
-    {group, project} = fixture(:project)
-    {:ok, group: group, project: project}
+  # Errors
+  # ----------------------------------------------------------
+
+  describe "errors" do
+    test "shows 401 unauthorized for non-logged-in users", %{group: group, project: project} do
+      Enum.each(
+        [
+          get(build_conn(), group_project_path(build_conn(), :new, group)),
+          post(build_conn(), group_project_path(build_conn(), :create, group), project: @create_attrs),
+          get(build_conn(), group_project_path(build_conn(), :edit, group, project)),
+          put(build_conn(), group_project_path(build_conn(), :update, group, project), group: @update_attrs),
+          delete(build_conn(), group_project_path(build_conn(), :delete, group, project))
+        ],
+        fn conn -> assert conn.status == 401 end
+      )
+    end
+
+    test "shows 404 not found for non-existent groups", %{conn: conn, project: project} do
+      Enum.each(
+        [
+          # unauthenticated
+          fn -> get build_conn(), group_project_path(build_conn(), :index, 1312) end,
+          fn -> get build_conn(), group_project_path(build_conn(), :show, 1312, project) end,
+
+          # authenticated
+          fn -> get conn, group_project_path(conn, :index, 1312) end,
+          fn -> get conn, group_project_path(conn, :show, 1312, project) end,
+          fn -> post conn, group_project_path(conn, :create, 1312), project: @create_attrs end,
+          fn -> get conn, group_project_path(conn, :new, 1312) end,
+          fn -> get conn, group_project_path(conn, :edit, 1312, project) end,
+          fn -> put conn, group_project_path(conn, :update, 1312, project), project: @update_attrs end,
+          fn -> delete conn, group_project_path(conn, :delete, 1312, project) end
+        ],
+        fn request -> assert_error_sent 404, request end
+      )
+    end
+
+    test "shows 404 not found for non-existent projects", %{conn: conn, group: group} do
+      Enum.each(
+        [
+          # unauthenticated
+          fn -> get build_conn(), group_project_path(build_conn(), :show, group, 1312) end,
+
+          # authenticated
+          fn -> get conn, group_project_path(conn, :show, group, 1312) end,
+          fn -> get conn, group_project_path(conn, :edit, group, 1312) end,
+          fn -> put conn, group_project_path(conn, :update, group, 1312), project: @update_attrs end,
+          fn -> delete conn, group_project_path(conn, :delete, group, 1312) end
+
+        ],
+        fn request -> assert_error_sent 404, request end
+      )
+    end
   end
 
   # Show
   # ----------------------------------------------------------
 
   describe "index" do
-    setup [:create_group]
-
-    # TODO: actually lists no projects since none are created... test both cases
+    # TODO: test for 0, 1, n projects across 1, n groups
+    # TODO: test logged in (conn) & logged out (build_conn())
     test "lists all projects", %{conn: conn} do
       conn = get conn, project_path(conn, :index)
       assert html_response(conn, 200) =~ "Listing Projects"
     end
 
-    # TODO: actually lists no projects since none are created... test both cases
+    # TODO: test for 0, 1, n projects
+    # TODO: test logged in (conn) & logged out (build_conn())
     test "lists all projects for a group", %{conn: conn, group: group} do
       conn = get conn, group_project_path(conn, :index, group)
       assert html_response(conn, 200) =~ "Listing Projects"
     end
-
-    test "shows 404 not found for non-existent groups", %{conn: conn} do
-      assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :index, 1312)
-      end
-    end
   end
 
   describe "show" do
-    setup [:create_project]
-
+    # TODO: test logged in (conn) & logged out (build_conn())
     test "lists the specified group", %{conn: conn, group: group, project: project} do
       conn = get conn, group_project_path(conn, :show, group, project)
       assert html_response(conn, 200) =~ "Show Project"
-    end
-
-    test "shows 404 not found for non-existent groups", %{conn: conn, group: _, project: project} do
-      assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :show, 1312, project)
-      end
-    end
-
-    test "shows 404 not found for non-existent projects", %{conn: conn, group: group, project: _} do
-      assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :show, group, 1312)
-      end
     end
   end
 
@@ -84,25 +127,15 @@ defmodule FerryWeb.ProjectControllerTest do
   # ----------------------------------------------------------
 
   describe "new project" do
-    setup [:create_group]
-
     test "renders form", %{conn: conn, group: group} do
       conn = get conn, group_project_path(conn, :new, group)
       assert html_response(conn, 200) =~ "New Project"
     end
-
-    test "shows 404 not found for non-existent groups", %{conn: conn, group: _} do
-      assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :new, 1312)
-      end
-    end
   end
 
   describe "create project" do
-    setup [:create_group]
-
     test "redirects to show when data is valid", %{conn: conn, group: group} do
-      conn = post conn, group_project_path(conn, :create, group), project: @create_attrs
+      conn = post conn, group_project_path(conn, :create, group), project: %{name: "Another Project"}
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == group_project_path(conn, :show, group, id)
@@ -115,64 +148,30 @@ defmodule FerryWeb.ProjectControllerTest do
       conn = post conn, group_project_path(conn, :create, group), project: @invalid_attrs
       assert html_response(conn, 200) =~ "New Project"
     end
-
-    test "shows 404 not found for non-existent groups", %{conn: conn, group: _} do
-      assert_error_sent 404, fn ->
-        post conn, group_project_path(conn, :create, 1312), project: @create_attrs
-      end
-    end
   end
 
   # Update
   # ----------------------------------------------------------
 
   describe "edit project" do
-    setup [:create_project]
-
     test "renders form for editing chosen project", %{conn: conn, group: group, project: project} do
       conn = get conn, group_project_path(conn, :edit, group, project)
       assert html_response(conn, 200) =~ "Edit Project"
     end
-
-    test "shows 404 not found for non-existent groups", %{conn: conn, group: _, project: project} do
-      assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :edit, 1312, project)
-      end
-    end
-
-    test "shows 404 not found for non-existent projects", %{conn: conn, group: group, project: _} do
-      assert_error_sent 404, fn ->
-        get conn, group_project_path(conn, :edit, group, 1312)
-      end
-    end
   end
 
   describe "update project" do
-    setup [:create_project]
-
     test "redirects when data is valid", %{conn: conn, group: group, project: project} do
       conn = put conn, group_project_path(conn, :update, group, project), project: @update_attrs
       assert redirected_to(conn) == group_project_path(conn, :show, group, project)
 
       conn = get conn, group_project_path(conn, :show, group, project)
-      assert html_response(conn, 200) =~ "some updated description"
+      assert html_response(conn, 200) =~ @update_attrs.description
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group, project: project} do
       conn = put conn, group_project_path(conn, :update, group, project), project: @invalid_attrs
       assert html_response(conn, 200) =~ "Edit Project"
-    end
-
-    test "shows 404 not found for non-existent groups", %{conn: conn, group: _, project: project} do
-      assert_error_sent 404, fn ->
-        put conn, group_project_path(conn, :update, 1312, project), project: @update_attrs
-      end
-    end
-
-    test "shows 404 not found for non-existent projects", %{conn: conn, group: group, project: _} do
-      assert_error_sent 404, fn ->
-        put conn, group_project_path(conn, :update, group, 1312), project: @update_attrs
-      end
     end
   end
 
@@ -180,25 +179,11 @@ defmodule FerryWeb.ProjectControllerTest do
   # ----------------------------------------------------------
 
   describe "delete project" do
-    setup [:create_project]
-
     test "deletes chosen project", %{conn: conn, group: group, project: project} do
       conn = delete conn, group_project_path(conn, :delete, group, project)
       assert redirected_to(conn) == group_project_path(conn, :index, group)
       assert_error_sent 404, fn ->
         get conn, group_project_path(conn, :show, group, project)
-      end
-    end
-
-    test "shows 404 not found for non-existent groups", %{conn: conn, group: _, project: project} do
-      assert_error_sent 404, fn ->
-        delete conn, group_project_path(conn, :delete, 1312, project)
-      end
-    end
-
-    test "shows 404 not found for non-existent projects", %{conn: conn, group: group, project: _} do
-      assert_error_sent 404, fn ->
-        delete conn, group_project_path(conn, :delete, group, 1312)
       end
     end
   end

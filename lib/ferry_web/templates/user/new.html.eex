@@ -1,0 +1,5 @@
+<h2>New User</h2>
+
+<%= render "form.html", Map.put(assigns, :action, group_user_path(@conn, :create, @group)) %>
+
+<span><%= link "Back", to: home_page_path(@conn, :index) %></span>

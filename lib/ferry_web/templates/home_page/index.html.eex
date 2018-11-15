@@ -5,4 +5,5 @@
 <p>
   <%= link "Groups", to: group_path(@conn, :index) %>
   <%= link "Projects", to: project_path(@conn, :index) %>
+  <%= link "Login", to: session_path(@conn, :new) %>
 </p>

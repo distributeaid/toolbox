@@ -38,5 +38,4 @@
   </p>
 <% end %>
 
-<span><%= link "New Group", to: group_path(@conn, :new) %></span>
 <span><%= link "Home", to: home_page_path(@conn, :index) %></span>

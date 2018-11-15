@@ -13,21 +13,40 @@ defmodule FerryWeb.Router do
     plug :accepts, ["json"]
   end
 
-  # Nested Resources - see https://hexdocs.pm/phoenix/routing.html#nested-resources
+  pipeline :auth do
+    plug Ferry.Auth.AuthAccessPipeline
+  end
+
   scope "/", FerryWeb do
-    pipe_through :browser # Use the default browser stack
+    pipe_through :browser
 
     get "/", HomePageController, :index
+  end
 
-    # TODO: move `/group/new` into an admin scope
-    resources "/groups", GroupController do
+  scope "/public", FerryWeb do
+    pipe_through :browser
+
+    resources "/sessions", SessionController, only: [:new, :create, :delete]
+
+    resources "/groups", GroupController, only: [:index, :show] do
+      resources "/users", UserController, only: [:new, :create] # TODO: move into admin scope
+      resources "/links", LinkController, only: [:index, :show]
+      resources "/projects", ProjectController, only: [:index, :show]
+    end
+
+    resources "/projects", ProjectController, only: [:index]
+  end
+
+  scope "/", FerryWeb do
+    pipe_through [:browser, :auth]
+
+    resources "/groups", GroupController, except: [:new, :create] do
       resources "/links", LinkController
       resources "/projects", ProjectController
     end
-
-#    resources "/projects", ProjectController, except: [:new, :create]
-    resources "/projects", ProjectController, only: [:index]
   end
+
+  # TODO: setup admin scope, add /groups/new and move /users/* into it
 
   # TODO: see Scoped Routes section of the guide to handle admin functionality
   #       https://hexdocs.pm/phoenix/routing.html#scoped-routes
