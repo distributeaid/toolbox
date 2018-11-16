@@ -18,7 +18,6 @@ defmodule Ferry.Accounts.User do
   end
 
   @doc false
-  # Based on: https://itnext.io/user-authentication-with-guardian-for-phoenix-1-3-web-apps-e2064cac0ec1
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:email, :password])
@@ -30,7 +29,8 @@ defmodule Ferry.Accounts.User do
     |> put_password_hash()
   end
 
-  defp put_password_hash(changeset) do
+  # only hash when necessary
+  defp put_password_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
         put_change(changeset, :password_hash, encrypt_password(password))
@@ -40,8 +40,12 @@ defmodule Ferry.Accounts.User do
     end
   end
 
+  defp put_password_hash(changeset), do: changeset
+
   @doc """
   TODO
+
+  Expose this step so it is accessible in tests.
   """
   def encrypt_password(password) do
     Bcrypt.hashpwsalt(password)

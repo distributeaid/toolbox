@@ -20,7 +20,7 @@ defmodule FerryWeb.UserController do
   def create(conn, %{"group_id" => group_id, "user" => user_params}) do
     group = Profiles.get_group!(group_id)
     case Accounts.create_user(group, user_params) do
-      {:ok, user} ->
+      {:ok, _user} ->
         conn
         |> put_flash(:info, "User created successfully.")
         |> redirect(to: home_page_path(conn, :index))

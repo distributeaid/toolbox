@@ -1,7 +1,10 @@
 defmodule FerryWeb.SessionController do
   use FerryWeb, :controller
 
+  alias Ferry.Accounts
+  alias Ferry.Accounts.User
   alias Ferry.Auth
+  alias Ferry.Auth.Guardian
 
   # Session Controller
   # ==============================================================================
@@ -10,30 +13,48 @@ defmodule FerryWeb.SessionController do
   # ----------------------------------------------------------
 
   def new(conn, _) do
-    render(conn, "new.html")
-  end
-
-  def create(conn, %{"email" => email, "password" => password}) do
-    case Ferry.Auth.authenticate_user(email, password) do
-      {:ok, user} ->
-        conn
-        |> Auth.login(user)
-        |> put_flash(:info, "Welcome back!")
-        |> redirect(to: group_path(conn, :index))
-
-      {:error, _reason} ->
-        conn
-        |> put_flash(:error, "Invalid username/password combination")
-        |> render("new.html")
+    changeset = Accounts.change_user(%User{})
+    maybe_user = Guardian.Plug.current_resource(conn)
+    if maybe_user do
+      redirect(conn, to: group_path(conn, :index)) # TODO: test redirect
+    else
+      render(conn, "new.html", changeset: changeset)
     end
   end
+
+  def create(conn, %{"user" => %{"email" => email, "password" => password}}) do
+    case Auth.authenticate_user(email, password) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "Welcome back!")
+        |> Guardian.Plug.sign_in(user)
+        |> redirect(to: group_path(conn, :index))
+
+      {:error, reason} ->
+        conn
+        |> put_flash(:error, to_string(reason))
+        |> new(%{})
+    end
+  end
+
+  # TODO: delete
+  # defp login(conn, user) do
+  #   conn
+  #   |> Guardian.Plug.sign_in(user)
+  #   |> assign(:current_user, user)
+  # end
 
   # Delete
   # ----------------------------------------------------------
 
   def delete(conn, _) do
     conn
-    |> Auth.logout()
+    |> logout()
     |> redirect(to: home_page_path(conn, :index))
+  end
+
+  defp logout(conn) do
+    conn
+    |> Guardian.Plug.sign_out()
   end
 end

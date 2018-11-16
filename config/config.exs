@@ -25,10 +25,6 @@ config :ferry, Ferry.Auth.Guardian,
        issuer: "ferry",
        secret_key: "super-secret"
 
-config :ferry, Ferry.Auth.AuthAccessPipeline,
-  module: Ferry.Auth.Guardian,
-  error_handler: Ferry.Auth.AuthErrorHandler
-
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

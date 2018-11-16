@@ -9,24 +9,28 @@ defmodule FerryWeb.Router do
     plug :put_secure_browser_headers
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
+  pipeline :setup_auth do
+    plug Ferry.Auth.SetupPipeline
   end
 
-  pipeline :auth do
-    plug Ferry.Auth.AuthAccessPipeline
+  pipeline :ensure_auth do
+    plug Ferry.Auth.EnsurePipeline
+  end
+
+  pipeline :authorization do
+    plug Ferry.Auth.AuthorizePipeline
   end
 
   scope "/", FerryWeb do
-    pipe_through :browser
+    pipe_through [:browser, :setup_auth]
 
     get "/", HomePageController, :index
   end
 
   scope "/public", FerryWeb do
-    pipe_through :browser
+    pipe_through [:browser, :setup_auth]
 
-    resources "/sessions", SessionController, only: [:new, :create, :delete]
+    resources "/session", SessionController, only: [:new, :create, :delete], singleton: true
 
     resources "/groups", GroupController, only: [:index, :show] do
       resources "/users", UserController, only: [:new, :create] # TODO: move into admin scope
@@ -38,21 +42,13 @@ defmodule FerryWeb.Router do
   end
 
   scope "/", FerryWeb do
-    pipe_through [:browser, :auth]
+    pipe_through [:browser, :setup_auth, :ensure_auth, :authorization]
 
-    resources "/groups", GroupController, except: [:new, :create] do
-      resources "/links", LinkController
-      resources "/projects", ProjectController
+    resources "/groups", GroupController, only: [:edit, :update, :delete] do
+      resources "/links", LinkController, except: [:index, :show]
+      resources "/projects", ProjectController, except: [:index, :show]
     end
   end
 
   # TODO: setup admin scope, add /groups/new and move /users/* into it
-
-  # TODO: see Scoped Routes section of the guide to handle admin functionality
-  #       https://hexdocs.pm/phoenix/routing.html#scoped-routes
-
-  # Other scopes may use custom stacks.
-  # scope "/api", FerryWeb do
-  #   pipe_through :api
-  # end
 end

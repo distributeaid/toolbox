@@ -9,7 +9,7 @@ defmodule FerryWeb.GroupControllerTest do
     user = insert(:user, group: group)
 
     conn = build_conn()
-    conn = post conn, session_path(conn, :create, %{email: user.email, password: @password})
+    conn = post conn, session_path(conn, :create, %{user: %{email: user.email, password: @password}})
     {:ok, conn: conn, group: group, user: user}
   end
 
@@ -28,6 +28,22 @@ defmodule FerryWeb.GroupControllerTest do
       )
     end
 
+    # NOTE: This covers the case of authenticated 404 errors for these actions,
+    #       since the user will be unauthenticated for the non-existant group.
+    test "shows 403 unauthenticated for actions on unassociated groups", %{conn: conn} do
+      not_my_group = insert(:group)
+
+      Enum.each(
+        [
+          # authenticated
+          get(conn, group_path(conn, :edit, not_my_group)),
+          put(conn, group_path(conn, :update, not_my_group), group: params_for(:group)),
+          delete(conn, group_path(conn, :delete, not_my_group))
+        ],
+        fn conn -> assert conn.status == 403 end
+      )
+    end
+
     test "shows 404 not found for non-existent groups", %{conn: conn} do
       Enum.each(
         [
@@ -36,9 +52,6 @@ defmodule FerryWeb.GroupControllerTest do
 
           # authenticated
           fn -> get conn, group_path(conn, :show, 1312) end,
-          fn -> get conn, group_path(conn, :edit, 1312) end,
-          fn -> put conn, group_path(conn, :update, 1312), group: params_for(:group) end,
-          fn -> delete conn, group_path(conn, :delete, 1312) end
         ],
         fn request -> assert_error_sent 404, request end
       )

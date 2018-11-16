@@ -5,5 +5,10 @@
 <p>
   <%= link "Groups", to: group_path(@conn, :index) %>
   <%= link "Projects", to: project_path(@conn, :index) %>
-  <%= link "Login", to: session_path(@conn, :new) %>
+
+  <%= if @current_user == nil do %>
+    <%= link "Login", to: session_path(@conn, :new) %>
+  <% else %>
+    <%= link "Logout", to: session_path(@conn, :delete), method: :delete %>
+  <% end %>
 </p>

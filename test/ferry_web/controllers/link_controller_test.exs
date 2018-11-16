@@ -10,10 +10,9 @@ defmodule FerryWeb.LinkControllerTest do
     link = insert(:link, group: group)
 
     conn = build_conn()
-    conn = post conn, session_path(conn, :create, %{email: user.email, password: @password})
+    conn = post conn, session_path(conn, :create, %{user: %{email: user.email, password: @password}})
     {:ok, conn: conn, group: group, user: user, link: link}
   end
-
 
   # Errors
   # ----------------------------------------------------------
@@ -32,6 +31,25 @@ defmodule FerryWeb.LinkControllerTest do
       )
     end
 
+    # NOTE: This covers the case of authenticated 404 errors for these actions,
+    #       since the user will be unauthenticated for the non-existant group.
+    test "shows 403 unauthenticated for actions on unassociated links", %{conn: conn} do
+      not_my_group = insert(:group)
+      not_my_link = insert(:link, group: not_my_group)
+
+      Enum.each(
+        [
+          # authenticated
+          post(conn, group_link_path(conn, :create, not_my_group), link: params_for(:link)),
+          get(conn, group_link_path(conn, :new, not_my_group)),
+          get(conn, group_link_path(conn, :edit, not_my_group, not_my_link)),
+          put(conn, group_link_path(conn, :update, not_my_group, not_my_link), link: params_for(:link)),
+          delete(conn, group_link_path(conn, :delete, not_my_group, not_my_link))
+        ],
+        fn conn -> assert conn.status == 403 end
+      )
+    end
+
     test "shows 404 not found for non-existent groups", %{conn: conn, link: link} do
       Enum.each(
         [
@@ -42,11 +60,6 @@ defmodule FerryWeb.LinkControllerTest do
           # authenticated
           fn -> get conn, group_link_path(conn, :index, 1312) end,
           fn -> get conn, group_link_path(conn, :show, 1312, link) end,
-          fn -> post conn, group_link_path(conn, :create, 1312), link: params_for(:link) end,
-          fn -> get conn, group_link_path(conn, :new, 1312) end,
-          fn -> get conn, group_link_path(conn, :edit, 1312, link) end,
-          fn -> put conn, group_link_path(conn, :update, 1312, link), link: params_for(:link) end,
-          fn -> delete conn, group_link_path(conn, :delete, 1312, link) end
         ],
         fn request -> assert_error_sent 404, request end
       )
