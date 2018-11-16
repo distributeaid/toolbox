@@ -1,43 +1,16 @@
 defmodule FerryWeb.ProjectControllerTest do
   use FerryWeb.ConnCase
 
-  alias Ferry.Accounts
-  alias Ferry.Profiles
-
   # Project Controller Tests
   # ==============================================================================
 
-  # Data, Helpers, & Setup
-  # ----------------------------------------------------------
-
-  @create_attrs %{name: "Kastration", description: "Snip-snip the barbed wire with some handy dandy bolt cutters."}
-  @update_attrs %{name: "Klimb", description: "Up and over their walls!"}
-  @invalid_attrs %{name: nil}
-
-  @user_attrs %{email: "john.brown@example.org", password: "¡ø`¡£`ºª¨˚ß∂∆ƒ ;dsajf"}
-
-  def fixture(:group) do
-    {:ok, group} = Profiles.create_group(%{name: "My Refugee Aid Group"})
-    {group}
-  end
-
-  def fixture(:user) do
-    {group} = fixture(:group)
-    {:ok, user} = Accounts.create_user(group, @user_attrs)
-    {group, user}
-  end
-
-  def fixture(:project, group) do
-    {:ok, project} = Profiles.create_project(group, @create_attrs)
-    {project}
-  end
-
   setup do
-    {group, user} = fixture(:user)
-    {project} = fixture(:project, group)
+    group = insert(:group)
+    user = insert(:user, group: group)
+    project = insert(:project, group: group)
 
     conn = build_conn()
-    conn = post conn, session_path(conn, :create, @user_attrs)
+    conn = post conn, session_path(conn, :create, %{email: user.email, password: @password})
     {:ok, conn: conn, group: group, user: user, project: project}
   end
 
@@ -49,9 +22,9 @@ defmodule FerryWeb.ProjectControllerTest do
       Enum.each(
         [
           get(build_conn(), group_project_path(build_conn(), :new, group)),
-          post(build_conn(), group_project_path(build_conn(), :create, group), project: @create_attrs),
+          post(build_conn(), group_project_path(build_conn(), :create, group), project: params_for(:project)),
           get(build_conn(), group_project_path(build_conn(), :edit, group, project)),
-          put(build_conn(), group_project_path(build_conn(), :update, group, project), group: @update_attrs),
+          put(build_conn(), group_project_path(build_conn(), :update, group, project), group: params_for(:project)),
           delete(build_conn(), group_project_path(build_conn(), :delete, group, project))
         ],
         fn conn -> assert conn.status == 401 end
@@ -68,10 +41,10 @@ defmodule FerryWeb.ProjectControllerTest do
           # authenticated
           fn -> get conn, group_project_path(conn, :index, 1312) end,
           fn -> get conn, group_project_path(conn, :show, 1312, project) end,
-          fn -> post conn, group_project_path(conn, :create, 1312), project: @create_attrs end,
+          fn -> post conn, group_project_path(conn, :create, 1312), project: params_for(:project) end,
           fn -> get conn, group_project_path(conn, :new, 1312) end,
           fn -> get conn, group_project_path(conn, :edit, 1312, project) end,
-          fn -> put conn, group_project_path(conn, :update, 1312, project), project: @update_attrs end,
+          fn -> put conn, group_project_path(conn, :update, 1312, project), project: params_for(:project) end,
           fn -> delete conn, group_project_path(conn, :delete, 1312, project) end
         ],
         fn request -> assert_error_sent 404, request end
@@ -87,7 +60,7 @@ defmodule FerryWeb.ProjectControllerTest do
           # authenticated
           fn -> get conn, group_project_path(conn, :show, group, 1312) end,
           fn -> get conn, group_project_path(conn, :edit, group, 1312) end,
-          fn -> put conn, group_project_path(conn, :update, group, 1312), project: @update_attrs end,
+          fn -> put conn, group_project_path(conn, :update, group, 1312), project: params_for(:project) end,
           fn -> delete conn, group_project_path(conn, :delete, group, 1312) end
 
         ],
@@ -145,7 +118,7 @@ defmodule FerryWeb.ProjectControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group} do
-      conn = post conn, group_project_path(conn, :create, group), project: @invalid_attrs
+      conn = post conn, group_project_path(conn, :create, group), project: params_for(:invalid_project)
       assert html_response(conn, 200) =~ "New Project"
     end
   end
@@ -162,15 +135,15 @@ defmodule FerryWeb.ProjectControllerTest do
 
   describe "update project" do
     test "redirects when data is valid", %{conn: conn, group: group, project: project} do
-      conn = put conn, group_project_path(conn, :update, group, project), project: @update_attrs
+      conn = put conn, group_project_path(conn, :update, group, project), project: params_for(:project)
       assert redirected_to(conn) == group_project_path(conn, :show, group, project)
 
       conn = get conn, group_project_path(conn, :show, group, project)
-      assert html_response(conn, 200) =~ @update_attrs.description
+      assert html_response(conn, 200) =~ params_for(:project).description
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group, project: project} do
-      conn = put conn, group_project_path(conn, :update, group, project), project: @invalid_attrs
+      conn = put conn, group_project_path(conn, :update, group, project), project: params_for(:invalid_project)
       assert html_response(conn, 200) =~ "Edit Project"
     end
   end

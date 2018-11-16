@@ -1,28 +1,11 @@
 defmodule FerryWeb.UserControllerTest do
   use FerryWeb.ConnCase
 
-  alias Ferry.Accounts
-  alias Ferry.Profiles
-
   # User Controller Tests
   # ==============================================================================
-  
-  # Data, Helpers, & Setup
-  # ----------------------------------------------------------
-
-  @create_attrs %{email: "red@example.org", password: "ø≈ƒ©ƒª•ªøƒπ∂ˆ¨©•ª¨∂©"}
-  @update_attrs %{email: "black@example.org", password: "ªƒ••º©¨∂ºª¡™£¢∞§§¶ª–"}
-  @invalid_attrs %{email: nil, password: nil}
-
-  @user_attrs %{email: "john.brown@example.org", password: "¡ø`¡£`ºª¨˚ß∂∆ƒ ;dsajf"}
-
-  def fixture(:group) do
-    {:ok, group} = Profiles.create_group(%{name: "My Refugee Aid Group"})
-    {group}
-  end
 
   setup do
-    {group} = fixture(:group)
+    group = insert(:group)
 
     conn = build_conn()
     {:ok, conn: conn, group: group}
@@ -37,7 +20,7 @@ defmodule FerryWeb.UserControllerTest do
         [
           # unauthenticated
           fn -> get conn, group_user_path(conn, :new, 1312) end,
-          fn -> post conn, group_user_path(conn, :create, 1312), user: @create_attrs end,
+          fn -> post conn, group_user_path(conn, :create, 1312), user: params_for(:user) end,
 
         ],
         fn request -> assert_error_sent 404, request end
@@ -57,7 +40,7 @@ defmodule FerryWeb.UserControllerTest do
 
   describe "create user" do
     test "redirects to show when data is valid", %{conn: conn, group: group} do
-      conn = post conn, group_user_path(conn, :create, group), user: @create_attrs
+      conn = post conn, group_user_path(conn, :create, group), user: params_for(:new_user)
 
       assert redirected_to(conn) == home_page_path(conn, :index)
 
@@ -67,7 +50,7 @@ defmodule FerryWeb.UserControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group} do
-      conn = post conn, group_user_path(conn, :create, group), user: @invalid_attrs
+      conn = post conn, group_user_path(conn, :create, group), user: params_for(:invalid_user)
       assert html_response(conn, 200) =~ "New User"
     end
   end

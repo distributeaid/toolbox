@@ -21,8 +21,14 @@ defmodule FerryWeb.ConnCase do
       use Phoenix.ConnTest
       import FerryWeb.Router.Helpers
 
+      import Ferry.Factory
+
       # The default endpoint for testing
       @endpoint FerryWeb.Endpoint
+
+      # Make authentication easy.
+      # NOTE: @password must be the same in `factory.ex`
+      @password "lasdjkf o827349081247SLKDJFSD87634784¡¨ˆ™˙´¨¥∂œ•ª¨∂"
     end
   end
 
