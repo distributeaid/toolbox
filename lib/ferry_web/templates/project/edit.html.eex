@@ -1,8 +1,12 @@
-<h2>
-  Edit Project
-  <small>(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</small>
-</h2>
+<section id="intro" class="projects intro section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Edit Project</h1>
+      <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+    </header>
 
-<%= render "form.html", Map.put(assigns, :action, group_project_path(@conn, :update, @group, @project)) %>
+    <%= render "form.html", Map.put(assigns, :action, group_project_path(@conn, :update, @group, @project)) %>
 
-<span><%= link "Back", to: group_project_path(@conn, :index, @group) %></span>
+    <span><%= link "Back To Group", to: group_path(@conn, :show, @group) %></span>
+  </div>
+</section>

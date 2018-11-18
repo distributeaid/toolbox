@@ -19,10 +19,5 @@ import "intercooler"
 //
 // Local files can be imported directly using relative
 // paths "./socket" or full ones "web/static/js/socket".
-
-import kube from "./kube-7.2.0"
 // import socket from "./socket"
-
-$K.init({
-  observer: true
-});
+import init from "./init"

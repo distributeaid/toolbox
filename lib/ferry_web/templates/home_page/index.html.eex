@@ -1,14 +1,12 @@
-<p>
-  Home Page
-</p>
+<section id="intro" class="welcome intro section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Welcome!</h1>
+    </header>
 
-<p>
-  <%= link "Groups", to: group_path(@conn, :index) %>
-  <%= link "Projects", to: project_path(@conn, :index) %>
+    <p>
+      Congratulations on being one of the first people to see / use the Distribute Aid platform.  We're hard at work, and it's only going to get better from here!
+    </p>
 
-  <%= if @current_user == nil do %>
-    <%= link "Login", to: session_path(@conn, :new) %>
-  <% else %>
-    <%= link "Logout", to: session_path(@conn, :delete), method: :delete %>
-  <% end %>
-</p>
+  </div>
+</section>

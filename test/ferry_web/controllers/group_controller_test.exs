@@ -66,7 +66,7 @@ defmodule FerryWeb.GroupControllerTest do
     # TODO: test logged in (conn) & logged out (build_conn())
     test "lists all groups", %{conn: conn} do
       conn = get conn, group_path(conn, :index)
-      assert html_response(conn, 200) =~ "Listing Groups"
+      assert html_response(conn, 200) =~ "Groups"
     end
   end
 

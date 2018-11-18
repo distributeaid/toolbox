@@ -1,8 +1,12 @@
-<h2>
-  New Link
-  <small>(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</small>
-</h2>
+<section id="intro" class="links intro section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">New Link</h1>
+      <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+    </header>
 
-<%= render "form.html", Map.put(assigns, :action, group_link_path(@conn, :create, @group)) %>
+    <%= render "form.html", Map.put(assigns, :action, group_link_path(@conn, :create, @group)) %>
 
-<span><%= link "Back", to: group_link_path(@conn, :index, @group) %></span>
+    <span><%= link "Back To Group", to: group_path(@conn, :show, @group) %></span>
+  </div>
+</section>

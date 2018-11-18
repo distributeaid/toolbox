@@ -7,32 +7,105 @@
 
     <title>Distribute Aid</title>
 
+    <!--
+    Styles
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    -->
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
 
+    <!--
+    Favicon
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    -->    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" sizes="16x16 32x32 64x64" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="196x196" href="<%= static_path(@conn, "/favicon-192.png") %>">
+    <link rel="icon" type="image/png" sizes="160x160" href="<%= static_path(@conn, "/favicon-160.png") %>">
+    <link rel="icon" type="image/png" sizes="96x96" href="<%= static_path(@conn, "/favicon-96.png") %>">
+    <link rel="icon" type="image/png" sizes="64x64" href="<%= static_path(@conn, "/favicon-64.png") %>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<%= static_path(@conn, "/favicon-32.png") %>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<%= static_path(@conn, "/favicon-16.png") %>">
+    <link rel="apple-touch-icon" href="<%= static_path(@conn, "/favicon-57.png") %>">
+    <link rel="apple-touch-icon" sizes="114x114" href="<%= static_path(@conn, "/favicon-114.png") %>">
+    <link rel="apple-touch-icon" sizes="72x72" href="<%= static_path(@conn, "/favicon-72.png") %>">
+    <link rel="apple-touch-icon" sizes="144x144" href="<%= static_path(@conn, "/favicon-144.png") %>">
+    <link rel="apple-touch-icon" sizes="60x60" href="<%= static_path(@conn, "/favicon-60.png") %>">
+    <link rel="apple-touch-icon" sizes="120x120" href="<%= static_path(@conn, "/favicon-120.png") %>">
+    <link rel="apple-touch-icon" sizes="76x76" href="<%= static_path(@conn, "/favicon-76.png") %>">
+    <link rel="apple-touch-icon" sizes="152x152" href="<%= static_path(@conn, "/favicon-152.png") %>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= static_path(@conn, "/favicon-180.png") %>">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="<%= static_path(@conn, "/favicon-144.png") %>">
+    <meta name="msapplication-config" content="<%= static_path(@conn, "/browserconfig.xml") %>">
+
+    <!--
+    Scripts
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    -->
     <script defer src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </head>
 
-  <body>
-    <header>
-      <h1>Distribute Aid</h1>
+  <body class="site">
+    <header class="navbar site-header">
+      <img class="logo" src="<%= static_path(@conn, "/images/logo.png") %>" alt="Logo: Outline of a Dove" />
+
+      <%= link "distribute|AID", to: home_page_path(@conn, :index), class: "brand" %>
+
+      <nav>
+        <ul class="site-nav">
+          <li>
+            <!-- TODO: change to "Dashboard" -->
+            <%= link "Home", to: home_page_path(@conn, :index), class: "site-nav__link" %>
+          </li>
+          <li>
+            <%= link "Groups", to: group_path(@conn, :index), class: "site-nav__link" %>
+          </li>
+          <li>
+            <%= link "Projects", to: project_path(@conn, :index), class: "site-nav__link" %>
+          </li>
+          <li>
+            <%= if @current_user == nil do %>
+              <%= link "Login", to: session_path(@conn, :new), class: "site-nav__link" %>
+            <% else %>
+              <%= link "Logout", to: session_path(@conn, :delete), method: :delete, class: "site-nav__link" %>
+            <% end %>
+          </li>
+        </ul>
+      </nav>
     </header>
 
-    <%= if info = get_flash(@conn, :info) do %>
-      <p class="alert is-info" role="alert"><%= info %></p>
-    <% end %>
+    <div class="flash">
+      <%= if message = get_flash(@conn, :success) do %>
+        <p class="alert is-success--inverted" role="alert"><%= message %></p>
+      <% end %>
 
-    <%= if error = get_flash(@conn, :error) do %>
-      <p class="alert is-error" role="alert"><%= error %></p>
-    <% end %>
+      <%= if message = get_flash(@conn, :info) do %>
+        <p class="alert is-focus--inverted" role="alert"><%= message %></p>
+      <% end %>
 
-    <main role="main">
-      <%= render @view_module, @view_template, assigns %>
+      <%= if message = get_flash(@conn, :error) do %>
+        <p class="alert is-error--inverted" role="alert"><%= message %></p>
+      <% end %>
+    </div>
+
+    <main role="main" class="site-content">
+      <article class="page-content">
+        <%= render @view_module, @view_template, assigns %>
+      </article>
     </main>
 
-    <footer>
-      <p>
-        The end.
-      </p>
+    <footer id="footer" class="site-footer section">
+      <div class="section__content">
+        <a class="site-footer__link site-footer__link--lowercase" href="mailto:hello@distributeaid.org">
+          <i class="fas fa-paper-plane fa-lg"></i>
+          hello@distributeaid.org
+        </a>
+
+        <a class="site-footer__link site-footer__link--lowercase" href="mailto:hello@distributeaid.org">
+          <i class="fas fa-paper-plane fa-lg"></i>
+          help@distributeaid.org
+        </a>
+      </div>
     </footer>
   </body>
 </html>

@@ -1,13 +1,13 @@
-<h2>
-  Listing Links
-  <small>(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</small>
-</h2>
+<section id="intro" class="links intro section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Links</h1>
+      <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+    </header>
 
-<%= render "index-list.partial.html", %{
-  conn: @conn,
-  links: @links
-} %>
+    <%= render "index-list.partial.html", %{conn: @conn, links: @links} %>
 
-<span><%= link "New Link", to: group_link_path(@conn, :new, @group) %></span>
-<span><%= link "Group", to: group_path(@conn, :show, @group) %></span>
-<span><%= link "Home", to: home_page_path(@conn, :index) %></span>
+    <span><%= link "New Link", to: group_link_path(@conn, :new, @group) %></span>
+    <span><%= link "Back to Group", to: group_path(@conn, :show, @group) %></span>
+  </div>
+</section>

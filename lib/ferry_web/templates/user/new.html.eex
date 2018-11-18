@@ -1,5 +1,9 @@
-<h2>New User</h2>
+<section id="intro" class="users intro section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">New User</h1>
+    </header>
 
-<%= render "form.html", Map.put(assigns, :action, group_user_path(@conn, :create, @group)) %>
-
-<span><%= link "Back", to: home_page_path(@conn, :index) %></span>
+    <%= render "form.html", Map.put(assigns, :action, group_user_path(@conn, :create, @group)) %>
+  </div>
+</section>

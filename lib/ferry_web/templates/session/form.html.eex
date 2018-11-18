@@ -11,7 +11,7 @@
     <%= error_tag f, :password %>
   </div>
 
-  <div class="form-item is-inline">
-    <%= submit "Submit", class: "button" %>
+  <div class="form-item is-text-center">
+    <%= submit "Submit", class: "button is-big" %>
   </div>
 <% end %>

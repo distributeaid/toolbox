@@ -1,1 +1,807 @@
-/* This file is for your main application css. */
+/* Ferry: The Distribute Aid software service.
+ * Copyright (C) 2018 - J. Taylor Fairbank (taylor@distributeaid.org)
+ *
+ * Licensed under the AGPLv3. See `/LICENSE.md`.
+ */
+
+/* File Structure
+ * ------------------------------------------------------
+ * The site styles use ITCSS standards as a guideline. See these blog posts for
+ * more on ITCSS:
+ *
+ *   - https://www.xfive.co/blog/itcss-scalable-maintainable-css-architecture/
+ *   - https://www.creativebloq.com/web-design/manage-large-css-projects-itcss-101517528
+ *
+ * Since we're writing straight CSS here, and use the Kube CSS framework as a
+ * baseline, the first three parts of ITCSS are covered (Settings, Tools, and
+ * Generic).
+ *
+ * The next four parts (Elements, Objects, Components, and Trumps) can be found
+ * under their related headings below.  Kube also takes care of a lot of the
+ * styles that'd normally go in the Elements and Objects section so they may
+ * be a bit sparse.
+ *
+ * We use BEM naming conventions.  See <http://getbem.com/introduction/>.
+ *
+ *
+ * Base Unit / Vertical Rhythm
+ * ------------------------------------------------------
+ * The site uses 16px as a base unit, and tries for the most part to adjust it
+ * in increments of 4px (1.25rem, etc).  Occasionally it will be adjusted by
+ * increments of 2px (1.125rem), or 2px will be used for border widths and such.
+ *
+ * Kube has a 4px vertical rhythm.
+ */
+
+@import url('https://fonts.googleapis.com/css?family=Comfortaa:400|Quicksand:400,700');
+
+
+/* Elements
+ * ========================================================================== */
+
+body {
+  font-family: Quicksand, sans-serif;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* Headers
+ * ------------------------------------------------------ */
+h1.title, h1, h2, h3, h4, h5, h6 {
+  color: inherit; /* Kube override */
+
+  font-family: Comfortaa, monospace;
+  font-weight: normal;
+}
+
+h1 {
+  font-size: 36px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+@media (min-width: 600px) {
+  h1 {
+    font-size: 48px;
+  }
+
+  h2 {
+    font-size: 36px;
+  }
+
+  h3 {
+    font-size: 24px;
+  }
+}
+
+/*
+Links
+------------------------------------------------------------
+*/
+a {
+  border-bottom: 1px dotted #313439;
+
+  color: #313439;
+
+  text-decoration: none;
+}
+
+a:hover {
+  border-bottom-style: solid;
+
+  color: inherit;
+
+  text-decoration: none;
+}
+
+/*
+Buttons
+------------------------------------------------------------
+*/
+button, .button,
+button:active, .button:active,
+button:focus, .button:focus {
+  background-color: #313439;
+}
+
+button:hover, .button:hover {
+  background-color: rgba(49, 52, 57, 0.8); /* #313439 */
+  box-shadow: 0.25rem 0.25rem 0.5rem 0 rgba(49, 52, 57, 0.2); /* #313439 */
+}
+
+button.is-secondary, .button.is-secondary,
+button.is-secondary:active, .button.is-secondary:active
+button.is-secondary:focus, .button.is-secondary:focus {
+  border-color: #313439;
+  background-color: white;
+  color: #313439;
+}
+
+button.is-secondary:hover, .button.is-secondary:hover {
+  border-color: rgba(49, 52, 57, 0.8); /* #313439 */
+  background-color: white;
+  color: rgba(49, 52, 57, 0.8); /* #313439 */
+  box-shadow: 0.25rem 0.25rem 0.5rem 0 rgba(49, 52, 57, 0.2); /* #313439 */
+}
+
+/*
+Form
+------------------------------------------------------------
+*/
+label {
+  font-size: 1rem;
+}
+
+
+
+/*
+Kube Overrides
+================================================================================
+*/
+
+/*
+Form
+------------------------------------------------------------
+*/
+form .is-req {
+  top: 0;
+  color: inherit;
+}
+
+.form-item.is-inline {
+  padding-left: 25px;
+  padding-right: 125px;
+}
+
+.form-item.is-inline-offset {
+  padding-left: 105px;
+  padding-right: 100px;
+}
+
+.form-item.is-inline label:not(.is-checkbox) {
+  float: none;
+  display: inline-block;
+  width: 100px;
+  margin-left: 0;
+  margin-right: 0.5rem;
+
+  text-align: right;
+}
+
+.form-item.is-inline input:not([type="checkbox"]):not([type="radio"]) {
+  display: inline-block;
+
+  /* leaves room for the 5px space between the label and the input and the label's right margin */
+  width: calc(100% - 105px - 0.5rem);
+}
+
+
+/* Objects
+ * ========================================================================== */
+
+/* Navbar
+ * ------------------------------------------------------ */
+.navbar {
+  position: fixed;
+  display: flex;
+  width: 100%;
+  min-width: 600px;
+  max-width: 800px;
+  padding: 0.75rem 1rem;
+  border-bottom: 0.125rem solid white;
+  box-shadow: 0 0.5rem 0.5rem 0 rgba(49, 52, 57, 0.2); /* #313439 */
+
+  z-index: 1000;
+}
+
+.navbar a {
+  border-bottom: none;
+}
+
+@media (min-width: 600px) {
+  .navbar {
+    width: 50%;
+  }
+}
+
+/* Brand
+ * ------------------------------------------------------ */
+.brand {
+  color: inherit;
+
+  font-family: Comfortaa, monospace;
+}
+
+.brand:hover {
+  text-decoration: none;
+}
+
+.brand > img {
+  display: none;
+}
+
+/* Section
+ * ------------------------------------------------------ */
+.section {
+  border-top: 2px solid #313439;
+  padding-top: 2rem;
+
+  background: no-repeat top center fixed;
+  background-size: cover;
+}
+
+.section--full-screen {
+  height: 100vh;
+}
+
+.section__header {
+  margin-bottom: 1rem;
+
+  text-align: center;
+}
+
+.section__title {
+  margin-bottom: 0;
+}
+
+.section__subtitle {
+  margin-top: 0.5rem;
+}
+
+p.section__subtitle {
+  font-size: 1.25rem;
+}
+
+.section__content {
+  width: 100%;
+  padding: 0.5rem 1rem;
+
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.section--full-screen .section__content {
+  height: 100vh;
+}
+
+@media (min-width: 600px) {
+  .section {
+    padding-top: 0;
+
+    border-top: 0.5rem solid white;
+    border-bottom: 0.5rem solid white;
+  }
+
+  .section:last-child {
+    border-bottom: 0;
+  }
+
+  .section__content {
+    width: 100%;
+    min-width: 600px;
+    max-width: 800px;
+    border-left: 0.125rem solid white;
+    border-right: 0.125rem solid white;
+    padding: 3rem 1.5rem;
+  }
+
+  .section:only-child .section__content {
+    min-height: calc(100vh - 50px - 131px); /* leave room for the site nav / footer */
+  }
+}
+
+@media (min-width: 600px) {
+  .section__content {
+    width: 50%;
+  }
+}
+
+/*
+Subsection
+------------------------------------------------------------
+*/
+.subsection__header {
+  margin: 2rem 0;
+
+  text-align: center;
+}
+
+.subsection__title {
+  margin-bottom: 0.5rem;
+  border-bottom: 2px dashed #313439;
+}
+
+.subsection__subtitle {
+  margin-top: -0.25rem;
+}
+
+/*
+Action
+------------------------------------------------------------
+*/
+.action {}
+
+.action__icon {
+  font-size: 1.5rem;
+  vertical-align: text-bottom;
+}
+
+/*
+Alert
+------------------------------------------------------------
+*/
+.alert {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0;
+
+  font-size: 1rem;
+}
+
+.alert.is-success--inverted {
+  background-color: rgba(32, 188, 113, 0.85);
+  border: 0.125rem solid rgba(32, 188, 113, 1);
+  color: white;
+}
+
+.alert.is-focus--inverted {
+  background-color: rgba(21, 141, 247, 0.85);
+  border: 0.125rem solid rgba(21, 141, 247, 1);
+  color: white;
+}
+
+.alert.is-error--inverted {
+  background-color: rgba(238, 36, 85, 0.8);
+  border: 0.125rem solid rgba(238, 36, 85, 1);
+  color: white;
+}
+
+
+/* Category
+ * ------------------------------------------------------ */
+.category {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+
+  text-align: center;
+}
+
+.category > * {
+  display: inline-block;
+  flex: 1;
+
+  margin: 1rem;
+}
+
+.category--inline > * {
+  flex: auto;
+  margin: 0 1rem 1rem 1rem;
+}
+
+.category--2-col > * {
+  flex: unset;
+  width: 50%;
+  margin: 1rem 0;
+}
+
+.category--3-col > * {
+  flex: unset;
+  width: 33.3%;
+  margin: 1rem 0;
+}
+
+@media (max-width: 600px) {
+  .category--3-col > * {
+    width: 50%;
+    margin: 1rem 0;
+  }
+}
+
+.category--4-col > * {
+  flex: unset;
+  width: 25%;
+  margin: 1rem 0;
+}
+
+.category__title {
+  margin-bottom: 0;
+
+  font-size: 1.125rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.category__icon {
+  display: block;
+  margin: 0 auto 0.5rem auto;
+
+  font-size: 300%;
+}
+
+.category--inline .category__icon {
+  margin: 0.5rem auto 0 auto;
+
+  font-size: 250%;
+}
+
+.category__photo {
+  display: block;
+  width: 12rem;
+  height: 12rem;
+  margin: 1rem auto;
+  border: 0.25rem solid #C8C8C8;
+  border-radius: 100%;
+}
+
+/*
+Card
+------------------------------------------------------------
+*/
+.card {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3rem;
+}
+
+.card__header {
+  display: flex;
+  flex-direction: column;
+}
+
+.card__title {
+  order: 1;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+
+  text-align: center;
+}
+
+.card__photo {
+  order: 0;
+  display: block;
+  width: 100%;
+  max-width: 192px;
+  margin: 0 auto;
+  border: 0.25rem solid #C8C8C8;
+  border-radius: 100%;
+}
+
+.card__content {
+  flex: 1;
+  margin-left: 1rem;
+}
+
+@media (min-width: 768px) {
+  .card {
+    flex-direction: row;
+  }
+
+  .card__title {
+    order: 0;
+    margin-top: 0;
+  }
+
+  .card__photo {
+    order: 1;
+    width: 12rem;
+    height: 12rem;
+  }
+}
+
+
+/* Components
+ * ========================================================================== */
+
+/* Site
+ * ------------------------------------------------------
+ */
+.site-header {
+  background-color: white;
+}
+
+.site-nav {
+  display: flex;
+}
+
+.site-nav__link {
+  margin-right: 1.5rem;
+
+  color: inherit;
+
+  text-transform: uppercase;
+}
+
+.site-nav > :last-child .site-nav__link {
+  margin-right: 0;
+}
+
+.site-nav__link:hover {
+  text-decoration: none;
+  text-shadow: #313439 0 0 1px;
+}
+
+.site-nav__link--active {
+  color: white;
+
+  font-weight: bold;
+}
+
+.site-content {}
+
+/* TODO: Make the footer menu a .site-nav as well since the styles overlap?
+ *       Or pull the overlapping parts out into an Object class?
+ */
+.site-footer {
+  color: rgba(49, 52, 57, 0.8); /* #313439 */
+
+  font-size: 1.125rem;
+}
+
+.site-footer__link {
+  display: block;
+  width: 220px;
+  margin: 0 auto 2rem auto;
+  border-bottom: 0;
+
+  color: inherit;
+
+  text-transform: uppercase;
+}
+
+.site-footer__link:hover {
+  color: #313439;
+
+  text-decoration: none;
+  text-shadow: #313439 0 0 1px;
+}
+
+.site-footer__link--lowercase {
+  text-transform: lowercase;
+}
+
+@media (min-width: 600px) {
+  .site-footer {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .site-footer__link:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 900px) {
+  .site-footer {
+    text-align: center;
+  }
+
+  .site-footer__link {
+    width: auto;
+    display: inline-block;
+    margin-bottom: 0;
+    margin-right: 2rem;
+  }
+
+  .site-footer__link:last-child {
+    margin-right: 0;
+  }
+}
+
+/*
+Page
+------------------------------------------------------------
+*/
+.page-content {}
+
+.page-menu {
+  display: none;
+  position: fixed;
+  top: 12.5vh;
+  width: 12.5%;
+
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.page-menu a {
+  display: inline-block;
+  margin: 0.25rem 0;
+  border-bottom: 0;
+  padding: 0.5rem;
+
+  color: #313439;
+  background-color: white;
+}
+
+.page-menu a:hover {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.2);
+
+  font-weight: bold;
+  text-decoration: none;
+}
+
+@media (min-width: 900px) {
+  .page-menu {
+    display: block;
+  }
+}
+
+/*
+Flash
+------------------------------------------------------------
+TODO: aligned w/ layout so needs mobile interactive styling
+*/
+.flash {
+  position: absolute;
+  top: 0rem;
+  left: 56.25%;
+  width: 37.5%;
+}
+
+/*
+Intro
+------------------------------------------------------------
+*/
+.intro {
+  border-top: none; /* remove the top .section border */
+  padding-top: 50px; /* leave space for the menu above */
+}
+
+.intro__actions {
+  text-align: center;
+}
+
+.intro__actions > * {
+  display: block;
+  width: 200px;
+  margin: 1rem auto;
+}
+
+.intro__actions > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Home Page
+ * ------------------------------------------------------
+ */
+.welcome {
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 600px) {
+  .welcome {
+    margin-bottom: 0;
+
+    background-image: url('../images/welcome-bg.jpg');
+    background-position: center center;
+  }
+}
+
+@media (min-width: 900px) {
+  .welcome {
+    background-position: center right;
+  }
+}
+
+/*
+Users
+------------------------------------------------------------
+*/
+@media (min-width: 600px) {
+  .users {
+    background-image: url('../images/users-bg.png');
+    background-position: center center;
+  }
+}
+
+/*
+Session
+------------------------------------------------------------
+*/
+.session {}
+
+@media (min-width: 600px) {
+  .session {
+    background-image: url('../images/session-bg.jpg');
+    background-position: bottom center;
+  }
+}
+
+/*
+Groups
+------------------------------------------------------------
+*/
+@media (min-width: 600px) {
+  .groups {
+    background-image: url('../images/groups-bg.jpg');
+  }
+}
+
+/*
+Projects
+------------------------------------------------------------
+*/
+@media (min-width: 600px) {
+  .projects {
+    background-image: url('../images/projects-bg.jpg');
+    background-position: bottom right;
+  }
+}
+
+/*
+Links
+------------------------------------------------------------
+*/
+@media (min-width: 600px) {
+  .links {
+    background-image: url('../images/links-bg.jpg');
+    background-position: top right;
+  }
+}
+
+
+
+/* Trumps & Helpers
+ * ========================================================================== */
+
+/*
+Helpers
+------------------------------------------------------------
+*/
+.nowrap {
+  white-space: nowrap;
+}
+
+/* Site Header // Brand & Logo
+ * ------------------------------------------------------ */
+.site-header .brand {
+  display: none;
+
+  margin-left: 2.25rem;
+  margin-bottom: 0;
+
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.site-header .brand + * {
+  margin-left: auto;
+}
+
+.site-header .logo {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3rem;
+}
+
+@media (min-width: 600px) {
+  .site-header .brand {
+    display: inline;
+  }
+}
+
+/*
+Intro // Section Content
+------------------------------------------------------------
+*/
+.intro .section__content {
+  padding-top: 1.5rem;
+}
+
+@media (min-width: 600px) {
+  .intro .section__content {
+    padding-top: 3rem;
+  }
+}

@@ -1,11 +1,10 @@
-<h2>
-  Listing Projects
-  <small>(for all groups)</small>
-</h2>
+<section id="intro" class="projects intro section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Projects</h1>
+      <p class="section__subtitle">(for all groups)</p>
+    </header>
 
-<%= render "index-table.partial.html", %{
-  conn: @conn,
-  projects: @projects
-} %>
-
-<span><%= link "Home", to: home_page_path(@conn, :index) %></span>
+    <%= render "index-table.partial.html", %{conn: @conn, projects: @projects} %>
+  </div>
+</section>

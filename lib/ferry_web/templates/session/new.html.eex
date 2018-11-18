@@ -1,5 +1,9 @@
-<h2>Login</h2>
+<section id="intro" class="session intro section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Login</h1>
+    </header>
 
-<%= render "form.html", Map.put(assigns, :action, session_path(@conn, :create)) %>
-
-<span><%= link "Back", to: home_page_path(@conn, :index) %></span>
+    <%= render "form.html", Map.put(assigns, :action, session_path(@conn, :create)) %>
+  </div>
+</section>

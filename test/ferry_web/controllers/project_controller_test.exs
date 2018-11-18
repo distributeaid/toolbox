@@ -91,14 +91,14 @@ defmodule FerryWeb.ProjectControllerTest do
     # TODO: test logged in (conn) & logged out (build_conn())
     test "lists all projects", %{conn: conn} do
       conn = get conn, project_path(conn, :index)
-      assert html_response(conn, 200) =~ "Listing Projects"
+      assert html_response(conn, 200) =~ "Projects"
     end
 
     # TODO: test for 0, 1, n projects
     # TODO: test logged in (conn) & logged out (build_conn())
     test "lists all projects for a group", %{conn: conn, group: group} do
       conn = get conn, group_project_path(conn, :index, group)
-      assert html_response(conn, 200) =~ "Listing Projects"
+      assert html_response(conn, 200) =~ "Projects"
     end
   end
 
@@ -122,7 +122,7 @@ defmodule FerryWeb.ProjectControllerTest do
 
   describe "create project" do
     test "redirects to show when data is valid", %{conn: conn, group: group} do
-      conn = post conn, group_project_path(conn, :create, group), project: %{name: "Another Project"}
+      conn = post conn, group_project_path(conn, :create, group), project: params_for(:project)
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == group_project_path(conn, :show, group, id)

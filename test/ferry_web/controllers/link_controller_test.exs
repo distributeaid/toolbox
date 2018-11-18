@@ -90,7 +90,7 @@ defmodule FerryWeb.LinkControllerTest do
     # TODO: actually lists no links since none are created... test both cases
     test "lists all links", %{conn: conn, group: group} do
       conn = get conn, group_link_path(conn, :index, group)
-      assert html_response(conn, 200) =~ "Listing Links"
+      assert html_response(conn, 200) =~ "Links"
     end
   end
 

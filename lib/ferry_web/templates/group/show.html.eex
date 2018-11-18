@@ -1,36 +1,38 @@
-<h2>Show Group</h2>
+<section id="intro" class="groups intro section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Show Group</h1>
+    </header>
 
-<ul>
+    <ul>
+      <li>
+        <strong>Name:</strong>
+        <%= @group.name %>
+      </li>
+      <li>
+        <strong>Description:</strong>
+        <%= @group.description %>
+      </li>
+    </ul>
 
-  <li>
-    <strong>Name:</strong>
-    <%= @group.name %>
-  </li>
+    <h2>Links</h2>
 
-  <li>
-    <strong>Description:</strong>
-    <%= @group.description %>
-  </li>
+    <%= render FerryWeb.LinkView, "index-table.partial.html", %{
+      conn: @conn,
+      owner: @group,
+      links: @links,
+      owner_link_path: &group_link_path/4
+    } %>
 
-</ul>
+    <h2>Projects</h2>
 
-<h2>Links</h2>
+    <%= render FerryWeb.ProjectView, "index-table.partial.html", %{
+      conn: @conn,
+      projects: @projects
+    } %>
 
-<%= render FerryWeb.LinkView, "index-table.partial.html", %{
-  conn: @conn,
-  owner: @group,
-  links: @links,
-  owner_link_path: &group_link_path/4
-} %>
-
-<h2>Projects</h2>
-
-<%= render FerryWeb.ProjectView, "index-table.partial.html", %{
-  conn: @conn,
-  projects: @projects
-} %>
-
-<span><%= link "Links", to: group_link_path(@conn, :index, @group) %></span>
-<span><%= link "Projects", to: group_project_path(@conn, :index, @group) %></span>
-<span><%= link "Edit", to: group_path(@conn, :edit, @group) %></span>
-<span><%= link "Back", to: group_path(@conn, :index) %></span>
+    <span><%= link "Links", to: group_link_path(@conn, :index, @group) %></span>
+    <span><%= link "Projects", to: group_project_path(@conn, :index, @group) %></span>
+    <span><%= link "Edit", to: group_path(@conn, :edit, @group) %></span>
+  </div>
+</section>
