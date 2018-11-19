@@ -1,0 +1,38 @@
+<section id="intro" class="locations intro section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Show Address</h1>
+      <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+    </header>
+
+    <ul>
+      <li>
+        <strong>Label:</strong>
+        <%= @address.label %>
+      </li>
+      <li>
+        <strong>Street:</strong>
+        <%= @address.street %>
+      </li>
+      <li>
+        <strong>City:</strong>
+        <%= @address.city %>
+      </li>
+      <li>
+        <strong>State:</strong>
+        <%= @address.state %>
+      </li>
+      <li>
+        <strong>Country:</strong>
+        <%= @address.country %>
+      </li>
+      <li>
+        <strong>Zip code:</strong>
+        <%= @address.zip_code %>
+      </li>
+    </ul>
+
+    <span><%= link "Edit", to: group_address_path(@conn, :edit, @group, @address) %></span>
+    <span><%= link "Back To Group", to: group_path(@conn, :show, @group) %></span>
+  </div>
+</section>

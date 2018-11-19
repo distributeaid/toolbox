@@ -749,6 +749,17 @@ Links
   }
 }
 
+/*
+Locations
+------------------------------------------------------------
+*/
+@media (min-width: 600px) {
+  .locations {
+    background-image: url('../images/locations-bg.png');
+  }
+}
+
+
 
 
 /* Trumps & Helpers

@@ -41,9 +41,10 @@ defmodule Ferry.LocationsTest do
       address
     end
 
-    def group_and_project_fixtures() do
-      {:ok, group} = Profiles.create_group(%{name: "Food Clothing and Resistance Collective"})
-      {:ok, project} = Profiles.create_project(group, %{name: "Feed The People"})
+    def group_and_project_fixtures(n \\ 1) do
+      n = to_string(n)
+      {:ok, group} = Profiles.create_group(%{name: "Food Clothing and Resistance Collective " <> n})
+      {:ok, project} = Profiles.create_project(group, %{name: "Feed The People " <> n})
 
       {group, project}
     end
@@ -54,19 +55,46 @@ defmodule Ferry.LocationsTest do
     #       between address owners (groups or projects) must test with both.
     #       Other functions like list_addresses/0 may only test with one.
 
-    test "list_addresses/0 returns all addresses" do
-      {group, project} = group_and_project_fixtures()
+    test "list_addresses/1 returns all addresses for a group" do
+      {group, project} = group_and_project_fixtures(1)
+      {group2, _} = group_and_project_fixtures(2)
 
       # no addresses
-      assert Locations.list_addresses() == []
+      assert Locations.list_addresses(group) == []
 
       # 1 address
       address1 = address_fixture(group)
-      assert Locations.list_addresses() == [address1]
+      assert Locations.list_addresses(group) == [address1]
+
+      # n addresses
+      address2 = address_fixture(group)
+      assert Locations.list_addresses(group) == [address1, address2]
+
+      # only addresses for that group
+      _ = address_fixture(group2)
+      _ = address_fixture(project)
+      assert Locations.list_addresses(group) == [address1, address2]
+    end
+
+    test "list_addresses/1 returns all addresses for a project" do
+      {group, project} = group_and_project_fixtures(1)
+      {_, project2} = group_and_project_fixtures(2)
+
+      # no addresses
+      assert Locations.list_addresses(project) == []
+
+      # 1 address
+      address1 = address_fixture(project)
+      assert Locations.list_addresses(project) == [address1]
 
       # n addresses
       address2 = address_fixture(project)
-      assert Locations.list_addresses() == [address1, address2]
+      assert Locations.list_addresses(project) == [address1, address2]
+
+      # only addresses for that group
+      _ = address_fixture(group)
+      _ = address_fixture(project2)
+      assert Locations.list_addresses(project) == [address1, address2]
     end
 
     test "list_countries/0 returns all countries"

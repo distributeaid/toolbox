@@ -1,0 +1,39 @@
+<%= if has_addresses? @addresses do %>
+  <table class="is-striped">
+    <thead>
+      <tr>
+        <th>Label</th>
+        <th>Street</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Country</th>
+        <th>Zip code</th>
+
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+  <%= for address <- @addresses do %>
+      <tr>
+        <td><%= address.label %></td>
+        <td><%= address.street %></td>
+        <td><%= address.city %></td>
+        <td><%= address.state %></td>
+        <td><%= address.country %></td>
+        <td><%= address.zip_code %></td>
+
+        <td>
+          <span><%= link "Show", to: @owner_link_path.(@conn, :show, address, @owner), class: "button is-small" %></span>
+          <span><%= link "Edit", to: @owner_link_path.(@conn, :edit, address, @owner), class: "button is-small" %></span>
+          <span><%= link "Delete", to: @owner_link_path.(@conn, :delete, address, @owner), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
+        </td>
+      </tr>
+  <% end %>
+    </tbody>
+  </table>
+
+<% else %>
+  <p>
+    No addresses have been created.
+  </p>
+<% end %>

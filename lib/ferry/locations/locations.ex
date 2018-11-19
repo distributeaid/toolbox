@@ -14,12 +14,25 @@ defmodule Ferry.Locations do
 
   ## Examples
 
-      iex> list_addresses()
+      iex> list_addresses(%Group{})
+      [%Address{}, ...]
+
+      iex> list_addresses(%Project{})
       [%Address{}, ...]
 
   """
-  def list_addresses do
-    Repo.all(Address)
+  def list_addresses(%Group{} = group) do
+    Repo.all(from a in Address,
+      where: a.group_id == ^group.id,
+      order_by: [a.id]
+    )
+  end
+
+  def list_addresses(%Project{} = project) do
+    Repo.all(from a in Address,
+      where: a.project_id == ^project.id,
+      order_by: [a.id]
+    )
   end
 
   @doc """

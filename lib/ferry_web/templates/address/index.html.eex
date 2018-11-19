@@ -1,0 +1,18 @@
+<section id="intro" class="locations intro section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Addresses</h1>
+      <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+    </header>
+
+    <%= render "index-table.partial.html", %{
+      conn: @conn,
+      addresses: @addresses,
+      owner: @group,
+      owner_link_path: &group_address_path/4
+    } %>
+
+    <span><%= link "New Address", to: group_address_path(@conn, :new, @group) %></span>
+    <span><%= link "Back to Group", to: group_path(@conn, :show, @group) %></span>
+  </div>
+</section>

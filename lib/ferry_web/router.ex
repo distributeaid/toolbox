@@ -33,11 +33,13 @@ defmodule FerryWeb.Router do
     resources "/session", SessionController, only: [:new, :create, :delete], singleton: true
 
     resources "/groups", GroupController, only: [:index, :show] do
-      resources "/users", UserController, only: [:new, :create] # TODO: move into admin scope
+      resources "/addresses", AddressController, only: [:index, :show]
       resources "/links", LinkController, only: [:index, :show]
       resources "/projects", ProjectController, only: [:index, :show]
+      resources "/users", UserController, only: [:new, :create] # TODO: move into admin scope
     end
 
+    resources "/addresses", AddressController, only: [:index] # TODO: will become "The Map" page
     resources "/projects", ProjectController, only: [:index]
   end
 
@@ -45,6 +47,7 @@ defmodule FerryWeb.Router do
     pipe_through [:browser, :setup_auth, :ensure_auth, :authorization]
 
     resources "/groups", GroupController, only: [:edit, :update, :delete] do
+      resources "/addresses", AddressController, except: [:index, :show]
       resources "/links", LinkController, except: [:index, :show]
       resources "/projects", ProjectController, except: [:index, :show]
     end

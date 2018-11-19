@@ -10,6 +10,7 @@ defmodule Ferry.Factory do
   alias Ferry.{
     Accounts.User,
     Links.Link,
+    Locations.Address,
     Profiles.Group,
     Profiles.Project
   }
@@ -104,6 +105,30 @@ defmodule Ferry.Factory do
       link_factory(),
       %{
         url: ""
+      }
+    )
+  end
+
+  # Address
+  # ----------------------------------------------------------
+  def address_factory do
+    %Address{
+      label: sequence("Where I Want To Move"),
+      street: sequence(:street, &"161#{&1} Exarchia Avenue"),
+      city: "Athens",
+      state: "Attica",
+      country: "Greece",
+      zip_code: "106 81"
+    }
+  end
+
+  def invalid_address_factory do
+    struct!(
+      address_factory(),
+      %{
+        label: "",
+        city: "",
+        country: ""
       }
     )
   end
