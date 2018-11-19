@@ -1,38 +1,29 @@
+<%= render "index.html", %{
+  conn: @conn,
+  groups: @groups,
+  current_group: @current_group
+} %>
+
 <section class="section">
   <div class="section__content">
     <header class="section__header">
-      <h1 class="section__title">Show Group</h1>
+      <h1 class="section__title"><%= @group.name %></h1>
     </header>
 
-    <ul>
-      <li>
-        <strong>Name:</strong>
-        <%= @group.name %>
-      </li>
-      <li>
-        <strong>Description:</strong>
-        <%= @group.description %>
-      </li>
-    </ul>
+    <p>
+      <%= @group.description %>
+    </p>
 
-    <h2>Links</h2>
-
-    <%= render FerryWeb.LinkView, "index-table.partial.html", %{
+    <%= render FerryWeb.LinkView, "index-list.partial.html", %{
       conn: @conn,
       owner: @group,
       links: @links,
       owner_link_path: &group_link_path/4
     } %>
 
-    <h2>Projects</h2>
-
-    <%= render FerryWeb.ProjectView, "index-table.partial.html", %{
+    <%= render FerryWeb.ProjectView, "index-list.partial.html", %{
       conn: @conn,
       projects: @projects
     } %>
-
-    <span><%= link "Links", to: group_link_path(@conn, :index, @group) %></span>
-    <span><%= link "Projects", to: group_project_path(@conn, :index, @group) %></span>
-    <span><%= link "Edit", to: group_path(@conn, :edit, @group) %></span>
   </div>
 </section>

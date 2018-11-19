@@ -291,18 +291,10 @@ Subsection
 ------------------------------------------------------------
 */
 .subsection__header {
-  margin: 2rem 0;
+  margin: 2rem 0 0.5rem 0;
+  border-bottom: 2px dashed #313439;
 
   text-align: center;
-}
-
-.subsection__title {
-  margin-bottom: 0.5rem;
-  border-bottom: 2px dashed #313439;
-}
-
-.subsection__subtitle {
-  margin-top: -0.25rem;
 }
 
 /*
@@ -371,7 +363,7 @@ a .category > * {
 
 .category--inline > * {
   flex-grow: 0;
-  margin: 0 1rem 1rem 1rem;
+  margin: 1rem;
 }
 
 .category--2-col > * {
@@ -702,7 +694,6 @@ Groups
 Group page styles go here.
 */
 
-
 /*
 Projects
 ------------------------------------------------------------
@@ -714,6 +705,13 @@ Links
 ------------------------------------------------------------
 Link page styles go here.
 */
+.links-list {
+  text-align: left;
+}
+
+.links-list ul {
+  margin-bottom: 0;
+}
 
 /*
 Locations

@@ -1,20 +1,23 @@
 <%= if has_links? @links do %>
-  <%= with links_by_category <- sort_links_by_category(@links) do %>
+  <h2 class="subsection__header">Quick Links</h2>
 
-    <%= for category <- categories(links_by_category) do %>
-      <h3><%= category %></h3>
-      <ul>
-        <%= for link <- links_by_category[category] do %>
-          <li>
-            <%= link label_text(link), to: link.url %>
-          </li>
-        <% end %>
-      </ul>
+  <div class="category category--inline">
+    <%= with links_by_category <- sort_links_by_category(@links) do %>
+
+      <%= for category <- categories(links_by_category) do %>
+        <div class="links-list">
+          <%= component "category-entry.partial.html", title: category do %>
+            <ul class="is-unstyled">
+              <%= for link <- links_by_category[category] do %>
+                <li>
+                  <%= link label_text(link), to: link.url %>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        </div>
+      <% end %>
+
     <% end %>
-
-  <% end %>
-<% else %>
-  <p>
-    No links have been created.
-  </p>
+  </div>
 <% end %>

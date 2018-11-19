@@ -1,0 +1,10 @@
+<%= if has_projects? @projects do %>
+  <h2 class="subsection__header">Projects</h2>
+
+  <ul class="is-unstyled">
+    <%= for project <- @projects do %>
+      <h3><%= project.name %></h3>
+      <p><%= project.description %></p>
+    <% end %>
+  </ul>
+<% end %>

@@ -19,8 +19,8 @@
     Current Group
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     -->
-    <%= if @current_user do %>
-      <h2 class="subsection__header subsection__title">My Group</h2>
+    <%= if @current_group do %>
+      <h2 class="subsection__header">My Group</h2>
       <div class="category category--inline">
         <%= link to: group_path(@conn, :show, @current_group), class: "link--wrapper" do %>
           <%= component "category-entry.partial.html", %{
@@ -35,7 +35,7 @@
     Groups List
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     -->
-    <h2 class="subsection__header subsection__title">All Groups</h2>
+    <h2 class="subsection__header">All Groups</h2>
     <%= if has_groups? @groups do %>
       <div class="category category--3-col">
         <%= for group <- @groups do %>
