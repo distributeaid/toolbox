@@ -90,9 +90,9 @@
     </div>
 
     <main role="main" class="site-content">
-      <article class="page-content">
+      <%= content_tag :article, class: "page-content " <> page_background_img_class(@conn) do %>
         <%= render @view_module, @view_template, assigns %>
-      </article>
+      <% end %>
     </main>
 
     <footer id="footer" class="site-footer section">

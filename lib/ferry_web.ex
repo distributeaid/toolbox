@@ -41,6 +41,9 @@ defmodule FerryWeb do
       import FerryWeb.ErrorHelpers
       import FerryWeb.Gettext
 
+      # Functions required for layouts.
+      import FerryWeb.LayoutHelpers
+
       # Shortcuts functions to render components.
       import FerryWeb.ComponentHelpers
     end

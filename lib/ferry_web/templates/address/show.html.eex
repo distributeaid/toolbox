@@ -1,4 +1,4 @@
-<section id="intro" class="locations intro section">
+<section class="section">
   <div class="section__content">
     <header class="section__header">
       <h1 class="section__title">Show Address</h1>

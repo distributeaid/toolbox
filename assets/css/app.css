@@ -203,10 +203,9 @@ form .is-req {
  * ------------------------------------------------------ */
 .navbar {
   position: fixed;
+  top: 0;
   display: flex;
   width: 100%;
-  min-width: 600px;
-  max-width: 800px;
   padding: 0.75rem 1rem;
   border-bottom: 0.125rem solid white;
   box-shadow: 0 0.5rem 0.5rem 0 rgba(49, 52, 57, 0.2); /* #313439 */
@@ -216,12 +215,6 @@ form .is-req {
 
 .navbar a {
   border-bottom: none;
-}
-
-@media (min-width: 600px) {
-  .navbar {
-    width: 50%;
-  }
 }
 
 /* Brand
@@ -243,11 +236,9 @@ form .is-req {
 /* Section
  * ------------------------------------------------------ */
 .section {
-  border-top: 2px solid #313439;
-  padding-top: 2rem;
+  margin: 0 2rem;
 
-  background: no-repeat top center fixed;
-  background-size: cover;
+  padding-top: 2rem;
 }
 
 .section--full-screen {
@@ -285,33 +276,13 @@ p.section__subtitle {
 
 @media (min-width: 600px) {
   .section {
-    padding-top: 0;
-
-    border-top: 0.5rem solid white;
-    border-bottom: 0.5rem solid white;
-  }
-
-  .section:last-child {
-    border-bottom: 0;
-  }
-
-  .section__content {
-    width: 100%;
-    min-width: 600px;
-    max-width: 800px;
-    border-left: 0.125rem solid white;
-    border-right: 0.125rem solid white;
-    padding: 3rem 1.5rem;
-  }
-
-  .section:only-child .section__content {
-    min-height: calc(100vh - 50px - 131px); /* leave room for the site nav / footer */
-  }
-}
-
-@media (min-width: 600px) {
-  .section__content {
     width: 50%;
+    padding-top: 0;
+  }
+
+  .section__content {
+    border: 0.125rem solid white;
+    padding: 3rem 1.5rem;
   }
 }
 
@@ -616,7 +587,43 @@ Card
 Page
 ------------------------------------------------------------
 */
-.page-content {}
+.page-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  min-height: calc(100vh - 181px); /* leave room for the site nav / footer */
+  margin-top: 50px;
+
+  background: no-repeat top center fixed;
+  background-size: cover;
+}
+
+@media (min-width: 600px) {
+  .page-content--welcome {
+    background-image: url('../images/welcome-bg.jpg');
+    background-position: bottom center;
+  }
+
+  .page-content--users {
+    background-image: url('../images/users-bg.png');
+    background-position: center center;
+  }
+
+  .page-content--session {
+    background-image: url('../images/session-bg.jpg');
+    background-position: center center;
+  }
+
+  .page-content--groups {
+    background-image: url('../images/groups-bg.jpg');
+    background-position: bottom center;
+  }
+
+  .page-content--projects {
+    background-image: url('../images/projects-bg.jpg');
+    background-position: top right;
+  }
+}
 
 .page-menu {
   display: none;
@@ -664,29 +671,6 @@ TODO: aligned w/ layout so needs mobile interactive styling
   width: 37.5%;
 }
 
-/*
-Intro
-------------------------------------------------------------
-*/
-.intro {
-  border-top: none; /* remove the top .section border */
-  padding-top: 50px; /* leave space for the menu above */
-}
-
-.intro__actions {
-  text-align: center;
-}
-
-.intro__actions > * {
-  display: block;
-  width: 200px;
-  margin: 1rem auto;
-}
-
-.intro__actions > *:last-child {
-  margin-bottom: 0;
-}
-
 /* Home Page
  * ------------------------------------------------------
  */
@@ -697,85 +681,45 @@ Intro
 @media (min-width: 600px) {
   .welcome {
     margin-bottom: 0;
-
-    background-image: url('../images/welcome-bg.jpg');
-    background-position: center center;
-  }
-}
-
-@media (min-width: 900px) {
-  .welcome {
-    background-position: center right;
   }
 }
 
 /*
 Users
 ------------------------------------------------------------
+User page styles go here.
 */
-@media (min-width: 600px) {
-  .users {
-    background-image: url('../images/users-bg.png');
-    background-position: center center;
-  }
-}
 
 /*
 Session
 ------------------------------------------------------------
+Session page styles go here.
 */
-.session {}
-
-@media (min-width: 600px) {
-  .session {
-    background-image: url('../images/session-bg.jpg');
-    background-position: bottom center;
-  }
-}
 
 /*
 Groups
 ------------------------------------------------------------
+Group page styles go here.
 */
-@media (min-width: 600px) {
-  .groups {
-    background-image: url('../images/groups-bg.jpg');
-  }
-}
+
 
 /*
 Projects
 ------------------------------------------------------------
+Project page styles go here.
 */
-@media (min-width: 600px) {
-  .projects {
-    background-image: url('../images/projects-bg.jpg');
-    background-position: bottom right;
-  }
-}
 
 /*
 Links
 ------------------------------------------------------------
+Link page styles go here.
 */
-@media (min-width: 600px) {
-  .links {
-    background-image: url('../images/links-bg.jpg');
-    background-position: top right;
-  }
-}
 
 /*
 Locations
 ------------------------------------------------------------
+Location page styles go here.
 */
-@media (min-width: 600px) {
-  .locations {
-    background-image: url('../images/locations-bg.png');
-  }
-}
-
-
 
 
 /* Trumps & Helpers
@@ -788,6 +732,15 @@ Helpers
 .nowrap {
   white-space: nowrap;
 }
+
+/*
+Site Content // Section Content
+------------------------------------------------------------
+*/
+.site-content .section__content {
+  min-height: calc(100vh - 181px); /* leave room for the site nav / footer */
+}
+
 
 /* Site Header // Brand & Logo
  * ------------------------------------------------------ */
@@ -816,19 +769,5 @@ Helpers
 @media (min-width: 600px) {
   .site-header .brand {
     display: inline;
-  }
-}
-
-/*
-Intro // Section Content
-------------------------------------------------------------
-*/
-.intro .section__content {
-  padding-top: 1.5rem;
-}
-
-@media (min-width: 600px) {
-  .intro .section__content {
-    padding-top: 3rem;
   }
 }
