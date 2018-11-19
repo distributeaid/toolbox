@@ -33,7 +33,11 @@
  * Kube has a 4px vertical rhythm.
  */
 
-@import url('https://fonts.googleapis.com/css?family=Comfortaa:400|Quicksand:400,700');
+/* TODO: For some reason the fonts aren't loading.  Perhaps it's b/c Kube is
+ *       concatenated before this stylesheet?  Loading them via a <link> tag
+ *       in `/lib/ferry_web/templates/layout/app.html.eex` for now.
+ */
+/* @import url('https://fonts.googleapis.com/css?family=Comfortaa:400|Quicksand:400,700'); */
 
 
 /* Elements

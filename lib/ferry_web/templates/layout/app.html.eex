@@ -12,6 +12,7 @@
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     -->
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa:400|Quicksand:400,700">
 
     <!--
     Favicon
