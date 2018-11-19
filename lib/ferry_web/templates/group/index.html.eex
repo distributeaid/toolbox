@@ -1,45 +1,58 @@
 <section id="intro" class="groups intro section">
   <div class="section__content">
+
+    <!--
+    Header
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    -->
     <header class="section__header">
       <h1 class="section__title">Groups</h1>
     </header>
 
-    <%= if has_groups? @groups do %>
-      <table class="is-striped">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Controls</th>
-            <th>Projects</th>
-            <th>Links</th>
-          </tr>
-        </thead>
-        <tbody>
-      <%= for group <- @groups do %>
-          <tr>
-            <td><%= group.name %></td>
-            <td><%= group.description %></td>
-            <td>
-              <span><%= link "Show", to: group_path(@conn, :show, group), class: "button is-small" %></span>
-              <span><%= link "Edit", to: group_path(@conn, :edit, group), class: "button is-small" %></span>
-              <span><%= link "Delete", to: group_path(@conn, :delete, group), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
-            </td>
-            <td>
-              <%= link "Projects", to: group_project_path(@conn, :index, group) %>
-            </td>
-            <td>
-              <%= link "Links", to: group_link_path(@conn, :index, group) %>
-            </td>
-          </tr>
-      <% end %>
-        </tbody>
-      </table>
+    <!--
+    Controls
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    TODO
+    -->
 
+    <!--
+    Current Group
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    -->
+    <%= if @current_user do %>
+      <h2 class="subsection__header subsection__title">My Group</h2>
+      <div class="category category--inline">
+        <%= link to: group_path(@conn, :show, @current_group), class: "link--wrapper" do %>
+          <%= component "category-entry.partial.html", %{
+            title: @current_group.name,
+            icon: %{class: "fas fa-3x fa-users"}
+          } %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!--
+    Groups List
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    -->
+    <h2 class="subsection__header subsection__title">All Groups</h2>
+    <%= if has_groups? @groups do %>
+      <div class="category category--3-col">
+        <%= for group <- @groups do %>
+          <%= link to: group_path(@conn, :show, group), class: "link--wrapper" do %>
+            <%= component "category-entry.partial.html", %{
+              title: group.name,
+              icon: %{class: "fas fa-3x fa-users"}
+            } %>
+          <% end %>
+        <% end %>
+      </div>
     <% else %>
       <p>
-        No groups have been created.
+        No groups have been created... yet!
       </p>
     <% end %>
+
+
   </div>
 </section>

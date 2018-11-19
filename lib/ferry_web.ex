@@ -40,6 +40,9 @@ defmodule FerryWeb do
       import FerryWeb.Router.Helpers
       import FerryWeb.ErrorHelpers
       import FerryWeb.Gettext
+
+      # Shortcuts functions to render components.
+      import FerryWeb.ComponentHelpers
     end
   end
 

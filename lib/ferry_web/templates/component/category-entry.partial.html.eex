@@ -1,0 +1,10 @@
+<%= cond do %>
+  <% assigns[:img] -> %>
+    <%= img_tag @img.src, alt: @img.alt, class: "category__photo" %>
+  <% assigns[:icon] -> %>
+    <%= content_tag :i, "", class: "category__icon " <> @icon.class %>
+  <% true -> %>
+    <!-- No Category Entry Image / Icon Provided -->
+<% end %>
+
+<span class="category__title"><%= @title %></h3>

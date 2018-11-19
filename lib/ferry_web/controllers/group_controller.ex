@@ -12,9 +12,15 @@ defmodule FerryWeb.GroupController do
   # ----------------------------------------------------------
 
   # TODO: add pagination
+  def index(conn = %{assigns: %{current_user: %{group_id: group_id}}}, _params) do
+    current_group = Profiles.get_group!(group_id)
+    groups = Profiles.list_groups()
+    render(conn, "index.html", groups: groups, current_group: current_group)
+  end
+
   def index(conn, _params) do
     groups = Profiles.list_groups()
-    render(conn, "index.html", groups: groups)
+    render(conn, "index.html", groups: groups, current_group: nil)    
   end
 
   # TODO: show group-specific 404 page - "couldn't find the group you were looking for"

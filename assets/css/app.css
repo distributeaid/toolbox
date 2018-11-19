@@ -106,6 +106,14 @@ a:hover {
   text-decoration: none;
 }
 
+a.link--wrapper {
+  border-bottom: none;
+}
+
+a.link--wrapper:hover {
+  border-bottom: none;
+}
+
 /*
 Buttons
 ------------------------------------------------------------
@@ -381,24 +389,28 @@ Alert
 
 .category > * {
   display: inline-block;
-  flex: 1;
+  flex-grow: 1;
 
   margin: 1rem;
 }
 
+a .category > * {
+  border-bottom: none;
+}
+
 .category--inline > * {
-  flex: auto;
+  flex-grow: 0;
   margin: 0 1rem 1rem 1rem;
 }
 
 .category--2-col > * {
-  flex: unset;
+  flex: 0 0 auto;
   width: 50%;
   margin: 1rem 0;
 }
 
 .category--3-col > * {
-  flex: unset;
+  flex: 0 0 auto;
   width: 33.3%;
   margin: 1rem 0;
 }
@@ -411,7 +423,7 @@ Alert
 }
 
 .category--4-col > * {
-  flex: unset;
+  flex: 0 0 auto;
   width: 25%;
   margin: 1rem 0;
 }
