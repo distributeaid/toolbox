@@ -169,8 +169,7 @@ form .is-req {
 }
 
 .form-item.is-inline {
-  padding-left: 25px;
-  padding-right: 125px;
+  padding-left: 0;
 }
 
 .form-item.is-inline-offset {
@@ -191,8 +190,23 @@ form .is-req {
 .form-item.is-inline input:not([type="checkbox"]):not([type="radio"]) {
   display: inline-block;
 
-  /* leaves room for the 5px space between the label and the input and the label's right margin */
+  /* Leaves room for:
+   *   - the 5px space between the label and the input.
+   *   - the label's right margin
+   *.  - build in some margin on the right
+   */
+  width: calc(100% - 205px - 0.5rem);
+}
+
+.form-item.is-inline textarea {
+  display: inline-block;
+
+  /* Leaves room for:
+   *   - the 5px space between the label and the input.
+   *   - the label's right margin
+   */
   width: calc(100% - 105px - 0.5rem);
+  height: 200px;
 }
 
 
@@ -236,6 +250,7 @@ form .is-req {
 /* Section
  * ------------------------------------------------------ */
 .section {
+  position: relative;
   margin: 0 2rem;
 
   padding-top: 2rem;
@@ -301,11 +316,51 @@ Subsection
 Action
 ------------------------------------------------------------
 */
-.action {}
+.actions {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  margin: 0;
+}
 
-.action__icon {
-  font-size: 1.5rem;
-  vertical-align: text-bottom;
+ul.actions {
+  list-style: none;
+}
+
+ul.actions > li {
+  display: inline-block;
+  padding: 0;
+}
+
+.action {
+  display: inline-block;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 100%;
+
+  color: white;
+  background-color: rgba(49, 52, 57, 0.8); /* #313439 */
+
+  font-size: 1.25rem;
+  line-height: 0;
+  text-align: left;
+  vertical-align: middle;
+}
+
+a.action {
+  border-bottom: none;
+}
+
+.action:hover {
+  background-color: rgba(49, 52, 57, 1);  /* #313439 */
+  color: white;
+}
+
+.action > * {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /*

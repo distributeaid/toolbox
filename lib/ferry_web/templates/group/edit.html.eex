@@ -1,9 +1,32 @@
+<%= render "index.html", %{
+  conn: @conn,
+  groups: @groups,
+  current_group: @current_group
+} %>
+
 <section class="section">
   <div class="section__content">
     <header class="section__header">
       <h1 class="section__title">Edit Group</h1>
     </header>
 
+    <ul class="actions">
+      <li>
+        <%= link to: group_path(@conn, :index), class: "action action--close" do %>
+          <i class="fas fa-times"></i>
+        <% end %>
+      </li>
+    </ul>
+
     <%= render "form.html", Map.put(assigns, :action, group_path(@conn, :update, @group)) %>
+
+    <p class="is-small">
+      It is currently not possible to delete your group through the app.  We
+      certainly respect your privacy and autonomy- if you feel like you aren't
+      ready to include your group on the Distribute Aid website please email
+      <a href="mailto:help@distributeaid.org">help@distributeaid.org</a> and one
+      of our technical team members will assist you.
+    </p>
+
   </div>
 </section>

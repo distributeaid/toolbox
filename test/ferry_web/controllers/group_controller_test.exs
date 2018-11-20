@@ -74,7 +74,7 @@ defmodule FerryWeb.GroupControllerTest do
     # TODO: test logged in (conn) & logged out (build_conn())
     test "lists the specified group", %{conn: conn, group: group} do
       conn = get conn, group_path(conn, :show, group.id)
-      assert html_response(conn, 200) =~ "Show Group"
+      assert html_response(conn, 200) =~ group.description
     end
   end
 

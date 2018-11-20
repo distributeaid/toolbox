@@ -13,7 +13,7 @@
 
   <div class="form-item is-inline">
     <%= label f, :description %>
-    <%= text_input f, :description %>
+    <%= textarea f, :description %>
     <%= error_tag f, :description %>
   </div>
 

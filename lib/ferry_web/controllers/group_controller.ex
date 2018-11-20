@@ -10,11 +10,18 @@ defmodule FerryWeb.GroupController do
 
   # Helpers
   # ----------------------------------------------------------
-  defp get_current_group(conn = %{assigns: %{current_user: %{group_id: group_id}}}) do
+  defp groups_list_assigns(conn) do
+    [
+      current_group: current_group(conn),
+      groups: Profiles.list_groups()
+    ]
+  end
+
+  defp current_group(_conn = %{assigns: %{current_user: %{group_id: group_id}}}) do
     Profiles.get_group!(group_id)
   end
 
-  defp get_current_group(_conn) do
+  defp current_group(_conn) do
     nil
   end
 
@@ -23,9 +30,7 @@ defmodule FerryWeb.GroupController do
 
   # TODO: add pagination
   def index(conn, _params) do
-    current_group = get_current_group(conn)
-    groups = Profiles.list_groups()
-    render(conn, "index.html", groups: groups, current_group: current_group)
+    render(conn, "index.html", groups_list_assigns(conn))
   end
 
   # TODO: show group-specific 404 page - "couldn't find the group you were looking for"
@@ -33,14 +38,15 @@ defmodule FerryWeb.GroupController do
   #       results in the 404 page being shown when debug mode is turned off
   #       (`debug_errors: true` in config/dev.exs)
   def show(conn, %{"id" => id}) do
-    # needed to render the left-hand side groups list
-    current_group = get_current_group(conn)
-    groups = Profiles.list_groups()
-
     group = Profiles.get_group!(id)
-    links = Links.list_links(group)
-    projects = Profiles.list_projects(group)
-    render(conn, "show.html", groups: groups, current_group: current_group, group: group, links: links, projects: projects)
+
+    assigns = Keyword.merge(groups_list_assigns(conn), [
+      group: group,
+      links: Links.list_links(group),
+      projects: Profiles.list_projects(group)
+    ])
+
+    render(conn, "show.html", assigns)
   end
 
   # Create
@@ -69,8 +75,13 @@ defmodule FerryWeb.GroupController do
 
   def edit(conn, %{"id" => id}) do
     group = Profiles.get_group!(id)
-    changeset = Profiles.change_group(group)
-    render(conn, "edit.html", group: group, changeset: changeset)
+
+    assigns = Keyword.merge(groups_list_assigns(conn), [
+      group: group,
+      changeset: Profiles.change_group(group),
+    ])
+
+    render(conn, "edit.html", assigns)
   end
 
   def update(conn, %{"id" => id, "group" => group_params}) do
@@ -81,8 +92,13 @@ defmodule FerryWeb.GroupController do
         conn
         |> put_flash(:info, "Group updated successfully.")
         |> redirect(to: group_path(conn, :show, group))
+
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", group: group, changeset: changeset)
+        assigns = Keyword.merge(groups_list_assigns(conn), [
+          group: group,
+          changeset: changeset,
+        ])
+        render(conn, "edit.html", assigns)
     end
   end
 
