@@ -1,22 +1,20 @@
 <section class="section">
   <div class="section__content">
     <header class="section__header">
-      <h1 class="section__title">Show Project</h1>
-      <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+      <h1 class="section__title"><%= @project.name %></h1>
+      <p class="section__subtitle">(a project by <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
     </header>
 
-    <ul>
+    <ul class="actions">
       <li>
-        <strong>Name:</strong>
-        <%= @project.name %>
-      </li>
-      <li>
-        <strong>Description:</strong>
-        <%= @project.description %>
+        <%= link to: group_path(@conn, :show, @group), class: "action action--close" do %>
+          <i class="fas fa-times"></i>
+        <% end %>
       </li>
     </ul>
 
-    <span><%= link "Edit", to: group_project_path(@conn, :edit, @group, @project) %></span>
-    <span><%= link "Back To Group", to: group_path(@conn, :show, @group) %></span>
+    <p>
+      <%= @project.description %>
+    </p>
   </div>
 </section>

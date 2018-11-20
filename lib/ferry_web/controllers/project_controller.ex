@@ -42,10 +42,10 @@ defmodule FerryWeb.ProjectController do
     group = Profiles.get_group!(group_id)
 
     case Profiles.create_project(group, project_params) do
-      {:ok, project} ->
+      {:ok, _project} ->
         conn
         |> put_flash(:info, "Project created successfully.")
-        |> redirect(to: group_project_path(conn, :show, group, project))
+        |> redirect(to: group_path(conn, :show, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", group: group, changeset: changeset)
     end
@@ -66,10 +66,10 @@ defmodule FerryWeb.ProjectController do
     project = Profiles.get_project!(id)
 
     case Profiles.update_project(project, project_params) do
-      {:ok, project} ->
+      {:ok, _project} ->
         conn
         |> put_flash(:info, "Project updated successfully.")
-        |> redirect(to: group_project_path(conn, :show, group, project))
+        |> redirect(to: group_path(conn, :show, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", group: group, project: project, changeset: changeset)
     end
@@ -85,6 +85,6 @@ defmodule FerryWeb.ProjectController do
 
     conn
     |> put_flash(:info, "Project deleted successfully.")
-    |> redirect(to: group_project_path(conn, :index, group))
+    |> redirect(to: group_path(conn, :show, group))
   end
 end

@@ -11,7 +11,7 @@
     </header>
 
     <ul class="actions">
-      <%= if @group.id == @current_group.id do %>
+      <%= if !is_nil(@current_group) &&@group.id == @current_group.id do %>
         <li>
           <%= link to: group_path(@conn, :edit, @current_group), class: "action" do %>
             <i class="fas fa-pencil-alt"></i>
@@ -34,12 +34,14 @@
       conn: @conn,
       group: @group,
       links: @links,
-      can_modify?: @group.id == @current_group.id
+      can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
     } %>
 
     <%= render FerryWeb.ProjectView, "index-list.partial.html", %{
       conn: @conn,
-      projects: @projects
+      group: @group,
+      projects: @projects,
+      can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
     } %>
   </div>
 </section>

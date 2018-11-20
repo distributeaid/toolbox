@@ -787,8 +787,25 @@ Group page styles go here.
 /*
 Projects
 ------------------------------------------------------------
-Project page styles go here.
 */
+.project {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+
+.project__title {
+  padding-top: 6px; /* vertically align w/ .project__actions */
+}
+
+.project__actions {
+  text-align: right;
+}
+
+.project__description {
+  flex-basis: 100%;
+}
 
 /*
 Links

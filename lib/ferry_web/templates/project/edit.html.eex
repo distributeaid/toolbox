@@ -5,8 +5,14 @@
       <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
     </header>
 
-    <%= render "form.html", Map.put(assigns, :action, group_project_path(@conn, :update, @group, @project)) %>
+    <ul class="actions">
+      <li>
+        <%= link to: group_path(@conn, :show, @group), class: "action" do %>
+          <i class="fas fa-times"></i>
+        <% end %>
+      </li>
+    </ul>
 
-    <span><%= link "Back To Group", to: group_path(@conn, :show, @group) %></span>
+    <%= render "form.html", Map.put(assigns, :action, group_project_path(@conn, :update, @group, @project)) %>
   </div>
 </section>

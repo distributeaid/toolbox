@@ -106,7 +106,7 @@ defmodule FerryWeb.ProjectControllerTest do
     # TODO: test logged in (conn) & logged out (build_conn())
     test "lists the specified group", %{conn: conn, group: group, project: project} do
       conn = get conn, group_project_path(conn, :show, group, project)
-      assert html_response(conn, 200) =~ "Show Project"
+      assert html_response(conn, 200) =~ project.name
     end
   end
 
@@ -122,13 +122,13 @@ defmodule FerryWeb.ProjectControllerTest do
 
   describe "create project" do
     test "redirects to show when data is valid", %{conn: conn, group: group} do
-      conn = post conn, group_project_path(conn, :create, group), project: params_for(:project)
+      project_params = params_for(:project)
+      conn = post conn, group_project_path(conn, :create, group), project: project_params
 
-      assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == group_project_path(conn, :show, group, id)
+      assert redirected_to(conn) == group_path(conn, :show, group)
 
-      conn = get conn, group_project_path(conn, :show, group, id)
-      assert html_response(conn, 200) =~ "Show Project"
+      conn = get conn, group_path(conn, :show, group)
+      assert html_response(conn, 200) =~ project_params.name
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group} do
@@ -149,11 +149,13 @@ defmodule FerryWeb.ProjectControllerTest do
 
   describe "update project" do
     test "redirects when data is valid", %{conn: conn, group: group, project: project} do
-      conn = put conn, group_project_path(conn, :update, group, project), project: params_for(:project)
-      assert redirected_to(conn) == group_project_path(conn, :show, group, project)
+      project_params = params_for(:project)
+      conn = put conn, group_project_path(conn, :update, group, project), project: project_params
 
-      conn = get conn, group_project_path(conn, :show, group, project)
-      assert html_response(conn, 200) =~ params_for(:project).description
+      assert redirected_to(conn) == group_path(conn, :show, group)
+
+      conn = get conn, group_path(conn, :show, group)
+      assert html_response(conn, 200) =~ project_params.name
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group, project: project} do
@@ -168,7 +170,7 @@ defmodule FerryWeb.ProjectControllerTest do
   describe "delete project" do
     test "deletes chosen project", %{conn: conn, group: group, project: project} do
       conn = delete conn, group_project_path(conn, :delete, group, project)
-      assert redirected_to(conn) == group_project_path(conn, :index, group)
+      assert redirected_to(conn) == group_path(conn, :show, group)
       assert_error_sent 404, fn ->
         get conn, group_project_path(conn, :show, group, project)
       end
