@@ -48,7 +48,10 @@ defmodule Ferry.Mixfile do
       {:bcrypt_elixir, "~> 1.0"},
 
       # testing deps
-      {:ex_machina, "~> 2.2"}
+      {:ex_machina, "~> 2.2"},
+
+      # deployment deps
+      {:distillery, "~> 2.0"},
     ]
   end
 
