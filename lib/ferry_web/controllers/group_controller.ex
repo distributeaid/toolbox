@@ -10,7 +10,9 @@ defmodule FerryWeb.GroupController do
 
   # Helpers
   # ----------------------------------------------------------
-  defp groups_list_assigns(conn) do
+
+  # TODO: test
+  def groups_list_assigns(conn) do
     [
       current_group: current_group(conn),
       groups: Profiles.list_groups()

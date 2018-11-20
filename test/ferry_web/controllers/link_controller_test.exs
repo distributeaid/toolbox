@@ -113,13 +113,13 @@ defmodule FerryWeb.LinkControllerTest do
 
   describe "create link" do
     test "redirects to show when data is valid", %{conn: conn, group: group} do
-      conn = post conn, group_link_path(conn, :create, group), link: params_for(:link)
+      link_params = params_for(:link)
+      conn = post conn, group_link_path(conn, :create, group), link: link_params
 
-      assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == group_link_path(conn, :show, group, id)
+      assert redirected_to(conn) == group_link_path(conn, :index, group)
 
-      conn = get conn, group_link_path(conn, :show, group, id)
-      assert html_response(conn, 200) =~ "Show Link"
+      conn = get conn, group_link_path(conn, :index, group)
+      assert html_response(conn, 200) =~ link_params.url
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group} do
@@ -140,11 +140,13 @@ defmodule FerryWeb.LinkControllerTest do
 
   describe "update link" do
     test "redirects when data is valid", %{conn: conn, group: group, link: link} do
-      conn = put conn, group_link_path(conn, :update, group, link), link: params_for(:link)
-      assert redirected_to(conn) == group_link_path(conn, :show, group, link)
+      link_params = params_for(:link)
+      conn = put conn, group_link_path(conn, :update, group, link), link: link_params
 
-      conn = get conn, group_link_path(conn, :show, group, link)
-      assert html_response(conn, 200) =~ "Show Link"
+      assert redirected_to(conn) == group_link_path(conn, :index, group)
+
+      conn = get conn, group_link_path(conn, :index, group)
+      assert html_response(conn, 200) =~ link_params.url
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group, link: link} do

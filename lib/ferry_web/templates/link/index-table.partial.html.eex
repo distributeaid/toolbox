@@ -5,8 +5,7 @@
         <th>Category</th>
         <th>Label</th>
         <th>Url</th>
-
-        <th></th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -15,11 +14,13 @@
         <td><%= link.category %></td>
         <td><%= link.label %></td>
         <td><%= link.url %></td>
-
         <td>
-          <span><%= link "Show", to: @owner_link_path.(@conn, :show, @owner, link), class: "button is-small" %></span>
-          <span><%= link "Edit", to: @owner_link_path.(@conn, :edit, @owner, link), class: "button is-small" %></span>
-          <span><%= link "Delete", to: @owner_link_path.(@conn, :delete, @owner, link), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
+          <%= link to: group_link_path(@conn, :edit, @group, link), class: "action" do %>
+            <i class="fas fa-pencil-alt"></i>
+          <% end %>
+          <%= link to: group_link_path(@conn, :delete, @group, link), method: :delete, data: [confirm: "Are you sure?"], class: "action" do %>
+            <i class="fas fa-trash-alt"></i>
+          <% end %>
         </td>
       </tr>
   <% end %>

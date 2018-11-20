@@ -209,6 +209,27 @@ form .is-req {
   height: 200px;
 }
 
+/*
+Table
+------------------------------------------------------------
+*/
+table {
+  font-size: 1rem;
+}
+
+table.is-striped tbody th,
+table.is-striped tbody td {
+  border: 0;
+}
+
+table.is-striped tr:nth-child(odd) td {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+table.is-striped tr:nth-child(even) td {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
 
 /* Objects
  * ========================================================================== */
@@ -295,6 +316,11 @@ p.section__subtitle {
     padding-top: 0;
   }
 
+  .section--focus {
+    width: auto;
+    min-width: 50%;
+  }
+
   .section__content {
     border: 0.125rem solid white;
     padding: 3rem 1.5rem;
@@ -305,6 +331,10 @@ p.section__subtitle {
 Subsection
 ------------------------------------------------------------
 */
+.subsection {
+  position: relative;
+}
+
 .subsection__header {
   margin: 2rem 0 0.5rem 0;
   border-bottom: 2px dashed #313439;
@@ -318,8 +348,8 @@ Action
 */
 .actions {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 0;
+  right: 0;
   margin: 0;
 }
 
@@ -330,6 +360,11 @@ ul.actions {
 ul.actions > li {
   display: inline-block;
   padding: 0;
+}
+
+.actions--inline {
+  position: relative;
+  text-align: center;
 }
 
 .action {
@@ -794,7 +829,6 @@ Site Content // Section Content
   min-height: calc(100vh - 181px); /* leave room for the site nav / footer */
 }
 
-
 /* Site Header // Brand & Logo
  * ------------------------------------------------------ */
 .site-header .brand {
@@ -823,4 +857,22 @@ Site Content // Section Content
   .site-header .brand {
     display: inline;
   }
+}
+
+/*
+Section // Actions
+------------------------------------------------------------
+*/
+.section .actions {
+  top: 1rem;
+  right: 1rem;
+}
+
+/*
+Subsection // Actions
+------------------------------------------------------------
+*/
+.subsection .actions {
+  top: 0;
+  right: 0;
 }

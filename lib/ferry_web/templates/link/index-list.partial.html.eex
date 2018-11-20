@@ -1,23 +1,39 @@
-<%= if has_links? @links do %>
+<div class="subsection">
   <h2 class="subsection__header">Quick Links</h2>
 
-  <div class="category category--inline">
-    <%= with links_by_category <- sort_links_by_category(@links) do %>
+  <%= if @can_modify? do %>
+    <ul class="actions">
+      <li>
+        <%= link to: group_link_path(@conn, :index, @group), class: "action" do %>
+          <i class="fas fa-pencil-alt"></i>
+        <% end %>
+      </li>
+    </ul>
+  <% end %>
 
-      <%= for category <- categories(links_by_category) do %>
-        <div class="links-list">
-          <%= component "category-entry.partial.html", title: category do %>
-            <ul class="is-unstyled">
-              <%= for link <- links_by_category[category] do %>
-                <li>
-                  <%= link label_text(link), to: link.url %>
-                </li>
-              <% end %>
-            </ul>
-          <% end %>
-        </div>
+  <%= if has_links? @links do %>
+    <div class="category category--inline">
+      <%= with links_by_category <- sort_links_by_category(@links) do %>
+        <%= for category <- categories(links_by_category) do %>
+
+          <div class="links-list">
+            <%= component "category-entry.partial.html", title: category do %>
+              <ul class="is-unstyled">
+                <%= for link <- Enum.reverse(links_by_category[category]) do %>
+                  <li>
+                    <%= link label_text(link), to: link.url %>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
+          </div>
+
+        <% end %>
       <% end %>
+    </div>
 
-    <% end %>
-  </div>
-<% end %>
+  <% else %>
+    No links have been added... yet!
+  <% end %>
+
+</div>

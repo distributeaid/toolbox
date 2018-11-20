@@ -14,6 +14,7 @@ defmodule FerryWeb.LinkController do
   def index(conn, %{"group_id" => group_id}) do
     group = Profiles.get_group!(group_id)
     links = Links.list_links(group)
+
     render(conn, "index.html", group: group, links: links)
   end
 
@@ -36,10 +37,10 @@ defmodule FerryWeb.LinkController do
     group = Profiles.get_group!(group_id)
 
     case Links.create_link(group, link_params) do
-      {:ok, link} ->
+      {:ok, _link} ->
         conn
         |> put_flash(:info, "Link created successfully.")
-        |> redirect(to: group_link_path(conn, :show, group, link))
+        |> redirect(to: group_link_path(conn, :index, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", group: group, changeset: changeset)
     end
@@ -60,10 +61,10 @@ defmodule FerryWeb.LinkController do
     link = Links.get_link!(id)
 
     case Links.update_link(link, link_params) do
-      {:ok, link} ->
+      {:ok, _link} ->
         conn
         |> put_flash(:info, "Link updated successfully.")
-        |> redirect(to: group_link_path(conn, :show, group, link))
+        |> redirect(to: group_link_path(conn, :index, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", group: group, link: link, changeset: changeset)
     end

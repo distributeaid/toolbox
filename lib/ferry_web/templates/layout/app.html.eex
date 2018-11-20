@@ -75,6 +75,7 @@
       </nav>
     </header>
 
+    <!--
     <div class="flash">
       <%= if message = get_flash(@conn, :success) do %>
         <p class="alert is-success--inverted" role="alert"><%= message %></p>
@@ -88,6 +89,7 @@
         <p class="alert is-error--inverted" role="alert"><%= message %></p>
       <% end %>
     </div>
+    -->
 
     <main role="main" class="site-content">
       <%= content_tag :article, class: "page-content " <> page_background_img_class(@conn) do %>

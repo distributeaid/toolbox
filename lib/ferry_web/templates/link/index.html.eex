@@ -1,13 +1,27 @@
-<section class="section">
+<section class="section section--focus">
   <div class="section__content">
     <header class="section__header">
       <h1 class="section__title">Links</h1>
       <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
     </header>
 
-    <%= render "index-list.partial.html", %{conn: @conn, links: @links} %>
+    <ul class="actions">
+      <li>
+        <%= link to: group_path(@conn, :show, @group), class: "action" do %>
+          <i class="fas fa-times"></i>
+        <% end %>
+      </li>
+    </ul>
 
-    <span><%= link "New Link", to: group_link_path(@conn, :new, @group) %></span>
-    <span><%= link "Back to Group", to: group_path(@conn, :show, @group) %></span>
+    <%= render "index-table.partial.html", %{conn: @conn, links: @links, group: @group} %>
+
+    <ul class="actions actions--inline">
+      <li>
+        <%= link to: group_link_path(@conn, :new, @group), class: "action" do %>
+          <i class="fas fa-plus"></i>
+        <% end %>
+      </li>
+    </ul>
+
   </div>
 </section>

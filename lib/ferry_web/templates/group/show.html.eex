@@ -14,7 +14,7 @@
       <%= if @group.id == @current_group.id do %>
         <li>
           <%= link to: group_path(@conn, :edit, @current_group), class: "action" do %>
-            <i class="action__icon fas fa-pencil-alt"></i>
+            <i class="fas fa-pencil-alt"></i>
           <% end %>
         </li>
       <% end %>
@@ -32,9 +32,9 @@
 
     <%= render FerryWeb.LinkView, "index-list.partial.html", %{
       conn: @conn,
-      owner: @group,
+      group: @group,
       links: @links,
-      owner_link_path: &group_link_path/4
+      can_modify?: @group.id == @current_group.id
     } %>
 
     <%= render FerryWeb.ProjectView, "index-list.partial.html", %{
