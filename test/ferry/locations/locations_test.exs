@@ -97,10 +97,13 @@ defmodule Ferry.LocationsTest do
       assert Locations.list_addresses(project) == [address1, address2]
     end
 
+    @tag skip: "Stubbed Function. Don't fail the build. Remove this tag & fill in test when the method is implemented."
     test "list_countries/0 returns all countries"
 
+    @tag skip: "Stubbed Function. Don't fail the build. Remove this tag & fill in test when the method is implemented."
     test "list_cities/0 returns tuples for all city / country pairs"
 
+    @tag skip: "Stubbed Function. Don't fail the build. Remove this tag & fill in test when the method is implemented."
     test "list_cities/1 returns tuples for all cities in the specified country"
 
     test "get_address!/1 returns the address with given id" do
@@ -171,6 +174,7 @@ defmodule Ferry.LocationsTest do
       assert {:error, %Ecto.Changeset{}} = Locations.create_address(project, @invalid_attrs.too_long)
     end
 
+    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
     test "the database's has_exactly_one_owner check constraint throws and error if an address has no or multiple owners"
 
     test "update_address/2 with valid data updates the address" do
@@ -213,8 +217,10 @@ defmodule Ferry.LocationsTest do
       assert_raise Ecto.NoResultsError, fn -> Locations.get_address!(address.id) end
     end
 
+    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
     test "the database's on_delete:delete_all setting deletes related addresses when a group is deleted"
 
+    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
     test "the database's on_delete:delete_all setting deletes related addresses when a project is deleted"
 
     test "change_address/1 returns a address changeset" do

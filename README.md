@@ -1,13 +1,9 @@
-[![pipeline status](https://gitlab.com/distribute-aid/toolbox/badges/master/pipeline.svg)](https://gitlab.com/distribute-aid/toolbox/commits/master)
-
-[![coverage report](https://gitlab.com/distribute-aid/toolbox/badges/master/coverage.svg)](https://gitlab.com/distribute-aid/toolbox/commits/master)
-
-
-
 Toolbox
 ================================================================================
 
 The collection of tools for newcomer (refugee) aid groups that make up the Distribute Aid platform.
+
+[![pipeline status](https://gitlab.com/distribute-aid/toolbox/badges/master/pipeline.svg)](https://gitlab.com/distribute-aid/toolbox/commits/master) [![coverage report](https://gitlab.com/distribute-aid/toolbox/badges/master/coverage.svg)](https://gitlab.com/distribute-aid/toolbox/commits/master)
 
 Up & Running - Mac OSX
 ------------------------------------------------------------
