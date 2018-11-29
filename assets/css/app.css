@@ -118,30 +118,34 @@ a.link--wrapper:hover {
 Buttons
 ------------------------------------------------------------
 */
-button, .button,
-button:active, .button:active,
-button:focus, .button:focus {
+.button,
+.button:active,
+.button:focus {
   background-color: #313439;
 }
 
-button:hover, .button:hover {
+.button:hover {
   background-color: rgba(49, 52, 57, 0.8); /* #313439 */
   box-shadow: 0.25rem 0.25rem 0.5rem 0 rgba(49, 52, 57, 0.2); /* #313439 */
 }
 
-button.is-secondary, .button.is-secondary,
-button.is-secondary:active, .button.is-secondary:active
-button.is-secondary:focus, .button.is-secondary:focus {
+.button.is-secondary,
+.button.is-secondary:active
+.button.is-secondary:focus {
   border-color: #313439;
   background-color: white;
   color: #313439;
 }
 
-button.is-secondary:hover, .button.is-secondary:hover {
+.button.is-secondary:hover {
   border-color: rgba(49, 52, 57, 0.8); /* #313439 */
   background-color: white;
   color: rgba(49, 52, 57, 0.8); /* #313439 */
   box-shadow: 0.25rem 0.25rem 0.5rem 0 rgba(49, 52, 57, 0.2); /* #313439 */
+}
+
+.button.is-big {
+  font-size: 1.25rem;
 }
 
 /*
@@ -766,6 +770,17 @@ TODO: aligned w/ layout so needs mobile interactive styling
   }
 }
 
+.changelog-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.changelog-entry-header small {
+  font-size: 75%;
+}
+
 /*
 Users
 ------------------------------------------------------------
@@ -836,6 +851,14 @@ Helpers
 */
 .nowrap {
   white-space: nowrap;
+}
+
+.is-icon-left {
+  margin-left: 0.5rem;
+}
+
+.is-icon-right {
+  margin-right: 0.5rem;
 }
 
 /*

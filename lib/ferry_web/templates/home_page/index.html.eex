@@ -8,5 +8,15 @@
       Congratulations on being one of the first people to see / use the Distribute Aid platform.  We're hard at work, and it's only going to get better from here!
     </p>
 
+    <%= if @current_user == nil do %>
+      <p class="is-text-center">
+        <%= link to: session_path(@conn, :new), class: "button is-big" do %>
+          Login <i class="fas fa-unlock is-icon-left"></i>
+        <% end %>
+      </p>
+    <% end %>
+
+    <%= render "changelog.partial.html" %>
+
   </div>
 </section>
