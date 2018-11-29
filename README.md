@@ -5,16 +5,24 @@ The collection of tools for newcomer (refugee) aid groups that make up the Distr
 
 [![pipeline status](https://gitlab.com/distribute-aid/toolbox/badges/master/pipeline.svg)](https://gitlab.com/distribute-aid/toolbox/commits/master) [![coverage report](https://gitlab.com/distribute-aid/toolbox/badges/master/coverage.svg)](https://gitlab.com/distribute-aid/toolbox/commits/master)
 
-Up & Running - Mac OSX
+Up & Running
 ------------------------------------------------------------
- 1. Install Homebrew: [https://brew.sh/]
- 2. Run commands:
-
 ```
-# Install Packages
-brew install node
+# Install Packages - Mac OSX
+# Uses Homebrew: [https://brew.sh/]
 brew install elixir
 brew install postgres
+brew install node
+
+# OR Install Packages - Ubuntu
+wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && sudo dpkg -i erlang-solutions_1.0_all.deb
+sudo apt-get update
+sudo apt-get install esl-erlang
+sudo apt-get install elixir
+sudo apt-get install postgresql postgresql-contrib
+sudo apt-get install nodejs
+sudo apt-get install npm
+sudo ln -s /usr/bin/nodejs /usr/bin/node
 
 # Clone The Project
 git clone git@gitlab.com:distribute-aid/toolbox.git
@@ -49,11 +57,15 @@ Database Reset: `mix ecto.reset`
 
 Testing
 ------------------------------------------------------------
-Run Tests: `mix test`, or `mix test --trace` for detailed output
+Run Tests:
 
-Target mix commands to the dev env
+  - `mix test`
+  - `mix test --trace` for detailed output
+  - `mix coverall` for code coverage
 
 Mix commands can be targeted to the test environment by prepending `MIX_ENV=test`.  For example, to reset the test database after changing a schema that you are working on, run `MIX_ENV=test mix ecto.reset`.
+
+Gitlab runs tests & code coverage in a continuous integration pipeline when code is pushed to `origin`.
 
 Contributing
 ------------------------------------------------------------

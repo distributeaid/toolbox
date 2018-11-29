@@ -1,3 +1,5 @@
+# Good overview of GitLab CI setup: https://blog.el-chavez.me/2017/07/13/elixir-phoenix-gitlabci/
+
 # This file is a template, and might need editing before it works on your project.
 image: elixir:latest
 
@@ -16,11 +18,10 @@ variables:
 
 before_script:
   - apt-get update && apt-get -y install postgresql-client
-  - mix local.rebar --force # is this line needed?  included in latest default .gitlab-ci.yml file, but not in their guide: https://docs.gitlab.com/ee/ci/examples/test_phoenix_app_with_gitlab_ci_cd/
   - mix local.hex --force
+  - mix local.rebar --force
   - mix deps.get --only test
-  - mix ecto.create
-  - mix ecto.migrate
+  - mix ecto.reset
 
 mix:
   script:
