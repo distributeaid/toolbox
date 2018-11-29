@@ -4,7 +4,7 @@ defmodule Ferry.Mixfile do
   def project do
     [
       app: :ferry,
-      version: "0.0.4",
+      version: "0.0.5",
       elixir: "~> 1.4",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
@@ -48,6 +48,9 @@ defmodule Ferry.Mixfile do
       {:guardian, "~> 1.0"},
       {:comeonin, "~> 4.0"},
       {:bcrypt_elixir, "~> 1.0"},
+
+      # file upload deps
+      {:arc_ecto, "~> 0.11.1"},
 
       # testing deps
       {:ex_machina, "~> 2.2"},

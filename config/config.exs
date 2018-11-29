@@ -25,6 +25,10 @@ config :ferry, Ferry.Auth.Guardian,
        issuer: "ferry",
        secret_key: "super-secret"
 
+# Configures Arq
+config :arc,
+  storage: Arc.Storage.Local
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

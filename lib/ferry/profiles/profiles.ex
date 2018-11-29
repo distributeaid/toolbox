@@ -10,6 +10,7 @@ defmodule Ferry.Profiles do
   # Group
   # ==============================================================================
   alias Ferry.Profiles.Group
+  alias Ferry.Profiles.Group.Logo
 
   @doc """
   Returns the list of groups.
@@ -38,7 +39,9 @@ defmodule Ferry.Profiles do
       ** (Ecto.NoResultsError)
 
   """
-  def get_group!(id), do: Repo.get!(Group, id)
+  def get_group!(id) do
+    group = Repo.get!(Group, id)
+  end
 
   @doc """
   Creates a group.

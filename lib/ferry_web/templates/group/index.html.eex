@@ -25,7 +25,7 @@
         <%= link to: group_path(@conn, :show, @current_group), class: "link--wrapper" do %>
           <%= component "category-entry.partial.html", %{
             title: @current_group.name,
-            icon: %{class: "fas fa-3x fa-users"}
+            img: %{src: logo_url(@current_group), alt: "Logo"}
           } %>
         <% end %>
       </div>
@@ -40,10 +40,17 @@
       <div class="category category--3-col">
         <%= for group <- @groups do %>
           <%= link to: group_path(@conn, :show, group), class: "link--wrapper" do %>
-            <%= component "category-entry.partial.html", %{
-              title: group.name,
-              icon: %{class: "fas fa-3x fa-users"}
-            } %>
+            <%= if group.logo do %>
+              <%= component "category-entry.partial.html", %{
+                title: group.name,
+                img: %{src: logo_url(group), alt: "Logo"}
+              } %>
+            <% else %>
+              <%= component "category-entry.partial.html", %{
+                title: group.name,
+                icon: %{class: "fas fa-3x fa-users"}
+              } %>
+            <% end %>
           <% end %>
         <% end %>
       </div>

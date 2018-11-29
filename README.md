@@ -13,6 +13,7 @@ Up & Running
 brew install elixir
 brew install postgres
 brew install node
+brew install imagemagick
 
 # OR Install Packages - Ubuntu
 wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && sudo dpkg -i erlang-solutions_1.0_all.deb
@@ -22,6 +23,7 @@ sudo apt-get install elixir
 sudo apt-get install postgresql postgresql-contrib
 sudo apt-get install nodejs
 sudo apt-get install npm
+sudo apt-get install imagemagick
 sudo ln -s /usr/bin/nodejs /usr/bin/node
 
 # Clone The Project
@@ -88,6 +90,7 @@ cd ~/toolbox/
 # build
 git pull
 cd assets && npm install && ./node_modules/brunch/bin/brunch b -p && cd .. && MIX_ENV=prod mix do phx.digest, release --env=prod --upgrade
+MIX_ENV=prod mix ecto.migrate
 
 # deploy
 cd [/path/to/webroot]

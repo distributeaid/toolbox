@@ -157,7 +157,6 @@ label {
 }
 
 
-
 /*
 Kube Overrides
 ================================================================================
@@ -439,6 +438,8 @@ Alert
 .category {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: flex-end;
   margin: 0;
 
   text-align: center;
@@ -495,6 +496,8 @@ a .category > * {
 
 .category__icon {
   display: block;
+  width: 4rem;
+  height: 4rem;
   margin: 0 auto 0.5rem auto;
 
   font-size: 300%;
@@ -508,10 +511,10 @@ a .category > * {
 
 .category__photo {
   display: block;
-  width: 12rem;
-  height: 12rem;
+  width: 4rem;
+  height: 4rem;
   margin: 1rem auto;
-  border: 0.25rem solid #C8C8C8;
+  border: 0.125rem solid #C8C8C8;
   border-radius: 100%;
 }
 
@@ -569,6 +572,35 @@ Card
     height: 12rem;
   }
 }
+
+/*
+Flash
+------------------------------------------------------------
+TODO: aligned w/ layout so needs mobile interactive styling
+*/
+.flash {
+  position: absolute;
+  top: 0rem;
+  left: 56.25%;
+  width: 37.5%;
+}
+
+/*
+Logo
+------------------------------------------------------------
+*/
+.logo {
+  width: 4rem;
+  height: 4rem;
+  border: 0.25rem solid #C8C8C8;
+  border-radius: 100%;
+}
+
+.logo--big {
+  width: 8rem;
+  height: 8rem;
+}
+ 
 
 
 /* Components
@@ -745,18 +777,6 @@ Page
   }
 }
 
-/*
-Flash
-------------------------------------------------------------
-TODO: aligned w/ layout so needs mobile interactive styling
-*/
-.flash {
-  position: absolute;
-  top: 0rem;
-  left: 56.25%;
-  width: 37.5%;
-}
-
 /* Home Page
  * ------------------------------------------------------
  */
@@ -881,7 +901,7 @@ Site Content // Section Content
   margin-left: auto;
 }
 
-.site-header .logo {
+.site-header__logo {
   display: block;
   position: absolute;
   top: 0;

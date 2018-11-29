@@ -48,7 +48,7 @@
 
   <body class="site">
     <header class="navbar site-header">
-      <img class="logo" src="<%= static_path(@conn, "/images/logo.png") %>" alt="Logo: Outline of a Dove" />
+      <img class="site-header__logo" src="<%= static_path(@conn, "/images/logo.png") %>" alt="Logo: Outline of a Dove" />
 
       <%= link "distribute|AID", to: home_page_path(@conn, :index), class: "brand" %>
 
