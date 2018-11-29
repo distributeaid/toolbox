@@ -6,12 +6,6 @@
   <% end %>
 
   <div class="form-item is-inline">
-    <%= label f, :category %>
-    <%= text_input f, :category %>
-    <%= error_tag f, :category %>
-  </div>
-
-  <div class="form-item is-inline">
     <%= label f, :label %>
     <%= text_input f, :label %>
     <%= error_tag f, :label %>

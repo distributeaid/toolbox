@@ -7,10 +7,6 @@
 
     <ul>
       <li>
-        <strong>Category:</strong>
-        <%= @link.category %>
-      </li>
-      <li>
         <strong>Link:</strong>
         <%= link label_text(@link), to: @link.url %>
       </li>

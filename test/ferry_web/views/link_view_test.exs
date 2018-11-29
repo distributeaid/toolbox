@@ -7,28 +7,24 @@ defmodule FerryWeb.LinkViewTest do
   # ----------------------------------------------------------
 
   @min_link %{
-    category: nil,
     label: nil,
     url: "https://johnnypanichiphop.bandcamp.com/album/voidspit"
   }
 
   @typical_link %{
-    category: "Rap",
     label: "Sima Lee",
     url: "https://simalee.bandcamp.com/album/trap-liberation-army"
   }
 
-  @typical_link_2 %{
-    category: "Rap",
-    label: "Lee Reed",
-    url: "https://htsn.bandcamp.com/album/the-steal-city-ep"
-  }
+  # @typical_link_2 %{
+  #   label: "Lee Reed",
+  #   url: "https://htsn.bandcamp.com/album/the-steal-city-ep"
+  # }
 
-  @typical_link_3 %{
-    category: "Chill",
-    label: "Toni Zamboni",
-    url: "https://tonyzamboni.bandcamp.com/album/zamboni-world-ep"
-  }
+  # @typical_link_3 %{
+  #   label: "Toni Zamboni",
+  #   url: "https://tonyzamboni.bandcamp.com/album/zamboni-world-ep"
+  # }
 
   # Links
   # ----------------------------------------------------------
@@ -39,28 +35,6 @@ defmodule FerryWeb.LinkViewTest do
 
     links = [@min_link]
     assert LinkView.has_links? links
-  end
-
-  test "sort_links_by_category/1 organizes links by category" do
-    assert %{} == LinkView.sort_links_by_category([])
-
-    assert %{other: [@min_link]} == LinkView.sort_links_by_category([@min_link])
-
-    assert %{"Rap" => [@typical_link]} == LinkView.sort_links_by_category([@typical_link])
-
-    assert %{:other => [@min_link], "Rap" => [@typical_link_2, @typical_link], "Chill" => [@typical_link_3]}
-      == LinkView.sort_links_by_category([@min_link, @typical_link, @typical_link_2, @typical_link_3])
-  end
-
-  test "categories/1 lists the categories of links" do
-    assert [] = LinkView.categories(%{})
-
-    assert [:other] = LinkView.categories(%{other: [@min_link]})
-
-    assert ["Rap"] == LinkView.categories(%{"Rap" => [@typical_link]})
-
-    assert [:other, "Chill", "Rap"]
-      == LinkView.categories(%{:other => [@min_link], "Rap" => [@typical_link_2, @typical_link], "Chill" => [@typical_link_3]})
   end
 
   # Link

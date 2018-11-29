@@ -14,12 +14,12 @@ defmodule Ferry.LinksTest do
     # ----------------------------------------------------------
 
     @valid_attrs %{
-      typical: %{category: "Website", label: "Homepage", url: "https://distributeaid.org/"},
+      typical: %{label: "Homepage", url: "https://distributeaid.org/"},
       min: %{url: "https://movementontheground.org"}
     }
 
     @update_attrs %{
-      typical: %{category: "Donations", label: "Our Patreon", url: "https://patreon.org/distributeaid"}
+      typical: %{label: "Our Patreon", url: "https://patreon.org/distributeaid"}
     }
 
     @invalid_attrs %{
@@ -27,7 +27,6 @@ defmodule Ferry.LinksTest do
       bad_format: %{url: "there_is_no_dot"},
       too_short: %{url: "h.i"},
       too_long: %{
-        category: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         label: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         url: "this-does-not-have-a-length-limit.org"
       }
@@ -139,13 +138,11 @@ defmodule Ferry.LinksTest do
 
       # typical
       assert {:ok, %Link{} = link} = Links.create_link(group, @valid_attrs.typical)
-      assert link.category == @valid_attrs.typical.category
       assert link.label == @valid_attrs.typical.label
       assert link.url == @valid_attrs.typical.url
 
       #min
       assert {:ok, %Link{} = link} = Links.create_link(group, @valid_attrs.min)
-      assert link.category == nil
       assert link.label == nil
       assert link.url == @valid_attrs.min.url
     end
@@ -155,13 +152,11 @@ defmodule Ferry.LinksTest do
 
       # typical
       assert {:ok, %Link{} = link} = Links.create_link(project, @valid_attrs.typical)
-      assert link.category == @valid_attrs.typical.category
       assert link.label == @valid_attrs.typical.label
       assert link.url == @valid_attrs.typical.url
 
       #min
       assert {:ok, %Link{} = link} = Links.create_link(project, @valid_attrs.min)
-      assert link.category == nil
       assert link.label == nil
       assert link.url == @valid_attrs.min.url
     end
@@ -171,13 +166,11 @@ defmodule Ferry.LinksTest do
 
       # typical
       assert {:ok, %Link{} = link} = Links.create_link(contact, @valid_attrs.typical)
-      assert link.category == @valid_attrs.typical.category
       assert link.label == @valid_attrs.typical.label
       assert link.url == @valid_attrs.typical.url
 
       #min
       assert {:ok, %Link{} = link} = Links.create_link(contact, @valid_attrs.min)
-      assert link.category == nil
       assert link.label == nil
       assert link.url == @valid_attrs.min.url
     end
@@ -216,7 +209,6 @@ defmodule Ferry.LinksTest do
       # typical
       assert {:ok, link} = Links.update_link(link, @update_attrs.typical)
       assert %Link{} = link
-      assert link.category == @update_attrs.typical.category
       assert link.label == @update_attrs.typical.label
       assert link.url == @update_attrs.typical.url
     end

@@ -94,7 +94,6 @@ defmodule Ferry.Factory do
 
   def link_factory do
     %Link{
-      category: "News",
       label: sequence("Are You Syrious?"),
       url: sequence(:url, &"https://medium.com/@AreYouSyrious?fakeParam=#{&1}")
     }

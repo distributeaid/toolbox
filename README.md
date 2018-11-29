@@ -94,7 +94,7 @@ cd [/path/to/webroot]
 mkdir releases/[version]
 cp ~/toolbox/_build/prod/rel/ferry/releases/[version]/ferry.tar.gz releases/[version]
 ./bin/ferry upgrade [version]
-PORT=1337 ./bin/ferry restart # needed to ensure updated static assetts are used
+PORT=1337 ./bin/ferry restart # needed to ensure updated static assets are used
 
 # TODO: need to include migrations in this process...
 ```

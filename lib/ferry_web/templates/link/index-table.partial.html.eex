@@ -2,7 +2,6 @@
   <table class="is-striped">
     <thead>
       <tr>
-        <th>Category</th>
         <th>Label</th>
         <th>Url</th>
         <th>Actions</th>
@@ -11,7 +10,6 @@
     <tbody>
   <%= for link <- @links do %>
       <tr>
-        <td><%= link.category %></td>
         <td><%= link.label %></td>
         <td><%= link.url %></td>
         <td>

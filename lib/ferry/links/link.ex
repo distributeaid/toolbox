@@ -5,7 +5,6 @@ defmodule Ferry.Links.Link do
   alias Ferry.CRM.Contact
 
   schema "links" do
-    field :category, :string
     field :label, :string
     field :url, :string
 
@@ -19,9 +18,8 @@ defmodule Ferry.Links.Link do
   @doc false
   def changeset(link, attrs) do
     link
-    |> cast(attrs, [:category, :label, :url])
+    |> cast(attrs, [:label, :url])
     |> validate_required([:url])
-    |> validate_length(:category, max: 255)
     |> validate_length(:label, max: 255)
     |> validate_length(:url, min: 4) # "a.de"
     |> validate_format(:url, ~r/\./)

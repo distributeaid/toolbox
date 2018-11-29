@@ -827,11 +827,7 @@ Links
 ------------------------------------------------------------
 Link page styles go here.
 */
-.links-list {
-  text-align: left;
-}
-
-.links-list ul {
+ul.links-list {
   margin-bottom: 0;
 }
 
