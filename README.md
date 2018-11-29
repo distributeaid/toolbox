@@ -77,7 +77,27 @@ Contributing
 
 Deployment
 ------------------------------------------------------------
-TODO: Document the deployment process during the first (successful) deploy.
+
+**Deployment Setup**
+
+```
+# log into the server
+ssh [user]@distributeaid.org
+cd ~/toolbox/
+
+# build
+git pull
+cd assets && npm install && ./node_modules/brunch/bin/brunch b -p && cd .. && MIX_ENV=prod mix do phx.digest, release --env=prod --upgrade
+
+# deploy
+cd [/path/to/webroot]
+mkdir releases/[version]
+cp ~/toolbox/_build/prod/rel/ferry/releases/[version]/ferry.tar.gz releases/[version]
+./bin/ferry upgrade [version]
+PORT=1337 ./bin/ferry restart # needed to ensure updated static assetts are used
+
+# TODO: need to include migrations in this process...
+```
 
 Metrics
 ------------------------------------------------------------
@@ -85,7 +105,35 @@ TODO
 
 Backups
 ------------------------------------------------------------
+
+### Secrets
+
+**Backup:**
+
+```
+scp [user]@distributeaid.org:/home/[user]/toolbox/config/prod.secret.exs [/path/to/backups]/toolbox/
+```
+
+**Restore:**
+```
 TODO
+```
+
+### Nginx Config
+
+**Backup:**
+
+```
+scp [user]@distributeaid.org:/etc/nginx/nginx.conf [/path/to/backups]/nginx
+
+scp -r [user]@distributeaid.org:/etc/nginx/sites-available [/path/to/backups]/nginx
+```
+
+**Restore:**
+
+```
+TODO
+```
 
 Links
 ------------------------------------------------------------
