@@ -50,6 +50,7 @@ defmodule FerryWeb.Router do
       resources "/addresses", AddressController, except: [:index, :show]
       resources "/links", LinkController, except: [:index, :show]
       resources "/projects", ProjectController, except: [:index, :show]
+      resources "/users", UserController, only: [:edit, :update]
     end
   end
 

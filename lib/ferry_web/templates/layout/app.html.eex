@@ -101,13 +101,15 @@
       <div class="section__content">
         <a class="site-footer__link site-footer__link--lowercase" href="mailto:hello@distributeaid.org">
           <i class="fas fa-paper-plane fa-lg"></i>
-          hello@distributeaid.org
-        </a>
-
-        <a class="site-footer__link site-footer__link--lowercase" href="mailto:hello@distributeaid.org">
-          <i class="fas fa-paper-plane fa-lg"></i>
           help@distributeaid.org
         </a>
+
+        <%= if @current_user do %>
+          <%= link to: group_user_path(@conn, :edit, @current_user.group_id, @current_user), class: "site-footer__link site-footer__link--lowercase" do %>
+            <i class="fas fa-lock fa-lg"></i>
+            Change Password
+          <% end %>
+        <% end %>
       </div>
     </footer>
   </body>

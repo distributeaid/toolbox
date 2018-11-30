@@ -69,12 +69,11 @@ defmodule Ferry.Accounts do
   #     {:error, %Ecto.Changeset{}}
 
   # """
-  # # TODO
-  # def update_user(%User{} = user, attrs) do
-  #   user
-  #   |> User.changeset(attrs)
-  #   |> Repo.update()
-  # end
+  def update_user(%User{} = user, attrs) do
+    user
+    |> User.changeset(attrs)
+    |> Repo.update()
+  end
 
   # @doc """
   # Deletes a User.

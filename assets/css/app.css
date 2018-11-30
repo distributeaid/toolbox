@@ -877,14 +877,6 @@ Helpers
   margin-right: 0.5rem;
 }
 
-/*
-Site Content // Section Content
-------------------------------------------------------------
-*/
-.site-content .section__content {
-  min-height: calc(100vh - 181px); /* leave room for the site nav / footer */
-}
-
 /* Site Header // Brand & Logo
  * ------------------------------------------------------ */
 .site-header .brand {
@@ -913,6 +905,23 @@ Site Content // Section Content
   .site-header .brand {
     display: inline;
   }
+}
+
+/*
+Site Content // Section
+------------------------------------------------------------
+*/
+.site-content .section__content {
+  min-height: calc(100vh - 181px); /* leave room for the site nav / footer */
+}
+
+/*
+Site Footer // Section
+------------------------------------------------------------
+*/
+.site-footer.section {
+  width: 100%;
+  margin: 0 0 0 2rem;
 }
 
 /*

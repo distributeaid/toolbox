@@ -28,4 +28,29 @@ defmodule FerryWeb.UserController do
         render(conn, "new.html", group: group, changeset: changeset)
     end
   end
+
+  # Update
+  # ----------------------------------------------------------
+
+  def edit(conn, %{"group_id" => group_id, "id" => id}) do
+    group = Profiles.get_group!(group_id)
+    user = Accounts.get_user!(id)
+    changeset = Accounts.change_user(user)
+    render(conn, "edit.html", group: group, user: user, changeset: changeset)
+  end
+
+  def update(conn, %{"group_id" => group_id, "id" => id, "user" => user_params}) do
+    group = Profiles.get_group!(group_id)
+    user = Accounts.get_user!(id)
+
+    case Accounts.update_user(user, user_params) do
+      {:ok, _user} ->
+        conn
+        |> put_flash(:info, "User updated successfully.")
+        |> redirect(to: home_page_path(conn, :index))
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "new.html", group: group, changeset: changeset)
+    end
+  end
+
 end

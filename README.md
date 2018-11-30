@@ -89,8 +89,10 @@ cd ~/toolbox/
 
 # build
 git pull
-cd assets && npm install && ./node_modules/brunch/bin/brunch b -p && cd .. && MIX_ENV=prod mix do phx.digest, release --env=prod --upgrade
+mix deps.get --only prod
+MIX_ENV=prod mix compile
 MIX_ENV=prod mix ecto.migrate
+cd assets && npm install && ./node_modules/brunch/bin/brunch b -p && cd .. && MIX_ENV=prod mix do phx.digest, release --env=prod --upgrade
 
 # deploy
 cd [/path/to/webroot]
