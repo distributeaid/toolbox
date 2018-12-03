@@ -155,6 +155,11 @@ defmodule Ferry.ProfilesTest do
       project
     end
 
+    def project_fixture_with_group(%Group{} = group, attrs \\ %{}) do
+      project = project_fixture(group, attrs)
+      %{project | group: group}
+    end
+
     # Tests
     # ----------------------------------------------------------
 
@@ -167,16 +172,16 @@ defmodule Ferry.ProfilesTest do
       "returns an empty list if no projects have been created"
 
       # 1 project, 1 group
-      project1 = project_fixture(group1)
+      project1 = project_fixture_with_group(group1)
       assert Profiles.list_projects() == [project1]
 
       # multiple projects, 1 group
-      project2 = project_fixture(group1, %{name: "A Second Project"})
+      project2 = project_fixture_with_group(group1, %{name: "A Second Project"})
       assert Profiles.list_projects() == [project1, project2]
 
       # multiple project, multiple groups
-      project3 = project_fixture(group2, %{name: "A Third Project"})
-      project4 = project_fixture(group2, %{name: "A Fourth Project"})
+      project3 = project_fixture_with_group(group2, %{name: "A Third Project"})
+      project4 = project_fixture_with_group(group2, %{name: "A Fourth Project"})
       assert Profiles.list_projects() == [project1, project2, project3, project4]
     end
 

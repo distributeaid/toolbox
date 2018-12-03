@@ -15,6 +15,14 @@
   </ol>
 
   <h3 class="changelog-entry-header">
+    <span>Release: v0.0.7</span>
+    <small>Monday, December 3rd, 2018</small>
+  </h3>
+  <ul>
+    <li>Fixed a bug on the <%= link "Projects page", to: project_path(@conn, :index) %>, and improved the styles.</li>
+  </ul>
+
+  <h3 class="changelog-entry-header">
     <span>Release: v0.0.6</span>
     <small>Thursday, November 29th, 2018</small>
   </h3>

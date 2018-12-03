@@ -16,7 +16,7 @@
       </p>
     <% end %>
 
-    <%= render "changelog.partial.html" %>
+    <%= render "changelog.partial.html", %{conn: @conn} %>
 
   </div>
 </section>

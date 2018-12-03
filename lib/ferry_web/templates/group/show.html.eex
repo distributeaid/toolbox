@@ -14,7 +14,7 @@
     </header>
 
     <ul class="actions">
-      <%= if !is_nil(@current_group) &&@group.id == @current_group.id do %>
+      <%= if !is_nil(@current_group) && @group.id == @current_group.id do %>
         <li>
           <%= link to: group_path(@conn, :edit, @current_group), class: "action" do %>
             <i class="fas fa-pencil-alt"></i>

@@ -7,6 +7,18 @@ defmodule FerryWeb.ProjectController do
   # Project Controller
   # ==============================================================================
 
+  # Helpers
+  # ----------------------------------------------------------
+
+  # TODO: copied from group_controller, refactor into shared function or something
+  defp current_group(_conn = %{assigns: %{current_user: %{group_id: group_id}}}) do
+    Profiles.get_group!(group_id)
+  end
+
+  defp current_group(_conn) do
+    nil
+  end
+
   # Show
   # ----------------------------------------------------------
 
@@ -20,7 +32,7 @@ defmodule FerryWeb.ProjectController do
   # TODO: add pagination
   def index(conn, _params) do
     projects = Profiles.list_projects()
-    render(conn, "index-all.html", projects: projects)
+    render(conn, "index-all.html", projects: projects, current_group: current_group(conn))
   end
 
   def show(conn, %{"group_id" => group_id, "id" => id}) do

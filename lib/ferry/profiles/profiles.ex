@@ -123,7 +123,11 @@ defmodule Ferry.Profiles do
 
   """
   def list_projects do
-    Repo.all(Project)
+    Repo.all(
+      from p in Project,
+      left_join: g in assoc(p, :group),
+      preload: [group: g]
+    )
   end
 
   @doc """
