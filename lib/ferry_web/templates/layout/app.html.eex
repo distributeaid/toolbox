@@ -101,6 +101,11 @@
       <div class="section__content">
         <a class="site-footer__link site-footer__link--lowercase" href="mailto:hello@distributeaid.org">
           <i class="fas fa-paper-plane fa-lg"></i>
+          hello@distributeaid.org
+        </a>
+
+        <a class="site-footer__link site-footer__link--lowercase" href="mailto:help@distributeaid.org">
+          <i class="fas fa-paper-plane fa-lg"></i>
           help@distributeaid.org
         </a>
 
