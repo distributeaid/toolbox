@@ -1,0 +1,34 @@
+<address class="<%= assigns[:class] %>">
+  <%# Label %>
+  <%= unless assigns[:include_label?] == false do %>
+    <strong><%= @address.label %></strong>
+    <br />
+  <% end %>
+
+  <%# Street %>
+  <%= if @address.street do %>
+    <%= @address.street %>
+    <br />
+  <% end %>
+
+  <%= cond do %>
+    <%# City, State, Zip, & Country %>
+    <% @address.state && @address.zip_code -> %>
+      <%= "#{@address.city}, #{@address.state}" %>
+      <br /><%= "#{@address.zip_code}, #{@address.country}" %>
+
+    <%# City, State, & Country %>
+    <% @address.state -> %>
+      <%= "#{@address.city}, #{@address.state}" %>
+      <br /><%= @address.country %>
+
+    <%# City, Zip, & Country %>
+    <% @address.zip_code -> %>
+      <%= "#{@address.city}, #{@address.zip_code}" %>
+      <br /><%= @address.country %>
+
+    <%# City & Country %>
+    <% true -> %>
+      <%= "#{@address.city}, #{@address.country}" %>
+  <% end %>
+</address>

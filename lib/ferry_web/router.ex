@@ -33,7 +33,7 @@ defmodule FerryWeb.Router do
     resources "/session", SessionController, only: [:new, :create, :delete], singleton: true
 
     resources "/groups", GroupController, only: [:index, :show] do
-      resources "/addresses", AddressController, only: [:index, :show]
+      resources "/addresses", AddressController, only: [:index]
       resources "/links", LinkController, only: [:index, :show]
       resources "/projects", ProjectController, only: [:index, :show]
       resources "/users", UserController, only: [:new, :create] # TODO: move into admin scope

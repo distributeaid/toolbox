@@ -5,14 +5,48 @@
       <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
     </header>
 
-    <%= render "index-table.partial.html", %{
-      conn: @conn,
-      addresses: @addresses,
-      owner: @group,
-      owner_link_path: &group_address_path/4
-    } %>
-
-    <span><%= link "New Address", to: group_address_path(@conn, :new, @group) %></span>
-    <span><%= link "Back to Group", to: group_path(@conn, :show, @group) %></span>
+    <div id="map" class="map"></div>
   </div>
 </section>
+
+<script>
+  /* addresses =
+   * [
+   *   {
+   *     geoencoding_uri: ...,
+   *     marker_content: ...,
+   *   },
+   *   ...
+   * ]
+   */
+  var addresses = <%= format_addresses_for_map(@addresses) %>;
+  var map = new L.map('map');
+
+  // create the tile layer with correct attribution
+  var osmUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+  var osmAttrib='Map data &copy; <a href="https://openstreetmap.org" target="blank">OpenStreetMap</a> contributors, <a href="https://openstreetmap.org/copyright" target="blank">CC-BY-SA</a>';
+  var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
+
+  // draw the map
+  map.setView(new L.LatLng(52, 13), 3);
+  map.addLayer(osm);
+
+  // geoencode addresses
+  var geoencodingRequests = addresses.map(function(address) {
+    return fetch(address.geoencoding_uri)
+      .then(function(response) {
+        return response.json();
+      });
+  });
+
+  // add markers to the map
+  Promise.all(geoencodingRequests)
+    .then(function(geoencodingResults) {
+      geoencodingResults.forEach(function(result, i) {
+        result = result[0];
+        var marker = L.marker([result.lat, result.lon])
+          .bindPopup(addresses[i].marker_content)
+          .addTo(map);
+      });
+    });
+</script>

@@ -51,6 +51,11 @@ exports.config = {
     babel: {
       // Do not use ES6 compiler in vendor code
       ignore: [/vendor/]
+    },
+    cssnano: {
+      // Don't modify zindex attributes, since they interact with other content
+      // loaded by scripts (like our maps).
+      zindex: false
     }
   },
 

@@ -21,13 +21,13 @@
 
     <%= if has_projects? @projects do %>
       <%= for project <- @projects do %>
-        <div class="project">
-          <h3 class="project__title">
+        <div class="entry">
+          <h3 class="entry__title">
             <%= tag :img, src: logo_url(project.group), alt: "Logo", class: "logo" %>
             <%= project.name %>
           </h3>
 
-          <ul class="project__actions actions actions--inline">
+          <ul class="entry__actions actions actions--inline">
             <li>
               <%= link to: group_project_path(@conn, :show, project.group_id, project), class: "action" do %>
                 <i class="fas fa-eye"></i>
@@ -47,7 +47,7 @@
             <% end %>
           </ul>
 
-          <p class="project__description"><%= project.description %></p>
+          <p class="entry__content"><%= project.description %></p>
         </div>
       <% end %>
 

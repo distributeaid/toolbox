@@ -11,8 +11,9 @@
     Styles
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     -->
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa:400|Quicksand:400,700">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <%= render_existing @view_module, "view-specific-styles.html" %>
 
     <!--
     Favicon
@@ -44,6 +45,7 @@
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     -->
     <script defer src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <%= render_existing @view_module, "view-specific-scripts.html" %>
   </head>
 
   <body class="site">
