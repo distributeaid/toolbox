@@ -250,7 +250,10 @@ defmodule Ferry.LocationsTest do
     # Tests
     # ----------------------------------------------------------
 
-    test "get_map/1 with valid parameters returns a map with results" do
+    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
+    test "get_map/1 lists all groups (in alphabetical order) in the `group_filter_labels` field"
+
+    test "get_map/1 with no controls set returns a map with all addresses included as results" do
       group = insert(:group)
 
       # no addresses
@@ -266,15 +269,37 @@ defmodule Ferry.LocationsTest do
       address2 = map_result_fixture(group)
       {:ok, map} = Locations.get_map()
       assert map.results == [address1, address2]
+    end
 
-      # no matches
-      # TODO
+    test "get_map/2 with the group_filter control set returns a map with all addresses of the selected groups" do
+      group1 = insert(:group)
+      group2 = insert(:group)
+      group3 = insert(:group)
 
-      # 1 match
-      # TODO
+      address1 = map_result_fixture(group1)
+      address2 = map_result_fixture(group2)
+      # group3 has no addresses
 
-      # n matches
-      # TODO
+      # no group selected
+      {:ok, map} = Locations.get_map(%{group_filter: []})
+      assert map.results == [address1, address2]
+
+      # group1 selected
+      {:ok, map} = Locations.get_map(%{group_filter: [group1.id]})
+      assert map.results == [address1]
+
+      # group1 & group2 selected
+      {:ok, map} = Locations.get_map(%{group_filter: [group1.id, group2.id]})
+      assert map.results == [address1, address2]
+
+      # all groups select
+      {:ok, map} = Locations.get_map(%{group_filter: [group1.id, group2.id, group3.id]})
+      assert map.results == [address1, address2]
+    end
+
+    test "change_map/1 returns a map changeset" do
+      {:ok, map} = Locations.get_map()
+      assert %Ecto.Changeset{} = Locations.change_map(map)
     end
 
   end

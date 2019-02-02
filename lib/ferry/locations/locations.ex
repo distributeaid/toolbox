@@ -194,37 +194,83 @@ defmodule Ferry.Locations do
 
   """
   def get_map(attrs \\ %{}) do
-    controls_changeset = %Map{} |> Map.changeset(attrs)
+    map_changeset = %Map{}
+    |> set_control_labels()
+    |> set_controls(attrs) 
+    |> apply_controls()    
 
-    unless controls_changeset.valid? do
-      {:error, controls_changeset}
-
+    if map_changeset.valid? do
+      map = map_changeset |> Changeset.apply_changes()
+      {:ok, map}
     else
-      map = Changeset.apply_changes(controls_changeset)
-
-      query = from a in Address,
-        left_join: g in assoc(a, :group),
-        left_join: p in assoc(a, :project),
-        select: a,
-        preload: [group: g, project: p]
-
-      query = if map.group_filter != nil && length(map.group_filter) > 0 do
-          from g in query,
-            where: g.id in ^map.group_filter
-        else
-          query
-        end
-
-      results = Repo.all(from a in query)
-      results_changeset = controls_changeset |> Map.changeset(%{results: results})
-
-      unless results_changeset.valid? do
-        {:error, results_changeset}
-      else
-        {:ok, Changeset.apply_changes(results_changeset)}
-      end
-
+      {:error, map_changeset}
     end
+  end
 
+  defp set_control_labels(%Map{} = map) do
+    # TODO: move to Profiles context for better encapsulation?
+    group_labels = Repo.all(from g in Group,
+      select: {g.name, g.id},
+      order_by: g.name
+    )
+
+    map
+    |> Map.changeset(%{
+      group_filter_labels: group_labels
+      # add other control_labels here
+    })
+  end
+
+  defp set_controls(%Changeset{} = map_changeset, attrs) do
+    map_changeset |> Map.changeset(attrs)
+  end
+
+  defp apply_controls(%Changeset{valid?: false} = changeset) do
+    changeset
+  end
+
+  defp apply_controls(%Changeset{valid?: true} = map_changeset) do
+    map = map_changeset |> Changeset.apply_changes()
+
+    query = from a in Address,
+      left_join: g in assoc(a, :group),
+      left_join: p in assoc(a, :project),
+      order_by: a.id,
+      preload: [group: g, project: p]
+
+    {_, query} = {map, query}
+    |> apply_group_filter() # returns {map, query}
+    # add other control applications here
+
+    results = Repo.all(from a in query)
+    map_changeset |> Map.changeset(%{results: results})
+  end
+
+  defp apply_group_filter({%Map{group_filter: nil} = map, query}) do
+    {map, query}
+  end
+
+  defp apply_group_filter({%Map{group_filter: []} = map, query}) do
+    {map, query}
+  end
+
+  defp apply_group_filter({%Map{} = map, query}) do
+    query = from [a, g] in query,
+            where: g.id in ^map.group_filter
+
+    {map, query}
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking map changes.
+
+  ## Examples
+
+      iex> change_map(map)
+      %Ecto.Changeset{source: %Map{}}
+
+  """
+  def change_map(%Map{} = map) do
+    Map.changeset(map, %{})
   end
 end

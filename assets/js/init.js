@@ -4,8 +4,6 @@
  * Licensed under the AGPLv3. See `/LICENSE.md`.
  */
 
-var $ = require('jquery');
-
 $(document).ready(function() {
 
   /*
@@ -15,6 +13,12 @@ $(document).ready(function() {
   $K.init({
     observer: true
   });
+
+  /*
+  Initialize Select2
+  ------------------------------------------------------------
+  */
+  $('select[multiple]').select2();
 
   /* Smooth Scroll to Anchors
    * ------------------------------------------------------

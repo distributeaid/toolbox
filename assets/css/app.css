@@ -190,7 +190,8 @@ form .is-req {
   text-align: right;
 }
 
-.form-item.is-inline input:not([type="checkbox"]):not([type="radio"]) {
+.form-item.is-inline input:not([type="checkbox"]):not([type="radio"]),
+.form-item.is-inline select {
   display: inline-block;
 
   /* Leaves room for:

@@ -4,19 +4,23 @@ defmodule Ferry.Locations.Map do
   alias Ferry.Locations.Address
 
   schema "maps" do
-    field :search, :string, virtual: true
+    # control data
+    field :group_filter_labels, {:array, :any}, virtual: true
 
+    # controls
+    field :search, :string, virtual: true
     field :country_filter, {:array, :string}, virtual: true
     field :group_filter, {:array, :integer}, virtual: true
-    field :project_filter, {:array, :integer}, virtual: true
 
+    # results
     field :results, {:array, :any}, virtual: true
   end
 
   @doc false
   def changeset(map, attrs) do
     map
-    |> cast(attrs, [:search, :country_filter, :group_filter, :project_filter, :results])
-    # TODO: validate country filter, results, etc
+    |> cast(attrs, [:group_filter_labels, :search, :country_filter, :group_filter, :results])
+    |> validate_required([:group_filter_labels])
+    # TODO: validate controls, results
   end
 end
