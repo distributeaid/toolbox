@@ -229,4 +229,53 @@ defmodule Ferry.LocationsTest do
       assert %Ecto.Changeset{} = Locations.change_address(address)
     end
   end
+
+
+  # Maps
+  # ==============================================================================
+  describe "maps" do
+    alias Ferry.Locations.Map
+    alias Ferry.Profiles.Group
+
+    # Data & Helpers
+    # ----------------------------------------------------------
+
+    def map_result_fixture(%Group{} = group, attrs \\ %{}) do
+      address = insert(:address, group: group)
+      %{address | project: nil}
+    end
+
+    # TODO: map_result_fixture w/ a project owning the address
+
+    # Tests
+    # ----------------------------------------------------------
+
+    test "get_map/1 with valid parameters returns a map with results" do
+      group = insert(:group)
+
+      # no addresses
+      {:ok, map} = Locations.get_map()
+      assert map.results == []
+
+      # 1 address
+      address1 = map_result_fixture(group)
+      {:ok, map} = Locations.get_map()
+      assert map.results == [address1]
+
+      # n addresses
+      address2 = map_result_fixture(group)
+      {:ok, map} = Locations.get_map()
+      assert map.results == [address1, address2]
+
+      # no matches
+      # TODO
+
+      # 1 match
+      # TODO
+
+      # n matches
+      # TODO
+    end
+
+  end
 end

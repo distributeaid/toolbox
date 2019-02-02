@@ -39,7 +39,7 @@ defmodule FerryWeb.Router do
       resources "/users", UserController, only: [:new, :create] # TODO: move into admin scope
     end
 
-    resources "/addresses", AddressController, only: [:index] # TODO: will become "The Map" page
+    resources "/map", MapController, only: [:show], singleton: true
     resources "/projects", ProjectController, only: [:index]
   end
 

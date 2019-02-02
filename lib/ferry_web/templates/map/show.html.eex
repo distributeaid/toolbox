@@ -1,8 +1,7 @@
 <section class="section">
   <div class="section__content">
     <header class="section__header">
-      <h1 class="section__title">Addresses</h1>
-      <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+      <h1 class="section__title">The Map</h1>
     </header>
 
     <div id="map" class="map"></div>
@@ -19,7 +18,7 @@
    *   ...
    * ]
    */
-  var addresses = <%= format_addresses_for_map(@addresses) %>;
+  var addresses = <%= format_addresses_for_map(@map.results) %>;
   var map = new L.map('map');
 
   // create the tile layer with correct attribution

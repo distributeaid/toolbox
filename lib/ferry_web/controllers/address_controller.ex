@@ -8,15 +8,6 @@ defmodule FerryWeb.AddressController do
   # Address Controller
   # ==============================================================================
 
-  # Show
-  # ----------------------------------------------------------
-
-  def index(conn, %{"group_id" => group_id}) do
-    group = Profiles.get_group!(group_id)
-    addresses = Locations.list_addresses(group)
-    render(conn, "index.html", group: group, addresses: addresses)
-  end
-
   # Create
   # ----------------------------------------------------------
 

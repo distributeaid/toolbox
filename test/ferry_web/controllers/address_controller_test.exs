@@ -50,19 +50,6 @@ defmodule FerryWeb.AddressControllerTest do
       )
     end
 
-    test "shows 404 not found for non-existent groups", %{conn: conn, address: address} do
-      Enum.each(
-        [
-          # unauthenticated
-          fn -> get build_conn(), group_address_path(build_conn(), :index, 1312) end,
-
-          # authenticated
-          fn -> get conn, group_address_path(conn, :index, 1312) end,
-        ],
-        fn request -> assert_error_sent 404, request end
-      )
-    end
-
     test "shows 404 not found for non-existent addresses", %{conn: conn, group: group} do
       Enum.each(
         [
@@ -74,17 +61,6 @@ defmodule FerryWeb.AddressControllerTest do
         ],
         fn request -> assert_error_sent 404, request end
       )
-    end
-  end
-
-  # Show
-  # ----------------------------------------------------------
-
-  describe "index" do
-    # TODO: actually lists no addresses since none are created... test both cases
-    test "lists all addresses", %{conn: conn, group: group} do
-      conn = get conn, group_address_path(conn, :index, group)
-      assert html_response(conn, 200) =~ "Addresses"
     end
   end
 

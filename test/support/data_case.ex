@@ -22,6 +22,7 @@ defmodule Ferry.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Ferry.DataCase
+      import Ferry.Factory
     end
   end
 

@@ -5,6 +5,7 @@ defmodule Ferry.Locations do
 
   import Ecto.Query, warn: false
   alias Ferry.Repo
+  alias Ecto.Changeset
 
   alias Ferry.Profiles.{Group, Project}
   alias Ferry.Locations.Address
@@ -169,5 +170,61 @@ defmodule Ferry.Locations do
   """
   def change_address(%Address{} = address) do
     Address.changeset(address, %{})
+  end
+
+  alias Ferry.Locations.Map
+
+  @doc """
+  Gets a map, which sets the search and filter fields and gets the matching
+  addresses from the database.  Groups / projects are preloaded on each address.
+
+  ## Examples
+
+      iex> get_map(%{search: "...", country_filter: "RS"})
+      {:ok, %Map{
+        search: "...",
+        country_filter: "RS",
+        results: [%Address{
+          label: "Collective Aid Processing Warehouse",
+          ...,
+          group: %Group{},
+          project: %Project{}
+        }, ...]
+      }}
+
+  """
+  def get_map(attrs \\ %{}) do
+    controls_changeset = %Map{} |> Map.changeset(attrs)
+
+    unless controls_changeset.valid? do
+      {:error, controls_changeset}
+
+    else
+      map = Changeset.apply_changes(controls_changeset)
+
+      query = from a in Address,
+        left_join: g in assoc(a, :group),
+        left_join: p in assoc(a, :project),
+        select: a,
+        preload: [group: g, project: p]
+
+      query = if map.group_filter != nil && length(map.group_filter) > 0 do
+          from g in query,
+            where: g.id in ^map.group_filter
+        else
+          query
+        end
+
+      results = Repo.all(from a in query)
+      results_changeset = controls_changeset |> Map.changeset(%{results: results})
+
+      unless results_changeset.valid? do
+        {:error, results_changeset}
+      else
+        {:ok, Changeset.apply_changes(results_changeset)}
+      end
+
+    end
+
   end
 end

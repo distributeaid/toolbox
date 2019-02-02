@@ -3,9 +3,12 @@
 
   <ul class="actions">
     <li>
-      <%= link to: group_address_path(@conn, :index, @group), class: "action" do %>
+      <!-- TODO: point to the map w/ the group filter setup -->
+      <!--
+      <%= link to: map_path(@conn, :show), class: "action" do %>
         <i class="fas fa-eye"></i>
       <% end %>
+      -->
     </li>
     <%= if @can_modify? do %>
       <li>
