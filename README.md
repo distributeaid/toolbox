@@ -28,6 +28,8 @@ sudo ln -s /usr/bin/nodejs /usr/bin/node
 
 # Clone The Project
 git clone git@gitlab.com:distribute-aid/toolbox.git
+
+# Change Directory into toolbox
 cd toolbox/
 
 # Install Hex Packages
