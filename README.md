@@ -48,6 +48,15 @@ ALTER USER toolbox CREATEDB;
 mix ecto.create
 mix ecto.migrate
 
+# Adding data to database for development 
+# Start by adding a value to the group table
+# Make sure you start the postgres server 
+cd toolbox/ # be inside toolbox folder
+psql toolbox_dev toolbox # logging into database created locally
+toolbox_dev=> INSERT INTO groups (name, description, inserted_at, updated_at)
+-> VALUES ('group1', 'this group helps developers test', '2019-02-18 08:35:06', '2019-02-18 08:35:06');
+=> SELECT * FROM groups; # this will provide you with the table and the new group you have created
+
 # Run Our Dev Tools
 mix phx.server
 mix test
@@ -56,6 +65,8 @@ mix test
 Development
 ------------------------------------------------------------
 Dev Server: `mix phx.server` - open [http://localhost:1312] in your browser
+To create new users: http://localhost:1312/public/groups/GROUP_ID/users/new
+Replace GROUP_ID in the above url with the group id from the table that was generated after you added group1 to the database
 
 Database Reset: `mix ecto.reset`
 
