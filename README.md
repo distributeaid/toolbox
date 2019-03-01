@@ -177,7 +177,29 @@ Ex Unit (testing framework):
 
 Copyright & Licensing
 ------------------------------------------------------------
-TODO: Ensure license notice appears in each source code file.
+Our source code is released under the AGPLv3 license.  You can find the full license in `LICENSE.md`.  The license notice has been included below:
+
+```
+Toolbox: Web tools for refugee aid groups.
+Copyright (C) 2018-2019  Distribute Aid
+https://distributeaid.org
+code@distributeaid.org
+
+Toolbox is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of
+the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+```
+
+TODO: Ensure the short version of license notice appears in each source code file.
 
 TODO: Ensure that appropriate code license & content license notices appear on each page of the site.
 
