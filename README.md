@@ -7,6 +7,46 @@ The collection of tools for newcomer (refugee) aid groups that make up the Distr
 
 Up & Running
 ------------------------------------------------------------
+
+Using Docker
+
+  - Install Docker - https://docs.docker.com/install/
+  - Install Docker Compose - https://docs.docker.com/compose/install/
+  - Build Images
+  - Running the `./build-server.sh` script will start the app with `phx.server` running for live reloads
+  - Once the message `[info] Running FerryWeb.Endpoint with Cowboy using http://0.0.0.0:1312` appears in the log it is ready to run
+
+  ```
+  # Run this to build and bring up the containers using docker-compose
+    ./build-server.sh
+
+  # To stop, run:
+    docker-compose down
+
+  # Execute commands on a particular container (https://docs.docker.com/engine/reference/commandline/ps/):
+  docker ps -a
+  docker exec $image_id command
+
+  # Commands can be run on running containers like:
+  docker exec $(docker ps -aqf "name=toolbox_web*") mix ecto.create
+  docker exec $(docker ps -aqf "name=toolbox_web*") mix ecto.migrate
+  docker exec $(docker ps -aqf "name=toolbox_web*") mix ecto.reset
+
+  # For more information, see here: https://docs.docker.com/engine/reference/commandline/exec/
+
+  # An interactive bash shell can be executed like:
+  docker exec -it $image_id /bin/bash
+
+  # Setup the seed test group:
+  docker exec $(docker ps -aqf "name=toolbox_db*") /bin/bash seed-test-group.sh
+
+  ```
+  - Troubleshooting:
+    - Incorrect development folder permissions, run: `chmod -R +x development/`
+    - Try not to have PostgreSQL running locally (potential conflict issues)
+
+Legacy
+
 ```
 # Install Packages - Mac OSX
 # Uses Homebrew: [https://brew.sh/]
