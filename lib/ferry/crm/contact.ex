@@ -24,8 +24,8 @@ defmodule Ferry.CRM.Contact do
     contact
     |> Repo.preload([:emails, :phones])
     |> cast(attrs, [:label, :description])
-    |> cast_assoc(:emails, [:required])
-    |> cast_assoc(:phones, [:required])
+    |> cast_assoc(:emails)
+    |> cast_assoc(:phones)
     |> validate_length(:label, max: 255)
     # TODO: add a changeset check constraint that matches the db one?
     #       https://hexdocs.pm/ecto/Ecto.Changeset.html#check_constraint/3

@@ -35,6 +35,7 @@ defmodule Ferry.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      # standard deps
       {:phoenix, "~> 1.3.4"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
@@ -43,6 +44,8 @@ defmodule Ferry.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
+
+      # json deps
       {:poison, "~> 3.1"},
 
       # authentication deps
@@ -72,7 +75,7 @@ defmodule Ferry.Mixfile do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "test": ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 end

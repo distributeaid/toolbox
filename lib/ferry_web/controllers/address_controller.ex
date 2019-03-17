@@ -21,7 +21,7 @@ defmodule FerryWeb.AddressController do
     group = Profiles.get_group!(group_id)
 
     case Locations.create_address(group, address_params) do
-      {:ok, address} ->
+      {:ok, _address} ->
         conn
         |> put_flash(:info, "Address created successfully.")
         |> redirect(to: group_path(conn, :show, group))
@@ -45,7 +45,7 @@ defmodule FerryWeb.AddressController do
     address = Locations.get_address!(id)
 
     case Locations.update_address(address, address_params) do
-      {:ok, address} ->
+      {:ok, _address} ->
         conn
         |> put_flash(:info, "Address updated successfully.")
         |> redirect(to: group_path(conn, :show, group))

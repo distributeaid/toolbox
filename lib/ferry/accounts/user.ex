@@ -30,7 +30,7 @@ defmodule Ferry.Accounts.User do
   end
 
   # only hash when necessary
-  defp put_password_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
+  defp put_password_hash(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
         put_change(changeset, :password_hash, encrypt_password(password))
@@ -39,8 +39,6 @@ defmodule Ferry.Accounts.User do
         changeset
     end
   end
-
-  defp put_password_hash(changeset), do: changeset
 
   @doc """
   TODO

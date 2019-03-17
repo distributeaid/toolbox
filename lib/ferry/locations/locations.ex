@@ -71,7 +71,7 @@ defmodule Ferry.Locations do
       [{"Calais", "France"}, {"Caen", "France"}, ...]
 
   """
-  def list_cities(country) do
+  def list_cities(_country) do
     throw "Ferry.Locations.list_cities/1 is not implemented... yet ;)"
   end
 

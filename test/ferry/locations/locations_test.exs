@@ -234,13 +234,13 @@ defmodule Ferry.LocationsTest do
   # Maps
   # ==============================================================================
   describe "maps" do
-    alias Ferry.Locations.Map
+#    alias Ferry.Locations.Map
     alias Ferry.Profiles.Group
 
     # Data & Helpers
     # ----------------------------------------------------------
 
-    def map_result_fixture(%Group{} = group, attrs \\ %{}) do
+    def map_result_fixture(%Group{} = group, _attrs \\ %{}) do
       address = insert(:address, group: group)
       %{address | project: nil}
     end

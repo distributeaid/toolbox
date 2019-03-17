@@ -8,7 +8,6 @@ defmodule Ferry.Auth do
   alias Comeonin.Bcrypt
 
   alias Ferry.Repo
-  alias Ferry.Auth.Guardian
   alias Ferry.Accounts.User
 
   @doc """

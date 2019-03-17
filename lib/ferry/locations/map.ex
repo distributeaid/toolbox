@@ -1,7 +1,6 @@
 defmodule Ferry.Locations.Map do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Ferry.Locations.Address
 
   schema "maps" do
     # control data
