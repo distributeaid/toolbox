@@ -5,7 +5,7 @@ defmodule Ferry.Mixfile do
     [
       app: :ferry,
       version: "0.0.7",
-      elixir: "~> 1.4",
+      elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       start_permanent: Mix.env == :prod,
@@ -57,7 +57,7 @@ defmodule Ferry.Mixfile do
       {:arc_ecto, "~> 0.11.1"},
 
       # testing deps
-      {:ex_machina, "~> 2.2"},
+      {:ex_machina, "~> 2.2", only: :test},
       {:excoveralls, "~> 0.10", only: :test},
 
       # deployment deps
