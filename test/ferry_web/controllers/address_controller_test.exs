@@ -1,10 +1,14 @@
 defmodule FerryWeb.AddressControllerTest do
   use FerryWeb.ConnCase
 
+  import Mox
+
   # Address Controller Tests
   # ==============================================================================
 
   setup do
+    verify_on_exit!()
+
     group = insert(:group)
     user = insert(:user, group: group)
     address = insert(:address, group: group)
@@ -75,7 +79,13 @@ defmodule FerryWeb.AddressControllerTest do
   end
 
   describe "create address" do
+    alias Ferry.Locations.Geocoder.GeocoderMock
+
     test "redirects to show when data is valid", %{conn: conn, group: group} do
+      GeocoderMock |> expect(:geocode_address, fn _address ->
+        {:ok, params_for(:geocode)}
+      end)
+
       address_params = params_for(:address)
       conn = post conn, group_address_path(conn, :create, group), address: address_params
 

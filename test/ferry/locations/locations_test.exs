@@ -1,53 +1,18 @@
 defmodule Ferry.LocationsTest do
   use Ferry.DataCase
 
+  import Mox
+
   alias Ferry.Locations
 
   # Addresses
   # ==============================================================================
   describe "addresses" do
-    alias Ferry.Profiles
+    alias Ferry.Profiles.Group
     alias Ferry.Locations.Address
+    alias Ferry.Locations.Geocoder.GeocoderMock
 
-    # Data & Helpers
-    # ----------------------------------------------------------
-
-    @valid_attrs %{
-      typical: %{label: "HQ", street: "123 Downtown Street", city: "Lund", state: "Skåne", country: "Sweden", zip_code: "222 23"},
-      min: %{label: "Warehouse", city: "Copenhagen", country: "Denmark"}
-    }
-
-    @update_attrs %{
-      typical: %{label: "New HQ", street: "123 Office Street", city: "Berlin", state: "Brandenburg", country: "Germany", zip_code: "161-AFA"}
-    }
-
-    @invalid_attrs %{
-      is_nil: %{label: nil, city: nil, country: nil},
-      too_short: %{label: "", city: "", country: ""},
-      too_long: %{
-        label: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        street: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        city: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        state: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        country: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        zip_code: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-      }
-    }
-
-    def address_fixture(owner, attrs \\ %{}) do
-      attrs = Enum.into(attrs, @valid_attrs.typical)
-      {:ok, address} = Locations.create_address(owner, attrs)
-
-      address
-    end
-
-    def group_and_project_fixtures(n \\ 1) do
-      n = to_string(n)
-      {:ok, group} = Profiles.create_group(%{name: "Food Clothing and Resistance Collective " <> n})
-      {:ok, project} = Profiles.create_project(group, %{name: "Feed The People " <> n})
-
-      {group, project}
-    end
+    setup :verify_on_exit!
 
     # Tests
     # ----------------------------------------------------------
@@ -56,44 +21,46 @@ defmodule Ferry.LocationsTest do
     #       Other functions like list_addresses/0 may only test with one.
 
     test "list_addresses/1 returns all addresses for a group" do
-      {group, project} = group_and_project_fixtures(1)
-      {group2, _} = group_and_project_fixtures(2)
+      group = insert(:group)
+      project = insert(:project, group: group)
+      group2 = insert(:group)
 
       # no addresses
       assert Locations.list_addresses(group) == []
 
       # 1 address
-      address1 = address_fixture(group)
+      address1 = insert(:address, group_id: group.id)
       assert Locations.list_addresses(group) == [address1]
 
       # n addresses
-      address2 = address_fixture(group)
+      address2 = insert(:address, group_id: group.id)
       assert Locations.list_addresses(group) == [address1, address2]
 
       # only addresses for that group
-      _ = address_fixture(group2)
-      _ = address_fixture(project)
+      _ = insert(:address, group_id: group2.id)
+      _ = insert(:address, project_id: project.id)
       assert Locations.list_addresses(group) == [address1, address2]
     end
 
     test "list_addresses/1 returns all addresses for a project" do
-      {group, project} = group_and_project_fixtures(1)
-      {_, project2} = group_and_project_fixtures(2)
+      group = insert(:group)
+      project = insert(:project, group: group)
+      project2 = insert(:project, group: build(:group))
 
       # no addresses
       assert Locations.list_addresses(project) == []
 
       # 1 address
-      address1 = address_fixture(project)
+      address1 = insert(:address, project_id: project.id)
       assert Locations.list_addresses(project) == [address1]
 
       # n addresses
-      address2 = address_fixture(project)
+      address2 = insert(:address, project_id: project.id)
       assert Locations.list_addresses(project) == [address1, address2]
 
-      # only addresses for that group
-      _ = address_fixture(group)
-      _ = address_fixture(project2)
+      # only addresses for that project
+      _ = insert(:address, group_id: group.id)
+      _ = insert(:address, project_id: project2.id)
       assert Locations.list_addresses(project) == [address1, address2]
     end
 
@@ -107,8 +74,8 @@ defmodule Ferry.LocationsTest do
     test "list_cities/1 returns tuples for all cities in the specified country"
 
     test "get_address!/1 returns the address with given id" do
-      {group, _} = group_and_project_fixtures()
-      address = address_fixture(group)
+      group = insert(:group)
+      address = insert(:address, group_id: group.id)
       assert Locations.get_address!(address.id) == address
     end
 
@@ -118,101 +85,131 @@ defmodule Ferry.LocationsTest do
       end
     end
 
-    test "create_address/2 with valid data creates a address" do
-      {group, project} = group_and_project_fixtures()
+    test "create_address/2 with valid data creates an address" do
+      GeocoderMock |> expect(:geocode_address, 4, fn _address ->
+        {:ok, params_for(:geocode)}
+      end)
 
-      # typical
-      assert {:ok, %Address{} = address} = Locations.create_address(group, @valid_attrs.typical)
-      assert address.label == @valid_attrs.typical.label
-      assert address.street == @valid_attrs.typical.street
-      assert address.city == @valid_attrs.typical.city
-      assert address.state == @valid_attrs.typical.state
-      assert address.country == @valid_attrs.typical.country
-      assert address.zip_code == @valid_attrs.typical.zip_code
+      group = insert(:group)
+      project = insert(:project, group: group)
 
-      assert {:ok, %Address{} = address} = Locations.create_address(project, @valid_attrs.typical)
-      assert address.label == @valid_attrs.typical.label
-      assert address.street == @valid_attrs.typical.street
-      assert address.city == @valid_attrs.typical.city
-      assert address.state == @valid_attrs.typical.state
-      assert address.country == @valid_attrs.typical.country
-      assert address.zip_code == @valid_attrs.typical.zip_code
+      attrs = params_for(:address)
+      assert {:ok, %Address{} = address} = Locations.create_address(group, attrs)
+      assert address.label == attrs.label
+      assert address.street == attrs.street
+      assert address.city == attrs.city
+      assert address.state == attrs.state
+      assert address.country == attrs.country
+      assert address.zip_code == attrs.zip_code
+      assert address.geocode.lat == attrs.geocode.lat
+      assert address.geocode.lng == attrs.geocode.lng
+      assert address.geocode.data == attrs.geocode.data
+
+      attrs = params_for(:address)
+      assert {:ok, %Address{} = address} = Locations.create_address(project, attrs)
+      assert address.label == attrs.label
+      assert address.street == attrs.street
+      assert address.city == attrs.city
+      assert address.state == attrs.state
+      assert address.country == attrs.country
+      assert address.zip_code == attrs.zip_code
+      assert address.geocode.lat == attrs.geocode.lat
+      assert address.geocode.lng == attrs.geocode.lng
+      assert address.geocode.data == attrs.geocode.data
 
       # min
-      assert {:ok, %Address{} = address} = Locations.create_address(group, @valid_attrs.min)
-      assert address.label == @valid_attrs.min.label
+      attrs = params_for(:min_address)
+      assert {:ok, %Address{} = address} = Locations.create_address(group, attrs)
+      assert address.label == attrs.label
       assert address.street == nil
-      assert address.city == @valid_attrs.min.city
+      assert address.city == attrs.city
       assert address.state == nil
-      assert address.country == @valid_attrs.min.country
+      assert address.country == attrs.country
       assert address.zip_code == nil
+      assert address.geocode.lat == attrs.geocode.lat
+      assert address.geocode.lng == attrs.geocode.lng
+      assert address.geocode.data == attrs.geocode.data
 
-      assert {:ok, %Address{} = address} = Locations.create_address(project, @valid_attrs.min)
-      assert address.label == @valid_attrs.min.label
+      attrs = params_for(:min_address)
+      assert {:ok, %Address{} = address} = Locations.create_address(project, attrs)
+      assert address.label == attrs.label
       assert address.street == nil
-      assert address.city == @valid_attrs.min.city
+      assert address.city == attrs.city
       assert address.state == nil
-      assert address.country == @valid_attrs.min.country
+      assert address.country == attrs.country
       assert address.zip_code == nil
+      assert address.geocode.lat == attrs.geocode.lat
+      assert address.geocode.lng == attrs.geocode.lng
+      assert address.geocode.data == attrs.geocode.data
     end
 
     test "create_address/2 with invalid data returns error changeset" do
-      {group, project} = group_and_project_fixtures()
+      group = insert(:group)
+      project = insert(:project, group: group)
 
       # is nil
-      assert {:error, changeset = %Ecto.Changeset{}} = Locations.create_address(group, @invalid_attrs.is_nil)
-      assert 3 == changeset.errors |> length
-      assert {:error, changeset = %Ecto.Changeset{}} = Locations.create_address(project, @invalid_attrs.is_nil)
-      assert 3 == changeset.errors |> length
+      attrs = params_for(:invalid_nil_address)
+      assert {:error, %Ecto.Changeset{} = changeset} = Locations.create_address(group, attrs)
+      assert 3 == length(changeset.errors)
+      assert {:error, %Ecto.Changeset{} = changeset} = Locations.create_address(project, attrs)
+      assert 3 == length(changeset.errors)
 
       # too short
-      assert {:error, %Ecto.Changeset{}} = Locations.create_address(group, @invalid_attrs.too_short)
-      assert {:error, %Ecto.Changeset{}} = Locations.create_address(project, @invalid_attrs.too_short)
+      attrs = params_for(:invalid_short_address)
+      assert {:error, %Ecto.Changeset{} = changeset} = Locations.create_address(group, attrs)
+      assert 3 == length(changeset.errors)
+      assert {:error, %Ecto.Changeset{} = changeset} = Locations.create_address(project, attrs)
+      assert 3 == length(changeset.errors)
 
       # too long
-      assert {:error, %Ecto.Changeset{}} = Locations.create_address(group, @invalid_attrs.too_long)
-      assert {:error, %Ecto.Changeset{}} = Locations.create_address(project, @invalid_attrs.too_long)
+      attrs = params_for(:invalid_long_address)
+      assert {:error, %Ecto.Changeset{} = changeset} = Locations.create_address(group, attrs)
+      assert 6 == length(changeset.errors)
+      assert {:error, %Ecto.Changeset{} = changeset} = Locations.create_address(project, attrs)
+      assert 6 == length(changeset.errors)
     end
 
     @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
     test "the database's has_exactly_one_owner check constraint throws and error if an address has no or multiple owners"
 
     test "update_address/2 with valid data updates the address" do
-      {group, _} = group_and_project_fixtures()
-      address = address_fixture(group)
+      group = insert(:group)
+      address = insert(:address, group_id: group.id)
 
       # typical
-      assert {:ok, address} = Locations.update_address(address, @update_attrs.typical)
-      assert %Address{} = address
-      assert address.label == @update_attrs.typical.label
-      assert address.street == @update_attrs.typical.street
-      assert address.city == @update_attrs.typical.city
-      assert address.state == @update_attrs.typical.state
-      assert address.country == @update_attrs.typical.country
-      assert address.zip_code == @update_attrs.typical.zip_code
+      attrs = params_for(:address)
+      assert {:ok, %Address{} = address} = Locations.update_address(address, attrs)
+      assert address.label == attrs.label
+      assert address.street == attrs.street
+      assert address.city == attrs.city
+      assert address.state == attrs.state
+      assert address.country == attrs.country
+      assert address.zip_code == attrs.zip_code
+      assert address.geocode.lat == attrs.geocode.lat
+      assert address.geocode.lng == attrs.geocode.lng
+      assert address.geocode.data == attrs.geocode.data
     end
 
     test "update_address/2 with invalid data returns error changeset" do
-      {group, _} = group_and_project_fixtures()
-      address = address_fixture(group)
-
-      # is nil
-      assert {:error, changeset = %Ecto.Changeset{}} = Locations.update_address(address, @invalid_attrs.is_nil)
-      assert 3 == changeset.errors |> length
-      assert address == Locations.get_address!(address.id)
+      group = insert(:group)
+      address = insert(:address, group_id: group.id)
 
       # too short
-      assert {:error, %Ecto.Changeset{}} = Locations.update_address(address, @invalid_attrs.too_short)
+      attrs = params_for(:invalid_short_address)
+      assert {:error, %Ecto.Changeset{} = changeset} = Locations.update_address(address, attrs)
+      assert 3 == length(changeset.errors)
       assert address == Locations.get_address!(address.id)
 
       # too long
-      assert {:error, %Ecto.Changeset{}} = Locations.update_address(address, @invalid_attrs.too_long)
+      attrs = params_for(:invalid_long_address)
+      assert {:error, %Ecto.Changeset{} = changeset} = Locations.update_address(address, attrs)
+      assert 6 == length(changeset.errors)
       assert address == Locations.get_address!(address.id)
     end
 
     test "delete_address/1 deletes the address" do
-      {group, _} = group_and_project_fixtures()
-      address = address_fixture(group)
+      group = insert(:group)
+      address = insert(:address, group_id: group.id)
       assert {:ok, %Address{}} = Locations.delete_address(address)
       assert_raise Ecto.NoResultsError, fn -> Locations.get_address!(address.id) end
     end
@@ -224,8 +221,8 @@ defmodule Ferry.LocationsTest do
     test "the database's on_delete:delete_all setting deletes related addresses when a project is deleted"
 
     test "change_address/1 returns a address changeset" do
-      {group, _} = group_and_project_fixtures()
-      address = address_fixture(group)
+      group = insert(:group)
+      address = insert(:address, group_id: group.id)
       assert %Ecto.Changeset{} = Locations.change_address(address)
     end
   end
@@ -271,7 +268,7 @@ defmodule Ferry.LocationsTest do
       assert map.results == [address1, address2]
     end
 
-    test "get_map/2 with the group_filter control set returns a map with all addresses of the selected groups" do
+    test "get_map/1 with the group_filter control set returns a map with all addresses of the selected groups" do
       group1 = insert(:group)
       group2 = insert(:group)
       group3 = insert(:group)

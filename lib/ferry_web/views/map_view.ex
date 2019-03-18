@@ -7,43 +7,15 @@ defmodule FerryWeb.MapView do
 
   def format_addresses_for_map(addresses) do
     addresses
-      |> Enum.map(fn address -> %{
-        geoencoding_uri: format_geoencoding_uri(address),
-        marker_content: format_marker_content(address)
-      } end)
-      |> Poison.encode!()
-      |> raw()
+    |> Enum.map(fn address -> %{
+        lat: address.geocode.lat |> html_escape() |> safe_to_string(),
+        lng: address.geocode.lng |> html_escape() |> safe_to_string(),
+        marker_content: render_to_string(FerryWeb.ComponentView, "address.partial.html", %{address: address})
+    } end)
+    |> Poison.encode!()
+    |> raw()
   end
 
-  defp format_geoencoding_uri(address) do
-    address_string = ""
-      <> if address.street, do: "#{address.street}, ", else: ""
-      <> "#{address.city}, "
-      <> if address.state, do: "#{address.state}, ", else: ""
-      <> if address.zip_code, do: "#{address.zip_code}, ", else: ""
-      <> address.country
-
-    params = %{
-      q: address_string,
-      format: "json",
-      limit: 1,
-      email: "tools@distributeaid.org"
-    }
-
-    "https://nominatim.openstreetmap.org/search"
-      |> URI.parse()
-      |> Map.put(:query, URI.encode_query(params))
-      |> URI.to_string()
-  end
-
-  defp format_marker_content(address) do
-    render(FerryWeb.ComponentView, "address.partial.html", %{address: address})
-      |> raw()
-      |> safe_to_string()
-  end
-
-  # TODO: this limits loading the styles to Address views, but it still loads
-  #       them on all Address views (including edit, etc)
   def render("view-specific-styles.html", _assigns) do
     ~E"""
       <link rel="stylesheet"
@@ -54,8 +26,6 @@ defmodule FerryWeb.MapView do
     """
   end
 
-  # TODO: this limits loading the scripts to Address views, but it still loads
-  #       them on all Address views (including edit, etc)
   def render("view-specific-scripts.html", _assigns) do
     ~E"""
       <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"

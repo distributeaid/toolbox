@@ -7,8 +7,12 @@ defmodule Ferry.Locations do
   alias Ferry.Repo
   alias Ecto.Changeset
 
+  # Address [w/ Geocode]
+  # ==============================================================================
   alias Ferry.Profiles.{Group, Project}
   alias Ferry.Locations.Address
+
+  @geocoder Application.get_env(:ferry, :geocoder)
 
   @doc """
   Returns the list of addresses.
@@ -25,6 +29,8 @@ defmodule Ferry.Locations do
   def list_addresses(%Group{} = group) do
     Repo.all(from a in Address,
       where: a.group_id == ^group.id,
+      join: g in assoc(a, :geocode),
+      preload: [geocode: g],
       order_by: [a.id]
     )
   end
@@ -32,6 +38,8 @@ defmodule Ferry.Locations do
   def list_addresses(%Project{} = project) do
     Repo.all(from a in Address,
       where: a.project_id == ^project.id,
+      join: g in assoc(a, :geocode),
+      preload: [geocode: g],
       order_by: [a.id]
     )
   end
@@ -89,7 +97,13 @@ defmodule Ferry.Locations do
       ** (Ecto.NoResultsError)
 
   """
-  def get_address!(id), do: Repo.get!(Address, id)
+  def get_address!(id) do
+    query = from a in Address,
+      join: g in assoc(a, :geocode),
+      preload: [geocode: g]
+
+    Repo.get!(query, id)
+  end
 
   @doc """
   Creates a address.
@@ -112,17 +126,30 @@ defmodule Ferry.Locations do
   def create_address(owner, attrs \\ %{})
 
   def create_address(%Group{} = group, attrs) do
-    %Address{}
-    |> Address.changeset(attrs)
-    |> Ecto.Changeset.put_change(:group_id, group.id)
-    |> Repo.insert()
+    create_address(:group_id, group.id, Address.changeset(%Address{}, attrs))
   end
 
   def create_address(%Project{} = project, attrs) do
-    %Address{}
-    |> Address.changeset(attrs)
-    |> Ecto.Changeset.put_change(:project_id, project.id)
-    |> Repo.insert()
+    create_address(:project_id, project.id, Address.changeset(%Address{}, attrs))
+  end
+
+  defp create_address(owner_col, owner_id, %Changeset{valid?: true} = changeset) do
+    case @geocoder.geocode_address(changeset.params) do
+      {:ok, geocode} ->
+        changeset
+        |> Changeset.put_change(owner_col, owner_id)
+        |> Address.geocode_changeset(%{geocode: geocode})
+        |> Repo.insert()
+
+      {:error, error} ->
+        IO.inspect error # TODO: proper error logging
+        changeset = Changeset.add_error(changeset, :geocoding, "Our application server could not contact the geocoding server, which looks up and address's latitude and longitude.  Please try again in a few minutes, or contact us if this problem persists.")
+        {:error, changeset}
+    end
+  end
+
+  defp create_address(_owner_col, _owner_id, changeset) do
+    {:error, changeset}
   end
 
   @doc """
@@ -172,6 +199,9 @@ defmodule Ferry.Locations do
     Address.changeset(address, %{})
   end
 
+
+  # Map
+  # ==============================================================================
   alias Ferry.Locations.Map
 
   @doc """
@@ -235,8 +265,9 @@ defmodule Ferry.Locations do
     query = from a in Address,
       left_join: g in assoc(a, :group),
       left_join: p in assoc(a, :project),
+      join: geo in assoc(a, :geocode),
       order_by: a.id,
-      preload: [group: g, project: p]
+      preload: [group: g, project: p, geocode: geo]
 
     {_, query} = {map, query}
     |> apply_group_filter() # returns {map, query}

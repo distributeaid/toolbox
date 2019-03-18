@@ -48,6 +48,9 @@ defmodule Ferry.Mixfile do
       # json deps
       {:poison, "~> 3.1"},
 
+      # http deps
+      {:httpoison, "~> 1.4"},
+
       # authentication deps
       {:guardian, "~> 1.0"},
       {:comeonin, "~> 4.0"},
@@ -59,6 +62,7 @@ defmodule Ferry.Mixfile do
       # testing deps
       {:ex_machina, "~> 2.2", only: :test},
       {:excoveralls, "~> 0.10", only: :test},
+      {:mox, "~> 0.5", only: :test},
 
       # deployment deps
       {:distillery, "~> 2.0"},

@@ -26,16 +26,6 @@
 </section>
 
 <script>
-  /* addresses =
-   * [
-   *   {
-   *     geoencoding_uri: ...,
-   *     marker_content: ...,
-   *   },
-   *   ...
-   * ]
-   */
-  var addresses = <%= format_addresses_for_map(@map.results) %>;
   var map = new L.map('map');
 
   // create the tile layer with correct attribution
@@ -47,22 +37,11 @@
   map.setView(new L.LatLng(52, 13), 3);
   map.addLayer(osm);
 
-  // geoencode addresses
-  var geoencodingRequests = addresses.map(function(address) {
-    return fetch(address.geoencoding_uri)
-      .then(function(response) {
-        return response.json();
-      });
-  });
-
   // add markers to the map
-  Promise.all(geoencodingRequests)
-    .then(function(geoencodingResults) {
-      geoencodingResults.forEach(function(result, i) {
-        result = result[0];
-        var marker = L.marker([result.lat, result.lon])
-          .bindPopup(addresses[i].marker_content)
-          .addTo(map);
-      });
-    });
+  var addresses = <%= format_addresses_for_map(@map.results) %>;
+  addresses.forEach(function(address) {
+    var marker = L.marker([address.lat, address.lng])
+      .bindPopup(address.marker_content)
+      .addTo(map);
+  });
 </script>
