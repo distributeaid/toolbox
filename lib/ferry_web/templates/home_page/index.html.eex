@@ -16,7 +16,8 @@
       </p>
     <% end %>
 
-    <%= render "changelog.partial.html", %{conn: @conn} %>
+    <%# remove the changelog for now %>
+    <%= # render "changelog.partial.html", %{conn: @conn} %>
 
   </div>
 </section>

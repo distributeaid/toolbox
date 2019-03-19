@@ -61,6 +61,9 @@
             <%= link "Home", to: home_page_path(@conn, :index), class: "site-nav__link" %>
           </li>
           <li>
+            <%= link "Map", to: map_path(@conn, :show), class: "site-nav__link" %>
+          </li>
+          <li>
             <%= link "Groups", to: group_path(@conn, :index), class: "site-nav__link" %>
           </li>
           <li>
