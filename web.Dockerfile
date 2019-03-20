@@ -1,17 +1,5 @@
 FROM elixir:1.7.4 AS build-env
 
-ARG DB_USERNAME
-ENV DB_USERNAME $DB_USERNAME
-
-ARG DB_PASSWORD
-ENV DB_PASSWORD $DB_PASSWORD
-
-ARG DB_DATABASE
-ENV DB_DATABASE $DB_DATABASE
-
-ARG DB_HOSTNAME
-ENV DB_HOSTNAME $DB_HOSTNAME
-
 # For getting NPM - not included by default in Debian
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 
@@ -23,10 +11,10 @@ RUN wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && \
     apt-get install -y npm && \
     apt-get install -y build-essential && \
     apt-get install -y inotify-tools && \
-    echo "Erlang release: " $(erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().'  -noshell) && \
-    echo "Node version: " $(node --version) && \
-    echo "NPM version: " $(npm --version) && \
-    echo "ImageMagick version: " $(convert -version) # This is installed in one of the base containers
+    echo "\033[0;34mErlang release:\033[0m \033[0;32m" $(erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().'  -noshell) "\033[0m" && \
+    echo "\033[0;34mNode version:\033[0m \033[0;32m" $(node --version) "\033[0m" && \
+    echo "\033[0;34mNPM version:\033[0m \033[0;32m" $(npm --version) "\033[0m" && \
+    echo "\033[0;34mImageMagick version:\033[0m \033[0;32m" $(convert -version) "\033[0m" # This is installed in one of the base containers
 
 RUN mkdir -p /app
 

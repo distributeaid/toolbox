@@ -12,8 +12,9 @@ Using Docker
 
   - Install Docker - https://docs.docker.com/install/
   - Install Docker Compose - https://docs.docker.com/compose/install/
-  - Build Images
-  - Running the `./build-server.sh` script will start the app with `phx.server` running for live reloads
+  - Create a 'db' directory with: `mkdir db && chmod -R +x db`
+  - Start the Docker daemon. This can vary depending on your OS - MacOs/Windows users should just need to start the Docker application however on Linux you may need to follow some of [these](https://docs.docker.com/install/linux/linux-postinstall/) post-installation steps.
+  - Running the `./build-server.sh` script will build the images and start the app with `phx.server` running for live reloads. This will take a few minutes to finish the first time you run it.
   - Once the message `[info] Running FerryWeb.Endpoint with Cowboy using http://0.0.0.0:1312` appears in the log it is ready to run
 
   ```
