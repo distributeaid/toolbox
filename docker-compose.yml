@@ -1,0 +1,31 @@
+version: '3.4'
+services:
+  db:
+    image: "postgres:${DA_POSTGRES_VERSION}"
+    volumes:
+      - ./db:/var/lib/postgresql/data
+      - ./development/seed-test-group.sh:/seed-test-group.sh
+    environment:
+      - POSTGRES_USER=${DA_DB_USERNAME}
+      - POSTGRES_PASSWORD=${DA_DB_PASSWORD}
+      - POSTGRES_DB=${DA_DB_DATABASE}
+  web:
+    build:
+      context: .
+      dockerfile: web.Dockerfile
+      target: build-env
+    command: ["/app/development/wait-for-it.sh", "db:5432", "--", "/app/development/web-entrypoint.sh"]
+    volumes:
+      - ./:/app
+      - /app/assets/node_modules
+    ports:
+      - "1312:1312"
+    # DB_HOSTNAME value MUST match the name of the db image!
+    environment:
+      - DB_USERNAME=${DA_DB_USERNAME}
+      - DB_PASSWORD=${DA_DB_PASSWORD}
+      - DB_DATABASE=${DA_DB_DATABASE}
+      - DB_HOSTNAME=db
+      - DB_PORT=5432
+    depends_on:
+      - db

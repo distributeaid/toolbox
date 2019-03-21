@@ -51,8 +51,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :ferry, Ferry.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "toolbox",
-  password: "1312",
-  database: "toolbox_dev",
-  hostname: "localhost",
+  username: System.get_env("DB_USERNAME"),
+  password: System.get_env("DB_PASSWORD"),
+  database: System.get_env("DB_DATABASE"),
+  hostname: System.get_env("DB_HOSTNAME"),
   pool_size: 10
