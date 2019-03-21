@@ -20,7 +20,12 @@ services:
       - /app/assets/node_modules
     ports:
       - "1312:1312"
-    env_file:
-      - ./development/local-dev.env
+    # DB_HOSTNAME value MUST match the name of the db image!
+    environment:
+      - DB_USERNAME=${DA_DB_USERNAME}
+      - DB_PASSWORD=${DA_DB_PASSWORD}
+      - DB_DATABASE=${DA_DB_DATABASE}
+      - DB_HOSTNAME=db
+      - DB_PORT=5432
     depends_on:
       - db
