@@ -5,9 +5,14 @@ defmodule Ferry.Locations do
 
   import Ecto.Query, warn: false
   alias Ferry.Repo
+  alias Ecto.Changeset
 
+  # Address [w/ Geocode]
+  # ==============================================================================
   alias Ferry.Profiles.{Group, Project}
   alias Ferry.Locations.Address
+
+  @geocoder Application.get_env(:ferry, :geocoder)
 
   @doc """
   Returns the list of addresses.
@@ -24,6 +29,8 @@ defmodule Ferry.Locations do
   def list_addresses(%Group{} = group) do
     Repo.all(from a in Address,
       where: a.group_id == ^group.id,
+      join: g in assoc(a, :geocode),
+      preload: [geocode: g],
       order_by: [a.id]
     )
   end
@@ -31,6 +38,8 @@ defmodule Ferry.Locations do
   def list_addresses(%Project{} = project) do
     Repo.all(from a in Address,
       where: a.project_id == ^project.id,
+      join: g in assoc(a, :geocode),
+      preload: [geocode: g],
       order_by: [a.id]
     )
   end
@@ -70,7 +79,7 @@ defmodule Ferry.Locations do
       [{"Calais", "France"}, {"Caen", "France"}, ...]
 
   """
-  def list_cities(country) do
+  def list_cities(_country) do
     throw "Ferry.Locations.list_cities/1 is not implemented... yet ;)"
   end
 
@@ -88,7 +97,13 @@ defmodule Ferry.Locations do
       ** (Ecto.NoResultsError)
 
   """
-  def get_address!(id), do: Repo.get!(Address, id)
+  def get_address!(id) do
+    query = from a in Address,
+      join: g in assoc(a, :geocode),
+      preload: [geocode: g]
+
+    Repo.get!(query, id)
+  end
 
   @doc """
   Creates a address.
@@ -111,17 +126,30 @@ defmodule Ferry.Locations do
   def create_address(owner, attrs \\ %{})
 
   def create_address(%Group{} = group, attrs) do
-    %Address{}
-    |> Address.changeset(attrs)
-    |> Ecto.Changeset.put_change(:group_id, group.id)
-    |> Repo.insert()
+    create_address(:group_id, group.id, Address.changeset(%Address{}, attrs))
   end
 
   def create_address(%Project{} = project, attrs) do
-    %Address{}
-    |> Address.changeset(attrs)
-    |> Ecto.Changeset.put_change(:project_id, project.id)
-    |> Repo.insert()
+    create_address(:project_id, project.id, Address.changeset(%Address{}, attrs))
+  end
+
+  defp create_address(owner_col, owner_id, %Changeset{valid?: true} = changeset) do
+    case @geocoder.geocode_address(changeset.params) do
+      {:ok, geocode} ->
+        changeset
+        |> Changeset.put_change(owner_col, owner_id)
+        |> Address.geocode_changeset(%{geocode: geocode})
+        |> Repo.insert()
+
+      {:error, error} ->
+        IO.inspect error # TODO: proper error logging
+        changeset = Changeset.add_error(changeset, :geocoding, "Our application server could not contact the geocoding server, which looks up and address's latitude and longitude.  Please try again in a few minutes, or contact us if this problem persists.")
+        {:error, changeset}
+    end
+  end
+
+  defp create_address(_owner_col, _owner_id, changeset) do
+    {:error, changeset}
   end
 
   @doc """
@@ -169,5 +197,111 @@ defmodule Ferry.Locations do
   """
   def change_address(%Address{} = address) do
     Address.changeset(address, %{})
+  end
+
+
+  # Map
+  # ==============================================================================
+  alias Ferry.Locations.Map
+
+  @doc """
+  Gets a map, which sets the search and filter fields and gets the matching
+  addresses from the database.  Groups / projects are preloaded on each address.
+
+  ## Examples
+
+      iex> get_map(%{search: "...", country_filter: "RS"})
+      {:ok, %Map{
+        search: "...",
+        country_filter: "RS",
+        results: [%Address{
+          label: "Collective Aid Processing Warehouse",
+          ...,
+          group: %Group{},
+          project: %Project{}
+        }, ...]
+      }}
+
+  """
+  def get_map(attrs \\ %{}) do
+    map_changeset = %Map{}
+    |> set_control_labels()
+    |> set_controls(attrs) 
+    |> apply_controls()    
+
+    if map_changeset.valid? do
+      map = map_changeset |> Changeset.apply_changes()
+      {:ok, map}
+    else
+      {:error, map_changeset}
+    end
+  end
+
+  defp set_control_labels(%Map{} = map) do
+    # TODO: move to Profiles context for better encapsulation?
+    group_labels = Repo.all(from g in Group,
+      select: {g.name, g.id},
+      order_by: g.name
+    )
+
+    map
+    |> Map.changeset(%{
+      group_filter_labels: group_labels
+      # add other control_labels here
+    })
+  end
+
+  defp set_controls(%Changeset{} = map_changeset, attrs) do
+    map_changeset |> Map.changeset(attrs)
+  end
+
+  defp apply_controls(%Changeset{valid?: false} = changeset) do
+    changeset
+  end
+
+  defp apply_controls(%Changeset{valid?: true} = map_changeset) do
+    map = map_changeset |> Changeset.apply_changes()
+
+    query = from a in Address,
+      left_join: g in assoc(a, :group),
+      left_join: p in assoc(a, :project),
+      join: geo in assoc(a, :geocode),
+      order_by: a.id,
+      preload: [group: g, project: p, geocode: geo]
+
+    {_, query} = {map, query}
+    |> apply_group_filter() # returns {map, query}
+    # add other control applications here
+
+    results = Repo.all(from a in query)
+    map_changeset |> Map.changeset(%{results: results})
+  end
+
+  defp apply_group_filter({%Map{group_filter: nil} = map, query}) do
+    {map, query}
+  end
+
+  defp apply_group_filter({%Map{group_filter: []} = map, query}) do
+    {map, query}
+  end
+
+  defp apply_group_filter({%Map{} = map, query}) do
+    query = from [a, g] in query,
+            where: g.id in ^map.group_filter
+
+    {map, query}
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking map changes.
+
+  ## Examples
+
+      iex> change_map(map)
+      %Ecto.Changeset{source: %Map{}}
+
+  """
+  def change_map(%Map{} = map) do
+    Map.changeset(map, %{})
   end
 end

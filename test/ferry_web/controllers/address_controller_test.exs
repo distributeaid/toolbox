@@ -1,10 +1,14 @@
 defmodule FerryWeb.AddressControllerTest do
   use FerryWeb.ConnCase
 
+  import Mox
+
   # Address Controller Tests
   # ==============================================================================
 
   setup do
+    verify_on_exit!()
+
     group = insert(:group)
     user = insert(:user, group: group)
     address = insert(:address, group: group)
@@ -50,29 +54,10 @@ defmodule FerryWeb.AddressControllerTest do
       )
     end
 
-    test "shows 404 not found for non-existent groups", %{conn: conn, address: address} do
-      Enum.each(
-        [
-          # unauthenticated
-          fn -> get build_conn(), group_address_path(build_conn(), :index, 1312) end,
-          fn -> get build_conn(), group_address_path(build_conn(), :show, 1312, address) end,
-
-          # authenticated
-          fn -> get conn, group_address_path(conn, :index, 1312) end,
-          fn -> get conn, group_address_path(conn, :show, 1312, address) end,
-        ],
-        fn request -> assert_error_sent 404, request end
-      )
-    end
-
     test "shows 404 not found for non-existent addresses", %{conn: conn, group: group} do
       Enum.each(
         [
-          # unauthenticated
-          fn -> get build_conn(), group_address_path(build_conn(), :show, group, 1312) end,
-
           # authenticated
-          fn -> get conn, group_address_path(conn, :show, group, 1312) end,
           fn -> get conn, group_address_path(conn, :edit, group, 1312) end,
           fn -> put conn, group_address_path(conn, :update, group, 1312), address: params_for(:address) end,
           fn -> delete conn, group_address_path(conn, :delete, group, 1312) end
@@ -80,24 +65,6 @@ defmodule FerryWeb.AddressControllerTest do
         ],
         fn request -> assert_error_sent 404, request end
       )
-    end
-  end
-
-  # Show
-  # ----------------------------------------------------------
-
-  describe "index" do
-    # TODO: actually lists no addresses since none are created... test both cases
-    test "lists all addresses", %{conn: conn, group: group} do
-      conn = get conn, group_address_path(conn, :index, group)
-      assert html_response(conn, 200) =~ "Addresses"
-    end
-  end
-
-  describe "show" do
-    test "lists the specified address", %{conn: conn, group: group, address: address} do
-      conn = get conn, group_address_path(conn, :show, group, address)
-      assert html_response(conn, 200) =~ "Show Address"
     end
   end
 
@@ -112,14 +79,21 @@ defmodule FerryWeb.AddressControllerTest do
   end
 
   describe "create address" do
+    alias Ferry.Locations.Geocoder.GeocoderMock
+
     test "redirects to show when data is valid", %{conn: conn, group: group} do
-      conn = post conn, group_address_path(conn, :create, group), address: params_for(:address)
+      GeocoderMock |> expect(:geocode_address, fn _address ->
+        {:ok, params_for(:geocode)}
+      end)
+
+      address_params = params_for(:address)
+      conn = post conn, group_address_path(conn, :create, group), address: address_params
 
       assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == group_address_path(conn, :show, group, id)
+      assert redirected_to(conn) == group_path(conn, :show, group)
 
-      conn = get conn, group_address_path(conn, :show, group, id)
-      assert html_response(conn, 200) =~ "Show Address"
+      conn = get conn, group_path(conn, :show, group)
+      assert html_response(conn, 200) =~ address_params.label
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group} do
@@ -140,11 +114,12 @@ defmodule FerryWeb.AddressControllerTest do
 
   describe "update address" do
     test "redirects when data is valid", %{conn: conn, group: group, address: address} do
-      conn = put conn, group_address_path(conn, :update, group, address), address: params_for(:address)
-      assert redirected_to(conn) == group_address_path(conn, :show, group, address)
+      address_params = params_for(:address)
+      conn = put conn, group_address_path(conn, :update, group, address), address: address_params
+      assert redirected_to(conn) == group_path(conn, :show, group)
 
-      conn = get conn, group_address_path(conn, :show, group, address)
-      assert html_response(conn, 200) =~ "Show Address"
+      conn = get conn, group_path(conn, :show, group)
+      assert html_response(conn, 200) =~ address_params.label
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group, address: address} do
@@ -159,10 +134,10 @@ defmodule FerryWeb.AddressControllerTest do
   describe "delete address" do
     test "deletes chosen address", %{conn: conn, group: group, address: address} do
       conn = delete conn, group_address_path(conn, :delete, group, address)
-      assert redirected_to(conn) == group_address_path(conn, :index, group)
-      assert_error_sent 404, fn ->
-        get conn, group_address_path(conn, :show, group, address)
-      end
+      assert redirected_to(conn) == group_path(conn, :show, group)
+
+      conn = get conn, group_path(conn, :show, group)
+      refute html_response(conn, 200) =~ address.label
     end
   end
 

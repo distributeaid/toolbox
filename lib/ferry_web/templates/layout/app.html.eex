@@ -11,8 +11,9 @@
     Styles
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     -->
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa:400|Quicksand:400,700">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <%= render_existing @view_module, "view-specific-styles.html" %>
 
     <!--
     Favicon
@@ -44,6 +45,7 @@
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     -->
     <script defer src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <%= render_existing @view_module, "view-specific-scripts.html" %>
   </head>
 
   <body class="site">
@@ -57,6 +59,9 @@
           <li>
             <!-- TODO: change to "Dashboard" -->
             <%= link "Home", to: home_page_path(@conn, :index), class: "site-nav__link" %>
+          </li>
+          <li>
+            <%= link "Map", to: map_path(@conn, :show), class: "site-nav__link" %>
           </li>
           <li>
             <%= link "Groups", to: group_path(@conn, :index), class: "site-nav__link" %>

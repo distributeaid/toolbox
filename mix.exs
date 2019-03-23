@@ -4,8 +4,8 @@ defmodule Ferry.Mixfile do
   def project do
     [
       app: :ferry,
-      version: "0.0.7",
-      elixir: "~> 1.4",
+      version: "0.0.8",
+      elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       start_permanent: Mix.env == :prod,
@@ -35,6 +35,7 @@ defmodule Ferry.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      # standard deps
       {:phoenix, "~> 1.3.4"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
@@ -43,6 +44,12 @@ defmodule Ferry.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
+
+      # json deps
+      {:poison, "~> 3.1"},
+
+      # http deps
+      {:httpoison, "~> 1.4"},
 
       # authentication deps
       {:guardian, "~> 1.0"},
@@ -53,8 +60,9 @@ defmodule Ferry.Mixfile do
       {:arc_ecto, "~> 0.11.1"},
 
       # testing deps
-      {:ex_machina, "~> 2.2"},
+      {:ex_machina, "~> 2.2", only: :test},
       {:excoveralls, "~> 0.10", only: :test},
+      {:mox, "~> 0.5", only: :test},
 
       # deployment deps
       {:distillery, "~> 2.0"},
@@ -71,7 +79,7 @@ defmodule Ferry.Mixfile do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "test": ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 end

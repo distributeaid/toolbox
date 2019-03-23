@@ -1,0 +1,47 @@
+<section class="section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">The Map</h1>
+    </header>
+
+    <%= form_for @changeset, map_path(@conn, :show), [method: :get], fn f -> %>
+      <%= if @changeset.action do %>
+        <div class="alert is-error">
+          <p>Oops, something went wrong! Please check the errors below.</p>
+        </div>
+      <% end %>
+
+      <div class="form-item is-inline">
+        <%= label f, :group_filter, "Groups" %>
+        <%= multiple_select f, :group_filter, @map.group_filter_labels, [multiple: true] %>
+      </div>
+
+      <div class="form-item is-text-center">
+        <%= submit "Submit", class: "button is-big" %>
+      </div>
+    <% end %>
+
+    <div id="map" class="map"></div>
+  </div>
+</section>
+
+<script>
+  var map = new L.map('map');
+
+  // create the tile layer with correct attribution
+  var osmUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+  var osmAttrib='Map data &copy; <a href="https://openstreetmap.org" target="blank">OpenStreetMap</a> contributors, <a href="https://openstreetmap.org/copyright" target="blank">CC-BY-SA</a>';
+  var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
+
+  // draw the map
+  map.setView(new L.LatLng(52, 13), 3);
+  map.addLayer(osm);
+
+  // add markers to the map
+  var addresses = <%= format_addresses_for_map(@map.results) %>;
+  addresses.forEach(function(address) {
+    var marker = L.marker([address.lat, address.lng])
+      .bindPopup(address.marker_content)
+      .addTo(map);
+  });
+</script>

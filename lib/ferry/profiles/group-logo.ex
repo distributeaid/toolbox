@@ -21,7 +21,7 @@ defmodule Ferry.Profiles.Group.Logo do
 
   # Whitelist file extensions:
   def validate({file, _}) do
-    ~w(.jpg .jpeg .gif .png) |> Enum.member?(Path.extname(file.file_name))
+    @extension_whitelist |> Enum.member?(Path.extname(file.file_name))
   end
 
   # Define a thumbnail transformation:
@@ -35,7 +35,7 @@ defmodule Ferry.Profiles.Group.Logo do
   end
 
   # Override the storage directory:
-  def storage_dir(version, {file, scope}) do
+  def storage_dir(_version, {_file, scope}) do
     "uploads/groups/#{scope.id}/logo/"
   end
 

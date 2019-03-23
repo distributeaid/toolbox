@@ -2,6 +2,7 @@ defmodule FerryWeb.GroupController do
   use FerryWeb, :controller
 
   alias Ferry.Links
+  alias Ferry.Locations
   alias Ferry.Profiles
   alias Ferry.Profiles.Group
 
@@ -45,7 +46,8 @@ defmodule FerryWeb.GroupController do
     assigns = Keyword.merge(groups_list_assigns(conn), [
       group: group,
       links: Links.list_links(group),
-      projects: Profiles.list_projects(group)
+      projects: Profiles.list_projects(group),
+      addresses: Locations.list_addresses(group)
     ])
 
     render(conn, "show.html", assigns)

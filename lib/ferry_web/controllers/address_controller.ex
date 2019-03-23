@@ -8,21 +8,6 @@ defmodule FerryWeb.AddressController do
   # Address Controller
   # ==============================================================================
 
-  # Show
-  # ----------------------------------------------------------
-
-  def index(conn, %{"group_id" => group_id}) do
-    group = Profiles.get_group!(group_id)
-    addresses = Locations.list_addresses(group)
-    render(conn, "index.html", group: group, addresses: addresses)
-  end
-
-  def show(conn, %{"group_id" => group_id, "id" => id}) do
-    group = Profiles.get_group!(group_id)
-    address = Locations.get_address!(id)
-    render(conn, "show.html", group: group, address: address)
-  end
-
   # Create
   # ----------------------------------------------------------
 
@@ -36,10 +21,10 @@ defmodule FerryWeb.AddressController do
     group = Profiles.get_group!(group_id)
 
     case Locations.create_address(group, address_params) do
-      {:ok, address} ->
+      {:ok, _address} ->
         conn
         |> put_flash(:info, "Address created successfully.")
-        |> redirect(to: group_address_path(conn, :show, group, address))
+        |> redirect(to: group_path(conn, :show, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", group: group, changeset: changeset)
     end
@@ -60,10 +45,10 @@ defmodule FerryWeb.AddressController do
     address = Locations.get_address!(id)
 
     case Locations.update_address(address, address_params) do
-      {:ok, address} ->
+      {:ok, _address} ->
         conn
         |> put_flash(:info, "Address updated successfully.")
-        |> redirect(to: group_address_path(conn, :show, group, address))
+        |> redirect(to: group_path(conn, :show, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", group: group, address: address, changeset: changeset)
     end
@@ -79,6 +64,6 @@ defmodule FerryWeb.AddressController do
 
     conn
     |> put_flash(:info, "Address deleted successfully.")
-    |> redirect(to: group_address_path(conn, :index, group))
+    |> redirect(to: group_path(conn, :show, group))
   end
 end

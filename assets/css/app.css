@@ -190,7 +190,8 @@ form .is-req {
   text-align: right;
 }
 
-.form-item.is-inline input:not([type="checkbox"]):not([type="radio"]) {
+.form-item.is-inline input:not([type="checkbox"]):not([type="radio"]),
+.form-item.is-inline select {
   display: inline-block;
 
   /* Leaves room for:
@@ -248,7 +249,7 @@ table.is-striped tr:nth-child(even) td {
   border-bottom: 0.125rem solid white;
   box-shadow: 0 0.5rem 0.5rem 0 rgba(49, 52, 57, 0.2); /* #313439 */
 
-  z-index: 1000;
+  z-index: 1200;
 }
 
 .navbar a {
@@ -600,7 +601,37 @@ Logo
   width: 8rem;
   height: 8rem;
 }
- 
+
+/*
+Entry
+------------------------------------------------------------
+*/
+.entry {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+
+.entry__title {
+  padding-top: 6px; /* vertically align w/ .entry__actions */
+}
+
+.entry__actions {
+  text-align: right;
+}
+
+.entry__content {
+  flex-basis: 100%;
+}
+
+/* Map
+ * ------------------------------------------------------
+ */
+.map {
+  width: 100%;
+  min-height: 250px;
+}
 
 
 /* Components
@@ -802,60 +833,12 @@ Page
 }
 
 /*
-Users
-------------------------------------------------------------
-User page styles go here.
-*/
-
-/*
-Session
-------------------------------------------------------------
-Session page styles go here.
-*/
-
-/*
-Groups
-------------------------------------------------------------
-Group page styles go here.
-*/
-
-/*
-Projects
-------------------------------------------------------------
-*/
-.project {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin: 1rem 0;
-}
-
-.project__title {
-  padding-top: 6px; /* vertically align w/ .project__actions */
-}
-
-.project__actions {
-  text-align: right;
-}
-
-.project__description {
-  flex-basis: 100%;
-}
-
-/*
 Links
 ------------------------------------------------------------
-Link page styles go here.
 */
 ul.links-list {
   margin-bottom: 0;
 }
-
-/*
-Locations
-------------------------------------------------------------
-Location page styles go here.
-*/
 
 
 /* Trumps & Helpers

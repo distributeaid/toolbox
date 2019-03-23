@@ -10,7 +10,6 @@ defmodule Ferry.Profiles do
   # Group
   # ==============================================================================
   alias Ferry.Profiles.Group
-  alias Ferry.Profiles.Group.Logo
 
   @doc """
   Returns the list of groups.
@@ -40,7 +39,7 @@ defmodule Ferry.Profiles do
 
   """
   def get_group!(id) do
-    group = Repo.get!(Group, id)
+    Repo.get!(Group, id)
   end
 
   @doc """
@@ -211,7 +210,7 @@ defmodule Ferry.Profiles do
       {:error, %Ecto.Changeset{}}
 
   """
-  def transfer_project(%Project{} = project, %Group{} = group) do
+  def transfer_project(%Project{} = _project, %Group{} = _group) do
     throw "Ferry.Profiles.transfer_project/2 is not implemented... yet ;)"
   end
 

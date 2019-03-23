@@ -51,6 +51,11 @@ exports.config = {
     babel: {
       // Do not use ES6 compiler in vendor code
       ignore: [/vendor/]
+    },
+    cssnano: {
+      // Don't modify zindex attributes, since they interact with other content
+      // loaded by scripts (like our maps).
+      zindex: false
     }
   },
 
@@ -61,6 +66,19 @@ exports.config = {
   },
 
   npm: {
-    enabled: true
+    enabled: true,
+    globals: {
+      $: "jquery",
+      jquery: "jquery",
+      jQuery: "jquery",
+    },
+    static: [
+      // NOTE: Might need to load jquery plugins outside of the standard app.js
+      //       since they don't seem to be registering with jquery otherwise.
+      "node_modules/select2/dist/js/select2.js"
+    ],
+    styles: {
+      select2: ['dist/css/select2.css']
+    }
   }
 };

@@ -46,5 +46,12 @@
       projects: @projects,
       can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
     } %>
+
+    <%= render FerryWeb.AddressView, "index-list.partial.html", %{
+      conn: @conn,
+      group: @group,
+      addresses: @addresses,
+      can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+    } %>
   </div>
 </section>
