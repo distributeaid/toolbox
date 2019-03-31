@@ -64,6 +64,12 @@ Replace GROUP_ID in the above url with the group id from the table that was gene
 
 Database Reset: `docker exec $(docker ps -aqf "name=toolbox_web*") mix ecto.reset`
 
+Database Administration
+------------------------------------------------------------
+1. Go to http://0.0.0.0:8088 in your browser
+2. Login using the credentials specified in `PGADMIN_DEFAULT_EMAIL` and `PGADMIN_DEFAULT_PASSWORD` ('admin' and 'admin' unless you overwrote the defaults).
+3. Create a New Server - under 'General' give it a name and optionally specify comments/connection colours. On the Connection tab enter 'db' as the Host name and the values for `POSTGRES_USER` and `POSTGRES_PASSWORD` as the Username and Password respectively ('toolbox' and '1312' are the default values).
+
 Testing
 ------------------------------------------------------------
 Run Tests:

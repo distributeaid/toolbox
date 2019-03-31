@@ -9,6 +9,16 @@ services:
       - POSTGRES_USER=${DA_DB_USERNAME}
       - POSTGRES_PASSWORD=${DA_DB_PASSWORD}
       - POSTGRES_DB=${DA_DB_DATABASE}
+  dbadmin:
+    image: "dpage/pgadmin4:4"
+    ports:
+      - "8088:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    depends_on:
+      - db
+    restart: unless-stopped
   web:
     build:
       context: .
