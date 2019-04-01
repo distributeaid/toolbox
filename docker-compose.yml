@@ -9,6 +9,12 @@ services:
       - POSTGRES_USER=${DA_DB_USERNAME}
       - POSTGRES_PASSWORD=${DA_DB_PASSWORD}
       - POSTGRES_DB=${DA_DB_DATABASE}
+  dbtest:
+    image: "postgres:${DA_POSTGRES_VERSION}"
+    environment:
+      - POSTGRES_USER=${DA_DB_USERNAME}
+      - POSTGRES_PASSWORD=${DA_DB_PASSWORD}
+      - POSTGRES_DB=${DA_DB_DATABASE_TEST}
   dbadmin:
     image: "dpage/pgadmin4:4"
     ports:
@@ -30,12 +36,15 @@ services:
       - /app/assets/node_modules
     ports:
       - "1312:1312"
-    # DB_HOSTNAME value MUST match the name of the db image!
+    # DB_HOSTNAME value MUST match the name of the db service!
+    # DA_DB_HOSTNAME_TEST value MUST match the name of the test db service!
     environment:
       - DB_USERNAME=${DA_DB_USERNAME}
       - DB_PASSWORD=${DA_DB_PASSWORD}
       - DB_DATABASE=${DA_DB_DATABASE}
       - DB_HOSTNAME=db
       - DB_PORT=5432
+      - DB_DATABASE_TEST=${DA_DB_DATABASE_TEST}
+      - DB_HOSTNAME_TEST=${DA_DB_HOSTNAME_TEST}
     depends_on:
       - db

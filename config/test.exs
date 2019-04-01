@@ -14,8 +14,8 @@ config :ferry, Ferry.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: System.get_env("DB_USERNAME"),
   password: System.get_env("DB_PASSWORD"),
-  database: System.get_env("DB_DATABASE"),
-  hostname: System.get_env("DB_HOSTNAME"),
+  database: System.get_env("DB_DATABASE_TEST"),
+  hostname: System.get_env("DB_HOSTNAME_TEST"),
   pool: Ecto.Adapters.SQL.Sandbox
 
 # Reduce the # of password hashing rounds to speed up the test suite.
