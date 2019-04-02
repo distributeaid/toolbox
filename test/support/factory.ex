@@ -9,12 +9,21 @@ defmodule Ferry.Factory do
 
   alias Ferry.{
     Accounts.User,
+    Inventory.Category,
+    Inventory.Item,
+    Inventory.Mod,
+    Inventory.Packaging,
+    Inventory.Stock,
     Links.Link,
     Locations.Address,
     Locations.Geocode,
     Profiles.Group,
     Profiles.Project
   }
+
+  @long_text String.duplicate("x", 256)
+  @long_email String.duplicate("x", 244) <> "@example.com"
+
 
   # ExMachina Factories
   # ==============================================================================
@@ -79,7 +88,9 @@ defmodule Ferry.Factory do
   def project_factory do
     %Project{
       name: sequence("Klimb"),
-      description: "Up and over their walls!  Snip-snip the barbed wire with some handy dandy bolt cutters."
+      description: "Up and over their walls!  Snip-snip the barbed wire with some handy dandy bolt cutters.",
+
+      group: build(:group)
     }
   end
 
@@ -167,12 +178,12 @@ defmodule Ferry.Factory do
     struct!(
       address_factory(),
       %{
-        label: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        street: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        city: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        state: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        country: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        zip_code: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        label: @long_text,
+        street: @long_text,
+        city: @long_text,
+        state: @long_text,
+        country: @long_text,
+        zip_code: @long_text
       }
     )
   end
@@ -209,6 +220,144 @@ defmodule Ferry.Factory do
         "type" => "yes"
       }
     }
+  end
+
+  # Inventory
+  # ================================================================================
+  
+  # Category
+  # ------------------------------------------------------------
+  def category_factory do
+    %Category{
+      name: sequence("Clothing")
+    }
+  end
+
+  def invalid_short_category_factory do
+    struct!(
+      category_factory(),
+      %{
+        name: ""
+      }
+    )
+  end
+
+  def invalid_long_category_factory do
+    struct!(
+      category_factory(),
+      %{
+        name: @long_text
+      }
+    )
+  end
+
+  # Item
+  # ------------------------------------------------------------
+  def item_factory do
+    %Item{
+      name: sequence("Shirt"),
+
+      category: build(:category)
+    }
+  end
+
+  def invalid_short_item_factory do
+    struct!(
+      item_factory(),
+      %{
+        name: ""
+      }
+    )
+  end
+
+  def invalid_long_item_factory do
+    struct!(
+      item_factory(),
+      %{
+        name: @long_text
+      }
+    )
+  end
+
+  # Mod
+  # ------------------------------------------------------------
+  # NOTE: Every combination of mods already exists in the DB.
+  #       Never use `insert(:mod)` in tests.
+  #
+  # TODO: randomly rotate through all possible combos
+  def mod_factory do
+    %Mod{
+      gender: sequence(:gender, ["", "masc", "fem"]),
+      age: sequence(:age, ["", "adult", "child", "baby"]),
+      size: sequence(:size, ["", "small", "medium", "large", "x-large"]),
+      season: sequence(:season, ["", "summer", "winter"])
+    }
+  end
+
+  def invalid_unkown_mod_factory do
+    %Mod{
+      # This is to test an error, not a political commentary.  Distribute Aid is
+      # an inclusive organization!  Non-binary / gender neutral items should
+      # leave the gender field blank / nil.
+      gender: "???",
+      age: "???",
+      size: "???",
+      season: "???"
+    }
+  end
+
+  # Packaging
+  # ------------------------------------------------------------
+  def packaging_factory do
+    %Packaging{
+      count: sequence(:count, &(&1 + 1)), # 1, 2, ...
+      type: "large bags",
+      description: "Large, sturdy bags that contain about 4 trash bags worth of items.",
+      photo: nil # TODO: test photo uploads
+    }
+  end
+
+  def invalid_short_packaging_factory do
+    struct!(
+      packaging_factory(),
+      %{
+        count: -1,
+        type: "",
+      }
+    )
+  end
+
+  def invalid_long_packaging_factor do
+    struct!(
+      packaging_factory(),
+      %{
+        type: @long_text
+      }
+    )
+  end
+
+  # Stock
+  # ------------------------------------------------------------
+  def stock_factory do
+    %Stock{
+      count: sequence(:count, &(&1 + 1)), # 1, 2, ...
+      description: "We got shirts yo.",
+      photo: nil, # TODO: test photo uploads
+
+      project: build(:project),
+      item: build(:item),
+      mod: build(:mod),
+      packaging: build(:packaging)
+    }
+  end
+
+  def invalid_short_stock_factory do
+    struct!(
+      stock_factory(),
+      %{
+        count: -1,
+      }
+    )
   end
 
 end

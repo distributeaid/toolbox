@@ -1,0 +1,28 @@
+<h2>Show Stock</h2>
+
+<ul>
+
+  <li>
+    <strong>Count:</strong>
+    <%= @stock.count %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @stock.description %>
+  </li>
+
+  <li>
+    <strong>Photo:</strong>
+    <%= @stock.photo %>
+  </li>
+
+  <li>
+    <strong>Package count:</strong>
+    <%= @stock.package_count %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: stock_path(@conn, :edit, @stock) %></span>
+<span><%= link "Back", to: stock_path(@conn, :index) %></span>

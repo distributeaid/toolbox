@@ -1,0 +1,32 @@
+<h2>Listing Inventory stocks</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Count</th>
+      <th>Description</th>
+      <th>Photo</th>
+      <th>Package count</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for stock <- @stocks do %>
+    <tr>
+      <td><%= stock.count %></td>
+      <td><%= stock.description %></td>
+      <td><%= stock.photo %></td>
+      <td><%= stock.package_count %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: stock_path(@conn, :show, stock), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: stock_path(@conn, :edit, stock), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: stock_path(@conn, :delete, stock), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Stock", to: stock_path(@conn, :new) %></span>

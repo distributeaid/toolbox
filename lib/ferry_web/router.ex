@@ -52,6 +52,9 @@ defmodule FerryWeb.Router do
       resources "/projects", ProjectController, except: [:index, :show]
       resources "/users", UserController, only: [:edit, :update]
     end
+
+    # TODO
+    resources "/stock", StockController
   end
 
   # TODO: setup admin scope, add /groups/new and move /users/* into it
