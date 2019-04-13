@@ -36,10 +36,8 @@ defmodule FerryWeb.GroupController do
     render(conn, "index.html", groups_list_assigns(conn))
   end
 
-  # TODO: show group-specific 404 page - "couldn't find the group you were looking for"
-  #       currently this function errors out with an invalid ID, which somehow
-  #       results in the 404 page being shown when debug mode is turned off
-  #       (`debug_errors: true` in config/dev.exs)
+  # change (`debug_errors: true` to false in config/dev.exs if you want to
+  # test website errors
   def show(conn, %{"id" => id}) do
     group = Profiles.get_group!(id)
 
