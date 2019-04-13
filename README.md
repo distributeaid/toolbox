@@ -27,6 +27,10 @@ mkdir db && chmod -R +x db
 ./build-server.sh
 
 # Once the message `[info] Running FerryWeb.Endpoint with Cowboy using http://0.0.0.0:1312` appears in the log it is ready to run
+# If you feel like you have been waiting a long time for this message, create another terminal, and inside of the toolbox dir run
+docker ps -a
+# If you see the status of toolbox_web_* was exited at some point, run
+docker start $NAME_OF_TOOLBOX_HERE
 
 # To stop the containers, run:
 docker-compose down
