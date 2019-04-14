@@ -12,7 +12,7 @@
   <body>
     <div class="container">
       <main role="main">
-        <h2>404 - <%= @reason %></h2>
+        <h2>400 - <%= @reason %></h2>
         <style>h2 {text-align: center;}</style>
       </main>
     </div> <!-- /container -->

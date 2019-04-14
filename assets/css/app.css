@@ -37,8 +37,10 @@
  *       concatenated before this stylesheet?  Loading them via a <link> tag
  *       in `/lib/ferry_web/templates/layout/app.html.eex` for now.
  */
+/* TODO: I believe we solve this by removing @import and just keeping the url like so
+    https://stackoverflow.com/questions/48720445/add-css-files-to-phoenix
+ */
 /* @import url('https://fonts.googleapis.com/css?family=Comfortaa:400|Quicksand:400,700'); */
-
 
 /* Elements
  * ========================================================================== */

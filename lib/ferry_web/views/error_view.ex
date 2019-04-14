@@ -2,9 +2,17 @@ defmodule FerryWeb.ErrorView do
   use FerryWeb, :view
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.
-  # def render("500.html", _assigns) do
-  #   "Internal Server Error"
-  # end
+  def render("400.html", _assigns) do
+    render("400_page.html", reason: "Bad Request")
+  end
+
+  def render("401.html", _assigns) do
+    render("401_page.html", reason: "Not Authorized to View")
+  end
+
+  def render("403.html", _assigns) do
+    render("403_page.html", reason: "Forbidden Page")
+  end
 
   # explicit check for bad group id as opposed to other 404 errors
   defp check_bad_group_id([views, groups, id | _tail]) when id != [] and _tail==[] do
@@ -16,7 +24,7 @@ defmodule FerryWeb.ErrorView do
     end
   end
 
-  # function stubbed out for now, but will allow us to expand 404 error messages as we see fit
+  # function stubbed out for now, but will allow us to expand 404 error messages as we see fit(past just group id)
   defp check_bad_group_id(_path) do
     {:error, "Page Not Found"}
   end
@@ -31,6 +39,12 @@ defmodule FerryWeb.ErrorView do
     end
     render("404_page.html", reason: reason)
   end
+
+  def render("500_page.html", _assigns) do
+    render("500_page.html", reason: "Internal Server Error")
+  end
+
+
 
   # By default, Phoenix returns the status message from
   # the template name. For example, "404.html" becomes
