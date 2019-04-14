@@ -7,8 +7,7 @@ defmodule FerryWeb.ErrorView do
   # end
 
   # explicit check for bad group id as opposed to other 404 errors
-  defp check_bad_group_id([views,groups | tail]) when tail != [] do
-    [id | _tail] = tail
+  defp check_bad_group_id([views, groups, id | tail]) when id != [] and tail==[] do
 
     if views=="public" and groups=="groups" and Integer.parse(id) != :error do
       {:ok, "A group with the ID #{id} does not exist"}
@@ -17,6 +16,7 @@ defmodule FerryWeb.ErrorView do
     end
   end
 
+
   # function stubbed out for now, but will allow us to expand 404 error messages as we see fit
   defp check_bad_group_id(_path) do
     {:error, "Page Not Found"}
@@ -24,12 +24,13 @@ defmodule FerryWeb.ErrorView do
 
   # custom 404 message
   def render("404.html", %{conn: %{path_info: path }}) do
-    case check_bad_group_id(path) do
-      {:ok, id} ->
-        id
-      {:error, reason} ->
-        reason
+   reason = case check_bad_group_id(path) do
+            {:ok, reason} ->
+              reason
+            {:error, reason} ->
+              reason
     end
+    render("404_page.html", reason: reason)
   end
 
   # By default, Phoenix returns the status message from
