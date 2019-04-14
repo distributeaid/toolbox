@@ -9,6 +9,7 @@ defmodule FerryWeb.ErrorView do
   # explicit check for bad group id as opposed to other 404 errors
   defp check_bad_group_id([views,groups | tail]) when tail != [] do
     [id | _tail] = tail
+
     if views=="public" and groups=="groups" and Integer.parse(id) != :error do
       {:ok, "A group with the ID #{id} does not exist"}
     else
