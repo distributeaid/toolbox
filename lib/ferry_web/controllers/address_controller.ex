@@ -27,6 +27,7 @@ defmodule FerryWeb.AddressController do
         |> redirect(to: group_path(conn, :show, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", group: group, changeset: changeset)
+
     end
   end
 

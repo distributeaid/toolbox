@@ -70,6 +70,7 @@ defmodule Ferry.Locations.Geocoder.Nominatim do
       {:ok, []} ->
         {:error, %{msg: "geocode error: no results found", response_body: body}}
 
+
       # other data error
       {:ok, _} ->
         {:error, %{msg: "geocode error: unexpected data format", response_body: body}}
