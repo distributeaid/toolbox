@@ -14,30 +14,28 @@ defmodule FerryWeb.ErrorView do
     render("403_page.html", reason: "Forbidden Page")
   end
 
-  # explicit check for bad group id as opposed to other 404 errors
-  defp check_bad_group_id([views, groups, id | _tail]) when id != [] and _tail==[] do
-
-    if views=="public" and groups=="groups" and Integer.parse(id) != :error do
-      {:ok, "A group with the ID #{id} does not exist"}
-    else
-      {:error, "Page Not Found"}
+  defp check_bad_ids([_, _, _, error, _]) do
+    cond do
+      String.contains? error, "p.id" ->
+        "The project ID #{String.replace(error, ~r/[^\d]/,"")} could not be found"
+      String.contains? error, "g.id" ->
+        "The group ID #{String.replace(error, ~r/[^\d]/,"")} could not be found"
+      true ->
+        "Page Not Found"
     end
-  end
-
-  # function stubbed out for now, but will allow us to expand 404 error messages as we see fit(past just group id)
-  defp check_bad_group_id(_path) do
-    {:error, "Page Not Found"}
   end
 
   # custom 404 message
-  def render("404.html", %{conn: %{path_info: path }}) do
-   reason = case check_bad_group_id(path) do
-            {:ok, reason} ->
-              reason
-            {:error, reason} ->
-              reason
+  def render("404.html", %{reason: %{message: message}}) do
+    checker = String.split(message, "\n")
+    cond do
+      String.contains? Enum.at(checker,0), "no route found" ->
+        render("404_page.html", reason: "Bad url. Check your spelling")
+      String.contains? Enum.at(checker,0), "expected at least one result but got none in query" ->
+        render("404_page.html", reason: check_bad_ids(checker))
+      true ->
+        render("404_page.html", reason: "Page Not Found")
     end
-    render("404_page.html", reason: reason)
   end
 
   def render("500_page.html", _assigns) do
