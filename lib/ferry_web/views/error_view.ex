@@ -14,14 +14,16 @@ defmodule FerryWeb.ErrorView do
     render("error_page.html", error: "403", reason: "Forbidden Page")
   end
 
-  defp check_bad_ids([_, _, _, error, _]) do
+  defp check_bad_ids([_, _, _, error, address_error | _tail]) do
     cond do
       String.contains? error, "p.id" ->
-        "The project ID #{String.replace(error, ~r/[^\d]/,"")} could not be found"
+        "The Project ID #{String.replace(error, ~r/[^\d]/,"")} Could Not be Found"
       String.contains? error, "g.id" ->
-        "The group ID #{String.replace(error, ~r/[^\d]/,"")} could not be found"
+        "The Group ID #{String.replace(error, ~r/[^\d]/,"")} Could Not be Found"
       String.contains? error, "l.id" ->
-        "Link ID #{String.replace(error, ~r/[^\d]/,"")} could not be found"
+        "Link ID #{String.replace(error, ~r/[^\d]/,"")} Could Not be Found"
+      String.contains? address_error, "a.id" ->
+        "Address #{String.replace(address_error, ~r/[^\d]/,"")} Could Not be Found"
       true ->
         "Page Not Found"
     end
