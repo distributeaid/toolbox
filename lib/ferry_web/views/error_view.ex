@@ -15,7 +15,6 @@ defmodule FerryWeb.ErrorView do
   end
 
   defp check_bad_ids([_, _, _, error, address_error | _tail]) do
-    IO.puts()
     cond do
       String.contains? error, "p.id" ->
         "The Project ID #{String.replace(error, ~r/[^\d]/,"")} Could Not be Found"
