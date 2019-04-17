@@ -13,4 +13,8 @@ export DA_DB_DATABASE_TEST=toolbox_test
 export DA_DB_HOSTNAME_TEST=dbtest
 
 # bring up containers
-docker-compose --verbose up
+if [ "$1" != "-v" ]; then
+	docker-compose up
+else
+	docker-compose --verbose up
+  fi

@@ -24,7 +24,9 @@ cd toolbox/
 mkdir db && chmod -R +x db
 
 # Run this to build and bring up the containers using docker-compose
-./build-server.sh
+./build-server.sh -v
+# You only need to run the -v flag if you want to see more info. It is useful for the first time you run the command.
+#after that it might be unnecesarry.
 
 # Once the message `[info] Running FerryWeb.Endpoint with Cowboy using http://0.0.0.0:1312` appears in the log it is ready to run
 # If you feel like you have been waiting a long time for this message, create another terminal, and inside of the toolbox dir run
