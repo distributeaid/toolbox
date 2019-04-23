@@ -8,12 +8,10 @@ defmodule Ferry.Inventory do
   alias Ecto.Multi
   alias Ecto.Changeset
 
-  alias Ferry.Profiles
   alias Ferry.Inventory.{
     Category,
     Item,
     Mod,
-    Packaging,
     Stock
   }
 
@@ -28,6 +26,25 @@ defmodule Ferry.Inventory do
   #       The general exception to this rule is getter functions which may be
   #       necessary to facilitate UI lists, forms, and search functionality.
 
+  defp full_stock_query() do
+    from s in Stock,
+      join: proj in assoc(s, :project),
+      join: g in assoc(proj, :group),
+
+      join: i in assoc(s, :item),
+      join: c in assoc(i, :category),
+
+      join: m in assoc(s, :mod),
+      left_join: p in assoc(s, :packaging),
+
+      preload: [
+        project: {proj, group: g},
+        item: {i, category: c},
+        mod: m,
+        packaging: p
+      ]
+  end
+
   @doc """
   Returns the list of stocks.
 
@@ -38,7 +55,7 @@ defmodule Ferry.Inventory do
 
   """
   def list_stocks do
-    Repo.all(Stock)
+    Repo.all(full_stock_query())
   end
 
   @doc """
@@ -56,24 +73,7 @@ defmodule Ferry.Inventory do
 
   """
   def get_stock!(id) do
-    query = from s in Stock,
-      join: proj in assoc(s, :project),
-      join: g in assoc(proj, :group),
-
-      join: i in assoc(s, :item),
-      join: c in assoc(i, :category),
-
-      join: m in assoc(s, :mod),
-      join: p in assoc(s, :packaging),
-
-      preload: [
-        project: {proj, group: g},
-        item: {i, category: c},
-        mod: m,
-        packaging: p
-      ]
-
-    Repo.get!(query, id)
+    Repo.get!(full_stock_query(), id)
   end
 
   @doc """
@@ -97,13 +97,13 @@ defmodule Ferry.Inventory do
   #          not- DB errors will still be thrown, or they could be revalidated
   #          with dependencies a 2nd time before creation
   def create_stock(attrs \\ %{}) do
-    {_, category} = get_or_create_category(attrs.item.category)
-    {_, item} = get_or_create_item(category, attrs.item)
-    {:ok, mod} = get_mod(attrs.mod)
+    {_, category} = get_or_create_category(attrs["item"]["category"])
+    {_, item} = get_or_create_item(category, attrs["item"])
+    {:ok, mod} = get_mod(attrs["mod"])
 
     attrs = Map.merge(attrs, %{
-      item: item,
-      mod: mod,
+      "item" => item,
+      "mod" => mod,
     })
 
     %Stock{}
@@ -124,13 +124,13 @@ defmodule Ferry.Inventory do
 
   """
   def update_stock(%Stock{} = stock, attrs) do
-    {_, category} = get_or_create_category(attrs.item.category)
-    {_, item} = get_or_create_item(category, attrs.item)
-    {:ok, mod} = get_mod(attrs.mod)
+    {_, category} = get_or_create_category(attrs["item"]["category"])
+    {_, item} = get_or_create_item(category, attrs["item"])
+    {:ok, mod} = get_mod(attrs["mod"])
 
     attrs = Map.merge(attrs, %{
-      item: item,
-      mod: mod,
+      "item" => item,
+      "mod" => mod,
     })
 
     stock
@@ -151,10 +151,15 @@ defmodule Ferry.Inventory do
 
   """
   def delete_stock(%Stock{} = stock) do
-    Multi.new
-    |> Multi.delete(:stock, stock)
-    |> Multi.delete(:packaging, stock.packaging)
-    |> Repo.transaction
+    steps = Multi.new |> Multi.delete(:stock, stock)
+    
+    steps = if stock.packaging do
+      steps |> Multi.delete(:packaging, stock.packaging)
+    else
+      steps
+    end
+
+    Repo.transaction(steps)
   end
 
   @doc """
@@ -174,13 +179,19 @@ defmodule Ferry.Inventory do
   # Category
   # ================================================================================
 
-  defp get_or_create_category(attrs \\ %{}) do
-    case Repo.get_by(Category, name: Map.get(attrs, :name)) do
+  defp get_or_create_category(attrs \\ %{})
+
+  defp get_or_create_category(%{"name" => name} = attrs) do
+    case Repo.get_by(Category, name: name) do
       %Category{} = category ->
         {:ok, category}
       nil ->
         create_category(attrs)
     end
+  end
+
+  defp get_or_create_category(attrs) do
+    create_category(attrs)
   end
 
   defp create_category(attrs \\ %{}) do
@@ -197,7 +208,7 @@ defmodule Ferry.Inventory do
 
   defp get_or_create_item(%Category{} = category, attrs) do
     item = Repo.one(from i in Item,
-      where: i.name == ^attrs.name
+      where: i.name == ^attrs["name"]
          and i.category_id == ^category.id,
       join: c in assoc(i, :category),
       preload: [category: c]
@@ -205,16 +216,17 @@ defmodule Ferry.Inventory do
 
     case item do
       %Item{} -> {:ok, item}
-      _ -> 
+      _ ->
+        attrs = attrs |> Map.put("category", category)
         %Item{}
-        |> Item.changeset(%{attrs | category: category})
+        |> Item.changeset(attrs)
         |> Repo.insert()
     end
   end
 
   defp get_or_create_item(%Changeset{} = category_changeset, attrs) do
-    changeset = %Item{}
-    |> Item.changeset(%{attrs | category: category_changeset})
+    attrs = attrs |> Map.put("category", category_changeset)
+    changeset = %Item{} |> Item.changeset(attrs)
     {:error, changeset}
   end
 
@@ -227,7 +239,7 @@ defmodule Ferry.Inventory do
 
     filter_keys = [:gender, :age, :size, :season]
     query = Enum.reduce(filter_keys, query, fn key, query ->
-      value = Map.get(attrs, key)
+      value = Map.get(attrs, Atom.to_string(key))
       if value != "" && value != nil do
         from m in query, where: field(m, ^key) == ^value
       else

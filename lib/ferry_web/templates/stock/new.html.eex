@@ -1,5 +1,18 @@
-<h2>New Stock</h2>
+<section class="section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Add Stock to Your Inventory</h1>
+      <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+    </header>
 
-<%= render "form.html", Map.put(assigns, :action, stock_path(@conn, :create)) %>
+    <ul class="actions">
+      <li>
+        <%= link to: group_stock_path(@conn, :index, @group), class: "action" do %>
+          <i class="fas fa-times"></i>
+        <% end %>
+      </li>
+    </ul>
 
-<span><%= link "Back", to: stock_path(@conn, :index) %></span>
+    <%= render "form.html", Map.put(assigns, :action, group_stock_path(@conn, :create, @group)) %>
+  </div>
+</section>

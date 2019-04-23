@@ -39,6 +39,8 @@ defmodule FerryWeb.Router do
       resources "/users", UserController, only: [:new, :create] # TODO: move into admin scope
     end
 
+    # TODO
+    # resources "/inventory", StockController, only: [:index, :show]
     resources "/map", MapController, only: [:show], singleton: true
     resources "/projects", ProjectController, only: [:index]
   end
@@ -50,11 +52,9 @@ defmodule FerryWeb.Router do
       resources "/addresses", AddressController, except: [:index, :show]
       resources "/links", LinkController, except: [:index, :show]
       resources "/projects", ProjectController, except: [:index, :show]
+      resources "/stock", StockController
       resources "/users", UserController, only: [:edit, :update]
     end
-
-    # TODO
-    resources "/stock", StockController
   end
 
   # TODO: setup admin scope, add /groups/new and move /users/* into it

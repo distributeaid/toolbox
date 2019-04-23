@@ -1,35 +1,83 @@
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
-    <div class="alert alert-danger">
+    <div class="alert is-error">
       <p>Oops, something went wrong! Please check the errors below.</p>
     </div>
   <% end %>
 
-  <div class="form-group">
-    <%= label f, :count, class: "control-label" %>
-    <%= number_input f, :count, class: "form-control" %>
+  <div class="form-item is-inline">
+    <%= label f, :project_id, class: "is-req" %>
+    <%= select f, :project_id, list_projects(@projects) %>
+    <%= error_tag f, :project_id %>
+  </div>
+
+  <div class="form-item is-inline">
+    <%= label f, :count, class: "is-req" %>
+    <%= number_input f, :count %>
     <%= error_tag f, :count %>
   </div>
 
-  <div class="form-group">
-    <%= label f, :description, class: "control-label" %>
-    <%= text_input f, :description, class: "form-control" %>
+  <%= inputs_for f, :item, fn fi -> %>
+    <%= inputs_for fi, :category, fn fc -> %>
+      <div class="form-item is-inline">
+        <%= label fc, :name, "Category", class: "is-req" %>
+        <%= text_input fc, :name %>
+        <%= error_tag fc, :name %>
+      </div>
+    <% end %>
+
+    <div class="form-item is-inline">
+      <%= label fi, :name, "Item", class: "is-req" %>
+      <%= text_input fi, :name %>
+      <%= error_tag fi, :name %>
+    </div>
+  <% end %>
+
+  <%= inputs_for f, :mod, fn fm -> %>
+    <div class="form-item is-inline">
+      <%= label fm, :age %>
+      <%= select fm, :age, list_ages() %>
+      <%= error_tag fm, :age %>
+    </div>
+
+    <div class="form-item is-inline">
+      <%= label fm, :gender %>
+      <%= select fm, :gender, list_genders() %>
+      <%= error_tag fm, :gender %>
+    </div>
+
+    <div class="form-item is-inline">
+      <%= label fm, :size %>
+      <%= select fm, :size, list_sizes() %>
+      <%= error_tag fm, :size %>
+    </div>
+
+    <div class="form-item is-inline">
+      <%= label fm, :season %>
+      <%= select fm, :season, list_seasons() %>
+      <%= error_tag fm, :season %>
+    </div>
+  <% end %>
+
+  <div class="form-item is-inline">
+    <%= label f, :description %>
+    <%= textarea f, :description %>
     <%= error_tag f, :description %>
   </div>
 
-  <div class="form-group">
-    <%= label f, :photo, class: "control-label" %>
-    <%= text_input f, :photo, class: "form-control" %>
+  <div class="form-item is-inline">
+    <%= label f, :photo %>
+    <%= text_input f, :photo %>
     <%= error_tag f, :photo %>
   </div>
 
-  <div class="form-group">
-    <%= label f, :package_count, class: "control-label" %>
-    <%= number_input f, :package_count, class: "form-control" %>
+  <div class="form-item is-inline">
+    <%= label f, :package_count %>
+    <%= number_input f, :package_count %>
     <%= error_tag f, :package_count %>
   </div>
 
-  <div class="form-group">
-    <%= submit "Submit", class: "btn btn-primary" %>
+  <div class="form-item is-text-center">
+    <%= submit "Submit", class: "button is-big" %>
   </div>
 <% end %>

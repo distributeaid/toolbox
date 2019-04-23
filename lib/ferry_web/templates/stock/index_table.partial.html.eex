@@ -1,0 +1,37 @@
+<%= if has_stocks? @stocks do %>
+  <table class="is-striped">
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Item</th>
+        <th>Count</th>
+        <th>Description</th>
+        <th>Photo</th>
+
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+  <%= for stock <- @stocks do %>
+      <tr>
+        <td><%= stock.item.category.name %></td>
+        <td><%= stock.item.name %></td>
+        <td><%= stock.count %></td>
+        <td><%= stock.description %></td>
+        <td>todo: stock photo</td>
+
+        <td>
+          <span><%= link "Show", to: group_stock_path(@conn, :show, @group, stock), class: "button is-small" %></span>
+          <span><%= link "Edit", to: group_stock_path(@conn, :edit, @group, stock), class: "button is-small" %></span>
+          <span><%= link "Delete", to: group_stock_path(@conn, :delete, @group, stock), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
+        </td>
+      </tr>
+  <% end %>
+    </tbody>
+  </table>
+
+<% else %>
+  <p>
+    No stock has been added to your inventory.
+  </p>
+<% end %>

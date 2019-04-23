@@ -1,32 +1,13 @@
-<h2>Listing Inventory stocks</h2>
+<section class="section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Group Inventory</h1>
+      <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+    </header>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Count</th>
-      <th>Description</th>
-      <th>Photo</th>
-      <th>Package count</th>
+    <%= render "index_table.partial.html", %{conn: @conn, group: @group, stocks: @stocks} %>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for stock <- @stocks do %>
-    <tr>
-      <td><%= stock.count %></td>
-      <td><%= stock.description %></td>
-      <td><%= stock.photo %></td>
-      <td><%= stock.package_count %></td>
-
-      <td class="text-right">
-        <span><%= link "Show", to: stock_path(@conn, :show, stock), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: stock_path(@conn, :edit, stock), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: stock_path(@conn, :delete, stock), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
-      </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
-
-<span><%= link "New Stock", to: stock_path(@conn, :new) %></span>
+    <span><%= link "Add Stock", to: group_stock_path(@conn, :new, @group) %></span>
+    <span><%= link "Back to Group", to: group_path(@conn, :show, @group) %></span>
+  </div>
+</section>

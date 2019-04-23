@@ -340,7 +340,7 @@ defmodule Ferry.Factory do
   # ------------------------------------------------------------
   def stock_factory do
     %Stock{
-      count: sequence(:count, &(&1 + 1)), # 1, 2, ...
+      count: sequence(:count, &(&1 + 101)), # 101, 102, ...
       description: "We got shirts yo.",
       photo: nil, # TODO: test photo uploads
 
@@ -358,6 +358,20 @@ defmodule Ferry.Factory do
         count: -1,
       }
     )
+  end
+
+  def stock_attrs_factory(%{project: %{id: project_id}} = attrs) do
+    %{
+      "project_id" => project_id,
+
+      "count" => sequence(:count, &(&1 + 201)), # 201, 202, ...
+      "description" => "Tons of shirts yo.",
+      "photo" => nil, # TODO: test photo uploads
+
+      "item" => Map.put(string_params_for(:item), "category", string_params_for(:category)),
+      "mod" => string_params_for(:mod),
+      "packaging" => string_params_for(:packaging)
+    }
   end
 
 end

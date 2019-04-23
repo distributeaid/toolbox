@@ -1,28 +1,28 @@
-<h2>Show Stock</h2>
+<section class="section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Show Stock in Your Inventory</h1>
+      <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+    </header>
 
-<ul>
+    <p>
+      <%= @stock.project.name %> has
 
-  <li>
-    <strong>Count:</strong>
-    <%= @stock.count %>
-  </li>
+      <%= @stock.count %>
 
-  <li>
-    <strong>Description:</strong>
-    <%= @stock.description %>
-  </li>
+      <%= @stock.mod.age %>
+      <%= print_gender(@stock.mod.gender) %>
+      <%= @stock.mod.size %>
+      <%= @stock.mod.season %>
+      
+      <%= @stock.item.name %>
+      (<%= @stock.item.category.name %>)
+      
+      available for shipment.
+    </p>
 
-  <li>
-    <strong>Photo:</strong>
-    <%= @stock.photo %>
-  </li>
-
-  <li>
-    <strong>Package count:</strong>
-    <%= @stock.package_count %>
-  </li>
-
-</ul>
-
-<span><%= link "Edit", to: stock_path(@conn, :edit, @stock) %></span>
-<span><%= link "Back", to: stock_path(@conn, :index) %></span>
+    <span><%= link "Edit", to: group_stock_path(@conn, :edit, @group, @stock) %></span>
+    <span><%= link "Back to Inventory", to: group_stock_path(@conn, :index, @group) %></span>
+    <span><%= link "Back to Group", to: group_path(@conn, :show, @group) %></span>
+  </div>
+</section>

@@ -21,7 +21,7 @@ defmodule Ferry.Inventory.Item do
     |> validate_required([:name])
     |> validate_length(:name, max: 255)
 
-    |> put_assoc(:category, attrs.category)
+    |> put_assoc(:category, attrs["category"])
     |> assoc_constraint(:category)
   end
 end

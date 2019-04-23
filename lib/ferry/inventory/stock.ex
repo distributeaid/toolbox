@@ -29,8 +29,8 @@ defmodule Ferry.Inventory.Stock do
 
     |> cast_attachments(attrs, [:photo])
     |> cast_assoc(:packaging)
-    |> put_assoc(:item, attrs.item)
-    |> put_assoc(:mod, attrs.mod)
+    |> put_assoc(:item, attrs["item"])
+    |> put_assoc(:mod, attrs["mod"])
 
     |> assoc_constraint(:project)
     |> assoc_constraint(:item)

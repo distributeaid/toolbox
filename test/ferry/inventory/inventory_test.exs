@@ -2,7 +2,6 @@ defmodule Ferry.InventoryTest do
   use Ferry.DataCase
 
   alias Ferry.Profiles
-  alias Ferry.Profiles.Project
   alias Ferry.Inventory
   alias Ferry.Inventory.{
     Category,
@@ -28,12 +27,12 @@ defmodule Ferry.InventoryTest do
     defp deep_params_for_stock(attrs \\ %{}) do
       project = insert(:project)
       assoc_params = %{
-        project_id: project.id,
-        item: Map.put(params_for(:item), :category, params_for(:category)),
-        mod: params_for(:mod),
-        packaging: params_for(:packaging)
+        "project_id" => project.id,
+        "item" => Map.put(string_params_for(:item), "category", string_params_for(:category)),
+        "mod" => string_params_for(:mod),
+        "packaging" => string_params_for(:packaging)
       }
-      deep_params = Enum.into(assoc_params, params_for(:stock))
+      deep_params = Enum.into(assoc_params, string_params_for(:stock))
       _overridden_params = Enum.into(attrs, deep_params)
     end
 
@@ -60,61 +59,66 @@ defmodule Ferry.InventoryTest do
       attrs = deep_params_for_stock()
 
       assert {:ok, %Stock{} = stock} = Inventory.create_stock(attrs)
-      assert stock.count == attrs.count
-      assert stock.description == attrs.description
+      assert stock.count == attrs["count"]
+      assert stock.description == attrs["description"]
       # TODO: test stock.photo
 
-      assert stock.project_id == attrs.project_id
+      assert stock.project_id == attrs["project_id"]
 
       assert %Item{} = stock.item
-      assert stock.item.name == attrs.item.name
+      assert stock.item.name == attrs["item"]["name"]
 
       assert %Category{} = stock.item.category
-      assert stock.item.category.name == attrs.item.category.name
+      assert stock.item.category.name == attrs["item"]["category"]["name"]
 
       assert %Mod{} = stock.mod
-      assert stock.mod.gender == attrs.mod.gender || (stock.mod.gender == nil && attrs.mod.gender == "")
-      assert stock.mod.age == attrs.mod.age || (stock.mod.age == nil && attrs.mod.age == "")
-      assert stock.mod.size == attrs.mod.size || (stock.mod.size == nil && attrs.mod.size == "")
-      assert stock.mod.season == attrs.mod.season || (stock.mod.season == nil && attrs.mod.season == "")
+      assert stock.mod.gender == attrs["mod"]["gender"] || (stock.mod.gender == nil && attrs["mod"]["gender"] == "")
+      assert stock.mod.age == attrs["mod"]["age"] || (stock.mod.age == nil && attrs["mod"]["age"] == "")
+      assert stock.mod.size == attrs["mod"]["size"] || (stock.mod.size == nil && attrs["mod"]["size"] == "")
+      assert stock.mod.season == attrs["mod"]["season"] || (stock.mod.season == nil && attrs["mod"]["season"] == "")
 
       assert %Packaging{} = stock.packaging
-      assert stock.packaging.count == attrs.packaging.count
-      assert stock.packaging.type == attrs.packaging.type
-      assert stock.packaging.description == attrs.packaging.description
+      assert stock.packaging.count == attrs["packaging"]["count"]
+      assert stock.packaging.type == attrs["packaging"]["type"]
+      assert stock.packaging.description == attrs["packaging"]["description"]
       # TODO: test stock.packaging.photo
     end
 
     test "create_stock/1 with valid existing data creates a stock entry" do
+      project = insert(:project)
+      item = insert(:item) # NOTE: a category is inserted by the item factory
       attrs = deep_params_for_stock(%{
-        project: insert(:project),
-        item: insert(:item), # NOTE: a category is inserted by the item factory
-        mod: build(:mod) # NOTE: mods already exist in the DB
+        "project_id" => project.id,
+        "item" => %{
+          "name" => item.name,
+          "category" => %{"name" => item.category.name}
+        },
+        "mod" => string_params_for(:mod)
       })
 
       assert {:ok, %Stock{} = stock} = Inventory.create_stock(attrs)
-      assert stock.count == attrs.count
-      assert stock.description == attrs.description
+      assert stock.count == attrs["count"]
+      assert stock.description == attrs["description"]
       # TODO: test stock.photo
 
-      assert stock.project_id == attrs.project_id
+      assert stock.project_id == attrs["project_id"]
 
       assert %Item{} = stock.item
-      assert stock.item.name == attrs.item.name
+      assert stock.item.name == attrs["item"]["name"]
 
       assert %Category{} = stock.item.category
-      assert stock.item.category.name == attrs.item.category.name
+      assert stock.item.category.name == attrs["item"]["category"]["name"]
 
       assert %Mod{} = stock.mod
-      assert stock.mod.gender == attrs.mod.gender || (stock.mod.gender == nil && attrs.mod.gender == "")
-      assert stock.mod.age == attrs.mod.age || (stock.mod.age == nil && attrs.mod.age == "")
-      assert stock.mod.size == attrs.mod.size || (stock.mod.size == nil && attrs.mod.size == "")
-      assert stock.mod.season == attrs.mod.season || (stock.mod.season == nil && attrs.mod.season == "")
+      assert stock.mod.gender == attrs["mod"]["gender"] || (stock.mod.gender == nil && attrs["mod"]["gender"] == "")
+      assert stock.mod.age == attrs["mod"]["age"] || (stock.mod.age == nil && attrs["mod"]["age"] == "")
+      assert stock.mod.size == attrs["mod"]["size"] || (stock.mod.size == nil && attrs["mod"]["size"] == "")
+      assert stock.mod.season == attrs["mod"]["season"] || (stock.mod.season == nil && attrs["mod"]["season"] == "")
 
       assert %Packaging{} = stock.packaging
-      assert stock.packaging.count == attrs.packaging.count
-      assert stock.packaging.type == attrs.packaging.type
-      assert stock.packaging.description == attrs.packaging.description
+      assert stock.packaging.count == attrs["packaging"]["count"]
+      assert stock.packaging.type == attrs["packaging"]["type"]
+      assert stock.packaging.description == attrs["packaging"]["description"]
       # TODO: test stock.packaging.photo
     end
 
@@ -123,18 +127,18 @@ defmodule Ferry.InventoryTest do
 
       # is nil
       nil_attrs = deep_params_for_stock()
-      nil_attrs = Map.put(nil_attrs, :project_id, nil)
+      nil_attrs = Map.put(nil_attrs, "project_id", nil)
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.create_stock(nil_attrs)
       assert 1 == length(changeset.errors)
 
       # too short
       assoc_params = %{
-        project_id: project.id,
-        item: Map.put(params_for(:invalid_short_item), :category, params_for(:invalid_short_category)),
-        mod: params_for(:mod),
-        packaging: params_for(:invalid_short_packaging)
+        "project_id" => project.id,
+        "item" => Map.put(string_params_for(:invalid_short_item), "category", string_params_for(:invalid_short_category)),
+        "mod" => string_params_for(:mod),
+        "packaging" => string_params_for(:invalid_short_packaging)
       }
-      short_attrs = Enum.into(assoc_params, params_for(:invalid_short_stock))
+      short_attrs = Enum.into(assoc_params, string_params_for(:invalid_short_stock))
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.create_stock(short_attrs)
       errors = Ecto.Changeset.traverse_errors(changeset, fn {msg, _} -> msg end)
       assert 1 == length(errors[:count])
@@ -145,12 +149,12 @@ defmodule Ferry.InventoryTest do
 
       # too long
       assoc_params = %{
-        project_id: project.id,
-        item: Map.put(params_for(:invalid_long_item), :category, params_for(:invalid_long_item)),
-        mod: params_for(:mod),
-        packaging: params_for(:packaging)
+        "project_id" => project.id,
+        "item" => Map.put(string_params_for(:invalid_long_item), "category", string_params_for(:invalid_long_item)),
+        "mod" => string_params_for(:mod),
+        "packaging" => string_params_for(:packaging)
       }
-      long_attrs = Enum.into(assoc_params, params_for(:stock))
+      long_attrs = Enum.into(assoc_params, string_params_for(:stock))
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.create_stock(long_attrs)
       assert 1 == length(errors[:item][:name])
       assert 1 == length(errors[:item][:category][:name])
@@ -161,62 +165,68 @@ defmodule Ferry.InventoryTest do
       attrs = deep_params_for_stock()
 
       assert {:ok, %Stock{} = stock} = Inventory.update_stock(current_stock, attrs)
-      assert stock.count == attrs.count
-      assert stock.description == attrs.description
+      assert stock.count == attrs["count"]
+      assert stock.description == attrs["description"]
       # TODO: test stock.photo
 
-      assert stock.project_id == attrs.project_id
+      assert stock.project_id == attrs["project_id"]
 
       assert %Item{} = stock.item
-      assert stock.item.name == attrs.item.name
+      assert stock.item.name == attrs["item"]["name"]
 
       assert %Category{} = stock.item.category
-      assert stock.item.category.name == attrs.item.category.name
+      assert stock.item.category.name == attrs["item"]["category"]["name"]
 
       assert %Mod{} = stock.mod
-      assert stock.mod.gender == attrs.mod.gender || (stock.mod.gender == nil && attrs.mod.gender == "")
-      assert stock.mod.age == attrs.mod.age || (stock.mod.age == nil && attrs.mod.age == "")
-      assert stock.mod.size == attrs.mod.size || (stock.mod.size == nil && attrs.mod.size == "")
-      assert stock.mod.season == attrs.mod.season || (stock.mod.season == nil && attrs.mod.season == "")
+      assert stock.mod.gender == attrs["mod"]["gender"] || (stock.mod.gender == nil && attrs["mod"]["gender"] == "")
+      assert stock.mod.age == attrs["mod"]["age"] || (stock.mod.age == nil && attrs["mod"]["age"] == "")
+      assert stock.mod.size == attrs["mod"]["size"] || (stock.mod.size == nil && attrs["mod"]["size"] == "")
+      assert stock.mod.season == attrs["mod"]["season"] || (stock.mod.season == nil && attrs["mod"]["season"] == "")
 
       assert %Packaging{} = stock.packaging
-      assert stock.packaging.count == attrs.packaging.count
-      assert stock.packaging.type == attrs.packaging.type
-      assert stock.packaging.description == attrs.packaging.description
+      assert stock.packaging.count == attrs["packaging"]["count"]
+      assert stock.packaging.type == attrs["packaging"]["type"]
+      assert stock.packaging.description == attrs["packaging"]["description"]
       # TODO: test stock.packaging.photo
     end
 
     test "update_stock/2 with valid existing data updates the stock" do
       current_stock = insert(:stock)
+
+      project = insert(:project)
+      item = insert(:item) # NOTE: a category is inserted by the item factory
       attrs = deep_params_for_stock(%{
-        project: insert(:project),
-        item: insert(:item), # NOTE: a category is inserted by the item factory
-        mod: build(:mod) # NOTE: mods already exist in the DB
+        "project_id" => project.id,
+        "item" => %{
+          "name" => item.name,
+          "category" => %{"name" => item.category.name}
+        },
+        "mod" => string_params_for(:mod)
       })
 
       assert {:ok, %Stock{} = stock} = Inventory.update_stock(current_stock, attrs)
-      assert stock.count == attrs.count
-      assert stock.description == attrs.description
+      assert stock.count == attrs["count"]
+      assert stock.description == attrs["description"]
       # TODO: test stock.photo
 
-      assert stock.project_id == attrs.project_id
+      assert stock.project_id == attrs["project_id"]
 
       assert %Item{} = stock.item
-      assert stock.item.name == attrs.item.name
+      assert stock.item.name == attrs["item"]["name"]
 
       assert %Category{} = stock.item.category
-      assert stock.item.category.name == attrs.item.category.name
+      assert stock.item.category.name == attrs["item"]["category"]["name"]
 
       assert %Mod{} = stock.mod
-      assert stock.mod.gender == attrs.mod.gender || (stock.mod.gender == nil && attrs.mod.gender == "")
-      assert stock.mod.age == attrs.mod.age || (stock.mod.age == nil && attrs.mod.age == "")
-      assert stock.mod.size == attrs.mod.size || (stock.mod.size == nil && attrs.mod.size == "")
-      assert stock.mod.season == attrs.mod.season || (stock.mod.season == nil && attrs.mod.season == "")
+      assert stock.mod.gender == attrs["mod"]["gender"] || (stock.mod.gender == nil && attrs["mod"]["gender"] == "")
+      assert stock.mod.age == attrs["mod"]["age"] || (stock.mod.age == nil && attrs["mod"]["age"] == "")
+      assert stock.mod.size == attrs["mod"]["size"] || (stock.mod.size == nil && attrs["mod"]["size"] == "")
+      assert stock.mod.season == attrs["mod"]["season"] || (stock.mod.season == nil && attrs["mod"]["season"] == "")
 
       assert %Packaging{} = stock.packaging
-      assert stock.packaging.count == attrs.packaging.count
-      assert stock.packaging.type == attrs.packaging.type
-      assert stock.packaging.description == attrs.packaging.description
+      assert stock.packaging.count == attrs["packaging"]["count"]
+      assert stock.packaging.type == attrs["packaging"]["type"]
+      assert stock.packaging.description == attrs["packaging"]["description"]
       # TODO: test stock.packaging.photo
     end
 
@@ -226,17 +236,17 @@ defmodule Ferry.InventoryTest do
 
       # is nil
       nil_attrs = deep_params_for_stock()
-      nil_attrs = Map.put(nil_attrs, :project_id, nil)
+      nil_attrs = Map.put(nil_attrs, "project_id", nil)
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.update_stock(current_stock, nil_attrs)
       assert 1 == length(changeset.errors)
 
       # too short
       assoc_params = %{
-        item: Map.put(params_for(:invalid_short_item), :category, params_for(:invalid_short_category)),
-        mod: params_for(:mod),
-        packaging: params_for(:invalid_short_packaging)
+        "item" => Map.put(string_params_for(:invalid_short_item), "category", string_params_for(:invalid_short_category)),
+        "mod" => string_params_for(:mod),
+        "packaging" => string_params_for(:invalid_short_packaging)
       }
-      short_attrs = Enum.into(assoc_params, params_for(:invalid_short_stock))
+      short_attrs = Enum.into(assoc_params, string_params_for(:invalid_short_stock))
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.update_stock(current_stock, short_attrs)
       errors = Ecto.Changeset.traverse_errors(changeset, fn {msg, _} -> msg end)
       assert 1 == length(errors[:count])
@@ -247,11 +257,11 @@ defmodule Ferry.InventoryTest do
 
       # too long
       assoc_params = %{
-        item: Map.put(params_for(:invalid_long_item), :category, params_for(:invalid_long_item)),
-        mod: params_for(:mod),
-        packaging: params_for(:packaging)
+        "item" => Map.put(string_params_for(:invalid_long_item), "category", string_params_for(:invalid_long_item)),
+        "mod" => string_params_for(:mod),
+        "packaging" => string_params_for(:packaging)
       }
-      long_attrs = Enum.into(assoc_params, params_for(:stock))
+      long_attrs = Enum.into(assoc_params, string_params_for(:stock))
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.update_stock(current_stock, long_attrs)
       assert 1 == length(errors[:item][:name])
       assert 1 == length(errors[:item][:category][:name])
