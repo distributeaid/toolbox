@@ -12,13 +12,13 @@
     <tr>
 
       <td class="text-right">
-        <span><%= link "Show", to: group_shipment_path(@conn, :show, 1, shipment), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: group_shipment_path(@conn, :edit, 1, shipment), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: group_shipment_path(@conn, :delete, 1, shipment), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+        <span><%= link "Show", to: group_shipment_path(@conn, :show, @group, shipment), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: group_shipment_path(@conn, :edit, @group, shipment), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: group_shipment_path(@conn, :delete, @group, shipment), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Shipment", to: group_shipment_path(@conn, :new, 1) %></span>
+<span><%= link "New Shipment", to: group_shipment_path(@conn, :new, @group) %></span>
