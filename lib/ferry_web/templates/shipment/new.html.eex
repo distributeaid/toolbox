@@ -2,4 +2,4 @@
 
 <%= render "form.html", Map.put(assigns, :action, group_shipment_path(@conn, :create, @group)) %>
 
-<span><%= link "Back", to: group_shipment_path(@conn, :index, @group) %></span>
+<span><%= link "Back", to: group_path(@conn, :show, @group) %></span>
