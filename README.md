@@ -59,6 +59,7 @@ Troubleshooting
 ------------------------------------------------------------
   - Incorrect development folder permissions, run: `chmod -R +x development/`
   - Try not to have PostgreSQL running locally (potential conflict issues)
+  - To log into db to look at seeded tables run "psql -U toolbox -d toolbox_dev" while in the container
 
 
 Development
