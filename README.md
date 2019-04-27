@@ -20,18 +20,17 @@ git clone git@gitlab.com:distribute-aid/toolbox.git
 # Change Directory into toolbox
 cd toolbox/
 
+**DO WE NEED THIS ANYMORE?**
 # Create a 'db' directory
 mkdir db && chmod -R +x db
 
 # Run this to build and bring up the containers using docker-compose
-./build-server.sh -v
-# You only need to run the -v flag if you want to see more info. It is useful for the first time you run the command.
-#after that it might be unnecesarry.
+./build-server.sh
 
 # Once the message `[info] Running FerryWeb.Endpoint with Cowboy using http://0.0.0.0:1312` appears in the log it is ready to run
-# If you feel like you have been waiting a long time for this message, create another terminal, and inside of the toolbox dir run
+# If you see "toolbox_web_1 exited with code 1", create another terminal, and inside of the toolbox dir run
 docker ps -a
-# If you see the status of toolbox_web_* was exited at some point, run
+# run
 docker start $NAME_OF_TOOLBOX_HERE
 
 # To stop the containers, run:
@@ -65,7 +64,7 @@ Troubleshooting
 Development
 ------------------------------------------------------------
 With the docker containers running, - open [http://0.0.0.0:1312] in your browser
-To create new users: http://0.0.0.0:1312/public/groups/GROUP_ID/users/new
+To create new users: http://localhost:1312/public/groups/GROUP_ID/users/new
 Replace GROUP_ID in the above url with the group id from the table that was generated after you added group1 to the database using the `seed-test-group.sh` script
 
 Database Reset: `docker exec $(docker ps -aqf "name=toolbox_web*") mix ecto.reset`
