@@ -19,7 +19,7 @@ defmodule FerryWeb.ShipmentController do
       {:ok, shipment} ->
         conn
         |> put_flash(:info, "Shipment created successfully.")
-        |> redirect(to: group_shipment_path(conn, :show, 1, shipment))
+        |> redirect(to: group_shipment_path(conn, :show, group_id, shipment))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", group: group_id, changeset: changeset)
     end

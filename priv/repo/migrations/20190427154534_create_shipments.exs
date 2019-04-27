@@ -8,8 +8,7 @@ defmodule Ferry.Repo.Migrations.CreateShipments do
       add :items, :string, null: false
       add :funding, :integer, null: false
       add :reciever_address, :string, null: false
-      add :reciever_id, :string, null: false
-
+      add :reciever_group_name, :string, null: false
       timestamps()
     end
   end

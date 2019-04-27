@@ -5,7 +5,31 @@
     </div>
   <% end %>
 
-  <div class="form-group">
-    <%= submit "Submit", class: "btn btn-primary" %>
+  <div class="form-item">
+    <%= label f, :shipping_address, class: "is-req" %>
+    <%= text_input f, :sender_address %>
+    <%= error_tag f, :label %>
+  </div>
+
+  <div class="form-item">
+    <%= label f, :Receiver_Group_Name, class: "is-req" %>
+    <%= text_input f, :reciever_group_name %>
+    <%= error_tag f, :reciever_group_name %>
+  </div>
+
+  <div class="form-item">
+    <%= label f, :Shipping_Items, class: "is-req" %>
+    <%= text_input f, :items %>
+    <%= error_tag f, :items %>
+  </div>
+
+  <div class="form-item">
+    <%= label f, :Funding, class: "is-req" %>
+    <%= text_input f, :funding %>
+    <%= error_tag f, :funding %>
+  </div>
+
+  <div class="form-item is-text-center">
+    <%= submit "Submit", class: "button is-big" %>
   </div>
 <% end %>
