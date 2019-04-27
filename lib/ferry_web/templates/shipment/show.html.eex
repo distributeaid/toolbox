@@ -1,0 +1,8 @@
+<h2>Show Shipment</h2>
+
+<ul>
+
+</ul>
+
+<span><%= link "Edit", to: group_shipment_path(@conn, :edit, 1, @shipment) %></span>
+<span><%= link "Back", to: group_shipment_path(@conn, :index, 1) %></span>

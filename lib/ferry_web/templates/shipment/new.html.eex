@@ -1,0 +1,5 @@
+<h2>New Shipment</h2>
+
+<%= render "form.html", Map.put(assigns, :action, group_shipment_path(@conn, :create, 1)) %>
+
+<span><%= link "Back", to: group_shipment_path(@conn, :index, 1) %></span>
