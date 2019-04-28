@@ -2,6 +2,7 @@ version: '3.4'
 services:
   db:
     image: "postgres:${DA_POSTGRES_VERSION}"
+    container_name: toolbox_db
     volumes:
       - ./db:/var/lib/postgresql/data
       - ./development/seed-test-group.sh:/seed-test-group.sh
@@ -11,12 +12,14 @@ services:
       - POSTGRES_DB=${DA_DB_DATABASE}
   dbtest:
     image: "postgres:${DA_POSTGRES_VERSION}"
+    container_name: dbtest
     environment:
       - POSTGRES_USER=${DA_DB_USERNAME}
       - POSTGRES_PASSWORD=${DA_DB_PASSWORD}
-      - POSTGRES_DB=${DA_DB_DATABASE_TEST}
+      - POSTGRES_DB=${DA_DB_DATABASE}
   dbadmin:
     image: "dpage/pgadmin4:4"
+    container_name: dbadmin
     ports:
       - "8088:80"
     environment:
@@ -31,6 +34,7 @@ services:
       dockerfile: web.Dockerfile
       target: build-env
     command: ["/app/development/wait-for-it.sh", "db:5432", "--", "/app/development/web-entrypoint.sh"]
+    container_name: toolbox_web
     volumes:
       - ./:/app
       - /app/assets/node_modules
@@ -39,12 +43,12 @@ services:
     # DB_HOSTNAME value MUST match the name of the db service!
     # DA_DB_HOSTNAME_TEST value MUST match the name of the test db service!
     environment:
-      - DB_USERNAME=${DA_DB_USERNAME}
-      - DB_PASSWORD=${DA_DB_PASSWORD}
-      - DB_DATABASE=${DA_DB_DATABASE}
-      - DB_HOSTNAME=db
-      - DB_PORT=5432
-      - DB_DATABASE_TEST=${DA_DB_DATABASE_TEST}
+      - POSTGRES_USER=${DA_DB_USERNAME}
+      - POSTGRES_PASSWORD=${DA_DB_PASSWORD}
+      - POSTGRES_DB=${DA_DB_DATABASE}
+      - DB_HOSTNAME_DEV=${DA_DB_HOSTNAME_DEV}
       - DB_HOSTNAME_TEST=${DA_DB_HOSTNAME_TEST}
+      - DB_PORT=5432
     depends_on:
       - db
+      - dbtest

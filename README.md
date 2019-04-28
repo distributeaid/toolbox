@@ -11,8 +11,8 @@ Contributing
 1. Run through the installation steps (see _Up & Running_ below).
 2. Make a new branch off `master` and write some code.  Test it.  ;)
 3. Push the new branch and make a pull request through gitlab.
-4. A team member will review your changes.  Commit further changes to the same branch and push them as needed.
-5. The team member will approve your pull request and merge your branch into `master` once it is ready.  They will be deployed along with other updates during our regular releases.
+4. We'll review your changes.  Commit further changes to the same branch and push them as needed.
+5. Once it's ready, we'll approve your pull request and merge your branch into `master`.  They will be deployed along with other updates during our regular releases.
 
 Links
 ------------------------------------------------------------
@@ -52,6 +52,8 @@ Up & Running
     - MacOS / Windows: Start the Docker application.
     - Linux: follow [these post-install steps](https://docs.docker.com/install/linux/linux-postinstall/).  Especially "managing docker as non-root" and "configure docker to start on boot".
 
+See the _Common Docker Commands_ section below for more info about how we use Docker.
+
 **Clone The Project**
 ```
 git clone git@gitlab.com:distribute-aid/toolbox.git
@@ -66,9 +68,13 @@ mkdir db && chmod -R +x db
 * Start: `./bulid-server.sh`
 * Stop: `ctrl-c` in the same window, or `docker-compose down` in another
 
-When starting the containers, once you see the message "_\[info\] Running FerryWeb.Endpoint with Cowboy using http://0.0.0.0:1312_" then it is ready.
+When starting the containers, once you see this message it is ready:
 
-If you see that a container has exited (ex: "toolbox_web_1 exited with code 1") then you can bring it up again from another terminal: `docker start $NAME_OF_CONTAINER`.  You can also run `docker ps -a` to see if any containers have exited.
+> [info] Running FerryWeb.Endpoint with Cowboy using http://0.0.0.0:1312
+
+If you see that a container has exited (ex: "toolbox_web_1 exited with code 1") then you can bring it up again from another terminal: `docker start $CONTAINER_NAME`.  You can also run `docker ps -a` to see if any containers have exited.
+
+See the _Common Docker Commands_ section below for a list of container names.
 
 **Setup PG Admin**
 
@@ -83,16 +89,12 @@ If everything is running correctly, you should be able to visit http://localhost
 We now need to seed a test group:
 
 ```
-# 1) list containers
-docker ps -a
-
-# 2) run the seed script
-docker exec $db_container_id /bin/bash seed-test-group.sh
+docker exec toolbox_db /bin/bash seed-test-group.sh
 ```
 
 You can now visit http://localhost:1312/public/groups/1/users/new to create a user associated with that group.  Finally, visit http://localhost:1312/public/session/new to log in.
 
-Unfortunately there's no easy way of creating more groups at the moment.  You can use PG Admin to manually add groups, or the command line to insert them.  See Managing Dev Databases below for how to connect via the commandline, then use the following INSERT statement:
+Unfortunately there's no easy way of creating more groups at the moment.  You can use PG Admin to manually add groups, or the command line to insert them.  See the _Managing Dev Databases_ section below for how to connect via the commandline, then use the following INSERT statement:
 
 ```
 INSERT INTO groups (name, description, inserted_at, updated_at) VALUES ('group name', 'about this group', NOW(), NOW());
@@ -105,21 +107,10 @@ To create more users, visit http://localhost:1312/public/groups/$GROUP_ID/users/
 * Try not to have PostgreSQL running locally (potential conflict issues).
 * Fix incorrect development folder permissions with: `chmod -R +x development/`.
 
-To verify that the seeds ran correctly:
+To verify that the seeds ran correctly select all entries in the groups table (there should be 1).  You can do this from PG Admin or the command line.  See the _Managing Dev Databases_ below for how to connect via the command line, then use the following SELECT statement:
 
 ```
-# 1) list containers
-docker ps -a
-
-# 2) open a bash shell into the db contianer
-docker exec -it $db_container_id /bin/bash
-
-# 3) open postgres
-psql -U toolbox -d toolbox_dev
-
-# 4) verify that seeded data is there
 SELECT * FROM groups;
-...
 ```
 
 Common Docker Commands
@@ -127,18 +118,19 @@ Common Docker Commands
 
 Docker's commandline documentation: https://docs.docker.com/engine/reference/commandline/
 
-* `docker ps -a` - List containers.  Very useful for getting a container's ID to use in other commands.  For more information see [Docker's ps documentation](https://docs.docker.com/engine/reference/commandline/ps/).
-* `docker exec $container_id $command` - Execute a command on a container.  For more information see here [Docker's exec documentation](https://docs.docker.com/engine/reference/commandline/exec/).
-* `docker exec -it $container_id /bin/bash` - Enter a bash shell on a container.
+* `docker ps -a` - List containers.  Very useful for getting a container's name, id, or status.  For more information see [Docker's ps documentation](https://docs.docker.com/engine/reference/commandline/ps/).
+* `docker exec $CONTAINER_NAME $COMMAND` - Execute a command on a container.  For more information see here [Docker's exec documentation](https://docs.docker.com/engine/reference/commandline/exec/).
+* `docker exec -it $CONTAINER_NAME /bin/bash` - Enter a bash shell on a container where you can run multiple mix commands in a row.  This is very useful for the web container.
+
+Our docker container names are:
+
+* **toolbox_web** - The elixir dev server.  All mix commands will be run on this container.
+* **toolbox_db** - Our dev database.  This is the database that you interact with from the locally hosted development site.
+* **dbtest** - Our test database.  `mix test` and `MIX_ENV=test $command` will both use this database.
+* **dbadmin** - The PG Admin server.
 
 Common Mix Commands
 ------------------------------------------------------------
-
-All of these tasks should be run on the web container.  There are three different ways to run them:
-
-1. You can use `docker ps -a` to get the web container ID and replace `$id` in the commands.
-2. You can also replace `$id` with `$(docker ps -aqf "name=toolbox_web*")` to run the command in 1 step. EX: `docker exec $(docker ps -aqf "name=toolbox_web*") mix test --color`
-3. Finally, you can always open a bash shell on the web container and run the commands directly.  EX: `docker exec -it $container_id /bin/bash` and then `mix test --color` in the shell.
 
 **Pheonix:**
 
@@ -148,12 +140,12 @@ All of these tasks should be run on the web container.  There are three differen
 
 ```
 # list all routes in the app
-docker exec $web_container_id mix phx.routes
+docker exec toolbox_web mix phx.routes
 
 # code generation (look these up in the docs- many options)
-docker exec $web_container_id mix phx.gen.schema [OPTIONS]
-docker exec $web_container_id mix phx.gen.context [OPTIONS]
-docker exec $web_container_id mix phx.gen.html [OPTIONS]
+docker exec toolbox_web mix phx.gen.schema [OPTIONS]
+docker exec toolbox_web mix phx.gen.context [OPTIONS]
+docker exec toolbox_web mix phx.gen.html [OPTIONS]
 ```
 
 **Ecto:**
@@ -161,9 +153,9 @@ docker exec $web_container_id mix phx.gen.html [OPTIONS]
 * https://hexdocs.pm/ecto/2.2.11/Mix.Tasks.Ecto.html (select a specific task in the left side menu)
 
 ```
-docker exec $web_container_id mix ecto.migrate
-docker exec $web_container_id mix ecto.rollback -n 1
-docker exec $web_container_id mix ecto.reset
+docker exec toolbox_web mix ecto.migrate
+docker exec toolbox_web mix ecto.rollback -n 1
+docker exec toolbox_web mix ecto.reset
 ```
 
 **Testing:**
@@ -172,20 +164,20 @@ docker exec $web_container_id mix ecto.reset
 * https://github.com/parroty/excoveralls#mix-coveralls-show-coverage
 
 ```
-docker exec $web_container_id mix test --color
+docker exec toolbox_web mix test --color
 
 # for detailed output
-docker exec $web_container_id mix test --color --trace
+docker exec toolbox_web mix test --color --trace
 
 # for code coverage
-docker exec $web_container_id mix coverall
+docker exec toolbox_web mix coverall
 ```
 
 Mix commands can be targeted to the test environment / database by setting an environment variable `MIX_ENV=test`.  There are three ways to do this:
 
-1. Specify an environment variable using docker exec's `--env` flag.  EX: `docker exec --env MIX_ENV=test $web_container_id mix ecto.reset`
-2. Run a shell command which executes another command that starts by setting the environment variable.  EX: `docker exec $web_container_id sh -c "MIX_ENV=test mex ecto.reset`.
-3. Finally, you can always open a bash shell on the web container and run the commands directly.  EX: `docker exec -it $container_id /bin/bash` and then `MIX_ENV=test mix ecto.reset` in the shell.
+1. Specify an environment variable using docker exec's `--env` flag.  EX: `docker exec --env MIX_ENV=test toolbox_web mix ecto.reset`
+2. Run a shell command which executes another command that starts by setting the environment variable.  EX: `docker exec toolbox_web sh -c "MIX_ENV=test mex ecto.reset`.
+3. Finally, you can always open a bash shell on the web container and run the commands directly.  EX: `docker exec -it toolbox_web /bin/bash` and then `MIX_ENV=test mix ecto.reset` in the shell.
 
 Managing Dev Databases
 ------------------------------------------------------------
@@ -195,16 +187,11 @@ Managing Dev Databases
 **psql:** If you prefer to use the commandline, you can run psql in the database docker containers:
 
 ```
-# list containers
-docker ps -a
+# dev database
+docker exec -it toolbox_db sh -c "psql -U toolbox -d toolbox_dev"
 
-# dev db
-docker exec -it $db_container_id /bin/bash
-psql -U toolbox -d toolbox_dev
-
-# test db
-docker exec -it $db_test_container_id /bin/bash
-psql -U toolbox -d toolbox_test
+# test database
+docker exec -it dbtest sh -c "psql -U toolbox -d toolbox_dev"
 ```
 
 Deployment
