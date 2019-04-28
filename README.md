@@ -5,96 +5,194 @@ The collection of tools for newcomer (refugee) aid groups that make up the Distr
 
 [![pipeline status](https://gitlab.com/distribute-aid/toolbox/badges/master/pipeline.svg)](https://gitlab.com/distribute-aid/toolbox/commits/master) [![coverage report](https://gitlab.com/distribute-aid/toolbox/badges/master/coverage.svg)](https://gitlab.com/distribute-aid/toolbox/commits/master)
 
+Contributing
+------------------------------------------------------------
+
+1. Run through the installation steps (see _Up & Running_ below).
+2. Make a new branch off `master` and write some code.  Test it.  ;)
+3. Push the new branch and make a pull request through gitlab.
+4. We'll review your changes.  Commit further changes to the same branch and push them as needed.
+5. Once it's ready, we'll approve your pull request and merge your branch into `master`.  They will be deployed along with other updates during our regular releases.
+
+Links
+------------------------------------------------------------
+
+Distribute Aid:
+
+* Landing site: https://distributeaid.org/
+* Tools: https://toolbox.distributeaid.org/
+* Facebook: https://facebook.com/DistributeAidDotOrg
+* Patreon: https://patreon.com/distributeaid
+
+Elixir (programming language):
+
+* Official website: https://elixir-lang.org/
+* Getting started guide: https://elixir-lang.org/getting-started/introduction.html
+* Docs: https://hexdocs.pm/elixir/1.7.2/Kernel.html - NOTE: we are not using the latest version of Elixir just yet.
+
+Phoenix (webserver framework):
+
+* Official website: http://www.phoenixframework.org/
+* Docs: https://hexdocs.pm/phoenix/1.3.4/overview.html - NOTE: we are not using the latest version of Phoenix just yet.
+* Mailing list: http://groups.google.com/group/phoenix-talk
+* Source: https://github.com/phoenixframework/phoenix
+
+Ecto (database framework & ORM):
+
+* Docs: https://hexdocs.pm/ecto/2.2.11/Ecto.html - NOTE: we are not using the latest version of Ecto just yet.
+
 Up & Running
 ------------------------------------------------------------
 
+**Setup Docker**
+
+1. Install Docker - https://docs.docker.com/install/
+2. Install Docker Compose - https://docs.docker.com/compose/install/
+3. Start the Docker daemon.
+    - MacOS / Windows: Start the Docker application.
+    - Linux: follow [these post-install steps](https://docs.docker.com/install/linux/linux-postinstall/).  Especially "managing docker as non-root" and "configure docker to start on boot".
+
+See the _Common Docker Commands_ section below for more info about how we use Docker.
+
+**Clone The Project**
 ```
-# Install Docker - https://docs.docker.com/install/
-# Install Docker Compose - https://docs.docker.com/compose/install/
-
-# Start the Docker daemon. This can vary depending on your OS - MacOS/Windows users should just need to start the Docker application however on Linux you may need to follow some of [these](https://docs.docker.com/install/linux/linux-postinstall/) post-installation steps.
-
-# Clone The Project
 git clone git@gitlab.com:distribute-aid/toolbox.git
-
-# Change Directory into toolbox
 cd toolbox/
 
-# Create a 'db' directory
+# Create a 'db' directory.
 mkdir db && chmod -R +x db
-
-# Run this to build and bring up the containers using docker-compose
-./build-server.sh -v
-# You only need to run the -v flag if you want to see more info. It is useful for the first time you run the command.
-#after that it might be unnecesarry.
-
-# Once the message `[info] Running FerryWeb.Endpoint with Cowboy using http://0.0.0.0:1312` appears in the log it is ready to run
-# If you feel like you have been waiting a long time for this message, create another terminal, and inside of the toolbox dir run
-docker ps -a
-# If you see the status of toolbox_web_* was exited at some point, run
-docker start $NAME_OF_TOOLBOX_HERE
-
-# To stop the containers, run:
-docker-compose down
-
-# Execute commands on a particular container (https://docs.docker.com/engine/reference/commandline/ps/):
-docker ps -a
-docker exec $image_id command
-
-# Commands can also be run on running containers
-docker exec $(docker ps -aqf "name=toolbox_web") mix ecto.create
-docker exec $(docker ps -aqf "name=toolbox_web") mix ecto.migrate
-docker exec $(docker ps -aqf "name=toolbox_web") mix ecto.reset
-docker exec $(docker ps -aqf "name=toolbox_web") mix test
-
-# For more information, see here: https://docs.docker.com/engine/reference/commandline/exec/
-
-# To execute an interactive bash shell
-docker exec -it $image_id /bin/bash
-
-# Setup the seed test group
-docker exec $(docker ps -aqf "name=toolbox_db") /bin/bash seed-test-group.sh
 ```
 
-Troubleshooting
+**Run Containers**
+
+* Start: `./bulid-server.sh`
+* Stop: `ctrl-c` in the same window, or `docker-compose down` in another
+
+When starting the containers, once you see this message it is ready:
+
+> [info] Running FerryWeb.Endpoint with Cowboy using http://0.0.0.0:1312
+
+If you see that a container has exited (ex: "toolbox_web_1 exited with code 1") then you can bring it up again from another terminal: `docker start $CONTAINER_NAME`.  You can also run `docker ps -a` to see if any containers have exited.
+
+See the _Common Docker Commands_ section below for a list of container names.
+
+**Setup PG Admin**
+
+1. With the containers running, go to http://localhost:8088 in your browser.
+2. Log in with username `admin` and password `admin` (unless you overrode the defaults).
+3. Create new servers for our dev and test dbs.  See `./build-server.sh` for the connection information (including the hostnames).
+
+**Setup Up Our Site**
+
+If everything is running correctly, you should be able to visit http://localhost:1312 or http://0.0.0.0:1312 and see our site.  The localhost address is used in the rest of this readme, but the 0.0.0.0 address should be the same thing.
+
+We now need to seed a test group:
+
+```
+docker exec toolbox_db /bin/bash seed-test-group.sh
+```
+
+You can now visit http://localhost:1312/public/groups/1/users/new to create a user associated with that group.  Finally, visit http://localhost:1312/public/session/new to log in.
+
+Unfortunately there's no easy way of creating more groups at the moment.  You can use PG Admin to manually add groups, or the command line to insert them.  See the _Managing Dev Databases_ section below for how to connect via the commandline, then use the following INSERT statement:
+
+```
+INSERT INTO groups (name, description, inserted_at, updated_at) VALUES ('group name', 'about this group', NOW(), NOW());
+```
+
+To create more users, visit http://localhost:1312/public/groups/$GROUP_ID/users/new (replace $GROUP_ID with the id of the group you want to add the user to).  You can add multiple users to a single group.
+
+**Trouble Shooting**
+
+* Try not to have PostgreSQL running locally (potential conflict issues).
+* Fix incorrect development folder permissions with: `chmod -R +x development/`.
+
+To verify that the seeds ran correctly select all entries in the groups table (there should be 1).  You can do this from PG Admin or the command line.  See the _Managing Dev Databases_ below for how to connect via the command line, then use the following SELECT statement:
+
+```
+SELECT * FROM groups;
+```
+
+Common Docker Commands
 ------------------------------------------------------------
-  - Incorrect development folder permissions, run: `chmod -R +x development/`
-  - Try not to have PostgreSQL running locally (potential conflict issues)
 
+Docker's commandline documentation: https://docs.docker.com/engine/reference/commandline/
 
-Development
+* `docker ps -a` - List containers.  Very useful for getting a container's name, id, or status.  For more information see [Docker's ps documentation](https://docs.docker.com/engine/reference/commandline/ps/).
+* `docker exec $CONTAINER_NAME $COMMAND` - Execute a command on a container.  For more information see here [Docker's exec documentation](https://docs.docker.com/engine/reference/commandline/exec/).
+* `docker exec -it $CONTAINER_NAME /bin/bash` - Enter a bash shell on a container where you can run multiple mix commands in a row.  This is very useful for the web container.
+
+Our docker container names are:
+
+* **toolbox_web** - The elixir dev server.  All mix commands will be run on this container.
+* **toolbox_db** - Our dev database.  This is the database that you interact with from the locally hosted development site.
+* **dbtest** - Our test database.  `mix test` and `MIX_ENV=test $command` will both use this database.
+* **dbadmin** - The PG Admin server.
+
+Common Mix Commands
 ------------------------------------------------------------
-With the docker containers running, - open [http://0.0.0.0:1312] in your browser
-To create new users: http://0.0.0.0:1312/public/groups/GROUP_ID/users/new
-Replace GROUP_ID in the above url with the group id from the table that was generated after you added group1 to the database using the `seed-test-group.sh` script
 
-Database Reset: `docker exec $(docker ps -aqf "name=toolbox_web") mix ecto.reset`
+**Pheonix:**
 
-Database Administration
+* https://hexdocs.pm/1.3.4/phoenix/phoenix_mix_tasks.html#content
+* You can also lookup each individual task in the mix section of the left side menu.
+* See `/development/web-entrypoint.sh` for common commands that are run when you start the containers.
+
+```
+# list all routes in the app
+docker exec toolbox_web mix phx.routes
+
+# code generation (look these up in the docs- many options)
+docker exec toolbox_web mix phx.gen.schema [OPTIONS]
+docker exec toolbox_web mix phx.gen.context [OPTIONS]
+docker exec toolbox_web mix phx.gen.html [OPTIONS]
+```
+
+**Ecto:**
+
+* https://hexdocs.pm/ecto/2.2.11/Mix.Tasks.Ecto.html (select a specific task in the left side menu)
+
+```
+docker exec toolbox_web mix ecto.migrate
+docker exec toolbox_web mix ecto.rollback -n 1
+docker exec toolbox_web mix ecto.reset
+```
+
+**Testing:**
+
+* https://hexdocs.pm/mix/Mix.Tasks.Test.html
+* https://github.com/parroty/excoveralls#mix-coveralls-show-coverage
+
+```
+docker exec toolbox_web mix test --color
+
+# for detailed output
+docker exec toolbox_web mix test --color --trace
+
+# for code coverage
+docker exec toolbox_web mix coverall
+```
+
+Mix commands can be targeted to the test environment / database by setting an environment variable `MIX_ENV=test`.  There are three ways to do this:
+
+1. Specify an environment variable using docker exec's `--env` flag.  EX: `docker exec --env MIX_ENV=test toolbox_web mix ecto.reset`
+2. Run a shell command which executes another command that starts by setting the environment variable.  EX: `docker exec toolbox_web sh -c "MIX_ENV=test mex ecto.reset`.
+3. Finally, you can always open a bash shell on the web container and run the commands directly.  EX: `docker exec -it toolbox_web /bin/bash` and then `MIX_ENV=test mix ecto.reset` in the shell.
+
+Managing Dev Databases
 ------------------------------------------------------------
-1. Go to http://0.0.0.0:8088 in your browser
-2. Login using the credentials specified in `PGADMIN_DEFAULT_EMAIL` and `PGADMIN_DEFAULT_PASSWORD` ('admin' and 'admin' unless you overwrote the defaults).
-3. Create a New Server - under 'General' give it a name and optionally specify comments/connection colours. On the Connection tab enter 'db' as the Host name and the values for `POSTGRES_USER` and `POSTGRES_PASSWORD` as the Username and Password respectively ('toolbox' and '1312' are the default values).
 
-Testing
-------------------------------------------------------------
-Run Tests:
+**PG Admin:** With the docker containers running, go to http://localhost:8088 in your browser.  Log in with username `admin` and password `admin`.  You should now be able to use the PG Admin GUI to manage your local dev databases.
 
-  - `docker exec $(docker ps -aqf "name=toolbox_web") mix test --color`
-  - `docker exec $(docker ps -aqf "name=toolbox_web") mix test --trace` for detailed output
-  - `docker exec $(docker ps -aqf "name=toolbox_web") mix coverall` for code coverage
+**psql:** If you prefer to use the commandline, you can run psql in the database docker containers:
 
-Mix commands can be targeted to the test environment by prepending `MIX_ENV=test`.  For example, to reset the test database after changing a schema that you are working on, run `MIX_ENV=test mix ecto.reset`.
+```
+# dev database
+docker exec -it toolbox_db sh -c "psql -U toolbox -d toolbox_dev"
 
-Gitlab runs tests & code coverage in a continuous integration pipeline when code is pushed to `origin`.
-
-Contributing
-------------------------------------------------------------
- 1. Run through the installation steps (see *Up & Running* above).
- 2. Make a new branch off `master` and write some code.  Test it.  ;)
- 3. Push the new branch and make a pull request through gitlab.
- 4. A team member will review your changes.  Commit further changes to the same branch and push them as needed.
- 5. The team member will approve your pull request and merge your branch into `master` once it is ready.  They will be deployed along with other updates during our regular releases.
+# test database
+docker exec -it dbtest sh -c "psql -U toolbox -d toolbox_dev"
+```
 
 Deployment
 ------------------------------------------------------------
@@ -123,27 +221,29 @@ PORT=1337 ./bin/ferry restart # needed to ensure updated static assets are used
 
 Metrics
 ------------------------------------------------------------
+
 TODO
 
 Backups
 ------------------------------------------------------------
 
-### Secrets
+**Secrets**
 
-**Backup:**
+Backup:
 
 ```
 scp [user]@distributeaid.org:/home/[user]/toolbox/config/prod.secret.exs [/path/to/backups]/toolbox/
 ```
 
-**Restore:**
+Restore:
+
 ```
 TODO
 ```
 
-### Nginx Config
+**Nginx Config**
 
-**Backup:**
+Backup:
 
 ```
 scp [user]@distributeaid.org:/etc/nginx/nginx.conf [/path/to/backups]/nginx
@@ -151,58 +251,35 @@ scp [user]@distributeaid.org:/etc/nginx/nginx.conf [/path/to/backups]/nginx
 scp -r [user]@distributeaid.org:/etc/nginx/sites-available [/path/to/backups]/nginx
 ```
 
-**Restore:**
+Restore:
 
 ```
 TODO
 ```
 
-Links
-------------------------------------------------------------
-Elixir (programming language):
-
-  * Official website: [https://elixir-lang.org/]
-  * Getting started guide: [https://elixir-lang.org/getting-started/introduction.html]
-  * Docs: [https://hexdocs.pm/elixir/Kernel.html]
-
-Phoenix (webserver framework):
-
-  * Official website: [http://www.phoenixframework.org/]
-  * Docs: [https://hexdocs.pm/phoenix]
-  * Mailing list: [http://groups.google.com/group/phoenix-talk]
-  * Source: [https://github.com/phoenixframework/phoenix]
-
-Ecto (database framework & ORM):
-
-  * Docs: [https://hexdocs.pm/ecto/Ecto.html]
-
-Ex Unit (testing framework):
-
-  * Docs: [https://hexdocs.pm/ex_unit/ExUnit.html]
-
 Copyright & Licensing
 ------------------------------------------------------------
+
 Our source code is released under the AGPLv3 license.  You can find the full license in `LICENSE.md`.  The license notice has been included below:
 
-```
-Toolbox: Web tools for refugee aid groups.
-Copyright (C) 2018-2019  Distribute Aid
-https://distributeaid.org
-code@distributeaid.org
-
-Toolbox is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-```
+> Toolbox: Web tools for refugee aid groups.
+> 
+> Copyright (C) 2018-2019  Distribute Aid
+> 
+> https://distributeaid.org --- code@distributeaid.org
+> 
+> Toolbox is free software: you can redistribute it and/or modify
+> it under the terms of the GNU Affero General Public License as
+> published by the Free Software Foundation, either version 3 of
+> the License, or (at your option) any later version.
+> 
+> This program is distributed in the hope that it will be useful,
+> but WITHOUT ANY WARRANTY; without even the implied warranty of
+> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> GNU Affero General Public License for more details.
+> 
+> You should have received a copy of the GNU Affero General Public License
+> along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 TODO: Ensure the short version of license notice appears in each source code file.
 

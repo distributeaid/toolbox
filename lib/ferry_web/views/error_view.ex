@@ -32,7 +32,6 @@ defmodule FerryWeb.ErrorView do
   # custom 404 message
   def render("404.html", %{reason: %{message: message}}) do
     checker = String.split(message, "\n")
-    IO.inspect(checker)
     error = "404"
     cond do
       String.contains? Enum.at(checker,0), "no route found" ->
