@@ -3,6 +3,8 @@ defmodule FerryWeb.ShipmentController do
 
   alias Ferry.Shipments
   alias Ferry.Shipments.Shipment
+  import Ecto.Changeset
+
 
   def index(%{assigns: %{current_user: %{group_id: group_id}}} = conn, _params) do
     shipments = Shipments.list_shipments()
@@ -14,7 +16,8 @@ defmodule FerryWeb.ShipmentController do
     render(conn, "new.html", group: conn.assigns.current_user.group_id, changeset: changeset)
   end
 
-  def create(%{assigns: %{current_user: %{group_id: group_id}}} = conn, %{"shipment" => shipment_params}) do
+  def create(%{assigns: %{current_user: %{group_id: group_id}}} = conn, %{"shipment" => shipment_params} = params) do
+    shipment_params = Map.put(shipment_params, "sending_group_id", group_id)
     case Shipments.create_shipment(shipment_params) do
       {:ok, shipment} ->
         conn
@@ -31,6 +34,7 @@ defmodule FerryWeb.ShipmentController do
   end
 
   def edit(%{assigns: %{current_user: %{group_id: group_id}}} = conn, %{"id" => id}) do
+    #NEED TO MAKE SOME OF THESE IMMUTABLE?
     shipment = Shipments.get_shipment!(id)
     changeset = Shipments.change_shipment(shipment)
     render(conn, "edit.html", group: group_id, shipment: shipment, changeset: changeset)
