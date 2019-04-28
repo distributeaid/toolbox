@@ -4,6 +4,7 @@ defmodule FerryWeb.ShipmentController do
   alias Ferry.Shipments
   alias Ferry.Shipments.Shipment
   import Ecto.Changeset
+  import Base
 
 
   def index(%{assigns: %{current_user: %{group_id: group_id}}} = conn, _params) do
@@ -28,13 +29,13 @@ defmodule FerryWeb.ShipmentController do
     end
   end
 
-  def show(%{assigns: %{current_user: %{group_id: group_id}}} = conn, %{"id" => id}) do
+  def show(%{assigns: %{current_user: %{group_id: group_id}}} = conn, %{"id" => id} = params) do
     shipment = Shipments.get_shipment!(id)
     render(conn, "show.html", group: group_id, shipment: shipment)
   end
 
   def edit(%{assigns: %{current_user: %{group_id: group_id}}} = conn, %{"id" => id}) do
-    #NEED TO MAKE SOME OF THESE IMMUTABLE?
+    #NEED TO MAKE SOME OF the db columns immutable?
     shipment = Shipments.get_shipment!(id)
     changeset = Shipments.change_shipment(shipment)
     render(conn, "edit.html", group: group_id, shipment: shipment, changeset: changeset)

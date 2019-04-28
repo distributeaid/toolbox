@@ -1,7 +1,12 @@
 <h2>Show Shipment</h2>
 
 <ul>
+  <li> <%= @shipment.funding %> </ul>
+  <li> <%= @shipment.items %></li>
+</ul>
 
+<ul>
+<%= @shipment.items %>
 </ul>
 
 <span><%= link "Edit", to: group_shipment_path(@conn, :edit, @group, @shipment) %></span>

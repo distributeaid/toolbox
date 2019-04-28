@@ -11,5 +11,6 @@ defmodule Ferry.Repo.Migrations.CreateShipments do
       add :reciever_group_id, :string, null: false
       timestamps()
     end
+
   end
 end
