@@ -42,10 +42,10 @@ docker ps -a
 docker exec $image_id command
 
 # Commands can also be run on running containers
-docker exec $(docker ps -aqf "name=toolbox_web*") mix ecto.create
-docker exec $(docker ps -aqf "name=toolbox_web*") mix ecto.migrate
-docker exec $(docker ps -aqf "name=toolbox_web*") mix ecto.reset
-docker exec $(docker ps -aqf "name=toolbox_web*") mix test
+docker exec $(docker ps -aqf "name=toolbox_web") mix ecto.create
+docker exec $(docker ps -aqf "name=toolbox_web") mix ecto.migrate
+docker exec $(docker ps -aqf "name=toolbox_web") mix ecto.reset
+docker exec $(docker ps -aqf "name=toolbox_web") mix test
 
 # For more information, see here: https://docs.docker.com/engine/reference/commandline/exec/
 
@@ -53,7 +53,7 @@ docker exec $(docker ps -aqf "name=toolbox_web*") mix test
 docker exec -it $image_id /bin/bash
 
 # Setup the seed test group
-docker exec $(docker ps -aqf "name=toolbox_db*") /bin/bash seed-test-group.sh
+docker exec $(docker ps -aqf "name=toolbox_db") /bin/bash seed-test-group.sh
 ```
 
 Troubleshooting
@@ -68,7 +68,7 @@ With the docker containers running, - open [http://0.0.0.0:1312] in your browser
 To create new users: http://0.0.0.0:1312/public/groups/GROUP_ID/users/new
 Replace GROUP_ID in the above url with the group id from the table that was generated after you added group1 to the database using the `seed-test-group.sh` script
 
-Database Reset: `docker exec $(docker ps -aqf "name=toolbox_web*") mix ecto.reset`
+Database Reset: `docker exec $(docker ps -aqf "name=toolbox_web") mix ecto.reset`
 
 Database Administration
 ------------------------------------------------------------
@@ -80,9 +80,9 @@ Testing
 ------------------------------------------------------------
 Run Tests:
 
-  - `docker exec $(docker ps -aqf "name=toolbox_web*") mix test`
-  - `docker exec $(docker ps -aqf "name=toolbox_web*") mix test --trace` for detailed output
-  - `docker exec $(docker ps -aqf "name=toolbox_web*") mix coverall` for code coverage
+  - `docker exec $(docker ps -aqf "name=toolbox_web") mix test --color`
+  - `docker exec $(docker ps -aqf "name=toolbox_web") mix test --trace` for detailed output
+  - `docker exec $(docker ps -aqf "name=toolbox_web") mix coverall` for code coverage
 
 Mix commands can be targeted to the test environment by prepending `MIX_ENV=test`.  For example, to reset the test database after changing a schema that you are working on, run `MIX_ENV=test mix ecto.reset`.
 

@@ -12,9 +12,9 @@ config :logger, level: :warn
 # Configure your database
 config :ferry, Ferry.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: System.get_env("DB_USERNAME"),
-  password: System.get_env("DB_PASSWORD"),
-  database: System.get_env("DB_DATABASE_TEST"),
+  username: System.get_env("POSTGRES_USER"),
+  password: System.get_env("POSTGRES_PASSWORD"),
+  database: System.get_env("POSTGRES_DB"),
   hostname: System.get_env("DB_HOSTNAME_TEST"),
   pool: Ecto.Adapters.SQL.Sandbox
 

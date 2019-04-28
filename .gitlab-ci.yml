@@ -7,13 +7,14 @@ image: elixir:latest
 # Only needed when using a docker container to run your tests in.
 # Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
 services:
-  - postgres:latest
+  - name: postgres:11.2
+    alias: dbtest
 
 variables:
-  POSTGRES_DB: toolbox_test
-  POSTGRES_HOST: postgres
   POSTGRES_USER: toolbox
   POSTGRES_PASSWORD: "1312"
+  POSTGRES_DB: toolbox_test
+  DB_HOSTNAME_TEST: dbtest
   MIX_ENV: "test"
 
 before_script:
