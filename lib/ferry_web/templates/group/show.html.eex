@@ -53,5 +53,14 @@
       addresses: @addresses,
       can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
     } %>
+
+    <%= render FerryWeb.ShipmentView, "index-list.partial.html", %{
+      conn: @conn,
+      group: @group,
+      shipments: @shipments,
+      can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+    } %>
+
+
   </div>
 </section>

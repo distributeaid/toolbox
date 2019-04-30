@@ -5,6 +5,7 @@ defmodule Ferry.Shipments do
 
   import Ecto.Query, warn: false
   alias Ferry.Repo
+  alias Ferry.Profiles.Group
 
   alias Ferry.Shipments.Shipment
 
@@ -21,6 +22,13 @@ defmodule Ferry.Shipments do
     Repo.all(Shipment)
   end
 
+  def list_shipments(%Group{} = group) do
+    Repo.all(
+      from s in Shipment,
+      where: s.group_id == ^group.id,
+      order_by: s.id
+    )
+  end
   @doc """
   Gets a single shipment.
 

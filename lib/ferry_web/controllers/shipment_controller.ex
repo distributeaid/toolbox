@@ -18,7 +18,7 @@ defmodule FerryWeb.ShipmentController do
   end
 
   def create(%{assigns: %{current_user: %{group_id: group_id}}} = conn, %{"shipment" => shipment_params} = params) do
-    shipment_params = Map.put(shipment_params, "sending_group_id", group_id)
+    shipment_params = Map.put(shipment_params, "group_id", group_id)
     case Shipments.create_shipment(shipment_params) do
       {:ok, shipment} ->
         conn
