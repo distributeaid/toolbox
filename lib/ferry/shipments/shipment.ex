@@ -1,8 +1,14 @@
 defmodule Ferry.Shipments.Shipment do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Ferry.Locations.Address
+
 
   schema "shipments" do
+    field :label, :string
+    field :target_date_to_be_shipped, :string
+    field :ready, :boolean
+    field :shipment_underway, :boolean
     field :group_id, :integer
     field :sender_address, :string
     field :items, :string
@@ -15,12 +21,8 @@ defmodule Ferry.Shipments.Shipment do
   @doc false
   def changeset(shipment, attrs) do
     shipment
-    |> cast(attrs, [:group_id, :sender_address, :items, :funding, :reciever_address, :reciever_group_id])
-    |> validate_required(:group_id, [message: "Cannot be Empty"])
-    |> validate_required(:sender_address, [message: "We need the address supplies will be sent from"])
-    |> validate_required(:items, [message: "We need the items that will be sent"])
-    |> validate_required(:funding, [message: "How will this shipment be funded?"])
-    |> validate_required(:reciever_address, [message: "Where are the supplies being shipped?"])
-    |> validate_required(:reciever_group_id, [message: "If the group is not setup yet, provide an email address"])
+    |> cast(attrs, [:group_id, :sender_address, :items, :funding, :reciever_address, :reciever_group_id,
+        :shipment_underway, :ready, :target_date_to_be_shipped, :label ])
+    |> validate_required(:label, [message: "We need to associate this shipment with a label"])
   end
 end

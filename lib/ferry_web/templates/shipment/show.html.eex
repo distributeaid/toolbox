@@ -1,13 +1,36 @@
-<h2>Show Shipment</h2>
+<section class="section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title"><%= @shipment.label %></h1>
+    </header>
 
-<ul>
-  <li> <%= @shipment.funding %> </ul>
-  <li> <%= @shipment.items %></li>
-</ul>
+    <p>
+      <%= @shipment.items %>
+    </p>
 
-<ul>
-<%= @shipment.items %>
-</ul>
+    <p>
+      <%= @shipment.funding %>
+    </p>
 
-<span><%= link "Edit", to: group_shipment_path(@conn, :edit, @group, @shipment) %></span>
-<span><%= link "Back", to: group_shipment_path(@conn, :index, @group) %></span>
+    <p>
+      <%= @shipment.sender_address %>
+    </p>
+
+    <p>
+      <%= @shipment.reciever_address %>
+    </p>
+
+    <p>
+      <%= @shipment.reciever_group_id %>
+    </p>
+
+    <p>
+      <%= @shipment.target_date_to_be_shipped %>
+    </p>
+    
+    <span><%= link "Edit", to: group_shipment_path(@conn, :edit, @group, @shipment) %></span>
+    <span><%= link "Back", to: group_shipment_path(@conn, :index, @group) %></span>
+  </div>
+</section>
+
+

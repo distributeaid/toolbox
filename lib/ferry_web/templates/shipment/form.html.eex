@@ -6,30 +6,52 @@
   <% end %>
 
   <div class="form-item">
-    <%= label f, :shipping_address, class: "is-req" %>
+    <%= label f, :label, class: "is-req" %>
+    <%= text_input f, :label %>
+    <%= error_tag f, :label %>
+  </div>
+
+  <div class="form-item">
+    <%= label f, :target_date_to_be_shipped %>
+    <%= text_input f, :target_date_to_be_shipped %>
+    <%= error_tag f, :target_date_to_be_shipped %>
+  </div>
+
+  <div class="form-item">
+    <%= label f, :ready %>
+    <%= checkbox f, :ready %>
+  </div>
+
+  <div class="form-item">
+    <%= label f, :shipment_underway %>
+    <%= checkbox f, :shipment_underway %>
+  </div>
+
+  <div class="form-item">
+    <%= label f, :shipping_address %>
     <%= text_input f, :reciever_address %>
     <%= error_tag f, :reciever_address %>
   </div>
 
   <div class="form-item">
-    <%= label f, :Reciever_Group_Name, class: "is-req" %>
+    <%= label f, :Reciever_Group_Name_or_Email %>
     <%= text_input f, :reciever_group_id %>
     <%= error_tag f, :reciever_group_id %>
   </div>
 
   <div class="form-item">
-    <%= label f, :Shipping_Items, class: "is-req" %>
+    <%= label f, :Shipping_Items %>
     <%= text_input f, :items %>
     <%= error_tag f, :items %>
   </div>
 
   <div class="form-item">
-    <%= label f, :Funding, class: "is-req" %>
+    <%= label f, :Funding %>
     <%= text_input f, :funding %>
     <%= error_tag f, :funding %>
   </div>
   <div class="form-item">
-    <%= label f, :Address_Where_Supplies_Sent_From, class: "is-req" %>
+    <%= label f, :Address_Where_Supplies_Are_Sent_From %>
     <%= text_input f, :sender_address %>
     <%= error_tag f, :sender_address %>
   </div>

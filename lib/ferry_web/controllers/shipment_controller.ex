@@ -4,8 +4,6 @@ defmodule FerryWeb.ShipmentController do
   alias Ferry.Shipments
   alias Ferry.Shipments.Shipment
   import Ecto.Changeset
-  import Base
-
 
   def index(%{assigns: %{current_user: %{group_id: group_id}}} = conn, _params) do
     shipments = Shipments.list_shipments()
@@ -19,12 +17,18 @@ defmodule FerryWeb.ShipmentController do
 
   def create(%{assigns: %{current_user: %{group_id: group_id}}} = conn, %{"shipment" => shipment_params} = params) do
     shipment_params = Map.put(shipment_params, "group_id", group_id)
+    IO.inspect(shipment_params)
     case Shipments.create_shipment(shipment_params) do
       {:ok, shipment} ->
         conn
         |> put_flash(:info, "Shipment created successfully.")
         |> redirect(to: group_shipment_path(conn, :show, group_id, shipment))
       {:error, %Ecto.Changeset{} = changeset} ->
+        IO.puts("++++++++++++++")
+        IO.puts("++++++++++++++")
+        IO.inspect(changeset)
+        IO.puts("++++++++++++++")
+        IO.puts("++++++++++++++")
         render(conn, "new.html", group: group_id, changeset: changeset)
     end
   end
