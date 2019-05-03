@@ -1,0 +1,31 @@
+<%= if has_shipments? @shipments do %>
+  <table class="is-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+  <%= for shipment <- @shipments do %>
+      <tr>
+        <td><%= shipment.label %></td>
+        <td><%= shipment.items %></td>
+
+        <td>
+          <span><%= link "Show", to: group_project_path(@conn, :show, shipment.group_id, shipment), class: "button is-small" %></span>
+          <span><%= link "Edit", to: group_project_path(@conn, :edit, shipment.group_id, shipment), class: "button is-small" %></span>
+          <span><%= link "Delete", to: group_project_path(@conn, :delete, shipment.group_id, shipment), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
+        </td>
+      </tr>
+  <% end %>
+    </tbody>
+  </table>
+
+<% else %>
+  <p>
+    No shipments have been created.
+  </p>
+<% end %>

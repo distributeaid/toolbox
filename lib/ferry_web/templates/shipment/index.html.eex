@@ -1,24 +1,12 @@
-<h2>Listing Shipments</h2>
+<section class="section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Shipments</h1>
+    </header>
 
-<table class="table">
-  <thead>
-    <tr>
+    <%= render "index-table.partial.html", %{conn: @conn, shipments: @shipments} %>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for shipment <- @shipments do %>
-    <tr>
-
-      <td class="text-right">
-        <span><%= link "Show", to: group_shipment_path(@conn, :show, @group, shipment), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: group_shipment_path(@conn, :edit, @group, shipment), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: group_shipment_path(@conn, :delete, @group, shipment), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
-      </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
-
-<span><%= link "New Shipment", to: group_shipment_path(@conn, :new, @group) %></span>
+    <span><%= link "New Project", to: group_shipment_path(@conn, :new, @group) %></span>
+    <span><%= link "Back to Group", to: group_path(@conn, :show, @group) %></span>
+  </div>
+</section>
