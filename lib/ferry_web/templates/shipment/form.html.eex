@@ -6,25 +6,25 @@
   <% end %>
 
   <div class="form-item">
-    <%= label f, :label, class: "is-req" %>
+    <%= label f, :Label, class: "is-req" %>
     <%= text_input f, :label %>
     <%= error_tag f, :label %>
   </div>
 
   <div class="form-item">
-    <%= label f, :target_date_to_be_shipped %>
+    <%= label f, :Target_Date_To_Be_Shipped %>
     <%= text_input f, :target_date_to_be_shipped %>
     <%= error_tag f, :target_date_to_be_shipped %>
   </div>
 
   <div class="form-item">
-    <%= label f, :shipping_address %>
+    <%= label f, :Shipping_Address %>
     <%= text_input f, :receiver_address %>
     <%= error_tag f, :receiver_address %>
   </div>
 
   <div class="form-item">
-    <%= label f, :receiver_Group_Name_or_Email %>
+    <%= label f, :Receiver_Group_Name_or_Email %>
     <%= text_input f, :receiver_group_id %>
     <%= error_tag f, :receiver_group_id %>
   </div>
