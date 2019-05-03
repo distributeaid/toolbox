@@ -11,8 +11,8 @@ defmodule Ferry.Repo.Migrations.CreateShipments do
       add :sender_address, :string
       add :items, :string
       add :funding, :string
-      add :reciever_address, :string
-      add :reciever_group_id, :string
+      add :receiver_address, :string
+      add :receiver_group_id, :string
       timestamps()
     end
   end

@@ -17,11 +17,11 @@
     </p>
 
     <p>
-      <%= @shipment.reciever_address %>
+      <%= @shipment.receiver_address %>
     </p>
 
     <p>
-      <%= @shipment.reciever_group_id %>
+      <%= @shipment.receiver_group_id %>
     </p>
 
     <p>

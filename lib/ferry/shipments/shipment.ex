@@ -13,15 +13,15 @@ defmodule Ferry.Shipments.Shipment do
     field :sender_address, :string
     field :items, :string
     field :funding, :string
-    field :reciever_address, :string
-    field :reciever_group_id, :string
+    field :receiver_address, :string
+    field :receiver_group_id, :string
     timestamps()
   end
 
   @doc false
   def changeset(shipment, attrs) do
     shipment
-    |> cast(attrs, [:group_id, :sender_address, :items, :funding, :reciever_address, :reciever_group_id,
+    |> cast(attrs, [:group_id, :sender_address, :items, :funding, :receiver_address, :receiver_group_id,
         :shipment_underway, :ready, :target_date_to_be_shipped, :label ])
     |> validate_required(:label, [message: "We need to associate this shipment with a label"])
   end

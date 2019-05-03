@@ -18,25 +18,15 @@
   </div>
 
   <div class="form-item">
-    <%= label f, :ready %>
-    <%= checkbox f, :ready %>
-  </div>
-
-  <div class="form-item">
-    <%= label f, :shipment_underway %>
-    <%= checkbox f, :shipment_underway %>
-  </div>
-
-  <div class="form-item">
     <%= label f, :shipping_address %>
-    <%= text_input f, :reciever_address %>
-    <%= error_tag f, :reciever_address %>
+    <%= text_input f, :receiver_address %>
+    <%= error_tag f, :receiver_address %>
   </div>
 
   <div class="form-item">
-    <%= label f, :Reciever_Group_Name_or_Email %>
-    <%= text_input f, :reciever_group_id %>
-    <%= error_tag f, :reciever_group_id %>
+    <%= label f, :receiver_Group_Name_or_Email %>
+    <%= text_input f, :receiver_group_id %>
+    <%= error_tag f, :receiver_group_id %>
   </div>
 
   <div class="form-item">
@@ -55,6 +45,16 @@
     <%= text_input f, :sender_address %>
     <%= error_tag f, :sender_address %>
   </div>
+
+    <div class="form-item">
+      <%= label f, :Ready_To_Be_Shipped? %>
+      <%= checkbox f, :ready %>
+    </div>
+
+    <div class="form-item">
+      <%= label f, :Shipment_Underway? %>
+      <%= checkbox f, :shipment_underway %>
+    </div>
 
   <div class="form-item is-text-center">
     <%= submit "Submit", class: "button is-big" %>
