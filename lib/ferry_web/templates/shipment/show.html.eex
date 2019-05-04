@@ -1,7 +1,7 @@
 <section class="section">
   <div class="section__content">
     <header class="section__header">
-      <h1 class="section__title"><%= @shipment.label %></h1>
+      <h1 class="section__title"> Show Shipment <%= @shipment.label %></h1>
     </header>
 
     <p>

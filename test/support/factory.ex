@@ -214,7 +214,8 @@ defmodule Ferry.Factory do
 
   def shipment_factory do
     %Shipment{
-      label: "hello"
+      label: "hello",
+      group_id: 1
     }
   end
 
@@ -223,6 +224,7 @@ defmodule Ferry.Factory do
       shipment_factory(),
       %{
         label: nil,
+        status: "hello"
       }
     )
   end
