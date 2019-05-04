@@ -58,7 +58,6 @@ defmodule Ferry.Shipments do
 
   """
   def create_shipment(attrs \\ %{}) do
-    IO.inspect(attrs)
     %Shipment{}
     |> Shipment.changeset(attrs)
     |> Repo.insert()

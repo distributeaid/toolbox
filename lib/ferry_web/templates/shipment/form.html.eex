@@ -12,6 +12,16 @@
   </div>
 
   <div class="form-item">
+    <%= label f, :status %>
+    <%= select f, :status,["Planning Shipment": "planning_shipment",
+                           "Ready": "ready",
+                           "Shipment Underway": "shipment_underway",
+                           "Shipment Received": "shipment_received"] %>
+    <%= error_tag f, :status %>
+
+  </div>
+
+  <div class="form-item">
     <%= label f, :Target_Date_To_Be_Shipped %>
     <%= text_input f, :target_date_to_be_shipped %>
     <%= error_tag f, :target_date_to_be_shipped %>
@@ -40,21 +50,12 @@
     <%= text_input f, :funding %>
     <%= error_tag f, :funding %>
   </div>
+
   <div class="form-item">
     <%= label f, :Address_Where_Supplies_Are_Sent_From %>
     <%= text_input f, :sender_address %>
     <%= error_tag f, :sender_address %>
   </div>
-
-    <div class="form-item">
-      <%= label f, :Ready_To_Be_Shipped? %>
-      <%= checkbox f, :ready %>
-    </div>
-
-    <div class="form-item">
-      <%= label f, :Shipment_Underway? %>
-      <%= checkbox f, :shipment_underway %>
-    </div>
 
   <div class="form-item is-text-center">
     <%= submit "Submit", class: "button is-big" %>

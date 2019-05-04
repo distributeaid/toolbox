@@ -6,7 +6,7 @@
 
     <%= render "index-table.partial.html", %{conn: @conn, shipments: @shipments} %>
 
-    <span><%= link "New Project", to: group_shipment_path(@conn, :new, @group) %></span>
+    <span><%= link "New Shipment", to: group_shipment_path(@conn, :new, @group) %></span>
     <span><%= link "Back to Group", to: group_path(@conn, :show, @group) %></span>
   </div>
 </section>
