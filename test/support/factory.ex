@@ -13,7 +13,8 @@ defmodule Ferry.Factory do
     Locations.Address,
     Locations.Geocode,
     Profiles.Group,
-    Profiles.Project
+    Profiles.Project,
+    Shipments.Shipment
   }
 
   # ExMachina Factories
@@ -209,6 +210,23 @@ defmodule Ferry.Factory do
         "type" => "yes"
       }
     }
+  end
+
+  def shipment_factory do
+    %Shipment{
+      label: "hello",
+      group_id: 1
+    }
+  end
+
+  def invalid_shipment_factory do
+    struct!(
+      shipment_factory(),
+      %{
+        label: nil,
+        status: "hello"
+      }
+    )
   end
 
 end

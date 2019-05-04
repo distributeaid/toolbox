@@ -1,0 +1,10 @@
+<section class="section">
+  <div class="section__content">
+    <header class="section__header">
+        <h1 class="section__title">New Shipment</h1>
+    </header>
+        <%= render "form.html", Map.put(assigns, :action, group_shipment_path(@conn, :create, @group)) %>
+
+        <span><%= link "Back To Group", to: group_path(@conn, :show, @group) %></span>
+  </div>
+</section>
