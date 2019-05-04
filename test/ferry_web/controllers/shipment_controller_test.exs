@@ -36,7 +36,7 @@ defmodule FerryWeb.ShipmentControllerTest do
       #assert redirected_to(conn) == group_shipment_path(conn, :show, group, shipment)
 
       conn = get conn, group_shipment_path(conn, :show, group, shipment)
-      assert html_response(conn, 200) =~ "Show Shipment"
+      assert html_response(conn, 200) =~ shipment_params.label
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group} do
