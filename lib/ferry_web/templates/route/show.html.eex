@@ -1,0 +1,23 @@
+<h2>Show Route</h2>
+
+<ul>
+
+  <li>
+    <strong>Address:</strong>
+    <%= @route.address %>
+  </li>
+
+  <li>
+    <strong>Date:</strong>
+    <%= @route.date %>
+  </li>
+
+  <li>
+    <strong>Groups:</strong>
+    <%= @route.groups %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: group_shipment_route_path(@conn, :edit, @group, @shipment, @route) %></span>
+<span><%= link "Back", to: group_shipment_route_path(@conn, :index, @group, @shipment) %></span>

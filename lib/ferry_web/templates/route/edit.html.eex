@@ -1,0 +1,5 @@
+<h2>Edit Route</h2>
+
+<%= render "form.html", Map.put(assigns, :action, group_shipment_route_path(@conn, :update, @group, @shipment, @route)) %>
+
+<span><%= link "Back", to: group_shipment_route_path(@conn, :index, @group, @shipment) %></span>
