@@ -3,10 +3,18 @@ defmodule FerryWeb.RouteController do
 
   alias Ferry.Shipments
   alias Ferry.Shipments.Route
+  alias Ferry.Profiles
 
-  def index(conn, _params) do
-    routes = Shipments.list_routes()
-    render(conn, "index.html", routes: routes)
+
+  def index(conn, params) do
+    # could also create helpers to grab _actual_ group and shipments, but feels like
+    # routes shouldn't have access to things above it/ what use case will it need to have entire shipment or group?
+    group_id = Map.get(params, "group_id")
+    shipment_id = Map.get(params, "shipment_id")
+    #not passing in group because all groups involved with shipment should see route
+    routes = Shipments.list_routes(shipment_id)
+
+    render(conn, "index.html", group: group_id, shipment: shipment_id, routes: routes)
   end
 
   def new(conn, _params) do

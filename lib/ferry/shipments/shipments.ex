@@ -8,6 +8,7 @@ defmodule Ferry.Shipments do
   alias Ferry.Profiles.Group
 
   alias Ferry.Shipments.Shipment
+  alias Ferry.Shipments.Route
 
   @doc """
   Returns the list of shipments.
@@ -110,8 +111,6 @@ defmodule Ferry.Shipments do
     Shipment.changeset(shipment, %{})
   end
 
-  alias Ferry.Shipments.Route
-
   @doc """
   Returns the list of routes.
 
@@ -124,6 +123,18 @@ defmodule Ferry.Shipments do
   def list_routes do
     Repo.all(Route)
   end
+
+
+
+  def list_routes(shipment_id) do
+    IO.inspect(shipment_id)
+    Repo.all(
+        from r in Route,
+        where: r.shipment_id == ^shipment_id,
+        order_by: r.id
+    )
+  end
+
 
   @doc """
   Gets a single route.
