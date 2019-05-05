@@ -3,7 +3,6 @@ defmodule FerryWeb.RouteController do
 
   alias Ferry.Shipments
   alias Ferry.Shipments.Route
-  alias Ferry.Profiles
 
   defp get_ids(params) do
     { Map.get(params, "group_id"), Map.get(params, "shipment_id"), Map.get(params, "id") }
@@ -28,7 +27,7 @@ defmodule FerryWeb.RouteController do
   end
 
   def create(conn, %{"route" => route_params} = params) do
-    { group_id, shipment_id, route_id } = get_ids(params)
+    { group_id, shipment_id, _ } = get_ids(params)
     route_params = Map.put(route_params, "shipment_id", shipment_id)
 
     case Shipments.create_route(route_params) do
@@ -49,6 +48,7 @@ defmodule FerryWeb.RouteController do
 
   def edit(conn, params) do
     { group_id, shipment_id, route_id } = get_ids(params)
+
     route = Shipments.get_route!(route_id)
     changeset = Shipments.change_route(route)
     render(conn, "edit.html", group: group_id, shipment: shipment_id, route: route, changeset: changeset)
@@ -67,12 +67,8 @@ defmodule FerryWeb.RouteController do
     end
   end
 
-  defp delete_multiple
-
   def delete(conn, params) do
     { group_id, shipment_id, route_id } = get_ids(params)
-
-    Shipments.list_routes() |>
 
     route_id
     |> Shipments.get_route!
