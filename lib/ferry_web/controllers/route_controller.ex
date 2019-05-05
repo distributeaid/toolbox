@@ -16,6 +16,8 @@ defmodule FerryWeb.RouteController do
     #not passing in group because all groups involved with shipment should see route
     routes = Shipments.list_routes(shipment_id)
 
+    IO.inspect(routes)
+
     render(conn, "index.html", group: group_id, shipment: shipment_id, routes: routes)
   end
 
@@ -27,10 +29,10 @@ defmodule FerryWeb.RouteController do
 
   def create(conn, %{"route" => route_params} = params) do
     { group_id, shipment_id, route_id } = get_ids(params)
+    route_params = Map.put(route_params, "shipment_id", shipment_id)
 
     case Shipments.create_route(route_params) do
       {:ok, route} ->
-        IO.inspect(route)
         conn
         |> put_flash(:info, "Route created successfully.")
         |> redirect(to: group_shipment_route_path(conn, :show, group_id, shipment_id, route))
@@ -45,34 +47,41 @@ defmodule FerryWeb.RouteController do
     render(conn, "show.html", group: group_id, shipment: shipment_id, route: route)
   end
 
-  def edit(conn, %{"id" => id}) do
-    route = Shipments.get_route!(id)
+  def edit(conn, params) do
+    { group_id, shipment_id, route_id } = get_ids(params)
+    route = Shipments.get_route!(route_id)
     changeset = Shipments.change_route(route)
-    render(conn, "edit.html", route: route, changeset: changeset)
+    render(conn, "edit.html", group: group_id, shipment: shipment_id, route: route, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "route" => route_params}) do
-    route = Shipments.get_route!(id)
-    group = 1
-    shipment = 1
+  def update(conn, %{"route" => route_params} = params) do
+    { group_id, shipment_id, route_id } = get_ids(params)
+    route = Shipments.get_route!(route_id)
     case Shipments.update_route(route, route_params) do
       {:ok, route} ->
         conn
         |> put_flash(:info, "Route updated successfully.")
-        |> redirect(to: group_shipment_route_path(conn, :index, group, shipment, route))
+        |> redirect(to: group_shipment_route_path(conn, :show, group_id, shipment_id, route))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", route: route, changeset: changeset)
+        render(conn, "edit.html", group: group_id, shipment: shipment_id, route: route, changeset: changeset)
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    route = Shipments.get_route!(id)
-    {:ok, _route} = Shipments.delete_route(route)
-    group = 1
-    shipment = 1
+  defp delete_multiple
+
+  def delete(conn, params) do
+    { group_id, shipment_id, route_id } = get_ids(params)
+
+    Shipments.list_routes() |>
+
+    route_id
+    |> Shipments.get_route!
+    |> Shipments.delete_route
+
+    routes = Shipments.list_routes(shipment_id)
 
     conn
     |> put_flash(:info, "Route deleted successfully.")
-    |> redirect(to: group_shipment_route_path(conn, :index, group, shipment))
+    |> redirect(to: group_shipment_route_path(conn, :index, group_id, shipment_id, routes))
   end
 end

@@ -25,7 +25,6 @@ defmodule FerryWeb.ShipmentController do
     shipment_params = Map.put(shipment_params, "group_id", group.id)
     case Shipments.create_shipment(shipment_params) do
       {:ok, shipment} ->
-        IO.inspect(shipment)
         conn
         |> put_flash(:info, "Shipment created successfully.")
         |> redirect(to: group_shipment_path(conn, :show, group, shipment))

@@ -127,7 +127,6 @@ defmodule Ferry.Shipments do
 
 
   def list_routes(shipment_id) do
-    IO.inspect(shipment_id)
     Repo.all(
         from r in Route,
         where: r.shipment_id == ^shipment_id,
