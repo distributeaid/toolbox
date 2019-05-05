@@ -13,7 +13,7 @@
       </li>
     </ul>
 
-    <%= render "index-table.partial.html", %{conn: @conn, links: @links, group: @group} %>
+    <%= render "index-table.partial.html.eex", %{conn: @conn, links: @links, group: @group} %>
 
     <ul class="actions actions--inline">
       <li>

@@ -1,0 +1,26 @@
+<section class="section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title"> <%= @route.label %></h1>
+    </header>
+
+    <p>
+      <%= @route.label %>
+    </p>
+
+    <p>
+      <%= @route.address %>
+    </p>
+
+    <p>
+      <%= @route.date %>
+    </p>
+
+    <p>
+      <%= @route.groups %>
+    </p>
+
+    <span><%= link "Edit", to: group_shipment_route_path(@conn, :edit, @group, @shipment, @route) %></span>
+    <span><%= link "Back", to: group_shipment_route_path(@conn, :index, @group, @shipment) %></span>
+  </div>
+</section>
