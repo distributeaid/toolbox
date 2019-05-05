@@ -15,8 +15,6 @@ defmodule FerryWeb.RouteController do
     #not passing in group because all groups involved with shipment should see route
     routes = Shipments.list_routes(shipment_id)
 
-    IO.inspect(routes)
-
     render(conn, "index.html", group: group_id, shipment: shipment_id, routes: routes)
   end
 

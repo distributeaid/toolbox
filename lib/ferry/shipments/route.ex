@@ -4,7 +4,7 @@ defmodule Ferry.Shipments.Route do
 
 
   schema "routes" do
-    field :label, :string
+    field :label, :string, null: false
     field :address, :string
     field :date, :string
     field :groups, :string
@@ -17,6 +17,6 @@ defmodule Ferry.Shipments.Route do
   def changeset(route, attrs) do
     route
     |> cast(attrs, [:address, :date, :groups, :label, :shipment_id])
-    |> validate_required([:address, :date, :groups])
+    |> validate_required([:label, :shipment_id])
   end
 end

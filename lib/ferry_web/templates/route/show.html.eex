@@ -1,23 +1,26 @@
-<h2>Show Route</h2>
+<section class="section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title"> <%= @route.label %></h1>
+    </header>
 
-<ul>
+    <p>
+      <%= @route.label %>
+    </p>
 
-  <li>
-    <strong>Address:</strong>
-    <%= @route.address %>
-  </li>
+    <p>
+      <%= @route.address %>
+    </p>
 
-  <li>
-    <strong>Date:</strong>
-    <%= @route.date %>
-  </li>
+    <p>
+      <%= @route.date %>
+    </p>
 
-  <li>
-    <strong>Groups:</strong>
-    <%= @route.groups %>
-  </li>
+    <p>
+      <%= @route.groups %>
+    </p>
 
-</ul>
-
-<span><%= link "Edit", to: group_shipment_route_path(@conn, :edit, @group, @shipment, @route) %></span>
-<span><%= link "Back", to: group_shipment_route_path(@conn, :index, @group, @shipment) %></span>
+    <span><%= link "Edit", to: group_shipment_route_path(@conn, :edit, @group, @shipment, @route) %></span>
+    <span><%= link "Back", to: group_shipment_route_path(@conn, :index, @group, @shipment) %></span>
+  </div>
+</section>
