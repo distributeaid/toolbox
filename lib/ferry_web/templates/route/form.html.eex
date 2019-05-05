@@ -6,20 +6,20 @@
   <% end %>
 
   <div class="form-group">
-    <%= label f, :address, class: "control-label" %>
-    <%= text_input f, :address, class: "form-control" %>
+    <%= label f, :address %>
+    <%= text_input f, :address %>
     <%= error_tag f, :address %>
   </div>
 
   <div class="form-group">
-    <%= label f, :date, class: "control-label" %>
-    <%= text_input f, :date, class: "form-control" %>
+    <%= label f, :date %>
+    <%= text_input f, :date %>
     <%= error_tag f, :date %>
   </div>
 
   <div class="form-group">
-    <%= label f, :groups, class: "control-label" %>
-    <%= text_input f, :groups, class: "form-control" %>
+    <%= label f, :groups %>
+    <%= text_input f, :groups %>
     <%= error_tag f, :groups %>
   </div>
 

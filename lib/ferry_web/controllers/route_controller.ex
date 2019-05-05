@@ -6,13 +6,13 @@ defmodule FerryWeb.RouteController do
   alias Ferry.Profiles
 
   defp get_ids(params) do
-    { Map.get(params, "group_id"), Map.get(params, "shipment_id") }
+    { Map.get(params, "group_id"), Map.get(params, "shipment_id"), Map.get(params, "id") }
   end
 
   def index(conn, params) do
     # could also create helpers to grab _actual_ group and shipments, but feels like
     # routes shouldn't have access to things above it/ what use case will it need to have entire shipment or group?
-    { group_id, shipment_id } = get_ids(params)
+    { group_id, shipment_id, _ } = get_ids(params)
     #not passing in group because all groups involved with shipment should see route
     routes = Shipments.list_routes(shipment_id)
 
@@ -21,26 +21,28 @@ defmodule FerryWeb.RouteController do
 
   def new(conn, params) do
     changeset = Shipments.change_route(%Route{})
-    { group_id, shipment_id } = get_ids(params)
+    { group_id, shipment_id, _ } = get_ids(params)
     render(conn, "new.html", group: group_id, shipment: shipment_id, changeset: changeset)
   end
 
-  def create(conn, %{"route" => route_params}) do
-    group = 1
-    shipment = 1
+  def create(conn, %{"route" => route_params} = params) do
+    { group_id, shipment_id, route_id } = get_ids(params)
+
     case Shipments.create_route(route_params) do
       {:ok, route} ->
+        IO.inspect(route)
         conn
         |> put_flash(:info, "Route created successfully.")
-        |> redirect(to: group_shipment_route_path(conn, :index, group, shipment, route))
+        |> redirect(to: group_shipment_route_path(conn, :show, group_id, shipment_id, route))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", group: group_id, shipment: shipment_id, changeset: changeset)
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    route = Shipments.get_route!(id)
-    render(conn, "show.html", route: route)
+  def show(conn, params) do
+    { group_id, shipment_id, route_id } = get_ids(params)
+    route = Shipments.get_route!(route_id)
+    render(conn, "show.html", group: group_id, shipment: shipment_id, route: route)
   end
 
   def edit(conn, %{"id" => id}) do
