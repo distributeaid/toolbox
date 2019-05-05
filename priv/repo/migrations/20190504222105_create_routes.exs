@@ -8,6 +8,7 @@ defmodule Ferry.Repo.Migrations.CreateRoutes do
       add :date, :string
       add :groups, :string
       add :shipment_id, :string
+      add :checklist, {:array, :string}
 
       timestamps()
     end

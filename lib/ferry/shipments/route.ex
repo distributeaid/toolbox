@@ -9,6 +9,7 @@ defmodule Ferry.Shipments.Route do
     field :date, :string
     field :groups, :string
     field :shipment_id, :string
+    field :checklist, {:array, :string}
 
     timestamps()
   end
@@ -16,7 +17,7 @@ defmodule Ferry.Shipments.Route do
   @doc false
   def changeset(route, attrs) do
     route
-    |> cast(attrs, [:address, :date, :groups, :label, :shipment_id])
+    |> cast(attrs, [:address, :date, :groups, :label, :shipment_id, :checklist])
     |> validate_required([:label, :shipment_id])
   end
 end

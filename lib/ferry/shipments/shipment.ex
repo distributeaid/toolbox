@@ -1,6 +1,7 @@
 defmodule Ferry.Shipments.Shipment do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Ferry.Shipments.Route
 
   schema "shipments" do
     field :label, :string
@@ -12,6 +13,9 @@ defmodule Ferry.Shipments.Shipment do
     field :funding, :string
     field :receiver_address, :string
     field :receiver_group_id, :string
+
+    has_many :routes, Route
+
     timestamps()
   end
 

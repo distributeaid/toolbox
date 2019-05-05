@@ -30,6 +30,51 @@
   </div>
 
   <div class="form-item is-text-center">
+    <input type="checkbox" name="check_for_custom_list" id="checkForCustomList" onclick="showCustomList()">
+    Do you want to create a custom list of steps for this stop?
+    <br>
+  </div>
+
+  <div class="form-item is-inline" id="customList" hidden>
+      <%= label f, :checklist %>
+      <input id="route_checklist" name="route[checklist]" type="text" oninput="createNewCheck()">
+      <%= error_tag f, :checklist %>
+  </div>
+
+  <div class="form-item is-text-center">
     <%= submit "Submit", class: "button is-big" %>
   </div>
 <% end %>
+
+
+<script>
+let value = 0;
+function showCustomList() {
+    let check = document.getElementById("checkForCustomList");
+    if(check.checked===false) document.getElementById("customList").style.display = 'none';
+    else document.getElementById("customList").style.display = 'inline';
+}
+
+
+
+function createNewCheck(){
+    value += 1;
+    let container = document.getElementById("customList");
+    let input = document.createElement("input");
+    input.type = 'text';
+    input.name = `route[checklist_${value}]`;
+    input.id='route_checklist';
+    input.oninput = function hello() {
+            if( typeof hello.counter == 'undefined' )
+                hello.counter = false;
+            if(hello.counter === false){
+                createNewCheck();
+                console.log("HERE");
+            }
+            hello.counter = true;
+    };
+    container.appendChild(input);
+}
+
+
+</script>
