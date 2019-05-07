@@ -37,7 +37,7 @@
 
   <div class="form-item is-inline" id="customList" hidden>
       <%= label f, :checklist %>
-      <input id="route_checklist" name="route[checklist]" type="text" oninput="createNewCheck()">
+      <input id="route_checklist" name="route[checklist]_0" type="text" oninput="checkTicket(this)">
       <%= error_tag f, :checklist %>
   </div>
 
@@ -48,30 +48,41 @@
 
 
 <script>
-let value = 0;
+let gateKeeper = {
+    ledger: [],
+    give_ticket: function(name){
+        
+        if(!this.ledger.includes(name)){
+            this.ledger.push(name);
+            return true;
+        }
+        return false;
+    }
+};
+
 function showCustomList() {
     let check = document.getElementById("checkForCustomList");
     if(check.checked===false) document.getElementById("customList").style.display = 'none';
     else document.getElementById("customList").style.display = 'inline';
 }
 
+function checkTicket(ele){
+    if(gateKeeper.give_ticket(ele.name)){
+        createNewInput(ele.name);
+    }
+}
 
+function createNewInput(name){
 
-function createNewCheck(){
-    value += 1;
+    let num = name.substring(17, name[name.length]);
+    let value = Number.isNaN(num) ? 1 : Number(num) + 1;
     let container = document.getElementById("customList");
     let input = document.createElement("input");
     input.type = 'text';
-    input.name = `route[checklist_${value}]`;
-    input.id='route_checklist';
-    input.oninput = function hello() {
-            if( typeof hello.counter == 'undefined' )
-                hello.counter = false;
-            if(hello.counter === false){
-                createNewCheck();
-                console.log("HERE");
-            }
-            hello.counter = true;
+    input.name = `route[checklist]_${value}`;
+    input.id=`route_checklist`;
+    input.oninput = function() {
+        checkTicket(input);
     };
     container.appendChild(input);
 }

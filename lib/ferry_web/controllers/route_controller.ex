@@ -27,6 +27,10 @@ defmodule FerryWeb.RouteController do
   def create(conn, %{"route" => route_params} = params) do
     { group_id, shipment_id, _ } = get_ids(params)
     route_params = Map.put(route_params, "shipment_id", shipment_id)
+    IO.puts("++++++++++++++++++++")
+    IO.puts("++++++++++++++++++++")
+    IO.inspect(params)
+    IO.puts("++++++++++++++++++++")
 
     case Shipments.create_route(route_params) do
       {:ok, route} ->
