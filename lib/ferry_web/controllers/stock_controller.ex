@@ -26,7 +26,7 @@ defmodule FerryWeb.StockController do
   def index(conn, %{"group_id" => group_id}) do
     group = Profiles.get_group!(group_id)
     stocks = Inventory.list_stocks()
-    render(conn, "index.html", group: group, stocks: stocks)
+    render(conn, "index.html", current_group: current_group(conn), group: group, stocks: stocks)
   end
 
   def show(conn, %{"group_id" => group_id, "id" => id}) do
@@ -41,8 +41,10 @@ defmodule FerryWeb.StockController do
   def new(conn, %{"group_id" => group_id}) do
     group = Profiles.get_group!(group_id)
     projects = Profiles.list_projects(group)
+    categories = Inventory.list_top_categories()
+    items = Inventory.list_top_items()
     changeset = Inventory.change_stock(%Stock{})
-    render(conn, "new.html", group: group, projects: projects, changeset: changeset)
+    render(conn, "new.html", group: group, projects: projects, categories: categories, items: items, changeset: changeset)
   end
 
   def create(conn, %{"group_id" => group_id, "stock" => stock_params}) do
@@ -55,7 +57,9 @@ defmodule FerryWeb.StockController do
         |> redirect(to: group_stock_path(conn, :index, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         projects = Profiles.list_projects(group)
-        render(conn, "new.html", group: group, projects: projects, changeset: changeset)
+        categories = Inventory.list_top_categories()
+        items = Inventory.list_top_items()
+        render(conn, "new.html", group: group, projects: projects, categories: categories, items: items, changeset: changeset)
     end
   end
 
@@ -65,9 +69,11 @@ defmodule FerryWeb.StockController do
   def edit(conn, %{"group_id" => group_id, "id" => id}) do
     group = Profiles.get_group!(group_id)
     projects = Profiles.list_projects(group)
+    categories = Inventory.list_top_categories()
+    items = Inventory.list_top_items()
     stock = Inventory.get_stock!(id)
     changeset = Inventory.change_stock(stock)
-    render(conn, "edit.html", group: group, projects: projects, stock: stock, changeset: changeset)
+    render(conn, "edit.html", group: group, projects: projects, categories: categories, items: items, stock: stock, changeset: changeset)
   end
 
   def update(conn, %{"group_id" => group_id, "id" => id, "stock" => stock_params}) do
@@ -81,7 +87,9 @@ defmodule FerryWeb.StockController do
         |> redirect(to: group_stock_path(conn, :index, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         projects = Profiles.list_projects(group)
-        render(conn, "edit.html", group: group, projects: projects, stock: stock, changeset: changeset)
+        categories = Inventory.list_top_categories()
+        items = Inventory.list_top_items()
+        render(conn, "edit.html", group: group, projects: projects, categories: categories, items: items, stock: stock, changeset: changeset)
     end
   end
 

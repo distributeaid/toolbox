@@ -6,6 +6,7 @@
     "watch": "brunch watch --stdin"
   },
   "dependencies": {
+    "datatables.net": "^1.10.19",
     "intercooler": "^1.2.1",
     "jquery": "^3.3.1",
     "phoenix": "file:../deps/phoenix",

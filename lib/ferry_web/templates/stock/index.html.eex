@@ -1,13 +1,24 @@
-<section class="section">
+<section class="section section--full-width">
   <div class="section__content">
     <header class="section__header">
       <h1 class="section__title">Group Inventory</h1>
       <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
     </header>
 
-    <%= render "index_table.partial.html", %{conn: @conn, group: @group, stocks: @stocks} %>
+    <ul class="actions actions--left">
+      <li>
+        <%= link to: group_path(@conn, :show, @group), class: "action action--back" do %>
+          <i class="fas fa-arrow-left"></i>
+        <% end %>
+        Back To Group
+      </li>
+    </ul>
 
-    <span><%= link "Add Stock", to: group_stock_path(@conn, :new, @group) %></span>
-    <span><%= link "Back to Group", to: group_path(@conn, :show, @group) %></span>
+    <%= render "index_table.partial.html", %{
+      conn: @conn,
+      group: @group,
+      stocks: @stocks,
+      can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+    } %>
   </div>
 </section>

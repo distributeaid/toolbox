@@ -7,6 +7,7 @@ defmodule Ferry.Inventory.Category do
 
   schema "inventory_categories" do
     field :name, :string
+    field :count, :integer, virtual: true
 
     has_many :items, Item
 

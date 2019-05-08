@@ -106,9 +106,16 @@ defmodule Ferry.Inventory do
       "mod" => mod,
     })
 
-    %Stock{}
+    {status, result} = %Stock{}
     |> Stock.changeset(attrs)
     |> Repo.insert()
+
+    case status do
+      :ok -> result
+        |> Stock.image_changeset(attrs)
+        |> Repo.update()
+      :error -> {status, result}
+    end
   end
 
   @doc """
@@ -135,6 +142,7 @@ defmodule Ferry.Inventory do
 
     stock
     |> Stock.changeset(attrs)
+    |> Stock.image_changeset(attrs)
     |> Repo.update()
   end
 
@@ -179,6 +187,18 @@ defmodule Ferry.Inventory do
   # Category
   # ================================================================================
 
+  def list_top_categories(n \\ 10) do
+    Repo.all(
+      from c in Category,
+      left_join: i in assoc(c, :items),
+      left_join: s in assoc(i, :stocks),
+      group_by: c.id,
+      order_by: [desc: count(c.id), asc: c.id],
+      limit: ^n,
+      select_merge: %{count: count(c.id)}
+    )
+  end
+
   defp get_or_create_category(attrs \\ %{})
 
   defp get_or_create_category(%{"name" => name} = attrs) do
@@ -203,7 +223,24 @@ defmodule Ferry.Inventory do
 
   # Item
   # ================================================================================
-  
+
+  # TODO: Gives top 100 items, which may / may not correspond to the top 10
+  #       categories in `list_top_categories`.  Should combine these two and
+  #       present a single category & item select input on the stock creation
+  #       form, with categories forming the opt-group and items organized as
+  #       selections within them.
+  def list_top_items(n \\ 100) do
+    Repo.all(
+      from i in Item,
+#      join: c in assoc(i, :category),
+      left_join: s in assoc(i, :stocks),
+      group_by: i.id,
+      order_by: [desc: count(i.id), asc: i.id],
+      limit: ^n,
+      select_merge: %{count: count(i.id)}
+    )
+  end
+
   defp get_or_create_item(category_or_changeset, attrs \\ %{})
 
   defp get_or_create_item(%Category{} = category, attrs) do

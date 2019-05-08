@@ -27,7 +27,6 @@ defmodule Ferry.Inventory.Stock do
     |> validate_required([:project_id, :count])
     |> validate_number(:count, greater_than_or_equal_to: 0)
 
-    |> cast_attachments(attrs, [:photo])
     |> cast_assoc(:packaging)
     |> put_assoc(:item, attrs["item"])
     |> put_assoc(:mod, attrs["mod"])
@@ -49,5 +48,11 @@ defmodule Ferry.Inventory.Stock do
     |> assoc_constraint(:item)
     |> assoc_constraint(:mod)
     |> assoc_constraint(:packaging)
+  end
+
+  @doc false
+  def image_changeset(stock, attrs) do
+    stock
+    |> cast_attachments(attrs, [:photo])
   end
 end

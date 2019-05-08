@@ -18,7 +18,22 @@ $(document).ready(function() {
   Initialize Select2
   ------------------------------------------------------------
   */
-  $('select[multiple]').select2();
+  $('.select').select2({
+    closeOnSelect: false
+  });
+
+  $('.select-and-input').select2({
+    tags: true
+  });
+
+  /*
+  Initialize Datatables
+  ------------------------------------------------------------
+  */
+  $('#group-stock-table').DataTable({
+    info: false,
+    paging: false,
+  });
 
   /* Smooth Scroll to Anchors
    * ------------------------------------------------------

@@ -5,6 +5,14 @@
       <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
     </header>
 
+    <ul class="actions">
+      <li>
+        <%= link to: group_stock_path(@conn, :index, @group), class: "action" do %>
+          <i class="fas fa-times"></i>
+        <% end %>
+      </li>
+    </ul>
+
     <p>
       <%= @stock.project.name %> has
 
@@ -21,8 +29,11 @@
       available for shipment.
     </p>
 
-    <span><%= link "Edit", to: group_stock_path(@conn, :edit, @group, @stock) %></span>
-    <span><%= link "Back to Inventory", to: group_stock_path(@conn, :index, @group) %></span>
-    <span><%= link "Back to Group", to: group_path(@conn, :show, @group) %></span>
+    <%= if @stock.photo do %>
+      <p>
+        <%= stock_photo(@stock) %>
+      </p>
+    <% end %>
+
   </div>
 </section>

@@ -11,6 +11,70 @@ defmodule Ferry.InventoryTest do
     Stock
   }
 
+  # Categories
+  # ================================================================================
+
+  describe "categories" do
+    test "list_top_categories/1 returns the top n categories" do
+      # no categories
+      assert Inventory.list_top_categories() == []
+
+      # <= n categories
+      stock1 = insert(:stock)
+      item = insert(:item)
+      stock2 = insert(:stock, %{item: item})
+      _ = insert(:stock, %{item: item}) # just adds more stock entries for that category
+      categories = Inventory.list_top_categories(3)
+      assert Enum.at(categories, 0).id == stock2.item.category.id
+      assert Enum.at(categories, 0).count == 2
+      assert Enum.at(categories, 1).id == stock1.item.category.id
+      assert Enum.at(categories, 1).count == 1
+
+      # > n categories
+      stock3 = insert(:stock)
+      _stock4 = insert(:stock)
+      categories = Inventory.list_top_categories(3)
+      assert Enum.at(categories, 0).id == stock2.item.category.id
+      assert Enum.at(categories, 0).count == 2
+      assert Enum.at(categories, 1).id == stock1.item.category.id
+      assert Enum.at(categories, 1).count == 1
+      assert Enum.at(categories, 2).id == stock3.item.category.id
+      assert Enum.at(categories, 2).count == 1
+    end
+  end
+
+  # Categories
+  # ================================================================================
+
+  describe "items" do
+    test "list_top_items/1 returns the top n items" do
+      # no items
+      assert Inventory.list_top_items() == []
+
+      # <= n items
+      stock1 = insert(:stock)
+      item = insert(:item)
+      stock2 = insert(:stock, %{item: item})
+      _ = insert(:stock, %{item: item}) # just adds more stock entries for that item
+      items = Inventory.list_top_items(3)
+      assert Enum.at(items, 0).id == stock2.item.id
+      assert Enum.at(items, 0).count == 2
+      assert Enum.at(items, 1).id == stock1.item.id
+      assert Enum.at(items, 1).count == 1
+
+      # > n items
+      stock3 = insert(:stock)
+      _stock4 = insert(:stock)
+      items = Inventory.list_top_items(3)
+      assert Enum.at(items, 0).id == stock2.item.id
+      assert Enum.at(items, 0).count == 2
+      assert Enum.at(items, 1).id == stock1.item.id
+      assert Enum.at(items, 1).count == 1
+      assert Enum.at(items, 2).id == stock3.item.id
+      assert Enum.at(items, 2).count == 1
+    end
+  end
+
   # Stocks
   # ================================================================================
   describe "stocks" do

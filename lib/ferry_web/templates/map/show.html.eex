@@ -13,7 +13,7 @@
 
       <div class="form-item is-inline">
         <%= label f, :group_filter, "Groups" %>
-        <%= multiple_select f, :group_filter, @map.group_filter_labels, [multiple: true] %>
+        <%= multiple_select f, :group_filter, @map.group_filter_labels, multiple: true, class: "select" %>
       </div>
 
       <div class="form-item is-text-center">

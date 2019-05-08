@@ -1,6 +1,8 @@
 defmodule FerryWeb.StockView do
   use FerryWeb, :view
 
+  alias Ferry.Inventory.Stock.Photo
+
   def has_stocks?(stocks) do
     length(stocks) > 0
   end
@@ -33,6 +35,21 @@ defmodule FerryWeb.StockView do
 
   def list_seasons do
     ["---": nil, "Summer": "summer", "Winter": "winter"]
+  end
+
+  def stock_photo(stock) do
+    alt_text = "Example of #{stock.item.name} (#{stock.item.category.name})"
+    url = Photo.url({stock.photo, stock}, :original)
+    img_tag url, alt: alt_text
+  end
+
+  # duck typing- works for categories & models since they both have id / name fields
+  def selectify(names_list) do
+    names_list
+    |> Enum.map(fn %{name: name} ->
+      name
+    end)
+    |> Enum.sort()
   end
 
 end

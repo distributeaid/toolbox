@@ -172,7 +172,7 @@ form .is-req {
 }
 
 .form-item.is-inline-offset {
-  padding-left: 105px;
+  padding-left: 113px;
   padding-right: 100px;
 }
 
@@ -210,11 +210,29 @@ form .is-req {
 }
 
 /*
+Select2 Overrides
+------------------------------------------------------------
+*/
+.select2-search--dropdown .select2-search__field {
+  padding-left: 32px; /* restore Kube's padding to give the search icon space */
+}
+
+
+/*
 Table
 ------------------------------------------------------------
 */
 table {
   font-size: 1rem;
+}
+
+td {
+  vertical-align: middle;
+}
+
+th::after,
+td::after {
+  margin-bottom: 0;
 }
 
 table.is-striped tbody th,
@@ -229,6 +247,45 @@ table.is-striped tr:nth-child(odd) td {
 table.is-striped tr:nth-child(even) td {
   background-color: rgba(0, 0, 0, 0.05);
 }
+
+
+/*
+Data Tables Overrides
+================================================================================
+*/
+.dataTable th {
+  cursor: pointer;
+}
+
+.sorting_asc::after,
+.sorting_desc::after {
+  position: relative;
+  display: inline-block;
+  left: 0.5rem;
+}
+
+.sorting_asc::after {
+  content: "▲";
+}
+
+.sorting_desc::after {
+  content: "▼";
+}
+
+.dataTables_filter {
+  text-align: center;
+}
+
+.dataTables_filter label {
+  margin-bottom: 0;
+}
+
+.dataTables_filter input {
+  display: inline-block;
+  width: 25%;
+  margin-left: 1rem;
+}
+
 
 
 /* Objects
@@ -316,6 +373,10 @@ p.section__subtitle {
     padding-top: 0;
   }
 
+  .section--full-width {
+    width: 100%;
+  }
+
   .section--focus {
     width: auto;
     min-width: 50%;
@@ -351,6 +412,10 @@ Action
   top: 0;
   right: 0;
   margin: 0;
+}
+
+.actions--left {
+  left: 0;
 }
 
 ul.actions {
@@ -907,16 +972,20 @@ Site Footer // Section
 Section // Actions
 ------------------------------------------------------------
 */
-.section .actions {
+.section__content > .actions {
   top: 1rem;
   right: 1rem;
+}
+
+.section__content > .actions--left {
+  left: 1rem;
 }
 
 /*
 Subsection // Actions
 ------------------------------------------------------------
 */
-.subsection .actions {
+.subsection > .actions {
   top: 0;
   right: 0;
 }

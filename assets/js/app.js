@@ -15,6 +15,10 @@ import "phoenix_html"
 import "jquery"
 import "intercooler"
 
+// jquery plugins
+require('select2')();
+require('datatables.net')();
+
 // Import local files
 //
 // Local files can be imported directly using relative
