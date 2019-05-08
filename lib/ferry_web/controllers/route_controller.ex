@@ -30,11 +30,7 @@ defmodule FerryWeb.RouteController do
     # adds checklist to params in proper form
     route_params = route_params
                   |> Map.put("shipment_id", shipment_id)
-                  |> Map.put("checklist",
-                       params
-                       |> Enum.filter(fn {k, v} -> String.contains?(k, "checklist") and v != "" end)
-                       |> Enum.map(fn {_, v} -> v end)
-    )
+                  |> Map.put("checklist", (for {k, v} <- params, String.contains?(k, "checklist"), v != "", do: v))
 
     case Shipments.create_route(route_params) do
       {:ok, route} ->

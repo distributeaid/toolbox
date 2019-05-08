@@ -14,8 +14,6 @@ defmodule Ferry.Shipments.Shipment do
     field :receiver_address, :string
     field :receiver_group_id, :string
 
-    has_many :routes, Route
-
     timestamps()
   end
 
