@@ -20,7 +20,24 @@
       <%= @route.groups %>
     </p>
 
+    <ul class="show_checklist">
+    <%= for r <- @route.checklist do %>
+    <%= content_tag(:li, r)  %>
+    <% end %>
+    </ul>
+
     <span><%= link "Edit", to: group_shipment_route_path(@conn, :edit, @group, @shipment, @route) %></span>
     <span><%= link "Back", to: group_shipment_route_path(@conn, :index, @group, @shipment) %></span>
   </div>
 </section>
+
+
+<script>
+let list = document.querySelector('.show_checklist');
+console.log(list);
+list.addEventListener('click', function(ev) {
+  if (ev.target.tagName === 'LI') {
+    ev.target.classList.toggle('checked');
+  }
+}, false);
+</script>

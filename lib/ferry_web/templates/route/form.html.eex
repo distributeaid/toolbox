@@ -50,7 +50,7 @@
 <script>
 let gateKeeper = {
     ledger: [],
-    give_ticket: function(name){
+    check_ticket: function(name){
         
         if(!this.ledger.includes(name)){
             this.ledger.push(name);
@@ -67,7 +67,7 @@ function showCustomList() {
 }
 
 function checkTicket(ele){
-    if(gateKeeper.give_ticket(ele.name)){
+    if(gateKeeper.check_ticket(ele.name)){
         createNewInput(ele.name);
     }
 }

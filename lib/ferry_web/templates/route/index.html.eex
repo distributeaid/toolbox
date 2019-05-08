@@ -4,7 +4,7 @@
       <h1 class="section__title">Routes for your shipment</h1>
     </header>
 
-    <%= render "index-table.partial.html", %{conn: @conn, routes: @routes} %>
+    <%= render "index-table.partial.html", %{conn: @conn, group: @group, shipment: @shipment, routes: @routes} %>
 
     <span><%= link "New Route", to: group_shipment_route_path(@conn, :new, @group, @shipment) %></span>
     <span><%= link "Back to Group", to: group_path(@conn, :show, @group) %></span>

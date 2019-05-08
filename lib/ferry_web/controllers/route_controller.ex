@@ -26,11 +26,15 @@ defmodule FerryWeb.RouteController do
 
   def create(conn, %{"route" => route_params} = params) do
     { group_id, shipment_id, _ } = get_ids(params)
-    route_params = Map.put(route_params, "shipment_id", shipment_id)
-    IO.puts("++++++++++++++++++++")
-    IO.puts("++++++++++++++++++++")
-    IO.inspect(params)
-    IO.puts("++++++++++++++++++++")
+
+    # adds checklist to params in proper form
+    route_params = route_params
+                  |> Map.put("shipment_id", shipment_id)
+                  |> Map.put("checklist",
+                       params
+                       |> Enum.filter(fn {k, v} -> String.contains?(k, "checklist") and v != "" end)
+                       |> Enum.map(fn {_, v} -> v end)
+    )
 
     case Shipments.create_route(route_params) do
       {:ok, route} ->
