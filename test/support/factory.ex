@@ -14,7 +14,8 @@ defmodule Ferry.Factory do
     Locations.Geocode,
     Profiles.Group,
     Profiles.Project,
-    Shipments.Shipment
+    Shipments.Shipment,
+    Shipments.Role
   }
 
   # ExMachina Factories
@@ -212,10 +213,20 @@ defmodule Ferry.Factory do
     }
   end
 
+  # Shipments
+  # ------------------------------------------------------------
+
   def shipment_factory do
     %Shipment{
-      label: "hello",
-      group_id: 1
+      label: sequence("hello"),
+      target_date_to_be_shipped: "today",
+      status: Enum.random(["planning_shipment", "ready", "shipment_underway", "shipment_received"]),
+      sender_address: "an address",
+      items: "some stuff",
+      funding: "$nothing",
+      receiver_address: "another address",
+
+      roles: []
     }
   end
 
@@ -223,8 +234,39 @@ defmodule Ferry.Factory do
     struct!(
       shipment_factory(),
       %{
-        label: nil,
+        label: "",
         status: "hello"
+      }
+    )
+  end
+
+  def with_role(shipment, group \\ %{}) do
+    group = case group do
+      %Group{} -> group
+      _ -> insert(:group, group) # `group` is attrs for :group factory
+    end
+
+    role = insert(:shipment_role, %{shipment_id: shipment.id, group: group})
+
+    # append the role to shipment.roles and return the shipment
+    %{shipment | roles: shipment.roles ++ [role]}
+  end
+
+  # Shipment Role
+  # ------------------------------------------------------------
+
+  def shipment_role_factory do
+    %Role{
+      label: Enum.random(["Collector", "Transporter", "Distributor", "Funder", "Observer"]),
+      description: sequence("I am description #")
+    }
+  end
+
+  def invalid_shipment_role_factory do
+    struct!(
+      shipment_role_factory(),
+      %{
+        label: ""
       }
     )
   end

@@ -4,10 +4,15 @@ defmodule Ferry.Shipments do
   """
 
   import Ecto.Query, warn: false
+  alias Ecto.Changeset
   alias Ferry.Repo
-  alias Ferry.Profiles.Group
 
+  alias Ferry.Profiles.Group
+  alias Ferry.Shipments.Role
   alias Ferry.Shipments.Shipment
+
+  # Shipment
+  # ==============================================================================
 
   @doc """
   Returns the list of shipments.
@@ -19,16 +24,29 @@ defmodule Ferry.Shipments do
 
   """
   def list_shipments do
-    Repo.all(Shipment)
+    Repo.all(
+      from s in Shipment,
+      order_by: s.id,
+      left_join: r in assoc(s, :roles),
+      left_join: g in assoc(r, :group),
+      preload: [roles: {r, group: g}]
+    )
   end
 
   def list_shipments(%Group{} = group) do
     Repo.all(
       from s in Shipment,
-      where: s.group_id == ^group.id,
-      order_by: s.id
+      order_by: s.id,
+      left_join: r in assoc(s, :roles),
+      where: r.group_id == ^group.id,
+
+      # TODO: Can we do all the queries in one go? Currently need to do extra
+      # queries for these.  If you try to inline it (see list_shipments/0 above)
+      # then the where clause will only select the 1 role that the group is in.
+      preload: [roles: :group]
     )
   end
+
   @doc """
   Gets a single shipment.
 
@@ -43,7 +61,14 @@ defmodule Ferry.Shipments do
       ** (Ecto.NoResultsError)
 
   """
-  def get_shipment!(id), do: Repo.get!(Shipment, id)
+  def get_shipment!(id) do
+    query = from s in Shipment,
+      left_join: r in assoc(s, :roles),
+      left_join: g in assoc(r, :group),
+      preload: [roles: {r, group: g}]
+
+    Repo.get!(query, id)
+  end
 
   @doc """
   Creates a shipment.
@@ -58,8 +83,10 @@ defmodule Ferry.Shipments do
 
   """
   def create_shipment(attrs \\ %{}) do
+    # TODO: force at least 1 role to exist to prevent orphan shipments
     %Shipment{}
     |> Shipment.changeset(attrs)
+    |> Changeset.cast_assoc(:roles)
     |> Repo.insert()
   end
 
@@ -108,5 +135,43 @@ defmodule Ferry.Shipments do
   """
   def change_shipment(%Shipment{} = shipment) do
     Shipment.changeset(shipment, %{})
+  end
+
+  # Roles
+  # ================================================================================
+
+  def get_role!(id) do
+    query = from r in Role,
+      join: g in assoc(r, :group),
+      preload: [group: g]
+
+    Repo.get!(query, id)
+  end
+
+  def create_role(%Group{} = group, %Shipment{} = shipment, attrs \\ %{}) do
+    attrs = Map.merge(attrs, %{
+      group_id: group.id,
+      shipment_id: shipment.id
+    })
+
+    %Role{}
+    |> Role.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  # TODO: shouldn't be able to change group / shipment
+  def update_role(%Role{} = role, attrs) do
+    role
+    |> Role.changeset(attrs)
+    |> Repo.update()
+  end
+
+  # TODO: force at least 1 role to exist to prevent orphan shipments
+  def delete_role(%Role{} = role) do
+    Repo.delete(role)
+  end
+
+  def change_role(%Role{} = role) do
+    Role.changeset(role, %{})
   end
 end

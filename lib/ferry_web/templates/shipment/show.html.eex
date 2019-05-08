@@ -21,10 +21,6 @@
     </p>
 
     <p>
-      <%= @shipment.receiver_group_id %>
-    </p>
-
-    <p>
       <%= @shipment.target_date_to_be_shipped %>
     </p>
     

@@ -3,6 +3,9 @@ defmodule FerryWeb.ShipmentControllerTest do
 
   alias Ferry.Shipments
 
+  # Shipment Controller Tests
+  # ==============================================================================
+
   setup do
     group = insert(:group)
     user = insert(:user, group: group)
@@ -13,6 +16,14 @@ defmodule FerryWeb.ShipmentControllerTest do
     {:ok, conn: conn, group: group, user: user, shipment: shipment}
   end
 
+  # Errors
+  # ----------------------------------------------------------
+  # TODO
+
+
+  # Show
+  # ----------------------------------------------------------
+
   describe "index" do
     test "lists all shipments", %{conn: conn, group: group, shipment: shipment} do
       # TODO: Need to mock repo call here
@@ -20,6 +31,16 @@ defmodule FerryWeb.ShipmentControllerTest do
       assert html_response(conn, 200) =~ "Shipments"
     end
   end
+
+  describe "show" do
+    test "lists the specified shipment", %{conn: conn, group: group, shipment: shipment} do
+      conn = get conn, group_shipment_path(conn, :show, group, shipment)
+      assert html_response(conn, 200) =~ shipment.label
+    end
+  end
+
+  # Create
+  # ----------------------------------------------------------
 
   describe "new shipment" do
     test "renders form", %{conn: conn, group: group, shipment: shipment} do
@@ -45,9 +66,10 @@ defmodule FerryWeb.ShipmentControllerTest do
     end
   end
 
-  describe "edit shipment" do
-    setup [:create_shipment]
+  # Update
+  # ----------------------------------------------------------
 
+  describe "edit shipment" do
     test "renders form for editing chosen shipment", %{conn: conn, group: group, shipment: shipment} do
       conn = get conn, group_shipment_path(conn, :edit,  group, shipment)
       assert html_response(conn, 200) =~ "Edit Shipment"
@@ -55,8 +77,6 @@ defmodule FerryWeb.ShipmentControllerTest do
   end
 
   describe "update shipment" do
-    setup [:create_shipment]
-
     test "redirects when data is valid", %{conn: conn, group: group, shipment: shipment} do
       shipment_params = params_for(:shipment)
       conn = put conn, group_shipment_path(conn, :update, group, shipment), shipment: shipment_params
@@ -72,9 +92,10 @@ defmodule FerryWeb.ShipmentControllerTest do
     end
   end
 
-  describe "delete shipment" do
-    setup [:create_shipment]
+  # Delete
+  # ----------------------------------------------------------
 
+  describe "delete shipment" do
     test "deletes chosen shipment", %{conn: conn, group: group, shipment: shipment} do
       conn = delete conn, group_shipment_path(conn, :delete, group, shipment)
       assert redirected_to(conn) == group_shipment_path(conn, :index, group)
@@ -84,8 +105,4 @@ defmodule FerryWeb.ShipmentControllerTest do
     end
   end
 
-  defp create_shipment(_) do
-    shipment = insert(:shipment)
-    {:ok, shipment: shipment}
-  end
 end

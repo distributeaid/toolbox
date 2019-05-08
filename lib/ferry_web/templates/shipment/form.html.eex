@@ -34,12 +34,6 @@
   </div>
 
   <div class="form-item">
-    <%= label f, :Receiver_Group_Name_or_Email %>
-    <%= text_input f, :receiver_group_id %>
-    <%= error_tag f, :receiver_group_id %>
-  </div>
-
-  <div class="form-item">
     <%= label f, :Shipping_Items %>
     <%= text_input f, :items %>
     <%= error_tag f, :items %>
