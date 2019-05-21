@@ -32,6 +32,9 @@ defmodule FerryWeb.RouteController do
                   |> Map.put("shipment_id", shipment_id)
                   |> Map.put("checklist", (for {k, v} <- params, String.contains?(k, "checklist"), v != "", do: v))
 
+    IO.inspect(params)
+    IO.inspect(conn)
+
     case Shipments.create_route(route_params) do
       {:ok, route} ->
         conn

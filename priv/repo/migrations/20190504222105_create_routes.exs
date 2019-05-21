@@ -7,8 +7,9 @@ defmodule Ferry.Repo.Migrations.CreateRoutes do
       add :address, :string
       add :date, :string
       add :groups, :string
-      add :shipment_id, :string
       add :checklist, {:array, :string}
+
+      add :shipment_id, references(:shipments, on_delete: :delete_all), null: false
 
       timestamps()
     end

@@ -5,7 +5,7 @@
       <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
     </header>
 
-    <%= render "index-table.partial.html.eex", %{conn: @conn, projects: @projects} %>
+    <%= render "index-table.partial.html", %{conn: @conn, projects: @projects} %>
 
     <span><%= link "New Project", to: group_project_path(@conn, :new, @group) %></span>
     <span><%= link "Back to Group", to: group_path(@conn, :show, @group) %></span>

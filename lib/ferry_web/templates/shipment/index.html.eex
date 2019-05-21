@@ -4,7 +4,7 @@
       <h1 class="section__title">Shipments</h1>
     </header>
 
-    <%= render "index-table.partial.html.eex", %{conn: @conn, shipments: @shipments} %>
+    <%= render "index-table.partial.html", %{conn: @conn, shipments: @shipments} %>
 
     <span><%= link "New Shipment", to: group_shipment_path(@conn, :new, @group) %></span>
     <span><%= link "Back to Group", to: group_path(@conn, :show, @group) %></span>
