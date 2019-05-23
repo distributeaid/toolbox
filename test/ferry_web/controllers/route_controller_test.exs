@@ -14,7 +14,7 @@ defmodule FerryWeb.RouteControllerTest do
 
   describe "index" do
     test "lists all routes", %{conn: conn} do
-      conn = get conn, group_shipment_route_path(conn, :index, group, shipment))
+      conn = get conn, group_shipment_route_path(conn, :index, group, shipment)
       assert html_response(conn, 200) =~ "Listing Routes"
     end
   end
@@ -74,7 +74,7 @@ defmodule FerryWeb.RouteControllerTest do
 
     test "deletes chosen route", %{conn: conn, route: route} do
       conn = delete conn, group_shipment_route_path(conn, :delete, route)
-      assert redirected_to(conn) == group_shipment_route_path(conn, :index, group, shipment))
+      assert redirected_to(conn) == group_shipment_route_path(conn, :index, group, shipment)
       assert_error_sent 404, fn ->
         get conn, group_shipment_route_path(conn, :show, route)
       end
