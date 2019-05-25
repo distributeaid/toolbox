@@ -9,6 +9,10 @@
     </p>
 
     <p>
+     <%= @shipment.status %>
+    </p>
+
+    <p>
       <%= @shipment.funding %>
     </p>
 
