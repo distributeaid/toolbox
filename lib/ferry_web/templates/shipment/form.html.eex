@@ -29,7 +29,7 @@
 
   <div class="form-item">
     <%= label f, :Shipping_Address %>
-    <%= text_input f, :receiver_address, "1600 Pennsylvania Avenue, Washington DC" %>
+    <%= text_input f, :receiver_address, placeholder: "1600 Pennsylvania Avenue, Washington DC" %>
     <%= error_tag f, :receiver_address %>
   </div>
 

@@ -23,8 +23,8 @@ defmodule FerryWeb.RouteControllerTest do
 
   describe "new route" do
     test "renders form", %{conn: conn, group: group, shipment: shipment, route: route} do
-      conn = get conn, group_shipment_route_path(conn, :new, group, shipment, route)
-      assert html_response(conn, 200) =~ "New Route"
+      conn = get conn, group_shipment_route_path(conn, :new, group, shipment)
+      assert html_response(conn, 200) =~ "New Stop Along Route"
     end
   end
 
@@ -36,12 +36,12 @@ defmodule FerryWeb.RouteControllerTest do
       #assert redirected_to(conn) == group_shipment_route_path(conn, :show, group, shipment, route)
 
       conn = get conn, group_shipment_route_path(conn, :show, group, shipment, route)
-      assert html_response(conn, 200) =~ "Show Route"
+      assert html_response(conn, 200) =~ route_params.label
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group, shipment: shipment} do
       conn = post conn, group_shipment_route_path(conn, :create, group, shipment), route: params_for(:invalid_route)
-      assert html_response(conn, 200) =~ "New Route"
+      assert html_response(conn, 200) =~ "New Stop Along Route"
     end
   end
 
@@ -59,16 +59,15 @@ defmodule FerryWeb.RouteControllerTest do
 
     test "redirects when data is valid", %{conn: conn, group: group, shipment: shipment, route: route} do
       route_params = params_for(:route)
-      IO.inspect route_params
       conn = put conn, group_shipment_route_path(conn, :update, group, shipment, route), route: route_params
       assert redirected_to(conn) == group_shipment_route_path(conn, :show, group, shipment, route)
 
       conn = get conn, group_shipment_route_path(conn, :show, group, shipment, route)
-      assert html_response(conn, 200) =~ "some updated address"
+      assert html_response(conn, 200) =~ route_params.label
     end
 
     test "renders errors when data is invalid", %{conn: conn,  group: group, shipment: shipment, route: route} do
-      conn = put conn, group_shipment_route_path(conn, :update,  group, shipment, route), route: params_for(:invalid_route)
+      conn = put conn, group_shipment_route_path(conn, :update, group, shipment, route), route: params_for(:invalid_route)
       assert html_response(conn, 200) =~ "Edit Route"
     end
   end
@@ -78,7 +77,7 @@ defmodule FerryWeb.RouteControllerTest do
 
     test "deletes chosen route", %{conn: conn, group: group, shipment: shipment, route: route} do
       conn = delete conn, group_shipment_route_path(conn, :delete, group, shipment, route)
-      assert redirected_to(conn) == group_shipment_route_path(conn, :index, group, shipment, route)
+      assert redirected_to(conn) == group_shipment_route_path(conn, :index, group, shipment)
       assert_error_sent 404, fn ->
         get conn, group_shipment_route_path(conn, :show, group, shipment, route)
       end

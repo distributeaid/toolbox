@@ -236,18 +236,16 @@ defmodule Ferry.Factory do
       shipment: %Shipment{
         label: "hello",
         group_id: 1
-      }
+      },
+      checklist: ["here", "there"]
     }
   end
 
   def invalid_route_factory do
-    struct!(
-      route_factory(),
-      %{
-        label: nil,
-        status: "hello"
-      }
-    )
+    %Route{
+        label: nil
+    }
+
   end
 
 end
