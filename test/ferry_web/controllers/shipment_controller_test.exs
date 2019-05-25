@@ -1,8 +1,6 @@
 defmodule FerryWeb.ShipmentControllerTest do
   use FerryWeb.ConnCase
 
-  alias Ferry.Shipments
-
   setup do
     group = insert(:group)
     user = insert(:user, group: group)
@@ -14,7 +12,7 @@ defmodule FerryWeb.ShipmentControllerTest do
   end
 
   describe "index" do
-    test "lists all shipments", %{conn: conn, group: group, shipment: shipment} do
+    test "lists all shipments", %{conn: conn, group: group} do
       # TODO: Need to mock repo call here
       conn = get conn, group_shipment_path(conn, :index, group)
       assert html_response(conn, 200) =~ "Shipments"
@@ -22,7 +20,7 @@ defmodule FerryWeb.ShipmentControllerTest do
   end
 
   describe "new shipment" do
-    test "renders form", %{conn: conn, group: group, shipment: shipment} do
+    test "renders form", %{conn: conn, group: group} do
       conn = get conn, group_shipment_path(conn, :new, group)
       assert html_response(conn, 200) =~ "New Shipment"
     end

@@ -13,6 +13,7 @@ defmodule Ferry.Auth.AuthorizePipeline do
   # TODO: replace w/ finer grained permissions via [Canary](https://github.com/cpjk/canary)
   #       example: https://github.com/digitalnatives/course_planner/blob/27b1c8067edc262685e9c4dcbfcf82633bc8b8dc/lib/course_planner_web/controllers/permissions.ex
   defp authorize_for_resource(conn, _) do
+
     if to_string(conn.assigns.current_user.group_id) == Enum.at(conn.path_info, 1) do
       conn
     else

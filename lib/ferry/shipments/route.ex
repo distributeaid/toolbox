@@ -14,11 +14,11 @@ defmodule Ferry.Shipments.Route do
     timestamps()
   end
 
+
   @doc false
   def changeset(route, attrs) do
     route
     |> cast(attrs, [:address, :date, :groups, :label, :shipment_id, :checklist])
     |> validate_required([:label, :shipment_id])
-
   end
 end

@@ -50,65 +50,60 @@ defmodule Ferry.ShipmentsTest do
   end
 
   describe "routes" do
+    alias Ferry.Shipments.Shipment
     alias Ferry.Shipments.Route
 
-    @valid_attrs %{address: "some address", date: "some date", groups: "some groups"}
-    @update_attrs %{address: "some updated address", date: "some updated date", groups: "some updated groups"}
-    @invalid_attrs %{address: nil, date: nil, groups: nil}
-
-    def route_fixture(attrs \\ %{}) do
-      {:ok, route} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Shipments.create_route()
-
-      route
-    end
-
     test "list_routes/0 returns all routes" do
-      route = route_fixture()
-      assert Shipments.list_routes() == [route]
+      route = insert(:route)
+      assert Shipments.list_routes() |> Ferry.Repo.preload(:shipment) == [route]
     end
 
     test "get_route!/1 returns the route with given id" do
-      route = route_fixture()
-      assert Shipments.get_route!(route.id) == route
+      route = insert(:route)
+      assert Shipments.get_route!(route.id) |> Ferry.Repo.preload(:shipment) == route
     end
 
     test "create_route/1 with valid data creates a route" do
-      assert {:ok, %Route{} = route} = Shipments.create_route(@valid_attrs)
-      assert route.address == "some address"
-      assert route.date == "some date"
-      assert route.groups == "some groups"
+      shipment = insert(:shipment)
+
+      route_params = params_for(:route, %{shipment_id: shipment.id})
+
+      assert {:ok, %Route{} = route} = Shipments.create_route(route_params)
+      assert route.checklist == route_params.checklist
+      assert route.date == route_params.date
+      assert route.groups == route_params.groups
     end
 
     test "create_route/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Shipments.create_route(@invalid_attrs)
+      route_params = params_for(:invalid_route)
+      assert {:error, %Ecto.Changeset{}} = Shipments.create_route(route_params)
     end
 
     test "update_route/2 with valid data updates the route" do
-      route = route_fixture()
-      assert {:ok, route} = Shipments.update_route(route, @update_attrs)
+      route = insert(:route)
+      route_params = params_for(:route)
+      assert {:ok, route} = Shipments.update_route(route, route_params)
       assert %Route{} = route
-      assert route.address == "some updated address"
-      assert route.date == "some updated date"
-      assert route.groups == "some updated groups"
+      assert route.label == route_params.label
+#      assert route.date == "some updated date"
+#      assert route.groups == "some updated groups"
     end
 
     test "update_route/2 with invalid data returns error changeset" do
-      route = route_fixture()
-      assert {:error, %Ecto.Changeset{}} = Shipments.update_route(route, @invalid_attrs)
-      assert route == Shipments.get_route!(route.id)
+      route = insert(:route)
+      route_params = params_for(:invalid_route)
+      assert {:error, %Ecto.Changeset{}} = Shipments.update_route(route, route_params)
+      assert route == Shipments.get_route!(route.id) |> Ferry.Repo.preload(:shipment)
     end
 
     test "delete_route/1 deletes the route" do
-      route = route_fixture()
+      route = insert(:route)
       assert {:ok, %Route{}} = Shipments.delete_route(route)
       assert_raise Ecto.NoResultsError, fn -> Shipments.get_route!(route.id) end
     end
 
     test "change_route/1 returns a route changeset" do
-      route = route_fixture()
+      route = insert(:route)
       assert %Ecto.Changeset{} = Shipments.change_route(route)
     end
   end

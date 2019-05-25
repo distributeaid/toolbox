@@ -5,7 +5,7 @@ defmodule FerryWeb.RouteControllerTest do
     group = insert(:group)
     user = insert(:user, group: group)
     shipment = insert(:shipment)
-    route = insert(:route)
+    route = insert(:route, %{shipment: shipment})
 
     conn = build_conn()
     conn = post conn, session_path(conn, :create, %{user: %{email: user.email, password: @password}})
@@ -27,13 +27,13 @@ defmodule FerryWeb.RouteControllerTest do
   end
 
   describe "create route" do
-    test "redirects to show when data is valid", %{conn: conn, group: group, shipment: shipment, route: route} do
+    test "redirects to show when data is valid", %{conn: conn, group: group, shipment: shipment} do
       route_params = params_for(:route)
       conn = post conn, group_shipment_route_path(conn, :create, group, shipment), route: route_params
       assert %{id: id} = redirected_params(conn)
-      #assert redirected_to(conn) == group_shipment_route_path(conn, :show, group, shipment, route)
+      assert redirected_to(conn) == group_shipment_route_path(conn, :show, group, shipment, id)
 
-      conn = get conn, group_shipment_route_path(conn, :show, group, shipment, route)
+      conn = get conn, group_shipment_route_path(conn, :show, group, shipment, id)
       assert html_response(conn, 200) =~ route_params.label
     end
 
@@ -64,12 +64,11 @@ defmodule FerryWeb.RouteControllerTest do
       assert html_response(conn, 200) =~ route_params.label
     end
 
-    # WHY DOESNT THIS WORK????
-#    test "renders errors when data is invalid", %{conn: conn,  group: group, shipment: shipment, route: route} do
-#      routes = params_for(:invalid_route)
-#      conn = put conn, group_shipment_route_path(conn, :update, group, shipment, route), routes
-#      assert html_response(conn, 200) =~ "Edit Route"
-#    end
+    test "renders errors when data is invalid", %{conn: conn,  group: group, shipment: shipment, route: route} do
+      routes = params_for(:invalid_route)
+      conn = put conn, group_shipment_route_path(conn, :update, group, shipment, route), route: routes
+      assert html_response(conn, 200) =~ "Edit Route"
+    end
   end
 
   describe "delete route" do

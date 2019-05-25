@@ -232,20 +232,21 @@ defmodule Ferry.Factory do
 
   def route_factory do
     %Route{
-      label: "not today",
-      shipment: %Shipment{
-        label: "hello",
-        group_id: 1
-      },
-      checklist: ["here", "there"]
+      label: sequence("not today"),
+      shipment: build(:shipment),
+      checklist: ["here", "there"],
+      date: "today",
+      groups: "x"
     }
   end
 
   def invalid_route_factory do
-    %Route{
-        label: nil,
-        shipment: invalid_shipment_factory()
-    }
+    struct!(
+      route_factory(),
+      %{
+        label: ""
+      }
+    )
 
   end
 

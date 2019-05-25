@@ -59,7 +59,8 @@ defmodule FerryWeb.RouteController do
 
   def update(conn, %{"route" => route_params} = params) do
     { group_id, shipment_id, route_id } = get_ids(params)
-    Process.info(self(), :current_stacktrace)
+    IO.inspect(route_params)
+
     route = Shipments.get_route!(route_id)
     case Shipments.update_route(route, route_params) do
       {:ok, route} ->
