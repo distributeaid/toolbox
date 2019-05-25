@@ -243,7 +243,8 @@ defmodule Ferry.Factory do
 
   def invalid_route_factory do
     %Route{
-        label: nil
+        label: nil,
+        shipment: invalid_shipment_factory()
     }
 
   end

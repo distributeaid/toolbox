@@ -4,6 +4,7 @@ defmodule FerryWeb.RouteController do
   alias Ferry.Shipments
   alias Ferry.Shipments.Route
 
+
   defp get_ids(params) do
     { Map.get(params, "group_id"), Map.get(params, "shipment_id"), Map.get(params, "id") }
   end
@@ -32,9 +33,6 @@ defmodule FerryWeb.RouteController do
                   |> Map.put("shipment_id", shipment_id)
                   |> Map.put("checklist", (for {k, v} <- params, String.contains?(k, "checklist"), v != "", do: v))
 
-    IO.inspect(params)
-    IO.inspect(conn)
-
     case Shipments.create_route(route_params) do
       {:ok, route} ->
         conn
@@ -61,6 +59,7 @@ defmodule FerryWeb.RouteController do
 
   def update(conn, %{"route" => route_params} = params) do
     { group_id, shipment_id, route_id } = get_ids(params)
+    Process.info(self(), :current_stacktrace)
     route = Shipments.get_route!(route_id)
     case Shipments.update_route(route, route_params) do
       {:ok, route} ->
