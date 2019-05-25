@@ -7,19 +7,19 @@
 
   <div class="form-item is-inline">
     <%= label f, :label, class: "is-req" %>
-    <%= text_input f, :label %>
+    <%= text_input f, :label, placeholder: "Stop number 1" %>
     <%= error_tag f, :label %>
   </div>
 
   <div class="form-item is-inline">
     <%= label f, :address %>
-    <%= text_input f, :address %>
+    <%= text_input f, :address, placeholder: "4 Privet Drive, Little Whinging, Surrey" %>
     <%= error_tag f, :address %>
   </div>
 
   <div class="form-item is-inline">
     <%= label f, :date %>
-    <%= text_input f, :date %>
+    <%= text_input f, :date, placeholder: "May 27th 2019" %>
     <%= error_tag f, :date %>
   </div>
 
@@ -37,7 +37,7 @@
 
   <div class="form-item is-inline" id="customList" hidden>
       <%= label f, :checklist %>
-      <input id="route_checklist" name="route[checklist]_0" type="text" oninput="checkTicket(this)">
+      <input id="route_checklist" name="route[checklist]_0" type="text" oninput="checkTicket(this)" placeholder="use forklift to drop boxes off ">
       <%= error_tag f, :checklist %>
   </div>
 

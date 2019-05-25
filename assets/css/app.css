@@ -942,3 +942,7 @@ ul.show_checklist li.checked::before {
   height: 15px;
   width: 7px;
 }
+
+#route_checklist{
+  /*margin: 550px;*/
+}

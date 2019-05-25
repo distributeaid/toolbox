@@ -12,6 +12,10 @@ html {
   box-sizing: border-box;
   -webkit-text-size-adjust: 100%; }
 
+#route_checklist{
+  padding-left: 100px;
+}
+
 *,
 *:before,
 *:after {
