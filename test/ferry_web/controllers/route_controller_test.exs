@@ -1,8 +1,6 @@
 defmodule FerryWeb.RouteControllerTest do
   use FerryWeb.ConnCase
 
-  alias Ferry.Shipments.Route
-
   setup do
     group = insert(:group)
     user = insert(:user, group: group)
