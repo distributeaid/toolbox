@@ -14,7 +14,8 @@ defmodule Ferry.Factory do
     Locations.Geocode,
     Profiles.Group,
     Profiles.Project,
-    Shipments.Shipment
+    Shipments.Shipment,
+    Shipments.Route
   }
 
   # ExMachina Factories
@@ -222,6 +223,26 @@ defmodule Ferry.Factory do
   def invalid_shipment_factory do
     struct!(
       shipment_factory(),
+      %{
+        label: nil,
+        status: "hello"
+      }
+    )
+  end
+
+  def route_factory do
+    %Route{
+      label: "not today",
+      shipment: %Shipment{
+        label: "hello",
+        group_id: 1
+      }
+    }
+  end
+
+  def invalid_route_factory do
+    struct!(
+      route_factory(),
       %{
         label: nil,
         status: "hello"

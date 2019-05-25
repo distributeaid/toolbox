@@ -49,10 +49,6 @@ defmodule FerryWeb.ShipmentController do
   end
 
   def update(conn, %{"id" => id, "shipment" => shipment_params}) do
-    IO.inspect(shipment_params)
-    IO.puts("++++++++++++++++++++++++")
-    IO.puts("++++++++++++++++++++++++")
-    IO.inspect(id)
     group = current_group(conn)
     shipment = Shipments.get_shipment!(id)
 

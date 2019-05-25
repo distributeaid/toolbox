@@ -1,7 +1,7 @@
 <section class="section">
   <div class="section__content">
     <header class="section__header">
-      <h1 class="section__title">Edit Shipment</h1>
+      <h1 class="section__title">Edit Route</h1>
     </header>
     <%= render "form.html", Map.put(assigns, :action, group_shipment_route_path(@conn, :update, @group, @shipment, @route)) %>
 
