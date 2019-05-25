@@ -72,7 +72,7 @@ defmodule FerryWeb.RouteControllerTest do
 #      conn = put conn, group_shipment_route_path(conn, :update, group, shipment, route), routes
 #      assert html_response(conn, 200) =~ "Edit Route"
 #    end
-#  end
+  end
 
   describe "delete route" do
     setup [:create_route]
