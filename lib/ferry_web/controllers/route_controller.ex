@@ -9,9 +9,9 @@ defmodule FerryWeb.RouteController do
     { Map.get(params, "group_id"), Map.get(params, "shipment_id"), Map.get(params, "id") }
   end
 
-  defp sanitize_checklist(params, shipment_id) do
-    params
-    |> Map.put("shipment_id", shipment_id)
+  defp sanitize_checklist(params, route_params) do
+    route_params
+    |> Map.put("shipment_id", params["shipment_id"])
     |> Map.put("checklist", (for {k, v} <- params, String.contains?(k, "checklist"), v != "", do: v))
   end
 
@@ -35,11 +35,15 @@ defmodule FerryWeb.RouteController do
 
   def create(conn, %{"route" => route_params} = params) do
     { group_id, shipment_id, _ } = get_ids(params)
+    # adds checklist to params in proper form
+    IO.puts "+++++++++++++++"
     IO.inspect(params)
     IO.puts("++++++++++++++++")
+    
+    route_params = sanitize_checklist(params, route_params)
+
+    IO.inspect(route_params)
     IO.puts("++++++++++++++++")
-    # adds checklist to params in proper form
-    route_params = sanitize_checklist(route_params, shipment_id)
 
     case Shipments.create_route(route_params) do
       {:ok, route} ->
@@ -47,8 +51,6 @@ defmodule FerryWeb.RouteController do
         |> put_flash(:info, "Route created successfully.")
         |> redirect(to: group_shipment_route_path(conn, :show, group_id, shipment_id, route))
       {:error, %Ecto.Changeset{} = changeset} ->
-        IO.inspect(changeset)
-        IO.puts("------------------------")
         shipment = Shipments.get_shipment!(shipment_id) |> Ferry.Repo.preload(:routes)
         render(conn, "new.html", group: group_id, shipment: shipment, changeset: changeset)
     end
@@ -71,10 +73,9 @@ defmodule FerryWeb.RouteController do
 
   def update(conn, %{"route" => route_params} = params) do
     { group_id, shipment_id, route_id } = get_ids(params)
-    IO.inspect(params)
-    IO.puts("+++++++++++++")
 
-    route_params = sanitize_checklist(params, shipment_id)
+    route_params = sanitize_checklist(params, route_params)
+
 
     route = Shipments.get_route!(route_id)
     case Shipments.update_route(route, route_params) do

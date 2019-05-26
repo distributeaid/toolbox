@@ -216,8 +216,17 @@ defmodule Ferry.Factory do
   def shipment_factory do
     %Shipment{
       label: "hello",
-      group_id: 1
+      group_id: 1,
     }
+  end
+
+  def create_shipment_factory do
+    struct!(
+      shipment_factory(),
+      %{
+        add_route: %{"route" => "true"}
+      }
+    )
   end
 
   def invalid_shipment_factory do
@@ -225,8 +234,9 @@ defmodule Ferry.Factory do
       shipment_factory(),
       %{
         label: nil,
-        status: "hello"
-      }
+        status: "hello",
+        add_route: %{"route" => "true"}
+        }
     )
   end
 

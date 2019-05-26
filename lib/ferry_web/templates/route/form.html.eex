@@ -29,25 +29,25 @@
     <%= error_tag f, :groups %>
   </div>
 
-    <%= if has_checklist? assigns.conn.path_info, @route.checklist do %>
-      <div class="form-item is-text-center">
-        <input type="checkbox" name="check_for_custom_list" id="checkForCustomList" onclick="showCustomList()">
-        Do you want to create a custom list of steps for this stop?
-        <br>
-      </div>
-      <div class="form-item is-inline" id="customList" hidden>
-        <%= label f, :checklist %>
-        <input id="route_checklist" name="route[checklist]_0" type="text" oninput="checkTicket(this)" placeholder="use forklift to drop boxes off ">
-        <%= error_tag f, :checklist %>
-      </div>
+    <%= if has_routes?(@shipment.routes) do %>
+          <div class="form-item is-inline" id="customList">
+            <%= label f, :checklist %>
+            <%= for {r, i} <- Enum.with_index(@route.checklist) do %>
+                <%= text_input f, :checklist, value: r, name: "route[checklist]_#{i}", oninput: "checkTicket(this)" %>
+                <%= error_tag f, :checklist %>
+            <% end %>
+            </div>
     <% else %>
-      <div class="form-item is-inline" id="customList">
-        <%= label f, :checklist %>
-        <%= for {r, i} <- Enum.with_index(@route.checklist) do %>
-            <%= text_input f, :checklist, value: r, name: "route[checklist]_#{i}", oninput: "checkTicket(this)" %>
-            <%= error_tag f, :checklist %>
-        <% end %>
+        <div class="form-item is-text-center">
+        <input type="checkbox" name="check_for_custom_list" id="checkForCustomList" onclick="showCustomList()">
+            Do you want to create a custom list of steps for this stop?
+        <br>
         </div>
+            <div class="form-item is-inline" id="customList" hidden>
+                <%= label f, :checklist %>
+                <%= text_input f, :checklist, name: "route[checklist]_0", oninput: "checkTicket(this)" %>
+                <%= error_tag f, :checklist %>
+            </div>
     <% end %>
 
   <div class="form-item is-text-center">
@@ -88,6 +88,7 @@ function createNewInput(name){
     let container = document.getElementById("customList");
     let input = document.createElement("input");
     input.type = 'text';
+    input.class = "form-item is-inline";
     input.name = `route[checklist]_${value}`;
     input.id=`route_checklist`;
     input.oninput = function() {

@@ -28,6 +28,7 @@
 
     <span><%= link "Edit", to: group_shipment_route_path(@conn, :edit, @group, @shipment, @route) %></span>
     <span><%= link "Back to Shipment", to: group_shipment_path(@conn, :show, @group, @shipment) %></span>
+    <span><%= link "Delete", to: group_shipment_route_path(@conn, :delete, @group, @shipment, @route), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
   </div>
 </section>
 

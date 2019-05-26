@@ -57,7 +57,9 @@
     <%= error_tag f, :sender_address %>
   </div>
 
-  <%= checkbox :add_route, :route, checked: true %> Add a Stop Along the Route for this Shipment?
+  <div class="form-item">
+  <%= checkbox f, :route, checked: true %> Add a Stop Along the Route for this Shipment?
+  </div>
 
 
   <div class="form-item is-text-center">
