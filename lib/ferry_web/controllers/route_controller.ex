@@ -9,29 +9,37 @@ defmodule FerryWeb.RouteController do
     { Map.get(params, "group_id"), Map.get(params, "shipment_id"), Map.get(params, "id") }
   end
 
+  defp sanitize_checklist(params, shipment_id) do
+    params
+    |> Map.put("shipment_id", shipment_id)
+    |> Map.put("checklist", (for {k, v} <- params, String.contains?(k, "checklist"), v != "", do: v))
+  end
+
   def index(conn, params) do
     # could also create helpers to grab _actual_ group and shipments, but feels like
     # routes shouldn't have access to things above it/ what use case will it need to have entire shipment or group?
     { group_id, shipment_id, _ } = get_ids(params)
     #not passing in group because all groups involved with shipment should see route
     routes = Shipments.list_routes(shipment_id)
+    shipment = Shipments.get_shipment!(shipment_id)
 
-    render(conn, "index.html", group: group_id, shipment: shipment_id, routes: routes)
+    render(conn, "index.html", group: group_id, shipment: shipment, routes: routes)
   end
 
   def new(conn, params) do
     changeset = Shipments.change_route(%Route{})
     { group_id, shipment_id, _ } = get_ids(params)
-    render(conn, "new.html", group: group_id, shipment: shipment_id, changeset: changeset)
+    shipment = Shipments.get_shipment!(shipment_id) |> Ferry.Repo.preload(:routes)
+    render(conn, "new.html", group: group_id, shipment: shipment, changeset: changeset)
   end
 
   def create(conn, %{"route" => route_params} = params) do
     { group_id, shipment_id, _ } = get_ids(params)
-
+    IO.inspect(params)
+    IO.puts("++++++++++++++++")
+    IO.puts("++++++++++++++++")
     # adds checklist to params in proper form
-    route_params = route_params
-                  |> Map.put("shipment_id", shipment_id)
-                  |> Map.put("checklist", (for {k, v} <- params, String.contains?(k, "checklist"), v != "", do: v))
+    route_params = sanitize_checklist(route_params, shipment_id)
 
     case Shipments.create_route(route_params) do
       {:ok, route} ->
@@ -39,7 +47,10 @@ defmodule FerryWeb.RouteController do
         |> put_flash(:info, "Route created successfully.")
         |> redirect(to: group_shipment_route_path(conn, :show, group_id, shipment_id, route))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", group: group_id, shipment: shipment_id, changeset: changeset)
+        IO.inspect(changeset)
+        IO.puts("------------------------")
+        shipment = Shipments.get_shipment!(shipment_id) |> Ferry.Repo.preload(:routes)
+        render(conn, "new.html", group: group_id, shipment: shipment, changeset: changeset)
     end
   end
 
@@ -52,14 +63,18 @@ defmodule FerryWeb.RouteController do
   def edit(conn, params) do
     { group_id, shipment_id, route_id } = get_ids(params)
 
+    shipment = Shipments.get_shipment!(shipment_id) |> Ferry.Repo.preload(:routes)
     route = Shipments.get_route!(route_id)
     changeset = Shipments.change_route(route)
-    render(conn, "edit.html", group: group_id, shipment: shipment_id, route: route, changeset: changeset)
+    render(conn, "edit.html", group: group_id, shipment: shipment , route: route, changeset: changeset)
   end
 
   def update(conn, %{"route" => route_params} = params) do
     { group_id, shipment_id, route_id } = get_ids(params)
-    IO.inspect(route_params)
+    IO.inspect(params)
+    IO.puts("+++++++++++++")
+
+    route_params = sanitize_checklist(params, shipment_id)
 
     route = Shipments.get_route!(route_id)
     case Shipments.update_route(route, route_params) do

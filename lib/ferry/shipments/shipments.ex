@@ -164,6 +164,8 @@ defmodule Ferry.Shipments do
 
   """
   def create_route(attrs \\ %{}) do
+    IO.inspect(attrs)
+    IO.puts("++++++++++++++++++")
     %Route{}
     |> Route.changeset(attrs)
     |> Repo.insert()

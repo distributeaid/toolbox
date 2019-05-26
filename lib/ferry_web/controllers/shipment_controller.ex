@@ -20,14 +20,20 @@ defmodule FerryWeb.ShipmentController do
     render(conn, "new.html", group: current_group(conn), changeset: changeset)
   end
 
-  def create(conn, %{"shipment" => shipment_params} = _params) do
+  def create(conn, %{"shipment" => shipment_params, "add_route" => %{"route" => add_route?} }) do
     group = current_group(conn)
     shipment_params = Map.put(shipment_params, "group_id", group.id)
+
     case Shipments.create_shipment(shipment_params) do
       {:ok, shipment} ->
-        conn
-        |> put_flash(:info, "Shipment created successfully.")
-        |> redirect(to: group_shipment_route_path(conn, :new, group, shipment))
+        case add_route? do
+          "true" ->
+            changeset = Shipments.change_route(%Shipments.Route{})
+            shipment = Ferry.Repo.preload(shipment, :routes)
+            render( conn,FerryWeb.RouteView, "new.html", group: group, shipment: shipment, changeset: changeset )
+          "false" ->
+            redirect(conn, to: group_shipment_path(conn, :show, group.id, shipment))
+        end
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", group: group, changeset: changeset)
     end
