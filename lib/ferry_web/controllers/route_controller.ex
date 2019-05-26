@@ -36,14 +36,7 @@ defmodule FerryWeb.RouteController do
   def create(conn, %{"route" => route_params} = params) do
     { group_id, shipment_id, _ } = get_ids(params)
     # adds checklist to params in proper form
-    IO.puts "+++++++++++++++"
-    IO.inspect(params)
-    IO.puts("++++++++++++++++")
-    
     route_params = sanitize_checklist(params, route_params)
-
-    IO.inspect(route_params)
-    IO.puts("++++++++++++++++")
 
     case Shipments.create_route(route_params) do
       {:ok, route} ->
@@ -52,6 +45,8 @@ defmodule FerryWeb.RouteController do
         |> redirect(to: group_shipment_route_path(conn, :show, group_id, shipment_id, route))
       {:error, %Ecto.Changeset{} = changeset} ->
         shipment = Shipments.get_shipment!(shipment_id) |> Ferry.Repo.preload(:routes)
+        IO.puts "+++++++++++++++++++++"
+        IO.inspect shipment
         render(conn, "new.html", group: group_id, shipment: shipment, changeset: changeset)
     end
   end
@@ -76,7 +71,6 @@ defmodule FerryWeb.RouteController do
 
     route_params = sanitize_checklist(params, route_params)
 
-
     route = Shipments.get_route!(route_id)
     case Shipments.update_route(route, route_params) do
       {:ok, route} ->
@@ -84,7 +78,8 @@ defmodule FerryWeb.RouteController do
         |> put_flash(:info, "Route updated successfully.")
         |> redirect(to: group_shipment_route_path(conn, :show, group_id, shipment_id, route))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", group: group_id, shipment: shipment_id, route: route, changeset: changeset)
+        shipment = Shipments.get_shipment!(shipment_id) |> Ferry.Repo.preload(:routes)
+        render(conn, "edit.html", group: group_id, shipment: shipment, route: route, changeset: changeset)
     end
   end
 

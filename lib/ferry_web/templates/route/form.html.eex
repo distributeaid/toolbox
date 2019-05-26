@@ -29,14 +29,16 @@
     <%= error_tag f, :groups %>
   </div>
 
-    <%= if has_routes?(@shipment.routes) do %>
-          <div class="form-item is-inline" id="customList">
+    <!–– small bug on this if condition I need to figure out -->
+    <%= if has_routes?(@shipment.routes) and has_checklist?(assigns.conn.path_info, @shipment.routes) do %>
+        <div class="form-item is-inline" id="customList">
             <%= label f, :checklist %>
             <%= for {r, i} <- Enum.with_index(@route.checklist) do %>
                 <%= text_input f, :checklist, value: r, name: "route[checklist]_#{i}", oninput: "checkTicket(this)" %>
                 <%= error_tag f, :checklist %>
             <% end %>
-            </div>
+            <%= text_input f, :checklist, value: "", name: "route[checklist]_#{length(@route.checklist)}", oninput: "checkTicket(this)" %>
+        </div>
     <% else %>
         <div class="form-item is-text-center">
         <input type="checkbox" name="check_for_custom_list" id="checkForCustomList" onclick="showCustomList()">
@@ -88,7 +90,6 @@ function createNewInput(name){
     let container = document.getElementById("customList");
     let input = document.createElement("input");
     input.type = 'text';
-    input.class = "form-item is-inline";
     input.name = `route[checklist]_${value}`;
     input.id=`route_checklist`;
     input.oninput = function() {

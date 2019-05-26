@@ -65,8 +65,7 @@ defmodule FerryWeb.RouteControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn,  group: group, shipment: shipment, route: route} do
-      routes = params_for(:invalid_route)
-      conn = put conn, group_shipment_route_path(conn, :update, group, shipment, route), route: routes
+      conn = put conn, group_shipment_route_path(conn, :update, group, shipment, route), route: params_for(:invalid_route)
       assert html_response(conn, 200) =~ "Edit Route"
     end
   end
