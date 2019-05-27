@@ -23,7 +23,7 @@ defmodule FerryWeb.ShipmentController do
   def create(conn, %{"shipment" => shipment_params}) do
     group = current_group(conn)
     shipment_params = Map.put(shipment_params, "group_id", group.id)
-    %{"route" => add_route? } = shipment_params
+    %{"new_route" => add_route? } = shipment_params
 
     case Shipments.create_shipment(shipment_params) do
       {:ok, shipment} ->
