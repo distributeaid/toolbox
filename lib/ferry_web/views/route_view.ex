@@ -7,7 +7,6 @@ defmodule FerryWeb.RouteView do
 
   def has_checklist?(path_info, route) do
     route = List.first(route)
-
     ((List.last(path_info) == "edit") and (length(route.checklist) > 0))
   end
 

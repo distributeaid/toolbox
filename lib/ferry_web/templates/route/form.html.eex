@@ -29,7 +29,6 @@
     <%= error_tag f, :groups %>
   </div>
 
-    <!–– small bug on this if condition I need to figure out -->
     <%= if has_routes?(@shipment.routes) and has_checklist?(assigns.conn.path_info, @shipment.routes) do %>
         <div class="form-item is-inline" id="customList">
             <%= label f, :checklist %>
