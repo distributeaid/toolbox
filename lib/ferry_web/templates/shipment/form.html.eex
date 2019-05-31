@@ -7,7 +7,7 @@
 
   <div class="form-item">
     <%= label f, :Label, class: "is-req" %>
-    <%= text_input f, :label %>
+    <%= text_input f, :label, placeholder: "My first shipment" %>
     <%= error_tag f, :label %>
   </div>
 
@@ -23,39 +23,44 @@
 
   <div class="form-item">
     <%= label f, :Target_Date_To_Be_Shipped %>
-    <%= text_input f, :target_date_to_be_shipped %>
+    <%= text_input f, :target_date_to_be_shipped, placeholder: "may 24th 2019" %>
     <%= error_tag f, :target_date_to_be_shipped %>
   </div>
 
   <div class="form-item">
     <%= label f, :Shipping_Address %>
-    <%= text_input f, :receiver_address %>
+    <%= text_input f, :receiver_address, placeholder: "1600 Pennsylvania Avenue, Washington DC" %>
     <%= error_tag f, :receiver_address %>
   </div>
 
   <div class="form-item">
     <%= label f, :Receiver_Group_Name_or_Email %>
-    <%= text_input f, :receiver_group_id %>
+    <%= text_input f, :receiver_group_id, placeholder: "hello@letsHelpRefugees.com" %>
     <%= error_tag f, :receiver_group_id %>
   </div>
 
   <div class="form-item">
     <%= label f, :Shipping_Items %>
-    <%= text_input f, :items %>
+    <%= text_input f, :items, placeholder: "soap, food, clothes" %>
     <%= error_tag f, :items %>
   </div>
 
   <div class="form-item">
     <%= label f, :Funding %>
-    <%= text_input f, :funding %>
+    <%= text_input f, :funding, placeholder: "$10.23" %>
     <%= error_tag f, :funding %>
   </div>
 
   <div class="form-item">
     <%= label f, :Address_Where_Supplies_Are_Sent_From %>
-    <%= text_input f, :sender_address %>
+    <%= text_input f, :sender_address, placeholder: "Glasgow" %>
     <%= error_tag f, :sender_address %>
   </div>
+
+  <div class="form-item">
+  <%= checkbox f, :new_route, checked: true %> Add a Stop Along the Route for this Shipment?
+  </div>
+
 
   <div class="form-item is-text-center">
     <%= submit "Submit", class: "button is-big" %>

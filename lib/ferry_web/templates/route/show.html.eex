@@ -1,0 +1,43 @@
+<section class="section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title"> <%= @route.label %></h1>
+    </header>
+
+    <p>
+      <%= @route.label %>
+    </p>
+
+    <p>
+      <%= @route.address %>
+    </p>
+
+    <p>
+      <%= @route.date %>
+    </p>
+
+    <p>
+      <%= @route.groups %>
+    </p>
+
+    <ul class="show_checklist">
+    <%= for r <- @route.checklist do %>
+    <%= content_tag(:li, r)  %>
+    <% end %>
+    </ul>
+
+    <span><%= link "Edit", to: group_shipment_route_path(@conn, :edit, @group, @shipment, @route) %></span>
+    <span><%= link "Back to Shipment", to: group_shipment_path(@conn, :show, @group, @shipment) %></span>
+    <span><%= link "Delete", to: group_shipment_route_path(@conn, :delete, @group, @shipment, @route), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
+  </div>
+</section>
+
+
+<script>
+let list = document.querySelector('.show_checklist');
+list.addEventListener('click', function(ev) {
+  if (ev.target.tagName === 'LI') {
+    ev.target.classList.toggle('checklist--checked');
+  }
+}, false);
+</script>

@@ -1,11 +1,15 @@
 <section class="section">
   <div class="section__content">
     <header class="section__header">
-      <h1 class="section__title"> Show Shipment <%= @shipment.label %></h1>
+      <h1 class="section__title"> <%= @shipment.label %></h1>
     </header>
 
     <p>
       <%= @shipment.items %>
+    </p>
+
+    <p>
+     <%= @shipment.status %>
     </p>
 
     <p>
@@ -27,9 +31,19 @@
     <p>
       <%= @shipment.target_date_to_be_shipped %>
     </p>
-    
+
+    <p>
+      <%= if has_routes? @routes do %>
+        <%= for route <- @routes do %>
+          <span><%= link "Show #{route.label}", to: group_shipment_route_path(@conn, :show, @group, route.shipment_id, route), class: "button is-small" %></span>
+        <% end %>
+      <% end %>
+    </p>
+
+    <span><%= link "New Stop Along Route", to: group_shipment_route_path(@conn, :new, @group, @shipment) %></span>
     <span><%= link "Edit", to: group_shipment_path(@conn, :edit, @group, @shipment) %></span>
     <span><%= link "Back", to: group_shipment_path(@conn, :index, @group) %></span>
+    <span><%= link "Delete", to: group_shipment_path(@conn, :delete, @group, @shipment), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
   </div>
 </section>
 

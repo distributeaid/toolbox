@@ -1,0 +1,100 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-item is-inline">
+    <%= label f, :label, class: "is-req" %>
+    <%= text_input f, :label, placeholder: "Stop number 1" %>
+    <%= error_tag f, :label %>
+  </div>
+
+  <div class="form-item is-inline">
+    <%= label f, :address %>
+    <%= text_input f, :address, placeholder: "4 Privet Drive, Little Whinging, Surrey" %>
+    <%= error_tag f, :address %>
+  </div>
+
+  <div class="form-item is-inline">
+    <%= label f, :date %>
+    <%= text_input f, :date, placeholder: "May 27th 2019" %>
+    <%= error_tag f, :date %>
+  </div>
+
+  <div class="form-item is-inline">
+    <%= label f, :groups %>
+    <%= text_input f, :groups %>
+    <%= error_tag f, :groups %>
+  </div>
+
+    <%= if has_routes?(@shipment.routes) and has_checklist?(assigns.conn.path_info, @shipment.routes) do %>
+        <div class="form-item is-inline" id="customList">
+            <%= label f, :checklist %>
+            <%= for {r, i} <- Enum.with_index(@route.checklist) do %>
+                <%= text_input f, :checklist, value: r, name: "route[checklist]_#{i}", oninput: "checkTicket(this)" %>
+                <%= error_tag f, :checklist %>
+            <% end %>
+            <%= text_input f, :checklist, value: "", name: "route[checklist]_#{length(@route.checklist)}", oninput: "checkTicket(this)" %>
+        </div>
+    <% else %>
+        <div class="form-item is-text-center">
+        <input type="checkbox" name="check_for_custom_list" id="checkForCustomList" onclick="showCustomList()">
+            Do you want to create a custom list of steps for this stop?
+        <br>
+        </div>
+            <div class="form-item is-inline" id="customList" hidden>
+                <%= label f, :checklist %>
+                <%= text_input f, :checklist, name: "route[checklist]_0", oninput: "checkTicket(this)" %>
+                <%= error_tag f, :checklist %>
+            </div>
+    <% end %>
+
+  <div class="form-item is-text-center">
+    <%= submit "Submit", class: "button is-big" %>
+  </div>
+<% end %>
+
+
+<script>
+let gateKeeper = {
+    ledger: [],
+    check_ticket: function(name){
+        
+        if(!this.ledger.includes(name)){
+            this.ledger.push(name);
+            return true;
+        }
+        return false;
+    }
+};
+
+function showCustomList() {
+    let check = document.getElementById("checkForCustomList");
+    if(check.checked===false) document.getElementById("customList").style.display = 'none';
+    else document.getElementById("customList").style.display = 'inline';
+}
+
+function checkTicket(ele){
+    if(gateKeeper.check_ticket(ele.name)){
+        createNewInput(ele.name);
+    }
+}
+
+function createNewInput(name){
+
+    let num = name.substring(17, name[name.length]);
+    let value = Number.isNaN(num) ? 1 : Number(num) + 1;
+    let container = document.getElementById("customList");
+    let input = document.createElement("input");
+    input.type = 'text';
+    input.name = `route[checklist]_${value}`;
+    input.id="route_checklist";
+    input.className = "route_checklist";
+    input.oninput = function() {
+        checkTicket(input);
+    };
+    container.appendChild(input);
+}
+</script>

@@ -836,6 +836,36 @@ ul.links-list {
   margin-bottom: 0;
 }
 
+/*
+Checklist
+------------------------------------------------------------
+ */
+ul.show_checklist li.checklist--checked {
+  background: #888;
+  color: #000000;
+  text-decoration: line-through;
+}
+ul.show_checklist li.checklist--checked::before {
+  content: '';
+  position: absolute;
+  border-color: #fff;
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  top: 10px;
+  left: 16px;
+  transform: rotate(45deg);
+  height: 15px;
+  width: 7px;
+}
+
+.route_checklist {
+  margin-left: 114px;
+}
+
+label + .route_checklist {
+  margin-left: 0;
+}
+
 
 /* Trumps & Helpers
  * ========================================================================== */
