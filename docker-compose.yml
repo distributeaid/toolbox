@@ -4,7 +4,7 @@ services:
     image: "postgres:${DA_POSTGRES_VERSION}"
     container_name: toolbox_db
     volumes:
-      - ./db:/var/lib/postgresql/data
+      - ./${DA_DB_VOLUME_NAME}:/var/lib/postgresql/data
       - ./development/seed-test-group.sh:/seed-test-group.sh
     environment:
       - POSTGRES_USER=${DA_DB_USERNAME}
@@ -33,7 +33,12 @@ services:
       context: .
       dockerfile: web.Dockerfile
       target: build-env
-    command: ["/app/development/wait-for-it.sh", "db:5432", "--", "/app/development/web-entrypoint.sh"]
+    command: [
+      "/app/development/wait-for-it.sh", 
+      "db:5432", 
+      "--", 
+      "/app/development/web-entrypoint.sh"
+    ]
     container_name: toolbox_web
     volumes:
       - ./:/app
@@ -52,3 +57,7 @@ services:
     depends_on:
       - db
       - dbtest
+volumes:
+  db:
+    name: ${DA_DB_VOLUME_NAME}
+    external: ${DA_EXTERNAL_VOLUME_REQUIRED}
