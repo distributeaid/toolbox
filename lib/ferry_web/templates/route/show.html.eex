@@ -37,7 +37,7 @@
 let list = document.querySelector('.show_checklist');
 list.addEventListener('click', function(ev) {
   if (ev.target.tagName === 'LI') {
-    ev.target.classList.toggle('checked');
+    ev.target.classList.toggle('checklist--checked');
   }
 }, false);
 </script>

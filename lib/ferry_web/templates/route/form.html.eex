@@ -90,7 +90,8 @@ function createNewInput(name){
     let input = document.createElement("input");
     input.type = 'text';
     input.name = `route[checklist]_${value}`;
-    input.id=`route_checklist`;
+    input.id="route_checklist";
+    input.className = "route_checklist";
     input.oninput = function() {
         checkTicket(input);
     };
