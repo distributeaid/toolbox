@@ -143,9 +143,11 @@ Common Mix Commands
 docker exec toolbox_web mix phx.routes
 
 # code generation (look these up in the docs- many options)
-docker exec toolbox_web mix phx.gen.schema [OPTIONS]
-docker exec toolbox_web mix phx.gen.context [OPTIONS]
-docker exec toolbox_web mix phx.gen.html [OPTIONS]
+# NOTE: Don't run code generation tasks through the Docker container.
+#       They generated files will have the wrong permissions.
+mix phx.gen.schema [OPTIONS]
+mix phx.gen.context [OPTIONS]
+mix phx.gen.html [OPTIONS]
 ```
 
 **Ecto:**

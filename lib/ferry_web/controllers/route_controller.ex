@@ -45,8 +45,6 @@ defmodule FerryWeb.RouteController do
         |> redirect(to: group_shipment_route_path(conn, :show, group_id, shipment_id, route))
       {:error, %Ecto.Changeset{} = changeset} ->
         shipment = Shipments.get_shipment!(shipment_id) |> Ferry.Repo.preload(:routes)
-        IO.puts "+++++++++++++++++++++"
-        IO.inspect shipment
         render(conn, "new.html", group: group_id, shipment: shipment, changeset: changeset)
     end
   end
