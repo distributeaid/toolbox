@@ -11,6 +11,10 @@ export DA_DB_PORT=55432
 export DA_DB_HOSTNAME_DEV=db
 export DA_DB_HOSTNAME_TEST=dbtest
 
+# needed only for Windows Docker configuration
+export DA_EXTERNAL_VOLUME_REQUIRED=false
+export DA_DB_VOLUME_NAME=db
+
 # bring up containers
 if [ "$1" != "-v" ]; then
 	docker-compose up
