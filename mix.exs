@@ -22,7 +22,7 @@ defmodule Ferry.Mixfile do
   def application do
     [
       mod: {Ferry.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :scrivener_ecto]
     ]
   end
 
@@ -66,6 +66,9 @@ defmodule Ferry.Mixfile do
 
       # deployment deps
       {:distillery, "~> 2.0"},
+
+      # scrivener library for pagination
+      {:scrivener_ecto, "~> 1.0"}
     ]
   end
 

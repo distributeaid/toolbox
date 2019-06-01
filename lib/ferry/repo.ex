@@ -1,5 +1,6 @@
 defmodule Ferry.Repo do
   use Ecto.Repo, otp_app: :ferry
+  use Scrivener, page_size: 6
 
   @doc """
   Dynamically loads the repository url from the
