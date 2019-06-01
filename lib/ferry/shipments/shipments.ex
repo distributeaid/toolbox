@@ -41,12 +41,12 @@ defmodule Ferry.Shipments do
       order_by: s.id,
       left_join: r in assoc(s, :roles),
       where: r.group_id == ^group.id,
-      left_join: rts in assoc(s, :routes),
 
       # TODO: Can we do all the queries in one go? Currently need to do extra
       # queries for these.  If you try to inline it (see list_shipments/0 above)
       # then the where clause will only select the 1 role that the group is in.
-      preload: [roles: :group, routes: rts]
+      preload: [roles: :group],
+      preload: [:routes]
     )
   end
 
