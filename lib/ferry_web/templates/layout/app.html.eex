@@ -101,14 +101,21 @@
 
     <footer id="footer" class="site-footer section">
       <div class="section__content">
-        <a class="site-footer__link site-footer__link--lowercase" href="mailto:hello@distributeaid.org">
-          <i class="fas fa-paper-plane fa-lg"></i>
-          hello@distributeaid.org
-        </a>
+        <%= if @current_user do %>
+          <a class="site-footer__link site-footer__link--lowercase" href="mailto:help@distributeaid.org">
+            <i class="fas fa-paper-plane fa-lg"></i>
+            help@distributeaid.org
+          </a>
+        <% else %>
+          <a class="site-footer__link site-footer__link--lowercase" href="mailto:hello@distributeaid.org">
+            <i class="fas fa-paper-plane fa-lg"></i>
+            hello@distributeaid.org
+          </a>
+        <% end %>
 
-        <a class="site-footer__link site-footer__link--lowercase" href="mailto:help@distributeaid.org">
-          <i class="fas fa-paper-plane fa-lg"></i>
-          help@distributeaid.org
+        <a class="site-footer__link" href="https://gitlab.com/users/distribute-aid/projects" target="blank">
+          <i class="fas fa-code fa-lg"></i>
+          Code
         </a>
 
         <%= if @current_user do %>
