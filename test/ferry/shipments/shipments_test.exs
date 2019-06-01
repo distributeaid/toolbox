@@ -5,6 +5,18 @@ defmodule Ferry.ShipmentsTest do
   alias Ferry.Shipments.Role
   alias Ferry.Shipments.Shipment
 
+  # Helpers
+  # ------------------------------------------------------------
+  def without_assoc(list, field) when is_list(list) do
+    Enum.map(list, fn x ->
+      Map.delete(x, field)
+    end)
+  end
+
+  def without_assoc(%{} = struct, field) do
+    Map.delete(struct, field)
+  end
+
   # Shipments
   # ==============================================================================
   describe "shipments" do
@@ -100,7 +112,12 @@ defmodule Ferry.ShipmentsTest do
     end
 
     test "update_shipment/2 with valid data updates the shipment" do
-      old_shipment = insert(:shipment) |> with_role() |> with_role()
+      old_shipment = insert(:shipment)
+      |> with_role()
+      |> with_role()
+      |> with_route()
+      |> with_route()
+
       attrs = params_for(:shipment)
 
       assert {:ok, %Shipment{} = shipment} = Shipments.update_shipment(old_shipment, attrs)
@@ -112,6 +129,7 @@ defmodule Ferry.ShipmentsTest do
       assert shipment.funding == attrs.funding
       assert shipment.receiver_address == attrs.receiver_address
       assert shipment.roles == old_shipment.roles
+      assert shipment.routes == old_shipment.routes
     end
 
     test "update_shipment/2 can't update roles" do
@@ -133,7 +151,8 @@ defmodule Ferry.ShipmentsTest do
       shipment = insert(:shipment)
       attrs = params_for(:invalid_shipment)
       assert {:error, %Ecto.Changeset{}} = Shipments.update_shipment(shipment, attrs)
-      assert shipment == Shipments.get_shipment!(shipment.id)
+      assert shipment |> without_assoc(:routes)
+          == Shipments.get_shipment!(shipment.id) |> without_assoc(:routes)
     end
 
     test "delete_shipment/1 deletes the shipment and roles" do
@@ -220,6 +239,84 @@ defmodule Ferry.ShipmentsTest do
       shipment = insert(:shipment)
       role = insert(:shipment_role, %{shipment: shipment, group: group})
       assert %Ecto.Changeset{} = Shipments.change_role(role)
+    end
+  end
+
+  # Routes
+  # ==============================================================================
+  describe "routes" do
+    alias Ferry.Shipments.Shipment
+    alias Ferry.Shipments.Route
+
+    test "list_routes/1 returns all routes in a shipment" do
+      shipment = insert(:shipment)
+
+      # no routes
+      assert Shipments.list_routes(shipment) == []
+
+      # 1 route
+      route1 = insert(:route, %{shipment: shipment}) |> without_assoc(:shipment)
+      routes = Shipments.list_routes(shipment) |> without_assoc(:shipment)
+      assert routes == [route1]
+
+      # n routes
+      route2 = insert(:route, %{shipment: shipment}) |> without_assoc(:shipment)
+      routes = Shipments.list_routes(shipment) |> without_assoc(:shipment)
+      assert routes == [route1, route2]
+
+      # only routes for that shipment should be included
+      not_my_shipment = insert(:shipment)
+      _not_my_route = insert(:route, %{shipment: not_my_shipment}) |> without_assoc(:shipment)
+      routes = Shipments.list_routes(shipment) |> without_assoc(:shipment)
+      assert routes == [route1, route2]
+    end
+
+    test "get_route!/1 returns the route with given id" do
+      route = insert(:route) |> without_assoc(:shipment)
+      assert Shipments.get_route!(route.id) |> without_assoc(:shipment) == route
+    end
+
+    test "create_route/1 with valid data creates a route" do
+      shipment = insert(:shipment)
+
+      route_params = params_for(:route, %{shipment_id: shipment.id})
+
+      assert {:ok, %Route{} = route} = Shipments.create_route(route_params)
+      assert route.checklist == route_params.checklist
+      assert route.date == route_params.date
+      assert route.groups == route_params.groups
+    end
+
+    test "create_route/1 with invalid data returns error changeset" do
+      route_params = params_for(:invalid_route)
+      assert {:error, %Ecto.Changeset{}} = Shipments.create_route(route_params)
+    end
+
+    test "update_route/2 with valid data updates the route" do
+      route = insert(:route)
+      route_params = params_for(:route)
+      assert {:ok, route} = Shipments.update_route(route, route_params)
+      assert %Route{} = route
+      assert route.label == route_params.label
+    end
+
+    test "update_route/2 with invalid data returns error changeset" do
+      route = insert(:route)
+      route_params = params_for(:invalid_route)
+      assert {:error, %Ecto.Changeset{}} = Shipments.update_route(route, route_params)
+      assert route |> without_assoc(:shipment)
+          == Shipments.get_route!(route.id) |> without_assoc(:shipment)
+    end
+
+    test "delete_route/1 deletes the route" do
+      route = insert(:route)
+      assert {:ok, %Route{}} = Shipments.delete_route(route)
+      assert_raise Ecto.NoResultsError, fn -> Shipments.get_route!(route.id) end
+    end
+
+    test "change_route/1 returns a route changeset" do
+      route = insert(:route)
+      assert %Ecto.Changeset{} = Shipments.change_route(route)
     end
   end
 end

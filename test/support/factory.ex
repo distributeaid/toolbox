@@ -15,7 +15,8 @@ defmodule Ferry.Factory do
     Profiles.Group,
     Profiles.Project,
     Shipments.Shipment,
-    Shipments.Role
+    Shipments.Role,
+    Shipments.Route
   }
 
   # ExMachina Factories
@@ -221,12 +222,15 @@ defmodule Ferry.Factory do
       label: sequence("hello"),
       target_date_to_be_shipped: "today",
       status: Enum.random(["planning_shipment", "ready", "shipment_underway", "shipment_received"]),
+
       sender_address: "an address",
-      items: "some stuff",
-      funding: "$nothing",
       receiver_address: "another address",
 
-      roles: []
+      items: "some stuff",
+      funding: "$nothing",
+
+      roles: [],
+      routes: []
     }
   end
 
@@ -250,6 +254,36 @@ defmodule Ferry.Factory do
 
     # append the role to shipment.roles and return the shipment
     %{shipment | roles: shipment.roles ++ [role]}
+  end
+
+  def with_route(shipment, route \\ %{}) do
+    route = case route do
+      %Route{} -> route
+      _ -> insert(:route, Map.merge(route, %{shipment: shipment}))
+    end
+
+    # append the route to shipment.routes and return the shipment
+    %{shipment | routes: shipment.routes ++ [route]}
+  end
+
+  def route_factory do
+    %Route{
+      label: sequence("not today"),
+      shipment: build(:shipment),
+      checklist: ["here", "there"],
+      date: "today",
+      groups: "x"
+    }
+  end
+
+  def invalid_route_factory do
+    struct!(
+      route_factory(),
+      %{
+        label: ""
+      }
+    )
+
   end
 
   # Shipment Role

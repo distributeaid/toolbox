@@ -4,7 +4,7 @@
       <h1 class="section__title">Edit Shipment</h1>
     </header>
 
-    <%= render "form.html", Map.put(assigns, :action, group_address_path(@conn, :update, @group, @shipment)) %>
+    <%= render "form.html", Map.put(assigns, :action, group_shipment_path(@conn, :update, @group, @shipment)) %>
 
     <span><%= link "Back To Group", to: group_path(@conn, :show, @group) %></span>
   </div>

@@ -10,6 +10,7 @@ defmodule Ferry.Shipments do
   alias Ferry.Profiles.Group
   alias Ferry.Shipments.Role
   alias Ferry.Shipments.Shipment
+  alias Ferry.Shipments.Route
 
   # Shipment
   # ==============================================================================
@@ -29,7 +30,8 @@ defmodule Ferry.Shipments do
       order_by: s.id,
       left_join: r in assoc(s, :roles),
       left_join: g in assoc(r, :group),
-      preload: [roles: {r, group: g}]
+      left_join: rts in assoc(s, :routes),
+      preload: [roles: {r, group: g}, routes: rts]
     )
   end
 
@@ -39,11 +41,12 @@ defmodule Ferry.Shipments do
       order_by: s.id,
       left_join: r in assoc(s, :roles),
       where: r.group_id == ^group.id,
+      left_join: rts in assoc(s, :routes),
 
       # TODO: Can we do all the queries in one go? Currently need to do extra
       # queries for these.  If you try to inline it (see list_shipments/0 above)
       # then the where clause will only select the 1 role that the group is in.
-      preload: [roles: :group]
+      preload: [roles: :group, routes: rts]
     )
   end
 
@@ -65,7 +68,8 @@ defmodule Ferry.Shipments do
     query = from s in Shipment,
       left_join: r in assoc(s, :roles),
       left_join: g in assoc(r, :group),
-      preload: [roles: {r, group: g}]
+      left_join: rts in assoc(s, :routes),
+      preload: [roles: {r, group: g}, routes: rts]
 
     Repo.get!(query, id)
   end
@@ -87,6 +91,7 @@ defmodule Ferry.Shipments do
     %Shipment{}
     |> Shipment.changeset(attrs)
     |> Changeset.cast_assoc(:roles)
+    |> Changeset.cast_assoc(:routes)
     |> Repo.insert()
   end
 
@@ -173,5 +178,103 @@ defmodule Ferry.Shipments do
 
   def change_role(%Role{} = role) do
     Role.changeset(role, %{})
+  end
+
+  @doc """
+  Returns the list of routes.
+
+  ## Examples
+
+      iex> list_routes(shipment)
+      [%Route{}, ...]
+
+  """
+  def list_routes(%Shipment{} = shipment) do
+    Repo.all(
+      from r in Route,
+      where: r.shipment_id == ^shipment.id,
+      order_by: r.id
+    )
+  end
+
+  @doc """
+  Gets a single route.
+
+  Raises `Ecto.NoResultsError` if the Route does not exist.
+
+  ## Examples
+
+      iex> get_route!(123)
+      %Route{}
+
+      iex> get_route!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_route!(id), do: Repo.get!(Route, id)
+
+  @doc """
+  Creates a route.
+
+  ## Examples
+
+      iex> create_route(%{field: value})
+      {:ok, %Route{}}
+
+      iex> create_route(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_route(attrs \\ %{}) do
+    %Route{}
+    |> Route.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a route.
+
+  ## Examples
+
+      iex> update_route(route, %{field: new_value})
+      {:ok, %Route{}}
+
+      iex> update_route(route, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_route(%Route{} = route, attrs) do
+    route
+    |> Route.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Route.
+
+  ## Examples
+
+      iex> delete_route(route)
+      {:ok, %Route{}}
+
+      iex> delete_route(route)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_route(%Route{} = route) do
+    Repo.delete(route)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking route changes.
+
+  ## Examples
+
+      iex> change_route(route)
+      %Ecto.Changeset{source: %Route{}}
+
+  """
+  def change_route(%Route{} = route) do
+    Route.changeset(route, %{})
   end
 end
