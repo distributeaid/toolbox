@@ -20,7 +20,7 @@
     <ul class="shipments-list is-unstyled">
       <%= for shipment <- @shipments do %>
         <li>
-            <%= link items_text(shipment), to: group_shipment_path(@conn, :show, @group, shipment), target: "blank" %>
+          <%= link items_text(shipment), to: group_shipment_path(@conn, :show, @group, shipment) %>
         </li>
       <% end %>
     </ul>

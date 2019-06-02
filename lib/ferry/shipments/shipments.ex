@@ -4,11 +4,16 @@ defmodule Ferry.Shipments do
   """
 
   import Ecto.Query, warn: false
+  alias Ecto.Changeset
   alias Ferry.Repo
-  alias Ferry.Profiles.Group
 
+  alias Ferry.Profiles.Group
+  alias Ferry.Shipments.Role
   alias Ferry.Shipments.Shipment
   alias Ferry.Shipments.Route
+
+  # Shipment
+  # ==============================================================================
 
   @doc """
   Returns the list of shipments.
@@ -20,16 +25,31 @@ defmodule Ferry.Shipments do
 
   """
   def list_shipments do
-    Repo.all(Shipment)
+    Repo.all(
+      from s in Shipment,
+      order_by: s.id,
+      left_join: r in assoc(s, :roles),
+      left_join: g in assoc(r, :group),
+      left_join: rts in assoc(s, :routes),
+      preload: [roles: {r, group: g}, routes: rts]
+    )
   end
 
   def list_shipments(%Group{} = group) do
     Repo.all(
       from s in Shipment,
-      where: s.group_id == ^group.id,
-      order_by: s.id
+      order_by: s.id,
+      left_join: r in assoc(s, :roles),
+      left_join: rts in assoc(s, :routes),
+      where: r.group_id == ^group.id,
+
+      # TODO: Can we do all the queries in one go? Currently need to do extra
+      # queries for these.  If you try to inline it (see list_shipments/0 above)
+      # then the where clause will only select the 1 role that the group is in.
+      preload: [roles: :group, routes: rts]
     )
   end
+
   @doc """
   Gets a single shipment.
 
@@ -44,7 +64,15 @@ defmodule Ferry.Shipments do
       ** (Ecto.NoResultsError)
 
   """
-  def get_shipment!(id), do: Repo.get!(Shipment, id)
+  def get_shipment!(id) do
+    query = from s in Shipment,
+      left_join: r in assoc(s, :roles),
+      left_join: g in assoc(r, :group),
+      left_join: rts in assoc(s, :routes),
+      preload: [roles: {r, group: g}, routes: rts]
+
+    Repo.get!(query, id)
+  end
 
   @doc """
   Creates a shipment.
@@ -59,8 +87,11 @@ defmodule Ferry.Shipments do
 
   """
   def create_shipment(attrs \\ %{}) do
+    # TODO: force at least 1 role to exist to prevent orphan shipments
     %Shipment{}
     |> Shipment.changeset(attrs)
+    |> Changeset.cast_assoc(:roles)
+    |> Changeset.cast_assoc(:routes)
     |> Repo.insert()
   end
 
@@ -111,29 +142,63 @@ defmodule Ferry.Shipments do
     Shipment.changeset(shipment, %{})
   end
 
+  # Roles
+  # ================================================================================
+
+  def get_role!(id) do
+    query = from r in Role,
+      join: g in assoc(r, :group),
+      preload: [group: g]
+
+    Repo.get!(query, id)
+  end
+
+  def create_role(attrs \\ %{}) do
+    %Role{}
+    |> Role.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  # TODO: shouldn't be able to change group / shipment
+  def update_role(%Role{} = role, attrs) do
+    role
+    |> Role.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete_role(%Role{} = role) do
+    shipment = get_shipment!(role.shipment_id)
+
+    cond do
+      length(shipment.roles) > 1 -> Repo.delete(role)
+      true ->
+        role # TODO: make into a delete changeset?
+        |> Changeset.change()
+        |> Changeset.add_error(:shipment, "There must be at least 1 group taking part in this shipment.")
+        |> Changeset.apply_action(:delete)
+    end
+  end
+
+  def change_role(%Role{} = role) do
+    Role.changeset(role, %{})
+  end
+
   @doc """
   Returns the list of routes.
 
   ## Examples
 
-      iex> list_routes()
+      iex> list_routes(shipment)
       [%Route{}, ...]
 
   """
-  def list_routes do
-    Repo.all(Route)
-  end
-
-
-
-  def list_routes(shipment_id) do
+  def list_routes(%Shipment{} = shipment) do
     Repo.all(
-        from r in Route,
-        where: r.shipment_id == ^shipment_id,
-        order_by: r.id
+      from r in Route,
+      where: r.shipment_id == ^shipment.id,
+      order_by: r.id
     )
   end
-
 
   @doc """
   Gets a single route.

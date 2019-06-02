@@ -15,9 +15,9 @@
         <td><%= shipment.items %></td>
 
         <td>
-          <span><%= link "Show", to: group_shipment_path(@conn, :show, shipment.group_id, shipment), class: "button is-small" %></span>
-          <span><%= link "Edit", to: group_shipment_path(@conn, :edit, shipment.group_id, shipment), class: "button is-small" %></span>
-          <span><%= link "Delete", to: group_shipment_path(@conn, :delete, shipment.group_id, shipment), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
+          <span><%= link "Show", to: group_shipment_path(@conn, :show, @group.id, shipment), class: "button is-small" %></span>
+          <span><%= link "Edit", to: group_shipment_path(@conn, :edit, @group.id, shipment), class: "button is-small" %></span>
+          <span><%= link "Delete", to: group_shipment_path(@conn, :delete, @group.id, shipment), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
         </td>
       </tr>
   <% end %>

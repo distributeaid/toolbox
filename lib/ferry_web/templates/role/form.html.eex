@@ -1,0 +1,31 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert is-error">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%= if assigns[:create?] do %>
+    <div class="form-item is-inline">
+      <%= label f, :group_id, "Group", class: "is-req" %>
+      <%= select f, :group_id, select_group_options(@groups, @shipment.roles) %>
+      <%= error_tag f, :group_id %>
+    </div>
+  <% end %>
+
+  <div class="form-item is-inline">
+    <%= label f, :label, class: "is-req" %>
+    <%= text_input f, :label %>
+    <%= error_tag f, :label %>
+  </div>
+
+  <div class="form-item is-inline">
+    <%= label f, :description %>
+    <%= textarea f, :description %>
+    <%= error_tag f, :description %>
+  </div>
+
+  <div class="form-item is-text-center">
+    <%= submit "Submit", class: "button is-big" %>
+  </div>
+<% end %>

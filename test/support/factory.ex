@@ -15,6 +15,7 @@ defmodule Ferry.Factory do
     Profiles.Group,
     Profiles.Project,
     Shipments.Shipment,
+    Shipments.Role,
     Shipments.Route
   }
 
@@ -213,24 +214,79 @@ defmodule Ferry.Factory do
     }
   end
 
+  # Shipments
+  # ------------------------------------------------------------
+
   def shipment_factory do
     %Shipment{
-      label: "hello",
-      group_id: 1,
+      label: sequence("hello"),
+      target_date_to_be_shipped: "today",
+      status: Enum.random(["planning_shipment", "ready", "shipment_underway", "shipment_received"]),
+
+      sender_address: "an address",
+      receiver_address: "another address",
+
+      items: "some stuff",
+      funding: "$nothing",
+
+      roles: [],
+      routes: []
     }
-
-end
-
+  end
 
   def invalid_shipment_factory do
     struct!(
       shipment_factory(),
       %{
         label: "",
-        status: "hello",
-        }
+        status: "hello"
+      }
     )
   end
+
+  def with_role(shipment, group \\ %{}) do
+    group = case group do
+      %Group{} -> group
+      _ -> insert(:group, group) # `group` is attrs for :group factory
+    end
+
+    role = insert(:shipment_role, %{shipment_id: shipment.id, group: group})
+
+    # append the role to shipment.roles and return the shipment
+    %{shipment | roles: shipment.roles ++ [role]}
+  end
+
+  def with_route(shipment, route \\ %{}) do
+    route = case route do
+      %Route{} -> route
+      _ -> insert(:route, Map.merge(route, %{shipment: shipment}))
+    end
+
+    # append the route to shipment.routes and return the shipment
+    %{shipment | routes: shipment.routes ++ [route]}
+  end
+
+  # Shipment Role
+  # ------------------------------------------------------------
+
+  def shipment_role_factory do
+    %Role{
+      label: Enum.random(["Collector", "Transporter", "Distributor", "Funder", "Observer"]),
+      description: sequence("I am description #")
+    }
+  end
+
+  def invalid_shipment_role_factory do
+    struct!(
+      shipment_role_factory(),
+      %{
+        label: ""
+      }
+    )
+  end
+
+  # Shipment Route
+  # ------------------------------------------------------------
 
   def route_factory do
     %Route{
@@ -249,7 +305,6 @@ end
         label: ""
       }
     )
-
   end
 
 end

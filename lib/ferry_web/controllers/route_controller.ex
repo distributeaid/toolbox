@@ -20,8 +20,8 @@ defmodule FerryWeb.RouteController do
     # routes shouldn't have access to things above it/ what use case will it need to have entire shipment or group?
     { group_id, shipment_id, _ } = get_ids(params)
     #not passing in group because all groups involved with shipment should see route
-    routes = Shipments.list_routes(shipment_id)
     shipment = Shipments.get_shipment!(shipment_id)
+    routes = Shipments.list_routes(shipment)
 
     render(conn, "index.html", group: group_id, shipment: shipment, routes: routes)
   end
@@ -88,10 +88,8 @@ defmodule FerryWeb.RouteController do
     |> Shipments.get_route!
     |> Shipments.delete_route
 
-    routes = Shipments.list_routes(shipment_id)
-
     conn
     |> put_flash(:info, "Route deleted successfully.")
-    |> redirect(to: group_shipment_route_path(conn, :index, group_id, shipment_id, routes))
+    |> redirect(to: group_shipment_route_path(conn, :index, group_id, shipment_id))
   end
 end

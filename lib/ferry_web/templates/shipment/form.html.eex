@@ -34,12 +34,6 @@
   </div>
 
   <div class="form-item">
-    <%= label f, :Receiver_Group_Name_or_Email %>
-    <%= text_input f, :receiver_group_id, placeholder: "hello@letsHelpRefugees.com" %>
-    <%= error_tag f, :receiver_group_id %>
-  </div>
-
-  <div class="form-item">
     <%= label f, :Shipping_Items %>
     <%= text_input f, :items, placeholder: "soap, food, clothes" %>
     <%= error_tag f, :items %>
@@ -57,8 +51,35 @@
     <%= error_tag f, :sender_address %>
   </div>
 
+  <%= if assigns[:new_shipment?] do %>
+    <%= inputs_for f, :roles, fn fr -> %>
+      <fieldset>
+        <legend>Your Role</legend>
+
+        <div class="form-item">
+          <%= label fr, :group_id, class: "is-req" %>
+          <span><%= @group.name %></span>
+          <%= hidden_input fr, :group_id %>
+        </div>
+
+        <div class="form-item">
+          <%= label fr, :label, class: "is-req" %>
+          <%= text_input fr, :label %>
+          <%= error_tag fr, :label %>
+        </div>
+
+        <div class="form-item">
+          <%= label fr, :description %>
+          <%= textarea fr, :description %>
+          <%= error_tag fr, :description %>
+        </div>
+
+      </fieldset>
+    <% end %>
+  <% end %>
+
   <div class="form-item">
-  <%= checkbox f, :new_route, checked: true %> Add a Stop Along the Route for this Shipment?
+    <%= checkbox f, :new_route, checked: true %> Add a Stop Along the Route for this Shipment?
   </div>
 
 

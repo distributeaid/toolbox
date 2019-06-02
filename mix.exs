@@ -60,7 +60,7 @@ defmodule Ferry.Mixfile do
       {:arc_ecto, "~> 0.11.1"},
 
       # testing deps
-      {:ex_machina, "~> 2.2", only: :test},
+      {:ex_machina, "~> 2.3", only: :test},
       {:excoveralls, "~> 0.10", only: :test},
       {:mox, "~> 0.5", only: :test},
 
