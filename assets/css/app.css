@@ -891,7 +891,7 @@ Helpers
 .site-header .brand {
   display: none;
 
-  margin-left: 2.25rem;
+  margin-left: 2.75rem;
   margin-bottom: 0;
 
   font-size: 1.5rem;
@@ -905,9 +905,11 @@ Helpers
 .site-header__logo {
   display: block;
   position: absolute;
+
   top: 0;
   left: 0;
-  width: 3rem;
+  /* specific number used as to cover full header */
+  width: 50px;
 }
 
 @media (min-width: 600px) {

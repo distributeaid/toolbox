@@ -5,5 +5,7 @@
     </header>
 
     <%= render "form.html", Map.put(assigns, :action, session_path(@conn, :create)) %>
+
+    
   </div>
 </section>
