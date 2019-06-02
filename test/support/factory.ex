@@ -266,26 +266,6 @@ defmodule Ferry.Factory do
     %{shipment | routes: shipment.routes ++ [route]}
   end
 
-  def route_factory do
-    %Route{
-      label: sequence("not today"),
-      shipment: build(:shipment),
-      checklist: ["here", "there"],
-      date: "today",
-      groups: "x"
-    }
-  end
-
-  def invalid_route_factory do
-    struct!(
-      route_factory(),
-      %{
-        label: ""
-      }
-    )
-
-  end
-
   # Shipment Role
   # ------------------------------------------------------------
 
@@ -299,6 +279,28 @@ defmodule Ferry.Factory do
   def invalid_shipment_role_factory do
     struct!(
       shipment_role_factory(),
+      %{
+        label: ""
+      }
+    )
+  end
+
+  # Shipment Route
+  # ------------------------------------------------------------
+
+  def route_factory do
+    %Route{
+      label: sequence("not today"),
+      shipment: build(:shipment),
+      checklist: ["here", "there"],
+      date: "today",
+      groups: "x"
+    }
+  end
+
+  def invalid_route_factory do
+    struct!(
+      route_factory(),
       %{
         label: ""
       }

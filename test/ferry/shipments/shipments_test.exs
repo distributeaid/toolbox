@@ -185,22 +185,22 @@ defmodule Ferry.ShipmentsTest do
       end
     end
 
-    test "create_role/3 with valid data creates a role" do
+    test "create_role/1 with valid data creates a role" do
       group = insert(:group)
       shipment = insert(:shipment)
-      attrs = params_for(:shipment_role)
-      assert {:ok, %Role{} = role} = Shipments.create_role(group, shipment, attrs)
+      attrs = params_for(:shipment_role, %{group_id: group.id, shipment_id: shipment.id})
+      assert {:ok, %Role{} = role} = Shipments.create_role(attrs)
       assert role.label == attrs.label
       assert role.description == attrs.description
       assert role.group_id == group.id
       assert role.shipment_id == shipment.id
     end
 
-    test "create_shipment/1 with invalid data returns error changeset" do
+    test "create_role/3 with invalid data returns error changeset" do
       group = insert(:group)
       shipment = insert(:shipment)
-      attrs = params_for(:invalid_shipment_role, %{})
-      assert {:error, %Ecto.Changeset{}} = Shipments.create_role(group, shipment, attrs)
+      attrs = params_for(:invalid_shipment_role, %{group_id: group.id, shipment_id: shipment.id})
+      assert {:error, %Ecto.Changeset{}} = Shipments.create_role(attrs)
     end
 
     # TODO: validate that you can't change the shipment / group
@@ -227,11 +227,22 @@ defmodule Ferry.ShipmentsTest do
     end
 
     test "delete_role/1 deletes the role" do
-      group = insert(:group)
       shipment = insert(:shipment)
-      role = insert(:shipment_role, %{shipment: shipment, group: group})
-      assert {:ok, %Role{}} = Shipments.delete_role(role)
-      assert_raise Ecto.NoResultsError, fn -> Shipments.get_role!(role.id) end
+
+      group1 = insert(:group)
+      role1 = insert(:shipment_role, %{shipment: shipment, group: group1})
+
+      group2 = insert(:group)
+      role2 = insert(:shipment_role, %{shipment: shipment, group: group2})
+
+      # can delete roles
+      assert {:ok, %Role{}} = Shipments.delete_role(role1)
+      assert_raise Ecto.NoResultsError, fn -> Shipments.get_role!(role1.id) end
+
+      # can't delete last role
+      assert {:error, %Ecto.Changeset{}} = Shipments.delete_role(role2)
+      assert role2 |> without_assoc(:shipment)
+        == Shipments.get_role!(role2.id) |> without_assoc(:shipment)
     end
 
     test "change_role/1 returns a role changeset" do

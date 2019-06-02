@@ -1,0 +1,13 @@
+<section class="section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Edit Role</h1>
+      <p class="section__subtitle">(shipment: <%= @shipment.label %>)</p>
+    </header>
+
+    <%= render "form.html", Map.put(assigns, :action, group_shipment_role_path(@conn, :update, @group, @shipment, @role)) %>
+
+    <span><%= link "Back", to: group_shipment_path(@conn, :show, @group, @shipment) %></span>
+  </div>
+</section>
+

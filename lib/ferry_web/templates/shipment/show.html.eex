@@ -28,6 +28,28 @@
       <%= @shipment.target_date_to_be_shipped %>
     </p>
 
+    <div>
+      <h3>Roles</h3>
+      <%= link "Add Role", to: group_shipment_role_path(@conn, :new, @group, @shipment) %>
+      <ul>
+        <%= for role <- @shipment.roles do %>
+          <li>
+            <strong><%= role.label %>: <%= role.group.name %></strong>
+            <%= link "Edit", to: group_shipment_role_path(@conn, :edit, @group, @shipment, role) %>
+
+            <%= if length(@shipment.roles) > 1 do %>
+              <%= link "Delete", to: group_shipment_role_path(@conn, :delete, @group, @shipment, role), method: :delete, data: [confirm: "Are you sure? This will remove the group from the shipment."] %>
+            <% end %>
+
+            <%= if role.description do %>
+              <br />
+              <%= role.description %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
     <p>
       <%= if has_routes? @routes do %>
         <%= for route <- @routes do %>
