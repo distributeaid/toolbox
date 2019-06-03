@@ -316,14 +316,9 @@ p.section__subtitle {
     padding-top: 0;
   }
 
-  .section--focus {
+.section--focus {
     width: auto;
     min-width: 50%;
-  }
-
-  .section__content {
-    border: 0.125rem solid white;
-    padding: 3rem 1.5rem;
   }
 }
 
@@ -624,11 +619,25 @@ Entry
 /* Map
  * ------------------------------------------------------
  */
-.map {
-  width: 100%;
-  min-height: 250px;
+.maps {
+  width: 55%;
 }
 
+.map-controls {
+  width: 100%;
+  font-size: 75%;
+  padding: 6rem 0rem;
+  margin-top: 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.map {
+  width: 100%;
+  min-height: 650px;
+  position: relative;
+  margin: 1rem 0rem;
+  margin-right: 1rem;
+}
 
 /* Components
  * ========================================================================== */
@@ -908,7 +917,7 @@ Helpers
 
   top: 0;
   left: 0;
-  /* specific number used as to cover full header */
+  /* specific number used as to cover the whole header*/
   width: 50px;
 }
 
