@@ -117,9 +117,7 @@
             Change Password
           <% end %>
         <% end %>
-
-        <br> <br>
-        <p class="underfoot"> Help <a href="https://www.patreon.com/distributeaid">support the development of Distribute Aid</a> for as little as €1/month!</p>
+        <p class="underfoot"> Help <a href="https://www.patreon.com/distributeaid" target="_blank">support the development of Distribute Aid</a> for as little as €1/month!</p>
       </div>
     </footer>
   </body>

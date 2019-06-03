@@ -944,6 +944,11 @@ Site Footer // Section
   margin: 0;
 }
 
+.underfoot {
+  font-size: 14px;
+  padding-top: 2%;
+}
+
 /*
 Section // Actions
 ------------------------------------------------------------
