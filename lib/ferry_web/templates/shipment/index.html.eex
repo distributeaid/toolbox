@@ -1,0 +1,12 @@
+<section class="section">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Shipments</h1>
+    </header>
+
+    <%= render "index-table.partial.html", %{conn: @conn, group: @group, shipments: @shipments} %>
+
+    <span><%= link "New Shipment", to: group_shipment_path(@conn, :new, @group) %></span>
+    <span><%= link "Back to Group", to: group_path(@conn, :show, @group) %></span>
+  </div>
+</section>

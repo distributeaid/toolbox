@@ -1,0 +1,9 @@
+<section class="section">
+  <div class="section__content">
+    <header class="section__header">
+        <h1 class="section__title">New Stop Along Route</h1>
+    </header>
+        <%= render "form.html", Map.put(assigns, :action, group_shipment_route_path(@conn, :create, @group, @shipment)) %>
+        <span><%= link "Back", to: group_shipment_route_path(@conn, :index, @group, @shipment) %></span>
+  </div>
+</section>

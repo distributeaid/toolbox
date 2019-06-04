@@ -37,7 +37,7 @@
     -->
     <h2 class="subsection__header">All Groups</h2>
     <%= if has_groups? @groups do %>
-      <div class="category category--3-col">
+      <div class="category category--4-col">
         <%= for group <- @groups do %>
           <%= link to: group_path(@conn, :show, group), class: "link--wrapper" do %>
             <%= if group.logo do %>

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Adding data to database for development 
+# Adding data to database for development
 # Start by adding a value to the group table
 
 set -ex

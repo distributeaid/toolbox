@@ -1,8 +1,3 @@
-<%= render "index.html", %{
-  conn: @conn,
-  groups: @groups,
-  current_group: @current_group
-} %>
 
 <section class="section">
   <div class="section__content">
@@ -53,5 +48,14 @@
       addresses: @addresses,
       can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
     } %>
+
+    <%= render FerryWeb.ShipmentView, "index-list.partial.html", %{
+      conn: @conn,
+      group: @group,
+      shipments: @shipments,
+      can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+    } %>
+
+
   </div>
 </section>

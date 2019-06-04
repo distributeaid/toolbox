@@ -381,11 +381,6 @@ p.section__subtitle {
     width: auto;
     min-width: 50%;
   }
-
-  .section__content {
-    border: 0.125rem solid white;
-    padding: 3rem 1.5rem;
-  }
 }
 
 /*
@@ -689,11 +684,25 @@ Entry
 /* Map
  * ------------------------------------------------------
  */
-.map {
-  width: 100%;
-  min-height: 250px;
+.maps {
+  width: 55%;
 }
 
+.map-controls {
+  width: 100%;
+  font-size: 75%;
+  padding: 6rem 0rem;
+  margin-top: 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.map {
+  width: 100%;
+  min-height: 650px;
+  position: relative;
+  margin: 1rem 0rem;
+  margin-right: 1rem;
+}
 
 /* Components
  * ========================================================================== */
@@ -901,6 +910,36 @@ ul.links-list {
   margin-bottom: 0;
 }
 
+/*
+Checklist
+------------------------------------------------------------
+ */
+ul.show_checklist li.checklist--checked {
+  background: #888;
+  color: #000000;
+  text-decoration: line-through;
+}
+ul.show_checklist li.checklist--checked::before {
+  content: '';
+  position: absolute;
+  border-color: #fff;
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  top: 10px;
+  left: 16px;
+  transform: rotate(45deg);
+  height: 15px;
+  width: 7px;
+}
+
+.route_checklist {
+  margin-left: 114px;
+}
+
+label + .route_checklist {
+  margin-left: 0;
+}
+
 
 /* Trumps & Helpers
  * ========================================================================== */
@@ -926,7 +965,7 @@ Helpers
 .site-header .brand {
   display: none;
 
-  margin-left: 2.25rem;
+  margin-left: 2.75rem;
   margin-bottom: 0;
 
   font-size: 1.5rem;
@@ -940,9 +979,11 @@ Helpers
 .site-header__logo {
   display: block;
   position: absolute;
+
   top: 0;
   left: 0;
-  width: 3rem;
+  /* specific number used as to cover the whole header*/
+  width: 50px;
 }
 
 @media (min-width: 600px) {
@@ -966,6 +1007,11 @@ Site Footer // Section
 .site-footer.section {
   width: 100%;
   margin: 0;
+}
+
+.underfoot {
+  font-size: 14px;
+  padding-top: 2%;
 }
 
 /*

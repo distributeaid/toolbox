@@ -5,6 +5,7 @@ defmodule FerryWeb.GroupController do
   alias Ferry.Locations
   alias Ferry.Profiles
   alias Ferry.Profiles.Group
+  alias Ferry.Shipments
 
   # Group Controller
   # ==============================================================================
@@ -45,7 +46,8 @@ defmodule FerryWeb.GroupController do
       group: group,
       links: Links.list_links(group),
       projects: Profiles.list_projects(group),
-      addresses: Locations.list_addresses(group)
+      addresses: Locations.list_addresses(group),
+      shipments: Shipments.list_shipments(group)
     ])
 
     render(conn, "show.html", assigns)

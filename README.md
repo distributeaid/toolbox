@@ -65,7 +65,7 @@ mkdir db && chmod -R +x db
 
 **Run Containers**
 
-* Start: `./bulid-server.sh`
+* Start: `./build-server.sh` (for Windows, use `./build-server.bat`)
 * Stop: `ctrl-c` in the same window, or `docker-compose down` in another
 
 When starting the containers, once you see this message it is ready:
@@ -143,9 +143,11 @@ Common Mix Commands
 docker exec toolbox_web mix phx.routes
 
 # code generation (look these up in the docs- many options)
-docker exec toolbox_web mix phx.gen.schema [OPTIONS]
-docker exec toolbox_web mix phx.gen.context [OPTIONS]
-docker exec toolbox_web mix phx.gen.html [OPTIONS]
+# NOTE: Don't run code generation tasks through the Docker container.
+#       They generated files will have the wrong permissions.
+mix phx.gen.schema [OPTIONS]
+mix phx.gen.context [OPTIONS]
+mix phx.gen.html [OPTIONS]
 ```
 
 **Ecto:**

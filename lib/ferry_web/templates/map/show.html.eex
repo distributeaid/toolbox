@@ -1,5 +1,5 @@
-<section class="section">
-  <div class="section__content">
+<section class="section maps">
+  <div class="section__content map-controls">
     <header class="section__header">
       <h1 class="section__title">The Map</h1>
     </header>
@@ -20,21 +20,21 @@
         <%= submit "Submit", class: "button is-big" %>
       </div>
     <% end %>
-
-    <div id="map" class="map"></div>
   </div>
 </section>
+
+<div id="map" class="map"></div>
 
 <script>
   var map = new L.map('map');
 
   // create the tile layer with correct attribution
   var osmUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-  var osmAttrib='Map data &copy; <a href="https://openstreetmap.org" target="blank">OpenStreetMap</a> contributors, <a href="https://openstreetmap.org/copyright" target="blank">CC-BY-SA</a>';
+  var osmAttrib='Map data &copy; <a href="https://www.openstreetmap.org" target="blank">OpenStreetMap</a> contributors, <a href="https://openstreetmap.org/copyright" target="blank">CC-BY-SA</a>';
   var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
 
   // draw the map
-  map.setView(new L.LatLng(52, 13), 3);
+  map.setView(new L.LatLng(51, 20), 4.0);
   map.addLayer(osm);
 
   // add markers to the map

@@ -18,7 +18,7 @@
     <!--
     Favicon
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    -->    
+    -->
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="icon" sizes="16x16 32x32 64x64" href="/favicon.ico">
     <link rel="icon" type="image/png" sizes="196x196" href="<%= static_path(@conn, "/favicon-192.png") %>">
@@ -50,7 +50,7 @@
 
   <body class="site">
     <header class="navbar site-header">
-      <img class="site-header__logo" src="<%= static_path(@conn, "/images/logo.png") %>" alt="Logo: Outline of a Dove" />
+      <img class="site-header__logo" src="<%= static_path(@conn, "/images/DAlogoDarkSmall.jpg") %>" alt="Logo: Outline of a Dove" />
 
       <%= link "distribute|AID", to: home_page_path(@conn, :index), class: "brand" %>
 
@@ -65,9 +65,6 @@
           </li>
           <li>
             <%= link "Groups", to: group_path(@conn, :index), class: "site-nav__link" %>
-          </li>
-          <li>
-            <%= link "Projects", to: project_path(@conn, :index), class: "site-nav__link" %>
           </li>
           <li>
             <%= if @current_user == nil do %>
@@ -104,14 +101,21 @@
 
     <footer id="footer" class="site-footer section">
       <div class="section__content">
-        <a class="site-footer__link site-footer__link--lowercase" href="mailto:hello@distributeaid.org">
-          <i class="fas fa-paper-plane fa-lg"></i>
-          hello@distributeaid.org
-        </a>
+        <%= if @current_user do %>
+          <a class="site-footer__link site-footer__link--lowercase" href="mailto:help@distributeaid.org">
+            <i class="fas fa-paper-plane fa-lg"></i>
+            help@distributeaid.org
+          </a>
+        <% else %>
+          <a class="site-footer__link site-footer__link--lowercase" href="mailto:hello@distributeaid.org">
+            <i class="fas fa-paper-plane fa-lg"></i>
+            hello@distributeaid.org
+          </a>
+        <% end %>
 
-        <a class="site-footer__link site-footer__link--lowercase" href="mailto:help@distributeaid.org">
-          <i class="fas fa-paper-plane fa-lg"></i>
-          help@distributeaid.org
+        <a class="site-footer__link" href="https://gitlab.com/users/distribute-aid/projects" target="blank">
+          <i class="fas fa-code fa-lg"></i>
+          Code
         </a>
 
         <%= if @current_user do %>
@@ -120,6 +124,7 @@
             Change Password
           <% end %>
         <% end %>
+        <p class="underfoot"> Help <a href="https://www.patreon.com/distributeaid" target="_blank">support the development of Distribute Aid</a> for as little as €1/month!</p>
       </div>
     </footer>
   </body>
