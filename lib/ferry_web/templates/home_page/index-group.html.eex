@@ -1,0 +1,72 @@
+<section class="section section--wider">
+  <div class="section__content">
+    <header class="section__header">
+      <%= component "group_logo.partial.html", %{
+        group: @group,
+        size: :large,
+        version: :thumb
+      } %>
+      <h1 class="section__title">
+        <%= @group.name %>
+      </h1>
+    </header>
+
+    <div class="subsection is-75 is-centered">
+      <h2 class="subsection__header">Your Tools</h2>
+
+      <p>
+        You can access the public tools through the main navbar.  The following
+        links will take you to your group-specific tools, where you can update
+        your information or collaborate privately with other groups.
+      </p>
+
+      <div class="category category--3-col">
+        <%= link to: group_path(@conn, :show, @group), class: "link--wrapper" do %>
+          <%= component "category-entry.partial.html", %{
+            title: "Group Profile",
+            icon: %{class: "fas fa-3x fa-users"}
+          } %>
+        <% end %>
+
+        <%= link to: group_stock_path(@conn, :index, @group), class: "link--wrapper" do %>
+          <%= component "category-entry.partial.html", %{
+            title: "Inventory Manager",
+            icon: %{class: "fas fa-3x fa-boxes"}
+          } %>
+        <% end %>
+
+        <%= link to: group_shipment_path(@conn, :index, @group), class: "link--wrapper" do %>
+          <%= component "category-entry.partial.html", %{
+            title: "Shipment Coordinator",
+            icon: %{class: "fas fa-3x fa-truck"}
+          } %>
+        <% end %>
+      </div>
+
+    </div>
+
+    <div class="subsection is-75 is-centered">
+      <h2 class="subsection__header">About the Beta</h2>
+
+      <p>
+        Welcome to the Distribute Aid platform, and thank you so much for
+        joining our beta test!  Please get in touch if you have an idea for
+        a great new feature, notice anything we can improve on, or want to
+        refer a friend:
+      </p>
+
+      <ul>
+        <li>
+          Email our team at: <a href="mailto:help@distributeaid.org" target="blank">help@distributeaid.org</a>
+        </li>
+        <li>
+          <a href="https://www.facebook.com/DistributeAidDotOrg/" target="blank">Send us a message on Facebook</a>
+        </li>
+        <li>
+          Contact Taylor (our tech lead) on WhatsApp: +44 7445 823932
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</section>

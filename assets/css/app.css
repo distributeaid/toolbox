@@ -210,15 +210,6 @@ form .is-req {
 }
 
 /*
-Select2 Overrides
-------------------------------------------------------------
-*/
-.select2-search--dropdown .select2-search__field {
-  padding-left: 32px; /* restore Kube's padding to give the search icon space */
-}
-
-
-/*
 Table
 ------------------------------------------------------------
 */
@@ -246,6 +237,15 @@ table.is-striped tr:nth-child(odd) td {
 
 table.is-striped tr:nth-child(even) td {
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+
+/*
+Select2 Overrides
+================================================================================
+*/
+.select2-search--dropdown .select2-search__field {
+  padding-left: 32px; /* restore Kube's padding to give the search icon space */
 }
 
 
@@ -358,7 +358,7 @@ p.section__subtitle {
 
 .section__content {
   width: 100%;
-  padding: 0.5rem 1rem;
+  padding: 1.5rem;
 
   background-color: rgba(255, 255, 255, 0.9);
 }
@@ -371,6 +371,16 @@ p.section__subtitle {
   .section {
     width: 50%;
     padding-top: 0;
+  }
+
+  .section--wide {
+    width: 66%;
+    margin: 0 auto;
+  }
+
+  .section--wider {
+    width: 75%;
+    margin: 0 auto;
   }
 
   .section--full-width {
@@ -649,13 +659,19 @@ Logo
 .logo {
   width: 4rem;
   height: 4rem;
+  margin-bottom: 0.5rem;
   border: 0.25rem solid #C8C8C8;
   border-radius: 100%;
+}
+
+.logo:last-child {
+  margin-bottom: 0;
 }
 
 .logo--big {
   width: 8rem;
   height: 8rem;
+  margin-bottom: 1rem;
 }
 
 /*
@@ -772,6 +788,11 @@ Entry
 
 .site-footer__link--lowercase {
   text-transform: lowercase;
+}
+
+.underfoot {
+  font-size: 0.875rem;
+  padding-top: 0.75rem;
 }
 
 @media (min-width: 600px) {
@@ -1009,9 +1030,7 @@ Site Footer // Section
   margin: 0;
 }
 
-.underfoot {
-  font-size: 14px;
-  padding-top: 2%;
+.site-footer .section__content {
 }
 
 /*

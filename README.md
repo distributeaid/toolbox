@@ -90,7 +90,7 @@ We now need to seed a test group and some database constants:
 
 ```
 docker exec toolbox_db /bin/bash seed-test-group.sh
-docker exec toolbox_db mix run priv/repo/seeds.sh
+docker exec toolbox_web mix run priv/repo/seeds.exs
 ```
 
 You can now visit http://localhost:1312/public/groups/1/users/new to create a user associated with that group.  Finally, visit http://localhost:1312/public/session/new to log in.
