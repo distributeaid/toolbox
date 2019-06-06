@@ -6,10 +6,102 @@ defmodule Ferry.InventoryTest do
   alias Ferry.Inventory.{
     Category,
     Item,
+    InventoryListControls,
     Mod,
     Packaging,
     Stock
   }
+
+
+  # Inventory List
+  # ================================================================================
+  # TODO: test control_data & controls
+
+  describe "inventory list" do
+    test "get_inventory_list/1 with no controls set returns all stocks in the results" do
+      # group 1
+      group1 = insert(:group)
+      project1 = insert(:project, %{group: group1})
+      project2 = insert(:project, %{group: group1})
+
+      # group 2
+      group2 = insert(:group)
+      project3 = insert(:project, %{group: group2})
+
+      # no stock
+      %{results: results} = Inventory.get_inventory_list()
+      assert results == []
+
+      # 1 stock, 1 project, 1 group
+      stock1 = insert(:stock, %{project: project1})
+      %{results: results} = Inventory.get_inventory_list()
+      assert results == [stock1]
+
+      # n stock, 1 project, 1 group
+      stock2 = insert(:stock, %{project: project1})
+      %{results: results} = Inventory.get_inventory_list()
+      assert results == [stock1, stock2]
+
+      # n stock, n projects, 1 group
+      stock3 = insert(:stock, %{project: project2})
+      %{results: results} = Inventory.get_inventory_list()
+      assert results == [stock1, stock2, stock3]
+
+      # n stock, n projects, n groups
+      stock4 = insert(:stock, %{project: project3})
+      %{results: results} = Inventory.get_inventory_list()
+      assert results == [stock1, stock2, stock3, stock4]
+    end
+
+    test "get_inventory_list/1 with the group filter set returns all stock for the selected groups" do
+      # group 1
+      group1 = insert(:group)
+      project1 = insert(:project, %{group: group1})
+      project2 = insert(:project, %{group: group1})
+      stock1 = insert(:stock, %{project: project1})
+      stock2 = insert(:stock, %{project: project2})
+
+      # group 2
+      group2 = insert(:group)
+      project3 = insert(:project, %{group: group2})
+      stock3 = insert(:stock, %{project: project3})
+
+      # group 3
+      group3 = insert(:group)
+      project4 = insert(:project, %{group: group3})
+      stock4 = insert(:stock, %{project: project4})
+
+      # group 4 - has no stock
+      group4 = insert(:group)
+      _project5 = insert(:project, %{group: group4})
+
+      # no group selected- list all stock
+      controls = %{group_filter: []}
+      %{results: results} = Inventory.get_inventory_list(controls)
+      assert results == [stock1, stock2, stock3, stock4]
+
+      # 1 group selected
+      controls = %{group_filter: [group1.id]}
+      %{results: results} = Inventory.get_inventory_list(controls)
+      assert results == [stock1, stock2]
+
+      # some groups selected
+      controls = %{group_filter: [group1.id, group2.id]}
+      %{results: results} = Inventory.get_inventory_list(controls)
+      assert results == [stock1, stock2, stock3]
+
+      # all groups selected
+      controls = %{group_filter: [group1.id, group2.id, group3.id, group4.id]}
+      %{results: results} = Inventory.get_inventory_list(controls)
+      assert results == [stock1, stock2, stock3, stock4]
+
+      # group without stock selected
+      controls = %{group_filter: [group4.id]}
+      %{results: results} = Inventory.get_inventory_list(controls)
+      assert results == []
+    end
+  end
+
 
   # Categories
   # ================================================================================

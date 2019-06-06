@@ -62,7 +62,19 @@
   </table>
 
 <% else %>
-  <p>
+  <p class="is-text-center">
     No stock has been added to your inventory.
+  </p>
+  <p>
+    <%= if @can_modify? do %>
+      <ul class="actions actions--inline">
+        <li>
+          <%= link to: group_stock_path(@conn, :new, @group), class: "action" do %>
+            <i class="fas fa-plus"></i>
+          <% end %>
+        </li>
+      </ul>
+    <% end %>
+
   </p>
 <% end %>

@@ -8,12 +8,106 @@ defmodule Ferry.Inventory do
   alias Ecto.Multi
   alias Ecto.Changeset
 
+  alias Ferry.Profiles.Group
+  alias Ferry.Inventory.InventoryList
+  alias Ferry.Inventory.InventoryListControls, as: Controls
   alias Ferry.Inventory.{
     Category,
     Item,
     Mod,
     Stock
   }
+
+
+  # Inventory List
+  # ================================================================================
+
+  @doc """
+  Gets an inventory list, which sets the filter fields and gets the matching
+  stocks from the database.
+
+  ## Examples
+
+      iex> get_inventory_list([group_filter: [id1, id2, ...]])
+      %{
+        control_data: %{
+          group_filter: [{"Group Name", id}, ...]
+        },
+
+        controls: %Ecto.Changeset{
+          group_filter: [id1, id2, ...]
+        },
+
+        results: [%Stock{}, ...]
+      }
+
+      iex> get_inventory_list([group_filter: ["not an id"]])
+      %{
+        control_data: %{
+          group_filter: [{"Group Name", id}, ...]
+        },
+
+        controls: %Ecto.Changeset{},
+
+        results: []
+      }
+  """
+  def get_inventory_list(controls \\ %{}) do
+    control_data = %{
+      group_filter: get_group_filter_labels()
+    }
+    controls = %Controls{} |> Controls.changeset(controls)
+
+    results = case controls.valid? do
+      true ->
+        controls
+        |> Changeset.apply_changes()
+        |> list_inventory()
+      false -> []
+    end
+
+    %{
+      control_data: control_data,
+      controls: controls,
+      results: results
+    }
+  end
+
+  # TODO: based on `set_control_labels` in /lib/ferry/locations.ex
+  #       need to refactor
+  defp get_group_filter_labels() do
+    # TODO: move to Profiles context for better encapsulation?
+    Repo.all(from g in Group,
+      select: {g.name, g.id},
+      order_by: g.name
+    )
+  end
+
+  defp list_inventory(controls) do
+    full_stock_query()
+    |> apply_group_filter(controls)
+    |> order_stock_list()
+    |> Repo.all()
+  end
+
+  defp apply_group_filter(query, %Controls{group_filter: group_filter}) do
+    case group_filter do
+      # empty- don't filter
+      nil -> query
+      [] -> query
+
+      # not empty- filter for selected groups
+      _ ->
+        from [s, p, g] in query,
+        where: g.id in ^group_filter
+    end
+  end
+
+  defp order_stock_list(query) do
+    from [s] in query,
+      order_by: s.id
+  end
+
 
   # Stock
   # ================================================================================

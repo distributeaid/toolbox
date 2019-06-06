@@ -39,8 +39,7 @@ defmodule FerryWeb.Router do
       resources "/users", UserController, only: [:new, :create] # TODO: move into admin scope
     end
 
-    # TODO
-    # resources "/inventory", StockController, only: [:index, :show]
+    resources "/inventory", InventoryController, only: [:show], singleton: true
     resources "/map", MapController, only: [:show], singleton: true
     resources "/projects", ProjectController, only: [:index]
   end

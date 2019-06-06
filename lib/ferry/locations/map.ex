@@ -2,7 +2,7 @@ defmodule Ferry.Locations.Map do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "maps" do
+  embedded_schema do
     # control data
     field :group_filter_labels, {:array, :any}, virtual: true
 

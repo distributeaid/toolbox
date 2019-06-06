@@ -86,10 +86,11 @@ See the _Common Docker Commands_ section below for a list of container names.
 
 If everything is running correctly, you should be able to visit http://localhost:1312 or http://0.0.0.0:1312 and see our site.  The localhost address is used in the rest of this readme, but the 0.0.0.0 address should be the same thing.
 
-We now need to seed a test group:
+We now need to seed a test group and some database constants:
 
 ```
 docker exec toolbox_db /bin/bash seed-test-group.sh
+docker exec toolbox_db mix run priv/repo/seeds.sh
 ```
 
 You can now visit http://localhost:1312/public/groups/1/users/new to create a user associated with that group.  Finally, visit http://localhost:1312/public/session/new to log in.
@@ -111,6 +112,7 @@ To verify that the seeds ran correctly select all entries in the groups table (t
 
 ```
 SELECT * FROM groups;
+SELECT * FROM inventory_mods;
 ```
 
 Common Docker Commands
@@ -158,6 +160,8 @@ mix phx.gen.html [OPTIONS]
 docker exec toolbox_web mix ecto.migrate
 docker exec toolbox_web mix ecto.rollback -n 1
 docker exec toolbox_web mix ecto.reset
+
+mix ecto.gen.migration "migration name"
 ```
 
 **Testing:**
@@ -168,7 +172,11 @@ docker exec toolbox_web mix ecto.reset
 ```
 docker exec toolbox_web mix test --color
 
-# for detailed output
+# run specific tests- all in a folder, all in a file, or even just a single one
+docker exec toolbox_web mix test --color test/$PATH_TO_FOLDER_OR_FILE
+docker exec toolbox_web mix test --color test/$PATH:$TEST_LINE_NUMBER
+
+# run tests synchronously, in order
 docker exec toolbox_web mix test --color --trace
 
 # for code coverage
