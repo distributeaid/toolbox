@@ -286,6 +286,10 @@ Data Tables Overrides
   margin-left: 1rem;
 }
 
+.dataTables_empty {
+  text-align: center;
+}
+
 
 
 /* Objects

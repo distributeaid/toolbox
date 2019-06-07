@@ -1,80 +1,61 @@
-<%= if has_stocks? @stocks do %>
-  <table id="group-stock-table" class="is-striped">
-    <thead>
-      <tr>
-        <th>Category</th>
-        <th>Item</th>
-        <th>Count</th>
-        <th>Age</th>
-        <th>Gender</th>
-        <th>Size</th>
-        <th>Season</th>
+<table id="group-stock-table" class="is-striped">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Item</th>
+      <th>Count</th>
+      <th>Age</th>
+      <th>Gender</th>
+      <th>Size</th>
+      <th>Season</th>
 
-        <th>
-          <%= if @can_modify? do %>
-            <ul class="actions actions--inline">
-              <li>
-                <%= link to: group_stock_path(@conn, :new, @group), class: "action" do %>
-                  <i class="fas fa-plus"></i>
-                <% end %>
-              </li>
-            </ul>
-          <% end %>
-        </th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <%= for stock <- @stocks do %>
-        <tr>
-          <td><%= stock.item.category.name %></td>
-          <td><%= stock.item.name %></td>
-          <td><%= stock.count %></td>
-          <td><%= stock.mod.age %></td>
-          <td><%= print_gender(stock.mod.gender) %></td>
-          <td><%= stock.mod.size %></td>
-          <td><%= stock.mod.season %></td>
-
-          <td>
-            <ul class="actions actions--inline">
-              <li>
-                <%= link to: group_stock_path(@conn, :show, @group, stock), class: "action" do %>
-                  <i class="fas fa-eye"></i>
-                <% end %>
-              </li>
-              <%= if @can_modify? do %>
-                <li>
-                  <%= link to: group_stock_path(@conn, :edit, @group, stock), class: "action" do %>
-                    <i class="fas fa-pencil-alt"></i>
-                  <% end %>
-                </li>
-                <li>
-                  <%= link to: group_stock_path(@conn, :delete, @group, stock), method: :delete, data: [confirm: "This will remove the stock entry from your inventory.  Are you sure?"], class: "action" do %>
-                    <i class="fas fa-trash-alt"></i>
-                  <% end %>
-                </li>
+      <th>
+        <%= if @can_modify? do %>
+          <ul class="actions actions--inline">
+            <li>
+              <%= link to: group_stock_path(@conn, :new, @group), class: "action" do %>
+                <i class="fas fa-plus"></i>
               <% end %>
-            </ul>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+            </li>
+          </ul>
+        <% end %>
+      </th>
+    </tr>
+  </thead>
 
-<% else %>
-  <p class="is-text-center">
-    No stock has been added to your inventory.
-  </p>
-  <p>
-    <%= if @can_modify? do %>
-      <ul class="actions actions--inline">
-        <li>
-          <%= link to: group_stock_path(@conn, :new, @group), class: "action" do %>
-            <i class="fas fa-plus"></i>
-          <% end %>
-        </li>
-      </ul>
+  <tbody>
+    <%= for stock <- @stocks do %>
+      <tr>
+        <td><%= stock.item.category.name %></td>
+        <td><%= stock.item.name %></td>
+        <td><%= stock.count %></td>
+        <td><%= stock.mod.age %></td>
+        <td><%= print_gender(stock.mod.gender) %></td>
+        <td><%= stock.mod.size %></td>
+        <td><%= stock.mod.season %></td>
+
+        <td>
+          <ul class="actions actions--inline">
+            <li>
+              <%= link to: group_stock_path(@conn, :show, @group, stock), class: "action" do %>
+                <i class="fas fa-eye"></i>
+              <% end %>
+            </li>
+            <%= if @can_modify? do %>
+              <li>
+                <%= link to: group_stock_path(@conn, :edit, @group, stock), class: "action" do %>
+                  <i class="fas fa-pencil-alt"></i>
+                <% end %>
+              </li>
+              <li>
+                <%= link to: group_stock_path(@conn, :delete, @group, stock), method: :delete, data: [confirm: "This will remove the stock entry from your inventory.  Are you sure?"], class: "action" do %>
+                  <i class="fas fa-trash-alt"></i>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </td>
+      </tr>
     <% end %>
-
-  </p>
-<% end %>
+  </tbody>
+</table>

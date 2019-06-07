@@ -1,8 +1,7 @@
 <section class="section">
   <div class="section__content">
     <header class="section__header">
-      <h1 class="section__title">Add Stock to Your Inventory</h1>
-      <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+      <h1 class="section__title">Add An Inventory Entry</h1>
     </header>
 
     <ul class="actions">

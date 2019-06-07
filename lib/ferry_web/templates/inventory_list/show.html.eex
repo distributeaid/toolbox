@@ -1,7 +1,7 @@
 <section class="section section--full-width">
   <div class="section__content">
     <header class="section__header">
-      <h1 class="section__title">Inventory Manager</h1>
+      <h1 class="section__title">Available Inventory</h1>
     </header>
 
     <%= form_for @changeset, inventory_list_path(@conn, :show), [method: :get], fn f -> %>
@@ -21,44 +21,37 @@
       </div>
     <% end %>
 
-    <%= if length(@results) > 0 do %>
-      <table id="group-stock-table" class="is-striped">
-        <thead>
+    <table id="inventory-list" class="is-striped">
+      <thead>
+        <tr>
+          <th>Group</th>
+          <th>Project</th>
+          <th>Category</th>
+          <th>Item</th>
+          <th>Count</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Size</th>
+          <th>Season</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <%= for stock <- @results do %>
           <tr>
-            <th>Group</th>
-            <th>Project</th>
-            <th>Category</th>
-            <th>Item</th>
-            <th>Count</th>
-            <th>Age</th>
-            <th>Gender</th>
-            <th>Size</th>
-            <th>Season</th>
+            <td><%= stock.project.group.name %></td>
+            <td><%= stock.project.name %></td>
+            <td><%= stock.item.category.name %></td>
+            <td><%= stock.item.name %></td>
+            <td><%= stock.count %></td>
+            <td><%= stock.mod.age %></td>
+            <td><%= print_gender(stock.mod.gender) %></td>
+            <td><%= stock.mod.size %></td>
+            <td><%= stock.mod.season %></td>
           </tr>
-        </thead>
-
-        <tbody>
-          <%= for stock <- @results do %>
-            <tr>
-              <td><%= stock.project.group.name %></td>
-              <td><%= stock.project.name %></td>
-              <td><%= stock.item.category.name %></td>
-              <td><%= stock.item.name %></td>
-              <td><%= stock.count %></td>
-              <td><%= stock.mod.age %></td>
-              <td><%= print_gender(stock.mod.gender) %></td>
-              <td><%= stock.mod.size %></td>
-              <td><%= stock.mod.season %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-
-    <% else %>
-      <p class="is-text-center">
-        No inventory entries matched your search.
-      </p>
-    <% end %>
+        <% end %>
+      </tbody>
+    </table>
 
   </div>
 </section>

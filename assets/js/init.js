@@ -33,6 +33,17 @@ $(document).ready(function() {
   $('#group-stock-table').DataTable({
     info: false,
     paging: false,
+    language: {
+      emptyTable: "No results found.  Try modifying your filters or adding a missing entry?"
+    }
+  });
+
+  $('#inventory-list').DataTable({
+    info: false,
+    paging: false,
+    language: {
+      emptyTable: "No results found.  Try modifying your filters?"
+    }
   });
 
   /* Smooth Scroll to Anchors
