@@ -67,7 +67,7 @@
             <%= link "Groups", to: group_path(@conn, :index), class: "site-nav__link" %>
           </li>
           <li>
-            <%= link "Inventory", to: inventory_path(@conn, :show), class: "site-nav__link" %>
+            <%= link "Inventory", to: inventory_list_path(@conn, :show), class: "site-nav__link" %>
           </li>
           <li>
             <%= if @current_user == nil do %>

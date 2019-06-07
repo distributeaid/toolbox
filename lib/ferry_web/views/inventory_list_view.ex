@@ -1,4 +1,4 @@
-defmodule FerryWeb.InventoryView do
+defmodule FerryWeb.InventoryListView do
   use FerryWeb, :view
 
   # copied from FerryWeb.StockView

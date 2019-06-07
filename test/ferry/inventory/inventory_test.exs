@@ -6,7 +6,6 @@ defmodule Ferry.InventoryTest do
   alias Ferry.Inventory.{
     Category,
     Item,
-    InventoryListControls,
     Mod,
     Packaging,
     Stock

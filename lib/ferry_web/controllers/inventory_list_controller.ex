@@ -1,4 +1,4 @@
-defmodule FerryWeb.InventoryController do
+defmodule FerryWeb.InventoryListController do
   use FerryWeb, :controller
 
   alias Ferry.Inventory

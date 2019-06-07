@@ -1,4 +1,4 @@
-defmodule FerryWeb.InventoryControllerTest do
+defmodule FerryWeb.InventoryListControllerTest do
   use FerryWeb.ConnCase
 
   # Inventory Controller Tests
@@ -24,7 +24,7 @@ defmodule FerryWeb.InventoryControllerTest do
       stock2 = insert(:stock)
       stock3 = insert(:stock)
 
-      conn = get conn, inventory_path(conn, :show)
+      conn = get conn, inventory_list_path(conn, :show)
       assert html_response(conn, 200) =~ Integer.to_string stock1.count
       assert html_response(conn, 200) =~ Integer.to_string stock2.count
       assert html_response(conn, 200) =~ Integer.to_string stock3.count
