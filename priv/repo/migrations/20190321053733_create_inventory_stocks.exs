@@ -42,7 +42,7 @@ defmodule Ferry.Repo.Migrations.CreateInventoryStocks do
     # Packaging
     # ------------------------------------------------------------
     create table(:inventory_packaging) do
-      add :count, :integer, nul: false
+      add :count, :integer, null: false
       add :type, :string, null: false
       add :description, :text
       add :photo, :string

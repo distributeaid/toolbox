@@ -1,4 +1,4 @@
-defmodule :"Elixir.Ferry.Repo.Migrations.Group-logos" do
+defmodule Ferry.Repo.Migrations.AddGroupLogos do
   use Ecto.Migration
 
   def change do

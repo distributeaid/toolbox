@@ -1,4 +1,4 @@
-defmodule :"Elixir.Ferry.Repo.Migrations.Add-index-to-routes" do
+defmodule Ferry.Repo.Migrations.AddIndexOnRoutes do
   use Ecto.Migration
 
   def change do
