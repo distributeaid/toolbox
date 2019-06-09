@@ -1,8 +1,6 @@
 <section class="section section--full-width">
   <div class="section__content">
-    <header class="section__header">
-      <h1 class="section__title">Available Inventory</h1>
-    </header>
+    <%= render "header.partial.html", assigns %>
 
     <%= form_for @changeset, inventory_list_path(@conn, :show), [method: :get], fn f -> %>
       <%= if @changeset.action do %>
@@ -28,7 +26,7 @@
           <th>Project</th>
           <th>Category</th>
           <th>Item</th>
-          <th>Count</th>
+          <th><%= amount_header(@list_type) %></th>
           <th>Age</th>
           <th>Gender</th>
           <th>Size</th>
@@ -43,7 +41,7 @@
             <td><%= stock.project.name %></td>
             <td><%= stock.item.category.name %></td>
             <td><%= stock.item.name %></td>
-            <td><%= stock.count %></td>
+            <td><%= amount(@list_type, stock) %></td>
             <td><%= stock.mod.age %></td>
             <td><%= print_gender(stock.mod.gender) %></td>
             <td><%= stock.mod.size %></td>

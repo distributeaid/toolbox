@@ -168,44 +168,28 @@ form .is-req {
 }
 
 .form-item.is-inline {
-  padding-left: 0;
+  padding-left: 108px; /* leave 0.5rem between the label and the input */
 }
 
 .form-item.is-inline-offset {
-  padding-left: 113px;
-  padding-right: 100px;
+  padding-left: 108px; /* needs to match the .is-inline padding-left */
 }
 
 .form-item.is-inline label:not(.is-checkbox) {
-  float: none;
-  display: inline-block;
   width: 100px;
-  margin-left: 0;
-  margin-right: 0.5rem;
+  margin-top: 8px; /* vertically center on the input */
+  margin-left: -108px; /* needs to match the .is-inline padding-left */
 
   text-align: right;
 }
 
 .form-item.is-inline input:not([type="checkbox"]):not([type="radio"]),
-.form-item.is-inline select {
-  display: inline-block;
-
-  /* Leaves room for:
-   *   - the 5px space between the label and the input.
-   *   - the label's right margin
-   *.  - build in some margin on the right
-   */
-  width: calc(100% - 205px - 0.5rem);
+.form-item.is-inline select,
+.form-item.is-inline textarea {
+  width: calc(100% - 108px); /* the pixel portion needs to match the .is-inline padding-left */
 }
 
 .form-item.is-inline textarea {
-  display: inline-block;
-
-  /* Leaves room for:
-   *   - the 5px space between the label and the input.
-   *   - the label's right margin
-   */
-  width: calc(100% - 105px - 0.5rem);
   height: 200px;
 }
 
@@ -244,8 +228,22 @@ table.is-striped tr:nth-child(even) td {
 Select2 Overrides
 ================================================================================
 */
+/* restore Kube's padding to give the search icon space */
 .select2-search--dropdown .select2-search__field {
-  padding-left: 32px; /* restore Kube's padding to give the search icon space */
+  padding-left: 32px;
+}
+
+
+/* make the select2 select boxes the same height as the standard kube ones */
+.select2-container .select2-selection--single {
+  height: 40px;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  line-height: 40px;
+  vertical-align: middle;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 40px;
 }
 
 

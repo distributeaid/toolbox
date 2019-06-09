@@ -17,7 +17,7 @@ defmodule Ferry.InventoryTest do
   # TODO: test control_data & controls
 
   describe "inventory list" do
-    test "get_inventory_list/1 with no controls set returns all stocks in the results" do
+    test "get_inventory_list/2 with no controls set returns all stocks in the results" do
       # group 1
       group1 = insert(:group)
       project1 = insert(:project, %{group: group1})
@@ -28,31 +28,44 @@ defmodule Ferry.InventoryTest do
       project3 = insert(:project, %{group: group2})
 
       # no stock
-      %{results: results} = Inventory.get_inventory_list()
+      %{results: results} = Inventory.get_inventory_list(:available)
       assert results == []
 
       # 1 stock, 1 project, 1 group
       stock1 = insert(:stock, %{project: project1})
-      %{results: results} = Inventory.get_inventory_list()
+      %{results: results} = Inventory.get_inventory_list(:available)
       assert results == [stock1]
 
       # n stock, 1 project, 1 group
       stock2 = insert(:stock, %{project: project1})
-      %{results: results} = Inventory.get_inventory_list()
+      %{results: results} = Inventory.get_inventory_list(:available)
       assert results == [stock1, stock2]
 
       # n stock, n projects, 1 group
       stock3 = insert(:stock, %{project: project2})
-      %{results: results} = Inventory.get_inventory_list()
+      %{results: results} = Inventory.get_inventory_list(:available)
       assert results == [stock1, stock2, stock3]
 
       # n stock, n projects, n groups
       stock4 = insert(:stock, %{project: project3})
-      %{results: results} = Inventory.get_inventory_list()
+      %{results: results} = Inventory.get_inventory_list(:available)
       assert results == [stock1, stock2, stock3, stock4]
     end
 
-    test "get_inventory_list/1 with the group filter set returns all stock for the selected groups" do
+    test "get_inventory_list/2 filters based on the type of list" do
+      available_stock = insert(:stock, %{have: 100, need: 0})
+      needed_stock = insert(:stock, %{have: 0, need: 100})
+
+      # available
+      %{results: results} = Inventory.get_inventory_list(:available)
+      assert results == [available_stock]
+
+      # needs
+      %{results: results} = Inventory.get_inventory_list(:needs)
+      assert results == [needed_stock]
+    end
+
+    test "get_inventory_list/2 with the group filter set returns all stock for the selected groups" do
       # group 1
       group1 = insert(:group)
       project1 = insert(:project, %{group: group1})
@@ -76,27 +89,27 @@ defmodule Ferry.InventoryTest do
 
       # no group selected- list all stock
       controls = %{group_filter: []}
-      %{results: results} = Inventory.get_inventory_list(controls)
+      %{results: results} = Inventory.get_inventory_list(:available, controls)
       assert results == [stock1, stock2, stock3, stock4]
 
       # 1 group selected
       controls = %{group_filter: [group1.id]}
-      %{results: results} = Inventory.get_inventory_list(controls)
+      %{results: results} = Inventory.get_inventory_list(:available, controls)
       assert results == [stock1, stock2]
 
       # some groups selected
       controls = %{group_filter: [group1.id, group2.id]}
-      %{results: results} = Inventory.get_inventory_list(controls)
+      %{results: results} = Inventory.get_inventory_list(:available, controls)
       assert results == [stock1, stock2, stock3]
 
       # all groups selected
       controls = %{group_filter: [group1.id, group2.id, group3.id, group4.id]}
-      %{results: results} = Inventory.get_inventory_list(controls)
+      %{results: results} = Inventory.get_inventory_list(:available, controls)
       assert results == [stock1, stock2, stock3, stock4]
 
       # group without stock selected
       controls = %{group_filter: [group4.id]}
-      %{results: results} = Inventory.get_inventory_list(controls)
+      %{results: results} = Inventory.get_inventory_list(:available, controls)
       assert results == []
     end
   end
@@ -117,20 +130,20 @@ defmodule Ferry.InventoryTest do
       _ = insert(:stock, %{item: item}) # just adds more stock entries for that category
       categories = Inventory.list_top_categories(3)
       assert Enum.at(categories, 0).id == stock2.item.category.id
-      assert Enum.at(categories, 0).count == 2
+      assert Enum.at(categories, 0).stock_reference_count == 2
       assert Enum.at(categories, 1).id == stock1.item.category.id
-      assert Enum.at(categories, 1).count == 1
+      assert Enum.at(categories, 1).stock_reference_count == 1
 
       # > n categories
       stock3 = insert(:stock)
       _stock4 = insert(:stock)
       categories = Inventory.list_top_categories(3)
       assert Enum.at(categories, 0).id == stock2.item.category.id
-      assert Enum.at(categories, 0).count == 2
+      assert Enum.at(categories, 0).stock_reference_count == 2
       assert Enum.at(categories, 1).id == stock1.item.category.id
-      assert Enum.at(categories, 1).count == 1
+      assert Enum.at(categories, 1).stock_reference_count == 1
       assert Enum.at(categories, 2).id == stock3.item.category.id
-      assert Enum.at(categories, 2).count == 1
+      assert Enum.at(categories, 2).stock_reference_count == 1
     end
   end
 
@@ -149,20 +162,20 @@ defmodule Ferry.InventoryTest do
       _ = insert(:stock, %{item: item}) # just adds more stock entries for that item
       items = Inventory.list_top_items(3)
       assert Enum.at(items, 0).id == stock2.item.id
-      assert Enum.at(items, 0).count == 2
+      assert Enum.at(items, 0).stock_reference_count == 2
       assert Enum.at(items, 1).id == stock1.item.id
-      assert Enum.at(items, 1).count == 1
+      assert Enum.at(items, 1).stock_reference_count == 1
 
       # > n items
       stock3 = insert(:stock)
       _stock4 = insert(:stock)
       items = Inventory.list_top_items(3)
       assert Enum.at(items, 0).id == stock2.item.id
-      assert Enum.at(items, 0).count == 2
+      assert Enum.at(items, 0).stock_reference_count == 2
       assert Enum.at(items, 1).id == stock1.item.id
-      assert Enum.at(items, 1).count == 1
+      assert Enum.at(items, 1).stock_reference_count == 1
       assert Enum.at(items, 2).id == stock3.item.id
-      assert Enum.at(items, 2).count == 1
+      assert Enum.at(items, 2).stock_reference_count == 1
     end
   end
 
@@ -214,7 +227,9 @@ defmodule Ferry.InventoryTest do
       attrs = deep_params_for_stock()
 
       assert {:ok, %Stock{} = stock} = Inventory.create_stock(attrs)
-      assert stock.count == attrs["count"]
+      assert stock.have == attrs["have"]
+      assert stock.need == attrs["need"]
+      assert stock.unit == attrs["unit"]
       assert stock.description == attrs["description"]
       # TODO: test stock.photo
 
@@ -252,7 +267,9 @@ defmodule Ferry.InventoryTest do
       })
 
       assert {:ok, %Stock{} = stock} = Inventory.create_stock(attrs)
-      assert stock.count == attrs["count"]
+      assert stock.have == attrs["have"]
+      assert stock.need == attrs["need"]
+      assert stock.unit == attrs["unit"]
       assert stock.description == attrs["description"]
       # TODO: test stock.photo
 
@@ -283,8 +300,9 @@ defmodule Ferry.InventoryTest do
       # is nil
       nil_attrs = deep_params_for_stock()
       nil_attrs = Map.put(nil_attrs, "project_id", nil)
+      nil_attrs = Map.put(nil_attrs, "unit", "")
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.create_stock(nil_attrs)
-      assert 1 == length(changeset.errors)
+      assert 2 == length(changeset.errors)
 
       # too short
       assoc_params = %{
@@ -296,7 +314,8 @@ defmodule Ferry.InventoryTest do
       short_attrs = Enum.into(assoc_params, string_params_for(:invalid_short_stock))
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.create_stock(short_attrs)
       errors = Ecto.Changeset.traverse_errors(changeset, fn {msg, _} -> msg end)
-      assert 1 == length(errors[:count])
+      assert 1 == length(errors[:have])
+      assert 1 == length(errors[:need])
       assert 1 == length(errors[:item][:name])
       assert 1 == length(errors[:item][:category][:name])
       assert 1 == length(errors[:packaging][:count])
@@ -320,7 +339,9 @@ defmodule Ferry.InventoryTest do
       attrs = deep_params_for_stock()
 
       assert {:ok, %Stock{} = stock} = Inventory.update_stock(current_stock, attrs)
-      assert stock.count == attrs["count"]
+      assert stock.have == attrs["have"]
+      assert stock.need == attrs["need"]
+      assert stock.unit == attrs["unit"]
       assert stock.description == attrs["description"]
       # TODO: test stock.photo
 
@@ -360,7 +381,9 @@ defmodule Ferry.InventoryTest do
       })
 
       assert {:ok, %Stock{} = stock} = Inventory.update_stock(current_stock, attrs)
-      assert stock.count == attrs["count"]
+      assert stock.have == attrs["have"]
+      assert stock.need == attrs["need"]
+      assert stock.unit == attrs["unit"]
       assert stock.description == attrs["description"]
       # TODO: test stock.photo
 
@@ -392,8 +415,9 @@ defmodule Ferry.InventoryTest do
       # is nil
       nil_attrs = deep_params_for_stock()
       nil_attrs = Map.put(nil_attrs, "project_id", nil)
+      nil_attrs = Map.put(nil_attrs, "unit", "")
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.update_stock(current_stock, nil_attrs)
-      assert 1 == length(changeset.errors)
+      assert 2 == length(changeset.errors)
 
       # too short
       assoc_params = %{
@@ -404,7 +428,8 @@ defmodule Ferry.InventoryTest do
       short_attrs = Enum.into(assoc_params, string_params_for(:invalid_short_stock))
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.update_stock(current_stock, short_attrs)
       errors = Ecto.Changeset.traverse_errors(changeset, fn {msg, _} -> msg end)
-      assert 1 == length(errors[:count])
+      assert 1 == length(errors[:have])
+      assert 1 == length(errors[:need])
       assert 1 == length(errors[:item][:name])
       assert 1 == length(errors[:item][:category][:name])
       assert 1 == length(errors[:packaging][:count])

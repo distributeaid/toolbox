@@ -1,7 +1,7 @@
 <section class="section">
   <div class="section__content">
     <header class="section__header">
-      <h1 class="section__title">Inventory Entry</h1>
+      <h1 class="section__title">Inventory Item</h1>
     </header>
 
     <ul class="actions">
@@ -15,7 +15,9 @@
     <p>
       <%= @stock.project.name %> has
 
-      <%= @stock.count %>
+      <%= @stock.have %> <%= @stock.unit %>
+
+      and needs <%= @stock.need %> <%= @stock.need %> (total)
 
       <%= @stock.mod.age %>
       <%= print_gender(@stock.mod.gender) %>

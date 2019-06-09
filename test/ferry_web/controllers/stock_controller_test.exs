@@ -29,7 +29,7 @@ defmodule FerryWeb.StockControllerTest do
     # TODO: test logged in (conn) & logged out (build_conn())
     test "lists all stocks for a group", %{conn: conn, group: group} do
       conn = get conn, group_stock_path(conn, :index, group)
-      assert html_response(conn, 200) =~ "Group Inventory"
+      assert html_response(conn, 200) =~ "Inventory Manager"
     end
   end
 
@@ -39,7 +39,7 @@ defmodule FerryWeb.StockControllerTest do
   describe "new stock" do
     test "renders form", %{conn: conn, group: group} do
       conn = get conn, group_stock_path(conn, :new, group)
-      assert html_response(conn, 200) =~ "Add Stock"
+      assert html_response(conn, 200) =~ "Add An Item"
     end
   end
 
@@ -52,14 +52,14 @@ defmodule FerryWeb.StockControllerTest do
       assert redirected_to(conn) == group_stock_path(conn, :index, group)
 
       conn = get conn, group_stock_path(conn, :index, group)
-      assert html_response(conn, 200) =~ Integer.to_string(attrs["count"])
+      assert html_response(conn, 200) =~ Integer.to_string(attrs["have"])
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group, project: project} do
       attrs = build(:stock_attrs, %{project: project})
       invalid_attrs = Map.merge(attrs, string_params_for(:invalid_short_stock))
       conn = post conn, group_stock_path(conn, :create, group), stock: invalid_attrs
-      assert html_response(conn, 200) =~ "Add Stock"
+      assert html_response(conn, 200) =~ "Add An Item"
     end
   end
 
@@ -69,7 +69,7 @@ defmodule FerryWeb.StockControllerTest do
   describe "edit stock" do
     test "renders form for editing chosen stock", %{conn: conn, group: group, stock: stock} do
       conn = get conn, group_stock_path(conn, :edit, group, stock)
-      assert html_response(conn, 200) =~ "Edit Stock"
+      assert html_response(conn, 200) =~ "Edit An Item"
     end
   end
 
@@ -80,14 +80,14 @@ defmodule FerryWeb.StockControllerTest do
       assert redirected_to(conn) == group_stock_path(conn, :index, group)
 
       conn = get conn, group_stock_path(conn, :show, group, stock)
-      assert html_response(conn, 200) =~ Integer.to_string(attrs["count"])
+      assert html_response(conn, 200) =~ Integer.to_string(attrs["have"])
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group, project: project, stock: stock} do
       attrs = build(:stock_attrs, %{project: project})
       invalid_attrs = Map.merge(attrs, string_params_for(:invalid_short_stock))
       conn = put conn, group_stock_path(conn, :update, group, stock), stock: invalid_attrs
-      assert html_response(conn, 200) =~ "Edit Stock"
+      assert html_response(conn, 200) =~ "Edit An Item"
     end
   end
 

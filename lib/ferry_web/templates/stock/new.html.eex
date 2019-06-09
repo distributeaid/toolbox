@@ -1,7 +1,7 @@
 <section class="section">
   <div class="section__content">
     <header class="section__header">
-      <h1 class="section__title">Add An Inventory Entry</h1>
+      <h1 class="section__title">Add An Item</h1>
     </header>
 
     <ul class="actions">

@@ -1,9 +1,11 @@
 <table id="group-stock-table" class="is-striped">
   <thead>
     <tr>
+      <th>Project</th>
       <th>Category</th>
       <th>Item</th>
-      <th>Count</th>
+      <th>Have</th>
+      <th>Need</th>
       <th>Age</th>
       <th>Gender</th>
       <th>Size</th>
@@ -26,9 +28,11 @@
   <tbody>
     <%= for stock <- @stocks do %>
       <tr>
+        <td><%= stock.project.name %></td>
         <td><%= stock.item.category.name %></td>
         <td><%= stock.item.name %></td>
-        <td><%= stock.count %></td>
+        <td><%= stock.have %></td>
+        <td><%= stock.need %></td>
         <td><%= stock.mod.age %></td>
         <td><%= print_gender(stock.mod.gender) %></td>
         <td><%= stock.mod.size %></td>

@@ -343,7 +343,9 @@ defmodule Ferry.Factory do
   # ------------------------------------------------------------
   def stock_factory do
     %Stock{
-      count: sequence(:count, &(&1 + 101)), # 101, 102, ...
+      have: sequence(:count, &(&1 + 101)), # 101, 102, ...
+      need: sequence(:need, &(&1 + 91)), # 91, 92, ...
+      unit: Enum.random(["items", "small bags", "large bags", "small boxes", "large boxes", "pallets"]),
       description: "We got shirts yo.",
       photo: nil, # TODO: test photo uploads
 
@@ -358,7 +360,8 @@ defmodule Ferry.Factory do
     struct!(
       stock_factory(),
       %{
-        count: -1,
+        have: -1,
+        need: -1
       }
     )
   end
@@ -367,7 +370,9 @@ defmodule Ferry.Factory do
     %{
       "project_id" => project_id,
 
-      "count" => sequence(:count, &(&1 + 201)), # 201, 202, ...
+      "have" => sequence(:count, &(&1 + 201)), # 201, 202, ...
+      "need" => sequence(:need, &(&1 + 191)), # 191, 192, ...
+      "unit" => Enum.random(["items", "small bags", "large bags", "small boxes", "large boxes", "pallets"]),
       "description" => "Tons of shirts yo.",
       "photo" => nil, # TODO: test photo uploads
 

@@ -28,7 +28,7 @@ defmodule Ferry.Inventory do
 
   ## Examples
 
-      iex> get_inventory_list([group_filter: [id1, id2, ...]])
+      iex> get_inventory_list(:type, [group_filter: [id1, id2, ...]])
       %{
         control_data: %{
           group_filter: [{"Group Name", id}, ...]
@@ -41,7 +41,7 @@ defmodule Ferry.Inventory do
         results: [%Stock{}, ...]
       }
 
-      iex> get_inventory_list([group_filter: ["not an id"]])
+      iex> get_inventory_list(:type, [group_filter: ["not an id"]])
       %{
         control_data: %{
           group_filter: [{"Group Name", id}, ...]
@@ -52,7 +52,7 @@ defmodule Ferry.Inventory do
         results: []
       }
   """
-  def get_inventory_list(controls \\ %{}) do
+  def get_inventory_list(type, controls \\ %{}) when type in [:available, :needs] do
     control_data = %{
       group_filter: get_group_filter_labels()
     }
@@ -62,7 +62,7 @@ defmodule Ferry.Inventory do
       true ->
         controls
         |> Changeset.apply_changes()
-        |> list_inventory()
+        |> list_inventory(type)
       false -> []
     end
 
@@ -83,11 +83,22 @@ defmodule Ferry.Inventory do
     )
   end
 
-  defp list_inventory(controls) do
+  defp list_inventory(controls, type) do
     full_stock_query()
+    |> inventory_list_type_filter(type)
     |> apply_group_filter(controls)
     |> order_stock_list()
     |> Repo.all()
+  end
+
+  defp inventory_list_type_filter(query, :available) do
+    from s in query,
+    where: s.have > s.need
+  end
+
+  defp inventory_list_type_filter(query, :needs) do
+    from s in query,
+    where: s.have < s.need
   end
 
   defp apply_group_filter(query, %Controls{group_filter: group_filter}) do
@@ -289,7 +300,7 @@ defmodule Ferry.Inventory do
       group_by: c.id,
       order_by: [desc: count(c.id), asc: c.id],
       limit: ^n,
-      select_merge: %{count: count(c.id)}
+      select_merge: %{stock_reference_count: count(c.id)}
     )
   end
 
@@ -331,7 +342,7 @@ defmodule Ferry.Inventory do
       group_by: i.id,
       order_by: [desc: count(i.id), asc: i.id],
       limit: ^n,
-      select_merge: %{count: count(i.id)}
+      select_merge: %{stock_reference_count: count(i.id)}
     )
   end
 
