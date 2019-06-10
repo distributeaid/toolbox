@@ -4,8 +4,14 @@
       <h1 class="section__title">Edit Shipment</h1>
     </header>
 
-    <%= render "form.html", Map.put(assigns, :action, group_shipment_path(@conn, :update, @group, @shipment)) %>
+    <ul class="actions">
+      <li>
+        <%= link to: group_shipment_path(@conn, :show, @group, @shipment), class: "action" do %>
+          <i class="fas fa-times"></i>
+        <% end %>
+      </li>
+    </ul>
 
-    <span><%= link "Back To Group", to: group_path(@conn, :show, @group) %></span>
+    <%= render "form.html", Map.put(assigns, :action, group_shipment_path(@conn, :update, @group, @shipment)) %>
   </div>
 </section>

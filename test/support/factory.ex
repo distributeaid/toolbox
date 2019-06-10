@@ -389,7 +389,7 @@ defmodule Ferry.Factory do
     %Shipment{
       label: sequence("hello"),
       target_date_to_be_shipped: "today",
-      status: Enum.random(["planning_shipment", "ready", "shipment_underway", "shipment_received"]),
+      status: Enum.random(["planning", "ready", "underway", "received"]),
 
       sender_address: "an address",
       receiver_address: "another address",

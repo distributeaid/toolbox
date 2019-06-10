@@ -18,6 +18,7 @@ defmodule FerryWeb.ComponentView do
 
     size_class = case size do
       :large -> "logo--big"
+      :small -> "logo--small"
       _ -> ""
     end
 
@@ -28,7 +29,7 @@ defmodule FerryWeb.ComponentView do
           class: "logo #{size_class}"
 
       # fill with blank space if there is no logo
-      fill -> ~E(<div class="logo #{size_class} logo--filler"></div>)
+      fill -> ~E(<span class="logo <%= size_class %> logo--filler"><i class="fas fa-fw fa-lg fa-question"></i></span>)
 
       # do nothing if there is no logo and fill != true
       true -> nil

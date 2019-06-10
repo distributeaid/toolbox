@@ -1,0 +1,19 @@
+<section class="subsection">
+  <h2 class="subsection__header">At A Glance</h2>
+  <dl class="shipment-details">
+    <dt>Status:</dt><dd class="shipment-details__status"><%= @shipment.status %></dd>
+    <dt>Target Date:</dt><dd><%= @shipment.target_date_to_be_shipped %></dd>
+    <dt>From:</dt><dd><%= @shipment.sender_address %></dd>
+    <dt>To:</dt><dd><%= @shipment.receiver_address %></dd>
+  </dl>
+
+  <ul class="actions">
+    <%= if @can_modify? do %>
+      <li>
+        <%= link to: group_shipment_path(@conn, :edit, @group, @shipment), class: "action" do %>
+          <i class="fas fa-pencil-alt"></i>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</section>

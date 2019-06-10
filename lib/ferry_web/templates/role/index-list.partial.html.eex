@@ -1,0 +1,55 @@
+<section class="subsection">
+  <h2 class="subsection__header">Roles</h2>
+
+  <%= if @can_modify? do %>
+    <ul class="actions">
+      <li>
+        <%= link to: group_shipment_role_path(@conn, :new, @group, @shipment), class: "action" do %>
+          <i class="fas fa-plus"></i>
+        <% end %>
+      </li>
+    </ul>
+  <% end %>
+
+  <ul class="roles is-unstyled">
+    <%= for role <- @shipment.roles do %>
+      <li class="role">
+        <p>
+          <strong class="role__label"><%= role.label %>:</strong>
+
+          <%= component "group_logo.partial.html", %{
+            group: role.group,
+            size: :small,
+            version: :thumb,
+            fill: true
+          } %>
+
+          <%= role.group.name %>
+        </p>
+
+        <%= if role.description do %>
+          <p><%= role.description %></p>
+        <% end %>
+
+        <ul class="actions">
+          <%= if @can_modify? do %>
+            <li>
+              <%= link to: group_shipment_role_path(@conn, :edit, @group, @shipment, role), class: "action" do %>
+                <i class="fas fa-pencil-alt"></i>
+              <% end %>
+            </li>
+            <%= if length(@shipment.roles) > 1 do %>
+              <li>
+                <%= link to: group_shipment_role_path(@conn, :delete, @group, @shipment, role), method: :delete, data: [confirm: "Are you sure? This will remove the group from the shipment."], class: "action" do %>
+                  <i class="fas fa-trash-alt"></i>
+                <% end %>
+              </li>
+            <% end %>
+          <% end %>
+        </ul>
+
+      </li>
+    <% end %>
+  </ul>
+
+</section>

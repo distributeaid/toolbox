@@ -25,9 +25,8 @@ defmodule FerryWeb.ShipmentControllerTest do
 
   describe "index" do
     test "lists all shipments", %{conn: conn, group: group} do
-      # TODO: Need to mock repo call here
       conn = get conn, group_shipment_path(conn, :index, group)
-      assert html_response(conn, 200) =~ "Shipments"
+      assert html_response(conn, 200) =~ "Shipment Coordinator"
     end
   end
 
@@ -52,7 +51,7 @@ defmodule FerryWeb.ShipmentControllerTest do
     test "redirects to show when data is valid", %{conn: conn, group: group} do
       shipment_params = params_for(:shipment) |> Map.put("new_route", "false")
       conn = post conn, group_shipment_path(conn, :create, group), shipment: shipment_params
-      #Because I adjust changeset in create, this turns out to be different
+
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == group_shipment_path(conn, :show, group, id)
 
@@ -60,7 +59,7 @@ defmodule FerryWeb.ShipmentControllerTest do
       assert html_response(conn, 200) =~ shipment_params.label
 
       shipment_params =  Map.put(shipment_params, "new_route", "true")
-      assert html_response(conn,200) =~ shipment_params.label
+      assert html_response(conn, 200) =~ shipment_params.label
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group} do

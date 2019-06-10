@@ -37,7 +37,7 @@ defmodule Ferry.Shipments.Shipment do
       :funding
     ])
 
-    |> validate_required(:label, [message: "We need to associate this shipment with a label"])
-    |> validate_inclusion(:status, ["planning_shipment", "ready", "shipment_underway", "shipment_received"])
+    |> validate_required([:label, :status, :target_date_to_be_shipped, :sender_address, :receiver_address])
+    |> validate_inclusion(:status, ["planning", "ready", "underway", "received"])
   end
 end

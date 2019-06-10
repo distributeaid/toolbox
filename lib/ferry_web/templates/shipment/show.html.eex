@@ -1,68 +1,51 @@
-<section class="section">
+<section class="shipment section section--full-width">
   <div class="section__content">
     <header class="section__header">
       <h1 class="section__title"> <%= @shipment.label %></h1>
     </header>
 
-    <p>
-      <%= @shipment.items %>
-    </p>
-
-    <p>
-     <%= @shipment.status %>
-    </p>
-
-    <p>
-      <%= @shipment.funding %>
-    </p>
-
-    <p>
-      <%= @shipment.sender_address %>
-    </p>
-
-    <p>
-      <%= @shipment.receiver_address %>
-    </p>
-
-    <p>
-      <%= @shipment.target_date_to_be_shipped %>
-    </p>
-
-    <div>
-      <h3>Roles</h3>
-      <%= link "Add Role", to: group_shipment_role_path(@conn, :new, @group, @shipment) %>
-      <ul>
-        <%= for role <- @shipment.roles do %>
-          <li>
-            <strong><%= role.label %>: <%= role.group.name %></strong>
-            <%= link "Edit", to: group_shipment_role_path(@conn, :edit, @group, @shipment, role) %>
-
-            <%= if length(@shipment.roles) > 1 do %>
-              <%= link "Delete", to: group_shipment_role_path(@conn, :delete, @group, @shipment, role), method: :delete, data: [confirm: "Are you sure? This will remove the group from the shipment."] %>
-            <% end %>
-
-            <%= if role.description do %>
-              <br />
-              <%= role.description %>
-            <% end %>
-          </li>
+    <ul class="actions">
+      <li>
+        <%= link to: group_shipment_path(@conn, :index, @group), class: "action action--close" do %>
+          <i class="fas fa-times"></i>
         <% end %>
-      </ul>
+      </li>
+    </ul>
+
+    <div class="is-row">
+
+      <div class="is-col is-50">
+        <%= render "show-details.partial.html", %{
+          conn: @conn,
+          group: @group,
+          shipment: @shipment,
+          can_modify?: !is_nil(@current_group) && @group.id == @current_group.id          
+        } %>
+
+        <%= render FerryWeb.RoleView, "index-list.partial.html", %{
+          conn: @conn,
+          group: @group,
+          shipment: @shipment,
+          can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+        } %>
+      </div>
+
+      <div class="is-col is-50">
+        <%= render FerryWeb.RouteView, "index-list.partial.html", %{
+          conn: @conn,
+          group: @group,
+          shipment: @shipment,
+          can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+        } %>
+      </div>
+
+      <div class="is-col is-100">
+        <section class="subsection">
+          <h2 class="subsection__header">Manifest</h2>
+          <p>Coming Soon...</p>
+        </section>
+      </div>
+
     </div>
 
-    <p>
-      <%= if has_routes? @routes do %>
-        <%= for route <- @routes do %>
-          <span><%= link "Show #{route.label}", to: group_shipment_route_path(@conn, :show, @group, route.shipment_id, route), class: "button is-small" %></span>
-        <% end %>
-      <% end %>
-    </p>
-
-    <span><%= link "New Stop Along Route", to: group_shipment_route_path(@conn, :new, @group, @shipment) %></span>
-    <span><%= link "Edit", to: group_shipment_path(@conn, :edit, @group, @shipment) %></span>
-    <span><%= link "Back", to: group_shipment_path(@conn, :index, @group) %></span>
-    <span><%= link "Delete", to: group_shipment_path(@conn, :delete, @group, @shipment), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
-  </div>
 </section>
-
-

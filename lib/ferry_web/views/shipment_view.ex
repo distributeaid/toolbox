@@ -16,4 +16,8 @@ defmodule FerryWeb.ShipmentView do
       true -> "There is nothing to describe this shipment yet"
     end
   end
+
+  def one_month_from_today() do
+    Timex.now() |> Timex.shift(months: 1) |> Timex.format!("{Mfull} {D}, {YYYY}")
+  end
 end

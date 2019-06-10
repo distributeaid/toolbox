@@ -150,6 +150,51 @@ Form
 */
 label {
   font-size: 1rem;
+  text-transform: capitalize;
+}
+
+fieldset {
+  margin: 2rem 0;
+  padding: 1rem 0;
+  border-left: 0;
+  border-right: 0;
+}
+
+legend {
+  margin: 0 auto;
+}
+
+/*
+Lists
+------------------------------------------------------------
+*/
+dl::after {
+  /* clearfix: https://css-tricks.com/snippets/css/clear-fix/ */
+  content: "";
+  display: table;
+  clear: both;
+}
+
+dt, dd {
+  float: left;
+  margin-top: 0.25rem;
+}
+
+dt {
+  clear: both;
+  margin-right: 0.5rem;
+}
+
+dl dd + dt {
+  margin-top: 0.25rem; /* kube override */
+}
+
+dt:first-child {
+  margin-top: 0;
+}
+
+dd:nth-child(2) {
+  margin-top: 0;
 }
 
 
@@ -169,10 +214,12 @@ form .is-req {
 
 .form-item.is-inline {
   padding-left: 108px; /* leave 0.5rem between the label and the input */
+  width: calc(100% - 108px); /* the pixel portion should match padding-left */
 }
 
 .form-item.is-inline-offset {
   padding-left: 108px; /* needs to match the .is-inline padding-left */
+  padding-right: 108px; /* needs to match the .is-inline padding-left */
 }
 
 .form-item.is-inline label:not(.is-checkbox) {
@@ -183,14 +230,12 @@ form .is-req {
   text-align: right;
 }
 
-.form-item.is-inline input:not([type="checkbox"]):not([type="radio"]),
-.form-item.is-inline select,
-.form-item.is-inline textarea {
-  width: calc(100% - 108px); /* the pixel portion needs to match the .is-inline padding-left */
-}
-
 .form-item.is-inline textarea {
   height: 200px;
+}
+
+form .is-desc {
+  color: rgba(17, 17, 19, 0.7);
 }
 
 /*
@@ -662,7 +707,7 @@ Logo
   width: 4rem;
   height: 4rem;
   margin-bottom: 0.5rem;
-  border: 0.25rem solid #C8C8C8;
+  border: 0.125rem solid #C8C8C8;
   border-radius: 100%;
 }
 
@@ -670,10 +715,34 @@ Logo
   margin-bottom: 0;
 }
 
+.logo--small {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: 0;
+  border-width: 1px;
+}
+
 .logo--big {
   width: 8rem;
   height: 8rem;
   margin-bottom: 1rem;
+  border-width: 0.25rem;
+}
+
+.logo--filler {
+  display: inline-block;
+
+  color: #999;
+
+  line-height: 20px;
+  vertical-align: middle;
+}
+
+.logo--filler .fa-question {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /*
@@ -721,6 +790,72 @@ Entry
   margin: 1rem 0rem;
   margin-right: 1rem;
 }
+
+/*
+Shipment
+------------------------------------------------------------
+*/
+.shipment {}
+
+.shipment-details {}
+
+.shipment-details__status {
+  text-transform: capitalize;
+}
+
+/*
+Shipment Roles
+------------------------------------------------------------
+*/
+ul.roles {
+  margin-top: 1rem;
+}
+
+ul.roles > li {
+  margin-bottom: 1rem;
+}
+
+ul.roles > li:last-child {
+  margin-bottom: 0;
+}
+
+.role {
+  position: relative;
+}
+
+.role p {
+  margin-bottom: 0.25rem;
+}
+
+.role__label {
+  display: inline-block;
+  min-width: 100px;
+}
+
+/*
+Shipment Routes
+------------------------------------------------------------
+*/
+ul.routes {
+  margin-top: 1rem;
+}
+
+ul.routes > li {
+  margin-bottom: 1rem;
+}
+
+ul.routes > li:last-child {
+  margin-bottom: 0;
+}
+
+.route {
+  position: relative;
+}
+
+.route p {
+  margin-bottom: 0.25rem;
+}
+
 
 /* Components
  * ========================================================================== */

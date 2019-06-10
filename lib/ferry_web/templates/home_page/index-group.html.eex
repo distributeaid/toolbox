@@ -20,7 +20,7 @@
         your information or collaborate privately with other groups.
       </p>
 
-      <div class="category category--3-col">
+      <div class="category">
         <%= link to: group_path(@conn, :show, @group), class: "link--wrapper" do %>
           <%= component "category-entry.partial.html", %{
             title: "Group Profile",

@@ -1,74 +1,93 @@
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
-    <div class="alert alert-danger">
+    <div class="alert is-error">
       <p>Oops, something went wrong! Please check the errors below.</p>
     </div>
   <% end %>
 
-  <div class="form-item">
-    <%= label f, :Label, class: "is-req" %>
-    <%= text_input f, :label, placeholder: "My first shipment" %>
+  <div class="form-item is-inline">
+    <%= label f, :label, class: "is-req" %>
+    <%= text_input f, :label, placeholder: "My Next Shipment" %>
     <%= error_tag f, :label %>
   </div>
 
-  <div class="form-item">
-    <%= label f, :status %>
-    <%= select f, :status,["Planning Shipment": "planning_shipment",
-                           "Ready": "ready",
-                           "Shipment Underway": "shipment_underway",
-                           "Shipment Received": "shipment_received"] %>
+  <div class="form-item is-inline">
+    <%= label f, :status, class: "is-req" %>
+    <%= select f, :status,[
+      "Planning": "planning",
+      "Ready To Load": "ready",
+      "Underway": "underway",
+      "Received": "received"
+    ] %>
     <%= error_tag f, :status %>
-
   </div>
 
-  <div class="form-item">
-    <%= label f, :Target_Date_To_Be_Shipped %>
-    <%= text_input f, :target_date_to_be_shipped, placeholder: "may 24th 2019" %>
+  <div class="form-item is-inline">
+    <%= label f, :target_date_to_be_shipped, "Target Date", class: "is-req" %>
+    <%= text_input f, :target_date_to_be_shipped, placeholder: one_month_from_today() %>
+    <div class="is-desc">
+      A specific date, a month, "summer", etc.
+    </div>
     <%= error_tag f, :target_date_to_be_shipped %>
   </div>
 
-  <div class="form-item">
-    <%= label f, :Shipping_Address %>
-    <%= text_input f, :receiver_address, placeholder: "1600 Pennsylvania Avenue, Washington DC" %>
+  <div class="form-item is-inline">
+    <%= label f, :sender_address, "From", class: "is-req" %>
+    <%= text_input f, :sender_address, placeholder: "Glasgow" %>
+    <div class="is-desc">
+      Keep this short and sweet.  You can add a detailed route once the shipment is created.
+    </div>
+    <%= error_tag f, :sender_address %>
+  </div>
+
+  <div class="form-item is-inline">
+    <%= label f, :receiver_address, "To", class: "is-req" %>
+    <%= text_input f, :receiver_address, placeholder: "Greece" %>
+    <div class="is-desc">
+      Keep this short and sweet.  You can add a detailed route once the shipment is created.
+    </div>
     <%= error_tag f, :receiver_address %>
   </div>
 
-  <div class="form-item">
-    <%= label f, :Shipping_Items %>
+  <!--
+  <div class="form-item is-inline">
+    <%= label f, :shipping_items %>
     <%= text_input f, :items, placeholder: "soap, food, clothes" %>
     <%= error_tag f, :items %>
   </div>
 
-  <div class="form-item">
+  <div class="form-item is-inline">
     <%= label f, :Funding %>
     <%= text_input f, :funding, placeholder: "$10.23" %>
     <%= error_tag f, :funding %>
   </div>
-
-  <div class="form-item">
-    <%= label f, :Address_Where_Supplies_Are_Sent_From %>
-    <%= text_input f, :sender_address, placeholder: "Glasgow" %>
-    <%= error_tag f, :sender_address %>
-  </div>
+  -->
 
   <%= if assigns[:new_shipment?] do %>
     <%= inputs_for f, :roles, fn fr -> %>
       <fieldset>
         <legend>Your Role</legend>
 
-        <div class="form-item">
-          <%= label fr, :group_id, class: "is-req" %>
-          <span><%= @group.name %></span>
+        <div class="form-item is-inline-offset">
+          <%= component "group_logo.partial.html", %{
+            group: @group,
+            size: :small,
+            version: :thumb
+          } %>
+          <strong><%= @group.name %></strong>
           <%= hidden_input fr, :group_id %>
         </div>
 
-        <div class="form-item">
+        <div class="form-item is-inline">
           <%= label fr, :label, class: "is-req" %>
-          <%= text_input fr, :label %>
+          <%= text_input fr, :label, placeholder: "Collector" %>
+          <div class="is-desc">
+            Collector, Transporter, Distributer, Funder, Organizer, etc.
+          </div>
           <%= error_tag fr, :label %>
         </div>
 
-        <div class="form-item">
+        <div class="form-item is-inline">
           <%= label fr, :description %>
           <%= textarea fr, :description %>
           <%= error_tag fr, :description %>
@@ -78,12 +97,14 @@
     <% end %>
   <% end %>
 
-  <div class="form-item">
+  <!--
+  <div class="form-item is-inline">
     <%= checkbox f, :new_route, checked: true %> Add a Stop Along the Route for this Shipment?
   </div>
+  -->
 
 
-  <div class="form-item is-text-center">
+  <div class="form-item is-inline-offset is-text-center">
     <%= submit "Submit", class: "button is-big" %>
   </div>
 <% end %>

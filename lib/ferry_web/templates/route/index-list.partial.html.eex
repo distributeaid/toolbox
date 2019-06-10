@@ -1,0 +1,58 @@
+<section class="subsection">
+  <h2 class="subsection__header">Route</h2>
+
+  <%= if @can_modify? do %>
+    <ul class="actions">
+      <li>
+        <%= link to: group_shipment_route_path(@conn, :new, @group, @shipment), class: "action" do %>
+          <i class="fas fa-plus"></i>
+        <% end %>
+      </li>
+    </ul>
+  <% end %>
+
+  <%= if length(@shipment.routes) > 0 do %>
+    <ul class="routes is-unstyled">
+      <%= for route <- @shipment.routes do %>
+        <li class="route">
+          <p>
+            <strong><%= route.label %></strong>
+            <%= if route.date do %>
+              - <%= route.date %>
+            <% end %>
+          </p>
+
+          <%= if route.address do %>
+            <p><%= route.address %></p>
+          <% end %>
+
+          <%= if route.groups do %>
+            <p><%= route.groups %></p>
+          <% end %>
+
+          <ul class="actions">
+            <%= if @can_modify? do %>
+              <li>
+                <%= link to: group_shipment_route_path(@conn, :edit, @group, @shipment, route), class: "action" do %>
+                  <i class="fas fa-pencil-alt"></i>
+                <% end %>
+              </li>
+              <li>
+                <%= link to: group_shipment_route_path(@conn, :delete, @group, @shipment, route), method: :delete, data: [confirm: "Are you sure? This will remove the route from the shipment."], class: "action" do %>
+                  <i class="fas fa-trash-alt"></i>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+
+        </li>
+      <% end %>
+    </ul>
+
+  <% else %>
+    <p>
+      No routes have been added yet.
+    </p>
+  <% end %>
+
+</section>

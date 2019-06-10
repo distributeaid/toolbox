@@ -16,8 +16,9 @@
   "devDependencies": {
     "babel-brunch": "^6.1.1",
     "brunch": "^2.10.17",
-    "cssnano-brunch": "^1.1.8",
+    "cssnano": "^4.1.10",
     "imagemin-brunch": "^1.1.0",
+    "postcss-brunch": "^2.10.1",
     "uglify-js-brunch": "^2.10.0"
   }
 }

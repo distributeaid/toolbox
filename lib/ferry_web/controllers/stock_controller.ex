@@ -5,6 +5,7 @@ defmodule FerryWeb.StockController do
   alias Ferry.Inventory
   alias Ferry.Inventory.Stock
 
+
   # Stock Controller
   # ==============================================================================
 
