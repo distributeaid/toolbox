@@ -5,9 +5,17 @@
       <p class="section__subtitle">(shipment: <%= @shipment.label %>)</p>
     </header>
 
-    <%= render "form.html", Map.put(assigns, :action, group_shipment_role_path(@conn, :update, @group, @shipment, @role)) %>
+    <ul class="actions">
+      <li>
+        <%= link to: group_shipment_path(@conn, :show, @group, @shipment), class: "action" do %>
+          <i class="fas fa-times"></i>
+        <% end %>
+      </li>
+    </ul>
 
-    <span><%= link "Back", to: group_shipment_path(@conn, :show, @group, @shipment) %></span>
+    <%= render "form.html",
+      Map.put(assigns, :action, group_shipment_role_path(@conn, :update, @group, @shipment, @role))
+    %>
   </div>
 </section>
 

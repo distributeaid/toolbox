@@ -11,6 +11,15 @@
       <%= select f, :group_id, select_group_options(@groups, @shipment.roles) %>
       <%= error_tag f, :group_id %>
     </div>
+  <% else %>
+    <div class="form-item is-text-center">
+      <%= component "group_logo.partial.html", %{
+        group: @role.group,
+        size: :small,
+        version: :thumb
+      } %>
+      <strong><%= @role.group.name %></strong>
+    </div>
   <% end %>
 
   <div class="form-item is-inline">

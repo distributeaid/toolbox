@@ -68,7 +68,7 @@
       <fieldset>
         <legend>Your Role</legend>
 
-        <div class="form-item is-inline-offset">
+        <div class="form-item is-text-center">
           <%= component "group_logo.partial.html", %{
             group: @group,
             size: :small,

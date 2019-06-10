@@ -5,26 +5,8 @@ defmodule FerryWeb.RoleController do
   alias Ferry.Shipments
   alias Ferry.Shipments.Role
 
-  # Shipment Controller
+  # Role Controller
   # ==============================================================================
-
-  # Show
-  # ----------------------------------------------------------
-
-  # def index(conn, %{"group_id" => group_id, "shipment_id" => shipment_id}) do
-  #   group = Profiles.get_group!(group_id)
-  #   shipment = Shipments.get_shipment!(shipment_id)
-
-  #   render(conn, "index.html", group: group, shipment: shipment, roles: shipment.roles)
-  # end
-
-  # def show(conn, %{"group_id" => group_id, "shipment_id" => shipment_id, "id" => id}) do
-  #   group = Profiles.get_group!(group_id)
-  #   shipment = Shipments.get_shipment!(shipment_id)
-  #   role = Shipments.get_role!(id)
-
-  #   render(conn, "show.html", group: group, shipment: shipment, role: role)
-  # end
 
   # Create
   # ----------------------------------------------------------

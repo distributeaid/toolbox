@@ -20,19 +20,6 @@ defmodule FerryWeb.RoleControllerTest do
   # ----------------------------------------------------------
   # TODO
 
-
-  # Show
-  # ----------------------------------------------------------
-
-  # describe "index" do
-  #   test "lists all roles", %{conn: conn} do
-  #     conn = get conn, role_path(conn, :index)
-  #     assert html_response(conn, 200) =~ "Listing Shipments groups roles"
-  #   end
-  # end
-  #
-  # describe "show"
-
   # Create
   # ----------------------------------------------------------
 
