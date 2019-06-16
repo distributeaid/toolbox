@@ -1,6 +1,10 @@
 defmodule FerryWeb.RouteControllerTest do
   use FerryWeb.ConnCase
 
+
+  # Route Controller Tests
+  # ================================================================================
+
   setup do
     group = insert(:group)
     user = insert(:user, group: group)
@@ -12,17 +16,17 @@ defmodule FerryWeb.RouteControllerTest do
     {:ok, conn: conn, group: group, user: user, shipment: shipment, route: route}
   end
 
-  describe "index" do
-    test "lists all route", %{conn: conn, group: group, shipment: shipment} do
-      conn = get conn, group_shipment_route_path(conn, :index, group, shipment)
-      assert html_response(conn, 200) =~ "Routes for your shipment"
-    end
-  end
+  # Errors
+  # ----------------------------------------------------------
+  # TODO
+
+  # Create
+  # ----------------------------------------------------------
 
   describe "new route" do
     test "renders form", %{conn: conn, group: group, shipment: shipment} do
       conn = get conn, group_shipment_route_path(conn, :new, group, shipment)
-      assert html_response(conn, 200) =~ "New Stop Along Route"
+      assert html_response(conn, 200) =~ "New Route Stop"
     end
   end
 
@@ -31,21 +35,22 @@ defmodule FerryWeb.RouteControllerTest do
       route_params = params_for(:route)
       conn = post conn, group_shipment_route_path(conn, :create, group, shipment), route: route_params
       assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == group_shipment_route_path(conn, :show, group, shipment, id)
+      assert redirected_to(conn) == group_shipment_path(conn, :show, group, shipment)
 
-      conn = get conn, group_shipment_route_path(conn, :show, group, shipment, id)
+      conn = get conn, group_shipment_path(conn, :show, group, shipment)
       assert html_response(conn, 200) =~ route_params.label
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group, shipment: shipment} do
       conn = post conn, group_shipment_route_path(conn, :create, group, shipment), route: params_for(:invalid_route)
-      assert html_response(conn, 200) =~ "New Stop Along Route"
+      assert html_response(conn, 200) =~ "New Route Stop"
     end
   end
 
-  describe "edit route" do
-    setup [:create_route]
+  # Update
+  # ----------------------------------------------------------
 
+  describe "edit route" do
     test "renders form for editing chosen route", %{conn: conn, group: group, shipment: shipment, route: route} do
       conn = get conn, group_shipment_route_path(conn, :edit, group, shipment, route)
       assert html_response(conn, 200) =~ "Edit Route"
@@ -53,14 +58,12 @@ defmodule FerryWeb.RouteControllerTest do
   end
 
   describe "update route" do
-    setup [:create_route]
-
     test "redirects when data is valid", %{conn: conn, group: group, shipment: shipment, route: route} do
       route_params = params_for(:route)
       conn = put conn, group_shipment_route_path(conn, :update, group, shipment, route), route: route_params
-      assert redirected_to(conn) == group_shipment_route_path(conn, :show, group, shipment, route)
+      assert redirected_to(conn) == group_shipment_path(conn, :show, group, shipment)
 
-      conn = get conn, group_shipment_route_path(conn, :show, group, shipment, route)
+      conn = get conn, group_shipment_path(conn, :show, group, shipment)
       assert html_response(conn, 200) =~ route_params.label
     end
 
@@ -70,20 +73,16 @@ defmodule FerryWeb.RouteControllerTest do
     end
   end
 
-  describe "delete route" do
-    setup [:create_route]
+  # Delete
+  # ----------------------------------------------------------
 
+  describe "delete route" do
     test "deletes chosen route", %{conn: conn, group: group, shipment: shipment, route: route} do
       conn = delete conn, group_shipment_route_path(conn, :delete, group, shipment, route)
-      assert redirected_to(conn) == group_shipment_route_path(conn, :index, group, shipment)
-      assert_error_sent 404, fn ->
-        get conn, group_shipment_route_path(conn, :show, group, shipment, route)
-      end
-    end
-  end
+      assert redirected_to(conn) == group_shipment_path(conn, :show, group, shipment)
 
-  defp create_route(_) do
-    route = insert(:route)
-    {:ok, route: route}
+      conn = get conn, group_shipment_path(conn, :show, group, shipment)
+      refute html_response(conn, 200) =~ route.label
+    end
   end
 end

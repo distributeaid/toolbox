@@ -1,9 +1,18 @@
 <section class="section">
   <div class="section__content">
     <header class="section__header">
-        <h1 class="section__title">New Stop Along Route</h1>
+      <h1 class="section__title">New Route Stop</h1>
+      <p class="section__subtitle">Shipment: <%= @shipment.label %></p>
     </header>
-        <%= render "form.html", Map.put(assigns, :action, group_shipment_route_path(@conn, :create, @group, @shipment)) %>
-        <span><%= link "Back", to: group_shipment_route_path(@conn, :index, @group, @shipment) %></span>
+
+    <ul class="actions">
+      <li>
+        <%= link to: group_shipment_path(@conn, :show, @group, @shipment), class: "action" do %>
+          <i class="fas fa-times"></i>
+        <% end %>
+      </li>
+    </ul>
+
+    <%= render "form.html", Map.put(assigns, :action, group_shipment_route_path(@conn, :create, @group, @shipment)) %>
   </div>
 </section>

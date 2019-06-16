@@ -55,7 +55,7 @@ defmodule FerryWeb.Router do
       resources "/users", UserController, only: [:edit, :update]
       resources "/shipments", ShipmentController do
         resources "/roles", RoleController, except: [:index, :show]
-        resources "/routes", RouteController
+        resources "/routes", RouteController, except: [:index, :show]
       end
     end
   end
