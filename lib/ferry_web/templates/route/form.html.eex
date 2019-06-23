@@ -23,12 +23,15 @@
     <%= error_tag f, :date %>
   </div>
 
+  <!--
   <div class="form-item is-inline">
     <%= label f, :groups %>
     <%= text_input f, :groups %>
     <%= error_tag f, :groups %>
   </div>
+  -->
 
+  <!--
     <%= if has_routes?(@shipment.routes) and has_checklist?(assigns.conn.path_info, @shipment.routes) do %>
         <div class="form-item is-inline" id="customList">
             <%= label f, :checklist %>
@@ -50,6 +53,7 @@
                 <%= error_tag f, :checklist %>
             </div>
     <% end %>
+  -->
 
   <div class="form-item is-text-center">
     <%= submit "Submit", class: "button is-big" %>
