@@ -427,7 +427,7 @@ defmodule Ferry.Factory do
   def with_route(shipment, route \\ %{}) do
     route = case route do
       %Route{} -> route
-      _ -> insert(:route, Map.merge(route, %{shipment: shipment}))
+      _ -> insert(:route, Map.merge(route, %{shipment_id: shipment.id}))
     end
 
     # append the route to shipment.routes and return the shipment
@@ -459,9 +459,8 @@ defmodule Ferry.Factory do
   def route_factory do
     %Route{
       label: sequence("not today"),
-      shipment: build(:shipment),
+      date: sequence(:date, &Date.add(Date.utc_today(), &1)),
       checklist: ["here", "there"],
-      date: "today",
       groups: "x"
     }
   end

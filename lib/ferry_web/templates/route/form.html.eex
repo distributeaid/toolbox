@@ -19,7 +19,7 @@
 
   <div class="form-item is-inline">
     <%= label f, :date %>
-    <%= text_input f, :date, placeholder: "May 27th 2019" %>
+    <%= date_input f, :date %>
     <%= error_tag f, :date %>
   </div>
 

@@ -30,8 +30,10 @@ defmodule Ferry.Shipments do
       order_by: s.id,
       left_join: r in assoc(s, :roles),
       left_join: g in assoc(r, :group),
-      left_join: rts in assoc(s, :routes),
-      preload: [roles: {r, group: g}, routes: rts]
+      preload: [
+        roles: {r, group: g},
+        routes: ^routes_query()
+      ]
     )
   end
 
@@ -40,13 +42,15 @@ defmodule Ferry.Shipments do
       from s in Shipment,
       order_by: s.id,
       left_join: r in assoc(s, :roles),
-      left_join: rts in assoc(s, :routes),
       where: r.group_id == ^group.id,
 
       # TODO: Can we do all the queries in one go? Currently need to do extra
       # queries for these.  If you try to inline it (see list_shipments/0 above)
       # then the where clause will only select the 1 role that the group is in.
-      preload: [roles: :group, routes: rts]
+      preload: [
+        roles: :group,
+        routes: ^routes_query()
+      ]
     )
   end
 
@@ -68,8 +72,10 @@ defmodule Ferry.Shipments do
     query = from s in Shipment,
       left_join: r in assoc(s, :roles),
       left_join: g in assoc(r, :group),
-      left_join: rts in assoc(s, :routes),
-      preload: [roles: {r, group: g}, routes: rts]
+      preload: [
+        roles: {r, group: g},
+        routes: ^routes_query()
+      ]
 
     Repo.get!(query, id)
   end
@@ -183,6 +189,14 @@ defmodule Ferry.Shipments do
     Role.changeset(role, %{})
   end
 
+  # Route
+  # ==============================================================================
+
+  defp routes_query do
+    from r in Route,
+    order_by: r.date
+  end
+
   @doc """
   Returns the list of routes.
 
@@ -194,9 +208,8 @@ defmodule Ferry.Shipments do
   """
   def list_routes(%Shipment{} = shipment) do
     Repo.all(
-      from r in Route,
-      where: r.shipment_id == ^shipment.id,
-      order_by: r.id
+      from r in routes_query(),
+      where: r.shipment_id == ^shipment.id
     )
   end
 

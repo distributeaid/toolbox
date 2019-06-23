@@ -6,9 +6,11 @@ defmodule Ferry.Shipments.Route do
   schema "routes" do
     field :label, :string, null: false
     field :address, :string
-    field :date, :string
+    field :date, :date
+
     field :groups, :string
     field :checklist, {:array, :string}
+
     belongs_to :shipment, Shipment # on_delete set in database via migration
 
     timestamps()
@@ -18,7 +20,7 @@ defmodule Ferry.Shipments.Route do
   @doc false
   def changeset(route, attrs) do
     route
-    |> cast(attrs, [:address, :date, :groups, :label, :shipment_id, :checklist])
+    |> cast(attrs, [:label, :address, :date, :groups, :checklist, :shipment_id])
     |> validate_required([:label, :shipment_id])
   end
 end
