@@ -24,7 +24,7 @@ defmodule FerryWeb.AddressController do
       {:ok, _address} ->
         conn
         |> put_flash(:info, "Address created successfully.")
-        |> redirect(to: group_path(conn, :show, group))
+        |> redirect(to: Routes.group_path(conn, :show, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", group: group, changeset: changeset)
 
@@ -49,7 +49,7 @@ defmodule FerryWeb.AddressController do
       {:ok, _address} ->
         conn
         |> put_flash(:info, "Address updated successfully.")
-        |> redirect(to: group_path(conn, :show, group))
+        |> redirect(to: Routes.group_path(conn, :show, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", group: group, address: address, changeset: changeset)
     end
@@ -65,6 +65,6 @@ defmodule FerryWeb.AddressController do
 
     conn
     |> put_flash(:info, "Address deleted successfully.")
-    |> redirect(to: group_path(conn, :show, group))
+    |> redirect(to: Routes.group_path(conn, :show, group))
   end
 end

@@ -12,13 +12,13 @@
 
     <ul class="actions">
       <li>
-        <%= link to: group_path(@conn, :index), class: "action action--close" do %>
+        <%= link to: Routes.group_path(@conn, :index), class: "action action--close" do %>
           <i class="fas fa-times"></i>
         <% end %>
       </li>
     </ul>
 
-    <%= render "form.html", Map.put(assigns, :action, group_path(@conn, :update, @group)) %>
+    <%= render "form.html", Map.put(assigns, :action, Routes.group_path(@conn, :update, @group)) %>
 
     <p class="is-small">
       It is currently not possible to delete your group through the app.  We

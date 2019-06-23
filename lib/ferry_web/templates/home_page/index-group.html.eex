@@ -21,21 +21,21 @@
       </p>
 
       <div class="category">
-        <%= link to: group_path(@conn, :show, @group), class: "link--wrapper" do %>
+        <%= link to: Routes.group_path(@conn, :show, @group), class: "link--wrapper" do %>
           <%= component "category-entry.partial.html", %{
             title: "Group Profile",
             icon: %{class: "fas fa-3x fa-users"}
           } %>
         <% end %>
 
-        <%= link to: group_stock_path(@conn, :index, @group), class: "link--wrapper" do %>
+        <%= link to: Routes.group_stock_path(@conn, :index, @group), class: "link--wrapper" do %>
           <%= component "category-entry.partial.html", %{
             title: "Inventory Manager",
             icon: %{class: "fas fa-3x fa-boxes"}
           } %>
         <% end %>
 
-        <%= link to: group_shipment_path(@conn, :index, @group), class: "link--wrapper" do %>
+        <%= link to: Routes.group_shipment_path(@conn, :index, @group), class: "link--wrapper" do %>
           <%= component "category-entry.partial.html", %{
             title: "Shipment Coordinator",
             icon: %{class: "fas fa-3x fa-truck"}

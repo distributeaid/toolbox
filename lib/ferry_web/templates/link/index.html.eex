@@ -2,12 +2,12 @@
   <div class="section__content">
     <header class="section__header">
       <h1 class="section__title">Links</h1>
-      <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+      <p class="section__subtitle">(for group <%= link @group.name, to: Routes.group_path(@conn, :show, @group) %>)</p>
     </header>
 
     <ul class="actions">
       <li>
-        <%= link to: group_path(@conn, :show, @group), class: "action" do %>
+        <%= link to: Routes.group_path(@conn, :show, @group), class: "action" do %>
           <i class="fas fa-times"></i>
         <% end %>
       </li>
@@ -17,7 +17,7 @@
 
     <ul class="actions actions--inline">
       <li>
-        <%= link to: group_link_path(@conn, :new, @group), class: "action" do %>
+        <%= link to: Routes.group_link_path(@conn, :new, @group), class: "action" do %>
           <i class="fas fa-plus"></i>
         <% end %>
       </li>

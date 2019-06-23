@@ -2,12 +2,12 @@
   <div class="section__content">
     <header class="section__header">
       <h1 class="section__title"><%= @project.name %></h1>
-      <p class="section__subtitle">(a project by <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+      <p class="section__subtitle">(a project by <%= link @group.name, to: Routes.group_path(@conn, :show, @group) %>)</p>
     </header>
 
     <ul class="actions">
       <li>
-        <%= link to: group_path(@conn, :show, @group), class: "action action--close" do %>
+        <%= link to: Routes.group_path(@conn, :show, @group), class: "action action--close" do %>
           <i class="fas fa-times"></i>
         <% end %>
       </li>

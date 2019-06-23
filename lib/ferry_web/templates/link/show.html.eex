@@ -2,7 +2,7 @@
   <div class="section__content">
     <header class="section__header">
       <h1 class="section__title">Show Link</h1>
-      <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+      <p class="section__subtitle">(for group <%= link @group.name, to: Routes.group_path(@conn, :show, @group) %>)</p>
     </header>
 
     <ul>
@@ -12,7 +12,7 @@
       </li>
     </ul>
 
-    <span><%= link "Edit", to: group_link_path(@conn, :edit, @link.group_id, @link) %></span>
-    <span><%= link "Back To Group", to: group_path(@conn, :show, @group) %></span>
+    <span><%= link "Edit", to: Routes.group_link_path(@conn, :edit, @link.group_id, @link) %></span>
+    <span><%= link "Back To Group", to: Routes.group_path(@conn, :show, @group) %></span>
   </div>
 </section>

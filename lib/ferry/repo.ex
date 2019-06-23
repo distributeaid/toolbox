@@ -1,5 +1,8 @@
 defmodule Ferry.Repo do
-  use Ecto.Repo, otp_app: :ferry
+  use Ecto.Repo,
+    otp_app: :ferry,
+    adapter: Ecto.Adapters.Postgres
+
   use Scrivener, page_size: 6
 
   @doc """

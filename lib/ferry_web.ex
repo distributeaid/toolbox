@@ -21,7 +21,7 @@ defmodule FerryWeb do
     quote do
       use Phoenix.Controller, namespace: FerryWeb
       import Plug.Conn
-      import FerryWeb.Router.Helpers
+      alias FerryWeb.Router.Helpers, as: Routes
       import FerryWeb.Gettext
     end
   end
@@ -37,7 +37,7 @@ defmodule FerryWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import FerryWeb.Router.Helpers
+      alias FerryWeb.Router.Helpers, as: Routes
       import FerryWeb.ErrorHelpers
       import FerryWeb.Gettext
 

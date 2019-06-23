@@ -11,7 +11,7 @@ defmodule FerryWeb.InventoryListControllerTest do
     stock = insert(:stock, project: project)
 
     conn = build_conn()
-    conn = post conn, session_path(conn, :create, %{user: %{email: user.email, password: @password}})
+    conn = post conn, Routes.session_path(conn, :create, %{user: %{email: user.email, password: @password}})
     {:ok, conn: conn, group: group, user: user, project: project, stock: stock}
   end
 
@@ -24,7 +24,7 @@ defmodule FerryWeb.InventoryListControllerTest do
       stock2 = insert(:stock)
       stock3 = insert(:stock, %{have: 0, need: 50})
 
-      conn = get conn, inventory_list_path(conn, :show)
+      conn = get conn, Routes.inventory_list_path(conn, :show)
       assert html_response(conn, 200) =~ stock1.item.name
       assert html_response(conn, 200) =~ stock2.item.name
       refute html_response(conn, 200) =~ stock3.item.name
@@ -34,7 +34,7 @@ defmodule FerryWeb.InventoryListControllerTest do
       stock2 = insert(:stock, %{have: 0, need: 50})
       stock3 = insert(:stock, %{have: 0, need: 50})
 
-      conn = get conn, inventory_list_path(conn, :show, type: "needs")
+      conn = get conn, Routes.inventory_list_path(conn, :show, type: "needs")
       refute html_response(conn, 200) =~ stock1.item.name
       assert html_response(conn, 200) =~ stock2.item.name
       assert html_response(conn, 200) =~ stock3.item.name

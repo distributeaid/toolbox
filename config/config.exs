@@ -34,6 +34,9 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:user_id]
 
+# Use Jason for JSON parsing in Phoenix
+config :phoenix, :json_library, Jason
+
 # Configure modules which can be overridden in test.exs by mocks for testing.
 config :ferry, :geocoder, Ferry.Locations.Geocoder.Nominatim
 

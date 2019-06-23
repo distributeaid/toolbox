@@ -33,7 +33,7 @@ defmodule FerryWeb.RouteController do
       {:ok, route} ->
         conn
         |> put_flash(:info, "Route created successfully.")
-        |> redirect(to: group_shipment_path(conn, :show, group_id, shipment_id))
+        |> redirect(to: Routes.group_shipment_path(conn, :show, group_id, shipment_id))
       {:error, %Ecto.Changeset{} = changeset} ->
         shipment = Shipments.get_shipment!(shipment_id) |> Ferry.Repo.preload(:routes)
         render(conn, "new.html", group: group_id, shipment: shipment, changeset: changeset)
@@ -65,7 +65,7 @@ defmodule FerryWeb.RouteController do
       {:ok, route} ->
         conn
         |> put_flash(:info, "Route updated successfully.")
-        |> redirect(to: group_shipment_path(conn, :show, group_id, shipment_id))
+        |> redirect(to: Routes.group_shipment_path(conn, :show, group_id, shipment_id))
       {:error, %Ecto.Changeset{} = changeset} ->
         shipment = Shipments.get_shipment!(shipment_id) |> Ferry.Repo.preload(:routes)
         render(conn, "edit.html", group: group_id, shipment: shipment, route: route, changeset: changeset)
@@ -82,6 +82,6 @@ defmodule FerryWeb.RouteController do
 
     conn
     |> put_flash(:info, "Route deleted successfully.")
-    |> redirect(to: group_shipment_path(conn, :show, group_id, shipment_id))
+    |> redirect(to: Routes.group_shipment_path(conn, :show, group_id, shipment_id))
   end
 end

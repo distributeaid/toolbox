@@ -4,7 +4,7 @@
   <%= if @can_modify? do %>
     <ul class="actions">
       <li>
-        <%= link to: group_shipment_role_path(@conn, :new, @group, @shipment), class: "action" do %>
+        <%= link to: Routes.group_shipment_role_path(@conn, :new, @group, @shipment), class: "action" do %>
           <i class="fas fa-plus"></i>
         <% end %>
       </li>
@@ -34,13 +34,13 @@
         <ul class="actions">
           <%= if @can_modify? do %>
             <li>
-              <%= link to: group_shipment_role_path(@conn, :edit, @group, @shipment, role), class: "action" do %>
+              <%= link to: Routes.group_shipment_role_path(@conn, :edit, @group, @shipment, role), class: "action" do %>
                 <i class="fas fa-pencil-alt"></i>
               <% end %>
             </li>
             <%= if length(@shipment.roles) > 1 do %>
               <li>
-                <%= link to: group_shipment_role_path(@conn, :delete, @group, @shipment, role), method: :delete, data: [confirm: "Are you sure? This will remove the group from the shipment."], class: "action" do %>
+                <%= link to: Routes.group_shipment_role_path(@conn, :delete, @group, @shipment, role), method: :delete, data: [confirm: "Are you sure? This will remove the group from the shipment."], class: "action" do %>
                   <i class="fas fa-trash-alt"></i>
                 <% end %>
               </li>

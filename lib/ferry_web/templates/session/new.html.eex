@@ -4,7 +4,7 @@
       <h1 class="section__title">Login</h1>
     </header>
 
-    <%= render "form.html", Map.put(assigns, :action, session_path(@conn, :create)) %>
+    <%= render "form.html", Map.put(assigns, :action, Routes.session_path(@conn, :create)) %>
 
     
   </div>

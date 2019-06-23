@@ -10,7 +10,7 @@
   <ul class="actions">
     <%= if @can_modify? do %>
       <li>
-        <%= link to: group_shipment_path(@conn, :edit, @group, @shipment), class: "action" do %>
+        <%= link to: Routes.group_shipment_path(@conn, :edit, @group, @shipment), class: "action" do %>
           <i class="fas fa-pencil-alt"></i>
         <% end %>
       </li>

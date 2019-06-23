@@ -1,7 +1,9 @@
 defmodule FerryWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :ferry
 
-  socket "/socket", FerryWeb.UserSocket
+  socket "/socket", FerryWeb.UserSocket,
+    websocket: true,
+    longpoll: false
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -27,7 +29,7 @@ defmodule FerryWeb.Endpoint do
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
-    json_decoder: Poison
+    json_decoder: Jason
 
   plug Plug.MethodOverride
   plug Plug.Head

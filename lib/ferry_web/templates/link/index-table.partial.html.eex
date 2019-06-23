@@ -13,10 +13,10 @@
         <td><%= link.label %></td>
         <td><%= link.url %></td>
         <td>
-          <%= link to: group_link_path(@conn, :edit, @group, link), class: "action" do %>
+          <%= link to: Routes.group_link_path(@conn, :edit, @group, link), class: "action" do %>
             <i class="fas fa-pencil-alt"></i>
           <% end %>
-          <%= link to: group_link_path(@conn, :delete, @group, link), method: :delete, data: [confirm: "Are you sure?"], class: "action" do %>
+          <%= link to: Routes.group_link_path(@conn, :delete, @group, link), method: :delete, data: [confirm: "Are you sure?"], class: "action" do %>
             <i class="fas fa-trash-alt"></i>
           <% end %>
         </td>

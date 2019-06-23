@@ -40,7 +40,7 @@ defmodule FerryWeb.LinkController do
       {:ok, _link} ->
         conn
         |> put_flash(:info, "Link created successfully.")
-        |> redirect(to: group_link_path(conn, :index, group))
+        |> redirect(to: Routes.group_link_path(conn, :index, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", group: group, changeset: changeset)
     end
@@ -64,7 +64,7 @@ defmodule FerryWeb.LinkController do
       {:ok, _link} ->
         conn
         |> put_flash(:info, "Link updated successfully.")
-        |> redirect(to: group_link_path(conn, :index, group))
+        |> redirect(to: Routes.group_link_path(conn, :index, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", group: group, link: link, changeset: changeset)
     end
@@ -80,6 +80,6 @@ defmodule FerryWeb.LinkController do
 
     conn
     |> put_flash(:info, "Link deleted successfully.")
-    |> redirect(to: group_link_path(conn, :index, group))
+    |> redirect(to: Routes.group_link_path(conn, :index, group))
   end
 end

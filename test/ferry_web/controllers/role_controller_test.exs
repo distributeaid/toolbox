@@ -12,7 +12,7 @@ defmodule FerryWeb.RoleControllerTest do
     role = insert(:shipment_role, %{group: group, shipment: shipment})
 
     conn = build_conn()
-    conn = post conn, session_path(conn, :create, %{user: %{email: user.email, password: @password}})
+    conn = post conn, Routes.session_path(conn, :create, %{user: %{email: user.email, password: @password}})
     {:ok, conn: conn, group: group, user: user, shipment: shipment, role: role}
   end
 
@@ -25,7 +25,7 @@ defmodule FerryWeb.RoleControllerTest do
 
   describe "new role" do
     test "renders form", %{conn: conn, group: group, shipment: shipment} do
-      conn = get conn, group_shipment_role_path(conn, :new, group, shipment)
+      conn = get conn, Routes.group_shipment_role_path(conn, :new, group, shipment)
       assert html_response(conn, 200) =~ "New Role"
     end
   end
@@ -36,12 +36,12 @@ defmodule FerryWeb.RoleControllerTest do
         group_id: insert(:group).id,
         shipment_id: shipment.id
       })
-      conn = post conn, group_shipment_role_path(conn, :create, group, shipment), role: role_attrs
+      conn = post conn, Routes.group_shipment_role_path(conn, :create, group, shipment), role: role_attrs
 
       assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == group_shipment_path(conn, :show, group, shipment)
+      assert redirected_to(conn) == Routes.group_shipment_path(conn, :show, group, shipment)
 
-      conn = get conn, group_shipment_path(conn, :show, group, shipment)
+      conn = get conn, Routes.group_shipment_path(conn, :show, group, shipment)
       assert html_response(conn, 200) =~ role_attrs["description"]
     end
 
@@ -50,7 +50,7 @@ defmodule FerryWeb.RoleControllerTest do
         group_id: insert(:group).id,
         shipment_id: shipment.id
       })
-      conn = post conn, group_shipment_role_path(conn, :create, group, shipment), role: role_attrs
+      conn = post conn, Routes.group_shipment_role_path(conn, :create, group, shipment), role: role_attrs
       assert html_response(conn, 200) =~ "New Role"
     end
   end
@@ -60,7 +60,7 @@ defmodule FerryWeb.RoleControllerTest do
 
   describe "edit role" do
     test "renders form for editing chosen role", %{conn: conn, group: group, shipment: shipment, role: role} do
-      conn = get conn, group_shipment_role_path(conn, :edit, group, shipment, role)
+      conn = get conn, Routes.group_shipment_role_path(conn, :edit, group, shipment, role)
       assert html_response(conn, 200) =~ "Edit Role"
     end
   end
@@ -68,16 +68,16 @@ defmodule FerryWeb.RoleControllerTest do
   describe "update role" do
     test "redirects when data is valid", %{conn: conn, group: group, shipment: shipment, role: role} do
       role_attrs = string_params_for(:shipment_role)
-      conn = put conn, group_shipment_role_path(conn, :update, group, shipment, role), role: role_attrs
-      assert redirected_to(conn) == group_shipment_path(conn, :show, group, shipment)
+      conn = put conn, Routes.group_shipment_role_path(conn, :update, group, shipment, role), role: role_attrs
+      assert redirected_to(conn) == Routes.group_shipment_path(conn, :show, group, shipment)
 
-      conn = get conn, group_shipment_path(conn, :show, group, shipment)
+      conn = get conn, Routes.group_shipment_path(conn, :show, group, shipment)
       assert html_response(conn, 200) =~ role_attrs["description"]
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group, shipment: shipment, role: role} do
       role_attrs = string_params_for(:invalid_shipment_role)
-      conn = put conn, group_shipment_role_path(conn, :update, group, shipment, role), role: role_attrs
+      conn = put conn, Routes.group_shipment_role_path(conn, :update, group, shipment, role), role: role_attrs
       assert html_response(conn, 200) =~ "Edit Role"
     end
   end
@@ -90,19 +90,19 @@ defmodule FerryWeb.RoleControllerTest do
       group2 = insert(:group)
       role2 = insert(:shipment_role, %{group: group2, shipment: shipment})
 
-      conn = delete conn, group_shipment_role_path(conn, :delete, group, shipment, role)
-      assert redirected_to(conn) == group_shipment_path(conn, :show, group, shipment)
+      conn = delete conn, Routes.group_shipment_role_path(conn, :delete, group, shipment, role)
+      assert redirected_to(conn) == Routes.group_shipment_path(conn, :show, group, shipment)
 
-      conn = get conn, group_shipment_path(conn, :show, group, shipment)
+      conn = get conn, Routes.group_shipment_path(conn, :show, group, shipment)
       refute html_response(conn, 200) =~ role.description
       assert html_response(conn, 200) =~ role2.description
     end
 
     test "renders errors when deletion is invalid", %{conn: conn, group: group, shipment: shipment, role: role} do
-      conn = delete conn, group_shipment_role_path(conn, :delete, group, shipment, role)
-      assert redirected_to(conn) == group_shipment_path(conn, :show, group, shipment)
+      conn = delete conn, Routes.group_shipment_role_path(conn, :delete, group, shipment, role)
+      assert redirected_to(conn) == Routes.group_shipment_path(conn, :show, group, shipment)
 
-      conn = get conn, group_shipment_path(conn, :show, group, shipment)
+      conn = get conn, Routes.group_shipment_path(conn, :show, group, shipment)
       assert html_response(conn, 200) =~ "There must be at least 1 group taking part in this shipment."
     end
   end

@@ -12,7 +12,7 @@ defmodule FerryWeb.MapView do
         lng: address.geocode.lng |> html_escape() |> safe_to_string(),
         marker_content: render_to_string(FerryWeb.ComponentView, "address.partial.html", %{address: address})
     } end)
-    |> Poison.encode!()
+    |> Jason.encode!()
     |> raw()
   end
 

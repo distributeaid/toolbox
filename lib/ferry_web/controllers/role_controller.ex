@@ -33,7 +33,7 @@ defmodule FerryWeb.RoleController do
       {:ok, _role} ->
         conn
         |> put_flash(:info, "Role created successfully.")
-        |> redirect(to: group_shipment_path(conn, :show, group, shipment))
+        |> redirect(to: Routes.group_shipment_path(conn, :show, group, shipment))
       {:error, %Ecto.Changeset{} = changeset} ->
         groups = Profiles.list_groups()
         render(conn, "new.html", group: group, shipment: shipment, groups: groups, changeset: changeset)
@@ -61,7 +61,7 @@ defmodule FerryWeb.RoleController do
       {:ok, _role} ->
         conn
         |> put_flash(:info, "Role updated successfully.")
-        |> redirect(to: group_shipment_path(conn, :show, group, shipment))
+        |> redirect(to: Routes.group_shipment_path(conn, :show, group, shipment))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", group: group, shipment: shipment, role: role, changeset: changeset)
     end
@@ -79,13 +79,13 @@ defmodule FerryWeb.RoleController do
       {:ok, _role} ->
         conn
         |> put_flash(:info, "Role deleted successfully.")
-        |> redirect(to: group_shipment_path(conn, :show, group, shipment))
+        |> redirect(to: Routes.group_shipment_path(conn, :show, group, shipment))
         
       {:error, %Ecto.Changeset{} = changeset} ->
         error_msg = Keyword.get(changeset.errors, :shipment) |> elem(0)
         conn
         |> put_flash(:error, error_msg)
-        |> redirect(to: group_shipment_path(conn, :show, group, shipment))
+        |> redirect(to: Routes.group_shipment_path(conn, :show, group, shipment))
     end
   end
 end

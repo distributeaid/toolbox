@@ -4,8 +4,8 @@
       <h1 class="section__title">New Group</h1>
     </header>
 
-    <%= render "form.html", Map.put(assigns, :action, group_path(@conn, :create)) %>
+    <%= render "form.html", Map.put(assigns, :action, Routes.group_path(@conn, :create)) %>
 
-    <span><%= link "Back", to: group_path(@conn, :show, @group) %></span>
+    <span><%= link "Back", to: Routes.group_path(@conn, :show, @group) %></span>
   </div>
 </section>

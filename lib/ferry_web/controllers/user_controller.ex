@@ -23,7 +23,7 @@ defmodule FerryWeb.UserController do
       {:ok, _user} ->
         conn
         |> put_flash(:info, "User created successfully.")
-        |> redirect(to: home_page_path(conn, :index))
+        |> redirect(to: Routes.home_page_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", group: group, changeset: changeset)
     end
@@ -47,7 +47,7 @@ defmodule FerryWeb.UserController do
       {:ok, _user} ->
         conn
         |> put_flash(:info, "User updated successfully.")
-        |> redirect(to: home_page_path(conn, :index))
+        |> redirect(to: Routes.home_page_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", group: group, changeset: changeset)
     end

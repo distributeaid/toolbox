@@ -5,14 +5,14 @@
     <li>
       <!-- TODO: point to the map w/ the group filter setup -->
       <!--
-      <%= link to: map_path(@conn, :show), class: "action" do %>
+      <%= link to: Routes.map_path(@conn, :show), class: "action" do %>
         <i class="fas fa-eye"></i>
       <% end %>
       -->
     </li>
     <%= if @can_modify? do %>
       <li>
-        <%= link to: group_address_path(@conn, :new, @group), class: "action" do %>
+        <%= link to: Routes.group_address_path(@conn, :new, @group), class: "action" do %>
           <i class="fas fa-plus"></i>
         <% end %>
       </li>
@@ -27,12 +27,12 @@
         <%= if @can_modify? do %>
           <ul class="entry__actions actions actions--inline">
             <li>
-              <%= link to: group_address_path(@conn, :edit, @group, address), class: "action" do %>
+              <%= link to: Routes.group_address_path(@conn, :edit, @group, address), class: "action" do %>
                 <i class="fas fa-pencil-alt"></i>
               <% end %>
             </li>
             <li>
-              <%= link to: group_address_path(@conn, :delete, @group, address), method: :delete, data: [confirm: "This will delete all data associated with the address and remove it from our public maps and private (group-only) listings.  Are you sure?"], class: "action" do %>
+              <%= link to: Routes.group_address_path(@conn, :delete, @group, address), method: :delete, data: [confirm: "This will delete all data associated with the address and remove it from our public maps and private (group-only) listings.  Are you sure?"], class: "action" do %>
                 <i class="fas fa-trash-alt"></i>
               <% end %>
             </li>

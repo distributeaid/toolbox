@@ -22,7 +22,7 @@
     <%= if @current_group do %>
       <h2 class="subsection__header">My Group</h2>
       <div class="category category--inline">
-        <%= link to: group_path(@conn, :show, @current_group), class: "link--wrapper" do %>
+        <%= link to: Routes.group_path(@conn, :show, @current_group), class: "link--wrapper" do %>
           <%= component "category-entry.partial.html", %{
             title: @current_group.name,
             img: %{src: logo_url(@current_group), alt: "Logo"}
@@ -39,7 +39,7 @@
     <%= if has_groups? @groups do %>
       <div class="category category--4-col">
         <%= for group <- @groups do %>
-          <%= link to: group_path(@conn, :show, group), class: "link--wrapper" do %>
+          <%= link to: Routes.group_path(@conn, :show, group), class: "link--wrapper" do %>
             <%= if group.logo do %>
               <%= component "category-entry.partial.html", %{
                 title: group.name,

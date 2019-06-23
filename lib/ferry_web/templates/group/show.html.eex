@@ -11,14 +11,14 @@
     <ul class="actions">
       <%= if !is_nil(@current_group) && @group.id == @current_group.id do %>
         <li>
-          <%= link to: group_path(@conn, :edit, @current_group), class: "action" do %>
+          <%= link to: Routes.group_path(@conn, :edit, @current_group), class: "action" do %>
             <i class="fas fa-pencil-alt"></i>
           <% end %>
         </li>
       <% end %>
 
       <li>
-        <%= link to: group_path(@conn, :index), class: "action action--close" do %>
+        <%= link to: Routes.group_path(@conn, :index), class: "action action--close" do %>
           <i class="fas fa-times"></i>
         <% end %>
       </li>

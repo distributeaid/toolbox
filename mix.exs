@@ -36,17 +36,18 @@ defmodule Ferry.Mixfile do
   defp deps do
     [
       # standard deps
-      {:phoenix, "~> 1.3.4"},
-      {:phoenix_pubsub, "~> 1.0"},
-      {:phoenix_ecto, "~> 3.6"},
+      {:phoenix, "~> 1.4.0"},
+      {:phoenix_pubsub, "~> 1.1"},
+      {:ecto_sql, "~> 3.1"},
+      {:phoenix_ecto, "~> 4.0"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.10"},
-      {:phoenix_live_reload, "~> 1.0", only: :dev},
-      {:gettext, "~> 0.11"},
-      {:plug_cowboy, "~> 1.0"},
+      {:phoenix_html, "~> 2.13"},
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:gettext, "~> 0.16"},
+      {:plug_cowboy, "~> 2.0"},
 
       # json deps
-      {:poison, "~> 3.1"},
+      {:jason, "~> 1.0"},
 
       # http deps
       {:httpoison, "~> 1.4"},
@@ -57,7 +58,7 @@ defmodule Ferry.Mixfile do
       {:bcrypt_elixir, "~> 1.0"},
 
       # file upload deps
-      {:arc_ecto, "~> 0.11.1"},
+      {:arc_ecto, "~> 0.11"},
 
       # testing deps
       {:ex_machina, "~> 2.3", only: :test},
@@ -68,7 +69,7 @@ defmodule Ferry.Mixfile do
       {:distillery, "~> 2.0"},
 
       # scrivener library for pagination
-      {:scrivener_ecto, "~> 1.0"},
+      {:scrivener_ecto, "~> 2.0"},
 
       # datetime manipulation & formatting
       {:timex, "~> 3.0"}

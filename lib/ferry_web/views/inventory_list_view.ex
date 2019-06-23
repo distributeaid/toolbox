@@ -34,7 +34,7 @@ defmodule FerryWeb.InventoryListView do
       <header class="section__header">
         <h1 class="section__title">Available Items</h1>
         <h3>
-          (<%= link "click here to see needed items", to: inventory_list_path(@conn, :show, type: "needs") %>)
+          (<%= link "click here to see needed items", to: Routes.inventory_list_path(@conn, :show, type: "needs") %>)
         </h3>
       </header>
     """
@@ -45,7 +45,7 @@ defmodule FerryWeb.InventoryListView do
       <header class="section__header">
         <h1 class="section__title">Needed Items</h1>
         <h3>
-          (<%= link "click here to see available items", to: inventory_list_path(@conn, :show) %>)
+          (<%= link "click here to see available items", to: Routes.inventory_list_path(@conn, :show) %>)
         </h3>
       </header>
     """

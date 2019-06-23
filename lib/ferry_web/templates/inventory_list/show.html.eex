@@ -2,7 +2,7 @@
   <div class="section__content">
     <%= render "header.partial.html", assigns %>
 
-    <%= form_for @changeset, inventory_list_path(@conn, :show), [method: :get], fn f -> %>
+    <%= form_for @changeset, Routes.inventory_list_path(@conn, :show), [method: :get], fn f -> %>
       <%= if @changeset.action do %>
         <div class="alert is-error">
           <p>Oops, something went wrong! Please check the errors below.</p>

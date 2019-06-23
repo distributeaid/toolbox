@@ -15,15 +15,15 @@
         <td><%= group.name %></td>
         <td><%= group.description %></td>
         <td>
-          <span><%= link "Show", to: group_path(@conn, :show, group), class: "button is-small" %></span>
-          <span><%= link "Edit", to: group_path(@conn, :edit, group), class: "button is-small" %></span>
-          <span><%= link "Delete", to: group_path(@conn, :delete, group), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
+          <span><%= link "Show", to: Routes.group_path(@conn, :show, group), class: "button is-small" %></span>
+          <span><%= link "Edit", to: Routes.group_path(@conn, :edit, group), class: "button is-small" %></span>
+          <span><%= link "Delete", to: Routes.group_path(@conn, :delete, group), method: :delete, data: [confirm: "Are you sure?"], class: "button is-small is-secondary" %></span>
         </td>
         <td>
-          <%= link "Projects", to: group_project_path(@conn, :index, group) %>
+          <%= link "Projects", to: Routes.group_project_path(@conn, :index, group) %>
         </td>
         <td>
-          <%= link "Links", to: group_link_path(@conn, :index, group) %>
+          <%= link "Links", to: Routes.group_link_path(@conn, :index, group) %>
         </td>
       </tr>
   <% end %>

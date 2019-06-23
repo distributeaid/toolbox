@@ -12,7 +12,7 @@
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa:400|Quicksand:400,700">
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>">
     <%= render_existing @view_module, "view-specific-styles.html" %>
 
     <!--
@@ -21,59 +21,59 @@
     -->
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="icon" sizes="16x16 32x32 64x64" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="196x196" href="<%= static_path(@conn, "/favicon-192.png") %>">
-    <link rel="icon" type="image/png" sizes="160x160" href="<%= static_path(@conn, "/favicon-160.png") %>">
-    <link rel="icon" type="image/png" sizes="96x96" href="<%= static_path(@conn, "/favicon-96.png") %>">
-    <link rel="icon" type="image/png" sizes="64x64" href="<%= static_path(@conn, "/favicon-64.png") %>">
-    <link rel="icon" type="image/png" sizes="32x32" href="<%= static_path(@conn, "/favicon-32.png") %>">
-    <link rel="icon" type="image/png" sizes="16x16" href="<%= static_path(@conn, "/favicon-16.png") %>">
-    <link rel="apple-touch-icon" href="<%= static_path(@conn, "/favicon-57.png") %>">
-    <link rel="apple-touch-icon" sizes="114x114" href="<%= static_path(@conn, "/favicon-114.png") %>">
-    <link rel="apple-touch-icon" sizes="72x72" href="<%= static_path(@conn, "/favicon-72.png") %>">
-    <link rel="apple-touch-icon" sizes="144x144" href="<%= static_path(@conn, "/favicon-144.png") %>">
-    <link rel="apple-touch-icon" sizes="60x60" href="<%= static_path(@conn, "/favicon-60.png") %>">
-    <link rel="apple-touch-icon" sizes="120x120" href="<%= static_path(@conn, "/favicon-120.png") %>">
-    <link rel="apple-touch-icon" sizes="76x76" href="<%= static_path(@conn, "/favicon-76.png") %>">
-    <link rel="apple-touch-icon" sizes="152x152" href="<%= static_path(@conn, "/favicon-152.png") %>">
-    <link rel="apple-touch-icon" sizes="180x180" href="<%= static_path(@conn, "/favicon-180.png") %>">
+    <link rel="icon" type="image/png" sizes="196x196" href="<%= Routes.static_path(@conn, "/favicon-192.png") %>">
+    <link rel="icon" type="image/png" sizes="160x160" href="<%= Routes.static_path(@conn, "/favicon-160.png") %>">
+    <link rel="icon" type="image/png" sizes="96x96" href="<%= Routes.static_path(@conn, "/favicon-96.png") %>">
+    <link rel="icon" type="image/png" sizes="64x64" href="<%= Routes.static_path(@conn, "/favicon-64.png") %>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<%= Routes.static_path(@conn, "/favicon-32.png") %>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<%= Routes.static_path(@conn, "/favicon-16.png") %>">
+    <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/favicon-57.png") %>">
+    <link rel="apple-touch-icon" sizes="114x114" href="<%= Routes.static_path(@conn, "/favicon-114.png") %>">
+    <link rel="apple-touch-icon" sizes="72x72" href="<%= Routes.static_path(@conn, "/favicon-72.png") %>">
+    <link rel="apple-touch-icon" sizes="144x144" href="<%= Routes.static_path(@conn, "/favicon-144.png") %>">
+    <link rel="apple-touch-icon" sizes="60x60" href="<%= Routes.static_path(@conn, "/favicon-60.png") %>">
+    <link rel="apple-touch-icon" sizes="120x120" href="<%= Routes.static_path(@conn, "/favicon-120.png") %>">
+    <link rel="apple-touch-icon" sizes="76x76" href="<%= Routes.static_path(@conn, "/favicon-76.png") %>">
+    <link rel="apple-touch-icon" sizes="152x152" href="<%= Routes.static_path(@conn, "/favicon-152.png") %>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= Routes.static_path(@conn, "/favicon-180.png") %>">
     <meta name="msapplication-TileColor" content="#FFFFFF">
-    <meta name="msapplication-TileImage" content="<%= static_path(@conn, "/favicon-144.png") %>">
-    <meta name="msapplication-config" content="<%= static_path(@conn, "/browserconfig.xml") %>">
+    <meta name="msapplication-TileImage" content="<%= Routes.static_path(@conn, "/favicon-144.png") %>">
+    <meta name="msapplication-config" content="<%= Routes.static_path(@conn, "/browserconfig.xml") %>">
 
     <!--
     Scripts
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     -->
-    <script defer src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <script defer src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
     <%= render_existing @view_module, "view-specific-scripts.html" %>
   </head>
 
   <body class="site">
     <header class="navbar site-header">
-      <img class="site-header__logo" src="<%= static_path(@conn, "/images/DAlogoDarkSmall.jpg") %>" alt="Logo: Outline of a Dove" />
+      <img class="site-header__logo" src="<%= Routes.static_path(@conn, "/images/DAlogoDarkSmall.jpg") %>" alt="Logo: Outline of a Dove" />
 
-      <%= link "distribute|AID", to: home_page_path(@conn, :index), class: "brand" %>
+      <%= link "distribute|AID", to: Routes.home_page_path(@conn, :index), class: "brand" %>
 
       <nav>
         <ul class="site-nav">
           <li>
             <!-- TODO: change to "Dashboard" -->
-            <%= link "Home", to: home_page_path(@conn, :index), class: "site-nav__link" %>
+            <%= link "Home", to: Routes.home_page_path(@conn, :index), class: "site-nav__link" %>
           </li>
           <li>
-            <%= link "Map", to: map_path(@conn, :show), class: "site-nav__link" %>
+            <%= link "Map", to: Routes.map_path(@conn, :show), class: "site-nav__link" %>
           </li>
           <li>
-            <%= link "Groups", to: group_path(@conn, :index), class: "site-nav__link" %>
+            <%= link "Groups", to: Routes.group_path(@conn, :index), class: "site-nav__link" %>
           </li>
           <li>
-            <%= link "Inventory", to: inventory_list_path(@conn, :show), class: "site-nav__link" %>
+            <%= link "Inventory", to: Routes.inventory_list_path(@conn, :show), class: "site-nav__link" %>
           </li>
           <li>
             <%= if @current_user == nil do %>
-              <%= link "Login", to: session_path(@conn, :new), class: "site-nav__link" %>
+              <%= link "Login", to: Routes.session_path(@conn, :new), class: "site-nav__link" %>
             <% else %>
-              <%= link "Logout", to: session_path(@conn, :delete), method: :delete, class: "site-nav__link" %>
+              <%= link "Logout", to: Routes.session_path(@conn, :delete), method: :delete, class: "site-nav__link" %>
             <% end %>
           </li>
         </ul>
@@ -122,7 +122,7 @@
         </a>
 
         <%= if @current_user do %>
-          <%= link to: group_user_path(@conn, :edit, @current_user.group_id, @current_user), class: "site-footer__link site-footer__link--lowercase" do %>
+          <%= link to: Routes.group_user_path(@conn, :edit, @current_user.group_id, @current_user), class: "site-footer__link site-footer__link--lowercase" do %>
             <i class="fas fa-lock fa-lg"></i>
             Change Password
           <% end %>

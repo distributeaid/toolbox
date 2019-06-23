@@ -57,7 +57,7 @@ defmodule FerryWeb.ProjectController do
       {:ok, _project} ->
         conn
         |> put_flash(:info, "Project created successfully.")
-        |> redirect(to: group_path(conn, :show, group))
+        |> redirect(to: Routes.group_path(conn, :show, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", group: group, changeset: changeset)
     end
@@ -81,7 +81,7 @@ defmodule FerryWeb.ProjectController do
       {:ok, _project} ->
         conn
         |> put_flash(:info, "Project updated successfully.")
-        |> redirect(to: group_path(conn, :show, group))
+        |> redirect(to: Routes.group_path(conn, :show, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", group: group, project: project, changeset: changeset)
     end
@@ -97,6 +97,6 @@ defmodule FerryWeb.ProjectController do
 
     conn
     |> put_flash(:info, "Project deleted successfully.")
-    |> redirect(to: group_path(conn, :show, group))
+    |> redirect(to: Routes.group_path(conn, :show, group))
   end
 end

@@ -16,7 +16,7 @@ defmodule FerryWeb.SessionController do
     changeset = Accounts.change_user(%User{})
     maybe_user = Guardian.Plug.current_resource(conn)
     if maybe_user do
-      redirect(conn, to: home_page_path(conn, :index)) # TODO: test redirect
+      redirect(conn, to: Routes.home_page_path(conn, :index)) # TODO: test redirect
     else
       render(conn, "new.html", changeset: changeset)
     end
@@ -28,7 +28,7 @@ defmodule FerryWeb.SessionController do
         conn
         |> put_flash(:info, "Welcome back!")
         |> Guardian.Plug.sign_in(user)
-        |> redirect(to: home_page_path(conn, :index))
+        |> redirect(to: Routes.home_page_path(conn, :index))
 
       {:error, reason} ->
         conn
@@ -43,7 +43,7 @@ defmodule FerryWeb.SessionController do
   def delete(conn, _) do
     conn
     |> logout()
-    |> redirect(to: home_page_path(conn, :index))
+    |> redirect(to: Routes.home_page_path(conn, :index))
   end
 
   defp logout(conn) do

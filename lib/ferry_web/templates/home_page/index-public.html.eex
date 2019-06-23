@@ -20,7 +20,7 @@
       </ul>
 
       <p class="is-text-center">
-        <%= link to: session_path(@conn, :new), class: "button is-big" do %>
+        <%= link to: Routes.session_path(@conn, :new), class: "button is-big" do %>
           Login <i class="fas fa-unlock is-icon-left"></i>
         <% end %>
       </p>

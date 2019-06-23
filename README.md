@@ -28,18 +28,18 @@ Elixir (programming language):
 
 * Official website: https://elixir-lang.org/
 * Getting started guide: https://elixir-lang.org/getting-started/introduction.html
-* Docs: https://hexdocs.pm/elixir/1.7.2/Kernel.html - NOTE: we are not using the latest version of Elixir just yet.
+* Docs: https://hexdocs.pm/elixir/1.7.4/Kernel.html - NOTE: we are not using the latest version of Elixir just yet.
 
 Phoenix (webserver framework):
 
 * Official website: http://www.phoenixframework.org/
-* Docs: https://hexdocs.pm/phoenix/1.3.4/overview.html - NOTE: we are not using the latest version of Phoenix just yet.
+* Docs: https://hexdocs.pm/phoenix/overview.html
 * Mailing list: http://groups.google.com/group/phoenix-talk
 * Source: https://github.com/phoenixframework/phoenix
 
 Ecto (database framework & ORM):
 
-* Docs: https://hexdocs.pm/ecto/2.2.11/Ecto.html - NOTE: we are not using the latest version of Ecto just yet.
+* Docs: https://hexdocs.pm/ecto/Ecto.html
 
 Up & Running
 ------------------------------------------------------------
@@ -136,7 +136,7 @@ Common Mix Commands
 
 **Pheonix:**
 
-* https://hexdocs.pm/1.3.4/phoenix/phoenix_mix_tasks.html#content
+* https://hexdocs.pm/phoenix/phoenix_mix_tasks.html#content
 * You can also lookup each individual task in the mix section of the left side menu.
 * See `/development/web-entrypoint.sh` for common commands that are run when you start the containers.
 
@@ -154,7 +154,7 @@ mix phx.gen.html [OPTIONS]
 
 **Ecto:**
 
-* https://hexdocs.pm/ecto/2.2.11/Mix.Tasks.Ecto.html (select a specific task in the left side menu)
+* https://hexdocs.pm/ecto/Mix.Tasks.Ecto.html (select a specific task in the left side menu)
 
 ```
 docker exec toolbox_web mix ecto.migrate

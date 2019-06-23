@@ -2,17 +2,17 @@
   <div class="section__content">
     <header class="section__header">
       <h1 class="section__title">New Link</h1>
-      <p class="section__subtitle">(for group <%= link @group.name, to: group_path(@conn, :show, @group) %>)</p>
+      <p class="section__subtitle">(for group <%= link @group.name, to: Routes.group_path(@conn, :show, @group) %>)</p>
     </header>
 
     <ul class="actions">
       <li>
-        <%= link to: group_link_path(@conn, :index, @group), class: "action" do %>
+        <%= link to: Routes.group_link_path(@conn, :index, @group), class: "action" do %>
           <i class="fas fa-times"></i>
         <% end %>
       </li>
     </ul>
 
-    <%= render "form.html", Map.put(assigns, :action, group_link_path(@conn, :create, @group)) %>
+    <%= render "form.html", Map.put(assigns, :action, Routes.group_link_path(@conn, :create, @group)) %>
   </div>
 </section>

@@ -19,7 +19,7 @@ config :ferry, Ferry.Repo,
   pool: Ecto.Adapters.SQL.Sandbox
 
 # Reduce the # of password hashing rounds to speed up the test suite.
-config :bcrypt_elixir, :log_rounds, 4
+config :bcrypt_elixir, log_rounds: 4
 
 # Override modules with mocks for testing.
 config :ferry, :geocoder, Ferry.Locations.Geocoder.GeocoderMock

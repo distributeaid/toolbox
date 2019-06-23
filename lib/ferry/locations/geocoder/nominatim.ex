@@ -58,7 +58,7 @@ defmodule Ferry.Locations.Geocoder.Nominatim do
   end
 
   defp handle_successful_geocoding_response(body) do
-    case Poison.decode(body) do
+    case Jason.decode(body) do
       {:ok, [%{} = geocode_data]} ->
         {:ok, %{
           lat: geocode_data["lat"],

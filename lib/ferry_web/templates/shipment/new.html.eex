@@ -6,14 +6,14 @@
 
     <ul class="actions">
       <li>
-        <%= link to: group_shipment_path(@conn, :index, @group), class: "action" do %>
+        <%= link to: Routes.group_shipment_path(@conn, :index, @group), class: "action" do %>
           <i class="fas fa-times"></i>
         <% end %>
       </li>
     </ul>
 
     <%= render "form.html", Map.merge(assigns, %{
-      action: group_shipment_path(@conn, :create, @group),
+      action: Routes.group_shipment_path(@conn, :create, @group),
       new_shipment?: true
     }) %>
   </div>

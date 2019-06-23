@@ -19,7 +19,7 @@ defmodule FerryWeb.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
-      import FerryWeb.Router.Helpers
+      alias FerryWeb.Router.Helpers, as: Routes
 
       import Ferry.Factory
 

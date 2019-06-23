@@ -977,27 +977,27 @@ Page
 
 @media (min-width: 600px) {
   .page-content--welcome {
-    background-image: url('../images/welcome-bg.jpg');
+    background-image: url('/images/welcome-bg.jpg');
     background-position: bottom center;
   }
 
   .page-content--users {
-    background-image: url('../images/users-bg.png');
+    background-image: url('/images/users-bg.png');
     background-position: center center;
   }
 
   .page-content--session {
-    background-image: url('../images/session-bg.jpg');
+    background-image: url('/images/session-bg.jpg');
     background-position: center center;
   }
 
   .page-content--groups {
-    background-image: url('../images/groups-bg.jpg');
+    background-image: url('/images/groups-bg.jpg');
     background-position: bottom center;
   }
 
   .page-content--projects {
-    background-image: url('../images/projects-bg.jpg');
+    background-image: url('/images/projects-bg.jpg');
     background-position: top right;
   }
 }

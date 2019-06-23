@@ -55,7 +55,7 @@ defmodule FerryWeb.StockController do
       {:ok, stock} ->
         conn
         |> put_flash(:info, "Stock created successfully.")
-        |> redirect(to: group_stock_path(conn, :index, group))
+        |> redirect(to: Routes.group_stock_path(conn, :index, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         projects = Profiles.list_projects(group)
         categories = Inventory.list_top_categories()
@@ -85,7 +85,7 @@ defmodule FerryWeb.StockController do
       {:ok, stock} ->
         conn
         |> put_flash(:info, "Stock updated successfully.")
-        |> redirect(to: group_stock_path(conn, :index, group))
+        |> redirect(to: Routes.group_stock_path(conn, :index, group))
       {:error, %Ecto.Changeset{} = changeset} ->
         projects = Profiles.list_projects(group)
         categories = Inventory.list_top_categories()
@@ -104,6 +104,6 @@ defmodule FerryWeb.StockController do
 
     conn
     |> put_flash(:info, "Stock deleted successfully.")
-    |> redirect(to: group_stock_path(conn, :index, group))
+    |> redirect(to: Routes.group_stock_path(conn, :index, group))
   end
 end

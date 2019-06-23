@@ -6,7 +6,7 @@
 
     <ul class="actions">
       <li>
-        <%= link to: group_stock_path(@conn, :index, @group), class: "action" do %>
+        <%= link to: Routes.group_stock_path(@conn, :index, @group), class: "action" do %>
           <i class="fas fa-times"></i>
         <% end %>
       </li>

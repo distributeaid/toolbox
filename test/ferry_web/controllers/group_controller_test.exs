@@ -9,7 +9,7 @@ defmodule FerryWeb.GroupControllerTest do
     user = insert(:user, group: group)
 
     conn = build_conn()
-    conn = post conn, session_path(conn, :create, %{user: %{email: user.email, password: @password}})
+    conn = post conn, Routes.session_path(conn, :create, %{user: %{email: user.email, password: @password}})
     {:ok, conn: conn, group: group, user: user}
   end
 
@@ -20,9 +20,9 @@ defmodule FerryWeb.GroupControllerTest do
     test "shows 401 unauthorized for non-logged-in users", %{group: group} do
       Enum.each(
         [
-          get(build_conn(), group_path(build_conn(), :edit, group)),
-          put(build_conn(), group_path(build_conn(), :update, group), group: params_for(:group)),
-          delete(build_conn(), group_path(build_conn(), :delete, group))
+          get(build_conn(), Routes.group_path(build_conn(), :edit, group)),
+          put(build_conn(), Routes.group_path(build_conn(), :update, group), group: params_for(:group)),
+          delete(build_conn(), Routes.group_path(build_conn(), :delete, group))
         ],
         fn conn -> assert conn.status == 401 end
       )
@@ -36,9 +36,9 @@ defmodule FerryWeb.GroupControllerTest do
       Enum.each(
         [
           # authenticated
-          get(conn, group_path(conn, :edit, not_my_group)),
-          put(conn, group_path(conn, :update, not_my_group), group: params_for(:group)),
-          delete(conn, group_path(conn, :delete, not_my_group))
+          get(conn, Routes.group_path(conn, :edit, not_my_group)),
+          put(conn, Routes.group_path(conn, :update, not_my_group), group: params_for(:group)),
+          delete(conn, Routes.group_path(conn, :delete, not_my_group))
         ],
         fn conn -> assert conn.status == 403 end
       )
@@ -48,10 +48,10 @@ defmodule FerryWeb.GroupControllerTest do
       Enum.each(
         [
           # unauthenticated
-          fn -> get build_conn(), group_path(build_conn(), :show, 1312) end,
+          fn -> get build_conn(), Routes.group_path(build_conn(), :show, 1312) end,
 
           # authenticated
-          fn -> get conn, group_path(conn, :show, 1312) end,
+          fn -> get conn, Routes.group_path(conn, :show, 1312) end,
         ],
         fn request -> assert_error_sent 404, request end
       )
@@ -65,7 +65,7 @@ defmodule FerryWeb.GroupControllerTest do
     # TODO: test for 0, 1, n groups
     # TODO: test logged in (conn) & logged out (build_conn())
     test "lists all groups", %{conn: conn} do
-      conn = get conn, group_path(conn, :index)
+      conn = get conn, Routes.group_path(conn, :index)
       assert html_response(conn, 200) =~ "Groups"
     end
   end
@@ -73,7 +73,7 @@ defmodule FerryWeb.GroupControllerTest do
   describe "show" do
     # TODO: test logged in (conn) & logged out (build_conn())
     test "lists the specified group", %{conn: conn, group: group} do
-      conn = get conn, group_path(conn, :show, group.id)
+      conn = get conn, Routes.group_path(conn, :show, group.id)
       assert html_response(conn, 200) =~ group.description
     end
   end
@@ -84,7 +84,7 @@ defmodule FerryWeb.GroupControllerTest do
 
   # describe "new group" do
   #   test "renders form", %{conn: conn} do
-  #     conn = get conn, group_path(conn, :new)
+  #     conn = get conn, Routes.group_path(conn, :new)
   #     assert html_response(conn, 200) =~ "New Group"
   #   end
   #
@@ -93,17 +93,17 @@ defmodule FerryWeb.GroupControllerTest do
 
   # describe "create group" do
   #   test "redirects to show when data is valid", %{conn: conn} do
-  #     conn = post conn, group_path(conn, :create), group: params_for(:group)
+  #     conn = post conn, Routes.group_path(conn, :create), group: params_for(:group)
 
   #     assert %{id: id} = redirected_params(conn)
-  #     assert redirected_to(conn) == group_path(conn, :show, id)
+  #     assert redirected_to(conn) == Routes.group_path(conn, :show, id)
 
-  #     conn = get conn, group_path(conn, :show, id)
+  #     conn = get conn, Routes.group_path(conn, :show, id)
   #     assert html_response(conn, 200) =~ "Show Group"
   #   end
 
   #   test "renders errors when data is invalid", %{conn: conn} do
-  #     conn = post conn, group_path(conn, :create), group: params_for(:invalid_group)
+  #     conn = post conn, Routes.group_path(conn, :create), group: params_for(:invalid_group)
   #     assert html_response(conn, 200) =~ "New Group"
   #   end
   #
@@ -115,22 +115,22 @@ defmodule FerryWeb.GroupControllerTest do
 
   describe "edit group" do
     test "renders form for editing chosen group", %{conn: conn, group: group} do
-      conn = get conn, group_path(conn, :edit, group)
+      conn = get conn, Routes.group_path(conn, :edit, group)
       assert html_response(conn, 200) =~ "Edit Group"
     end
   end
 
   describe "update group" do
     test "redirects when data is valid", %{conn: conn, group: group} do
-      conn = put conn, group_path(conn, :update, group), group: params_for(:group)
-      assert redirected_to(conn) == group_path(conn, :show, group)
+      conn = put conn, Routes.group_path(conn, :update, group), group: params_for(:group)
+      assert redirected_to(conn) == Routes.group_path(conn, :show, group)
 
-      conn = get conn, group_path(conn, :show, group)
+      conn = get conn, Routes.group_path(conn, :show, group)
       assert html_response(conn, 200) =~ params_for(:group).description
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group} do
-      conn = put conn, group_path(conn, :update, group), group: params_for(:invalid_group)
+      conn = put conn, Routes.group_path(conn, :update, group), group: params_for(:invalid_group)
       assert html_response(conn, 200) =~ "Edit Group"
     end
   end
@@ -140,10 +140,10 @@ defmodule FerryWeb.GroupControllerTest do
 
   describe "delete group" do
     test "deletes chosen group", %{conn: conn, group: group} do
-      conn = delete conn, group_path(conn, :delete, group)
-      assert redirected_to(conn) == group_path(conn, :index)
+      conn = delete conn, Routes.group_path(conn, :delete, group)
+      assert redirected_to(conn) == Routes.group_path(conn, :index)
       assert_error_sent 404, fn ->
-        get conn, group_path(conn, :show, group)
+        get conn, Routes.group_path(conn, :show, group)
       end
     end
   end
