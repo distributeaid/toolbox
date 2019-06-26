@@ -3,7 +3,10 @@
     <div class="alert is-error">
       <p>Oops, something went wrong! Please check the errors below.</p>
     </div>
-  <% end %>
+    <div class="form-item is-inline">
+      <p> <%= error_tag f, :login %> </p>
+    </div>
+ <% end %>
 
   <div class="form-item is-inline">
     <%= label f, :email, class: "is-req" %>

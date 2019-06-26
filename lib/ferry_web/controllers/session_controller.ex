@@ -1,10 +1,12 @@
 defmodule FerryWeb.SessionController do
   use FerryWeb, :controller
+  import Ecto.Changeset
 
   alias Ferry.Accounts
   alias Ferry.Accounts.User
   alias Ferry.Auth
   alias Ferry.Auth.Guardian
+  alias Ferry.Repo
 
   # Session Controller
   # ==============================================================================
@@ -31,9 +33,14 @@ defmodule FerryWeb.SessionController do
         |> redirect(to: Routes.home_page_path(conn, :index))
 
       {:error, reason} ->
+        changeset = User.validate_login(%User{}, %{email: email, password: password})
+        |> Map.put(:action, :update)
+        |> add_error(:login, "Email or password is incorrect.")
+
         conn
         |> put_flash(:error, to_string(reason))
-        |> new(%{})
+        |> render("new.html", changeset: changeset)
+
     end
   end
 
