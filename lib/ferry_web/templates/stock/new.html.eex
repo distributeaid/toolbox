@@ -12,6 +12,14 @@
       </li>
     </ul>
 
-    <%= render "form.html", Map.put(assigns, :action, Routes.group_stock_path(@conn, :create, @group)) %>
+    <%= if length(@projects) > 0 do %>
+      <%= render "form.html", Map.put(assigns, :action, Routes.group_stock_path(@conn, :create, @group)) %>
+    <%= else %>
+      <p>In order to add an item, you need to add a project first!</p>
+      <p>Inventory is attached to specific projects since groups may have multiple projects in different locations, each with their own inventory and needs.</p>
+      <p class="is-text-center">
+        <%= link "Create your first project!", to: Routes.group_project_path(@conn, :new, @group), class: "button is-big" %>
+      </p>
+    <% end %>
   </div>
 </section>
