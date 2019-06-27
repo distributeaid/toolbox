@@ -219,7 +219,9 @@ git pull
 mix deps.get --only prod
 MIX_ENV=prod mix compile
 MIX_ENV=prod mix ecto.migrate
-cd assets && npm install && ./node_modules/brunch/bin/brunch b -p && cd .. && MIX_ENV=prod mix do phx.digest, release --env=prod --upgrade
+cd assets && npm install && npm run deploy && cd ..
+MIX_ENV=prod mix phx.digest
+MIX_ENV=prod mix release --env=prod --upgrade
 
 # deploy
 cd [/path/to/webroot]
