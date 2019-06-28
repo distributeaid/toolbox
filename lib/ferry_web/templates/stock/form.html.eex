@@ -15,7 +15,7 @@
     <%= inputs_for fi, :category, fn fc -> %>
       <div class="form-item is-inline">
         <%= label fc, :name, "Category", class: "is-req" %>
-        <%= select fc, :name, selectify(@categories), class: "select-and-input" %>
+        <%= select fc, :name, selectify(@categories), class: "select-and-input-cat" %>
         <div class="is-desc">
           Common categories are listed for you to select.  You can enter a custom category by typing it into the search box and pressing enter.
         </div>
@@ -25,7 +25,7 @@
 
     <div class="form-item is-inline">
       <%= label fi, :name, "Item", class: "is-req" %>
-      <%= select fi, :name, selectify(@items), class: "select-and-input" %>
+      <%= select fi, :name, selectify(@items), class: "select-and-input-item" %>
         <div class="is-desc">
           Common items are listed for you to select.  You can enter a custom item by typing it into the search box and pressing enter.
         </div>

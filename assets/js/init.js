@@ -21,10 +21,59 @@ $(document).ready(function() {
   $('.select').select2({
     closeOnSelect: false
   });
+  $
 
-  $('.select-and-input').select2({
-    tags: true
-  });
+  $category = $('.select-and-input-cat').select2({ tags: true});
+  $item = $('.select-and-input-item').select2({ tags: true});
+
+  $category.on("select2:close", function(data){checkInputOffFocus(data, $category)});
+  $item.on("select2:close", function(data){checkInputOffFocus(data, $item)});
+
+
+function checkInputOffFocus(data, $focusinputitem){
+  if(data.params.originalSelect2Event === undefined){
+      var newOption = new Option(data.target.lastChild.label, data.target.lastChild.label, true, true);
+      $focusinputitem.append(newOption).trigger('change');
+    }
+}
+
+//
+// $('.select-and-input-cat').on("select2:close", function(fulldata){
+//   if(fulldata.params.originalSelect2Event === undefined){
+//       var newOption = new Option(fulldata.target.lastChild.label, fulldata.target.lastChild.label, true, true);
+//       $focusinput.append(newOption).trigger('change');
+//     }
+//   });
+//   var $focusinputitem = $('.select-and-input-item').select2({ tags: true});
+//     $('.select-and-input-item').on("select2:close", function(fulldata){
+//       if(fulldata.params.originalSelect2Event === undefined){
+//           var newOption = new Option(fulldata.target.lastChild.label, fulldata.target.lastChild.label, true, true);
+//           $focusinputitem.append(newOption).trigger('change');
+//         }
+//       });
+    // else {
+    //     data = fulldata.params.originalSelect2Event.data;
+    //     if (Object.values(data).length > 3) {
+    //         $focusinput.val(data.id).trigger('change');
+    //         console.log(true);
+    //       } else {
+    //           var newOption = new Option(data.text, data.id, true, true);
+    //           $focusinput.append(newOption).trigger('change');
+    //   }
+    // }
+
+
+
+    //  else {
+    //     data = fulldata.params.originalSelect2Event.data;
+    //       if (Object.values(data).length > 3) {
+    //           $focusinputitem.val(data.id).trigger('change');
+    //         } else {
+    //           var newOption = new Option(data.text, data.id, true, true);
+    //           $focusinputitem.append(newOption).trigger('change');
+    //         }
+    // }
+
 
   /*
   Initialize Datatables
