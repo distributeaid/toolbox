@@ -53,6 +53,15 @@ function checkInputOffFocus(data, $input){
 
 
 
+
+  // Prevent Enter default
+  $(document).keydown("form", function(event) {
+    if(event.keyCode == 13 | event.keyCode == 108){
+      event.preventDefault();
+      return false;
+    }
+  })
+
   /*
   Initialize Datatables
   ------------------------------------------------------------

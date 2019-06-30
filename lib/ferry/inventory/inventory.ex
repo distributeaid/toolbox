@@ -265,7 +265,7 @@ defmodule Ferry.Inventory do
   """
   def delete_stock(%Stock{} = stock) do
     steps = Multi.new |> Multi.delete(:stock, stock)
-    
+
     steps = if stock.packaging do
       steps |> Multi.delete(:packaging, stock.packaging)
     else
@@ -393,7 +393,7 @@ defmodule Ferry.Inventory do
 
     {:ok, mod} # standardize return with related Category & Item functions
   end
-  
+
 
   # Packaging
   # ================================================================================
