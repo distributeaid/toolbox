@@ -22,7 +22,6 @@ $(document).ready(function() {
   $('.select').select2({
     closeOnSelect: false
   });
-  $
 
  // ensure the select is initialized and blank 
   $category = $('.select-and-input-cat').select2({tags: true,}).val(null).trigger('change');
@@ -33,19 +32,18 @@ $(document).ready(function() {
 
 
 function checkInputOffFocus(data, $input){
-  console.log(data)
   var options = data.target.options;
   var test = options[options.length - 1];
 
-if(data.params.originalSelect2Event === undefined){
-  var check = true;
-  for(var i = 0; i < options.length; i++){
-    if(options[i].label === test.label){
-      $input.val(options[i].label).trigger('change');
-      check = false;
-      break;
+  if(data.params.originalSelect2Event === undefined){
+    var check = true;
+    for(var i = 0; i < options.length; i++){
+      if(options[i].label === test.label){
+        $input.val(options[i].label).trigger('change');
+        check = false;
+        break;
+      }
     }
-  }
     if(check){
       var newOption = new Option(data.target.lastChild.label, data.target.lastChild.label, true, true);
       $input.append(newOption).trigger('change');
