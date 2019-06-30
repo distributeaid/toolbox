@@ -16,15 +16,42 @@ $(document).ready(function() {
 
   /*
   Initialize Select2
+  Select2 Documentation: https://select2.org/
   ------------------------------------------------------------
   */
   $('.select').select2({
     closeOnSelect: false
   });
 
-  $('.select-and-input').select2({
-    tags: true
-  });
+ // ensure the select is initialized and blank 
+  $category = $('.select-and-input-cat').select2({tags: true,}).val(null).trigger('change');
+  $item = $('.select-and-input-item').select2({tags: true,}).val(null).trigger('change');
+
+  $category.on("select2:close", function(data){checkInputOffFocus(data, $category)});
+  $item.on("select2:close", function(data){checkInputOffFocus(data, $item)});
+
+
+function checkInputOffFocus(data, $input){
+  var options = data.target.options;
+  var test = options[options.length - 1];
+
+  if(data.params.originalSelect2Event === undefined){
+    var check = true;
+    for(var i = 0; i < options.length; i++){
+      if(options[i].label === test.label){
+        $input.val(options[i].label).trigger('change');
+        check = false;
+        break;
+      }
+    }
+    if(check){
+      var newOption = new Option(data.target.lastChild.label, data.target.lastChild.label, true, true);
+      $input.append(newOption).trigger('change');
+    }
+  }
+}
+
+
 
   /*
   Initialize Datatables
