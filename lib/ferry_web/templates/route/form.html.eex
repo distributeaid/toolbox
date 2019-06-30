@@ -6,6 +6,10 @@
   <% end %>
 
   <div class="form-item is-inline">
+  <%= component "required.partial.html" %>
+ </div>
+
+  <div class="form-item is-inline">
     <%= label f, :label, class: "is-req" %>
     <%= text_input f, :label, placeholder: "Stop number 1" %>
     <%= error_tag f, :label %>
@@ -65,7 +69,7 @@
 let gateKeeper = {
     ledger: [],
     check_ticket: function(name){
-        
+
         if(!this.ledger.includes(name)){
             this.ledger.push(name);
             return true;

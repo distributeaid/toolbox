@@ -5,6 +5,11 @@
     </div>
   <% end %>
 
+
+  <div class="form-item is-inline">
+  <%= component "required.partial.html" %>
+ </div>
+ 
   <div class="form-item is-inline">
     <%= label f, :email, class: "is-req" %>
     <%= text_input f, :email %>

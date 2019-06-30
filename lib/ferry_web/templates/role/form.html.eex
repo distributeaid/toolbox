@@ -5,6 +5,10 @@
     </div>
   <% end %>
 
+  <div class="form-item is-inline">
+  <%= component "required.partial.html" %>
+ </div>
+
   <%= if assigns[:create?] do %>
     <div class="form-item is-inline">
       <%= label f, :group_id, "Group", class: "is-req" %>
