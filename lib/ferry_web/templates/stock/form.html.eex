@@ -6,6 +6,10 @@
   <% end %>
 
   <div class="form-item is-inline">
+  <%= component "required.partial.html" %>
+ </div>
+
+  <div class="form-item is-inline">
     <%= label f, :project_id, class: "is-req" %>
     <%= select f, :project_id, list_projects(@projects) %>
     <%= error_tag f, :project_id %>

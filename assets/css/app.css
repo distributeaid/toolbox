@@ -212,6 +212,12 @@ form .is-req {
   color: inherit;
 }
 
+form .is-req::after{
+  content: "*";
+  color: #e32;
+  display: inline;
+}
+
 .form-item.is-inline {
   padding-left: 108px; /* leave 0.5rem between the label and the input */
   width: calc(100% - 108px); /* the pixel portion should match padding-left */
@@ -236,6 +242,11 @@ form .is-req {
 
 form .is-desc {
   color: rgba(17, 17, 19, 0.7);
+}
+
+.star{
+    color:#e32;
+    display:inline;
 }
 
 /*

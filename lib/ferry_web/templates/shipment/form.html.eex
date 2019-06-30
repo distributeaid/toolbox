@@ -6,6 +6,10 @@
   <% end %>
 
   <div class="form-item is-inline">
+  <%= component "required.partial.html" %>
+ </div>
+
+  <div class="form-item is-inline">
     <%= label f, :label, class: "is-req" %>
     <%= text_input f, :label, placeholder: "My Next Shipment" %>
     <%= error_tag f, :label %>
