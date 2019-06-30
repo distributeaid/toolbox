@@ -16,6 +16,7 @@ $(document).ready(function() {
 
   /*
   Initialize Select2
+  Select2 Documentation: https://select2.org/
   ------------------------------------------------------------
   */
   $('.select').select2({
@@ -23,8 +24,9 @@ $(document).ready(function() {
   });
   $
 
-  $category = $('.select-and-input-cat').select2({ tags: true});
-  $item = $('.select-and-input-item').select2({ tags: true});
+ // ensure the select is initialized and blank 
+  $category = $('.select-and-input-cat').select2({tags: true,}).val(null).trigger('change');
+  $item = $('.select-and-input-item').select2({tags: true,}).val(null).trigger('change');
 
   $category.on("select2:close", function(data){checkInputOffFocus(data, $category)});
   $item.on("select2:close", function(data){checkInputOffFocus(data, $item)});
