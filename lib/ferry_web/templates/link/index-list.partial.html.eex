@@ -26,7 +26,7 @@
     </ul>
 
   <% else %>
-    No links have been added... yet!
+  <%= component "link-guidance.html" %>
   <% end %>
 
 </div>

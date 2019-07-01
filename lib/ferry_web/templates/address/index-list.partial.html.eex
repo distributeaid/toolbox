@@ -48,8 +48,6 @@
     <% end %>
 
   <% else %>
-    <p>
-      No addresses have been added... yet!
-    </p>
+    <%= component "address-guidance.html" %>
   <% end %>
 </div>

@@ -41,8 +41,6 @@
     <% end %>
 
   <% else %>
-    <p>
-      No projects have been added... yet!
-    </p>
+  <%= component "project-guidance.html" %>
   <% end %>
 </div>

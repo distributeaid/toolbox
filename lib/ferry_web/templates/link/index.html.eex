@@ -5,6 +5,10 @@
       <p class="section__subtitle">(for group <%= link @group.name, to: Routes.group_path(@conn, :show, @group) %>)</p>
     </header>
 
+    <%= if !(length(@links) > 0) do %>
+    <%= component "link-guidance.html" %>
+    <% end %>
+
     <ul class="actions">
       <li>
         <%= link to: Routes.group_path(@conn, :show, @group), class: "action" do %>
