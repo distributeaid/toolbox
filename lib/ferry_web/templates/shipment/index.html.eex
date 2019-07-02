@@ -4,9 +4,9 @@
       <h1 class="section__title">Shipment Coordinator</h1>
     </header>
     <%= if !(length(@shipments)>0) do %>
-    <center>
-    <%= component "shipment-guidance.html" %>
-  </center>
+    <div class="is-40 is-center">
+    <%= render "shipment-guidance.partial.html" %>
+  </div>
   <% end %>
     <%= render "index-table.partial.html", %{
       conn: @conn,

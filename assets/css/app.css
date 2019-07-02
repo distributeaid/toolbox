@@ -1117,8 +1117,8 @@ label + .route_checklist {
 Guidance Text
 */
 .guidance {
-  color: #808080;
-  font-size: 0.80 rem;
+  color: #444;
+  font-size: 0.875rem;
 }
 
 /*

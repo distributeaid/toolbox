@@ -26,7 +26,7 @@
     </ul>
 
   <% else %>
-  <%= component "link-guidance.html" %>
+  <%= render "link-guidance.partial.html" %>
   <% end %>
 
 </div>
