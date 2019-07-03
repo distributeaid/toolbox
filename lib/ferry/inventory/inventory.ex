@@ -10,7 +10,6 @@ defmodule Ferry.Inventory do
 
   alias Ferry.Profiles.Group
   alias Ferry.Inventory.InventoryList
-  alias Ferry.Inventory.InventoryListControls, as: Controls
   alias Ferry.Inventory.{
     Category,
     Item,
@@ -28,93 +27,28 @@ defmodule Ferry.Inventory do
 
   ## Examples
 
-      iex> get_inventory_list(:type, [group_filter: [id1, id2, ...]])
-      %{
-        control_data: %{
-          group_filter: [{"Group Name", id}, ...]
-        },
+      iex> list_inventory(:type)
+      [%Stock{}, ...]
 
-        controls: %Ecto.Changeset{
-          group_filter: [id1, id2, ...]
-        },
-
-        results: [%Stock{}, ...]
-      }
-
-      iex> get_inventory_list(:type, [group_filter: ["not an id"]])
-      %{
-        control_data: %{
-          group_filter: [{"Group Name", id}, ...]
-        },
-
-        controls: %Ecto.Changeset{},
-
-        results: []
-      }
   """
-  def get_inventory_list(type, controls \\ %{}) when type in [:available, :needs] do
-    control_data = %{
-      group_filter: get_group_filter_labels()
-    }
-    controls = %Controls{} |> Controls.changeset(controls)
-
-    results = case controls.valid? do
-      true ->
-        controls
-        |> Changeset.apply_changes()
-        |> list_inventory(type)
-      false -> []
-    end
-
-    %{
-      control_data: control_data,
-      controls: controls,
-      results: results
-    }
-  end
-
-  # TODO: based on `set_control_labels` in /lib/ferry/locations.ex
-  #       need to refactor
-  defp get_group_filter_labels() do
-    # TODO: move to Profiles context for better encapsulation?
-    Repo.all(from g in Group,
-      select: {g.name, g.id},
-      order_by: g.name
-    )
-  end
-
-  defp list_inventory(controls, type) do
+  def get_inventory(type) when type in [:available, :needs] do
     full_stock_query()
-    |> inventory_list_type_filter(type)
-    |> apply_group_filter(controls)
-    |> order_stock_list()
+    |> filter_inventory_by_type(type)
+    |> order_inventory()
     |> Repo.all()
   end
 
-  defp inventory_list_type_filter(query, :available) do
+  defp filter_inventory_by_type(query, :available) do
     from s in query,
     where: s.have > s.need
   end
 
-  defp inventory_list_type_filter(query, :needs) do
+  defp filter_inventory_by_type(query, :needs) do
     from s in query,
     where: s.have < s.need
   end
 
-  defp apply_group_filter(query, %Controls{group_filter: group_filter}) do
-    case group_filter do
-      # empty- don't filter
-      nil -> query
-      [] -> query
-
-      # not empty- filter for selected groups
-      _ ->
-        from [s, p, g] in query,
-        where: g.id in ^group_filter
-    end
-  end
-
-  defp order_stock_list(query) do
+  defp order_inventory(query) do
     from [s] in query,
       order_by: s.id
   end

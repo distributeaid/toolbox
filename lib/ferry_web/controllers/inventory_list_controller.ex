@@ -10,24 +10,18 @@ defmodule FerryWeb.InventoryListController do
   # Show
   # ------------------------------------------------------------
 
-  def show(conn, %{"inventory_list_controls" => controls} = params) do
-    list_type = case params["type"] do
-      "needs" -> :needs
-      "available" -> :available
-      _ -> :available
-    end
-
-    %{
-      control_data: control_data,
-      controls: controls,
-      results: results
-    } = Inventory.get_inventory_list(list_type, controls)
-
-    render(conn, "show.html", list_type: list_type, control_data: control_data, changeset: controls, results: results)
+  # NOTE: Need to limit the string values of type since we are converting it to
+  #       an atom.  For security and performance.
+  #
+  #       For performance see: https://hexdocs.pm/elixir/String.html#to_atom/1
+  def show(conn, %{"type" => type} = params) when type in ["available", "needs"] do
+    type = String.to_atom(type)
+    inventory = Inventory.get_inventory(type)
+    render(conn, "show.html", type: type, inventory: inventory)
   end
 
   def show(conn, params) do
-    show conn, Map.put(params, "inventory_list_controls", %{})
+    show(conn, Map.put(params, "type", "available"))
   end
 
 end

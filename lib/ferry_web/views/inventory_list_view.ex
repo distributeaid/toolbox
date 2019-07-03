@@ -29,7 +29,7 @@ defmodule FerryWeb.InventoryListView do
     ~s(#{need - have} #{unit})
   end
 
-  def render("header.partial.html", %{list_type: :available} = assigns) do
+  def render("header.partial.html", %{type: :available} = assigns) do
     ~E"""
       <header class="section__header">
         <h1 class="section__title">Available Items</h1>
@@ -40,7 +40,7 @@ defmodule FerryWeb.InventoryListView do
     """
   end
 
-  def render("header.partial.html", %{list_type: :needs} = assigns) do
+  def render("header.partial.html", %{type: :needs} = assigns) do
     ~E"""
       <header class="section__header">
         <h1 class="section__title">Needed Items</h1>

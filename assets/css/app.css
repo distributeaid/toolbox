@@ -1109,6 +1109,18 @@ label + .route_checklist {
   margin-left: 0;
 }
 
+/*
+Group Details
+------------------------------------------------------------
+*/
+.group-details {
+  display: inline-block;
+  margin-left: 0.25rem;
+
+  vertical-align: middle;
+}
+
+
 
 /* Trumps & Helpers
  * ========================================================================== */

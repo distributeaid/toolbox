@@ -7,9 +7,24 @@
 $(document).ready(function() {
 
   /*
+  Forms
+  ------------------------------------------------------------
+  */
+
+  // prevent submit on enter when form is selected (default behavior)
+  $(document).keydown("form", function(event) {
+    if(event.keyCode == 13 | event.keyCode == 108){
+      event.preventDefault();
+      return false;
+    }
+  });
+   
+
+  /*
   Initialize Kube
   ------------------------------------------------------------
   */
+
   $K.init({
     observer: true
   });
@@ -19,10 +34,13 @@ $(document).ready(function() {
   Select2 Documentation: https://select2.org/
   ------------------------------------------------------------
   */
+
+  // single select
   $('.select').select2({
     closeOnSelect: false
   });
 
+  // multi select
  // ensure the select is initialized and blank 
   $category = $('.select-and-input-cat').select2({tags: true,}).val(null).trigger('change');
   $item = $('.select-and-input-item').select2({tags: true,}).val(null).trigger('change');
@@ -30,47 +48,36 @@ $(document).ready(function() {
   $category.on("select2:close", function(data){checkInputOffFocus(data, $category)});
   $item.on("select2:close", function(data){checkInputOffFocus(data, $item)});
 
+  function checkInputOffFocus(data, $input){
+    var options = data.target.options;
+    var test = options[options.length - 1];
 
-function checkInputOffFocus(data, $input){
-  var options = data.target.options;
-  var test = options[options.length - 1];
-
-  if(data.params.originalSelect2Event === undefined){
-    var check = true;
-    for(var i = 0; i < options.length; i++){
-      if(options[i].label === test.label){
-        $input.val(options[i].label).trigger('change');
-        check = false;
-        break;
+    if(data.params.originalSelect2Event === undefined){
+      var check = true;
+      for(var i = 0; i < options.length; i++){
+        if(options[i].label === test.label){
+          $input.val(options[i].label).trigger('change');
+          check = false;
+          break;
+        }
+      }
+      if(check){
+        var newOption = new Option(data.target.lastChild.label, data.target.lastChild.label, true, true);
+        $input.append(newOption).trigger('change');
       }
     }
-    if(check){
-      var newOption = new Option(data.target.lastChild.label, data.target.lastChild.label, true, true);
-      $input.append(newOption).trigger('change');
-    }
   }
-}
-
-
-
-
-  // Prevent Enter default
-  $(document).keydown("form", function(event) {
-    if(event.keyCode == 13 | event.keyCode == 108){
-      event.preventDefault();
-      return false;
-    }
-  })
 
   /*
   Initialize Datatables
   ------------------------------------------------------------
   */
+
   $('#group-stock-table').DataTable({
     info: false,
     paging: false,
     language: {
-      emptyTable: "No results found.  Try modifying your filters or adding a missing entry?"
+      emptyTable: "No results found.  Try another search term or adding missing inventory?"
     }
   });
 
@@ -78,7 +85,7 @@ function checkInputOffFocus(data, $input){
     info: false,
     paging: false,
     language: {
-      emptyTable: "No results found.  Try modifying your filters?"
+      emptyTable: "No results found.  Try another search term?"
     }
   });
 
@@ -86,6 +93,7 @@ function checkInputOffFocus(data, $input){
    * ------------------------------------------------------
    * Based on: https://www.abeautifulsite.net/smoothly-scroll-to-an-element-without-a-jquery-plugin-2
    */
+
   $('a[href^="#"]').on('click', function(event) {
     var hash = this.getAttribute('href');
     var $target = $(hash);
@@ -100,4 +108,5 @@ function checkInputOffFocus(data, $input){
       location.hash = hash.replace('#', '');
     }
   });
+
 });

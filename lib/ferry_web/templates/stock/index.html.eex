@@ -4,6 +4,8 @@
       <h1 class="section__title">Inventory Manager</h1>
     </header>
 
+    <%= render "search-guidance.partial.html" %>
+
     <%= render "index_table.partial.html", %{
       conn: @conn,
       group: @group,

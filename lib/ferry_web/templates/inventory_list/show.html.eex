@@ -2,31 +2,15 @@
   <div class="section__content">
     <%= render "header.partial.html", assigns %>
 
-    <%= form_for @changeset, Routes.inventory_list_path(@conn, :show), [method: :get], fn f -> %>
-      <%= if @changeset.action do %>
-        <div class="alert is-error">
-          <p>Oops, something went wrong! Please check the errors below.</p>
-        </div>
-      <% end %>
-
-      <div class="form-item is-inline">
-        <%= label f, :group_filter, "Groups" %>
-        <%= multiple_select f, :group_filter, @control_data.group_filter, multiple: true, class: "select" %>
-      </div>
-
-      <div class="form-item is-text-center">
-        <%= submit "Submit", class: "button is-big" %>
-      </div>
-    <% end %>
+    <%= render FerryWeb.StockView, "search-guidance.partial.html" %>
 
     <table id="inventory-list" class="is-striped">
       <thead>
         <tr>
-          <th>Group</th>
-          <th>Project</th>
+          <th>Group & Project</th>
           <th>Category</th>
           <th>Item</th>
-          <th><%= amount_header(@list_type) %></th>
+          <th><%= amount_header(@type) %></th>
           <th>Age</th>
           <th>Gender</th>
           <th>Size</th>
@@ -35,13 +19,24 @@
       </thead>
 
       <tbody>
-        <%= for stock <- @results do %>
+        <%= for stock <- @inventory do %>
           <tr>
-            <td><%= stock.project.group.name %></td>
-            <td><%= stock.project.name %></td>
+            <td>
+              <%= component "group_logo.partial.html", %{
+                group: stock.project.group,
+                size: :small,
+                version: :thumb,
+                fill: true
+              } %>
+              <div class="group-details">
+                <%= link stock.project.group.name, to: Routes.group_path(@conn, :show, stock.project.group) %>
+                <br />
+                <%= stock.project.name %>
+              </div>
+            </td>
             <td><%= stock.item.category.name %></td>
             <td><%= stock.item.name %></td>
-            <td><%= amount(@list_type, stock) %></td>
+            <td><%= amount(@type, stock) %></td>
             <td><%= stock.mod.age %></td>
             <td><%= print_gender(stock.mod.gender) %></td>
             <td><%= stock.mod.size %></td>
