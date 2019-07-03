@@ -1114,6 +1114,14 @@ label + .route_checklist {
  * ========================================================================== */
 
 /*
+Guidance Text
+*/
+.guidance {
+  color: #444;
+  font-size: 0.875rem;
+}
+
+/*
 Helpers
 ------------------------------------------------------------
 */
@@ -1192,6 +1200,11 @@ Section // Actions
 
 .section__content > .actions--left {
   left: 1rem;
+}
+
+.section__content > .actions--inline {
+  top: 0;
+  right: 0;
 }
 
 /*

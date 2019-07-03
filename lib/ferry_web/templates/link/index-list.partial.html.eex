@@ -26,7 +26,7 @@
     </ul>
 
   <% else %>
-    No links have been added... yet!
+  <%= render "link-guidance.partial.html" %>
   <% end %>
 
 </div>

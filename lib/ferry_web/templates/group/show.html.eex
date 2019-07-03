@@ -28,33 +28,41 @@
       <%= @group.description %>
     </p>
 
-    <%= render FerryWeb.LinkView, "index-list.partial.html", %{
-      conn: @conn,
-      group: @group,
-      links: @links,
-      can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
-    } %>
+        <%= if length(@links) > 0 ||  (!is_nil(@current_group) && @group.id == @current_group.id) do %>
+        <%= render FerryWeb.LinkView, "index-list.partial.html", %{
+          conn: @conn,
+          group: @group,
+          links: @links,
+          can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+        } %>
+        <% end %>
 
-    <%= render FerryWeb.ProjectView, "index-list.partial.html", %{
-      conn: @conn,
-      group: @group,
-      projects: @projects,
-      can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
-    } %>
+        <%= if length(@projects) > 0 ||(!is_nil(@current_group) && @group.id == @current_group.id) do %>
+        <%= render FerryWeb.ProjectView, "index-list.partial.html", %{
+          conn: @conn,
+          group: @group,
+          projects: @projects,
+          can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+        } %>
+        <% end %>
 
-    <%= render FerryWeb.AddressView, "index-list.partial.html", %{
-      conn: @conn,
-      group: @group,
-      addresses: @addresses,
-      can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
-    } %>
+        <%= if length(@addresses) > 0 || (!is_nil(@current_group) && @group.id == @current_group.id) do %>
+        <%= render FerryWeb.AddressView, "index-list.partial.html", %{
+          conn: @conn,
+          group: @group,
+          addresses: @addresses,
+          can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+        } %>
+        <% end %>
 
-    <%= render FerryWeb.ShipmentView, "index-list.partial.html", %{
-      conn: @conn,
-      group: @group,
-      shipments: @shipments,
-      can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
-    } %>
+        <%= if length(@shipments) > 0 || (!is_nil(@current_group) && @group.id == @current_group.id) do %>
+        <%= render FerryWeb.ShipmentView, "index-list.partial.html", %{
+          conn: @conn,
+          group: @group,
+          shipments: @shipments,
+          can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+        } %>
+        <% end %>
 
 
   </div>
