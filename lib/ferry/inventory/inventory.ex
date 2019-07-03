@@ -155,12 +155,18 @@ defmodule Ferry.Inventory do
 
   ## Examples
 
-      iex> list_stocks()
-      [%Stock{}, ...]
+      iex> list_stocks(group)
+      [%Stock{group: group, ...}, ...]
 
   """
-  def list_stocks do
-    Repo.all(full_stock_query())
+  def list_stocks(%Group{} = group) do
+    query = full_stock_query()
+
+    Repo.all(
+      from [s, p, g] in query,
+      where: g.id == ^group.id,
+      order_by: s.id
+    )
   end
 
   @doc """

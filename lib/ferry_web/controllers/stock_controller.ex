@@ -26,7 +26,7 @@ defmodule FerryWeb.StockController do
   
   def index(conn, %{"group_id" => group_id}) do
     group = Profiles.get_group!(group_id)
-    stocks = Inventory.list_stocks()
+    stocks = Inventory.list_stocks(group)
     render(conn, "index.html", current_group: current_group(conn), group: group, stocks: stocks)
   end
 

@@ -207,10 +207,33 @@ defmodule Ferry.InventoryTest do
     # Tests
     # ------------------------------------------------------------
 
-    # test "list_stocks/0 returns all stocks" do
-    #   stock = stock_fixture()
-    #   assert Inventory.list_stocks() == [stock]
-    # end
+    test "list_stocks/0 returns all stocks for a group" do
+      group1 = insert(:group)
+      project1 = insert(:project, %{group: group1})
+      project2 = insert(:project, %{group: group1})
+
+      group2 = insert(:group)
+      project3 = insert(:project, %{group: group2})
+
+      # no stocks
+      assert Inventory.list_stocks(group1) == []
+
+      # 1 stock
+      stock1 = insert(:stock, %{project: project1})
+      assert Inventory.list_stocks(group1) == [stock1]
+
+      # n stocks
+      stock2 = insert(:stock, %{project: project1})
+      assert Inventory.list_stocks(group1) == [stock1, stock2]
+
+      # includes stocks from all projects
+      stock3 = insert(:stock, %{project: project2})
+      assert Inventory.list_stocks(group1) == [stock1, stock2, stock3]
+
+      # only includes stocks for the group
+      stock4 = insert(:stock, %{project: project3})
+      refute Inventory.list_stocks(group1) |> Enum.find(&(&1.id == project3.id))
+    end
 
     test "get_stock!/1 returns the stock with given id" do
       stock = insert(:stock)
