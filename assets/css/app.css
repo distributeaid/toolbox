@@ -1202,6 +1202,11 @@ Section // Actions
   left: 1rem;
 }
 
+.section__content > .actions--inline {
+  top: 0;
+  right: 0;
+}
+
 /*
 Subsection // Actions
 ------------------------------------------------------------

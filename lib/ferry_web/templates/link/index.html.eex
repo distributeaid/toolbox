@@ -5,10 +5,6 @@
       <p class="section__subtitle">(for group <%= link @group.name, to: Routes.group_path(@conn, :show, @group) %>)</p>
     </header>
 
-    <%= if length(@links) == 0 do %>
-    <%= render "link-guidance.partial.html" %>
-    <% end %>
-
     <ul class="actions">
       <li>
         <%= link to: Routes.group_path(@conn, :show, @group), class: "action" do %>
@@ -17,15 +13,46 @@
       </li>
     </ul>
 
-    <%= render "index-table.partial.html", %{conn: @conn, links: @links, group: @group} %>
+    <p>
+      <ul class="actions actions--inline">
+        <li>
+          <%= link to: Routes.group_link_path(@conn, :new, @group), class: "action" do %>
+            <i class="fas fa-plus"></i>
+          <% end %>
+        </li>
+      </ul>
+    </p>
 
-    <ul class="actions actions--inline">
-      <li>
-        <%= link to: Routes.group_link_path(@conn, :new, @group), class: "action" do %>
-          <i class="fas fa-plus"></i>
-        <% end %>
-      </li>
-    </ul>
+    <%= if length(@links) == 0 do %>
+      <%= render "link-guidance.partial.html" %>
+
+    <% else %>
+      <table class="is-striped">
+        <thead>
+          <tr>
+            <th>Label</th>
+            <th>Url</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for link <- @links do %>
+            <tr>
+              <td><%= link.label %></td>
+              <td><%= link.url %></td>
+              <td>
+                <%= link to: Routes.group_link_path(@conn, :edit, @group, link), class: "action" do %>
+                  <i class="fas fa-pencil-alt"></i>
+                <% end %>
+                <%= link to: Routes.group_link_path(@conn, :delete, @group, link), method: :delete, data: [confirm: "Are you sure?"], class: "action" do %>
+                  <i class="fas fa-trash-alt"></i>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
 
   </div>
 </section>
