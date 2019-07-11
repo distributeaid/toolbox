@@ -221,7 +221,7 @@ MIX_ENV=prod mix compile
 MIX_ENV=prod mix ecto.migrate
 cd assets && npm install && npm run deploy && cd ..
 MIX_ENV=prod mix phx.digest
-MIX_ENV=prod mix release --env=prod --upgrade
+MIX_ENV=prod mix Distillery.release --env=prod --upgrade
 
 # deploy
 cd [/path/to/webroot]
