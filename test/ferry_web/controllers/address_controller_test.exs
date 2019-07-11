@@ -2,6 +2,8 @@ defmodule FerryWeb.AddressControllerTest do
   use FerryWeb.ConnCase
 
   import Mox
+  alias Ferry.Locations.Geocoder.GeocoderMock
+
 
   # Address Controller Tests
   # ==============================================================================
@@ -11,7 +13,7 @@ defmodule FerryWeb.AddressControllerTest do
 
     group = insert(:group)
     user = insert(:user, group: group)
-    address = insert(:address, group: group)
+    address = insert(:address, group: group) |> with_geocode()
 
     conn = build_conn()
     conn = post conn, Routes.session_path(conn, :create, %{user: %{email: user.email, password: @password}})
@@ -39,7 +41,7 @@ defmodule FerryWeb.AddressControllerTest do
     #       since the user will be unauthenticated for the non-existant group.
     test "shows 403 unauthenticated for actions on unassociated addresses", %{conn: conn} do
       not_my_group = insert(:group)
-      not_my_address = insert(:address, group: not_my_group)
+      not_my_address = insert(:address, group: not_my_group) |> with_geocode()
 
       Enum.each(
         [
@@ -79,8 +81,6 @@ defmodule FerryWeb.AddressControllerTest do
   end
 
   describe "create address" do
-    alias Ferry.Locations.Geocoder.GeocoderMock
-
     test "redirects to show when data is valid", %{conn: conn, group: group} do
       GeocoderMock |> expect(:geocode_address, fn _address ->
         {:ok, params_for(:geocode)}
@@ -114,6 +114,10 @@ defmodule FerryWeb.AddressControllerTest do
 
   describe "update address" do
     test "redirects when data is valid", %{conn: conn, group: group, address: address} do
+      GeocoderMock |> expect(:geocode_address, fn _address ->
+        {:ok, params_for(:geocode)}
+      end)
+
       address_params = params_for(:address)
       conn = put conn, Routes.group_address_path(conn, :update, group, address), address: address_params
       assert redirected_to(conn) == Routes.group_path(conn, :show, group)
