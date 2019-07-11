@@ -6,6 +6,7 @@
       <th>Item</th>
       <th>Have</th>
       <th>Need</th>
+      <th>Units</th>
       <th>Age</th>
       <th>Gender</th>
       <th>Size</th>
@@ -33,6 +34,7 @@
         <td><%= stock.item.name %></td>
         <td><%= stock.have %></td>
         <td><%= stock.need %></td>
+        <td><%= stock.unit %></td>
         <td><%= stock.mod.age %></td>
         <td><%= print_gender(stock.mod.gender) %></td>
         <td><%= stock.mod.size %></td>

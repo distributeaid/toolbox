@@ -6,7 +6,6 @@ defmodule Ferry.LinksTest do
   # Links
   # ==============================================================================
   describe "links" do
-    alias Ferry.Profiles
     alias Ferry.CRM
     alias Ferry.Links.Link
 
@@ -39,10 +38,9 @@ defmodule Ferry.LinksTest do
       link
     end
 
-    def owner_fixtures(n \\ 1) do
-      n = Integer.to_string(n)
-      {:ok, group} = Profiles.create_group(%{name: "Johnny Panic " <> n})
-      {:ok, project} = Profiles.create_project(group, %{name: "Voidspit " <> n})
+    def owner_fixtures() do
+      group = insert(:group)
+      project = insert(:project, %{group: group})
       {:ok, contact} = CRM.create_contact(project)
 
       {group, project, contact}
@@ -56,8 +54,8 @@ defmodule Ferry.LinksTest do
     #       one.
 
     test "list_links/1 returns all links for a group" do
-      {group, project, contact} = owner_fixtures(1)
-      {group2, _, _} = owner_fixtures(2)
+      {group, project, contact} = owner_fixtures()
+      {group2, _, _} = owner_fixtures()
 
       # 0 links
       assert Links.list_links(group) == []
@@ -78,8 +76,8 @@ defmodule Ferry.LinksTest do
     end
 
     test "list_links/1 returns all links for a project" do
-      {group, project, contact} = owner_fixtures(1)
-      {_, project2, _} = owner_fixtures(2)
+      {group, project, contact} = owner_fixtures()
+      {_, project2, _} = owner_fixtures()
 
       # 0 links
       assert Links.list_links(project) == []
@@ -100,8 +98,8 @@ defmodule Ferry.LinksTest do
     end
 
     test "list_links/1 returns all links for a contact" do
-      {group, project, contact} = owner_fixtures(1)
-      {_, _, contact2} = owner_fixtures(2)
+      {group, project, contact} = owner_fixtures()
+      {_, _, contact2} = owner_fixtures()
 
       # 0 links
       assert Links.list_links(contact) == []

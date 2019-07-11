@@ -58,7 +58,7 @@
     <%= label f, :need, class: "is-req" %>
     <%= number_input f, :need %>
     <div class="is-desc">
-      The number of total units you need for the next 6 month period.
+      The number of units you need.  It's best to plan at least 6 months out, or for the "winter" and "summer" seasons, since larger shipments may take a while!
     </div>
     <%= error_tag f, :need %>
   </div>
@@ -69,28 +69,6 @@
     <%= text_input f, :unit %>
     <%= error_tag f, :unit %>
   </div>
-
-  <!--
-  <p class="alert is-focus">
-    <strong>NOTE:</strong> Please consider "have" and "need" separately.  For example you should enter the total number of items needed for the next 6 months into the need field, and not the number of additional items needed.
-  </p>
-
-  <p>
-    Our software will use this information intelligently:
-  </p>
-
-  <ul>
-    <li>
-      If you have more items than your total need, they will be shown on our public "Available Inventory" list.  You are under no obligation to supply those extra items, but it does surface the other information so groups can reach out.
-    </li>
-    <li>
-      Similarly, if you need more items than you currently have then we'll list the remaining amount you need to collect on our public "Needs" list.
-    </li>
-    <li>
-      Finally, our shipments are smart- we'll show a notice as items are moved into the shipment's manifest.  That way other groups know how many items will arrive and when they are expected.  This allows everyone to make better decisions, and prevents situations where multiple groups respond to a call for donations independently, overwhelming the destination group with too much of a single type of item.
-    </li>
-  </ul>
-  -->
 
   <%= inputs_for f, :mod, fn fm -> %>
     <div class="form-item is-inline">

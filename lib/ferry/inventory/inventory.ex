@@ -27,25 +27,14 @@ defmodule Ferry.Inventory do
 
   ## Examples
 
-      iex> list_inventory(:type)
+      iex> list_inventory()
       [%Stock{}, ...]
 
   """
-  def get_inventory(type) when type in [:available, :needs] do
+  def get_inventory() do
     full_stock_query()
-    |> filter_inventory_by_type(type)
     |> order_inventory()
     |> Repo.all()
-  end
-
-  defp filter_inventory_by_type(query, :available) do
-    from s in query,
-    where: s.have > s.need
-  end
-
-  defp filter_inventory_by_type(query, :needs) do
-    from s in query,
-    where: s.have < s.need
   end
 
   defp order_inventory(query) do
@@ -69,6 +58,7 @@ defmodule Ferry.Inventory do
     from s in Stock,
       join: proj in assoc(s, :project),
       join: g in assoc(proj, :group),
+      join: a in assoc(proj, :address),
 
       join: i in assoc(s, :item),
       join: c in assoc(i, :category),
@@ -77,7 +67,7 @@ defmodule Ferry.Inventory do
       left_join: p in assoc(s, :packaging),
 
       preload: [
-        project: {proj, group: g},
+        project: {proj, group: g, address: a},
         item: {i, category: c},
         mod: m,
         packaging: p

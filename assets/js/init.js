@@ -18,7 +18,7 @@ $(document).ready(function() {
       return false;
     }
   });
-   
+
 
   /*
   Initialize Kube
@@ -41,7 +41,7 @@ $(document).ready(function() {
   });
 
   // multi select
- // ensure the select is initialized and blank 
+ // ensure the select is initialized and blank
   $category = $('.select-and-input-cat').select2({tags: true,}).val(null).trigger('change');
   $item = $('.select-and-input-item').select2({tags: true,}).val(null).trigger('change');
 
@@ -86,6 +86,14 @@ $(document).ready(function() {
     paging: false,
     language: {
       emptyTable: "No results found.  Try another search term?"
+    }
+  });
+
+  $('#group-index').DataTable({
+    info: false,
+    paging: false,
+    language: {
+      emptyTable: "No groups have been created... yet!"
     }
   });
 

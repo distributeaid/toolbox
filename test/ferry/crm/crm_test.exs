@@ -10,7 +10,6 @@ defmodule Ferry.CRMTest do
   #       tests of those associations is fine for now, but if related bugs pop
   #       up the associations should be tested together as well.
   describe "contacts" do
-    alias Ferry.Profiles
     alias Ferry.CRM.Contact
 
     # Data & Helpers
@@ -36,11 +35,9 @@ defmodule Ferry.CRMTest do
       contact
     end
 
-    def group_and_project_fixtures(n \\ 1) do
-      n = Integer.to_string(n)
-      {:ok, group} = Profiles.create_group(%{name: "Food Clothing and Resistance Collective " <> n})
-      {:ok, project} = Profiles.create_project(group, %{name: "Feed The People " <> n})
-
+    def group_and_project_fixtures() do
+      group = insert(:group)
+      project = insert(:project, %{group: group})
       {group, project}
     end
 
@@ -50,8 +47,8 @@ defmodule Ferry.CRMTest do
     #       between contact owners (groups or projects) must test with both.
     #       Other functions like list_contacts/0 may only test with one.
     test "list_contacts/1 returns all contacts for a group" do
-      {group, project} = group_and_project_fixtures(1)
-      {group2, _} = group_and_project_fixtures(2)
+      {group, project} = group_and_project_fixtures()
+      {group2, _} = group_and_project_fixtures()
 
       # no contacts
       assert CRM.list_contacts(group) == []
@@ -71,8 +68,8 @@ defmodule Ferry.CRMTest do
     end
 
     test "list_contacts/1 returns all contacts for a project" do
-      {group, project} = group_and_project_fixtures(1)
-      {_, project2} = group_and_project_fixtures(2)
+      {group, project} = group_and_project_fixtures()
+      {_, project2} = group_and_project_fixtures()
 
       # no contacts
       assert CRM.list_contacts(project) == []
@@ -239,8 +236,8 @@ defmodule Ferry.CRMTest do
     # ----------------------------------------------------------
 
     test "list_contacts/1 includes emails when returning all contacts for a group" do
-      {group1, _} = group_and_project_fixtures(1)
-      {group2, _} = group_and_project_fixtures(2)
+      {group1, _} = group_and_project_fixtures()
+      {group2, _} = group_and_project_fixtures()
 
       email3 = %{email: "email3@example.com"}
       email4 = %{email: "email4@example.com"}
@@ -255,8 +252,8 @@ defmodule Ferry.CRMTest do
     end
 
     test "list_contacts/1 includes emails when returning all contacts for a project" do
-      {_, project1} = group_and_project_fixtures(1)
-      {_, project2} = group_and_project_fixtures(2)
+      {_, project1} = group_and_project_fixtures()
+      {_, project2} = group_and_project_fixtures()
 
       email3 = %{email: "email3@example.com"}
       email4 = %{email: "email4@example.com"}
@@ -465,8 +462,8 @@ defmodule Ferry.CRMTest do
     # ----------------------------------------------------------
 
     test "list_contacts/1 includes phones when returning all contacts for a group" do
-      {group1, _} = group_and_project_fixtures(1)
-      {group2, _} = group_and_project_fixtures(2)
+      {group1, _} = group_and_project_fixtures()
+      {group2, _} = group_and_project_fixtures()
 
       phone3 = %{country_code: "+30", number: "123 456 7890"}
       phone4 = %{country_code: "+33", number: "98 76 54 32 11"}
@@ -481,8 +478,8 @@ defmodule Ferry.CRMTest do
     end
 
     test "list_contacts/1 includes phones when returning all contacts for a project" do
-      {_, project1} = group_and_project_fixtures(1)
-      {_, project2} = group_and_project_fixtures(2)
+      {_, project1} = group_and_project_fixtures()
+      {_, project2} = group_and_project_fixtures()
 
       phone3 = %{country_code: "+30", number: "123 456 7890"}
       phone4 = %{country_code: "+33", number: "98 76 54 32 11"}
