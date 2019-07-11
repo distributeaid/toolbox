@@ -20,24 +20,15 @@ defmodule FerryWeb.InventoryListControllerTest do
   # TODO: test filters n labels?
 
   describe "show" do
-    test "shows the available inventory list page with all available stock", %{conn: conn, stock: stock1} do
-      stock2 = insert(:stock)
-      stock3 = insert(:stock, %{have: 0, need: 50})
+    test "shows the inventory list page with all stock", %{conn: conn} do
+      stock1 = insert(:stock, %{have: 11, need: 22})
+      stock2 = insert(:stock, %{have: 0, need: 55})
+      stock3 = insert(:stock, %{have: 44, need: 0})
 
       conn = get conn, Routes.inventory_list_path(conn, :show)
-      assert html_response(conn, 200) =~ stock1.item.name
-      assert html_response(conn, 200) =~ stock2.item.name
-      refute html_response(conn, 200) =~ stock3.item.name
-    end
-
-    test "shows the available inventory list page with all needed stock", %{conn: conn, stock: stock1} do
-      stock2 = insert(:stock, %{have: 0, need: 50})
-      stock3 = insert(:stock, %{have: 0, need: 50})
-
-      conn = get conn, Routes.inventory_list_path(conn, :show, type: "needs")
-      refute html_response(conn, 200) =~ stock1.item.name
-      assert html_response(conn, 200) =~ stock2.item.name
-      assert html_response(conn, 200) =~ stock3.item.name
+      assert html_response(conn, 200) =~ stock1.have |> Integer.to_string()
+      assert html_response(conn, 200) =~ stock2.need |> Integer.to_string()
+      assert html_response(conn, 200) =~ stock3.have |> Integer.to_string()
     end
   end
 

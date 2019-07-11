@@ -27,25 +27,14 @@ defmodule Ferry.Inventory do
 
   ## Examples
 
-      iex> list_inventory(:type)
+      iex> list_inventory()
       [%Stock{}, ...]
 
   """
-  def get_inventory(type) when type in [:available, :needs] do
+  def get_inventory() do
     full_stock_query()
-    |> filter_inventory_by_type(type)
     |> order_inventory()
     |> Repo.all()
-  end
-
-  defp filter_inventory_by_type(query, :available) do
-    from s in query,
-    where: s.have > s.need
-  end
-
-  defp filter_inventory_by_type(query, :needs) do
-    from s in query,
-    where: s.have < s.need
   end
 
   defp order_inventory(query) do

@@ -17,7 +17,7 @@ defmodule Ferry.InventoryTest do
   # TODO: test control_data & controls
 
   describe "inventory list" do
-    test "get_inventory/1 lists all stocks" do
+    test "get_inventory/0 lists all stocks" do
       # group 1
       group1 = insert(:group)
       project1 = insert(:project, %{group: group1})
@@ -28,41 +28,28 @@ defmodule Ferry.InventoryTest do
       project3 = insert(:project, %{group: group2})
 
       # no stock
-      inventory = Inventory.get_inventory(:available)
+      inventory = Inventory.get_inventory()
       assert inventory == []
 
       # 1 stock, 1 project, 1 group
       stock1 = insert(:stock, %{project: project1}) |> without_assoc([:project, :address, :geocode])
-      inventory = Inventory.get_inventory(:available)
+      inventory = Inventory.get_inventory()
       assert inventory == [stock1]
 
       # n stock, 1 project, 1 group
       stock2 = insert(:stock, %{project: project1}) |> without_assoc([:project, :address, :geocode])
-      inventory = Inventory.get_inventory(:available)
+      inventory = Inventory.get_inventory()
       assert inventory == [stock1, stock2]
 
       # n stock, n projects, 1 group
       stock3 = insert(:stock, %{project: project2}) |> without_assoc([:project, :address, :geocode])
-      inventory = Inventory.get_inventory(:available)
+      inventory = Inventory.get_inventory()
       assert inventory == [stock1, stock2, stock3]
 
       # n stock, n projects, n groups
       stock4 = insert(:stock, %{project: project3}) |> without_assoc([:project, :address, :geocode])
-      inventory = Inventory.get_inventory(:available)
+      inventory = Inventory.get_inventory()
       assert inventory == [stock1, stock2, stock3, stock4]
-    end
-
-    test "get_inventory/1 filters based on the type of list" do
-      available_stock = insert(:stock, %{have: 100, need: 0}) |> without_assoc([:project, :address, :geocode])
-      needed_stock = insert(:stock, %{have: 0, need: 100}) |> without_assoc([:project, :address, :geocode])
-
-      # available
-      inventory = Inventory.get_inventory(:available)
-      assert inventory == [available_stock]
-
-      # needs
-      inventory = Inventory.get_inventory(:needs)
-      assert inventory == [needed_stock]
     end
   end
 
