@@ -124,7 +124,7 @@ defmodule Ferry.InventoryTest do
 
     # Helpers
     # ------------------------------------------------------------
-    
+
     # NOTE: ExMachina isn't setup to build params for parent objects defined
     #       through a `belongs_to` field, so we need to make a helper function
     #       to do the equivalent.
@@ -255,6 +255,47 @@ defmodule Ferry.InventoryTest do
       assert stock.packaging.description == attrs["packaging"]["description"]
       # TODO: test stock.packaging.photo
     end
+
+    test "create_stock/1 with existing item but different category leads to a stock entry" do
+      project = insert(:project)
+      item = insert(:item) # NOTE: a category is inserted by the item factory
+      attrs = deep_params_for_stock(%{
+        "project_id" => project.id,
+        "item" => %{
+          "name" => item.name,
+          "category" => %{"name" => "different"}
+        },
+        "mod" => string_params_for(:mod)
+      })
+
+      assert {:ok, %Stock{} = stock} = Inventory.create_stock(attrs)
+      assert stock.have == attrs["have"]
+      assert stock.need == attrs["need"]
+      assert stock.unit == attrs["unit"]
+      assert stock.description == attrs["description"]
+      # TODO: test stock.photo
+
+      assert stock.project_id == attrs["project_id"]
+
+      assert %Item{} = stock.item
+      assert stock.item.name == attrs["item"]["name"]
+
+      assert %Category{} = stock.item.category
+      assert stock.item.category.name == attrs["item"]["category"]["name"]
+
+      assert %Mod{} = stock.mod
+      assert stock.mod.gender == attrs["mod"]["gender"] || (stock.mod.gender == nil && attrs["mod"]["gender"] == "")
+      assert stock.mod.age == attrs["mod"]["age"] || (stock.mod.age == nil && attrs["mod"]["age"] == "")
+      assert stock.mod.size == attrs["mod"]["size"] || (stock.mod.size == nil && attrs["mod"]["size"] == "")
+      assert stock.mod.season == attrs["mod"]["season"] || (stock.mod.season == nil && attrs["mod"]["season"] == "")
+
+      assert %Packaging{} = stock.packaging
+      assert stock.packaging.count == attrs["packaging"]["count"]
+      assert stock.packaging.type == attrs["packaging"]["type"]
+      assert stock.packaging.description == attrs["packaging"]["description"]
+      # TODO: test stock.packaging.photo
+    end
+
 
     test "create_stock/1 with invalid data returns error changeset" do
       project = insert(:project)

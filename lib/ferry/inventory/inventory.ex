@@ -285,7 +285,6 @@ defmodule Ferry.Inventory do
       join: c in assoc(i, :category),
       preload: [category: c]
     )
-
     case item do
       %Item{} -> {:ok, item}
       _ ->
