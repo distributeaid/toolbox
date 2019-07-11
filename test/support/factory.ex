@@ -498,6 +498,8 @@ defmodule Ferry.Factory do
   def shipment_role_factory do
     %Role{
       label: Enum.random(["Collector", "Transporter", "Distributor", "Funder", "Observer"]),
+      supplier?: Enum.random([true, false]),
+      receiver?: Enum.random([true, false]),
       description: sequence("I am description #")
     }
   end

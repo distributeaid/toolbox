@@ -428,17 +428,16 @@ p.section__subtitle {
 @media (min-width: 600px) {
   .section {
     width: 50%;
+    margin: 0 auto;
     padding-top: 0;
   }
 
   .section--wide {
     width: 66%;
-    margin: 0 auto;
   }
 
   .section--wider {
     width: 75%;
-    margin: 0 auto;
   }
 
   .section--full-width {
@@ -840,7 +839,10 @@ ul.roles > li:last-child {
 
 .role__label {
   display: inline-block;
-  min-width: 100px;
+  margin-right: 0.5rem;
+
+  vertical-align: middle;
+  text-align: center;
 }
 
 /*

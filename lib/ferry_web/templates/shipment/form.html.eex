@@ -92,6 +92,30 @@
         </div>
 
         <div class="form-item is-inline">
+          <%= label fr, :supplier?, class: "is-checkbox" do %>
+            <%= checkbox fr, :supplier? %>
+            Supplier
+            <span class="is-desc">Suppliers will be able to add inventory to the shipment.</span>
+          <% end %>
+          <%= error_tag fr, :supplier? %>
+        </div>
+
+        <div class="form-item is-inline">
+          <%= label fr, :receiver?, class: "is-checkbox" do %>
+            <%= checkbox fr, :receiver? %>
+            Receiver
+            <span class="is-desc">Receiver's needs lists will be shown on the shipment.</span>
+          <% end %>
+          <%= error_tag fr, :receiver? %>
+        </div>
+
+        <div class="form-item is-inline-offset">
+          <p class="is-desc">
+            A group can be a supplier, a receiver, both, or neither.  For example, many groups working in the field will have a home office that also organizes donation drives and want to ship items to themselves, so they'd be both.  Other groups may be involved in specific roles organizing the shipment or transporting the aid, so they'd be neither.
+          </p>
+        </div>
+
+        <div class="form-item is-inline">
           <%= label fr, :description %>
           <%= textarea fr, :description %>
           <%= error_tag fr, :description %>
