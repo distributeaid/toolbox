@@ -12,7 +12,6 @@ defmodule Ferry.Profiles.Group do
     field :name, :string
     field :description, :string
     field :logo, Logo.Type
-    field :logo_url, :string, virtual: true
 
     has_one :users, User # on_delete set in database via migration
     has_many :projects, Project # on_delete set in database via migration
