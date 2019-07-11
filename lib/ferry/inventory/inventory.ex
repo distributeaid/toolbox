@@ -58,7 +58,7 @@ defmodule Ferry.Inventory do
     from s in Stock,
       join: proj in assoc(s, :project),
       join: g in assoc(proj, :group),
-      join: a in assoc(proj, :address),
+      left_join: a in assoc(proj, :address),
 
       join: i in assoc(s, :item),
       join: c in assoc(i, :category),
