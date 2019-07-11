@@ -1,5 +1,5 @@
-<section class="section">
-  <div class="section__content">
+<section class="section section--wider">
+  <div class="section__content is-centered is-75">
 
     <!--
     Header
@@ -14,51 +14,54 @@
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     TODO
     -->
+     <!-- Table start -->
+     <table id="group-index" class="is-striped">
 
-    <!--
-    Current Group
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    -->
-    <%= if @current_group do %>
-      <h2 class="subsection__header">My Group</h2>
-      <div class="category category--inline">
-        <%= link to: Routes.group_path(@conn, :show, @current_group), class: "link--wrapper" do %>
-          <%= component "category-entry.partial.html", %{
-            title: @current_group.name,
-            img: %{src: logo_url(@current_group), alt: "Logo"}
-          } %>
-        <% end %>
-      </div>
-    <% end %>
+       <thead>
+         <tr>
+           <th> Group </th>
+           <th></th>
+         </tr>
+       </thead>
 
-    <!--
-    Groups List
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    -->
-    <h2 class="subsection__header">All Groups</h2>
+
+  <tbody>
     <%= if has_groups? @groups do %>
-      <div class="category category--4-col">
         <%= for group <- @groups do %>
-          <%= link to: Routes.group_path(@conn, :show, group), class: "link--wrapper" do %>
-            <%= if group.logo do %>
-              <%= component "category-entry.partial.html", %{
-                title: group.name,
-                img: %{src: logo_url(group), alt: "Logo"}
-              } %>
-            <% else %>
-              <%= component "category-entry.partial.html", %{
-                title: group.name,
-                icon: %{class: "fas fa-3x fa-users"}
-              } %>
-            <% end %>
+            <tr>
+              <td>
+                <%= link to: Routes.group_path(@conn, :show, group), class: "link--wrapper" do %>
+                  <%= component "group_logo.partial.html", %{
+                      group: group,
+                      size: :small,
+                      version: :thumb,
+                      fill: true
+                    } %>
+                    <div class="group-details">
+                      <%= group.name %>
+                    </div>
+                <% end %>
+              </td>
+              <td>
+                <%= link to: Routes.group_path(@conn, :show, group), class: "action" do %>
+                  <i class="fas fa-eye"></i>
+                <% end %>
+                <%= if @current_group != nil && group == @current_group do %>
+                  <%= link to: Routes.group_path(@conn, :edit, @current_group), class: "action" do %>
+                    <i class="fas fa-pencil-alt"></i>
+                  <% end %>
+                <% end %>
+              </td>
+            </tr>
           <% end %>
-        <% end %>
-      </div>
     <% else %>
       <p>
         No groups have been created... yet!
       </p>
     <% end %>
+
+  </tbody>
+</table>
 
 
   </div>
