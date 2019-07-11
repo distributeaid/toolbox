@@ -24,7 +24,7 @@
         <div class="entry">
           <h3 class="entry__title">
             <%= component "group_logo.partial.html", %{
-              group: @group,
+              group: @current_group,
               size: :small,
               version: :thumb
             } %>
