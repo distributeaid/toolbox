@@ -1,0 +1,35 @@
+<div class="form-item is-inline">
+  <%= label @form, :label, class: "is-req" %>
+  <%= text_input @form, :label %>
+  <%= error_tag @form, :label %>
+</div>
+
+<div class="form-item is-inline">
+  <%= label @form, :street %>
+  <%= text_input @form, :street %>
+  <%= error_tag @form, :street %>
+</div>
+
+<div class="form-item is-inline">
+  <%= label @form, :city, class: "is-req" %>
+  <%= text_input @form, :city %>
+  <%= error_tag @form, :city %>
+</div>
+
+<div class="form-item is-inline">
+  <%= label @form, :state %>
+  <%= text_input @form, :state %>
+  <%= error_tag @form, :state %>
+</div>
+
+<div class="form-item is-inline">
+  <%= label @form, :country, class: "is-req" %>
+  <%= text_input @form, :country %>
+  <%= error_tag @form, :country %>
+</div>
+
+<div class="form-item is-inline">
+  <%= label @form, :zip_code %>
+  <%= text_input @form, :zip_code %>
+  <%= error_tag @form, :zip_code %>
+</div>

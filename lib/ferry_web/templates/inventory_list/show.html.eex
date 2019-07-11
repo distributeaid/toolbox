@@ -1,6 +1,9 @@
 <section class="section section--full-width">
   <div class="section__content">
-    <%= render "header.partial.html", assigns %>
+
+    <header class="section__header">
+      <h1 class="section__title">Inventory</h1>
+    </header>
 
     <%= render FerryWeb.StockView, "search-guidance.partial.html" %>
 
@@ -10,7 +13,9 @@
           <th>Group & Project</th>
           <th>Category</th>
           <th>Item</th>
-          <th><%= amount_header(@type) %></th>
+          <th>Have</th>
+          <th>Need</th>
+          <th>Units</th>
           <th>Age</th>
           <th>Gender</th>
           <th>Size</th>
@@ -36,7 +41,9 @@
             </td>
             <td><%= stock.item.category.name %></td>
             <td><%= stock.item.name %></td>
-            <td><%= amount(@type, stock) %></td>
+            <td><%= stock.have %></td>
+            <td><%= stock.need %></td>
+            <td><%= stock.unit %></td>
             <td><%= stock.mod.age %></td>
             <td><%= print_gender(stock.mod.gender) %></td>
             <td><%= stock.mod.size %></td>

@@ -9,7 +9,7 @@ defmodule FerryWeb.ComponentView do
     version = assigns[:version] # optional
     size = assigns[:size] # optional
     fill = assigns[:fill] # optional
- 
+
     version = case version do
       :original -> :original
       :thumb -> :thumb

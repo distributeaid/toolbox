@@ -27,15 +27,60 @@ defmodule Ferry.Factory do
   @long_text String.duplicate("x", 256)
   @long_email String.duplicate("x", 244) <> "@example.com"
 
+  # NOTE: @password must be the same in `conn_case.ex`
+  @password "lasdjkf o827349081247SLKDJFSD87634784¡¨ˆ™˙´¨¥∂œ•ª¨∂"
+  @password_hash User.encrypt_password(@password)
+
+  # Helpers
+  # ------------------------------------------------------------
+  
+  # Partly based on: https://stackoverflow.com/questions/49996642/ecto-remove-preload/49997873#49997873
+  def without_assoc(data, access, cardinality \\ :one)
+
+  def without_assoc(list, path, cardinality) when is_list(list) and is_list(path) do
+    field = List.last(path)
+
+    path = Enum.map(path, fn step ->
+      Access.key(step)
+    end)
+
+    # assumes all structs in the list are the same type
+    owner = case length(path) do
+      # owner is just an entry in the list
+      1 -> hd(list)
+
+      # follow the path to the n-1 step to find the field's owner
+      _ -> get_in( hd(list), List.pop_at(path, -1) |> elem(1) )
+    end
+
+    not_loaded = %Ecto.Association.NotLoaded{
+      __field__: field,
+      __owner__: owner.__struct__,
+      __cardinality__: cardinality
+    }
+
+    Enum.map(list, fn struct ->
+      put_in(struct, path, not_loaded)
+    end)
+  end
+
+  def without_assoc(list, field, cardinality) when is_list(list) do
+    without_assoc(list, [field], cardinality)
+  end
+
+  def without_assoc(%{} = struct, path, cardinality) when is_list(path) do
+    without_assoc([struct], path, cardinality) |> hd()
+  end
+
+  def without_assoc(%{} = struct, field, cardinality) do
+    without_assoc([struct], [field], cardinality) |> hd()
+  end
+
 
   # ExMachina Factories
   # ==============================================================================
   # TODO: split up into model-specific files
   #       https://hexdocs.pm/ex_machina/readme.html#splitting-factories-into-separate-files
-
-  # NOTE: @password must be the same in `conn_case.ex`
-  @password "lasdjkf o827349081247SLKDJFSD87634784¡¨ˆ™˙´¨¥∂œ•ª¨∂"
-  @password_hash User.encrypt_password(@password)
 
   # Group
   # ----------------------------------------------------------
@@ -93,8 +138,18 @@ defmodule Ferry.Factory do
       name: sequence("Klimb"),
       description: "Up and over their walls!  Snip-snip the barbed wire with some handy dandy bolt cutters.",
 
-      group: build(:group)
+      group: build(:group),
+      address: build(:address)
     }
+  end
+
+  def min_project_factory do
+    struct!(
+      project_factory(),
+      %{
+        description: nil
+      }
+    )
   end
 
   def invalid_project_factory do
@@ -134,9 +189,7 @@ defmodule Ferry.Factory do
       city: "Athens",
       state: "Attica",
       country: "Greece",
-      zip_code: "106 81",
-
-      geocode: build(:geocode)
+      zip_code: "106 81"
     }
   end
 
@@ -189,6 +242,11 @@ defmodule Ferry.Factory do
         zip_code: @long_text
       }
     )
+  end
+
+  def with_geocode(%Address{} = address) do
+    geocode = insert(:geocode, address: address) |> without_assoc(:address)
+    %{address | geocode: geocode}
   end
 
   # Geocode
@@ -366,7 +424,7 @@ defmodule Ferry.Factory do
     )
   end
 
-  def stock_attrs_factory(%{project: %{id: project_id}} = attrs) do
+  def stock_attrs_factory(%{project: %{id: project_id}} = _attrs) do
     %{
       "project_id" => project_id,
 

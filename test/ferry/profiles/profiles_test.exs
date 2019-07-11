@@ -1,6 +1,8 @@
 defmodule Ferry.ProfilesTest do
   use Ferry.DataCase
 
+  import Mox
+
   alias Ferry.Profiles
 
   # Groups
@@ -129,84 +131,53 @@ defmodule Ferry.ProfilesTest do
   # ==============================================================================
   describe "projects" do
     alias Ferry.Profiles.{Group, Project}
+    alias Ferry.Locations.Geocoder.GeocoderMock
 
-    # Data & Helpers
-    # ----------------------------------------------------------
-
-    @valid_attrs %{
-      typical: %{name: "My Warehouse", description: "We distribute to newcomers!"},
-      min: %{name: "My Other Warehouse"}
-    }
-
-    @update_attrs %{
-      typical: %{name: "My Free Store", description: "We cloth newcomers!"}
-    }
-
-    @invalid_attrs %{
-      is_nil: %{name: nil},
-      too_short: %{name: ""},
-      too_long: %{name: "This name is really way too long.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}
-    }
-
-    def project_fixture(%Group{} = group, attrs \\ %{}) do
-      attrs = Enum.into(attrs, @valid_attrs.typical)
-      {:ok, project} = Profiles.create_project(group, attrs)
-
-      project
-    end
-
-    def project_fixture_with_group(%Group{} = group, attrs \\ %{}) do
-      project = project_fixture(group, attrs)
-      %{project | group: group}
-    end
+    setup :verify_on_exit!
 
     # Tests
     # ----------------------------------------------------------
 
     test "list_projects/0 returns all projects" do
-      group1 = group_fixture()
-      group2 = group_fixture(%{name: "A Second Group"})
+      group1 = insert(:group)
+      group2 = insert(:group)
 
       # no projects
-      assert Profiles.list_projects() == [],
-      "returns an empty list if no projects have been created"
+      assert Profiles.list_projects() == []
 
       # 1 project, 1 group
-      project1 = project_fixture_with_group(group1)
+      project1 = insert(:project, %{group: group1}) |> without_assoc([:address, :geocode])
       assert Profiles.list_projects() == [project1]
 
       # multiple projects, 1 group
-      project2 = project_fixture_with_group(group1, %{name: "A Second Project"})
+      project2 = insert(:project, %{group: group1}) |> without_assoc([:address, :geocode])
       assert Profiles.list_projects() == [project1, project2]
 
       # multiple project, multiple groups
-      project3 = project_fixture_with_group(group2, %{name: "A Third Project"})
-      project4 = project_fixture_with_group(group2, %{name: "A Fourth Project"})
+      project3 = insert(:project, %{group: group2}) |> without_assoc([:address, :geocode])
+      project4 = insert(:project, %{group: group2}) |> without_assoc([:address, :geocode])
       assert Profiles.list_projects() == [project1, project2, project3, project4]
     end
 
     test "list_projects/1 returns all projects for the specified group" do
-      group1 = group_fixture()
-      group2 = group_fixture(%{name: "A Second Group"})
+      group1 = insert(:group)
+      group2 = insert(:group)
 
       # no projects
-      assert Profiles.list_projects(group1) == [],
-      "returns an empty list if no projects have been created"
+      assert Profiles.list_projects(group1) == []
 
       # no projects for group
-      _ = project_fixture(group2)
-      assert Profiles.list_projects(group1) == [],
-      "returns an empty list if no projects have been created by the group"
+      _ = insert(:project, %{group: group2})
+      assert Profiles.list_projects(group1) == []
 
       # multiple projects for group
-      project2 = project_fixture(group1, %{name: "A Second Project"})
-      project3 = project_fixture(group1, %{name: "A Third Project"})
+      project2 = insert(:project, %{group: group1}) |> without_assoc([:address, :geocode]) |> without_assoc(:group)
+      project3 = insert(:project, %{group: group1}) |> without_assoc([:address, :geocode]) |> without_assoc(:group)
       assert Profiles.list_projects(group1) == [project2, project3]
     end
 
     test "get_project!/1 returns the project with given id" do
-      group = group_fixture()
-      project = project_fixture(group)
+      project = insert(:project) |> without_assoc([:address, :geocode]) |> without_assoc(:group)
       assert Profiles.get_project!(project.id) == project
     end
 
@@ -217,68 +188,89 @@ defmodule Ferry.ProfilesTest do
     end
 
     test "create_project/2 with valid data creates a project" do
-      group = group_fixture()
+      GeocoderMock |> expect(:geocode_address, 2, fn _address ->
+        {:ok, params_for(:geocode)}
+      end)
+
+      group = insert(:group)
+      geocode = params_for(:geocode)
 
       # typical
-      assert {:ok, %Project{} = project} = Profiles.create_project(group, @valid_attrs.typical)
-      assert project.name == @valid_attrs.typical.name
-      assert project.description == @valid_attrs.typical.description
+      attrs = string_params_for(:project, %{group_id: group.id})
+      assert {:ok, %Project{} = project} = Profiles.create_project(group, attrs)
       assert project.group_id == group.id
+      assert project.name == attrs["name"]
+      assert project.description == attrs["description"]
+      assert project.address.label == attrs["address"]["label"]
+      assert project.address.street == attrs["address"]["street"]
+      assert project.address.city == attrs["address"]["city"]
+      assert project.address.state == attrs["address"]["state"]
+      assert project.address.country == attrs["address"]["country"]
+      assert project.address.zip_code == attrs["address"]["zip_code"]
+      assert project.address.geocode.lat == geocode.lat
+      assert project.address.geocode.lng == geocode.lng
+      assert project.address.geocode.data == geocode.data
 
       # min
-      assert {:ok, %Project{} = project} = Profiles.create_project(group, @valid_attrs.min)
-      assert project.name == @valid_attrs.min.name
-      assert project.description == nil
+      attrs = string_params_for(:min_project, %{group_id: group.id})
+      assert {:ok, %Project{} = project} = Profiles.create_project(group, attrs)
       assert project.group_id == group.id
+      assert project.name == attrs["name"]
+      assert project.description == nil
+      assert project.address.label == attrs["address"]["label"]
+      assert project.address.street == attrs["address"]["street"]
+      assert project.address.city == attrs["address"]["city"]
+      assert project.address.state == attrs["address"]["state"]
+      assert project.address.country == attrs["address"]["country"]
+      assert project.address.zip_code == attrs["address"]["zip_code"]
+      assert project.address.geocode.lat == geocode.lat
+      assert project.address.geocode.lng == geocode.lng
+      assert project.address.geocode.data == geocode.data
     end
 
     test "create_project/2 with invalid data returns error changeset" do
-      group = group_fixture()
-
-      # is nil
-      assert {:error, %Ecto.Changeset{}} = Profiles.create_project(group, @invalid_attrs.is_nil)
-
-      # too short
-      assert {:error, %Ecto.Changeset{}} = Profiles.create_project(group, @invalid_attrs.too_short)
-
-      # too long
-      assert {:error, %Ecto.Changeset{}} = Profiles.create_project(group, @invalid_attrs.too_long)
+      group = insert(:group)
+      attrs = params_for(:invalid_project)
+      assert {:error, %Ecto.Changeset{}} = Profiles.create_project(group, attrs)
     end
 
     test "update_project/2 with valid data updates the project" do
-      group = group_fixture()
-      project = project_fixture(group)
+      GeocoderMock |> expect(:geocode_address, fn _address ->
+        {:ok, params_for(:geocode)}
+      end)
+
+      project = insert(:project)
+      geocode = params_for(:geocode)
 
       # typical
-      assert {:ok, project} = Profiles.update_project(project, @update_attrs.typical)
+      attrs = string_params_for(:project)
+      assert {:ok, project} = Profiles.update_project(project, attrs)
       assert %Project{} = project
-      assert project.name == @update_attrs.typical.name
-      assert project.description == @update_attrs.typical.description
+      assert project.name == attrs["name"]
+      assert project.description == attrs["description"]
+      assert project.address.label == attrs["address"]["label"]
+      assert project.address.street == attrs["address"]["street"]
+      assert project.address.city == attrs["address"]["city"]
+      assert project.address.state == attrs["address"]["state"]
+      assert project.address.country == attrs["address"]["country"]
+      assert project.address.zip_code == attrs["address"]["zip_code"]
+      assert project.address.geocode.lat == geocode.lat
+      assert project.address.geocode.lng == geocode.lng
+      assert project.address.geocode.data == geocode.data
     end
 
     @tag skip: "Stubbed Function. Don't fail the build. Remove this tag & fill in test when the method is implemented."
     test "transfer_project/2 with valid data transfers the project to another group"
 
     test "update_project/2 with invalid data returns error changeset" do
-      group = group_fixture()
-      project = project_fixture(group)
-
-      # is nil
-      assert {:error, %Ecto.Changeset{}} = Profiles.update_project(project, @invalid_attrs.is_nil)
-      assert project == Profiles.get_project!(project.id)
-
-      # too short
-      assert {:error, %Ecto.Changeset{}} = Profiles.update_project(project, @invalid_attrs.too_short)
-      assert project == Profiles.get_project!(project.id)
-
-      # too long
-      assert {:error, %Ecto.Changeset{}} = Profiles.update_project(project, @invalid_attrs.too_long)
+      project = insert(:project) |> without_assoc([:address, :geocode]) |> without_assoc(:group)
+      attrs = params_for(:invalid_project)
+      assert {:error, %Ecto.Changeset{}} = Profiles.update_project(project, attrs)
       assert project == Profiles.get_project!(project.id)
     end
 
     test "delete_project/1 deletes the project" do
-      group = group_fixture()
-      project = project_fixture(group)
+      project = insert(:project)
       assert {:ok, %Project{}} = Profiles.delete_project(project)
       assert_raise Ecto.NoResultsError, fn -> Profiles.get_project!(project.id) end
     end
@@ -287,8 +279,7 @@ defmodule Ferry.ProfilesTest do
     test "the database's on_delete:delete_all setting deletes related projects when a group is deleted"
 
     test "change_project/1 returns a project changeset" do
-      group = group_fixture()
-      project = project_fixture(group)
+      project = insert(:project)
       assert %Ecto.Changeset{} = Profiles.change_project(project)
     end
   end

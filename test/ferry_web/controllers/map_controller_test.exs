@@ -7,7 +7,10 @@ defmodule FerryWeb.MapControllerTest do
   setup do
     group = insert(:group)
     user = insert(:user, group: group)
-    addresses = [insert(:address, group: group), insert(:address, group: group)]
+    addresses = [
+      insert(:address, group: group) |> with_geocode(),
+      insert(:address, group: group) |> with_geocode()
+    ]
 
     conn = build_conn()
     conn = post conn, Routes.session_path(conn, :create, %{user: %{email: user.email, password: @password}})

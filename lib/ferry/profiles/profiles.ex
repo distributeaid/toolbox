@@ -6,6 +6,10 @@ defmodule Ferry.Profiles do
   import Ecto
   import Ecto.Query, warn: false
   alias Ferry.Repo
+  alias Ecto.Changeset
+
+  @geocoder Application.get_env(:ferry, :geocoder)
+
 
   # Group
   # ==============================================================================
@@ -112,6 +116,21 @@ defmodule Ferry.Profiles do
   
   alias Ferry.Profiles.Project
 
+  defp geocode_project_address(%Changeset{valid?: true} = changeset, address_attrs) do
+    case @geocoder.geocode_address(changeset.params["address"]) do
+      {:ok, geocode} ->
+        attrs = %{"address" => Map.put(address_attrs, "geocode", geocode)}
+        Project.address_changeset(changeset, attrs)
+      {:error, error} ->
+        IO.inspect error # TODO: proper error logging
+        Changeset.add_error(changeset, :geocoding, "Our application server could not contact the geocoding server, which looks up and address's latitude and longitude.  Please try again in a few minutes, or contact us if this problem persists.")
+    end
+  end
+
+  defp geocode_project_address(%Changeset{valid?: false} = changeset, _address_attrs) do
+    changeset
+  end
+
   @doc """
   Returns the list of projects.
 
@@ -125,7 +144,8 @@ defmodule Ferry.Profiles do
     Repo.all(
       from p in Project,
       left_join: g in assoc(p, :group),
-      preload: [group: g]
+      left_join: a in assoc(p, :address),
+      preload: [group: g, address: a]
     )
   end
 
@@ -142,7 +162,9 @@ defmodule Ferry.Profiles do
     Repo.all(
       from p in Project,
       where: p.group_id == ^group.id,
-      order_by: p.id
+      left_join: a in assoc(p, :address),
+      order_by: p.id,
+      preload: [address: a]
     )
   end
 
@@ -160,7 +182,14 @@ defmodule Ferry.Profiles do
       ** (Ecto.NoResultsError)
 
   """
-  def get_project!(id), do: Repo.get!(Project, id)
+  def get_project!(id) do
+    query =
+      from p in Project,
+      left_join: a in assoc(p, :address),
+      preload: [address: a]
+
+    Repo.get!(query, id)
+  end
 
   @doc """
   Creates a project.
@@ -177,6 +206,7 @@ defmodule Ferry.Profiles do
   def create_project(%Group{} = group, attrs \\ %{}) do
     build_assoc(group, :projects)
     |> Project.changeset(attrs)
+    |> geocode_project_address(attrs["address"])
     |> Repo.insert()
   end
 
@@ -194,7 +224,9 @@ defmodule Ferry.Profiles do
   """
   def update_project(%Project{} = project, attrs) do
     project
+    |> Repo.preload([address: [:geocode]])
     |> Project.changeset(attrs)
+    |> geocode_project_address(attrs["address"])
     |> Repo.update()
   end
 

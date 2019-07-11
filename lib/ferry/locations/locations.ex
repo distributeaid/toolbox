@@ -9,10 +9,25 @@ defmodule Ferry.Locations do
 
   # Address [w/ Geocode]
   # ==============================================================================
-  alias Ferry.Profiles.{Group, Project}
+  alias Ferry.Profiles.Group
   alias Ferry.Locations.Address
 
   @geocoder Application.get_env(:ferry, :geocoder)
+
+  defp geocode_address(%Changeset{valid?: true} = changeset) do
+    case @geocoder.geocode_address(changeset.params) do
+      {:ok, geocode} ->
+        attrs = %{"geocode" => geocode}
+        Address.geocode_changeset(changeset, attrs)
+      {:error, error} ->
+        IO.inspect error # TODO: proper error logging
+        Changeset.add_error(changeset, :geocoding, "Our application server could not contact the geocoding server, which looks up and address's latitude and longitude.  Please try again in a few minutes, or contact us if this problem persists.")
+    end
+  end
+
+  defp geocode_address(%Changeset{valid?: false} = changeset) do
+    changeset
+  end
 
   @doc """
   Returns the list of addresses.
@@ -22,22 +37,10 @@ defmodule Ferry.Locations do
       iex> list_addresses(%Group{})
       [%Address{}, ...]
 
-      iex> list_addresses(%Project{})
-      [%Address{}, ...]
-
   """
   def list_addresses(%Group{} = group) do
     Repo.all(from a in Address,
       where: a.group_id == ^group.id,
-      join: g in assoc(a, :geocode),
-      preload: [geocode: g],
-      order_by: [a.id]
-    )
-  end
-
-  def list_addresses(%Project{} = project) do
-    Repo.all(from a in Address,
-      where: a.project_id == ^project.id,
       join: g in assoc(a, :geocode),
       preload: [geocode: g],
       order_by: [a.id]
@@ -113,43 +116,16 @@ defmodule Ferry.Locations do
       iex> create_address(%Group{}, %{field: value})
       {:ok, %Address{}}
 
-      iex> create_address(%Project{}, %{field: value})
-      {:ok, %Address{}}
-
       iex> create_address(%Group{}, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
-      iex> create_address(%Project{}, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
   """
-  def create_address(owner, attrs \\ %{})
-
   def create_address(%Group{} = group, attrs) do
-    create_address(:group_id, group.id, Address.changeset(%Address{}, attrs))
-  end
-
-  def create_address(%Project{} = project, attrs) do
-    create_address(:project_id, project.id, Address.changeset(%Address{}, attrs))
-  end
-
-  defp create_address(owner_col, owner_id, %Changeset{valid?: true} = changeset) do
-    case @geocoder.geocode_address(changeset.params) do
-      {:ok, geocode} ->
-        changeset
-        |> Changeset.put_change(owner_col, owner_id)
-        |> Address.geocode_changeset(%{geocode: geocode})
-        |> Repo.insert()
-
-      {:error, error} ->
-        IO.inspect error # TODO: proper error logging
-        changeset = Changeset.add_error(changeset, :geocoding, "Our application server could not contact the geocoding server, which looks up and address's latitude and longitude.  Please try again in a few minutes, or contact us if this problem persists.")
-        {:error, changeset}
-    end
-  end
-
-  defp create_address(_owner_col, _owner_id, changeset) do
-    {:error, changeset}
+    %Address{}
+    |> Address.changeset(attrs)
+    |> Changeset.put_change(:group_id, group.id)
+    |> geocode_address()
+    |> Repo.insert()
   end
 
   @doc """
@@ -166,7 +142,9 @@ defmodule Ferry.Locations do
   """
   def update_address(%Address{} = address, attrs) do
     address
+    |> Repo.preload([:geocode])
     |> Address.changeset(attrs)
+    |> geocode_address()
     |> Repo.update()
   end
 
@@ -206,7 +184,7 @@ defmodule Ferry.Locations do
 
   @doc """
   Gets a map, which sets the search and filter fields and gets the matching
-  addresses from the database.  Groups / projects are preloaded on each address.
+  addresses from the database.  Groups are preloaded on each address.
 
   ## Examples
 
@@ -217,8 +195,7 @@ defmodule Ferry.Locations do
         results: [%Address{
           label: "Collective Aid Processing Warehouse",
           ...,
-          group: %Group{},
-          project: %Project{}
+          group: %Group{}
         }, ...]
       }}
 
@@ -264,10 +241,9 @@ defmodule Ferry.Locations do
 
     query = from a in Address,
       left_join: g in assoc(a, :group),
-      left_join: p in assoc(a, :project),
       join: geo in assoc(a, :geocode),
       order_by: a.id,
-      preload: [group: g, project: p, geocode: geo]
+      preload: [group: g, geocode: geo]
 
     {_, query} = {map, query}
     |> apply_group_filter() # returns {map, query}

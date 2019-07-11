@@ -7,7 +7,7 @@
 |> Path.wildcard()
 |> Enum.map(&Code.eval_file(&1))
 
-use Mix.Releases.Config,
+use Distillery.Releases.Config,
     # This sets the default release built by `mix release`
     default_release: :default,
     # This sets the default environment used by `mix release`
@@ -35,7 +35,7 @@ environment :dev do
 end
 
 environment :prod do
-  set include_erts: false
+  set include_erts: true
   set include_src: false
   set cookie: :"O`U]z8R&UGr9w^u4&XR!;SF]r1Bi5*UffaA0HZCc5QfKxl^o(vcJOokub1kOZmlZ"
   set vm_args: "rel/vm.args"
