@@ -113,7 +113,7 @@ defmodule Ferry.Profiles do
 
   # Project
   # ==============================================================================
-  
+
   alias Ferry.Profiles.Project
 
   defp geocode_project_address(%Changeset{valid?: true} = changeset, address_attrs) do
@@ -122,8 +122,8 @@ defmodule Ferry.Profiles do
         attrs = %{"address" => Map.put(address_attrs, "geocode", geocode)}
         Project.address_changeset(changeset, attrs)
       {:error, error} ->
-        IO.inspect error # TODO: proper error logging
-        Changeset.add_error(changeset, :geocoding, "Our application server could not contact the geocoding server, which looks up and address's latitude and longitude.  Please try again in a few minutes, or contact us if this problem persists.")
+          # TODO: proper error logging
+          Changeset.add_error(changeset, :geocoding, "Our geocoding server sometimes can not locate a very specific address. Try removing your organization name, floor, or appartment # from the street line. If that continues to fail, try only city, country and postal code. If the problem persists, please reach out to us: help@distributeaid.org!")
     end
   end
 
