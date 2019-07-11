@@ -23,7 +23,11 @@
       <%= for project <- @projects do %>
         <div class="entry">
           <h3 class="entry__title">
-            <%= tag :img, src: logo_url(project.group), alt: "Logo", class: "logo" %>
+            <%= component "group_logo.partial.html", %{
+              group: @current_group,
+              size: :small,
+              version: :thumb
+            } %>
             <%= project.name %>
           </h3>
 

@@ -3,7 +3,11 @@
   <div class="section__content">
     <header class="section__header">
       <h1 class="section__title">
-        <%= tag :img, src: logo_url(@group), alt: "Logo", class: "logo logo--big" %>
+        <%= component "group_logo.partial.html", %{
+          group: @group,
+          size: :large,
+          version: :thumb
+        } %>
         <br /> <%= @group.name %>
       </h1>
     </header>
