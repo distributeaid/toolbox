@@ -6,44 +6,10 @@
   <% end %>
 
   <div class="form-item is-inline">
-  <%= component "required.partial.html" %>
- </div>
-
-  <div class="form-item is-inline">
-    <%= label f, :label, class: "is-req" %>
-    <%= text_input f, :label %>
-    <%= error_tag f, :label %>
+    <%= component "required.partial.html" %>
   </div>
 
-  <div class="form-item is-inline">
-    <%= label f, :street %>
-    <%= text_input f, :street %>
-    <%= error_tag f, :street %>
-  </div>
-
-  <div class="form-item is-inline">
-    <%= label f, :city, class: "is-req" %>
-    <%= text_input f, :city %>
-    <%= error_tag f, :city %>
-  </div>
-
-  <div class="form-item is-inline">
-    <%= label f, :state %>
-    <%= text_input f, :state %>
-    <%= error_tag f, :state %>
-  </div>
-
-  <div class="form-item is-inline">
-    <%= label f, :country, class: "is-req" %>
-    <%= text_input f, :country %>
-    <%= error_tag f, :country %>
-  </div>
-
-  <div class="form-item is-inline">
-    <%= label f, :zip_code %>
-    <%= text_input f, :zip_code %>
-    <%= error_tag f, :zip_code %>
-  </div>
+  <%= render "form-inputs.partial.html", %{form: f} %>
 
   <div class="form-item is-text-center">
     <%= submit "Submit", class: "button is-big" %>

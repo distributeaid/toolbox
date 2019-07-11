@@ -32,29 +32,29 @@ defmodule Ferry.InventoryTest do
       assert inventory == []
 
       # 1 stock, 1 project, 1 group
-      stock1 = insert(:stock, %{project: project1})
+      stock1 = insert(:stock, %{project: project1}) |> without_assoc([:project, :address, :geocode])
       inventory = Inventory.get_inventory(:available)
       assert inventory == [stock1]
 
       # n stock, 1 project, 1 group
-      stock2 = insert(:stock, %{project: project1})
+      stock2 = insert(:stock, %{project: project1}) |> without_assoc([:project, :address, :geocode])
       inventory = Inventory.get_inventory(:available)
       assert inventory == [stock1, stock2]
 
       # n stock, n projects, 1 group
-      stock3 = insert(:stock, %{project: project2})
+      stock3 = insert(:stock, %{project: project2}) |> without_assoc([:project, :address, :geocode])
       inventory = Inventory.get_inventory(:available)
       assert inventory == [stock1, stock2, stock3]
 
       # n stock, n projects, n groups
-      stock4 = insert(:stock, %{project: project3})
+      stock4 = insert(:stock, %{project: project3}) |> without_assoc([:project, :address, :geocode])
       inventory = Inventory.get_inventory(:available)
       assert inventory == [stock1, stock2, stock3, stock4]
     end
 
     test "get_inventory/1 filters based on the type of list" do
-      available_stock = insert(:stock, %{have: 100, need: 0})
-      needed_stock = insert(:stock, %{have: 0, need: 100})
+      available_stock = insert(:stock, %{have: 100, need: 0}) |> without_assoc([:project, :address, :geocode])
+      needed_stock = insert(:stock, %{have: 0, need: 100}) |> without_assoc([:project, :address, :geocode])
 
       # available
       inventory = Inventory.get_inventory(:available)
@@ -171,24 +171,24 @@ defmodule Ferry.InventoryTest do
       assert Inventory.list_stocks(group1) == []
 
       # 1 stock
-      stock1 = insert(:stock, %{project: project1})
+      stock1 = insert(:stock, %{project: project1}) |> without_assoc([:project, :address, :geocode])
       assert Inventory.list_stocks(group1) == [stock1]
 
       # n stocks
-      stock2 = insert(:stock, %{project: project1})
+      stock2 = insert(:stock, %{project: project1}) |> without_assoc([:project, :address, :geocode])
       assert Inventory.list_stocks(group1) == [stock1, stock2]
 
       # includes stocks from all projects
-      stock3 = insert(:stock, %{project: project2})
+      stock3 = insert(:stock, %{project: project2}) |> without_assoc([:project, :address, :geocode])
       assert Inventory.list_stocks(group1) == [stock1, stock2, stock3]
 
       # only includes stocks for the group
-      stock4 = insert(:stock, %{project: project3})
+      _stock4 = insert(:stock, %{project: project3}) |> without_assoc([:project, :address, :geocode])
       refute Inventory.list_stocks(group1) |> Enum.find(&(&1.id == project3.id))
     end
 
     test "get_stock!/1 returns the stock with given id" do
-      stock = insert(:stock)
+      stock = insert(:stock) |> without_assoc([:project, :address, :geocode])
       assert Inventory.get_stock!(stock.id) == stock
     end
 
@@ -423,7 +423,7 @@ defmodule Ferry.InventoryTest do
     end
 
     test "delete_stock/1 deletes the stock and packaging, but not the rest of the associations" do
-      stock = insert(:stock)
+      stock = insert(:stock) |> without_assoc([:project, :address, :geocode])
       assert {:ok, %{
         stock: %Stock{} = stock,
         packaging: %Packaging{} = packaging,

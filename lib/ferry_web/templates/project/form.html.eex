@@ -21,6 +21,18 @@
     <%= error_tag f, :description %>
   </div>
 
+  <hr>
+
+  <h3 class="is-text-center">
+    Project's Main Address
+  </h3>
+
+  <%= inputs_for f, :address, fn fa -> %>
+    <%= render FerryWeb.AddressView, "form-inputs.partial.html", %{form: fa} %>
+  <% end %>
+
+  <hr>
+
   <div class="form-item is-text-center">
     <%= submit "Submit", class: "button is-big" %>
   </div>

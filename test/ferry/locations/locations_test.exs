@@ -16,52 +16,25 @@ defmodule Ferry.LocationsTest do
 
     # Tests
     # ----------------------------------------------------------
-    # NOTE: Functions like create_address/2 which are required to distinguish
-    #       between address owners (groups or projects) must test with both.
-    #       Other functions like list_addresses/0 may only test with one.
 
     test "list_addresses/1 returns all addresses for a group" do
       group = insert(:group)
-      project = insert(:project, group: group)
       group2 = insert(:group)
 
       # no addresses
       assert Locations.list_addresses(group) == []
 
       # 1 address
-      address1 = insert(:address, group_id: group.id)
+      address1 = insert(:address, group_id: group.id) |> with_geocode()
       assert Locations.list_addresses(group) == [address1]
 
       # n addresses
-      address2 = insert(:address, group_id: group.id)
+      address2 = insert(:address, group_id: group.id) |> with_geocode()
       assert Locations.list_addresses(group) == [address1, address2]
 
       # only addresses for that group
-      _ = insert(:address, group_id: group2.id)
-      _ = insert(:address, project_id: project.id)
+      _ = insert(:address, group_id: group2.id) |> with_geocode()
       assert Locations.list_addresses(group) == [address1, address2]
-    end
-
-    test "list_addresses/1 returns all addresses for a project" do
-      group = insert(:group)
-      project = insert(:project, group: group)
-      project2 = insert(:project, group: build(:group))
-
-      # no addresses
-      assert Locations.list_addresses(project) == []
-
-      # 1 address
-      address1 = insert(:address, project_id: project.id)
-      assert Locations.list_addresses(project) == [address1]
-
-      # n addresses
-      address2 = insert(:address, project_id: project.id)
-      assert Locations.list_addresses(project) == [address1, address2]
-
-      # only addresses for that project
-      _ = insert(:address, group_id: group.id)
-      _ = insert(:address, project_id: project2.id)
-      assert Locations.list_addresses(project) == [address1, address2]
     end
 
     @tag skip: "Stubbed Function. Don't fail the build. Remove this tag & fill in test when the method is implemented."
@@ -75,7 +48,7 @@ defmodule Ferry.LocationsTest do
 
     test "get_address!/1 returns the address with given id" do
       group = insert(:group)
-      address = insert(:address, group_id: group.id)
+      address = insert(:address, group_id: group.id) |> with_geocode()
       assert Locations.get_address!(address.id) == address
     end
 
@@ -86,86 +59,55 @@ defmodule Ferry.LocationsTest do
     end
 
     test "create_address/2 with valid data creates an address" do
-      GeocoderMock |> expect(:geocode_address, 4, fn _address ->
+      GeocoderMock |> expect(:geocode_address, 2, fn _address ->
         {:ok, params_for(:geocode)}
       end)
 
       group = insert(:group)
-      project = insert(:project, group: group)
+      geocode = params_for(:geocode)
 
-      attrs = params_for(:address)
+      attrs = string_params_for(:address)
       assert {:ok, %Address{} = address} = Locations.create_address(group, attrs)
-      assert address.label == attrs.label
-      assert address.street == attrs.street
-      assert address.city == attrs.city
-      assert address.state == attrs.state
-      assert address.country == attrs.country
-      assert address.zip_code == attrs.zip_code
-      assert address.geocode.lat == attrs.geocode.lat
-      assert address.geocode.lng == attrs.geocode.lng
-      assert address.geocode.data == attrs.geocode.data
-
-      attrs = params_for(:address)
-      assert {:ok, %Address{} = address} = Locations.create_address(project, attrs)
-      assert address.label == attrs.label
-      assert address.street == attrs.street
-      assert address.city == attrs.city
-      assert address.state == attrs.state
-      assert address.country == attrs.country
-      assert address.zip_code == attrs.zip_code
-      assert address.geocode.lat == attrs.geocode.lat
-      assert address.geocode.lng == attrs.geocode.lng
-      assert address.geocode.data == attrs.geocode.data
+      assert address.label == attrs["label"]
+      assert address.street == attrs["street"]
+      assert address.city == attrs["city"]
+      assert address.state == attrs["state"]
+      assert address.country == attrs["country"]
+      assert address.zip_code == attrs["zip_code"]
+      assert address.geocode.lat == geocode.lat
+      assert address.geocode.lng == geocode.lng
+      assert address.geocode.data == geocode.data
 
       # min
-      attrs = params_for(:min_address)
+      attrs = string_params_for(:min_address)
       assert {:ok, %Address{} = address} = Locations.create_address(group, attrs)
-      assert address.label == attrs.label
+      assert address.label == attrs["label"]
       assert address.street == nil
-      assert address.city == attrs.city
+      assert address.city == attrs["city"]
       assert address.state == nil
-      assert address.country == attrs.country
+      assert address.country == attrs["country"]
       assert address.zip_code == nil
-      assert address.geocode.lat == attrs.geocode.lat
-      assert address.geocode.lng == attrs.geocode.lng
-      assert address.geocode.data == attrs.geocode.data
-
-      attrs = params_for(:min_address)
-      assert {:ok, %Address{} = address} = Locations.create_address(project, attrs)
-      assert address.label == attrs.label
-      assert address.street == nil
-      assert address.city == attrs.city
-      assert address.state == nil
-      assert address.country == attrs.country
-      assert address.zip_code == nil
-      assert address.geocode.lat == attrs.geocode.lat
-      assert address.geocode.lng == attrs.geocode.lng
-      assert address.geocode.data == attrs.geocode.data
+      assert address.geocode.lat == geocode.lat
+      assert address.geocode.lng == geocode.lng
+      assert address.geocode.data == geocode.data
     end
 
     test "create_address/2 with invalid data returns error changeset" do
       group = insert(:group)
-      project = insert(:project, group: group)
 
       # is nil
-      attrs = params_for(:invalid_nil_address)
+      attrs = string_params_for(:invalid_nil_address)
       assert {:error, %Ecto.Changeset{} = changeset} = Locations.create_address(group, attrs)
-      assert 3 == length(changeset.errors)
-      assert {:error, %Ecto.Changeset{} = changeset} = Locations.create_address(project, attrs)
       assert 3 == length(changeset.errors)
 
       # too short
-      attrs = params_for(:invalid_short_address)
+      attrs = string_params_for(:invalid_short_address)
       assert {:error, %Ecto.Changeset{} = changeset} = Locations.create_address(group, attrs)
-      assert 3 == length(changeset.errors)
-      assert {:error, %Ecto.Changeset{} = changeset} = Locations.create_address(project, attrs)
       assert 3 == length(changeset.errors)
 
       # too long
-      attrs = params_for(:invalid_long_address)
+      attrs = string_params_for(:invalid_long_address)
       assert {:error, %Ecto.Changeset{} = changeset} = Locations.create_address(group, attrs)
-      assert 6 == length(changeset.errors)
-      assert {:error, %Ecto.Changeset{} = changeset} = Locations.create_address(project, attrs)
       assert 6 == length(changeset.errors)
     end
 
@@ -173,8 +115,13 @@ defmodule Ferry.LocationsTest do
     test "the database's has_exactly_one_owner check constraint throws and error if an address has no or multiple owners"
 
     test "update_address/2 with valid data updates the address" do
+      GeocoderMock |> expect(:geocode_address, fn _address ->
+        {:ok, params_for(:geocode)}
+      end)
+
       group = insert(:group)
       address = insert(:address, group_id: group.id)
+      geocode = params_for(:geocode)
 
       # typical
       attrs = params_for(:address)
@@ -185,14 +132,14 @@ defmodule Ferry.LocationsTest do
       assert address.state == attrs.state
       assert address.country == attrs.country
       assert address.zip_code == attrs.zip_code
-      assert address.geocode.lat == attrs.geocode.lat
-      assert address.geocode.lng == attrs.geocode.lng
-      assert address.geocode.data == attrs.geocode.data
+      assert address.geocode.lat == geocode.lat
+      assert address.geocode.lng == geocode.lng
+      assert address.geocode.data == geocode.data
     end
 
     test "update_address/2 with invalid data returns error changeset" do
       group = insert(:group)
-      address = insert(:address, group_id: group.id)
+      address = insert(:address, group_id: group.id) |> with_geocode()
 
       # too short
       attrs = params_for(:invalid_short_address)
@@ -217,9 +164,6 @@ defmodule Ferry.LocationsTest do
     @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
     test "the database's on_delete:delete_all setting deletes related addresses when a group is deleted"
 
-    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
-    test "the database's on_delete:delete_all setting deletes related addresses when a project is deleted"
-
     test "change_address/1 returns a address changeset" do
       group = insert(:group)
       address = insert(:address, group_id: group.id)
@@ -238,11 +182,8 @@ defmodule Ferry.LocationsTest do
     # ----------------------------------------------------------
 
     def map_result_fixture(%Group{} = group, _attrs \\ %{}) do
-      address = insert(:address, group: group)
-      %{address | project: nil}
+      insert(:address, group: group) |> with_geocode()
     end
-
-    # TODO: map_result_fixture w/ a project owning the address
 
     # Tests
     # ----------------------------------------------------------
@@ -251,21 +192,27 @@ defmodule Ferry.LocationsTest do
     test "get_map/1 lists all groups (in alphabetical order) in the `group_filter_labels` field"
 
     test "get_map/1 with no controls set returns a map with all addresses included as results" do
-      group = insert(:group)
+      group1 = insert(:group)
+      group2 = insert(:group)
 
       # no addresses
       {:ok, map} = Locations.get_map()
       assert map.results == []
 
-      # 1 address
-      address1 = map_result_fixture(group)
+      # 1 address, 1 group
+      address1 = insert(:address, group: group1) |> with_geocode()
       {:ok, map} = Locations.get_map()
       assert map.results == [address1]
 
-      # n addresses
-      address2 = map_result_fixture(group)
+      # n addresses, 1 group
+      address2 = insert(:address, group: group1) |> with_geocode()
       {:ok, map} = Locations.get_map()
       assert map.results == [address1, address2]
+
+      # n addresses, n groups
+      address3 = insert(:address, group: group2) |> with_geocode()
+      {:ok, map} = Locations.get_map()
+      assert map.results == [address1, address2, address3]
     end
 
     test "get_map/1 with the group_filter control set returns a map with all addresses of the selected groups" do

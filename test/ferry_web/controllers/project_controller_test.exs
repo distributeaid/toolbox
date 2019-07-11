@@ -1,10 +1,16 @@
 defmodule FerryWeb.ProjectControllerTest do
   use FerryWeb.ConnCase
 
+  import Mox
+  alias Ferry.Locations.Geocoder.GeocoderMock
+
+
   # Project Controller Tests
   # ==============================================================================
 
   setup do
+    verify_on_exit!()
+
     group = insert(:group)
     user = insert(:user, group: group)
     project = insert(:project, group: group)
@@ -122,6 +128,10 @@ defmodule FerryWeb.ProjectControllerTest do
 
   describe "create project" do
     test "redirects to show when data is valid", %{conn: conn, group: group} do
+      GeocoderMock |> expect(:geocode_address, fn _address ->
+        {:ok, params_for(:geocode)}
+      end)
+
       project_params = params_for(:project)
       conn = post conn, Routes.group_project_path(conn, :create, group), project: project_params
 
@@ -149,6 +159,10 @@ defmodule FerryWeb.ProjectControllerTest do
 
   describe "update project" do
     test "redirects when data is valid", %{conn: conn, group: group, project: project} do
+      GeocoderMock |> expect(:geocode_address, fn _address ->
+        {:ok, params_for(:geocode)}
+      end)
+
       project_params = params_for(:project)
       conn = put conn, Routes.group_project_path(conn, :update, group, project), project: project_params
 

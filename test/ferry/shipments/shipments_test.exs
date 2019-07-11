@@ -5,17 +5,6 @@ defmodule Ferry.ShipmentsTest do
   alias Ferry.Shipments.Role
   alias Ferry.Shipments.Shipment
 
-  # Helpers
-  # ------------------------------------------------------------
-  def without_assoc(list, field) when is_list(list) do
-    Enum.map(list, fn x ->
-      Map.delete(x, field)
-    end)
-  end
-
-  def without_assoc(%{} = struct, field) do
-    Map.delete(struct, field)
-  end
 
   # Shipments
   # ==============================================================================
@@ -182,8 +171,7 @@ defmodule Ferry.ShipmentsTest do
       shipment = insert(:shipment)
       attrs = params_for(:invalid_shipment)
       assert {:error, %Ecto.Changeset{}} = Shipments.update_shipment(shipment, attrs)
-      assert shipment |> without_assoc(:routes)
-          == Shipments.get_shipment!(shipment.id) |> without_assoc(:routes)
+      assert shipment == Shipments.get_shipment!(shipment.id)
     end
 
     test "delete_shipment/1 deletes the shipment and roles" do
@@ -272,8 +260,7 @@ defmodule Ferry.ShipmentsTest do
 
       # can't delete last role
       assert {:error, %Ecto.Changeset{}} = Shipments.delete_role(role2)
-      assert role2 |> without_assoc(:shipment)
-        == Shipments.get_role!(role2.id) |> without_assoc(:shipment)
+      assert Shipments.get_role!(role2.id) == role2 |> without_assoc(:shipment)
     end
 
     test "change_role/1 returns a role changeset" do
@@ -298,26 +285,26 @@ defmodule Ferry.ShipmentsTest do
 
       # 1 route
       route1 = insert(:route, %{shipment: shipment}) |> without_assoc(:shipment)
-      routes = Shipments.list_routes(shipment) |> without_assoc(:shipment)
+      routes = Shipments.list_routes(shipment)
       assert routes == [route1]
 
       # n routes, with chronological ordering
       yesterday = Date.add(Date.utc_today, -1)
       route2 = insert(:route, %{shipment: shipment, date: yesterday}) |> without_assoc(:shipment)
-      routes = Shipments.list_routes(shipment) |> without_assoc(:shipment)
+      routes = Shipments.list_routes(shipment)
       assert routes == [route2, route1]
 
       # only routes for that shipment should be included
       not_my_shipment = insert(:shipment)
       _not_my_route = insert(:route, %{shipment: not_my_shipment}) |> without_assoc(:shipment)
-      routes = Shipments.list_routes(shipment) |> without_assoc(:shipment)
+      routes = Shipments.list_routes(shipment)
       assert routes == [route2, route1]
     end
 
     test "get_route!/1 returns the route with given id" do
       shipment = insert(:shipment)
       route = insert(:route, %{shipment: shipment}) |> without_assoc(:shipment)
-      assert Shipments.get_route!(route.id) |> without_assoc(:shipment) == route
+      assert Shipments.get_route!(route.id) == route
     end
 
     test "create_route/1 with valid data creates a route" do
@@ -347,11 +334,10 @@ defmodule Ferry.ShipmentsTest do
 
     test "update_route/2 with invalid data returns error changeset" do
       shipment = insert(:shipment)
-      route = insert(:route, %{shipment: shipment})
+      route = insert(:route, %{shipment: shipment}) |> without_assoc(:shipment)
       route_params = params_for(:invalid_route)
       assert {:error, %Ecto.Changeset{}} = Shipments.update_route(route, route_params)
-      assert route |> without_assoc(:shipment)
-          == Shipments.get_route!(route.id) |> without_assoc(:shipment)
+      assert route == Shipments.get_route!(route.id)
     end
 
     test "delete_route/1 deletes the route" do
