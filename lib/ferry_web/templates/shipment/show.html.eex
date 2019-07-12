@@ -40,10 +40,24 @@
       </div>
 
       <div class="is-col is-100">
-        <section class="subsection">
-          <h2 class="subsection__header">Manifest</h2>
-          <p>Coming Soon...</p>
-        </section>
+        <div class="subsection">
+          <header>
+            <h2 class="subsection__header">Manifest & Needs</h2>
+            <nav class="tabs" data-kube="tabs" data-equal="true">
+              <!-- TODO: need to select the active class based on the existing url fragment -->
+              <a href="#manifest" class="is-active">Manifest</a>
+              <a href="#needs">Needs</a>
+            </nav>
+          </header>
+
+          <section id="manifest" class="tab--auto-height">
+            MANIFEST
+          </section>
+
+          <section id="needs" class="tab--auto-height">
+            <%= render FerryWeb.ManifestView, "needs-list.partial.html", %{conn: @conn, needs: @needs} %>
+          </section>
+        </div>
       </div>
 
     </div>

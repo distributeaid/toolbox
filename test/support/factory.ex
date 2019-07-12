@@ -101,6 +101,16 @@ defmodule Ferry.Factory do
     )
   end
 
+  def with_project(%Group{} = group) do
+    project = insert(:project, group: group)
+
+    if is_list(group.projects) do
+      %{group | projects: [project | group.projects]}
+    else
+      %{group | projects: [project]}
+    end
+  end
+
   # User
   # ----------------------------------------------------------
 
