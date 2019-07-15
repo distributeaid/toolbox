@@ -5,9 +5,10 @@ defmodule FerryWeb.ShipmentController do
   alias Ferry.Shipments.Shipment
   alias Ferry.Shipments.Role
   alias Ferry.Profiles
+  alias Ferry.Manifests
 
 
-  # Stock Controller
+  # Shipment Controller
   # ==============================================================================
 
   # Helpers
@@ -41,7 +42,17 @@ defmodule FerryWeb.ShipmentController do
     group = current_group(conn)
     shipment = Shipments.get_shipment!(id)
     routes = Shipments.list_routes(shipment)
-    render(conn, "show.html", current_group: current_group(conn), group: group, shipment: shipment, routes: routes)
+    needs = Manifests.list_needs(shipment)
+    
+    render(conn, "show.html",
+      current_group: current_group(conn),
+      group: group,
+      
+      shipment: shipment,
+      routes: routes,
+
+      needs: needs
+    )
   end
 
   # Create

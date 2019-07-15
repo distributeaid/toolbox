@@ -73,6 +73,14 @@ $(document).ready(function() {
   ------------------------------------------------------------
   */
 
+  $('#group-index').DataTable({
+    info: false,
+    paging: false,
+    language: {
+      emptyTable: "No groups have been created... yet!"
+    }
+  });
+
   $('#group-stock-table').DataTable({
     info: false,
     paging: false,
@@ -89,13 +97,13 @@ $(document).ready(function() {
     }
   });
 
-  $('#group-index').DataTable({
+  $('#shipment-overview').DataTable({
     info: false,
     paging: false,
     language: {
-      emptyTable: "No groups have been created... yet!"
+      emptyTable: "No shipments have been created... yet!"
     }
-  });
+  })
 
   /* Smooth Scroll to Anchors
    * ------------------------------------------------------

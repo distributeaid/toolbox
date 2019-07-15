@@ -8,6 +8,8 @@ defmodule Ferry.Shipments.Role do
   schema "shipments_groups_roles" do
     field :label, :string
     field :description, :string
+    field :supplier?, :boolean, default: false, source: :is_supplier
+    field :receiver?, :boolean, default: false, source: :is_receiver
 
     belongs_to :group, Group # on_delete set in database via migration
     belongs_to :shipment, Shipment # on_delete set in database via migration
@@ -18,8 +20,8 @@ defmodule Ferry.Shipments.Role do
   @doc false
   def changeset(role, attrs) do
     role
-    |> cast(attrs, [:label, :description, :group_id, :shipment_id])
-    |> validate_required([:label, :group_id])
+    |> cast(attrs, [:label, :description, :supplier?, :receiver?, :group_id, :shipment_id])
+    |> validate_required([:label, :supplier?, :receiver?, :group_id])
     # TODO: :shipment_id not validated to allow shipment creation to also create
     #       an initial role.  However this leaves direct role creation vulnerable
     #       to a missing :shipment_id.  Maybe make 2 changesets?  Or is validating

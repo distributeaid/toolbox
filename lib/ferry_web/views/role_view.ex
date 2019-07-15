@@ -20,4 +20,13 @@ defmodule FerryWeb.RoleView do
     # add a default option
     [{"---", nil} | options]
   end
+
+  def display_role_attributes(role) do
+    cond do
+      role.supplier? and role.receiver? -> ~E(<br /><small>Supplier, Receiver</small>)
+      role.supplier? -> ~E(<br /><small>Supplier</small>)
+      role.receiver? -> ~E(<br /><small>Receiver</small>)
+      true -> nil
+    end
+  end
 end

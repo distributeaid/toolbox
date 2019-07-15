@@ -101,6 +101,16 @@ defmodule Ferry.Factory do
     )
   end
 
+  def with_project(%Group{} = group) do
+    project = insert(:project, group: group)
+
+    if is_list(group.projects) do
+      %{group | projects: [project | group.projects]}
+    else
+      %{group | projects: [project]}
+    end
+  end
+
   # User
   # ----------------------------------------------------------
 
@@ -498,6 +508,8 @@ defmodule Ferry.Factory do
   def shipment_role_factory do
     %Role{
       label: Enum.random(["Collector", "Transporter", "Distributor", "Funder", "Observer"]),
+      supplier?: Enum.random([true, false]),
+      receiver?: Enum.random([true, false]),
       description: sequence("I am description #")
     }
   end

@@ -15,7 +15,10 @@
     <%= for role <- @shipment.roles do %>
       <li class="role">
         <p>
-          <strong class="role__label"><%= role.label %>:</strong>
+          <span class="role__label">
+            <strong><%= role.label %></strong>
+            <%= display_role_attributes(role) %>
+          </span>
 
           <%= component "group_logo.partial.html", %{
             group: role.group,

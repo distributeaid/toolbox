@@ -279,6 +279,21 @@ table.is-striped tr:nth-child(even) td {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+/*
+Tabs
+------------------------------------------------------------
+*/
+.tabs {
+  justify-content: center;
+}
+
+/* NOTE: See this definition at the bottom of the file in the Trumps section.
+         It uses !important to override the height set on the tab's element
+         by the Kube js.
+*/
+/* .tab--auto-height {} */
+
+
 
 /*
 Select2 Overrides
@@ -428,17 +443,16 @@ p.section__subtitle {
 @media (min-width: 600px) {
   .section {
     width: 50%;
+    margin: 0 auto;
     padding-top: 0;
   }
 
   .section--wide {
     width: 66%;
-    margin: 0 auto;
   }
 
   .section--wider {
     width: 75%;
-    margin: 0 auto;
   }
 
   .section--full-width {
@@ -840,7 +854,10 @@ ul.roles > li:last-child {
 
 .role__label {
   display: inline-block;
-  min-width: 100px;
+  margin-right: 0.5rem;
+
+  vertical-align: middle;
+  text-align: center;
 }
 
 /*
@@ -1226,4 +1243,16 @@ Subsection // Actions
 .subsection > .actions {
   top: 0;
   right: 0;
+}
+
+/*
+IMPORTANT
+------------------------------------------------------------
+All uses of !important should go here.  They must have a comment describing
+why they are necessary.
+*/
+
+/* needed to override the height set on a tab's element by Kube's js */
+.tab--auto-height {
+  min-height: auto !important;
 }

@@ -6,7 +6,7 @@
 
     <ul class="actions">
       <li>
-        <%= link to: Routes.group_shipment_path(@conn, :index, @group), class: "action action--close" do %>
+        <%= link to: Routes.shipment_overview_path(@conn, :index), class: "action action--close" do %>
           <i class="fas fa-times"></i>
         <% end %>
       </li>
@@ -15,27 +15,24 @@
     <div class="is-row">
 
       <div class="is-col is-50">
-        <%= render "show-details.partial.html", %{
+        <%= render FerryWeb.ShipmentView, "show-details.partial.html", %{
           conn: @conn,
-          group: @group,
           shipment: @shipment,
-          can_modify?: !is_nil(@current_group) && @group.id == @current_group.id          
+          can_modify?: false
         } %>
 
         <%= render FerryWeb.RoleView, "index-list.partial.html", %{
           conn: @conn,
-          group: @group,
           shipment: @shipment,
-          can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+          can_modify?: false
         } %>
       </div>
 
       <div class="is-col is-50">
         <%= render FerryWeb.RouteView, "index-list.partial.html", %{
           conn: @conn,
-          group: @group,
           shipment: @shipment,
-          can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+          can_modify?: false
         } %>
       </div>
 

@@ -42,6 +42,7 @@ defmodule FerryWeb.Router do
     resources "/inventory", InventoryListController, only: [:show], singleton: true
     resources "/map", MapController, only: [:show], singleton: true
     resources "/projects", ProjectController, only: [:index]
+    resources "/shipments", ShipmentOverviewController, only: [:index, :show]
   end
 
   scope "/", FerryWeb do
