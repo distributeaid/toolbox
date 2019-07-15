@@ -8,7 +8,7 @@ defmodule FerryWeb.ShipmentController do
   alias Ferry.Manifests
 
 
-  # Stock Controller
+  # Shipment Controller
   # ==============================================================================
 
   # Helpers

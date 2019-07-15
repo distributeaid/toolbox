@@ -1,0 +1,62 @@
+<section class="shipment section section--full-width">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title"> <%= @shipment.label %></h1>
+    </header>
+
+    <ul class="actions">
+      <li>
+        <%= link to: Routes.shipment_overview_path(@conn, :index), class: "action action--close" do %>
+          <i class="fas fa-times"></i>
+        <% end %>
+      </li>
+    </ul>
+
+    <div class="is-row">
+
+      <div class="is-col is-50">
+        <%= render FerryWeb.ShipmentView, "show-details.partial.html", %{
+          conn: @conn,
+          shipment: @shipment,
+          can_modify?: false
+        } %>
+
+        <%= render FerryWeb.RoleView, "index-list.partial.html", %{
+          conn: @conn,
+          shipment: @shipment,
+          can_modify?: false
+        } %>
+      </div>
+
+      <div class="is-col is-50">
+        <%= render FerryWeb.RouteView, "index-list.partial.html", %{
+          conn: @conn,
+          shipment: @shipment,
+          can_modify?: false
+        } %>
+      </div>
+
+      <div class="is-col is-100">
+        <div class="subsection">
+          <header>
+            <h2 class="subsection__header">Manifest & Needs</h2>
+            <nav class="tabs" data-kube="tabs" data-equal="true">
+              <!-- TODO: need to select the active class based on the existing url fragment -->
+              <a href="#manifest" class="is-active">Manifest</a>
+              <a href="#needs">Needs</a>
+            </nav>
+          </header>
+
+          <section id="manifest" class="tab--auto-height">
+            MANIFEST
+          </section>
+
+          <section id="needs" class="tab--auto-height">
+            <%= render FerryWeb.ManifestView, "needs-list.partial.html", %{conn: @conn, needs: @needs} %>
+          </section>
+        </div>
+      </div>
+
+    </div>
+
+</section>

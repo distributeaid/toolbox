@@ -1,0 +1,55 @@
+<section class="section section--full-width">
+  <div class="section__content">
+    <header class="section__header">
+      <h1 class="section__title">Shipments</h1>
+    </header>
+    
+    <table id="shipment-overview" class="is-striped">
+      <thead>
+        <tr>
+          <th>Shipment</th>
+          <th>Status</th>
+          <th>Target Date</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Groups</th>
+          <th><!-- Actions --></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <%= for shipment <- @shipments do %>
+          <tr>
+            <td><%= shipment.label %></td>
+            <td class="shipment__status"><%= shipment.status %></td>
+            <td><%= shipment.target_date_to_be_shipped %></td>
+            <td><%= shipment.sender_address %></td>
+            <td><%= shipment.receiver_address %></td>
+            <td>
+              <%= for role <- shipment.roles do %>
+                <!-- TOOD: link to group, and show full name on hover) -->
+                <%= component "group_logo.partial.html", %{
+                  group: role.group,
+                  size: :small,
+                  version: :thumb,
+                  fill: true
+                } %>                
+              <% end %>
+            </td>
+            <td>
+              <ul class="actions actions--inline">
+                <li>
+                  <%= link to: Routes.shipment_overview_path(@conn, :show, shipment), class: "action" do %>
+                    <i class="fas fa-eye"></i>
+                  <% end %>
+                </li>
+              </ul>
+            </td>
+          </tr>
+        <% end %>
+
+      </tbody>
+    </table>
+
+  </div>
+</section>
