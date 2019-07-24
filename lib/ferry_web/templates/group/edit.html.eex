@@ -1,9 +1,3 @@
-<%= render "index.html", %{
-  conn: @conn,
-  groups: @groups,
-  current_group: @current_group
-} %>
-
 <section class="section">
   <div class="section__content">
     <header class="section__header">
