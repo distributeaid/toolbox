@@ -25,8 +25,12 @@ defmodule Ferry.Profiles.Group.Logo do
   end
 
   # Define a thumbnail transformation:
+  def transform(:original, _) do
+    {:convert, ~s(-strip -resize 256x256^ -gravity center -extent 256x256)}
+  end
+
   def transform(:thumb, _) do
-    {:convert, "-strip -thumbnail 128x128^ -gravity center -extent 128x128 -format png", :png}
+    {:convert, ~s(-strip -thumbnail 128x128^ -gravity center -extent 128x128)}
   end
 
   # Override the persisted filenames:
