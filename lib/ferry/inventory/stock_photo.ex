@@ -19,7 +19,10 @@ defmodule Ferry.Inventory.Stock.Photo do
   end
 
   def transform(:thumb, _) do
-    {:convert, ~s(-strip -thumbnail 128x128^ -gravity center -extent 128x128)}
+    # NOTE: Thumbnails must be converted to png's due to legacy code reasons.
+    #       DO NOT CHANGE THIS unless you also convert all existing thumbnails
+    #       back to their original format (i.e. .jpg, etc)
+    {:convert, ~s(-strip -thumbnail 128x128^ -gravity center -extent 128x128), :png}
   end
 
   # Override the persisted filenames:
