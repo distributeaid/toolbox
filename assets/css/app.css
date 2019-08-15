@@ -816,6 +816,13 @@ Entry
   margin-right: 1rem;
 }
 
+.map-icon--logo {
+  width: 2rem;
+  height: 2rem;
+  border: 0.125rem solid #C8C8C8;
+  border-radius: 100%;
+}
+
 /*
 Shipment
 ------------------------------------------------------------
