@@ -40,7 +40,14 @@
   // add markers to the map
   var addresses = <%= format_addresses_for_map(@map.results) %>;
   addresses.forEach(function(address) {
-    var marker = L.marker([address.lat, address.lng])
+    var icon = L.icon({
+      iconUrl: address.marker_img,
+      className: "map-icon--logo"
+    });
+
+    var marker = L.marker([address.lat, address.lng], {
+      icon: icon
+    })
       .bindPopup(address.marker_content)
       .addTo(map);
   });

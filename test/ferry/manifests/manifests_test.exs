@@ -47,10 +47,12 @@ defmodule Ferry.ManifestsTest do
       # includes needs from all receiving groups
       need1 = insert(:stock, %{project: groups.receiver.projects |> hd(), need: 50})
       |> without_assoc([:project, :group, :projects], :many)
+      |> without_assoc([:project, :address, :geocode])
       |> without_assoc([:packaging])
 
       need2 = insert(:stock, %{project: groups.both.projects |> hd(), need: 50})
       |> without_assoc([:project, :group, :projects], :many)
+      |> without_assoc([:project, :address, :geocode])
       |> without_assoc([:packaging])
 
       assert Manifests.list_needs(shipment) == [need1, need2]
@@ -58,6 +60,7 @@ defmodule Ferry.ManifestsTest do
       # includes needs from all of a receiving group's projects
       need3 = insert(:stock, %{project: Enum.at(groups.receiver.projects, 1), need: 50})
       |> without_assoc([:project, :group, :projects], :many)
+      |> without_assoc([:project, :address, :geocode])
       |> without_assoc([:packaging])
 
       assert Manifests.list_needs(shipment) == [need1, need2, need3]

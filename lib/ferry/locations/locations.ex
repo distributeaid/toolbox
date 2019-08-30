@@ -241,9 +241,11 @@ defmodule Ferry.Locations do
 
     query = from a in Address,
       left_join: g in assoc(a, :group),
+      left_join: p in assoc(a, :project),
+      left_join: pg in assoc(p, :group),
       join: geo in assoc(a, :geocode),
       order_by: a.id,
-      preload: [group: g, geocode: geo]
+      preload: [group: g, project: {p, group: pg}, geocode: geo]
 
     {_, query} = {map, query}
     |> apply_group_filter() # returns {map, query}
@@ -262,8 +264,9 @@ defmodule Ferry.Locations do
   end
 
   defp apply_group_filter({%Map{} = map, query}) do
-    query = from [a, g] in query,
+    query = from [a, g, p, pg] in query,
             where: g.id in ^map.group_filter
+                or pg.id in ^map.group_filter
 
     {map, query}
   end
