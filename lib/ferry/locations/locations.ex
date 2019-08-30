@@ -264,8 +264,9 @@ defmodule Ferry.Locations do
   end
 
   defp apply_group_filter({%Map{} = map, query}) do
-    query = from [a, g] in query,
+    query = from [a, g, p, pg] in query,
             where: g.id in ^map.group_filter
+                or pg.id in ^map.group_filter
 
     {map, query}
   end

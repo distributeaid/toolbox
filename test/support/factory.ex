@@ -149,7 +149,7 @@ defmodule Ferry.Factory do
       description: "Up and over their walls!  Snip-snip the barbed wire with some handy dandy bolt cutters.",
 
       group: build(:group),
-      address: build(:address)
+      address: build(:address, geocode: build(:geocode))
     }
   end
 
