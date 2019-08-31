@@ -1,7 +1,8 @@
 // We need to import the CSS so that webpack will load it.
 // The MiniCssExtractPlugin is used to separate it out into
 // its own CSS file.
-import "../vendor/css/kube-7.2.0.css";
+import "../vendor/spectre-0.5.8/spectre.min.css";
+import "../vendor/spectre-0.5.8/spectre-exp.min.css";
 import "../css/app.css";
 import "select2/dist/css/select2.css";
 

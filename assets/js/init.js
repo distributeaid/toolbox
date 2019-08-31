@@ -19,16 +19,6 @@ $(document).ready(function() {
     }
   });
 
-
-  /*
-  Initialize Kube
-  ------------------------------------------------------------
-  */
-
-  $K.init({
-    observer: true
-  });
-
   /*
   Initialize Select2
   Select2 Documentation: https://select2.org/
