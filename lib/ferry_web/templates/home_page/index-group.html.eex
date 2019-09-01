@@ -11,7 +11,7 @@
       </h1>
     </header>
 
-    <div class="subsection is-75 is-centered">
+    <div class="subsection p-centered col-9">
       <h2 class="subsection__header">Your Tools</h2>
 
       <p>
@@ -45,7 +45,7 @@
 
     </div>
 
-    <div class="subsection is-75 is-centered">
+    <div class="subsection p-centered col-9">
       <h2 class="subsection__header">About the Beta</h2>
 
       <p>

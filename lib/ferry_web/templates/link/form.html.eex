@@ -13,11 +13,11 @@
     <%= error_tag f, :label %>
   </div>
 
-  <div class="form-group <%= validation_status_class(f, :url) %>">
-    <%= label f, :url, class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :url) %>">
+    <%= label f, :url %>
     <%= text_input f, :url, class: "form-input", placeholder: "https://justgiving.com/my-fundraiser" %>
     <%= error_tag f, :url %>
-    <p class="is-desc">
+    <p class="form-input-desc">
       Please be sure to include "http" or "https"!
     </p>
   </div>

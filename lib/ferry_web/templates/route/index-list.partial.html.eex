@@ -12,7 +12,7 @@
   <% end %>
 
   <%= if length(@shipment.routes) > 0 do %>
-    <ul class="routes is-unstyled">
+    <ul class="routes list--unstyled">
       <%= for route <- @shipment.routes do %>
         <li class="route">
           <p>

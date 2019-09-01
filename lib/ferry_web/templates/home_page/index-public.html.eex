@@ -4,7 +4,7 @@
       <h1 class="section__title">Welcome!</h1>
     </header>
 
-    <div class="is-75 is-center">
+    <div class="col-9 p-centered">
       <p>
         After a year of work, Distribute Aid is now in Beta!  Feel free to check
         out our public tools, and be sure to stay in touch:
@@ -19,7 +19,7 @@
         </li>
       </ul>
 
-      <p class="is-text-center">
+      <p class="text-center">
         <%= link to: Routes.session_path(@conn, :new), class: "btn btn-lg btn-primary" do %>
           Login <i class="fas fa-unlock is-icon-left"></i>
         <% end %>

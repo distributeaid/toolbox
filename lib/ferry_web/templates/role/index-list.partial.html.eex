@@ -11,7 +11,7 @@
     </ul>
   <% end %>
 
-  <ul class="roles is-unstyled">
+  <ul class="roles list--unstyled">
     <%= for role <- @shipment.roles do %>
       <li class="role">
         <p>

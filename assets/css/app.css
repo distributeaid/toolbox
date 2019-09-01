@@ -111,12 +111,66 @@ h2:last-child, .h2:last-child,
 h3:last-child, .h3:last-child,
 h4:last-child, .h4:last-child,
 h5:last-child, .h5:last-child,
-h6:last-child, .h6:last-child {
+h6:last-child, .h6:last-child,
+p:last-child,
+ul:last-child,
+ol:last-child,
+dl:last-child {
   margin-bottom: 0;
 }
 
-p:last-child {
-  margin-bottom: 0;
+ul {
+  list-style: disc outside;
+}
+
+ol {
+  list-style: decimal outside;
+}
+
+ul.list--unstyled,
+ol.list--unstyled {
+  margin: 0;
+
+  list-style: none;
+}
+
+ul.list--horizontal,
+ol.list--horizontal {
+  margin-left: 0.8rem;
+  margin-right: 0.8rem;
+}
+
+ul.list--horizontal > li,
+ol.list--horizontal > li {
+  display: inline-block;
+  margin-top: 0;
+  margin-left: 0.8rem;
+}
+
+ul.list--horizontal > li:first-child,
+ol.list--horizontal > li:first-child {
+  margin-left: 0;
+}
+
+dl.list--grid {
+  display: grid;
+  grid-template-columns: max-content auto;
+}
+
+dl.list--grid > dt {
+  padding-right: 0.4rem;
+
+  text-align: right;
+}
+
+dl.list--grid > dd {
+  margin: 0;
+  border-left: 1px solid #3b4351;
+  padding: 0 0 0.4rem 0.4rem;
+}
+
+dl.list--grid > dd:last-child {
+  padding-bottom: 0;
 }
 
 a {
@@ -143,114 +197,15 @@ a.link--wrapper {
 a.link--wrapper:focus,
 a.link--wrapper:hover,
 a.link--wrapper:active,
-a.link--wrapperactive {
+a.link--wrapper.active {
   border-bottom: none;
-}
-
-/*
-Lists
-------------------------------------------------------------
-TODO:
-  [ ] check it out visually- are these styles necessary?
-  [ ] combine this into the Typeography section?
-*/
-ul {
-  list-style: disc outside;
-}
-
-ol {
-  list-style: decimal outside;
-}
-
-ul > li:first-child, ol > li:first-child {
-  margin-top: 0;
-}
-
-.list--unstyled {
-  margin: 0;
-
-  list-style: none;
-}
-
-.list--horizontal {
-  margin-left: 0;
-}
-
-.list--horizontal > li {
-  display: inline-block;
-  margin-top: 0;
-  margin-left: 0.4rem;
-}
-
-.list--horizontal > li:first-child {
-  margin-left: 0;
-}
-
-
-dl::after {
-  /* clearfix: https://css-tricks.com/snippets/css/clear-fix/ */
-  content: "";
-  display: table;
-  clear: both;
-}
-
-dt, dd {
-  float: left;
-  margin-top: 0.2rem;
-}
-
-dt {
-  clear: both;
-  margin-right: 0.4rem;
-}
-
-dl dd + dt {
-  margin-top: 0.2rem; /* kube override */
-}
-
-dt:first-child {
-  margin-top: 0;
-}
-
-dd:nth-child(2) {
-  margin-top: 0;
 }
 
 /*
 Tables
 ------------------------------------------------------------
-TODO:
-  [ ] check it out visually- are these styles necessary?
-
-*/
-
-/*
-table {
-  font-size: 0.8rem;
-}
-
-td {
-  vertical-align: middle;
-}
-
-th::after,
-td::after {
-  margin-bottom: 0;
-}
-
-table.table-striped tbody th,
-table.table-striped tbody td {
-  border: 0;
-}
-
-table.table-striped tr:nth-child(odd) td {
-  background-color: rgba(255, 255, 255, 0.4);
-}
-
-table.table-striped tr:nth-child(even) td {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-*/
+Nothing here... for now. :)
+*/ 
 
 /*
 Buttons
@@ -295,10 +250,6 @@ Buttons
 /*
 Form
 ------------------------------------------------------------
-TODO:
-  [ ] move classes (.star, .is-req, etc) to helpers at the end?
-  [ ] is the inline stuff needed? if so convert to spectre
-  [ ] rename .is-desc to .form-group__desc
 */
 .form-group:not(:last-child) {
   margin-bottom: 0.8rem;
@@ -308,22 +259,22 @@ TODO:
   align-items: center;
 }
 
-label {
-  font-size: 0.8rem;
-  text-transform: capitalize;
-}
-
-label.is-req {
+.form-group--required label {
   font-weight: bold;
 }
 
-label.is-req::after{
+.form-group--required label:after {
   content: "*";
   display: inline;
 
-  color: #e32;
+  color: #E32;
 
   font-weight: bold;
+}
+
+label {
+  font-size: 0.8rem;
+  text-transform: capitalize;
 }
 
 .form-horizontal label {
@@ -336,6 +287,14 @@ label.is-req::after{
 .form-horizontal .form-input,
 .form-horizontal .form-select {
   width: 50%;
+}
+
+textarea.form-input {
+  min-height: 100px;
+}
+
+.form-horizontal textarea.form-input {
+  width: 75%;
 }
 
 .form-checkbox,
@@ -375,19 +334,11 @@ label.is-req::after{
   color: #FFF;
 }
 
-textarea.form-input {
-  min-height: 100px;
-}
-
-.form-horizontal textarea.form-input {
-  width: 75%;
-}
-
 .form-input-hint {
   margin-bottom: 0;
 }
 
-.is-desc {
+.form-input-desc {
   margin-bottom: 0.8rem;
 
   color: rgba(17, 17, 19, 0.7);
@@ -395,13 +346,13 @@ textarea.form-input {
   font-size: 0.7rem;
 }
 
-.form-group .is-desc {
+.form-group .form-input-desc {
   margin-top: 0.2rem;
   margin-bottom: 0;
 }
 
 .form-horizontal .form-input-hint,
-.form-horizontal .is-desc {
+.form-horizontal .form-input-desc {
   width: 75%;
   margin-left: auto;
 }
@@ -426,20 +377,29 @@ legend {
   margin-left: calc(25% - 0.8rem); /* align w/ the inputs but leave room for the padding */
 }
 
-.star {
-  display: inline;
-
-  color: #e32;
-
+form .star {
+  color: #E32;
   font-weight: bold;
 }
+
+/*
+Icons
+------------------------------------------------------------
+Nothing here... for now. :)
+*/
+
+/*
+Labels
+------------------------------------------------------------
+Nothing here... for now. :)
+*/
 
 /*
 Media
 ------------------------------------------------------------
 */
 img {
-  display: block;
+  display: inline-block;
   height: auto;
   max-width: 100%;
 }
@@ -449,18 +409,6 @@ img {
 Objects
 ================================================================================
 */
-
-/*
-Avatar
-------------------------------------------------------------
-Extend Spectre.
-*/
-.avatar-xxl {
-  width: 6.4rem;
-  height: 6.4rem;
-
-  font-size: 3.2rem;
-}
 
 /*
 Column
@@ -480,6 +428,8 @@ Extend's Spectre.
 /*
 Data Tables
 ------------------------------------------------------------
+TODO:
+  [ ] adjust for Spectre
 */
 .dataTable th {
   cursor: pointer;
@@ -548,13 +498,26 @@ Section
 */
 .section {
   position: relative;
-  margin: 0 1.6rem;
-
-  padding-top: 1.6rem;
+  width: 50%;
+  margin: 0 auto;
+  padding-top: 0;
 }
 
-.section--full-screen {
-  height: 100vh;
+.section--wide {
+  width: 66%;
+}
+
+.section--wider {
+  width: 75%;
+}
+
+.section--full-width {
+  width: 100%;
+}
+
+.section--focus {
+  width: auto;
+  min-width: 50%;
 }
 
 .section__header {
@@ -577,93 +540,10 @@ p.section__subtitle {
 
 .section__content {
   width: 100%;
+  min-height: calc(100vh - 158px); /* leave room for the site nav / footer */
   padding: 1.2rem;
 
   background-color: rgba(255, 255, 255, 0.9);
-}
-
-.section--full-screen .section__content {
-  height: 100vh;
-}
-
-@media (min-width: 600px) {
-  .section {
-    width: 50%;
-    margin: 0 auto;
-    padding-top: 0;
-  }
-
-  .section--wide {
-    width: 66%;
-  }
-
-  .section--wider {
-    width: 75%;
-  }
-
-  .section--full-width {
-    width: 100%;
-  }
-
-  .section--focus {
-    width: auto;
-    min-width: 50%;
-  }
-}
-
-/*
-Select2
-------------------------------------------------------------
-TODO:
-  [ ] convert from Kube to Spectre
-*/
-/* restore Kube's padding to give the search icon space */
-.select2-search--dropdown .select2-search__field {
-  padding-left: 1.6rem;
-}
-
-/* make the select2 select boxes the same height as the standard kube ones */
-.select2-container .select2-selection--single {
-  height: 1.8rem;
-}
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-  line-height: 1.8rem;
-  vertical-align: middle;
-}
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-  height: 1.8rem;
-}
-
-/*
-Tabs
-------------------------------------------------------------
-TODO:
-  [ ] convert from Kube to Spectre (only used on shipments page)
-*/
-.tabs {
-  justify-content: center;
-}
-
-/* NOTE: See this definition at the bottom of the file in the Trumps section.
-         It uses !important to override the height set on the tab's element
-         by the Kube js.
-*/
-/* .tab--auto-height {} */
-
-/*
-Toast
-------------------------------------------------------------
-TOOD:
-  [ ] double check that the spacing changes are still needed
-  [ ] color
-*/
-.toast {
-  margin-top: 0.8rem;
-  margin-bottom: 0.8rem;
-  padding: 0.4rem 0.8rem;
-  border-radius: 0;
-
-  font-size: 0.8rem;
 }
 
 
@@ -671,6 +551,18 @@ TOOD:
 Components
 ================================================================================
 */
+
+/*
+Avatar
+------------------------------------------------------------
+Extend Spectre.
+*/
+.avatar-xxl {
+  width: 6.4rem;
+  height: 6.4rem;
+
+  font-size: 3.2rem;
+}
 
 /*
 Action
@@ -737,11 +629,16 @@ a.action {
 /*
 Brand
 ------------------------------------------------------
+TODO:
+  [] only used in navbar- just override Spectre's .navbar-brand class instead
 */
 .brand {
+  padding: 0.2rem 0.4rem;
+
   color: inherit;
 
   font-family: Lato, monospace;
+  font-size: 1.2rem;
   text-transform: uppercase;
 }
 
@@ -798,13 +695,6 @@ a .category > * {
   margin: 0.8rem 0;
 }
 
-@media (max-width: 600px) {
-  .category--3-col > * {
-    width: 50%;
-    margin: 0.8rem 0;
-  }
-}
-
 .category--4-col > * {
   flex: 0 0 auto;
   width: 25%;
@@ -846,7 +736,7 @@ a .category > * {
 /*
 Checklist
 ------------------------------------------------------------
- */
+*/
 ul.show_checklist li.checklist--checked {
   background: #888;
   color: #000000;
@@ -900,6 +790,7 @@ Entry
 Flash
 ------------------------------------------------------------
 TODO:
+  [ ] is this an object?
   [ ] aligned w/ layout so needs mobile interactive styling
 */
 .flash {
@@ -939,16 +830,6 @@ Icons
 
 .is-icon-right {
   margin-right: 0.4rem;
-}
-
-/*
-Links
-------------------------------------------------------------
-TODO:
-  [ ] should be a utility class
-*/
-ul.links-list {
-  margin-bottom: 0;
 }
 
 /*
@@ -1033,6 +914,29 @@ TODO:
 }
 
 /*
+Select2
+------------------------------------------------------------
+TODO:
+  [ ] adjust for Spectre
+*/
+/* restore Kube's padding to give the search icon space */
+.select2-search--dropdown .select2-search__field {
+  padding-left: 1.6rem;
+}
+
+/* make the select2 select boxes the same height as the standard kube ones */
+.select2-container .select2-selection--single {
+  height: 1.8rem;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  line-height: 1.8rem;
+  vertical-align: middle;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 1.8rem;
+}
+
+/*
 Shipment
 ------------------------------------------------------------
 */
@@ -1108,12 +1012,10 @@ Site
   background-color: white;
 }
 
-.site-nav {
-  margin-right: 1rem;
-}
+.site-header__logo {
+  display: inline-block;
 
-.site-nav li {
-  margin-left: 1rem;
+  height: 50px; /* navbar height */
 }
 
 .site-nav a {
@@ -1132,24 +1034,29 @@ Site
   margin-top: 50px; /* navbar height */
 }
 
-/* TODO: Make the footer menu a .site-nav as well since the styles overlap?
- *       Or pull the overlapping parts out into an Object class?
- */
 .site-footer {
+  padding: 1.6rem;
+
   color: rgba(49, 52, 57, 0.8); /* #313439 */
 
   font-size: 0.9rem;
+  text-align: center;
 }
 
+/* TODO: Use flexbox to position .site-footer__link */
 .site-footer__link {
-  display: block;
-  width: 220px;
-  margin: 0 auto 1.6rem auto;
+  display: inline-block;
+  margin-bottom: 0.8rem;
+  margin-right: 1.6rem;
   border-bottom: 0;
 
   color: inherit;
 
   text-transform: uppercase;
+}
+
+.site-footer__link:last-child {
+  margin-right: 0;
 }
 
 .site-footer__link:hover {
@@ -1161,40 +1068,6 @@ Site
 
 .site-footer__link--lowercase {
   text-transform: lowercase;
-}
-
-/* TODO: follow naming conventions */
-.underfoot {
-  font-size: 0.7rem;
-  padding-top: 0.6rem;
-}
-
-@media (min-width: 600px) {
-  .site-footer {
-    border-top: none;
-    padding-top: 0;
-  }
-
-  .site-footer__link:last-child {
-    margin-bottom: 0;
-  }
-}
-
-@media (min-width: 900px) {
-  .site-footer {
-    text-align: center;
-  }
-
-  .site-footer__link {
-    width: auto;
-    display: inline-block;
-    margin-bottom: 0;
-    margin-right: 1.6rem;
-  }
-
-  .site-footer__link:last-child {
-    margin-right: 0;
-  }
 }
 
 /*
@@ -1212,32 +1085,59 @@ Subsection
   text-align: center;
 }
 
+/*
+Toast
+------------------------------------------------------------
+TOOD:
+  [ ] double check that the spacing changes are still needed
+  [ ] color
+*/
+.toast {
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0;
+
+  font-size: 0.8rem;
+}
+
 
 /*
 Utilities
 ==========================================================================
-TODO:
-  [ ] deal with Trumps
 */
 
 /*
 Backgrounds
 ------------------------------------------------------------
-TODO:
-  [ ] background images (see views/layout_helpers.ex)
 */
-.bg--cover {
-  background: no-repeat top center fixed;
-  background-size: cover;
+.bg-cover {
+  background: no-repeat top center fixed !important;
+  background-size: cover !important;
   background-color: #C5CFE4; /* fallback if no image is used */
 }
 
-.bg--img-default {
-  background-image: url('/images/welcome-bg.jpg');
+.bg-img--1 {
+  background-image: url('/images/welcome-bg.jpg') !important;
 }
 
-.bg--color-1 {
-  background-color: #4362A6;
+.bg-color--1 {
+  background-color: #4362A6 !important;
+}
+
+/*
+Colors
+------------------------------------------------------------
+Nothing here... for now. :)
+*/
+
+/*
+Text
+------------------------------------------------------------
+*/
+.small {
+  font-size: 80% !important;
+  font-weight: 400;
 }
 
 /*
@@ -1273,82 +1173,4 @@ Transforms
 
 .rotate--270 {
   transform: rotate(270deg) !important;
-}
-
-/*
-Trump: Site Header // Brand & Logo
-------------------------------------------------------
-*/
-.site-header .brand {
-  display: none;
-
-  margin-left: 0.4rem;
-  margin-bottom: 0;
-
-  font-size: 1.2rem;
-  line-height: 1;
-}
-
-.site-header .brand + * {
-  margin-left: auto;
-}
-
-.site-header__logo {
-  display: inline-block;
-
-  /* specific number used as to cover the whole header*/
-  height: 50px;
-}
-
-@media (min-width: 600px) {
-  .site-header .brand {
-    display: inline;
-  }
-}
-
-/*
-Trump: Site Content // Section
-------------------------------------------------------------
-*/
-.site-content .section__content {
-  min-height: calc(100vh - 158px); /* leave room for the site nav / footer */
-}
-
-/*
-Trump: Site Footer // Section
-------------------------------------------------------------
-*/
-.site-footer.section {
-  width: 100%;
-  margin: 0;
-}
-
-.site-footer .section__content {
-}
-
-/*
-Trump: Section // Actions
-------------------------------------------------------------
-*/
-.section__content > .actions {
-  top: 0.8rem;
-  right: 0.8rem;
-}
-
-.section__content > .actions--left {
-  left: 0.8rem;
-}
-
-.section__content > .actions--inline {
-  top: 0;
-  right: 0;
-}
-
-/*
-Trump: Subsection // Actions
-------------------------------------------------------------
-*/
-.subsection > .actions {
-  top: 0;
-  right: 0;
 }

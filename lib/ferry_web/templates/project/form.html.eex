@@ -7,8 +7,8 @@
     </div>
   <% end %>
 
-  <div class="form-group <%= validation_status_class(f, :name) %>">
-    <%= label f, :name, class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :name) %>">
+    <%= label f, :name %>
     <%= text_input f, :name, class: "form-input", placeholder: "The Free Shop" %>
     <%= error_tag f, :name %>
   </div>

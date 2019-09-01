@@ -7,8 +7,8 @@
     </div>
   <% end %>
 
-  <div class="form-group <%= validation_status_class(f, :label) %>">
-    <%= label f, :label, class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :label) %>">
+    <%= label f, :label %>
     <%= text_input f, :label, class: "form-input", placeholder: "Pickup" %>
     <%= error_tag f, :label %>
   </div>
@@ -45,7 +45,7 @@
             <%= text_input f, :checklist, value: "", name: "route[checklist]_#{length(@route.checklist)}", oninput: "checkTicket(this)" %>
         </div>
     <% else %>
-        <div class="form-item is-text-center">
+        <div class="form-item text-center">
         <input type="checkbox" name="check_for_custom_list" id="checkForCustomList" onclick="showCustomList()">
             Do you want to create a custom list of steps for this stop?
         <br>

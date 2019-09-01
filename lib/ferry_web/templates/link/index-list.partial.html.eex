@@ -17,7 +17,7 @@
   <% end %>
 
   <%= if has_links? @links do %>
-    <ul class="links-list is-unstyled">
+    <ul class="list--unstyled">
       <%= for link <- @links do %>
         <li>
           <%= link label_text(link), to: link.url, target: "blank" %>

@@ -10,10 +10,11 @@
     <style>title{text-align: center}</style>
   </head>
   <body>
-    <div class="container">
+    <div>
       <main role="main">
-        <h2><%= @error %> Error - <%= @reason %></h2>
-        <style>h2 {text-align: center;}</style>
+        <h2 class="text-center">
+          <%= @error %> Error - <%= @reason %>
+        </h2>
       </main>
     </div> <!-- /container -->
    <script src="/js/app.js"></script>

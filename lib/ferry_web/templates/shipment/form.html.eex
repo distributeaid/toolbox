@@ -7,14 +7,14 @@
     </div>
   <% end %>
 
-  <div class="form-group <%= validation_status_class(f, :label) %>">
-    <%= label f, :label, class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :label) %>">
+    <%= label f, :label %>
     <%= text_input f, :label, class: "form-input", placeholder: "Nappies For Greece!" %>
     <%= error_tag f, :label %>
   </div>
 
-  <div class="form-group <%= validation_status_class(f, :status) %>">
-    <%= label f, :status, class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :status) %>">
+    <%= label f, :status %>
     <%= select f, :status, [
       "Planning": "planning",
       "Ready To Load": "ready",
@@ -24,29 +24,29 @@
     <%= error_tag f, :status %>
   </div>
 
-  <div class="form-group <%= validation_status_class(f, :target_date_to_be_shipped) %>">
-    <%= label f, :target_date_to_be_shipped, "Target Date", class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :target_date_to_be_shipped) %>">
+    <%= label f, :target_date_to_be_shipped, "Target Date" %>
     <%= text_input f, :target_date_to_be_shipped, class: "form-input", placeholder: one_month_from_today() %>
     <%= error_tag f, :target_date_to_be_shipped %>
-    <p class="is-desc">
+    <p class="form-input-desc">
       A specific date, a month, "summer", etc.
     </p>
   </div>
 
-  <div class="form-group <%= validation_status_class(f, :sender_address) %>">
-    <%= label f, :sender_address, "From", class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :sender_address) %>">
+    <%= label f, :sender_address, "From" %>
     <%= text_input f, :sender_address, class: "form-input", placeholder: "Glasgow" %>
     <%= error_tag f, :sender_address %>
-    <p class="is-desc">
+    <p class="form-input-desc">
       Keep this short and sweet.  You can add a detailed route once the shipment is created.
     </p>
   </div>
 
-  <div class="form-group <%= validation_status_class(f, :receiver_address) %>">
-    <%= label f, :receiver_address, "To", class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :receiver_address) %>">
+    <%= label f, :receiver_address, "To" %>
     <%= text_input f, :receiver_address, class: "form-input", placeholder: "Greece" %>
     <%= error_tag f, :receiver_address %>
-    <p class="is-desc">
+    <p class="form-input-desc">
       Keep this short and sweet.  You can add a detailed route once the shipment is created.
     </p>
   </div>
@@ -81,8 +81,8 @@
           <%= hidden_input fr, :group_id %>
         </div>
 
-        <div class="form-group <%= validation_status_class(f, :label) %>">
-          <%= label f, :label, class: "is-req" %>
+        <div class="form-group form-group--required <%= validation_status_class(f, :label) %>">
+          <%= label f, :label %>
           <%= text_input f, :label, class: "form-input", placeholder: "EX: Organizer, Funder, etc" %>
           <%= error_tag f, :label %>
         </div>
@@ -94,7 +94,7 @@
             Supplier
           <% end %>
           <%= error_tag f, :supplier? %>
-          <p class="is-desc">Suppliers will be able to add inventory to the shipment.</p>
+          <p class="form-input-desc">Suppliers will be able to add inventory to the shipment.</p>
         </div>
 
         <div class="form-group <%= validation_status_class(f, :receiver?) %>">
@@ -104,10 +104,10 @@
             Receiver
           <% end %>
           <%= error_tag f, :receiver? %>
-          <p class="is-desc">Receiver's needs lists will be shown on the shipment.</p>
+          <p class="form-input-desc">Receiver's needs lists will be shown on the shipment.</p>
         </div>
 
-        <div class="is-desc">
+        <div class="form-input-desc">
           <p>
             A group can be a supplier, a receiver, both, or neither.  For example:
           </p>

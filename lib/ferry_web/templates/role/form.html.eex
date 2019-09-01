@@ -8,9 +8,9 @@
   <% end %>
 
   <%= if assigns[:create?] do %>
-    <div class="form-group <%= validation_status_class(f, :group_id) %>">
-      <%= label f, :group_id, "Group", class: "is-req" %>
-      <%= select f, :group_id, select_group_options(@groups, @shipment.roles), class: "form-input" %>
+    <div class="form-group form-group--required <%= validation_status_class(f, :group_id) %>">
+      <%= label f, :group_id, "Group" %>
+      <%= select f, :group_id, select_group_options(@groups, @shipment.roles), class: "form-select" %>
       <%= error_tag f, :group_id %>
     </div>
   <% else %>
@@ -24,8 +24,8 @@
     </div>
   <% end %>
 
-  <div class="form-group <%= validation_status_class(f, :label) %>">
-    <%= label f, :label, class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :label) %>">
+    <%= label f, :label %>
     <%= text_input f, :label, class: "form-input", placeholder: "EX: Organizer, Funder, etc" %>
     <%= error_tag f, :label %>
   </div>
@@ -37,7 +37,7 @@
       Supplier
     <% end %>
     <%= error_tag f, :supplier? %>
-    <p class="is-desc">Suppliers will be able to add inventory to the shipment.</p>
+    <p class="form-input-desc">Suppliers will be able to add inventory to the shipment.</p>
   </div>
 
   <div class="form-group <%= validation_status_class(f, :receiver?) %>">
@@ -47,10 +47,10 @@
       Receiver
     <% end %>
     <%= error_tag f, :receiver? %>
-    <p class="is-desc">Receiver's needs lists will be shown on the shipment.</p>
+    <p class="form-input-desc">Receiver's needs lists will be shown on the shipment.</p>
   </div>
 
-  <div class="is-desc">
+  <div class="form-input-desc">
     <p>
       A group can be a supplier, a receiver, both, or neither.  For example:
     </p>

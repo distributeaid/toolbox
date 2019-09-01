@@ -7,61 +7,61 @@
     </div>
   <% end %>
 
-  <div class="form-group <%= validation_status_class(f, :project_id) %>">
-    <%= label f, :project_id, class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :project_id) %>">
+    <%= label f, :project_id %>
     <%= select f, :project_id, list_projects(@projects), class: "form-select" %>
     <%= error_tag f, :project_id %>
   </div>
 
   <%= inputs_for f, :item, fn fi -> %>
     <%= inputs_for fi, :category, fn fc -> %>
-      <div class="form-group <%= validation_status_class(fc, :name) %>">
-        <%= label fc, :name, "Category", class: "is-req" %>
+      <div class="form-group form-group--required <%= validation_status_class(fc, :name) %>">
+        <%= label fc, :name, "Category" %>
         <%= select fc, :name, selectify(@categories), class: "select-and-input-cat form-select" %>
         <%= error_tag fc, :name %>
-        <p class="is-desc">
+        <p class="form-input-desc">
           Common categories are listed for you to select.  You can enter a custom category by typing it into the search box and pressing enter.
         </p>
       </div>
     <% end %>
 
-    <div class="form-group <%= validation_status_class(fi, :name) %>">
-      <%= label fi, :name, "Item", class: "is-req" %>
+    <div class="form-group form-group--required <%= validation_status_class(fi, :name) %>">
+      <%= label fi, :name, "Item" %>
       <%= select fi, :name, selectify(@items), class: "select-and-input-item form-select" %>
       <%= error_tag fi, :name %>
-      <p class="is-desc">
+      <p class="form-input-desc">
         Common items are listed for you to select.  You can enter a custom item by typing it into the search box and pressing enter.
       </p>
     </div>
 
-    <p class="is-desc">
+    <p class="form-input-desc">
       NOTE: Common categories and items are listed for you to select.  You can
       input a custom category / item name by typing it into the search box and
       pressing enter or clicking it.
     </p>
   <% end %>
 
-  <div class="form-group <%= validation_status_class(f, :have) %>">
-    <%= label f, :have, class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :have) %>">
+    <%= label f, :have %>
     <%= number_input f, :have, class: "form-input", placeholder: "0" %>
     <%= error_tag f, :have %>
-    <p class="is-desc">
+    <p class="form-input-desc">
       The number of units you have in your warehouse.
     </p>
   </div>
 
-  <div class="form-group <%= validation_status_class(f, :need) %>">
-    <%= label f, :need, class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :need) %>">
+    <%= label f, :need %>
     <%= number_input f, :need, class: "form-input", placeholder: "0" %>
     <%= error_tag f, :need %>
-    <p class="is-desc">
+    <p class="form-input-desc">
       The number of units you need.  It's best to plan at least 6 months out, or for the "winter" and "summer" seasons, since larger shipments may take a while!
     </p>
   </div>
 
   <!-- TODO: should be a select box -->
-  <div class="form-group <%= validation_status_class(f, :unit) %>">
-    <%= label f, :unit, class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :unit) %>">
+    <%= label f, :unit %>
     <%= text_input f, :unit, class: "form-input", placeholder: "EX: items, bags, boxes, etc" %>
     <%= error_tag f, :unit %>
   </div>

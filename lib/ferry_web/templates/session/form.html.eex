@@ -10,14 +10,14 @@
     </div>
   <% end %>
 
-  <div class="form-group <%= validation_status_class(f, :email) %>">
-    <%= label f, :email, class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :email) %>">
+    <%= label f, :email %>
     <%= text_input f, :email, class: "form-input", placeholder: "you@example.org" %>
     <%= error_tag f, :email %>
   </div>
 
-  <div class="form-group <%= validation_status_class(f, :password) %>">
-    <%= label f, :password, class: "is-req" %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :password) %>">
+    <%= label f, :password %>
     <%= password_input f, :password, class: "form-input", placeholder: "A secret!" %>
     <%= error_tag f, :password %>
   </div>

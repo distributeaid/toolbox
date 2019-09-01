@@ -17,7 +17,7 @@
     <%= else %>
       <p>In order to add an item, you need to add a project first!</p>
       <p>Inventory is attached to specific projects since groups may have multiple projects in different locations, each with their own inventory and needs.</p>
-      <p class="is-text-center">
+      <p class="text-center">
         <%= link "Create your first project!", to: Routes.group_project_path(@conn, :new, @group), class: "btn btn-lg btn-primary" %>
       </p>
     <% end %>

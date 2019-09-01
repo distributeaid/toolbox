@@ -17,7 +17,7 @@
   <% end %>
 
   <%= if has_shipments? @shipments do %>
-    <ul class="shipments-list is-unstyled">
+    <ul class="shipments-list list--unstyled">
       <%= for shipment <- @shipments do %>
         <li>
           <%= link items_text(shipment), to: Routes.group_shipment_path(@conn, :show, @group, shipment) %>
@@ -26,7 +26,7 @@
     </ul>
 
   <% else %>
-  <%= render "shipment-guidance.partial.html" %>
+    <%= render "shipment-guidance.partial.html" %>
   <% end %>
 
 </div>

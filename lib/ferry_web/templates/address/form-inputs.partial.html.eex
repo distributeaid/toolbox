@@ -1,5 +1,5 @@
-<div class="form-group <%= validation_status_class(@form, :label) %>">
-  <%= label @form, :label, class: "is-req" %>
+<div class="form-group form-group--required <%= validation_status_class(@form, :label) %>">
+  <%= label @form, :label %>
   <%= text_input @form, :label, class: "form-input", placeholder: "Our HQ" %>
   <%= error_tag @form, :label %>
 </div>
@@ -10,8 +10,8 @@
   <%= error_tag @form, :street %>
 </div>
 
-<div class="form-group <%= validation_status_class(@form, :city) %>">
-  <%= label @form, :city, class: "is-req" %>
+<div class="form-group form-group--required <%= validation_status_class(@form, :city) %>">
+  <%= label @form, :city %>
   <%= text_input @form, :city, class: "form-input", placeholder: "London" %>
   <%= error_tag @form, :city %>
 </div>
@@ -22,8 +22,8 @@
   <%= error_tag @form, :state %>
 </div>
 
-<div class="form-group <%= validation_status_class(@form, :country) %>">
-  <%= label @form, :country, class: "is-req" %>
+<div class="form-group form-group--required <%= validation_status_class(@form, :country) %>">
+  <%= label @form, :country %>
   <%= text_input @form, :country, class: "form-input", placeholder: "UK" %>
   <%= error_tag @form, :country %>
 </div>
