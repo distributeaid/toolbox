@@ -1,2 +1,4 @@
-<p><strong><span class="star">*</span></strong> means
-  that the item is a required input.</p>
+<p class="text-center">
+  <span class="star">*</span> means
+  that the item is a required input.
+</p>

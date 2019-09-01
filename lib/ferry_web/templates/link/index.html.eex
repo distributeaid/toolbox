@@ -27,7 +27,7 @@
       <%= render "link-guidance.partial.html" %>
 
     <% else %>
-      <table class="is-striped">
+      <table class="table table-striped">
         <thead>
           <tr>
             <th>Label</th>

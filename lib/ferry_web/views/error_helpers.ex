@@ -6,11 +6,25 @@ defmodule FerryWeb.ErrorHelpers do
   use Phoenix.HTML
 
   @doc """
+  Adds a validation status class to an input group.
+
+  It seems confusing to also highlight the success fields, especially if they
+  are empty.  Let's leave the "has-success" class off for now.
+  """
+  def validation_status_class(form, field) do
+    cond do
+      is_nil(form.source.action) -> "" # Freshly loaded form.
+      Keyword.get_values(form.errors, field) |> length() > 0 -> "has-error"
+      true -> "" # "has-success"
+    end
+  end
+
+  @doc """
   Generates tag for inlined form input errors.
   """
   def error_tag(form, field) do
     Enum.map(Keyword.get_values(form.errors, field), fn (error) ->
-      content_tag :span, translate_error(error), class: "help-block"
+      content_tag :p, translate_error(error), class: "form-input-hint"
     end)
   end
 

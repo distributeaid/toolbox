@@ -1,58 +1,57 @@
-<%= form_for @changeset, @action, fn f -> %>
+<%= form_for @changeset, @action, [class: "form-horizontal"], fn f -> %>
+  <%= component "required.partial.html" %>
+  
   <%= if @changeset.action do %>
-    <div class="alert is-error">
+    <div class="toast toast-error">
       <p>Oops, something went wrong! Please check the errors below.</p>
     </div>
   <% end %>
 
-  <div class="form-item is-inline">
-  <%= component "required.partial.html" %>
- </div>
-
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :label) %>">
     <%= label f, :label, class: "is-req" %>
-    <%= text_input f, :label, placeholder: "My Next Shipment" %>
+    <%= text_input f, :label, class: "form-input", placeholder: "Nappies For Greece!" %>
     <%= error_tag f, :label %>
   </div>
 
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :status) %>">
     <%= label f, :status, class: "is-req" %>
-    <%= select f, :status,[
+    <%= select f, :status, [
       "Planning": "planning",
       "Ready To Load": "ready",
       "Underway": "underway",
       "Received": "received"
-    ] %>
+    ], class: "form-select" %>
     <%= error_tag f, :status %>
   </div>
 
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :target_date_to_be_shipped) %>">
     <%= label f, :target_date_to_be_shipped, "Target Date", class: "is-req" %>
-    <%= text_input f, :target_date_to_be_shipped, placeholder: one_month_from_today() %>
-    <div class="is-desc">
-      A specific date, a month, "summer", etc.
-    </div>
+    <%= text_input f, :target_date_to_be_shipped, class: "form-input", placeholder: one_month_from_today() %>
     <%= error_tag f, :target_date_to_be_shipped %>
+    <p class="is-desc">
+      A specific date, a month, "summer", etc.
+    </p>
   </div>
 
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :sender_address) %>">
     <%= label f, :sender_address, "From", class: "is-req" %>
-    <%= text_input f, :sender_address, placeholder: "Glasgow" %>
-    <div class="is-desc">
-      Keep this short and sweet.  You can add a detailed route once the shipment is created.
-    </div>
+    <%= text_input f, :sender_address, class: "form-input", placeholder: "Glasgow" %>
     <%= error_tag f, :sender_address %>
-  </div>
-
-  <div class="form-item is-inline">
-    <%= label f, :receiver_address, "To", class: "is-req" %>
-    <%= text_input f, :receiver_address, placeholder: "Greece" %>
-    <div class="is-desc">
+    <p class="is-desc">
       Keep this short and sweet.  You can add a detailed route once the shipment is created.
-    </div>
-    <%= error_tag f, :receiver_address %>
+    </p>
   </div>
 
+  <div class="form-group <%= validation_status_class(f, :receiver_address) %>">
+    <%= label f, :receiver_address, "To", class: "is-req" %>
+    <%= text_input f, :receiver_address, class: "form-input", placeholder: "Greece" %>
+    <%= error_tag f, :receiver_address %>
+    <p class="is-desc">
+      Keep this short and sweet.  You can add a detailed route once the shipment is created.
+    </p>
+  </div>
+
+  <!-- TODO: none of this has been styled after switching from Kube => Spectre since it was commented out -->
   <!--
   <div class="form-item is-inline">
     <%= label f, :shipping_items %>
@@ -72,7 +71,7 @@
       <fieldset>
         <legend>Your Role</legend>
 
-        <div class="form-item is-text-center">
+        <div class="form-group flex-centered--col">
           <%= component "group_logo.partial.html", %{
             group: @group,
             size: :small,
@@ -82,57 +81,60 @@
           <%= hidden_input fr, :group_id %>
         </div>
 
-        <div class="form-item is-inline">
-          <%= label fr, :label, class: "is-req" %>
-          <%= text_input fr, :label, placeholder: "Collector" %>
-          <div class="is-desc">
-            Collector, Transporter, Distributer, Funder, Organizer, etc.
-          </div>
-          <%= error_tag fr, :label %>
+        <div class="form-group <%= validation_status_class(f, :label) %>">
+          <%= label f, :label, class: "is-req" %>
+          <%= text_input f, :label, class: "form-input", placeholder: "EX: Organizer, Funder, etc" %>
+          <%= error_tag f, :label %>
         </div>
 
-        <div class="form-item is-inline">
-          <%= label fr, :supplier?, class: "is-checkbox" do %>
-            <%= checkbox fr, :supplier? %>
+        <div class="form-group <%= validation_status_class(f, :supplier?) %>">
+          <%= label f, :supplier?, class: "form-checkbox" do %>
+            <%= checkbox f, :supplier? %>
+            <i class="form-icon fas fa-check"></i>
             Supplier
-            <span class="is-desc">Suppliers will be able to add inventory to the shipment.</span>
           <% end %>
-          <%= error_tag fr, :supplier? %>
+          <%= error_tag f, :supplier? %>
+          <p class="is-desc">Suppliers will be able to add inventory to the shipment.</p>
         </div>
 
-        <div class="form-item is-inline">
-          <%= label fr, :receiver?, class: "is-checkbox" do %>
-            <%= checkbox fr, :receiver? %>
+        <div class="form-group <%= validation_status_class(f, :receiver?) %>">
+          <%= label f, :receiver?, class: "form-checkbox" do %>
+            <%= checkbox f, :receiver? %>
+            <i class="form-icon fas fa-check"></i>
             Receiver
-            <span class="is-desc">Receiver's needs lists will be shown on the shipment.</span>
           <% end %>
-          <%= error_tag fr, :receiver? %>
+          <%= error_tag f, :receiver? %>
+          <p class="is-desc">Receiver's needs lists will be shown on the shipment.</p>
         </div>
 
-        <div class="form-item is-inline-offset">
-          <p class="is-desc">
-            A group can be a supplier, a receiver, both, or neither.  For example, many groups working in the field will have a home office that also organizes donation drives and want to ship items to themselves, so they'd be both.  Other groups may be involved in specific roles organizing the shipment or transporting the aid, so they'd be neither.
+        <div class="is-desc">
+          <p>
+            A group can be a supplier, a receiver, both, or neither.  For example:
           </p>
+          <ul>
+            <li>
+              One group collects donations at home to send to another group working in the field.  The first group would be a Supplier, and the second a Receiver.
+            </li>
+            <li>
+              A group's home office organizes donation drives.  In this case the group would be both a Supplier and a Receiver.
+            </li>
+            <li>
+              Groups can also be involved in the shipment without supplying or receiving aid, such as if they are only organizing the shipment or funding it.  The Label field is useful to clarify their Role.
+            </li>
+          </ul>
         </div>
 
-        <div class="form-item is-inline">
-          <%= label fr, :description %>
-          <%= textarea fr, :description %>
-          <%= error_tag fr, :description %>
+        <div class="form-group <%= validation_status_class(f, :description) %>">
+          <%= label f, :description %>
+          <%= textarea f, :description, class: "form-input", placeholder: "Include other details about your role in the shipment..." %>
+          <%= error_tag f, :description %>
         </div>
 
       </fieldset>
     <% end %>
   <% end %>
 
-  <!--
-  <div class="form-item is-inline">
-    <%= checkbox f, :new_route, checked: true %> Add a Stop Along the Route for this Shipment?
-  </div>
-  -->
-
-
-  <div class="form-item is-inline-offset is-text-center">
-    <%= submit "Submit", class: "button is-big" %>
+  <div class="form-group col-9 col-ml-auto">
+    <%= submit "Submit", class: "btn btn-lg btn-primary" %>
   </div>
 <% end %>

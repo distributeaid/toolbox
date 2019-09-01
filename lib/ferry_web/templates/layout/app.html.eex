@@ -11,8 +11,8 @@
     Styles
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa:400|Quicksand:400,700">
-    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>">
+    <link href="https://fonts.googleapis.com/css?family=Lato|Quicksand:400,700&display=swap" rel="stylesheet">
+    <link href="<%= Routes.static_path(@conn, "/css/app.css") %>" rel="stylesheet">
     <%= render_existing @view_module, "view-specific-styles.html" %>
 
     <!--
@@ -50,12 +50,14 @@
 
   <body class="site">
     <header class="navbar site-header">
-      <img class="site-header__logo" src="<%= Routes.static_path(@conn, "/images/DAlogoDarkSmall.jpg") %>" alt="Logo: Outline of a Dove" />
-
-      <%= link "distribute|AID", to: Routes.home_page_path(@conn, :index), class: "brand" %>
+      <div class="flex-centered">
+        <!-- TODO: replace this w/ the wordmark file -->
+        <img class="site-header__logo" src="<%= Routes.static_path(@conn, "/images/DAlogoDarkSmall.jpg") %>" alt="Logo: Outline of a Dove" />
+        <%= link "Distribute Aid", to: Routes.home_page_path(@conn, :index), class: "brand" %>
+      </div>
 
       <nav>
-        <ul class="site-nav">
+        <ul class="site-nav list--unstyled list--horizontal">
           <li>
             <!-- TODO: change to "Dashboard" -->
             <%= link "Home", to: Routes.home_page_path(@conn, :index), class: "site-nav__link" %>
@@ -86,21 +88,21 @@
     <!--
     <div class="flash">
       <%= if message = get_flash(@conn, :success) do %>
-        <p class="alert is-success--inverted" role="alert"><%= message %></p>
+        <p class="toast toast-success" role="alert"><%= message %></p>
       <% end %>
 
       <%= if message = get_flash(@conn, :info) do %>
-        <p class="alert is-focus--inverted" role="alert"><%= message %></p>
+        <p class="toast" role="alert"><%= message %></p>
       <% end %>
 
       <%= if message = get_flash(@conn, :error) do %>
-        <p class="alert is-error--inverted" role="alert"><%= message %></p>
+        <p class="toast toast-error" role="alert"><%= message %></p>
       <% end %>
     </div>
     -->
 
-    <main role="main" class="site-content">
-      <%= content_tag :article, class: "page-content " <> page_background_img_class(@conn) do %>
+    <main role="main">
+      <%= content_tag :article, class: "site-content bg--cover bg--img-default " <> page_background_img_class(@conn) do %>
         <%= render @view_module, @view_template, assigns %>
       <% end %>
     </main>

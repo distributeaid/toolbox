@@ -1,22 +1,20 @@
-<%= form_for @changeset, @action, fn f -> %>
+<%= form_for @changeset, @action, [class: "form-horizontal"], fn f -> %>
+  <%= component "required.partial.html" %>
+
   <%= if @changeset.action do %>
-    <div class="alert is-error">
+    <div class="toast toast-error">
       <p>Oops, something went wrong! Please check the errors below.</p>
     </div>
   <% end %>
 
-  <div class="form-item is-inline">
-  <%= component "required.partial.html" %>
- </div>
-
   <%= if assigns[:create?] do %>
-    <div class="form-item is-inline">
+    <div class="form-group <%= validation_status_class(f, :group_id) %>">
       <%= label f, :group_id, "Group", class: "is-req" %>
-      <%= select f, :group_id, select_group_options(@groups, @shipment.roles) %>
+      <%= select f, :group_id, select_group_options(@groups, @shipment.roles), class: "form-input" %>
       <%= error_tag f, :group_id %>
     </div>
   <% else %>
-    <div class="form-item is-text-center">
+    <div class="form-group flex-centered--col">
       <%= component "group_logo.partial.html", %{
         group: @role.group,
         size: :small,
@@ -26,43 +24,56 @@
     </div>
   <% end %>
 
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :label) %>">
     <%= label f, :label, class: "is-req" %>
-    <%= text_input f, :label %>
+    <%= text_input f, :label, class: "form-input", placeholder: "EX: Organizer, Funder, etc" %>
     <%= error_tag f, :label %>
   </div>
 
-  <div class="form-item is-inline">
-    <%= label f, :supplier?, class: "is-checkbox" do %>
+  <div class="form-group <%= validation_status_class(f, :supplier?) %>">
+    <%= label f, :supplier?, class: "form-checkbox" do %>
       <%= checkbox f, :supplier? %>
+      <i class="form-icon fas fa-check"></i>
       Supplier
-      <span class="is-desc">Suppliers will be able to add inventory to the shipment.</span>
     <% end %>
     <%= error_tag f, :supplier? %>
+    <p class="is-desc">Suppliers will be able to add inventory to the shipment.</p>
   </div>
 
-  <div class="form-item is-inline">
-    <%= label f, :receiver?, class: "is-checkbox" do %>
+  <div class="form-group <%= validation_status_class(f, :receiver?) %>">
+    <%= label f, :receiver?, class: "form-checkbox" do %>
       <%= checkbox f, :receiver? %>
+      <i class="form-icon fas fa-check"></i>
       Receiver
-      <span class="is-desc">Receiver's needs lists will be shown on the shipment.</span>
     <% end %>
     <%= error_tag f, :receiver? %>
+    <p class="is-desc">Receiver's needs lists will be shown on the shipment.</p>
   </div>
 
-  <div class="form-item is-inline-offset">
-    <p class="is-desc">
-      A group can be a supplier, a receiver, both, or neither.  For example, many groups working in the field will have a home office that also organizes donation drives and want to ship items to themselves, so they'd be both.  Other groups may be involved in specific roles organizing the shipment or transporting the aid, so they'd be neither.
+  <div class="is-desc">
+    <p>
+      A group can be a supplier, a receiver, both, or neither.  For example:
     </p>
+    <ul>
+      <li>
+        One group collects donations at home to send to another group working in the field.  The first group would be a Supplier, and the second a Receiver.
+      </li>
+      <li>
+        A group's home office organizes donation drives.  In this case the group would be both a Supplier and a Receiver.
+      </li>
+      <li>
+        Groups can also be involved in the shipment without supplying or receiving aid, such as if they are only organizing the shipment or funding it.  The Label field is useful to clarify their Role.
+      </li>
+    </ul>
   </div>
 
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :description) %>">
     <%= label f, :description %>
-    <%= textarea f, :description %>
+    <%= textarea f, :description, class: "form-input", placeholder: "Include other details about your role in the shipment..." %>
     <%= error_tag f, :description %>
   </div>
 
-  <div class="form-item is-text-center">
-    <%= submit "Submit", class: "button is-big" %>
+  <div class="form-group col-9 col-ml-auto">
+    <%= submit "Submit", class: "btn btn-lg btn-primary" %>
   </div>
 <% end %>

@@ -3,8 +3,8 @@
 // its own CSS file.
 import "../vendor/spectre-0.5.8/spectre.min.css";
 import "../vendor/spectre-0.5.8/spectre-exp.min.css";
-import "../css/app.css";
 import "select2/dist/css/select2.css";
+import "../css/app.css";
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured

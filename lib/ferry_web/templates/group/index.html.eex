@@ -15,7 +15,7 @@
     TODO
     -->
      <!-- Table start -->
-     <table id="group-index" class="is-striped">
+     <table id="group-index" class="table table-striped">
 
        <thead>
          <tr>

@@ -1,6 +1,6 @@
 <%= render FerryWeb.StockView, "search-guidance.partial.html" %>
 
-<table id="inventory-list" class="is-striped">
+<table id="inventory-list" class="table table-striped">
   <thead>
     <tr>
       <th>Group</th>

@@ -4,7 +4,7 @@
       <h1 class="section__title">Shipments</h1>
     </header>
     
-    <table id="shipment-overview" class="is-striped">
+    <table id="shipment-overview" class="table table-striped">
       <thead>
         <tr>
           <th>Shipment</th>

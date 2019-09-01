@@ -6,6 +6,5 @@
 
     <%= render "form.html", Map.put(assigns, :action, Routes.session_path(@conn, :create)) %>
 
-
   </div>
 </section>

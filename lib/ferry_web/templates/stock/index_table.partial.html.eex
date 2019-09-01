@@ -1,4 +1,4 @@
-<table id="group-stock-table" class="is-striped">
+<table id="group-stock-table" class="table table-striped">
   <thead>
     <tr>
       <th>Project</th>

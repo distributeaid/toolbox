@@ -1,35 +1,35 @@
-<div class="form-item is-inline">
+<div class="form-group <%= validation_status_class(@form, :label) %>">
   <%= label @form, :label, class: "is-req" %>
-  <%= text_input @form, :label %>
+  <%= text_input @form, :label, class: "form-input", placeholder: "Our HQ" %>
   <%= error_tag @form, :label %>
 </div>
 
-<div class="form-item is-inline">
+<div class="form-group <%= validation_status_class(@form, :street) %>">
   <%= label @form, :street %>
-  <%= text_input @form, :street %>
+  <%= text_input @form, :street, class: "form-input", placeholder: "120 Cromer Street" %>
   <%= error_tag @form, :street %>
 </div>
 
-<div class="form-item is-inline">
+<div class="form-group <%= validation_status_class(@form, :city) %>">
   <%= label @form, :city, class: "is-req" %>
-  <%= text_input @form, :city %>
+  <%= text_input @form, :city, class: "form-input", placeholder: "London" %>
   <%= error_tag @form, :city %>
 </div>
 
-<div class="form-item is-inline">
+<div class="form-group <%= validation_status_class(@form, :state) %>">
   <%= label @form, :state %>
-  <%= text_input @form, :state %>
+  <%= text_input @form, :state, class: "form-input", placeholder: "England" %>
   <%= error_tag @form, :state %>
 </div>
 
-<div class="form-item is-inline">
+<div class="form-group <%= validation_status_class(@form, :country) %>">
   <%= label @form, :country, class: "is-req" %>
-  <%= text_input @form, :country %>
+  <%= text_input @form, :country, class: "form-input", placeholder: "UK" %>
   <%= error_tag @form, :country %>
 </div>
 
-<div class="form-item is-inline">
+<div class="form-group <%= validation_status_class(@form, :zip_code) %>">
   <%= label @form, :zip_code %>
-  <%= text_input @form, :zip_code %>
+  <%= text_input @form, :zip_code, class: "form-input", placeholder: "WC1H 8BS" %>
   <%= error_tag @form, :zip_code %>
 </div>

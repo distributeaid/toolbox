@@ -1,28 +1,25 @@
-<%= form_for @changeset, @action, fn f -> %>
+<%= form_for @changeset, @action, [class: "form-horizontal"], fn f -> %>
+  <%= component "required.partial.html" %>
+  
   <%= if @changeset.action do %>
-    <div class="alert is-error">
+    <div class="toast toast-error">
       <p>Oops, something went wrong! Please check the errors below.</p>
     </div>
   <% end %>
-
-
-  <div class="form-item is-inline">
-  <%= component "required.partial.html" %>
- </div>
  
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :email) %>">
     <%= label f, :email, class: "is-req" %>
-    <%= text_input f, :email %>
+    <%= text_input f, :email, class: "form-input", placeholder: "you@example.org" %>
     <%= error_tag f, :email %>
   </div>
 
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :password) %>">
     <%= label f, :password, class: "is-req" %>
-    <%= password_input f, :password %>
+    <%= password_input f, :password, class: "form-input", placeholder: "A secret!" %>
     <%= error_tag f, :password %>
   </div>
 
-  <div class="form-item is-text-center">
-    <%= submit "Submit", class: "button is-big" %>
+  <div class="form-group col-9 col-ml-auto">
+    <%= submit "Submit", class: "btn btn-lg btn-primary" %>
   </div>
 <% end %>

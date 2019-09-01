@@ -1,114 +1,110 @@
-<%= form_for @changeset, @action, [multipart: true], fn f -> %>
+<%= form_for @changeset, @action, [multipart: true, class: "form-horizontal"], fn f -> %>
+  <%= component "required.partial.html" %>
+
   <%= if @changeset.action do %>
-    <div class="alert is-error">
+    <div class="toast toast-error">
       <p>Oops, something went wrong! Please check the errors below.</p>
     </div>
   <% end %>
 
-  <div class="form-item is-inline">
-  <%= component "required.partial.html" %>
- </div>
-
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :project_id) %>">
     <%= label f, :project_id, class: "is-req" %>
-    <%= select f, :project_id, list_projects(@projects) %>
+    <%= select f, :project_id, list_projects(@projects), class: "form-select" %>
     <%= error_tag f, :project_id %>
   </div>
 
   <%= inputs_for f, :item, fn fi -> %>
     <%= inputs_for fi, :category, fn fc -> %>
-      <div class="form-item is-inline">
+      <div class="form-group <%= validation_status_class(fc, :name) %>">
         <%= label fc, :name, "Category", class: "is-req" %>
-        <%= select fc, :name, selectify(@categories), class: "select-and-input-cat" %>
-        <div class="is-desc">
-          Common categories are listed for you to select.  You can enter a custom category by typing it into the search box and pressing enter.
-        </div>
+        <%= select fc, :name, selectify(@categories), class: "select-and-input-cat form-select" %>
         <%= error_tag fc, :name %>
+        <p class="is-desc">
+          Common categories are listed for you to select.  You can enter a custom category by typing it into the search box and pressing enter.
+        </p>
       </div>
     <% end %>
 
-    <div class="form-item is-inline">
+    <div class="form-group <%= validation_status_class(fi, :name) %>">
       <%= label fi, :name, "Item", class: "is-req" %>
-      <%= select fi, :name, selectify(@items), class: "select-and-input-item" %>
-        <div class="is-desc">
-          Common items are listed for you to select.  You can enter a custom item by typing it into the search box and pressing enter.
-        </div>
+      <%= select fi, :name, selectify(@items), class: "select-and-input-item form-select" %>
       <%= error_tag fi, :name %>
-    </div>
-
-    <div class="form-item is-inline-offset">
-      <p class="is-small">
-        NOTE: Common categories and items are listed for you to select.  You can
-        input a custom category / item name by typing it into the search box and
-        pressing enter or clicking it.
+      <p class="is-desc">
+        Common items are listed for you to select.  You can enter a custom item by typing it into the search box and pressing enter.
       </p>
     </div>
+
+    <p class="is-desc">
+      NOTE: Common categories and items are listed for you to select.  You can
+      input a custom category / item name by typing it into the search box and
+      pressing enter or clicking it.
+    </p>
   <% end %>
 
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :have) %>">
     <%= label f, :have, class: "is-req" %>
-    <%= number_input f, :have %>
-    <div class="is-desc">
-      The number of units you have in your warehouse.
-    </div>
+    <%= number_input f, :have, class: "form-input", placeholder: "0" %>
     <%= error_tag f, :have %>
+    <p class="is-desc">
+      The number of units you have in your warehouse.
+    </p>
   </div>
 
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :need) %>">
     <%= label f, :need, class: "is-req" %>
-    <%= number_input f, :need %>
-    <div class="is-desc">
-      The number of units you need.  It's best to plan at least 6 months out, or for the "winter" and "summer" seasons, since larger shipments may take a while!
-    </div>
+    <%= number_input f, :need, class: "form-input", placeholder: "0" %>
     <%= error_tag f, :need %>
+    <p class="is-desc">
+      The number of units you need.  It's best to plan at least 6 months out, or for the "winter" and "summer" seasons, since larger shipments may take a while!
+    </p>
   </div>
 
   <!-- TODO: should be a select box -->
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :unit) %>">
     <%= label f, :unit, class: "is-req" %>
-    <%= text_input f, :unit %>
+    <%= text_input f, :unit, class: "form-input", placeholder: "EX: items, bags, boxes, etc" %>
     <%= error_tag f, :unit %>
   </div>
 
   <%= inputs_for f, :mod, fn fm -> %>
-    <div class="form-item is-inline">
+    <div class="form-group <%= validation_status_class(fm, :age) %>">
       <%= label fm, :age %>
-      <%= select fm, :age, list_ages() %>
+      <%= select fm, :age, list_ages(), class: "form-select" %>
       <%= error_tag fm, :age %>
     </div>
 
-    <div class="form-item is-inline">
+    <div class="form-group <%= validation_status_class(fm, :gender) %>">
       <%= label fm, :gender %>
-      <%= select fm, :gender, list_genders() %>
+      <%= select fm, :gender, list_genders(), class: "form-select" %>
       <%= error_tag fm, :gender %>
     </div>
 
-    <div class="form-item is-inline">
+    <div class="form-group <%= validation_status_class(fm, :size) %>">
       <%= label fm, :size %>
-      <%= select fm, :size, list_sizes() %>
+      <%= select fm, :size, list_sizes(), class: "form-select" %>
       <%= error_tag fm, :size %>
     </div>
 
-    <div class="form-item is-inline">
+    <div class="form-group <%= validation_status_class(fm, :season) %>">
       <%= label fm, :season %>
-      <%= select fm, :season, list_seasons() %>
+      <%= select fm, :season, list_seasons(), class: "form-select" %>
       <%= error_tag fm, :season %>
     </div>
   <% end %>
 
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :description) %>">
     <%= label f, :description %>
-    <%= textarea f, :description %>
+    <%= textarea f, :description, class: "form-input", placeholder: "Tell us anything else that other groups should know about this item..." %>
     <%= error_tag f, :description %>
   </div>
 
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :photo) %>">
     <%= label f, :photo %>
-    <%= file_input f, :photo %>
+    <%= file_input f, :photo, class: "form-input" %>
     <%= error_tag f, :photo %>
   </div>
 
-  <div class="form-item is-text-center">
-    <%= submit "Submit", class: "button is-big" %>
+  <div class="form-group col-9 col-ml-auto">
+    <%= submit "Submit", class: "btn btn-lg btn-primary" %>
   </div>
 <% end %>

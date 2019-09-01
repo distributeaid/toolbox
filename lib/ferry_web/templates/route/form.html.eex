@@ -1,40 +1,39 @@
-<%= form_for @changeset, @action, fn f -> %>
+<%= form_for @changeset, @action, [class: "form-horizontal"], fn f -> %>
+  <%= component "required.partial.html" %>
+
   <%= if @changeset.action do %>
-    <div class="alert is-error">
+    <div class="toast toast-error">
       <p>Oops, something went wrong! Please check the errors below.</p>
     </div>
   <% end %>
 
-  <div class="form-item is-inline">
-  <%= component "required.partial.html" %>
- </div>
-
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :label) %>">
     <%= label f, :label, class: "is-req" %>
-    <%= text_input f, :label, placeholder: "Stop number 1" %>
+    <%= text_input f, :label, class: "form-input", placeholder: "Pickup" %>
     <%= error_tag f, :label %>
   </div>
 
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :address) %>">
     <%= label f, :address %>
-    <%= text_input f, :address, placeholder: "4 Privet Drive, Little Whinging, Surrey" %>
+    <%= text_input f, :address, class: "form-input", placeholder: "4 Privet Drive, Little Whinging, Surrey" %>
     <%= error_tag f, :address %>
   </div>
 
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :date) %>">
     <%= label f, :date %>
-    <%= date_input f, :date %>
+    <%= date_input f, :date, class: "form-input" %>
     <%= error_tag f, :date %>
   </div>
 
   <!--
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :groups) %>">
     <%= label f, :groups %>
-    <%= text_input f, :groups %>
+    <%= text_input f, :groups, class: "form-input" %>
     <%= error_tag f, :groups %>
   </div>
   -->
 
+  <!-- TODO: none of this has been styled after switching from Kube => Spectre since it was commented out -->
   <!--
     <%= if has_routes?(@shipment.routes) and has_checklist?(assigns.conn.path_info, @shipment.routes) do %>
         <div class="form-item is-inline" id="customList">
@@ -59,12 +58,12 @@
     <% end %>
   -->
 
-  <div class="form-item is-text-center">
-    <%= submit "Submit", class: "button is-big" %>
+  <div class="form-group col-9 col-ml-auto">
+    <%= submit "Submit", class: "btn btn-lg btn-primary" %>
   </div>
 <% end %>
 
-
+<!--
 <script>
 let gateKeeper = {
     ledger: [],
@@ -106,3 +105,4 @@ function createNewInput(name){
     container.appendChild(input);
 }
 </script>
+-->

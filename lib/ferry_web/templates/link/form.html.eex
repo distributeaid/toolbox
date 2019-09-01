@@ -1,27 +1,28 @@
-<%= form_for @changeset, @action, fn f -> %>
+<%= form_for @changeset, @action, [class: "form-horizontal"], fn f -> %>
+  <%= component "required.partial.html" %>
+
   <%= if @changeset.action do %>
-    <div class="alert is-error">
+    <div class="toast toast-error">
       <p>Oops, something went wrong! Please check the errors below.</p>
     </div>
   <% end %>
-
-  <div class="form-item is-inline">
-  <%= component "required.partial.html" %>
- </div>
-
-  <div class="form-item is-inline">
+ 
+  <div class="form-group <%= validation_status_class(f, :label) %>">
     <%= label f, :label %>
-    <%= text_input f, :label %>
+    <%= text_input f, :label, class: "form-input", placeholder: "Donate" %>
     <%= error_tag f, :label %>
   </div>
 
-  <div class="form-item is-inline">
+  <div class="form-group <%= validation_status_class(f, :url) %>">
     <%= label f, :url, class: "is-req" %>
-    <%= text_input f, :url %>
+    <%= text_input f, :url, class: "form-input", placeholder: "https://justgiving.com/my-fundraiser" %>
     <%= error_tag f, :url %>
+    <p class="is-desc">
+      Please be sure to include "http" or "https"!
+    </p>
   </div>
 
-  <div class="form-item is-text-center">
-    <%= submit "Submit", class: "button is-big" %>
+  <div class="form-group col-9 col-ml-auto">
+    <%= submit "Submit", class: "btn btn-lg btn-primary" %>
   </div>
 <% end %>
