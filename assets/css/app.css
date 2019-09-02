@@ -103,7 +103,7 @@ h3, .h3,
 h4, .h4,
 h5, .h5,
 h6, .h6 {
-  font-family: Lato, monospace;
+  font-family: Lato, serif;
 }
 
 h1:last-child, .h1:last-child,
@@ -173,7 +173,8 @@ dl.list--grid > dd:last-child {
   padding-bottom: 0;
 }
 
-a {
+a,
+a:visited {
   border-bottom: 1px dotted #4362A6;
 
   color: #4362A6;
@@ -233,7 +234,7 @@ Buttons
   background-color: #C6ACD2;
   border-color: #B493C4;
 
-  font-family: Lato, monospace;
+  font-family: Lato, serif;
   font-weight: bold;
 }
 .btn.btn-primary:focus,
@@ -368,7 +369,7 @@ legend {
   margin: 0 auto;
   padding: 0 0.8rem;
 
-  font-family: Lato, monospace;
+  font-family: Lato, serif;
   font-size: 1rem;
   font-weight: bold;
 }
@@ -397,9 +398,11 @@ Nothing here... for now. :)
 /*
 Media
 ------------------------------------------------------------
+TODO:
+ [ ] see how `display: block` affects group logos (especially centered ones)
 */
 img {
-  display: inline-block;
+  display: block;
   height: auto;
   max-width: 100%;
 }
@@ -637,7 +640,7 @@ TODO:
 
   color: inherit;
 
-  font-family: Lato, monospace;
+  font-family: Lato, serif;
   font-size: 1.2rem;
   text-transform: uppercase;
 }
@@ -1009,65 +1012,65 @@ Site
 ------------------------------------------------------
 */
 .site-header {
-  background-color: white;
+  overflow: hidden auto;
+  min-height: 100vh;
+  border-right: 0.1rem solid #C5CFE4;
+
+  background-color: #E2E7F1;
+  color: #4362A6;
 }
 
 .site-header__logo {
-  display: inline-block;
-
-  height: 50px; /* navbar height */
+  margin: 0.4rem 0.4rem 0.8rem 0.4rem;
 }
 
-.site-nav a {
-  color: inherit;
-
-  text-transform: uppercase;  
+.site-header__divider {
+  margin: 0.4rem 0.8rem;
+  border: none;
+  border-bottom: 1px solid #C5CFE4;
+  color: #C5CFE4;
 }
 
-.site-nav a:hover {
-  text-decoration: none;
-  text-shadow: #313439 0 0 1px;
+.site-nav {
+  font-family: Lato, serif;
+  font-size: 0.9rem;
+  list-style: none;
+}
+
+.site-nav--small {
+  font-family: Quicksand, sans-serif;
+  font-size: 0.7rem;
+}
+
+ul.site-nav {
+  margin: 0;
+}
+
+ul.site-nav > li {
+  margin-top: 0;
+}
+
+.site-nav a,
+.site-nav a:visited {
+  display: block;
+  width: 100%;
+  border-bottom: none;
+  padding: 0.4rem 1.6rem 0.4rem 0.4rem;
+
+  background-color: inherit;
+  color: #4362A6;
+}
+
+.site-nav a:focus,
+.site-nav a:hover,
+.site-nav a:active,
+.site-nav a.active {
+  background-color: #C5CFE4;
+  color: #082B76;
 }
 
 .site-content {
-  min-height: calc(100vh - 158px); /* leave room for the navbar / footer */
-  margin-top: 50px; /* navbar height */
-}
-
-.site-footer {
-  padding: 1.6rem;
-
-  color: rgba(49, 52, 57, 0.8); /* #313439 */
-
-  font-size: 0.9rem;
-  text-align: center;
-}
-
-/* TODO: Use flexbox to position .site-footer__link */
-.site-footer__link {
-  display: inline-block;
-  margin-bottom: 0.8rem;
-  margin-right: 1.6rem;
-  border-bottom: 0;
-
-  color: inherit;
-
-  text-transform: uppercase;
-}
-
-.site-footer__link:last-child {
-  margin-right: 0;
-}
-
-.site-footer__link:hover {
-  color: #313439;
-
-  text-decoration: none;
-  text-shadow: #313439 0 0 1px;
-}
-
-.site-footer__link--lowercase {
-  text-transform: lowercase;
+  overflow: hidden auto;
 }
 
 /*

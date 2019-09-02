@@ -48,91 +48,109 @@
     <%= render_existing @view_module, "view-specific-scripts.html" %>
   </head>
 
-  <body class="site">
-    <header class="navbar site-header">
-      <div class="flex-centered">
-        <!-- TODO: replace this w/ the wordmark file -->
-        <img class="site-header__logo" src="<%= Routes.static_path(@conn, "/images/DAlogoDarkSmall.jpg") %>" alt="Logo: Outline of a Dove" />
-        <%= link "Distribute Aid", to: Routes.home_page_path(@conn, :index), class: "brand" %>
-      </div>
+  <body class="columns col-gapless">
+
+    <header class="site-header column col-auto">
+      <%= img_tag Routes.static_path(@conn, "/images/logos/DA_lettermark_blue.svg"), class: "site-header__logo", alt: "Distribute Aid Logo: Outline of Doves" %>
+
+      <hr class="site-header__divider" />
 
       <nav>
-        <ul class="site-nav list--unstyled list--horizontal">
+        <ul class="site-nav">
           <li>
-            <!-- TODO: change to "Dashboard" -->
-            <%= link "Home", to: Routes.home_page_path(@conn, :index), class: "site-nav__link" %>
-          </li>
-          <li>
-            <%= link "Map", to: Routes.map_path(@conn, :show), class: "site-nav__link" %>
-          </li>
-          <li>
-            <%= link "Groups", to: Routes.group_path(@conn, :index), class: "site-nav__link" %>
-          </li>
-          <li>
-            <%= link "Inventory", to: Routes.inventory_list_path(@conn, :show), class: "site-nav__link" %>
-          </li>
-          <li>
-            <%= link "Shipments", to: Routes.shipment_overview_path(@conn, :index), class: "site-nav__link" %>
+            <%= link to: Routes.home_page_path(@conn, :index) do %>
+              <i class="fas fa-fw fa-home"></i> Dashboard
+            <% end %>
           </li>
           <li>
             <%= if @current_user == nil do %>
-              <%= link "Login", to: Routes.session_path(@conn, :new), class: "site-nav__link" %>
+              <%= link to: Routes.session_path(@conn, :new) do %>
+                <i class="fas fa-fw fa-unlock-alt"></i> Login
+              <% end %>
             <% else %>
-              <%= link "Logout", to: Routes.session_path(@conn, :delete), method: :delete, class: "site-nav__link" %>
+              <%= link "Logout", to: Routes.session_path(@conn, :delete), method: :delete %>
+            <% end %>
+          </li>
+          <li>
+            <hr class="site-header__divider" />
+          </li>
+          <li>
+            <%= link to: Routes.group_path(@conn, :index) do %>
+              <i class="fas fa-fw fa-user-circle"></i> Aid Groups
+            <% end %>
+          </li>
+          <li>
+            <%= link to: Routes.map_path(@conn, :show) do %>
+              <i class="fas fa-fw fa-map-marker-alt"></i> Map
+            <% end %>
+          </li>
+          <li>
+            <%= link to: Routes.inventory_list_path(@conn, :show) do %>
+              <i class="fas fa-fw fa-boxes"></i> Inventory
+            <% end %>
+          </li>
+          <li>
+            <%= link to: Routes.shipment_overview_path(@conn, :index) do %>
+              <i class="fas fa-fw fa-truck"></i> Shipments
             <% end %>
           </li>
         </ul>
       </nav>
+
+      <hr class="site-header__divider" />
+
+      <ul class="site-nav site-nav--small">
+        <li>
+          <%= if @current_user do %>
+            <%= link to: Routes.group_user_path(@conn, :edit, @current_user.group_id, @current_user) do %>
+              <i class="fas fa-fw fa-lock"></i> Change Password
+            <% end %>
+          <% end %>
+        </li>
+
+        <li>
+          <%= if @current_user do %>
+            <a href="mailto:help@distributeaid.org">
+              <i class="fas fa-fw fa-paper-plane"></i> help@distributeaid.org
+            </a>
+          <% else %>
+            <a href="mailto:hello@distributeaid.org">
+              <i class="fas fa-fw fa-paper-plane"></i> hello@distributeaid.org
+            </a>
+          <% end %>
+        </li>
+        <li>
+          <a href="https://gitlab.com/users/distribute-aid/projects" target="_blank">
+            <i class="fas fa-fw fa-code"></i> Code
+          </a>
+        </li>
+        <li>
+          <a href="https://www.patreon.com/distributeaid" target="_blank">
+            <i class="fas fa-fw fa-euro-sign"></i> Support Us
+          </a>
+        </li>
+      </ul>
     </header>
 
-    <!--
-    <div class="flash">
-      <%= if message = get_flash(@conn, :success) do %>
-        <p class="toast toast-success" role="alert"><%= message %></p>
-      <% end %>
+    <main class="site-content column" role="main">
+      <!--
+      <div class="flash">
+        <%= if message = get_flash(@conn, :success) do %>
+          <p class="toast toast-success" role="alert"><%= message %></p>
+        <% end %>
 
-      <%= if message = get_flash(@conn, :info) do %>
-        <p class="toast" role="alert"><%= message %></p>
-      <% end %>
+        <%= if message = get_flash(@conn, :info) do %>
+          <p class="toast" role="alert"><%= message %></p>
+        <% end %>
 
-      <%= if message = get_flash(@conn, :error) do %>
-        <p class="toast toast-error" role="alert"><%= message %></p>
-      <% end %>
-    </div>
-    -->
+        <%= if message = get_flash(@conn, :error) do %>
+          <p class="toast toast-error" role="alert"><%= message %></p>
+        <% end %>
+      </div>
+      -->
 
-    <main role="main">
-      <%= content_tag :article, class: "site-content bg-cover bg-img--1" do %>
-        <%= render @view_module, @view_template, assigns %>
-      <% end %>
+      <%= render @view_module, @view_template, assigns %>
     </main>
 
-    <footer id="footer" class="site-footer">
-      <%= if @current_user do %>
-        <a class="site-footer__link site-footer__link--lowercase" href="mailto:help@distributeaid.org">
-          <i class="fas fa-paper-plane fa-lg"></i>
-          help@distributeaid.org
-        </a>
-      <% else %>
-        <a class="site-footer__link site-footer__link--lowercase" href="mailto:hello@distributeaid.org">
-          <i class="fas fa-paper-plane fa-lg"></i>
-          hello@distributeaid.org
-        </a>
-      <% end %>
-
-      <a class="site-footer__link" href="https://gitlab.com/users/distribute-aid/projects" target="blank">
-        <i class="fas fa-code fa-lg"></i>
-        Code
-      </a>
-
-      <%= if @current_user do %>
-        <%= link to: Routes.group_user_path(@conn, :edit, @current_user.group_id, @current_user), class: "site-footer__link site-footer__link--lowercase" do %>
-          <i class="fas fa-lock fa-lg"></i>
-          Change Password
-        <% end %>
-      <% end %>
-
-      <p class="small"> Help <a href="https://www.patreon.com/distributeaid" target="_blank">support the development of Distribute Aid</a> for as little as €1 / month!</p>
-    </footer>
   </body>
 </html>
