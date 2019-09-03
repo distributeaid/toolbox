@@ -1,4 +1,4 @@
-<p class="text-center">
+<p class="col-9 col-ml-auto">
   <span class="star">*</span> means
   that the item is a required input.
 </p>

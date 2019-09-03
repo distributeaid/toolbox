@@ -1,10 +1,11 @@
-<section class="section section--wider">
-  <div class="section__content">
+<div class="flex-centered">
+  <section class="section section--text col-9">
+
     <header class="section__header">
-      <h1 class="section__title">Welcome!</h1>
+      <h1>Welcome!</h1>
     </header>
 
-    <div class="col-9 p-centered">
+    <div class="section__content">
       <p>
         After a year of work, Distribute Aid is now in Beta!  Feel free to check
         out our public tools, and be sure to stay in touch:
@@ -18,13 +19,13 @@
           <a href="https://www.facebook.com/DistributeAidDotOrg/" target="blank">Follow us on Facebook</a> for the latest updates.
         </li>
       </ul>
-
-      <p class="text-center">
-        <%= link to: Routes.session_path(@conn, :new), class: "btn btn-lg btn-primary" do %>
-          Login <i class="fas fa-unlock is-icon-left"></i>
-        <% end %>
-      </p>
     </div>
 
-  </div>
-</section>
+    <footer class="section__footer">
+      <%= link to: Routes.session_path(@conn, :new), class: "btn btn-lg btn-primary" do %>
+        Login <i class="fas fa-unlock is-icon-left"></i>
+      <% end %>
+    </footer>
+
+  </section>
+</div>

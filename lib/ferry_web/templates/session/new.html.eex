@@ -1,10 +1,13 @@
-<section class="section">
-  <div class="section__content">
+<div class="flex-centered">
+  <section class="section section--form col-9">
+
     <header class="section__header">
-      <h1 class="section__title">Login</h1>
+      <h1 class="col-9 col-ml-auto">Login</h1>
     </header>
 
-    <%= render "form.html", Map.put(assigns, :action, Routes.session_path(@conn, :create)) %>
+    <div class="section__content">
+      <%= render "form.html", Map.put(assigns, :action, Routes.session_path(@conn, :create)) %>
+    </div>
 
-  </div>
-</section>
+  </section>
+</div>

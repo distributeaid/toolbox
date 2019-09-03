@@ -1,68 +1,71 @@
-<section class="section section--wider">
-  <div class="section__content p-center col-9">
+<section class="section section--tabs">
 
-    <!--
-    Header
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    -->
-    <header class="section__header">
-      <h1 class="section__title">Groups</h1>
-    </header>
+  <header class="section__header">
+    <h1 class="section__title">Groups</h1>
 
-    <!--
-    Controls
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    TODO
-    -->
-     <!-- Table start -->
-     <table id="group-index" class="table table-striped">
+    <nav class="section__nav">
+      <ul class="section__tab tab">
+        <li class="tab-item active">
+          <%= link "All Groups", to: Routes.group_path(@conn, :index) %>
+        </li>
+        <%= if @current_group != nil do %>
+          <li class="tab-item">
+            <%= link "My Group", to: Routes.group_path(@conn, :show, @current_group.id) %>
+          </li>
+          <!-- TODO: else sign up prompt? -->
+        <% end %>
+      </ul>
+    </nav>
+  </header>
 
-       <thead>
-         <tr>
-           <th> Group </th>
-           <th></th>
-         </tr>
-       </thead>
+  <div class="section__content">
+    <table id="group-index" class="table table-striped">
 
+      <thead>
+        <tr>
+          <th> Group </th>
+          <th></th>
+        </tr>
+      </thead>
 
-  <tbody>
-    <%= if has_groups? @groups do %>
-        <%= for group <- @groups do %>
-            <tr>
-              <td>
-                <%= link to: Routes.group_path(@conn, :show, group), class: "link--wrapper" do %>
-                  <%= component "group_logo.partial.html", %{
-                      group: group,
-                      size: :small,
-                      version: :thumb,
-                      fill: true
-                    } %>
-                    <div class="group-details">
-                      <%= group.name %>
-                    </div>
-                <% end %>
-              </td>
-              <td>
-                <%= link to: Routes.group_path(@conn, :show, group), class: "action" do %>
-                  <i class="fas fa-eye"></i>
-                <% end %>
-                <%= if @current_group != nil && group == @current_group do %>
-                  <%= link to: Routes.group_path(@conn, :edit, @current_group), class: "action" do %>
-                    <i class="fas fa-pencil-alt"></i>
-                  <% end %>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-    <% else %>
-      <p>
-        No groups have been created... yet!
-      </p>
-    <% end %>
+      <tbody>
+        <%= if has_groups? @groups do %>
+            <%= for group <- @groups do %>
+                <tr>
+                  <td>
+                    <%= link to: Routes.group_path(@conn, :show, group), class: "link--wrapper" do %>
+                      <%= component "group_logo.partial.html", %{
+                          group: group,
+                          size: :small,
+                          version: :thumb,
+                          fill: true
+                        } %>
+                        <div class="group-details">
+                          <%= group.name %>
+                        </div>
+                    <% end %>
+                  </td>
+                  <td>
+                    <%= link to: Routes.group_path(@conn, :show, group), class: "action" do %>
+                      <i class="fas fa-eye"></i>
+                    <% end %>
+                    <%= if @current_group != nil && group == @current_group do %>
+                      <%= link to: Routes.group_path(@conn, :edit, @current_group), class: "action" do %>
+                        <i class="fas fa-pencil-alt"></i>
+                      <% end %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
 
-  </tbody>
-</table>
+            <% else %>
+          <p>
+            No groups have been created... yet!
+          </p>
+        <% end %>
+      </tbody>
 
-
+    </table>
   </div>
+
 </section>

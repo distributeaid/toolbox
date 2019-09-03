@@ -17,19 +17,20 @@ defmodule FerryWeb.ComponentView do
     end
 
     size_class = case size do
-      :large -> "logo--big"
-      :small -> "logo--small"
+      :large -> "avatar-xxl"
+      :small -> "avatar-lg"
       _ -> ""
     end
 
     cond do
-      group.logo ->
-        img_tag Logo.url({group.logo, group}, version),
-          alt: "#{group.name}'s Logo",
-          class: "logo #{size_class}"
+      group.logo -> content_tag :figure, class: "avatar #{size_class}" do
+        img_tag Logo.url({group.logo, group}, version), alt: "#Logo: {group.name}"
+      end
 
       # fill with blank space if there is no logo
-      fill -> ~E(<span class="logo <%= size_class %> logo--filler"><i class="fas fa-fw fa-lg fa-question"></i></span>)
+      fill -> content_tag :figure, class: "avatar avatar--filler #{size_class}" do
+        ~E(<i class="fas fa-fw fa-lg fa-question"></i>)
+      end
 
       # do nothing if there is no logo and fill != true
       true -> nil

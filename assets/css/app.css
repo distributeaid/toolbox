@@ -97,15 +97,6 @@ body {
   font-family: Quicksand, sans-serif;
 }
 
-h1, .h1,
-h2, .h2,
-h3, .h3,
-h4, .h4,
-h5, .h5,
-h6, .h6 {
-  font-family: Lato, serif;
-}
-
 h1:last-child, .h1:last-child,
 h2:last-child, .h2:last-child,
 h3:last-child, .h3:last-child,
@@ -117,6 +108,21 @@ ul:last-child,
 ol:last-child,
 dl:last-child {
   margin-bottom: 0;
+}
+
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6 {
+  color: #09328B;
+
+  font-family: Lato, serif;
+}
+
+p {
+  margin-bottom: 0.8rem;
 }
 
 ul {
@@ -175,18 +181,18 @@ dl.list--grid > dd:last-child {
 
 a,
 a:visited {
-  border-bottom: 1px dotted #4362A6;
+  border-bottom: 1px dotted #9FA8FF;
 
-  color: #4362A6;
+  color: #8F97E5;
 }
 
 a:focus,
 a:hover,
 a:active,
 a.active {
-  border-bottom-style: solid;
+  border-bottom: 1px solid #8F97E5;
 
-  color: inherit;
+  color: #8F97E5;
 
   text-decoration: none;
 }
@@ -500,55 +506,66 @@ Section
 ------------------------------------------------------
 */
 .section {
-  position: relative;
-  width: 50%;
-  margin: 0 auto;
-  padding-top: 0;
+  margin: 1.6rem;
 }
 
-.section--wide {
-  width: 66%;
+.section--text {
+  border-left: 0.1rem solid #CCD1FF;
+  padding: 1.6rem;
 }
 
-.section--wider {
-  width: 75%;
-}
-
-.section--full-width {
-  width: 100%;
-}
-
-.section--focus {
-  width: auto;
-  min-width: 50%;
+.section--form {
+  border-left: 0.1rem solid #CCD1FF;
+  padding: 1.6rem 0;
 }
 
 .section__header {
+  margin-bottom: 0.4rem;
+}
+
+.section__content {}
+
+.section__footer {
+  margin-top: 0.8rem;
+}
+
+.section--tabs {
+  margin: 0.4rem 0.4rem 1.6rem 0.4rem;
+}
+
+.section--tabs .section__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
   margin-bottom: 0.8rem;
-
-  text-align: center;
+  border-bottom: 1px solid #E3E5FF;
 }
 
-.section__title {
-  margin-bottom: 0;
+.section--tabs .section__title {
+  flex: 0 0 auto;
+  margin: 0 0.4rem 0 0;
+  border-bottom: 0.1rem solid #09328B;
+  padding: 0 0.8rem;
+
+  /*line-height: 1;*/
 }
 
-.section__subtitle {
-  margin-top: 0.4rem;
-}
+.section--tabs .section__nav {
+  flex: 1 0 auto;
 
-p.section__subtitle {
   font-size: 1rem;
 }
 
-.section__content {
-  width: 100%;
-  min-height: calc(100vh - 158px); /* leave room for the site nav / footer */
-  padding: 1.2rem;
-
-  background-color: rgba(255, 255, 255, 0.9);
+.section--tabs .section__tab {
+  margin-top: 0;
+  border-bottom: 0;
 }
 
+.section--tabs .section__content {
+  margin-left: 1.2rem;
+  margin-right: 1.2rem;
+}
 
 /*
 Components
@@ -559,12 +576,37 @@ Components
 Avatar
 ------------------------------------------------------------
 Extend Spectre.
+
+TODO:
+  [ ] use it for map icons too
 */
-.avatar-xxl {
+.avatar {
+  border: 0.05rem solid #EEF0FF;
+}
+
+.avatar.avatar-xxl {
   width: 6.4rem;
   height: 6.4rem;
+  border: 0.1rem solid #EEF0FF;  
 
   font-size: 3.2rem;
+}
+
+.avatar.avatar-lg {
+  width: 2.1rem;
+  height: 2.1rem;
+}
+
+.avatar.avatar--filler {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #E3E5FF;
+  border-color: #CCD1FF;
+  color: #B6BCFF;
+
+  font-size: 0.7rem;
 }
 
 /*
@@ -836,54 +878,6 @@ Icons
 }
 
 /*
-Logo
-------------------------------------------------------------
-TODO
-  [ ] use Spectre's avatar class?
-*/
-.logo {
-  width: 3.6rem;
-  height: 3.6rem;
-  margin-bottom: 0.4rem;
-  border: 0.1rem solid #C8C8C8;
-  border-radius: 100%;
-}
-
-.logo:last-child {
-  margin-bottom: 0;
-}
-
-.logo--small {
-  width: 2rem;
-  height: 2rem;
-  margin-bottom: 0;
-  border-width: 1px;
-}
-
-.logo--big {
-  width: 6.4rem;
-  height: 6.4rem;
-  margin-bottom: 0.8rem;
-  border-width: 0.2rem;
-}
-
-.logo--filler {
-  display: inline-block;
-
-  color: #999;
-
-  line-height: 1rem;
-  vertical-align: middle;
-}
-
-.logo--filler .fa-question {
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-/*
 Map
 ------------------------------------------------------
 TODO:
@@ -1011,9 +1005,13 @@ ul.routes > li:last-child {
 Site
 ------------------------------------------------------
 */
+.site {
+  background-color: #FFFDFA;
+}
+
 .site-header {
+  height: 100vh;
   overflow: hidden auto;
-  min-height: 100vh;
   border-right: 0.1rem solid #C5CFE4;
 
   background-color: #E2E7F1;
@@ -1070,6 +1068,7 @@ ul.site-nav > li {
 }
 
 .site-content {
+  height: 100vh;
   overflow: hidden auto;
 }
 
@@ -1086,6 +1085,35 @@ Subsection
   border-bottom: 0.1rem dashed #313439;
 
   text-align: center;
+}
+
+/*
+Tab
+------------------------------------------------------------
+*/
+.tab {
+  border-bottom-color: #E3E5FF;
+
+  font-family: Lato, serif;
+}
+
+.tab .tab-item a {
+  padding-left: 1.6rem;
+  padding-right: 1.6rem;
+
+  color: #B6BCFF;
+}
+
+.tab .tab-item a:focus,
+.tab .tab-item a:hover {
+  border-bottom-color: #E3E5FF;
+  color: #9FA8FF;
+}
+
+.tab .tab-item a.active,
+.tab .tab-item.active a {
+  border-bottom-color: #B6BCFF;
+  color: #8F97E5;
 }
 
 /*
@@ -1147,7 +1175,12 @@ Text
 Positioning
 ------------------------------------------------------------
 */
+.flex-centered {
+  height: 100%;
+}
+
 .flex-centered--col {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
