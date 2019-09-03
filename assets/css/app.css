@@ -165,15 +165,14 @@ dl.list--grid {
 }
 
 dl.list--grid > dt {
-  padding-right: 0.4rem;
+  padding: 0 0.2rem 0.4rem 0;
 
   text-align: right;
 }
 
 dl.list--grid > dd {
   margin: 0;
-  border-left: 1px solid #3b4351;
-  padding: 0 0 0.4rem 0.4rem;
+  padding: 0 0 0.4rem 0.2rem;
 }
 
 dl.list--grid > dd:last-child {
@@ -482,7 +481,7 @@ TODO:
 }
 
 .dataTables_filter {
-  text-align: center;
+  margin-bottom: 0.8rem;
 }
 
 .dataTables_filter label {
@@ -604,9 +603,12 @@ Section
   margin-right: 1.2rem;
 }
 
+.section--multi .section__content--thin,
 .section--tabs .section__content--thin {
   margin-left: 0;
   margin-right: 0;
+  border-left: none;
+  padding: 0;
 }
 
 /*
@@ -1032,32 +1034,8 @@ Shipment
 Shipment Roles
 ------------------------------------------------------------
 */
-ul.roles {
-  margin-top: 0.8rem;
-}
-
-ul.roles > li {
-  margin-bottom: 0.8rem;
-}
-
-ul.roles > li:last-child {
-  margin-bottom: 0;
-}
-
 .role {
-  position: relative;
-}
-
-.role p {
-  margin-bottom: 0.2rem;
-}
-
-.role__label {
-  display: inline-block;
-  margin-right: 0.4rem;
-
-  vertical-align: middle;
-  text-align: center;
+  margin-bottom: 0.8rem;
 }
 
 /*

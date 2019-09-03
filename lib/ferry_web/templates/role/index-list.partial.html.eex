@@ -1,5 +1,5 @@
-<section class="subsection">
-  <h2 class="subsection__header">Roles</h2>
+<div class="content-header">
+  <h3 class="content-header__title">Roles</h3>
 
   <%= if @can_modify? do %>
     <ul class="actions">
@@ -10,49 +10,45 @@
       </li>
     </ul>
   <% end %>
+</div>
 
-  <ul class="roles list--unstyled">
-    <%= for role <- @shipment.roles do %>
-      <li class="role">
-        <p>
-          <span class="role__label">
-            <strong><%= role.label %></strong>
-            <%= display_role_attributes(role) %>
-          </span>
-
-          <%= component "group_logo.partial.html", %{
-            group: role.group,
-            size: :small,
-            version: :thumb,
-            fill: true
-          } %>
-
-          <%= role.group.name %>
-        </p>
-
-        <%= if role.description do %>
-          <p><%= role.description %></p>
-        <% end %>
-
-        <ul class="actions">
-          <%= if @can_modify? do %>
+<%= for role <- @shipment.roles do %>
+  <div class="columns role">
+    <div class="column col-auto">
+      <%= component "group_logo.partial.html", %{
+        group: role.group,
+        size: :small,
+        version: :thumb,
+        fill: true
+      } %>
+    </div>
+    <div class="column">
+      <p>
+        <strong><%= role.label %></strong>
+        <%= display_role_attributes(role) %>
+        <br /><%= role.group.name %>
+      </p>
+      <%= if role.description do %>
+        <p><%= role.description %></p>
+      <% end %>
+    </div>
+    <%= if @can_modify? do %>
+      <div class="column col-auto">
+        <ul class="actions actions--sm">
+          <li>
+            <%= link to: Routes.group_shipment_role_path(@conn, :edit, @group, @shipment, role), class: "action" do %>
+              <i class="fas fa-pencil-alt"></i>
+            <% end %>
+          </li>
+          <%= if length(@shipment.roles) > 1 do %>
             <li>
-              <%= link to: Routes.group_shipment_role_path(@conn, :edit, @group, @shipment, role), class: "action" do %>
-                <i class="fas fa-pencil-alt"></i>
+              <%= link to: Routes.group_shipment_role_path(@conn, :delete, @group, @shipment, role), method: :delete, data: [confirm: "Are you sure? This will remove the group from the shipment."], class: "action" do %>
+                <i class="fas fa-trash-alt"></i>
               <% end %>
             </li>
-            <%= if length(@shipment.roles) > 1 do %>
-              <li>
-                <%= link to: Routes.group_shipment_role_path(@conn, :delete, @group, @shipment, role), method: :delete, data: [confirm: "Are you sure? This will remove the group from the shipment."], class: "action" do %>
-                  <i class="fas fa-trash-alt"></i>
-                <% end %>
-              </li>
-            <% end %>
           <% end %>
         </ul>
-
-      </li>
+      </div>
     <% end %>
-  </ul>
-
-</section>
+  </div>
+<% end %>

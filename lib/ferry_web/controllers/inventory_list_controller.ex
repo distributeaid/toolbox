@@ -11,8 +11,13 @@ defmodule FerryWeb.InventoryListController do
   # Helpers
   # ------------------------------------------------------------
 
+  # TODO: copied from group_controller, refactor into shared function or something
   defp current_group(_conn = %{assigns: %{current_user: %{group_id: group_id}}}) do
     Profiles.get_group!(group_id)
+  end
+
+  defp current_group(_conn) do
+    nil
   end
 
   # Show

@@ -23,9 +23,9 @@ defmodule FerryWeb.RoleView do
 
   def display_role_attributes(role) do
     cond do
-      role.supplier? and role.receiver? -> ~E(<br /><small>Supplier, Receiver</small>)
-      role.supplier? -> ~E(<br /><small>Supplier</small>)
-      role.receiver? -> ~E(<br /><small>Receiver</small>)
+      role.supplier? and role.receiver? -> ~E(<small>Supplier, Receiver</small>)
+      role.supplier? -> ~E(<small>Supplier</small>)
+      role.receiver? -> ~E(<small>Receiver</small>)
       true -> nil
     end
   end

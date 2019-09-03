@@ -1,5 +1,5 @@
-<section class="subsection">
-  <h2 class="subsection__header">Route</h2>
+<div class="content-header">
+  <h3 class="content-header__title">Route</h3>
 
   <%= if @can_modify? do %>
     <ul class="actions">
@@ -10,49 +10,48 @@
       </li>
     </ul>
   <% end %>
+</div>
 
-  <%= if length(@shipment.routes) > 0 do %>
-    <ul class="routes list--unstyled">
-      <%= for route <- @shipment.routes do %>
-        <li class="route">
-          <p>
-            <strong><%= route.label %></strong>
-            <%= if route.date do %>
-              - <%= route.date %>
-            <% end %>
-          </p>
-
-          <%= if route.address do %>
-            <p><%= route.address %></p>
+<%= if length(@shipment.routes) > 0 do %>
+  <%= for route <- @shipment.routes do %>
+    <div class="columns">
+      <div class="column">
+        <p>
+          <strong><%= route.label %></strong>
+          <%= if route.date do %>
+            - <%= route.date %>
           <% end %>
+        </p>
 
-          <%= if route.groups do %>
-            <p><%= route.groups %></p>
-          <% end %>
+        <%= if route.address do %>
+          <p><%= route.address %></p>
+        <% end %>
 
-          <ul class="actions">
-            <%= if @can_modify? do %>
-              <li>
-                <%= link to: Routes.group_shipment_route_path(@conn, :edit, @group, @shipment, route), class: "action" do %>
-                  <i class="fas fa-pencil-alt"></i>
-                <% end %>
-              </li>
-              <li>
-                <%= link to: Routes.group_shipment_route_path(@conn, :delete, @group, @shipment, route), method: :delete, data: [confirm: "Are you sure? This will remove the route from the shipment."], class: "action" do %>
-                  <i class="fas fa-trash-alt"></i>
-                <% end %>
-              </li>
-            <% end %>
+        <%= if route.groups do %>
+          <p><%= route.groups %></p>
+        <% end %>
+      </div>
+      <%= if @can_modify? do %>
+        <div class="column col-auto">
+          <ul class="actions actions--sm">
+            <li>
+              <%= link to: Routes.group_shipment_route_path(@conn, :edit, @group, @shipment, route), class: "action" do %>
+                <i class="fas fa-pencil-alt"></i>
+              <% end %>
+            </li>
+            <li>
+              <%= link to: Routes.group_shipment_route_path(@conn, :delete, @group, @shipment, route), method: :delete, data: [confirm: "Are you sure? This will remove the route from the shipment."], class: "action" do %>
+                <i class="fas fa-trash-alt"></i>
+              <% end %>
+            </li>
           </ul>
-
-        </li>
+        </div>
       <% end %>
-    </ul>
-
-  <% else %>
-    <p>
-      No routes have been added yet.
-    </p>
+    </div>
   <% end %>
 
-</section>
+<% else %>
+  <p>
+    No routes have been added yet.
+  </p>
+<% end %>

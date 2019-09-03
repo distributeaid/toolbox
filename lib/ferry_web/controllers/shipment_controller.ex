@@ -43,7 +43,7 @@ defmodule FerryWeb.ShipmentController do
     shipment = Shipments.get_shipment!(id)
     routes = Shipments.list_routes(shipment)
     needs = Manifests.list_needs(shipment)
-    
+
     render(conn, "show.html",
       current_group: current_group(conn),
       group: group,

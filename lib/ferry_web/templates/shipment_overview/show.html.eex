@@ -1,65 +1,63 @@
-<section class="shipment section section--full-width">
-  <div class="section__content">
-    <header class="section__header">
-      <h1 class="section__title"> <%= @shipment.label %></h1>
-    </header>
+<section class="section section--tabs section--multi">
 
-    <ul class="actions">
-      <li>
-        <%= link to: Routes.shipment_overview_path(@conn, :index), class: "action action--close" do %>
-          <i class="fas fa-times"></i>
+  <header class="section__header">
+    <h1 class="section__title">Shipments</h1>
+
+    <nav class="section__nav">
+      <ul class="section__tab tab">
+        <li class="tab-item active">
+          <%= link "All Shipments", to: Routes.shipment_overview_path(@conn, :index) %>
+        </li>
+        <%= if @current_group != nil do %>
+          <li class="tab-item">
+            <%= link "My Shipments", to: Routes.group_shipment_path(@conn, :index, @current_group) %>
+          </li>
+          <!-- TODO: else sign up prompt? -->
         <% end %>
-      </li>
-    </ul>
+      </ul>
+    </nav>
+  </header>
 
-    <div class="columns">
-
-      <div class="column col-6">
+  <div class="columns">
+    <div class="column col-6">
+      <div class="section__content">
         <%= render FerryWeb.ShipmentView, "show-details.partial.html", %{
           conn: @conn,
           shipment: @shipment,
           can_modify?: false
         } %>
-
-        <%= render FerryWeb.RoleView, "index-list.partial.html", %{
-          conn: @conn,
-          shipment: @shipment,
-          can_modify?: false
-        } %>
       </div>
-
-      <div class="column col-6">
+    </div>
+    <div class="column col-6">
+      <div class="section__content">
         <%= render FerryWeb.RouteView, "index-list.partial.html", %{
           conn: @conn,
           shipment: @shipment,
           can_modify?: false
         } %>
       </div>
-
-      <div class="column">
-        <div class="subsection">
-          <header>
-            <h2 class="subsection__header">Manifest & Needs</h2>
-            <ul class="tab tab-block">
-              <!-- TODO: need to select the active class based on the existing url fragment -->
-              <li class="tab-item active">
-                <a href="#manifest">Manifest</a>
-              </li>
-              <li class="tab-item">
-                <a href="#needs">Needs</a>
-              </li>
-            </ul>
-          </header>
-
-          <section id="manifest">
-            MANIFEST
-          </section>
-
-          <section id="needs">
-            <%= render FerryWeb.ManifestView, "needs-list.partial.html", %{conn: @conn, needs: @needs} %>
-          </section>
-        </div>
-      </div>
-
     </div>
+  </div>
+
+  <div class="section__content">
+    <%= render FerryWeb.RoleView, "index-list.partial.html", %{
+      conn: @conn,
+      shipment: @shipment,
+      can_modify?: false
+    } %>
+  </div>
+
+  <!-- TODO: add Order -->
+  <div class="section__content section__content--thin">
+    <div class="content-header">
+      <h3 class="content-header__title">
+        Needs
+      </h3>
+    </div>
+
+    <div id="needs">
+      <%= render FerryWeb.ManifestView, "needs-list.partial.html", %{conn: @conn, needs: @needs} %>
+    </div>
+  </div>
+
 </section>

@@ -1,9 +1,23 @@
-<section class="section section--full-width">
-  <div class="section__content">
-    <header class="section__header">
-      <h1 class="section__title">Shipments</h1>
-    </header>
-    
+<section class="section section--tabs">
+  <header class="section__header">
+    <h1 class="section__title">Shipments</h1>
+
+    <nav class="section__nav">
+      <ul class="section__tab tab">
+        <li class="tab-item active">
+          <%= link "All Shipments", to: Routes.shipment_overview_path(@conn, :index) %>
+        </li>
+        <%= if @current_group != nil do %>
+          <li class="tab-item">
+            <%= link "My Shipments", to: Routes.group_shipment_path(@conn, :index, @current_group) %>
+          </li>
+          <!-- TODO: else sign up prompt? -->
+        <% end %>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="section__content section__content--thin">
     <table id="shipment-overview" class="table table-striped">
       <thead>
         <tr>
@@ -37,7 +51,7 @@
               <% end %>
             </td>
             <td>
-              <ul class="actions">
+              <ul class="actions actions--sm">
                 <li>
                   <%= link to: Routes.shipment_overview_path(@conn, :show, shipment), class: "action" do %>
                     <i class="fas fa-eye"></i>
