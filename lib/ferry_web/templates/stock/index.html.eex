@@ -1,9 +1,23 @@
-<section class="section section--full-width">
-  <div class="section__content">
-    <header class="section__header">
-      <h1 class="section__title">Inventory Manager</h1>
-    </header>
+<section class="section section--tabs">
+  <header class="section__header">
+    <h1 class="section__title">Inventory</h1>
 
+    <nav class="section__nav">
+      <ul class="section__tab tab">
+        <li class="tab-item">
+          <%= link "All Inventory", to: Routes.inventory_list_path(@conn, :show) %>
+        </li>
+        <%= if @current_group != nil do %>
+          <li class="tab-item active">
+            <%= link "My Inventory", to: Routes.group_stock_path(@conn, :index, @current_group) %>
+          </li>
+          <!-- TODO: else sign up prompt? -->
+        <% end %>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="section__content section__content--thin">
     <%= render "search-guidance.partial.html" %>
 
     <%= render "index_table.partial.html", %{
@@ -13,4 +27,5 @@
       can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
     } %>
   </div>
+
 </section>

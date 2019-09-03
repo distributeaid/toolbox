@@ -2,26 +2,19 @@
   <thead>
     <tr>
       <th>Project</th>
-      <th>Category</th>
       <th>Item</th>
       <th>Have</th>
       <th>Need</th>
       <th>Units</th>
-      <th>Age</th>
-      <th>Gender</th>
-      <th>Size</th>
-      <th>Season</th>
-
+      <th>Attributes</th>
       <th>
-        <%= if @can_modify? do %>
-          <ul class="actions">
-            <li>
-              <%= link to: Routes.group_stock_path(@conn, :new, @group), class: "action" do %>
-                <i class="fas fa-plus"></i>
-              <% end %>
-            </li>
-          </ul>
-        <% end %>
+        <ul class="actions">
+          <li>
+            <%= link to: Routes.group_stock_path(@conn, :new, @group), class: "action" do %>
+              <i class="fas fa-plus"></i>
+            <% end %>
+          </li>
+        </ul>
       </th>
     </tr>
   </thead>
@@ -29,38 +22,36 @@
   <tbody>
     <%= for stock <- @stocks do %>
       <tr>
-        <td><%= stock.project.name %></td>
-        <td><%= stock.item.category.name %></td>
-        <td><%= stock.item.name %></td>
+        <td class="col-3"><%= stock.project.name %></td>
+        <td class="col-3">
+          <strong><%= stock.item.category.name %></strong>
+          - <%= stock.item.name %>
+        </td>
         <td><%= stock.have %></td>
         <td><%= stock.need %></td>
         <td><%= stock.unit %></td>
-        <td><%= stock.mod.age %></td>
-        <td><%= print_gender(stock.mod.gender) %></td>
-        <td><%= stock.mod.size %></td>
-        <td><%= stock.mod.season %></td>
+        <td>
+          <%= stock.mod.age %>
+          <%= print_gender(stock.mod.gender) %>
+          <%= stock.mod.size %>
+          <%= stock.mod.season %>
+        </td>
 
         <td>
-          <ul class="actions">
+          <ul class="actions actions--sm">
             <li>
-              <%= link to: Routes.group_stock_path(@conn, :show, @group, stock), class: "action" do %>
-                <i class="fas fa-eye"></i>
+              <%= link to: Routes.group_stock_path(@conn, :edit, @group, stock), class: "action" do %>
+                <i class="fas fa-pencil-alt"></i>
               <% end %>
             </li>
-            <%= if @can_modify? do %>
-              <li>
-                <%= link to: Routes.group_stock_path(@conn, :edit, @group, stock), class: "action" do %>
-                  <i class="fas fa-pencil-alt"></i>
-                <% end %>
-              </li>
-              <li>
-                <%= link to: Routes.group_stock_path(@conn, :delete, @group, stock), method: :delete, data: [confirm: "This will remove the stock entry from your inventory.  Are you sure?"], class: "action" do %>
-                  <i class="fas fa-trash-alt"></i>
-                <% end %>
-              </li>
-            <% end %>
+            <li>
+              <%= link to: Routes.group_stock_path(@conn, :delete, @group, stock), method: :delete, data: [confirm: "This will remove the stock entry from your inventory.  Are you sure?"], class: "action" do %>
+                <i class="fas fa-trash-alt"></i>
+              <% end %>
+            </li>
           </ul>
         </td>
+
       </tr>
     <% end %>
   </tbody>

@@ -604,6 +604,11 @@ Section
   margin-right: 1.2rem;
 }
 
+.section--tabs .section__content--thin {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 /*
 Content Header
 ------------------------------------------------------------

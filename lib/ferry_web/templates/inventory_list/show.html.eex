@@ -1,57 +1,69 @@
-<section class="section section--full-width">
-  <div class="section__content">
+<section class="section section--tabs">
+  <header class="section__header">
+    <h1 class="section__title">Inventory</h1>
 
-    <header class="section__header">
-      <h1 class="section__title">Inventory</h1>
-    </header>
+    <nav class="section__nav">
+      <ul class="section__tab tab">
+        <li class="tab-item active">
+          <%= link "All Inventory", to: Routes.inventory_list_path(@conn, :show) %>
+        </li>
+        <%= if @current_group != nil do %>
+          <li class="tab-item">
+            <%= link "My Inventory", to: Routes.group_stock_path(@conn, :index, @current_group) %>
+          </li>
+          <!-- TODO: else sign up prompt? -->
+        <% end %>
+      </ul>
+    </nav>
+  </header>
 
+  <div class="section__content section__content--thin">
     <%= render FerryWeb.StockView, "search-guidance.partial.html" %>
-
     <table id="inventory-list" class="table table-striped">
+
       <thead>
         <tr>
           <th>Group & Project</th>
-          <th>Category</th>
           <th>Item</th>
           <th>Have</th>
           <th>Need</th>
           <th>Units</th>
-          <th>Age</th>
-          <th>Gender</th>
-          <th>Size</th>
-          <th>Season</th>
+          <th>Attributes</th>
         </tr>
       </thead>
 
       <tbody>
         <%= for stock <- @inventory do %>
           <tr>
-            <td>
+            <td class="col-3">
               <%= component "group_logo.partial.html", %{
                 group: stock.project.group,
                 size: :small,
                 version: :thumb,
                 fill: true
               } %>
-              <div class="group-details">
-                <%= link stock.project.group.name, to: Routes.group_path(@conn, :show, stock.project.group) %>
-                <br />
-                <%= stock.project.name %>
-              </div>
+              <%= link stock.project.group.name, to: Routes.group_path(@conn, :show, stock.project.group) %>
+              <br />
+              <%= stock.project.name %>
             </td>
-            <td><%= stock.item.category.name %></td>
-            <td><%= stock.item.name %></td>
+            <td class="col-3">
+              <strong><%= stock.item.category.name %></strong>
+              - <%= stock.item.name %>
+            </td>
             <td><%= stock.have %></td>
             <td><%= stock.need %></td>
             <td><%= stock.unit %></td>
-            <td><%= stock.mod.age %></td>
-            <td><%= print_gender(stock.mod.gender) %></td>
-            <td><%= stock.mod.size %></td>
-            <td><%= stock.mod.season %></td>
+            <td>
+              <%= stock.mod.age %>
+              <%= print_gender(stock.mod.gender) %>
+              <%= stock.mod.size %>
+              <%= stock.mod.season %>
+            </td>
           </tr>
         <% end %>
       </tbody>
-    </table>
 
+    </table>
   </div>
+
 </section>
