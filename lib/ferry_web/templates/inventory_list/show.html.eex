@@ -35,7 +35,7 @@
       <tbody>
         <%= for stock <- @inventory do %>
           <tr>
-            <td class="col-3">
+            <td class="col-4">
               <%= component "group_logo.partial.html", %{
                 group: stock.project.group,
                 size: :small,

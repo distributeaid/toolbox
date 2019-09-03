@@ -1,9 +1,10 @@
-<section class="section maps">
-  <div class="section__content map-controls">
-    <header class="section__header">
-      <h1 class="section__title">The Map</h1>
-    </header>
+<section class="section section--tabs">
 
+  <header class="section__header">
+    <h1 class="section__title">The Map</h1>
+  </header>
+
+  <div class="section__content">
     <%= form_for @changeset, Routes.map_path(@conn, :show), [method: :get, class: "form-horizontal"], fn f -> %>
       <%= if @changeset.action do %>
         <div class="toast toast-error">
@@ -21,12 +22,16 @@
       </div>
     <% end %>
   </div>
-</section>
 
-<div id="map" class="map"></div>
+  <div class="section__content section__content--thin">
+    <div id="map" class="map"></div>
+  </div>
+
+</section>
 
 <script>
   var map = new L.map('map');
+  map.scrollWheelZoom.disable();
 
   // create the tile layer with correct attribution
   var osmUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -34,7 +39,7 @@
   var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
 
   // draw the map
-  map.setView(new L.LatLng(51, 20), 4.0);
+  map.setView(new L.LatLng(48, 13), 4.0);
   map.addLayer(osm);
 
   // add markers to the map

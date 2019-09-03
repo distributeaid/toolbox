@@ -968,10 +968,6 @@ Map
 TODO:
   [ ] redo layout for this page
 */
-.maps {
-  width: 55%;
-}
-
 .map-controls {
   width: 100%;
   font-size: 75%;
@@ -982,10 +978,8 @@ TODO:
 
 .map {
   width: 100%;
-  min-height: 650px;
+  min-height: calc(100vh - 3.2rem);
   position: relative;
-  margin: 0.8rem 0rem;
-  margin-right: 0.8rem;
 }
 
 .map-icon--logo {
@@ -1114,7 +1108,7 @@ ul.site-nav > li {
   display: block;
   width: 100%;
   border-bottom: none;
-  padding: 0.4rem 1.6rem 0.4rem 0.4rem;
+  padding: 0.4rem;
 
   background-color: inherit;
   color: #4362A6;
