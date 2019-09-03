@@ -33,7 +33,7 @@
             <%= for group <- @groups do %>
                 <tr>
                   <td>
-                    <%= link to: Routes.group_path(@conn, :show, group), class: "link--wrapper" do %>
+                    <%= link to: Routes.group_path(@conn, :show, group), class: "link--unstyled" do %>
                       <%= component "group_logo.partial.html", %{
                           group: group,
                           size: :small,

@@ -208,11 +208,31 @@ a.link--wrapper.active {
   border-bottom: none;
 }
 
+a.link--unstyled,
+a.link--unstyled:visited,
+a.link--unstyled:focus,
+a.link--unstyled:hover,
+a.link--unstyled:active,
+a.link--unstyled.active {
+  border-bottom: 0;
+
+  color: #3B4351;
+}
+
 /*
 Tables
 ------------------------------------------------------------
-Nothing here... for now. :)
-*/ 
+*/
+.table th,
+.table td {
+  padding: 0.4rem;
+
+  border-bottom-color: #E3E5FF;
+}
+
+.table.table-striped tbody tr:nth-of-type(2n+1) {
+  background-color: #EEF0FF;
+}
 
 /*
 Buttons
@@ -239,6 +259,7 @@ Buttons
 .btn.btn-primary {
   background-color: #C6ACD2;
   border-color: #B493C4;
+  color: #FFF;
 
   font-family: Lato, serif;
   font-weight: bold;
@@ -469,7 +490,7 @@ TODO:
 
 .dataTables_filter input {
   display: inline-block;
-  width: 25%;
+  width: 33.33333333%;
   margin-left: 0.8rem;
 }
 
@@ -614,6 +635,7 @@ Action
 ------------------------------------------------------------
 TODO:
   [ ] is this generic enough to be an Object?
+  [ ] colors same as .btn.btn-primary.  should this be a "rounded button"?
 */
 .actions {
   position: absolute;
@@ -640,35 +662,35 @@ ul.actions > li {
   text-align: center;
 }
 
-.action {
-  display: inline-block;
+.action,
+.action:visited {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   width: 2rem;
   height: 2rem;
   border-radius: 100%;
+  border: 1px solid #B493C4;
 
-  color: white;
-  background-color: rgba(49, 52, 57, 0.8); /* #313439 */
+  color: #FFF;
+  background-color: #C6ACD2;
 
   font-size: 1.2rem;
-  line-height: 0;
-  text-align: left;
-  vertical-align: middle;
 }
 
-a.action {
-  border-bottom: none;
-}
-
+.action:focus,
 .action:hover {
-  background-color: rgba(49, 52, 57, 1);  /* #313439 */
-  color: white;
+  background-color: #B493C4;
+  border-color: #A284B0;
+  color: #FFF;
 }
 
-.action > * {
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.action:active,
+.action.active {
+  background-color: #A284B0;
+  border-color: #A284B0;
+  color: #FFF;
 }
 
 /*
