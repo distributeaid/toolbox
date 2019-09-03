@@ -14,7 +14,7 @@
     </ul>
 
     <p>
-      <ul class="actions actions--inline">
+      <ul class="actions">
         <li>
           <%= link to: Routes.group_link_path(@conn, :new, @group), class: "action" do %>
             <i class="fas fa-plus"></i>

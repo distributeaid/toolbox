@@ -1,11 +1,11 @@
-<div class="subsection">
-  <h2 class="subsection__header">Quick Links</h2>
+<div class="content-header">
+  <h3 class="content-header__title">Quick Links</h3>
 
   <%= if @can_modify? do %>
     <ul class="actions">
       <li>
         <%= link to: Routes.group_link_path(@conn, :index, @group), class: "action" do %>
-          <i class="fas fa-eye"></i>
+          <i class="fas fa-pencil-alt"></i>
         <% end %>
       </li>
       <li>
@@ -15,18 +15,17 @@
       </li>
     </ul>
   <% end %>
-
-  <%= if has_links? @links do %>
-    <ul class="list--unstyled">
-      <%= for link <- @links do %>
-        <li>
-          <%= link label_text(link), to: link.url, target: "blank" %>
-        </li>
-      <% end %>
-    </ul>
-
-  <% else %>
-  <%= render "link-guidance.partial.html" %>
-  <% end %>
-
 </div>
+
+<%= if has_links? @links do %>
+  <ul class="list--unstyled">
+    <%= for link <- @links do %>
+      <li>
+        <%= link label_text(link), to: link.url, target: "blank" %>
+      </li>
+    <% end %>
+  </ul>
+
+<% else %>
+  <%= render "link-guidance.partial.html" %>
+<% end %>

@@ -37,7 +37,7 @@
               <% end %>
             </td>
             <td>
-              <ul class="actions actions--inline">
+              <ul class="actions">
                 <li>
                   <%= link to: Routes.shipment_overview_path(@conn, :show, shipment), class: "action" do %>
                     <i class="fas fa-eye"></i>

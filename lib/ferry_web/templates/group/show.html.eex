@@ -1,69 +1,105 @@
-<section class="section">
+<section class="section section--tabs section--multi">
+
   <header class="section__header">
-    <h1>
+    <h1 class="section__title">Groups</h1>
+
+    <nav class="section__nav">
+      <ul class="section__tab tab">
+        <%= if @current_group != nil && @current_group.id == @group.id do %>
+          <li class="tab-item">
+            <%= link "All Groups", to: Routes.group_path(@conn, :index) %>
+          </li>
+        <% else %>
+          <li class="tab-item active">
+            <%= link "All Groups", to: Routes.group_path(@conn, :index) %>
+          </li>
+        <% end %>
+
+        <%= if @current_group != nil do %>
+          <%= if @current_group.id == @group.id do %>
+            <li class="tab-item active">
+              <%= link "My Group", to: Routes.group_path(@conn, :show, @current_group.id) %>
+            </li>
+          <% else %>
+            <li class="tab-item">
+              <%= link "My Group", to: Routes.group_path(@conn, :show, @current_group.id) %>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="section__content">
+    <div class="content-header content-header--no-underline">
       <%= component "group_logo.partial.html", %{
         group: @group,
         size: :large,
         version: :thumb
       } %>
-      <br /> <%= @group.name %>
-    </h1>
-  </header>
 
-  <ul class="actions">
-    <%= if !is_nil(@current_group) && @group.id == @current_group.id do %>
-      <li>
-        <%= link to: Routes.group_path(@conn, :edit, @current_group), class: "action" do %>
-          <i class="fas fa-pencil-alt"></i>
+      <h2 class="content-header__title"><%= @group.name %></h2>
+
+      <ul class="actions">
+        <%= if !is_nil(@current_group) && @group.id == @current_group.id do %>
+          <li>
+            <%= link to: Routes.group_path(@conn, :edit, @current_group), class: "action" do %>
+              <i class="fas fa-pencil-alt"></i>
+            <% end %>
+          </li>
         <% end %>
-      </li>
+      </ul>
+    </div>
+
+    <%= if @group.description do %>
+      <p>
+        <%= @group.description %>
+      </p>
     <% end %>
-
-    <li>
-      <%= link to: Routes.group_path(@conn, :index), class: "action action--close" do %>
-        <i class="fas fa-times"></i>
-      <% end %>
-    </li>
-  </ul>
-
-  <p>
-    <%= @group.description %>
-  </p>
+  </div>
 
   <%= if length(@links) > 0 ||  (!is_nil(@current_group) && @group.id == @current_group.id) do %>
-    <%= render FerryWeb.LinkView, "index-list.partial.html", %{
-      conn: @conn,
-      group: @group,
-      links: @links,
-      can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
-    } %>
+    <div class="section__content">
+      <%= render FerryWeb.LinkView, "index-list.partial.html", %{
+        conn: @conn,
+        group: @group,
+        links: @links,
+        can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+      } %>
+    </div>
   <% end %>
 
   <%= if length(@projects) > 0 ||(!is_nil(@current_group) && @group.id == @current_group.id) do %>
-    <%= render FerryWeb.ProjectView, "index-list.partial.html", %{
-      conn: @conn,
-      group: @group,
-      projects: @projects,
-      can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
-    } %>
+    <div class="section__content">
+        <%= render FerryWeb.ProjectView, "index-list.partial.html", %{
+          conn: @conn,
+          group: @group,
+          projects: @projects,
+          can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+        } %>
+    </div>
   <% end %>
 
   <%= if length(@addresses) > 0 || (!is_nil(@current_group) && @group.id == @current_group.id) do %>
-    <%= render FerryWeb.AddressView, "index-list.partial.html", %{
-      conn: @conn,
-      group: @group,
-      addresses: @addresses,
-      can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
-    } %>
+    <div class="section__content">
+      <%= render FerryWeb.AddressView, "index-list.partial.html", %{
+        conn: @conn,
+        group: @group,
+        addresses: @addresses,
+        can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+      } %>
+    </div>
   <% end %>
 
   <%= if length(@shipments) > 0 || (!is_nil(@current_group) && @group.id == @current_group.id) do %>
-    <%= render FerryWeb.ShipmentView, "index-list.partial.html", %{
-      conn: @conn,
-      group: @group,
-      shipments: @shipments,
-      can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
-    } %>
+    <div class="section__content">
+      <%= render FerryWeb.ShipmentView, "index-list.partial.html", %{
+        conn: @conn,
+        group: @group,
+        shipments: @shipments,
+        can_modify?: !is_nil(@current_group) && @group.id == @current_group.id
+      } %>
+    </div>
   <% end %>
 
 </section>

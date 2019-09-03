@@ -1,56 +1,44 @@
-<div class="subsection">
-  <h2 class="subsection__header">Addresses</h2>
+<div class="content-header">
+  <h3 class="content-header__title">Addresses</h3>
 
-  <ul class="actions">
-    <li>
-      <!-- TODO: point to the map w/ the group filter setup -->
-      <!--
-      <%= link to: Routes.map_path(@conn, :show), class: "action" do %>
-        <i class="fas fa-eye"></i>
-      <% end %>
-      -->
-    </li>
-    <%= if @can_modify? do %>
+  <%= if @can_modify? do %>
+    <ul class="actions">
       <li>
         <%= link to: Routes.group_address_path(@conn, :new, @group), class: "action" do %>
           <i class="fas fa-plus"></i>
         <% end %>
       </li>
-    <% end %>
-  </ul>
-
-  <%= if has_addresses? @addresses do %>
-    <%= for address <- @addresses do %>
-      <div class="entry">
-        <h3 class="entry__title"><%= address.label %></h3>
-
-        <%= if @can_modify? do %>
-          <ul class="entry__actions actions actions--inline">
-            <li>
-              <%= link to: Routes.group_address_path(@conn, :edit, @group, address), class: "action" do %>
-                <i class="fas fa-pencil-alt"></i>
-              <% end %>
-            </li>
-            <li>
-              <%= link to: Routes.group_address_path(@conn, :delete, @group, address), method: :delete, data: [confirm: "This will delete all data associated with the address and remove it from our public maps and private (group-only) listings.  Are you sure?"], class: "action" do %>
-                <i class="fas fa-trash-alt"></i>
-              <% end %>
-            </li>
-          </ul>
-        <% end %>
-
-        <%= component "address.partial.html", %{
-          address: address,
-          include_label?: false,
-          class: "entry__content"
-        } %>
-      </div>
-    <% end %>
-
-  <% else %>
-  <div class="guidance">
-    <p>Add some of your locations here so that other groups, and users know where you have addresses. </p>
-    <p>Including donation dropoffs could help people know where to bring aid. Also include addresses for your offices and project locations! </p>
-  </div>
+    </ul>
   <% end %>
 </div>
+
+<%= if has_addresses? @addresses do %>
+  <%= for address <- @addresses do %>
+    <%= component "address.partial.html", %{address: address} %>
+
+    <%= if @can_modify? do %>
+      <ul class="actions actions--inline actions--sm">
+        <li>
+          <%= link to: Routes.group_address_path(@conn, :edit, @group, address), class: "action" do %>
+            <i class="fas fa-pencil-alt"></i>
+          <% end %>
+        </li>
+        <li>
+          <%= link to: Routes.group_address_path(@conn, :delete, @group, address), method: :delete, data: [confirm: "This will delete all data associated with the address and remove it from our public maps and private (group-only) listings.  Are you sure?"], class: "action" do %>
+            <i class="fas fa-trash-alt"></i>
+          <% end %>
+        </li>
+      </ul>
+    <% end %>
+  <% end %>
+
+<% else %>
+  <div class="guidance">
+    <p>
+      Add some of your locations here so that other groups, and users know where you have addresses.
+    </p>
+    <p>
+      Including donation dropoffs could help people know where to bring aid. Also include addresses for your offices and project locations!
+    </p>
+  </div>
+<% end %>

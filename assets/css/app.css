@@ -121,7 +121,8 @@ h6, .h6 {
   font-family: Lato, serif;
 }
 
-p {
+p,
+address {
   margin-bottom: 0.8rem;
 }
 
@@ -530,6 +531,22 @@ Section
   margin: 1.6rem;
 }
 
+.section__header {
+  margin-bottom: 0.4rem;
+}
+
+.section__content {
+  position: relative;
+}
+
+.section__footer {
+  margin-top: 0.8rem;
+}
+
+.section--tabs {
+  margin: 0.4rem 0.4rem 1.6rem 0.4rem;
+}
+
 .section--text {
   border-left: 0.1rem solid #CCD1FF;
   padding: 1.6rem;
@@ -540,19 +557,18 @@ Section
   padding: 1.6rem 0;
 }
 
-.section__header {
-  margin-bottom: 0.4rem;
+.section--multi {}
+
+.section--multi .section__header {}
+
+.section--multi .section__content {
+  margin-top: 1.6rem;
+  margin-bottom: 1.6rem;
+  border-left: 0.1rem solid #CCD1FF;
+  padding: 0.8rem 0 0.8rem 0.8rem;
 }
 
-.section__content {}
-
-.section__footer {
-  margin-top: 0.8rem;
-}
-
-.section--tabs {
-  margin: 0.4rem 0.4rem 1.6rem 0.4rem;
-}
+.section--multi .section__footer {}
 
 .section--tabs .section__header {
   display: flex;
@@ -589,6 +605,37 @@ Section
 }
 
 /*
+Content Header
+------------------------------------------------------------
+*/
+.content-header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.05rem;
+  border-bottom: 0.05rem solid #CCD1FF;
+  margin-bottom: 0.8rem;
+}
+
+.content-header:last-child {
+  margin-bottom: 0.8rem;
+}
+
+.content-header--no-underline {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.content-header__title {
+  flex: 1 0 0;
+  margin: 0;
+}
+
+.content-header__title:not(:first-child) {
+  margin-left: 0.4rem;
+}
+
+
+/*
 Components
 ================================================================================
 */
@@ -606,8 +653,8 @@ TODO:
 }
 
 .avatar.avatar-xxl {
-  width: 6.4rem;
-  height: 6.4rem;
+  width: 4rem;
+  height: 4rem;
   border: 0.1rem solid #EEF0FF;  
 
   font-size: 3.2rem;
@@ -638,10 +685,23 @@ TODO:
   [ ] colors same as .btn.btn-primary.  should this be a "rounded button"?
 */
 .actions {
+/*
   position: absolute;
   top: 0;
   right: 0;
+*/
   margin: 0;
+}
+
+.actions--inline {
+  margin-bottom: 0.8rem;
+}
+
+.actions--sm .action {
+  width: 1.6rem;
+  height: 1.6rem;
+
+  font-size: 0.8rem;
 }
 
 .actions--left {
@@ -654,12 +714,8 @@ ul.actions {
 
 ul.actions > li {
   display: inline-block;
+  margin: 0;
   padding: 0;
-}
-
-.actions--inline {
-  position: relative;
-  text-align: center;
 }
 
 .action,

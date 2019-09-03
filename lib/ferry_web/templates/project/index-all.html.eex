@@ -31,7 +31,7 @@
             <%= project.name %>
           </h3>
 
-          <ul class="entry__actions actions actions--inline">
+          <ul class="entry__actions actions">
             <li>
               <%= link to: Routes.group_project_path(@conn, :show, project.group_id, project), class: "action" do %>
                 <i class="fas fa-eye"></i>
