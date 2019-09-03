@@ -1,3 +1,49 @@
+<div class="flex-centered">
+  <section class="section section--multi col-9">
+
+    <header class="section__content">
+      <div class="content-header content-header--no-underline">
+        <%= component "group_logo.partial.html", %{
+          group: @group,
+          size: :large,
+          version: :thumb
+        } %>
+
+        <h1 class="content-header__title"><%= @group.name %></h1>
+      </div>
+    </header>
+
+    <div class="section__content">
+      <div class="content-header content-header--no-underline">
+        <div class="content-header__title">
+          <h2>About the Beta</h2>
+        </div>
+      </div>
+
+      <p>
+        Welcome to the Distribute Aid platform, and thank you so much for
+        joining our beta test!  Please get in touch if you have an idea for
+        a great new feature, notice anything we can improve on, or want to
+        refer a friend:
+      </p>
+
+      <ul>
+        <li>
+          Email our team at: <a href="mailto:help@distributeaid.org" target="blank">help@distributeaid.org</a>
+        </li>
+        <li>
+          <a href="https://www.facebook.com/DistributeAidDotOrg/" target="blank">Send us a message on Facebook</a>
+        </li>
+        <li>
+          Contact Taylor (our tech lead) on WhatsApp: +44 7445 823932
+        </li>
+      </ul>
+    </div>
+
+  </section>
+</div>
+
+<!--
 <section class="section section--wider">
   <div class="section__content">
     <header class="section__header">
@@ -70,3 +116,4 @@
 
   </div>
 </section>
+-->
