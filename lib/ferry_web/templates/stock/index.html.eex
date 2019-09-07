@@ -7,12 +7,9 @@
         <li class="tab-item">
           <%= link "All Inventory", to: Routes.inventory_list_path(@conn, :show) %>
         </li>
-        <%= if @current_group != nil do %>
-          <li class="tab-item active">
-            <%= link "My Inventory", to: Routes.group_stock_path(@conn, :index, @current_group) %>
-          </li>
-          <!-- TODO: else sign up prompt? -->
-        <% end %>
+        <li class="tab-item active">
+          <%= link "My Inventory", to: Routes.group_stock_path(@conn, :index, @current_group) %>
+        </li>
       </ul>
     </nav>
   </header>

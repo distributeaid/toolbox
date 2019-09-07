@@ -63,7 +63,7 @@ defmodule FerryWeb.ShipmentController do
     changeset = Shipments.change_shipment(%Shipment{
       roles: [%Role{group_id: group.id}]
     })
-    render(conn, "new.html", group: group, changeset: changeset)
+    render(conn, "new.html", current_group: current_group(conn), group: group, changeset: changeset)
   end
 
   def create(conn, %{"shipment" => shipment_params}) do
@@ -81,7 +81,7 @@ defmodule FerryWeb.ShipmentController do
             redirect(conn, to: Routes.group_shipment_path(conn, :show, group.id, shipment))
         end
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", group: group, changeset: changeset)
+        render(conn, "new.html", current_group: current_group(conn), group: group, changeset: changeset)
     end
   end
 
@@ -93,7 +93,7 @@ defmodule FerryWeb.ShipmentController do
     group = current_group(conn)
     shipment = Shipments.get_shipment!(id)
     changeset = Shipments.change_shipment(shipment)
-    render(conn, "edit.html", group: group, shipment: shipment, changeset: changeset)
+    render(conn, "edit.html", current_group: current_group(conn), group: group, shipment: shipment, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "shipment" => shipment_params}) do
@@ -106,7 +106,7 @@ defmodule FerryWeb.ShipmentController do
         |> put_flash(:info, "Shipment updated successfully.")
         |> redirect(to: Routes.group_shipment_path(conn, :show, group, shipment))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", group: group, shipment: shipment, changeset: changeset)
+        render(conn, "edit.html", current_group: current_group(conn), group: group, shipment: shipment, changeset: changeset)
     end
   end
 

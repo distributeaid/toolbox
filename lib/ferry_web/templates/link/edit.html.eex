@@ -1,18 +1,22 @@
-<section class="section">
+<section class="section section--tabs section--multi">
+
+  <header class="section__header">
+    <h1 class="section__title">Groups</h1>
+
+    <nav class="section__nav">
+      <ul class="section__tab tab">
+        <li class="tab-item">
+          <%= link "All Groups", to: Routes.group_path(@conn, :index) %>
+        </li>
+        <li class="tab-item active">
+          <%= link "My Group", to: Routes.group_path(@conn, :show, @current_group.id) %>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
   <div class="section__content">
-    <header class="section__header">
-      <h1 class="section__title">Edit Link</h1>
-      <p class="section__subtitle">(for group <%= link @group.name, to: Routes.group_path(@conn, :show, @group) %>)</p>
-    </header>
-
-    <ul class="actions">
-      <li>
-        <%= link to: Routes.group_link_path(@conn, :index, @group), class: "action" do %>
-          <i class="fas fa-times"></i>
-        <% end %>
-      </li>
-    </ul>
-
+    <h2 class="col-9 col-ml-auto">Edit A Link</h2>
     <%= render "form.html", Map.put(assigns, :action, Routes.group_link_path(@conn, :update, @group, @link)) %>
   </div>
 </section>

@@ -55,24 +55,7 @@ defmodule FerryWeb.GroupController do
 
   # Create
   # ----------------------------------------------------------
-
-  def new(conn, _params) do
-    changeset = Profiles.change_group(%Group{})
-    render(conn, "new.html", changeset: changeset)
-  end
-
-  # TODO: trying to keep it on `/groups/new` after you submit the form with an error
-  #.      currently the url changes to `/groups` (though the new group form is still rendered)
-  def create(conn, %{"group" => group_params}) do
-    case Profiles.create_group(group_params) do
-      {:ok, group} ->
-        conn
-        |> put_flash(:info, "Group created successfully.")
-        |> redirect(to: Routes.group_path(conn, :show, group))
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
-    end
-  end
+  # Create groups using psql directly for now.  See `/README.md` for instructions.
 
   # Update
   # ----------------------------------------------------------

@@ -30,12 +30,6 @@ defmodule FerryWeb.StockController do
     render(conn, "index.html", current_group: current_group(conn), group: group, stocks: stocks)
   end
 
-  def show(conn, %{"group_id" => group_id, "id" => id}) do
-    group = Profiles.get_group!(group_id)
-    stock = Inventory.get_stock!(id)
-    render(conn, "show.html", group: group, stock: stock)
-  end
-
   # Create
   # ------------------------------------------------------------
 
@@ -45,7 +39,7 @@ defmodule FerryWeb.StockController do
     categories = Inventory.list_top_categories()
     items = Inventory.list_top_items()
     changeset = Inventory.change_stock(%Stock{})
-    render(conn, "new.html", group: group, projects: projects, categories: categories, items: items, changeset: changeset)
+    render(conn, "new.html", current_group: current_group(conn), group: group, projects: projects, categories: categories, items: items, changeset: changeset)
   end
 
   def create(conn, %{"group_id" => group_id, "stock" => stock_params}) do
@@ -60,7 +54,7 @@ defmodule FerryWeb.StockController do
         projects = Profiles.list_projects(group)
         categories = Inventory.list_top_categories()
         items = Inventory.list_top_items()
-        render(conn, "new.html", group: group, projects: projects, categories: categories, items: items, changeset: changeset)
+        render(conn, "new.html", current_group: current_group(conn), group: group, projects: projects, categories: categories, items: items, changeset: changeset)
     end
   end
 
@@ -74,7 +68,7 @@ defmodule FerryWeb.StockController do
     items = Inventory.list_top_items()
     stock = Inventory.get_stock!(id)
     changeset = Inventory.change_stock(stock)
-    render(conn, "edit.html", group: group, projects: projects, categories: categories, items: items, stock: stock, changeset: changeset)
+    render(conn, "edit.html", current_group: current_group(conn), group: group, projects: projects, categories: categories, items: items, stock: stock, changeset: changeset)
   end
 
   def update(conn, %{"group_id" => group_id, "id" => id, "stock" => stock_params}) do
@@ -90,7 +84,7 @@ defmodule FerryWeb.StockController do
         projects = Profiles.list_projects(group)
         categories = Inventory.list_top_categories()
         items = Inventory.list_top_items()
-        render(conn, "edit.html", group: group, projects: projects, categories: categories, items: items, stock: stock, changeset: changeset)
+        render(conn, "edit.html", current_group: current_group(conn), group: group, projects: projects, categories: categories, items: items, stock: stock, changeset: changeset)
     end
   end
 

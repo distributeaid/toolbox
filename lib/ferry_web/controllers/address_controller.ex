@@ -8,13 +8,25 @@ defmodule FerryWeb.AddressController do
   # Address Controller
   # ==============================================================================
 
+  # Helpers
+  # ----------------------------------------------------------
+
+  # TODO: copied from group_controller, refactor into shared function or something
+  defp current_group(_conn = %{assigns: %{current_user: %{group_id: group_id}}}) do
+    Profiles.get_group!(group_id)
+  end
+
+  defp current_group(_conn) do
+    nil
+  end
+
   # Create
   # ----------------------------------------------------------
 
   def new(conn, %{"group_id" => group_id}) do
     group = Profiles.get_group!(group_id)
     changeset = Locations.change_address(%Address{})
-    render(conn, "new.html", group: group, changeset: changeset)
+    render(conn, "new.html", current_group: current_group(conn), group: group, changeset: changeset)
   end
 
   def create(conn, %{"group_id" => group_id, "address" => address_params}) do
@@ -26,7 +38,7 @@ defmodule FerryWeb.AddressController do
         |> put_flash(:info, "Address created successfully.")
         |> redirect(to: Routes.group_path(conn, :show, group))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", group: group, changeset: changeset)
+        render(conn, "new.html", current_group: current_group(conn), group: group, changeset: changeset)
 
     end
   end
@@ -38,7 +50,7 @@ defmodule FerryWeb.AddressController do
     group = Profiles.get_group!(group_id)
     address = Locations.get_address!(id)
     changeset = Locations.change_address(address)
-    render(conn, "edit.html", group: group, address: address, changeset: changeset)
+    render(conn, "edit.html", current_group: current_group(conn), group: group, address: address, changeset: changeset)
   end
 
   def update(conn, %{"group_id" => group_id, "id" => id, "address" => address_params}) do
@@ -51,7 +63,7 @@ defmodule FerryWeb.AddressController do
         |> put_flash(:info, "Address updated successfully.")
         |> redirect(to: Routes.group_path(conn, :show, group))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", group: group, address: address, changeset: changeset)
+        render(conn, "edit.html", current_group: current_group(conn), group: group, address: address, changeset: changeset)
     end
   end
 

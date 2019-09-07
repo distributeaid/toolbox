@@ -20,7 +20,7 @@
   </div>
 
   <fieldset>
-    <legend>Main Address</legend>
+    <legend>Location</legend>
     <%= inputs_for f, :address, fn fa -> %>
       <%= render FerryWeb.AddressView, "form-inputs.partial.html", %{form: fa} %>
     <% end %>

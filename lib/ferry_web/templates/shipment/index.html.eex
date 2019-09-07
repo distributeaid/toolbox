@@ -7,12 +7,9 @@
         <li class="tab-item">
           <%= link "All Shipments", to: Routes.shipment_overview_path(@conn, :index) %>
         </li>
-        <%= if @current_group != nil do %>
-          <li class="tab-item active">
-            <%= link "My Shipments", to: Routes.group_shipment_path(@conn, :index, @current_group) %>
-          </li>
-          <!-- TODO: else sign up prompt? -->
-        <% end %>
+        <li class="tab-item active">
+          <%= link "My Shipments", to: Routes.group_shipment_path(@conn, :index, @current_group) %>
+        </li>
       </ul>
     </nav>
   </header>

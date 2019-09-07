@@ -1234,9 +1234,13 @@ Nothing here... for now. :)
 Text
 ------------------------------------------------------------
 */
-.small {
-  font-size: 80% !important;
+.text-small {
+  font-size: 75% !important;
   font-weight: 400;
+}
+
+.text-large {
+  font-size: 125% !important;
 }
 
 /*

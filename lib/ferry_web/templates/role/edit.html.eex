@@ -1,21 +1,25 @@
-<section class="section section--wide">
+<section class="section section--tabs section--multi">
+
+  <header class="section__header">
+    <h1 class="section__title">Shipments</h1>
+
+    <nav class="section__nav">
+      <ul class="section__tab tab">
+        <li class="tab-item">
+          <%= link "All Shipments", to: Routes.shipment_overview_path(@conn, :index) %>
+        </li>
+        <li class="tab-item active">
+          <%= link "My Shipments", to: Routes.group_shipment_path(@conn, :index, @current_group) %>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
   <div class="section__content">
-    <header class="section__header">
-      <h1 class="section__title">Edit Role</h1>
-      <p class="section__subtitle">(shipment: <%= @shipment.label %>)</p>
-    </header>
-
-    <ul class="actions">
-      <li>
-        <%= link to: Routes.group_shipment_path(@conn, :show, @group, @shipment), class: "action" do %>
-          <i class="fas fa-times"></i>
-        <% end %>
-      </li>
-    </ul>
-
+    <h2 class="col-9 col-ml-auto">Edit A Role</h2>
     <%= render "form.html",
       Map.put(assigns, :action, Routes.group_shipment_role_path(@conn, :update, @group, @shipment, @role))
     %>
   </div>
-</section>
 
+</section>

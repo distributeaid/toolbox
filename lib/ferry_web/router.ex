@@ -33,15 +33,11 @@ defmodule FerryWeb.Router do
     resources "/session", SessionController, only: [:new, :create, :delete], singleton: true
 
     resources "/groups", GroupController, only: [:index, :show] do
-      resources "/addresses", AddressController, only: [:index]
-      resources "/links", LinkController, only: [:index, :show]
-      resources "/projects", ProjectController, only: [:index, :show]
       resources "/users", UserController, only: [:new, :create] # TODO: move into admin scope
     end
 
     resources "/inventory", InventoryListController, only: [:show], singleton: true
     resources "/map", MapController, only: [:show], singleton: true
-    resources "/projects", ProjectController, only: [:index]
     resources "/shipments", ShipmentOverviewController, only: [:index, :show]
   end
 
@@ -50,9 +46,9 @@ defmodule FerryWeb.Router do
 
     resources "/groups", GroupController, only: [:edit, :update, :delete] do
       resources "/addresses", AddressController, except: [:index, :show]
-      resources "/links", LinkController, except: [:index, :show]
+      resources "/links", LinkController, except: [:show]
       resources "/projects", ProjectController, except: [:index, :show]
-      resources "/stock", StockController
+      resources "/inventory", StockController, except: [:show]
       resources "/users", UserController, only: [:edit, :update]
       resources "/shipments", ShipmentController do
         resources "/roles", RoleController, except: [:index, :show]
