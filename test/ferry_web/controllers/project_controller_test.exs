@@ -60,12 +60,10 @@ defmodule FerryWeb.ProjectControllerTest do
       Enum.each(
         [
           # unauthenticated
-          fn -> get build_conn(), Routes.group_project_path(build_conn(), :index, 1312) end,
-          fn -> get build_conn(), Routes.group_project_path(build_conn(), :show, 1312, project) end,
+          # none
 
           # authenticated
-          fn -> get conn, Routes.group_project_path(conn, :index, 1312) end,
-          fn -> get conn, Routes.group_project_path(conn, :show, 1312, project) end,
+          # none
         ],
         fn request -> assert_error_sent 404, request end
       )
@@ -75,10 +73,9 @@ defmodule FerryWeb.ProjectControllerTest do
       Enum.each(
         [
           # unauthenticated
-          fn -> get build_conn(), Routes.group_project_path(build_conn(), :show, group, 1312) end,
+          # none
 
           # authenticated
-          fn -> get conn, Routes.group_project_path(conn, :show, group, 1312) end,
           fn -> get conn, Routes.group_project_path(conn, :edit, group, 1312) end,
           fn -> put conn, Routes.group_project_path(conn, :update, group, 1312), project: params_for(:project) end,
           fn -> delete conn, Routes.group_project_path(conn, :delete, group, 1312) end
@@ -86,33 +83,6 @@ defmodule FerryWeb.ProjectControllerTest do
         ],
         fn request -> assert_error_sent 404, request end
       )
-    end
-  end
-
-  # Show
-  # ----------------------------------------------------------
-
-  describe "index" do
-    # TODO: test for 0, 1, n projects across 1, n groups
-    # TODO: test logged in (conn) & logged out (build_conn())
-    test "lists all projects", %{conn: conn} do
-      conn = get conn, Routes.project_path(conn, :index)
-      assert html_response(conn, 200) =~ "Projects"
-    end
-
-    # TODO: test for 0, 1, n projects
-    # TODO: test logged in (conn) & logged out (build_conn())
-    test "lists all projects for a group", %{conn: conn, group: group} do
-      conn = get conn, Routes.group_project_path(conn, :index, group)
-      assert html_response(conn, 200) =~ "Projects"
-    end
-  end
-
-  describe "show" do
-    # TODO: test logged in (conn) & logged out (build_conn())
-    test "lists the specified group", %{conn: conn, group: group, project: project} do
-      conn = get conn, Routes.group_project_path(conn, :show, group, project)
-      assert html_response(conn, 200) =~ project.name
     end
   end
 
@@ -153,7 +123,7 @@ defmodule FerryWeb.ProjectControllerTest do
   describe "edit project" do
     test "renders form for editing chosen project", %{conn: conn, group: group, project: project} do
       conn = get conn, Routes.group_project_path(conn, :edit, group, project)
-      assert html_response(conn, 200) =~ "Edit Project"
+      assert html_response(conn, 200) =~ "Edit A Project"
     end
   end
 
@@ -174,7 +144,7 @@ defmodule FerryWeb.ProjectControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn, group: group, project: project} do
       conn = put conn, Routes.group_project_path(conn, :update, group, project), project: params_for(:invalid_project)
-      assert html_response(conn, 200) =~ "Edit Project"
+      assert html_response(conn, 200) =~ "Edit A Project"
     end
   end
 
@@ -185,9 +155,9 @@ defmodule FerryWeb.ProjectControllerTest do
     test "deletes chosen project", %{conn: conn, group: group, project: project} do
       conn = delete conn, Routes.group_project_path(conn, :delete, group, project)
       assert redirected_to(conn) == Routes.group_path(conn, :show, group)
-      assert_error_sent 404, fn ->
-        get conn, Routes.group_project_path(conn, :show, group, project)
-      end
+
+      conn = get conn, Routes.group_path(conn, :show, group)
+      refute html_response(conn, 200) =~ project.name
     end
   end
 

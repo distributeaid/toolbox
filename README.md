@@ -186,7 +186,7 @@ docker exec toolbox_web mix test --color test/$PATH:$TEST_LINE_NUMBER
 docker exec toolbox_web mix test --color --trace
 
 # for code coverage
-docker exec toolbox_web mix coverall
+docker exec toolbox_web mix coveralls
 ```
 
 Mix commands can be targeted to the test environment / database by setting an environment variable `MIX_ENV=test`.  There are three ways to do this:

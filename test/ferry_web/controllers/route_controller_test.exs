@@ -26,7 +26,7 @@ defmodule FerryWeb.RouteControllerTest do
   describe "new route" do
     test "renders form", %{conn: conn, group: group, shipment: shipment} do
       conn = get conn, Routes.group_shipment_route_path(conn, :new, group, shipment)
-      assert html_response(conn, 200) =~ "New Route Stop"
+      assert html_response(conn, 200) =~ "Add A New Route Stop"
     end
   end
 
@@ -43,7 +43,7 @@ defmodule FerryWeb.RouteControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn, group: group, shipment: shipment} do
       conn = post conn, Routes.group_shipment_route_path(conn, :create, group, shipment), route: params_for(:invalid_route)
-      assert html_response(conn, 200) =~ "New Route Stop"
+      assert html_response(conn, 200) =~ "Add A New Route Stop"
     end
   end
 
@@ -53,7 +53,7 @@ defmodule FerryWeb.RouteControllerTest do
   describe "edit route" do
     test "renders form for editing chosen route", %{conn: conn, group: group, shipment: shipment, route: route} do
       conn = get conn, Routes.group_shipment_route_path(conn, :edit, group, shipment, route)
-      assert html_response(conn, 200) =~ "Edit Route"
+      assert html_response(conn, 200) =~ "Edit A Route Stop"
     end
   end
 
@@ -69,7 +69,7 @@ defmodule FerryWeb.RouteControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn,  group: group, shipment: shipment, route: route} do
       conn = put conn, Routes.group_shipment_route_path(conn, :update, group, shipment, route), route: params_for(:invalid_route)
-      assert html_response(conn, 200) =~ "Edit Route"
+      assert html_response(conn, 200) =~ "Edit A Route Stop"
     end
   end
 

@@ -61,7 +61,7 @@ defmodule FerryWeb.RoleControllerTest do
   describe "edit role" do
     test "renders form for editing chosen role", %{conn: conn, group: group, shipment: shipment, role: role} do
       conn = get conn, Routes.group_shipment_role_path(conn, :edit, group, shipment, role)
-      assert html_response(conn, 200) =~ "Edit Role"
+      assert html_response(conn, 200) =~ "Edit A Role"
     end
   end
 
@@ -78,7 +78,7 @@ defmodule FerryWeb.RoleControllerTest do
     test "renders errors when data is invalid", %{conn: conn, group: group, shipment: shipment, role: role} do
       role_attrs = string_params_for(:invalid_shipment_role)
       conn = put conn, Routes.group_shipment_role_path(conn, :update, group, shipment, role), role: role_attrs
-      assert html_response(conn, 200) =~ "Edit Role"
+      assert html_response(conn, 200) =~ "Edit A Role"
     end
   end
 

@@ -40,6 +40,7 @@ defmodule FerryWeb.LinkControllerTest do
       Enum.each(
         [
           # authenticated
+          post(conn, Routes.group_link_path(conn, :index, not_my_group)),
           post(conn, Routes.group_link_path(conn, :create, not_my_group), link: params_for(:link)),
           get(conn, Routes.group_link_path(conn, :new, not_my_group)),
           get(conn, Routes.group_link_path(conn, :edit, not_my_group, not_my_link)),
@@ -54,12 +55,10 @@ defmodule FerryWeb.LinkControllerTest do
       Enum.each(
         [
           # unauthenticated
-          fn -> get build_conn(), Routes.group_link_path(build_conn(), :index, 1312) end,
-          fn -> get build_conn(), Routes.group_link_path(build_conn(), :show, 1312, link) end,
+          # none
 
           # authenticated
-          fn -> get conn, Routes.group_link_path(conn, :index, 1312) end,
-          fn -> get conn, Routes.group_link_path(conn, :show, 1312, link) end,
+          # none
         ],
         fn request -> assert_error_sent 404, request end
       )
@@ -69,10 +68,9 @@ defmodule FerryWeb.LinkControllerTest do
       Enum.each(
         [
           # unauthenticated
-          fn -> get build_conn(), Routes.group_link_path(build_conn(), :show, group, 1312) end,
+          # none
 
           # authenticated
-          fn -> get conn, Routes.group_link_path(conn, :show, group, 1312) end,
           fn -> get conn, Routes.group_link_path(conn, :edit, group, 1312) end,
           fn -> put conn, Routes.group_link_path(conn, :update, group, 1312), link: params_for(:link) end,
           fn -> delete conn, Routes.group_link_path(conn, :delete, group, 1312) end
@@ -91,13 +89,6 @@ defmodule FerryWeb.LinkControllerTest do
     test "lists all links", %{conn: conn, group: group} do
       conn = get conn, Routes.group_link_path(conn, :index, group)
       assert html_response(conn, 200) =~ "Links"
-    end
-  end
-
-  describe "show" do
-    test "lists the specified link", %{conn: conn, group: group, link: link} do
-      conn = get conn, Routes.group_link_path(conn, :show, group, link)
-      assert html_response(conn, 200) =~ "Show Link"
     end
   end
 
@@ -134,7 +125,7 @@ defmodule FerryWeb.LinkControllerTest do
   describe "edit link" do
     test "renders form for editing chosen link", %{conn: conn, group: group, link: link} do
       conn = get conn, Routes.group_link_path(conn, :edit, group, link)
-      assert html_response(conn, 200) =~ "Edit Link"
+      assert html_response(conn, 200) =~ "Edit A Link"
     end
   end
 
@@ -151,7 +142,7 @@ defmodule FerryWeb.LinkControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn, group: group, link: link} do
       conn = put conn, Routes.group_link_path(conn, :update, group, link), link: params_for(:invalid_link)
-      assert html_response(conn, 200) =~ "Edit Link"
+      assert html_response(conn, 200) =~ "Edit A Link"
     end
   end
 
@@ -162,9 +153,9 @@ defmodule FerryWeb.LinkControllerTest do
     test "deletes chosen link", %{conn: conn, group: group, link: link} do
       conn = delete conn, Routes.group_link_path(conn, :delete, group, link)
       assert redirected_to(conn) == Routes.group_link_path(conn, :index, group)
-      assert_error_sent 404, fn ->
-        get conn, Routes.group_link_path(conn, :show, group, link)
-      end
+
+      conn = get conn, Routes.group_link_path(conn, :index, group)
+      refute html_response(conn, 200) =~ link.label
     end
   end
 

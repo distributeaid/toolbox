@@ -16,7 +16,7 @@
   </header>
 
   <div class="section__content">
-    <h2 class="col-9 col-ml-auto">Add A New Route</h2>
+    <h2 class="col-9 col-ml-auto">Add A New Route Stop</h2>
     <%= render "form.html",
       Map.put(assigns, :action, Routes.group_shipment_route_path(@conn, :create, @group, @shipment))
     %>

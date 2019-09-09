@@ -108,7 +108,7 @@ defmodule FerryWeb.AddressControllerTest do
   describe "edit address" do
     test "renders form for editing chosen address", %{conn: conn, group: group, address: address} do
       conn = get conn, Routes.group_address_path(conn, :edit, group, address)
-      assert html_response(conn, 200) =~ "Edit Address"
+      assert html_response(conn, 200) =~ "Edit An Address"
     end
   end
 
@@ -128,7 +128,7 @@ defmodule FerryWeb.AddressControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn, group: group, address: address} do
       conn = put conn, Routes.group_address_path(conn, :update, group, address), address: params_for(:invalid_address)
-      assert html_response(conn, 200) =~ "Edit Address"
+      assert html_response(conn, 200) =~ "Edit An Address"
     end
   end
 

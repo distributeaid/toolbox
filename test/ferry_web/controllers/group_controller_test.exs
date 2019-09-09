@@ -116,7 +116,7 @@ defmodule FerryWeb.GroupControllerTest do
   describe "edit group" do
     test "renders form for editing chosen group", %{conn: conn, group: group} do
       conn = get conn, Routes.group_path(conn, :edit, group)
-      assert html_response(conn, 200) =~ "Edit Group"
+      assert html_response(conn, 200) =~ "Edit Your Group"
     end
   end
 
@@ -131,7 +131,7 @@ defmodule FerryWeb.GroupControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn, group: group} do
       conn = put conn, Routes.group_path(conn, :update, group), group: params_for(:invalid_group)
-      assert html_response(conn, 200) =~ "Edit Group"
+      assert html_response(conn, 200) =~ "Edit Your Group"
     end
   end
 

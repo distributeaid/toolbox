@@ -29,7 +29,7 @@ defmodule FerryWeb.StockControllerTest do
     # TODO: test logged in (conn) & logged out (build_conn())
     test "lists all stocks for a group", %{conn: conn, group: group} do
       conn = get conn, Routes.group_stock_path(conn, :index, group)
-      assert html_response(conn, 200) =~ "Inventory Manager"
+      assert html_response(conn, 200) =~ "Inventory"
     end
   end
 
@@ -39,7 +39,7 @@ defmodule FerryWeb.StockControllerTest do
   describe "new stock" do
     test "renders form", %{conn: conn, group: group} do
       conn = get conn, Routes.group_stock_path(conn, :new, group)
-      assert html_response(conn, 200) =~ "Add An Item"
+      assert html_response(conn, 200) =~ "Add A New Item"
     end
   end
 
@@ -59,7 +59,7 @@ defmodule FerryWeb.StockControllerTest do
       attrs = build(:stock_attrs, %{project: project})
       invalid_attrs = Map.merge(attrs, string_params_for(:invalid_short_stock))
       conn = post conn, Routes.group_stock_path(conn, :create, group), stock: invalid_attrs
-      assert html_response(conn, 200) =~ "Add An Item"
+      assert html_response(conn, 200) =~ "Add A New Item"
     end
   end
 
@@ -79,7 +79,7 @@ defmodule FerryWeb.StockControllerTest do
       conn = put conn, Routes.group_stock_path(conn, :update, group, stock), stock: attrs
       assert redirected_to(conn) == Routes.group_stock_path(conn, :index, group)
 
-      conn = get conn, Routes.group_stock_path(conn, :show, group, stock)
+      conn = get conn, Routes.group_stock_path(conn, :index, group)
       assert html_response(conn, 200) =~ Integer.to_string(attrs["have"])
     end
 
@@ -98,9 +98,9 @@ defmodule FerryWeb.StockControllerTest do
     test "deletes chosen stock", %{conn: conn, group: group, stock: stock} do
       conn = delete conn, Routes.group_stock_path(conn, :delete, group, stock)
       assert redirected_to(conn) == Routes.group_stock_path(conn, :index, group)
-      assert_error_sent 404, fn ->
-        get conn, Routes.group_stock_path(conn, :show, group, stock)
-      end
+
+      conn = get conn, Routes.group_stock_path(conn, :index, group)
+      refute html_response(conn, 200) =~ Integer.to_string(stock.id)
     end
   end
 end
