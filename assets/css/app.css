@@ -97,6 +97,17 @@ body {
   font-family: Quicksand, sans-serif;
 }
 
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6 {
+  color: #09328B;
+
+  font-family: Lato, serif;
+}
+
 h1:last-child, .h1:last-child,
 h2:last-child, .h2:last-child,
 h3:last-child, .h3:last-child,
@@ -108,17 +119,6 @@ ul:last-child,
 ol:last-child,
 dl:last-child {
   margin-bottom: 0;
-}
-
-h1, .h1,
-h2, .h2,
-h3, .h3,
-h4, .h4,
-h5, .h5,
-h6, .h6 {
-  color: #09328B;
-
-  font-family: Lato, serif;
 }
 
 p,
@@ -190,7 +190,9 @@ a:focus,
 a:hover,
 a:active,
 a.active {
-  border-bottom: 1px solid #8F97E5;
+  /* NOTE: Don't set border bottom size, so if the border is set to `none` by a more specific link style then it doesn't also have to specify that for the active case. */
+  border-bottom-style: solid;
+  border-bottom-color: #8F97E5;
 
   color: #8F97E5;
 
@@ -201,20 +203,13 @@ a.link--wrapper {
   border-bottom: none;
 }
 
-a.link--wrapper:focus,
-a.link--wrapper:hover,
-a.link--wrapper:active,
-a.link--wrapper.active {
-  border-bottom: none;
-}
-
 a.link--unstyled,
 a.link--unstyled:visited,
 a.link--unstyled:focus,
 a.link--unstyled:hover,
 a.link--unstyled:active,
 a.link--unstyled.active {
-  border-bottom: 0;
+  border-bottom: none;
 
   color: #3B4351;
 }
@@ -966,6 +961,9 @@ Guidance Text
 /*
 Icons
 ------------------------------------------------------------
+TODO:
+  [ ] move this to icon styles in Elements, or extend Spectre's position utilities?
+      https://picturepan2.github.io/spectre/utilities/position.html
 */
 .is-icon-left {
   margin-left: 0.4rem;
@@ -1210,7 +1208,7 @@ Utilities
 Backgrounds
 ------------------------------------------------------------
 */
-.bg-cover {
+.bg-img--cover {
   background: no-repeat top center fixed !important;
   background-size: cover !important;
   background-color: #C5CFE4; /* fallback if no image is used */
@@ -1246,6 +1244,8 @@ Text
 /*
 Positioning
 ------------------------------------------------------------
+TODO:
+  [ ] should `flex-centered` be changed to use stretch instead?
 */
 .flex-centered {
   height: 100%;
