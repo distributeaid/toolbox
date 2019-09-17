@@ -17,11 +17,9 @@ defmodule Ferry.AccountsTest do
       min: %{email: "a@b.de", password: "123456789012"}
     }
 
-    # @update_attrs %{
-    #   typical: %{email: "welcome.newcomers.3@example.org", password: "2opqiurefdlaksjfO#Q$*@&#?"},
-    #   email_only: %{email: "welcome.newcomers.4@example.org"},
-    #   password_only: %{password: "lksdaj foia ej(*(FY*(WER##RDD"}
-    # }
+    @update_attrs %{
+      typical: %{email: "welcome.newcomers.3@example.org", password: "2opqiurefdlaksjfO#Q$*@&#?"}
+    }
 
     @invalid_attrs %{
       is_nil: %{email: nil, password: nil},
@@ -114,6 +112,37 @@ defmodule Ferry.AccountsTest do
       group = group_fixture(4)
       assert {:error, %Ecto.Changeset{} = changeset} = Accounts.create_user(group, @invalid_attrs.too_long)
       assert 1 == changeset.errors |> length
+    end
+
+    test "update_user/2 with valid data updates the user" do
+      group = group_fixture(1)
+      assert {:ok, %User{} = user} = Accounts.create_user(group, @valid_attrs.typical)
+
+      # typical
+      assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs.typical)
+      assert user.email == @update_attrs.typical.email
+      assert user.password == @update_attrs.typical.password
+    end
+
+    test "update_user/2 with invalid data returns error changeset" do
+      group = group_fixture(1)
+      assert {:ok, %User{} = user} = Accounts.create_user(group, @valid_attrs.typical)
+
+      # is nil
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs.is_nil)
+      assert user = Accounts.get_user!(user.id)
+
+      # bad format
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs.bad_format)
+      assert user = Accounts.get_user!(user.id)
+
+      # too short
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs.too_short)
+      assert user = Accounts.get_user!(user.id)
+
+      # too long
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs.too_long)
+      assert user = Accounts.get_user!(user.id)
     end
 
     test "change_user/1 returns a user changeset" do

@@ -32,6 +32,7 @@ defmodule Ferry.Accounts.User do
     |> put_password_hash()
   end
 
+  @doc false
   def validate_login(user, %{email: email, password: password} = attrs) do
     user
     |> cast(attrs, [:email, :password])

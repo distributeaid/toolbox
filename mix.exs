@@ -62,7 +62,7 @@ defmodule Ferry.Mixfile do
 
       # testing deps
       {:ex_machina, "~> 2.3", only: :test},
-      {:excoveralls, "~> 0.10", only: :test},
+      {:excoveralls, "~> 0.11", only: :test},
       {:mox, "~> 0.5", only: :test},
 
       # deployment deps
