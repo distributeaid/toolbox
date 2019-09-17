@@ -8,9 +8,10 @@ defmodule Ferry.Inventory.Stock do
   alias Ferry.Inventory.Stock.Photo
 
   schema "inventory_stocks" do
-    field :have, :integer
-    field :need, :integer
-    field :unit, :string
+    field :have, :integer, default: 0
+    field :need, :integer, default: 0
+    field :available, :integer, default: 0
+    field :unit, :string, default: "Items"
     field :description, :string
     field :photo, Photo.Type
 
@@ -25,10 +26,11 @@ defmodule Ferry.Inventory.Stock do
   @doc false
   def changeset(stock, attrs) do
     stock
-    |> cast(attrs, [:project_id, :have, :need, :unit, :description])
-    |> validate_required([:project_id, :have, :need, :unit])
+    |> cast(attrs, [:project_id, :have, :need, :available, :unit, :description])
+    |> validate_required([:project_id, :have, :need, :available, :unit])
     |> validate_number(:have, greater_than_or_equal_to: 0)
     |> validate_number(:need, greater_than_or_equal_to: 0)
+    |> validate_available()
 
     |> cast_assoc(:packaging)
     |> put_assoc(:item, attrs["item"])
@@ -43,10 +45,11 @@ defmodule Ferry.Inventory.Stock do
   @doc false
   def validate(stock, attrs \\ %{}) do
     stock
-    |> cast(attrs, [:have, :need, :unit, :description])
+    |> cast(attrs, [:have, :available, :need, :unit, :description])
     |> validate_required([:have, :need, :unit])
     |> validate_number(:have, greater_than_or_equal_to: 0)
     |> validate_number(:need, greater_than_or_equal_to: 0)
+    |> validate_available()
 
     |> assoc_constraint(:project)
     |> assoc_constraint(:item)
@@ -58,5 +61,23 @@ defmodule Ferry.Inventory.Stock do
   def image_changeset(stock, attrs) do
     stock
     |> cast_attachments(attrs, [:photo])
+  end
+
+  defp validate_available(changeset) do
+    {_, have} = changeset |> fetch_field(:have)
+    {_, available} = changeset |> fetch_field(:available)
+    {_, need} = changeset |> fetch_field(:need)
+
+    changeset = changeset
+    |> validate_number(:available, greater_than_or_equal_to: 0)
+    |> validate_number(:available, less_than_or_equal_to: have,
+      message: "You cannot list more available items than you currently have."
+    )
+
+    cond do
+      available > 0 and need > 0 ->
+        changeset |> add_error(:available, "You cannot list available items if you need more of them.")
+      true -> changeset
+    end
   end
 end

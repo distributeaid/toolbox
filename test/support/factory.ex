@@ -411,8 +411,9 @@ defmodule Ferry.Factory do
   # ------------------------------------------------------------
   def stock_factory do
     %Stock{
-      have: sequence(:count, &(&1 + 101)), # 101, 102, ...
-      need: sequence(:need, &(&1 + 91)), # 91, 92, ...
+      have: sequence(:count, &(&1 + 100)), # 100, 101, ...
+      available: 0,
+      need: 0,
       unit: Enum.random(["items", "small bags", "large bags", "small boxes", "large boxes", "pallets"]),
       description: "We got shirts yo.",
       photo: nil, # TODO: test photo uploads
@@ -424,12 +425,52 @@ defmodule Ferry.Factory do
     }
   end
 
+  def available_stock_factory do
+    struct!(
+      stock_factory(),
+      %{
+        available: sequence(:available, &(&1 + 50)) # 50, 51, ...
+      }
+    )
+  end
+
+  def need_stock_factory do
+    struct!(
+      stock_factory(),
+      %{
+        need: sequence(:need, &(&1 + 50)) # 50, 51, ...
+      }
+    )
+  end
+
   def invalid_short_stock_factory do
     struct!(
       stock_factory(),
       %{
         have: -1,
+        available: -1,
         need: -1
+      }
+    )
+  end
+
+  def invalid_long_stock_factory do
+    struct!(
+      stock_factory(),
+      %{
+        # available > have
+        available: sequence(:available, &(&1 + 200)) # 200, 201, ...
+      }
+    )
+  end
+
+  def invalid_available_stock_factory do
+    struct!(
+      stock_factory(),
+      %{
+        # available > 0 & need > 0
+        available: 1,
+        need: 1
       }
     )
   end
@@ -439,7 +480,8 @@ defmodule Ferry.Factory do
       "project_id" => project_id,
 
       "have" => sequence(:count, &(&1 + 201)), # 201, 202, ...
-      "need" => sequence(:need, &(&1 + 191)), # 191, 192, ...
+      "need" => 0,
+      "available" => 0,
       "unit" => Enum.random(["items", "small bags", "large bags", "small boxes", "large boxes", "pallets"]),
       "description" => "Tons of shirts yo.",
       "photo" => nil, # TODO: test photo uploads

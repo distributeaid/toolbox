@@ -303,9 +303,8 @@ defmodule Ferry.InventoryTest do
       # is nil
       nil_attrs = deep_params_for_stock()
       nil_attrs = Map.put(nil_attrs, "project_id", nil)
-      nil_attrs = Map.put(nil_attrs, "unit", "")
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.create_stock(nil_attrs)
-      assert 2 == length(changeset.errors)
+      assert 1 == length(changeset.errors)
 
       # too short
       assoc_params = %{
@@ -318,6 +317,7 @@ defmodule Ferry.InventoryTest do
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.create_stock(short_attrs)
       errors = Ecto.Changeset.traverse_errors(changeset, fn {msg, _} -> msg end)
       assert 1 == length(errors[:have])
+      assert 1 == length(errors[:available])
       assert 1 == length(errors[:need])
       assert 1 == length(errors[:item][:name])
       assert 1 == length(errors[:item][:category][:name])
@@ -331,10 +331,16 @@ defmodule Ferry.InventoryTest do
         "mod" => string_params_for(:mod),
         "packaging" => string_params_for(:packaging)
       }
-      long_attrs = Enum.into(assoc_params, string_params_for(:stock))
+      long_attrs = Enum.into(assoc_params, string_params_for(:invalid_long_stock))
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.create_stock(long_attrs)
+      assert 1 == length(errors[:available])
       assert 1 == length(errors[:item][:name])
       assert 1 == length(errors[:item][:category][:name])
+
+      # invalid available
+      attrs = Enum.into(string_params_for(:invalid_available_stock), deep_params_for_stock())
+      assert {:error, %Ecto.Changeset{} = changeset} = Inventory.create_stock(attrs)
+      assert 1 == length(errors[:available])
     end
 
     test "update_stock/2 with valid new data updates the stock" do
@@ -418,9 +424,8 @@ defmodule Ferry.InventoryTest do
       # is nil
       nil_attrs = deep_params_for_stock()
       nil_attrs = Map.put(nil_attrs, "project_id", nil)
-      nil_attrs = Map.put(nil_attrs, "unit", "")
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.update_stock(current_stock, nil_attrs)
-      assert 2 == length(changeset.errors)
+      assert 1 == length(changeset.errors)
 
       # too short
       assoc_params = %{
@@ -432,6 +437,7 @@ defmodule Ferry.InventoryTest do
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.update_stock(current_stock, short_attrs)
       errors = Ecto.Changeset.traverse_errors(changeset, fn {msg, _} -> msg end)
       assert 1 == length(errors[:have])
+      assert 1 == length(errors[:available])
       assert 1 == length(errors[:need])
       assert 1 == length(errors[:item][:name])
       assert 1 == length(errors[:item][:category][:name])
@@ -444,10 +450,16 @@ defmodule Ferry.InventoryTest do
         "mod" => string_params_for(:mod),
         "packaging" => string_params_for(:packaging)
       }
-      long_attrs = Enum.into(assoc_params, string_params_for(:stock))
+      long_attrs = Enum.into(assoc_params, string_params_for(:invalid_long_stock))
       assert {:error, %Ecto.Changeset{} = changeset} = Inventory.update_stock(current_stock, long_attrs)
+      assert 1 == length(errors[:available])
       assert 1 == length(errors[:item][:name])
       assert 1 == length(errors[:item][:category][:name])
+
+      # invalid available
+      attrs = Enum.into(string_params_for(:invalid_available_stock), deep_params_for_stock())
+      assert {:error, %Ecto.Changeset{} = changeset} = Inventory.update_stock(current_stock, attrs)
+      assert 1 == length(errors[:available])
     end
 
     test "delete_stock/1 deletes the stock and packaging, but not the rest of the associations" do

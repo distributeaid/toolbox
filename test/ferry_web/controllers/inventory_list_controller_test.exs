@@ -21,14 +21,16 @@ defmodule FerryWeb.InventoryListControllerTest do
 
   describe "show" do
     test "shows the inventory list page with all stock", %{conn: conn} do
-      stock1 = insert(:stock, %{have: 11, need: 22})
-      stock2 = insert(:stock, %{have: 0, need: 55})
-      stock3 = insert(:stock, %{have: 44, need: 0})
+      stock1 = insert(:stock, %{available: 11, have: 22, need: 33})
+      stock2 = insert(:stock, %{available: 0, have: 0, need: 44})
+      stock3 = insert(:stock, %{available: 0, have: 55, need: 0})
+      stock4 = insert(:stock, %{available: 66, have: 66, need: 0})
 
       conn = get conn, Routes.inventory_list_path(conn, :show)
       assert html_response(conn, 200) =~ stock1.have |> Integer.to_string()
       assert html_response(conn, 200) =~ stock2.need |> Integer.to_string()
       assert html_response(conn, 200) =~ stock3.have |> Integer.to_string()
+      assert html_response(conn, 200) =~ stock4.available |> Integer.to_string()
     end
   end
 

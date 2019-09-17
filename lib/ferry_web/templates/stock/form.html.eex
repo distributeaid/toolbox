@@ -50,12 +50,21 @@
     </p>
   </div>
 
+  <div class="form-group form-group--required <%= validation_status_class(f, :available) %>">
+    <%= label f, :available %>
+    <%= number_input f, :available, class: "form-input", placeholder: "0" %>
+    <%= error_tag f, :available %>
+    <p class="form-input-desc">
+      The number of extra units that you do not plan to use and can give away to other groups.  This applies to groups collecting donations at home, and groups in the field with extra supplies they want to share locally.
+    </p>
+  </div>
+
   <div class="form-group form-group--required <%= validation_status_class(f, :need) %>">
     <%= label f, :need %>
     <%= number_input f, :need, class: "form-input", placeholder: "0" %>
     <%= error_tag f, :need %>
     <p class="form-input-desc">
-      The number of units you need.  It's best to plan at least 6 months out, or for the "winter" and "summer" seasons, since larger shipments may take a while!
+      The number of ADDITIONAL units that you need.  It's best to plan at least 6 months out, or for the "winter" and "summer" seasons, since larger shipments may take a while!
     </p>
   </div>
 

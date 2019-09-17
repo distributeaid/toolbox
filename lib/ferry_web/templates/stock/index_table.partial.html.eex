@@ -4,6 +4,7 @@
       <th>Project</th>
       <th>Item</th>
       <th>Have</th>
+      <th>Available</th>
       <th>Need</th>
       <th>Units</th>
       <th>Attributes</th>
@@ -28,6 +29,7 @@
           - <%= stock.item.name %>
         </td>
         <td><%= stock.have %></td>
+        <td><%= stock.available %></td>
         <td><%= stock.need %></td>
         <td><%= stock.unit %></td>
         <td>
