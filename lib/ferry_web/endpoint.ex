@@ -11,7 +11,8 @@ defmodule FerryWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/", from: :ferry, gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(css fonts images js manifest.json robots.txt),
+    only_matching: ~w(android-icon apple-icon favicon)
 
   plug Plug.Static, 
     at: "/uploads", from: Path.expand("./uploads"), gzip: false
