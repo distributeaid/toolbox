@@ -43,9 +43,9 @@
               <%= for role <- shipment.roles do %>
                 <!-- TOOD: link to group, and show full name on hover) -->
                 <%= component "group_logo.partial.html", %{
+                  conn: @conn,
                   group: role.group,
                   size: :small,
-                  version: :thumb,
                   fill: true
                 } %>                
               <% end %>

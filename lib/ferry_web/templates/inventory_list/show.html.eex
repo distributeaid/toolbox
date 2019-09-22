@@ -38,9 +38,9 @@
           <tr>
             <td class="col-4">
               <%= component "group_logo.partial.html", %{
+                conn: @conn,
                 group: stock.project.group,
                 size: :small,
-                version: :thumb,
                 fill: true
               } %>
               <%= link stock.project.group.name, to: Routes.group_path(@conn, :show, stock.project.group) %>

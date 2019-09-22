@@ -20,9 +20,9 @@
       <tr>
         <td>
           <%= component "group_logo.partial.html", %{
+            conn: @conn,
             group: stock.project.group,
             size: :small,
-            version: :thumb,
             fill: true
           } %>
         </td>

@@ -73,9 +73,9 @@
 
         <div class="form-group flex-centered--col">
           <%= component "group_logo.partial.html", %{
+            conn: @conn,
             group: @group,
-            size: :small,
-            version: :thumb
+            size: :small
           } %>
           <strong><%= @group.name %></strong>
           <%= hidden_input fr, :group_id %>

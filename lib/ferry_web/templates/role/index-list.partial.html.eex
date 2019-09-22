@@ -16,9 +16,9 @@
   <div class="columns role">
     <div class="column col-auto">
       <%= component "group_logo.partial.html", %{
+        conn: @conn,
         group: role.group,
         size: :small,
-        version: :thumb,
         fill: true
       } %>
     </div>

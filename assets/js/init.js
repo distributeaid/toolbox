@@ -115,4 +115,14 @@ $(document).ready(function() {
     }
   });
 
+  /*
+  Lazy Load Images
+  ------------------------------------------------------------
+  Inspired by: https://www.robinosborne.co.uk/2016/05/16/lazy-loading-images-dont-rely-on-javascript/
+  */
+  var lazy = document.getElementsByClassName('lazy');
+  for (var i = 0; i < lazy.length; i++) {
+    lazy[i].src = lazy[i].getAttribute('data-src');
+  }
+
 });

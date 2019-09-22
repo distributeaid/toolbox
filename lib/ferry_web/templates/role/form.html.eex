@@ -16,9 +16,9 @@
   <% else %>
     <div class="form-group flex-centered--col">
       <%= component "group_logo.partial.html", %{
+        conn: @conn,
         group: @role.group,
-        size: :small,
-        version: :thumb
+        size: :small
       } %>
       <strong><%= @role.group.name %></strong>
     </div>

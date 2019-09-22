@@ -5,14 +5,13 @@ defmodule FerryWeb.ComponentView do
   alias Ferry.Profiles.Group
   alias Ferry.Profiles.Group.Logo
 
-  def render("group_logo.partial.html", %{group: %Group{} = group} = assigns) do
-    version = assigns[:version] # optional
+  def render("group_logo.partial.html", %{conn: conn, group: %Group{} = group} = assigns) do
     size = assigns[:size] # optional
     fill = assigns[:fill] # optional
 
-    version = case version do
-      :original -> :original
-      :thumb -> :thumb
+    version = case size do
+      :small -> :thumb
+      :large -> :original
       _ -> :thumb
     end
 
@@ -24,7 +23,10 @@ defmodule FerryWeb.ComponentView do
 
     cond do
       group.logo -> content_tag :figure, class: "avatar #{size_class}" do
-        img_tag Logo.url({group.logo, group}, version), alt: "#Logo: {group.name}"
+        img_tag Routes.static_path(conn, "/images/1x1.png"),
+          alt: "#Logo: {group.name}",
+          class: "lazy",
+          data: [src: Logo.url({group.logo, group}, version)]
       end
 
       # fill with blank space if there is no logo

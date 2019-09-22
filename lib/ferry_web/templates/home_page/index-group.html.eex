@@ -4,9 +4,9 @@
     <header class="section__content">
       <div class="content-header content-header--no-underline">
         <%= component "group_logo.partial.html", %{
+          conn: @conn,
           group: @group,
-          size: :large,
-          version: :thumb
+          size: :large
         } %>
 
         <h1 class="content-header__title"><%= @group.name %></h1>
@@ -48,9 +48,9 @@
   <div class="section__content">
     <header class="section__header">
       <%= component "group_logo.partial.html", %{
+        conn: @conn,
         group: @group,
-        size: :large,
-        version: :thumb
+        size: :large
       } %>
       <h1 class="section__title">
         <%= @group.name %>

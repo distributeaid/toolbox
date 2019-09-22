@@ -35,9 +35,9 @@
                   <td>
                     <%= link to: Routes.group_path(@conn, :show, group), class: "link--unstyled" do %>
                       <%= component "group_logo.partial.html", %{
+                          conn: @conn,
                           group: group,
                           size: :small,
-                          version: :thumb,
                           fill: true
                         } %>
                         <div class="group-details">
