@@ -11,11 +11,13 @@ defmodule FerryWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/", from: :ferry, gzip: false,
-    only: ~w(css fonts images js manifest.json robots.txt),
+    only: ~w(css fonts images js robots.txt cache_manifest.json manifest.json stillsuit.js),
     only_matching: ~w(android-icon apple-icon favicon)
+    # TODO: `manifest.json` was recommended by the .ico generator, is it needed?
 
   plug Plug.Static, 
     at: "/uploads", from: Path.expand("./uploads"), gzip: false
+    # TODO: add an `only:` clause to limit file types that users can download from eachother
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

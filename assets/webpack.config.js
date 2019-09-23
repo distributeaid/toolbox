@@ -11,12 +11,13 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 module.exports = (env, options) => ({
 
   entry: {
-    app: glob.sync('./vendor/**/*.min.js').concat(['./js/app.js'])
+    app: glob.sync('./vendor/**/*.min.js').concat(['./js/app.js']),
+    '../stillsuit': './js/stillsuit.js'
   },
 
   output: {
-    filename: '[name].js',
-    path: path.resolve(__dirname, '../priv/static/js')
+    path: path.resolve(__dirname, '../priv/static/js'),
+    filename: '[name].js'
   },
 
   module: {
