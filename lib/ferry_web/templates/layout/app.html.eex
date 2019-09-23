@@ -12,6 +12,7 @@
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     -->
     <link href="https://fonts.googleapis.com/css?family=Lato|Quicksand:400,700&display=swap" rel="stylesheet">
+    <link href="<%= Routes.static_path(@conn, "/css/vendors~app.css") %>" rel="stylesheet">
     <link href="<%= Routes.static_path(@conn, "/css/app.css") %>" rel="stylesheet">
     <%= render_existing @view_module, "view-specific-styles.html" %>
 
@@ -41,6 +42,7 @@
     Scripts
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     -->
+    <script defer src="<%= Routes.static_path(@conn, "/js/vendors~app.js") %>"></script>
     <script defer src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
     <%= render_existing @view_module, "view-specific-scripts.html" %>
   </head>
