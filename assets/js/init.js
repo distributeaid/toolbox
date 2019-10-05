@@ -64,36 +64,40 @@ $(document).ready(function() {
   */
 
   $('#group-index').DataTable({
+    fixedHeader: true,
     info: false,
-    paging: false,
     language: {
       emptyTable: "No groups have been created... yet!"
-    }
+    },
+    paging: false
   });
 
   $('#group-stock-table').DataTable({
+    fixedHeader: true,
     info: false,
-    paging: false,
     language: {
       emptyTable: "No results found.  Try another search term or adding missing inventory?"
-    }
+    },
+    paging: false
   });
 
   $('#inventory-list').DataTable({
+    fixedHeader: true,
     info: false,
-    paging: false,
     language: {
       emptyTable: "No results found.  Try another search term?"
-    }
+    },
+    paging: false
   });
 
   $('#shipment-overview').DataTable({
+    fixedHeader: true,
     info: false,
-    paging: false,
     language: {
       emptyTable: "No shipments have been created... yet!"
-    }
-  })
+    },
+    paging: false
+  });
 
   /* Smooth Scroll to Anchors
    * ------------------------------------------------------

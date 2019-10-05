@@ -456,41 +456,42 @@ Data Tables
 TODO:
   [ ] adjust for Spectre
 */
-.dataTable th {
-  cursor: pointer;
+.dataTables_wrapper .dataTables_filter {
+  float: none;
+  margin-bottom: 0.3rem;
+
+  text-align: left;
 }
 
-.sorting_asc::after,
-.sorting_desc::after {
-  position: relative;
-  display: inline-block;
-  left: 0.4rem;
-}
-
-.sorting_asc::after {
-  content: "▲";
-}
-
-.sorting_desc::after {
-  content: "▼";
-}
-
-.dataTables_filter {
-  margin-bottom: 0.8rem;
-}
-
-.dataTables_filter label {
-  margin-bottom: 0;
-}
-
-.dataTables_filter input {
+.dataTables_wrapper .dataTables_filter input {
   display: inline-block;
   width: 33.33333333%;
   margin-left: 0.8rem;
 }
 
-.dataTables_empty {
-  text-align: center;
+table.dataTable.no-footer {
+  border-bottom: 1px solid #8F97E5;
+}
+
+table.dataTable thead th,
+table.dataTable thead td {
+  border-bottom: 1px solid #8F97E5;
+}
+
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc,
+table.dataTable thead .sorting_asc_disabled,
+table.dataTable thead .sorting_desc_disabled {
+  background-position: center left;
+}
+
+table.fixedHeader-floating {
+  z-index: 100;
+}
+
+table.fixedHeader-floating.no-footer {
+  border-bottom: 0;
 }
 
 /*
@@ -1076,6 +1077,8 @@ Site
 }
 
 .site-header {
+  position: sticky;
+  top: 0;
   height: 100vh;
   overflow: hidden auto;
   border-right: 0.1rem solid #C5CFE4;
@@ -1133,10 +1136,7 @@ ul.site-nav > li {
   color: #082B76;
 }
 
-.site-content {
-  height: 100vh;
-  overflow: hidden auto;
-}
+.site-content {}
 
 /*
 Subsection
