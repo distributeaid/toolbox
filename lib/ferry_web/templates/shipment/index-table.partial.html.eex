@@ -1,7 +1,6 @@
 <table id="shipment-overview" class="table table-striped">
   <thead>
     <tr>
-      <th>Name</th>
       <th>Status</th>
       <th>Target Date</th>
       <th>From</th>
@@ -24,7 +23,6 @@
   <tbody>
     <%= for shipment <- @shipments do %>
       <tr>
-        <td><%= shipment.label %></td>
         <td class="shipment__status"><%= shipment.status %></td>
         <td><%= shipment.target_date_to_be_shipped %></td>
         <td><%= shipment.sender_address %></td>

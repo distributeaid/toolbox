@@ -102,7 +102,6 @@ defmodule Ferry.ShipmentsTest do
     test "create_shipment/1 with valid data creates a shipment" do
       attrs = params_for(:shipment)
       assert {:ok, %Shipment{} = shipment} = Shipments.create_shipment(attrs)
-      assert shipment.label == attrs.label
       assert shipment.target_date_to_be_shipped == attrs.target_date_to_be_shipped
       assert shipment.status == attrs.status
       assert shipment.sender_address == attrs.sender_address
@@ -120,7 +119,6 @@ defmodule Ferry.ShipmentsTest do
       assert [%Role{} = role] = shipment.roles
 
       # NOTE: shipment attributes are tested above, no need to duplicate here
-      assert role.label == role_attrs.label
       assert role.supplier? == role_attrs.supplier?
       assert role.receiver? == role_attrs.receiver?
       assert role.description == role_attrs.description
@@ -143,7 +141,6 @@ defmodule Ferry.ShipmentsTest do
       attrs = params_for(:shipment)
 
       assert {:ok, %Shipment{} = shipment} = Shipments.update_shipment(old_shipment, attrs)
-      assert shipment.label == attrs.label
       assert shipment.target_date_to_be_shipped == attrs.target_date_to_be_shipped
       assert shipment.status == attrs.status
       assert shipment.sender_address == attrs.sender_address
@@ -159,7 +156,6 @@ defmodule Ferry.ShipmentsTest do
       attrs = params_for(:shipment)
 
       assert {:ok, %Shipment{} = shipment} = Shipments.update_shipment(old_shipment, attrs)
-      assert shipment.label == attrs.label
       assert shipment.target_date_to_be_shipped == attrs.target_date_to_be_shipped
       assert shipment.status == attrs.status
       assert shipment.sender_address == attrs.sender_address

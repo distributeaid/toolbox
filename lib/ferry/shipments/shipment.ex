@@ -6,7 +6,6 @@ defmodule Ferry.Shipments.Shipment do
   alias Ferry.Shipments.Role
 
   schema "shipments" do
-    field :label, :string
     field :status, :string
     field :target_date_to_be_shipped, :string
 
@@ -26,7 +25,6 @@ defmodule Ferry.Shipments.Shipment do
   def changeset(shipment, attrs) do
     shipment
     |> cast(attrs, [
-      :label,
       :status,
       :target_date_to_be_shipped,
 
@@ -37,7 +35,7 @@ defmodule Ferry.Shipments.Shipment do
       :funding
     ])
 
-    |> validate_required([:label, :status, :target_date_to_be_shipped, :sender_address, :receiver_address])
+    |> validate_required([:status, :target_date_to_be_shipped, :sender_address, :receiver_address])
     |> validate_inclusion(:status, ["planning", "ready", "underway", "received"])
   end
 end

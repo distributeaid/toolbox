@@ -33,7 +33,7 @@ defmodule FerryWeb.ShipmentControllerTest do
   describe "show" do
     test "lists the specified shipment", %{conn: conn, group: group, shipment: shipment} do
       conn = get conn, Routes.group_shipment_path(conn, :show, group, shipment)
-      assert html_response(conn, 200) =~ shipment.label
+      assert html_response(conn, 200) =~ shipment.target_date_to_be_shipped
     end
   end
 
@@ -56,10 +56,10 @@ defmodule FerryWeb.ShipmentControllerTest do
       assert redirected_to(conn) == Routes.group_shipment_path(conn, :show, group, id)
 
       conn = get conn, Routes.group_shipment_path(conn, :show, group, id)
-      assert html_response(conn, 200) =~ shipment_params.label
+      assert html_response(conn, 200) =~ shipment_params.target_date_to_be_shipped
 
       shipment_params =  Map.put(shipment_params, "new_route", "true")
-      assert html_response(conn, 200) =~ shipment_params.label
+      assert html_response(conn, 200) =~ shipment_params.target_date_to_be_shipped
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group} do

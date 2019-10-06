@@ -497,8 +497,7 @@ defmodule Ferry.Factory do
 
   def shipment_factory do
     %Shipment{
-      label: sequence("hello"),
-      target_date_to_be_shipped: "today",
+      target_date_to_be_shipped: sequence(:target_date_to_be_shipped, &"1/1/#{2020 + &1}"),
       status: Enum.random(["planning", "ready", "underway", "received"]),
 
       sender_address: "an address",
@@ -516,7 +515,6 @@ defmodule Ferry.Factory do
     struct!(
       shipment_factory(),
       %{
-        label: "",
         status: "hello"
       }
     )

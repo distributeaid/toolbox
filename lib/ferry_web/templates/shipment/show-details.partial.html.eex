@@ -1,5 +1,5 @@
 <div class="content-header">
-  <h3 class="content-header__title"><%= @shipment.label %></h3>
+  <h3 class="content-header__title">At A Glance</h3>
 
   <%= if @can_modify? do %>
     <ul class="actions">

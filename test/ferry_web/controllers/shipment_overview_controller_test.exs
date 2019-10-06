@@ -28,14 +28,14 @@ defmodule FerryWeb.ShipmentOverviewControllerTest do
       conn = get conn, Routes.shipment_overview_path(conn, :index)
       response = html_response(conn, 200)
       assert response =~ "Shipments"
-      assert response =~ shipment.label
+      assert response =~ shipment.target_date_to_be_shipped
     end
   end
 
   describe "show" do
     test "lists the specified shipment", %{conn: conn, shipment: shipment} do
       conn = get conn, Routes.shipment_overview_path(conn, :show, shipment)
-      assert html_response(conn, 200) =~ shipment.label
+      assert html_response(conn, 200) =~ shipment.target_date_to_be_shipped
     end
   end
 
