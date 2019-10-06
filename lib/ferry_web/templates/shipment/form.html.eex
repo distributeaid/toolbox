@@ -75,29 +75,29 @@
           <%= hidden_input fr, :group_id %>
         </div>
 
-        <div class="form-group form-group--required <%= validation_status_class(f, :label) %>">
-          <%= label f, :label %>
-          <%= text_input f, :label, class: "form-input", placeholder: "EX: Organizer, Funder, etc" %>
-          <%= error_tag f, :label %>
+        <div class="form-group form-group--required <%= validation_status_class(fr, :label) %>">
+          <%= label fr, :label %>
+          <%= text_input fr, :label, class: "form-input", placeholder: "EX: Organizer, Funder, etc" %>
+          <%= error_tag fr, :label %>
         </div>
 
-        <div class="form-group <%= validation_status_class(f, :supplier?) %>">
-          <%= label f, :supplier?, class: "form-checkbox" do %>
-            <%= checkbox f, :supplier? %>
+        <div class="form-group <%= validation_status_class(fr, :supplier?) %>">
+          <%= label fr, :supplier?, class: "form-checkbox" do %>
+            <%= checkbox fr, :supplier? %>
             <i class="form-icon fas fa-check"></i>
             Supplier
           <% end %>
-          <%= error_tag f, :supplier? %>
+          <%= error_tag fr, :supplier? %>
           <p class="form-input-desc">Suppliers will be able to add inventory to the shipment.</p>
         </div>
 
-        <div class="form-group <%= validation_status_class(f, :receiver?) %>">
-          <%= label f, :receiver?, class: "form-checkbox" do %>
-            <%= checkbox f, :receiver? %>
+        <div class="form-group <%= validation_status_class(fr, :receiver?) %>">
+          <%= label fr, :receiver?, class: "form-checkbox" do %>
+            <%= checkbox fr, :receiver? %>
             <i class="form-icon fas fa-check"></i>
             Receiver
           <% end %>
-          <%= error_tag f, :receiver? %>
+          <%= error_tag fr, :receiver? %>
           <p class="form-input-desc">Receiver's needs lists will be shown on the shipment.</p>
         </div>
 
@@ -118,10 +118,10 @@
           </ul>
         </div>
 
-        <div class="form-group <%= validation_status_class(f, :description) %>">
-          <%= label f, :description %>
-          <%= textarea f, :description, class: "form-input", placeholder: "Include other details about your role in the shipment..." %>
-          <%= error_tag f, :description %>
+        <div class="form-group <%= validation_status_class(fr, :description) %>">
+          <%= label fr, :description %>
+          <%= textarea fr, :description, class: "form-input", placeholder: "Include other details about your role in the shipment..." %>
+          <%= error_tag fr, :description %>
         </div>
 
       </fieldset>

@@ -93,7 +93,8 @@ defmodule Ferry.Shipments do
 
   """
   def create_shipment(attrs \\ %{}) do
-    # TODO: force at least 1 role to exist to prevent orphan shipments
+    # TODO: validate that at least 1 role exists to prevent orphan shipments
+    #       currently enforced through the UI
     %Shipment{}
     |> Shipment.changeset(attrs)
     |> Changeset.cast_assoc(:roles)
