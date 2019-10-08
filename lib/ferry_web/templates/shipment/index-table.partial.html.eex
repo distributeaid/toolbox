@@ -3,6 +3,7 @@
     <tr>
       <th>Status</th>
       <th>Target Date</th>
+      <th>Size</th>
       <th>From</th>
       <th>To</th>
 
@@ -24,7 +25,8 @@
     <%= for shipment <- @shipments do %>
       <tr>
         <td class="shipment__status"><%= shipment.status %></td>
-        <td><%= shipment.target_date_to_be_shipped %></td>
+        <td><%= shipment.target_date %></td>
+        <td><%= shipment.transport_size %></td>
         <td><%= shipment.sender_address %></td>
         <td><%= shipment.receiver_address %></td>
 

@@ -21,7 +21,17 @@
   <ul class="shipments-list list--unstyled">
     <%= for shipment <- @shipments do %>
       <li>
-        <%= link items_text(shipment), to: Routes.group_shipment_path(@conn, :show, @group, shipment) %>
+        <%= link to: Routes.group_shipment_path(@conn, :show, @group, shipment) do %>
+          <!-- TODO: handle corner cases where not all info is present / other status. -->
+          <span class="shipment-details__status"><%= shipment.status %></span> - 
+          <%= if shipment.transport_size do %>
+            <%= "#{shipment.transport_size} - " %>
+          <% end %>
+          <%= "#{shipment.target_date} - #{shipment.sender_address} => #{shipment.receiver_address}." %>
+        <% end %>
+        <p>
+          <%= shipment.description %>
+        </p>
       </li>
     <% end %>
   </ul>

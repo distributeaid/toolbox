@@ -497,11 +497,23 @@ defmodule Ferry.Factory do
 
   def shipment_factory do
     %Shipment{
-      target_date_to_be_shipped: sequence(:target_date_to_be_shipped, &"1/1/#{2020 + &1}"),
+      target_date: sequence(:target_date, &"1/1/#{2020 + &1}"),
       status: Enum.random(["planning", "ready", "underway", "received"]),
+      description: sequence("I am a shipment description with stuff about shipments yeah!"),
 
       sender_address: "an address",
       receiver_address: "another address",
+
+      transport_size: Enum.random([
+        nil,
+        "Full Truck (13m / 40ft)",
+        "Half Truck (13m / 40ft)",
+        "Individual Pallets",
+        "Van",
+        "Car",
+        "Shipping Container",
+        "Other"
+      ]),
 
       items: "some stuff",
       funding: "$nothing",

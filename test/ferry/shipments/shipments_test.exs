@@ -102,13 +102,17 @@ defmodule Ferry.ShipmentsTest do
     test "create_shipment/1 with valid data creates a shipment" do
       attrs = params_for(:shipment)
       assert {:ok, %Shipment{} = shipment} = Shipments.create_shipment(attrs)
-      assert shipment.target_date_to_be_shipped == attrs.target_date_to_be_shipped
+      assert shipment.target_date == attrs.target_date
       assert shipment.status == attrs.status
       assert shipment.sender_address == attrs.sender_address
       assert shipment.items == attrs.items
       assert shipment.funding == attrs.funding
       assert shipment.receiver_address == attrs.receiver_address
       assert shipment.roles == []
+      assert shipment.description == attrs.description
+      if attrs["transport_size"] do
+        assert shipment.transport_size == attrs.transport_size
+      end
     end
 
     test "create_shipment/1 with additional role data creates a shipment with roles" do
@@ -141,7 +145,7 @@ defmodule Ferry.ShipmentsTest do
       attrs = params_for(:shipment)
 
       assert {:ok, %Shipment{} = shipment} = Shipments.update_shipment(old_shipment, attrs)
-      assert shipment.target_date_to_be_shipped == attrs.target_date_to_be_shipped
+      assert shipment.target_date == attrs.target_date
       assert shipment.status == attrs.status
       assert shipment.sender_address == attrs.sender_address
       assert shipment.items == attrs.items
@@ -149,6 +153,10 @@ defmodule Ferry.ShipmentsTest do
       assert shipment.receiver_address == attrs.receiver_address
       assert shipment.roles == old_shipment.roles
       assert shipment.routes == old_shipment.routes
+      assert shipment.description == attrs.description
+      if attrs["transport_size"] do
+        assert shipment.transport_size == attrs.transport_size
+      end
     end
 
     test "update_shipment/2 can't update roles" do
@@ -156,13 +164,17 @@ defmodule Ferry.ShipmentsTest do
       attrs = params_for(:shipment)
 
       assert {:ok, %Shipment{} = shipment} = Shipments.update_shipment(old_shipment, attrs)
-      assert shipment.target_date_to_be_shipped == attrs.target_date_to_be_shipped
+      assert shipment.target_date == attrs.target_date
       assert shipment.status == attrs.status
       assert shipment.sender_address == attrs.sender_address
       assert shipment.items == attrs.items
       assert shipment.funding == attrs.funding
       assert shipment.receiver_address == attrs.receiver_address
       assert shipment.roles == old_shipment.roles
+      assert shipment.description == attrs.description
+      if attrs["transport_size"] do
+        assert shipment.transport_size == attrs.transport_size
+      end
     end
 
     test "update_shipment/2 with invalid data returns error changeset" do

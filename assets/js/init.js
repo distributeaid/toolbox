@@ -25,17 +25,16 @@ $(document).ready(function() {
   ------------------------------------------------------------
   */
 
-  // single select
-  $('.select').select2({
-    closeOnSelect: false
+  // ensure the select is initialized and blank
+  $transportSize = $('.select-transport-size').select2({
+    allowClear: true,
+    placeholder: "Select a transport size..."
   });
-
-  // multi select
- // ensure the select is initialized and blank
   $category = $('.select-and-input-cat').select2({tags: true}).val(null).trigger('change');
   $item = $('.select-and-input-item').select2({tags: true}).val(null).trigger('change');
   $roleType = $('.select-role-type').select2({tags: true}).val(null).trigger('change');
 
+  // ensure that custom values are entered if the user clicks off the selectbox after typing them in
   $category.on("select2:close", function(data){checkInputOffFocus(data, $category)});
   $item.on("select2:close", function(data){checkInputOffFocus(data, $item)});
   $roleType.on("select2:close", function(data){checkInputOffFocus(data, $roleType)});

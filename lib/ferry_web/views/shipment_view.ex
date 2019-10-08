@@ -9,13 +9,6 @@ defmodule FerryWeb.ShipmentView do
     length(routes) > 0
   end
 
-  def items_text(shipment) do
-    cond do
-      shipment.items != nil -> shipment.items
-      true -> "There is nothing to describe this shipment yet"
-    end
-  end
-
   def one_month_from_today() do
     Timex.now() |> Timex.shift(months: 1) |> Timex.format!("{Mfull} {D}, {YYYY}")
   end

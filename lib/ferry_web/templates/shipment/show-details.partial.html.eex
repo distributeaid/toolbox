@@ -14,7 +14,9 @@
 
 <dl class="shipment-details list--grid">
   <dt>Status:</dt><dd class="shipment-details__status"><%= @shipment.status %></dd>
-  <dt>Target Date:</dt><dd><%= @shipment.target_date_to_be_shipped %></dd>
+  <dt>Target Date:</dt><dd><%= @shipment.target_date %></dd>
+  <dt>Size:</dt><dd><%= @shipment.transport_size %></dd>
   <dt>From:</dt><dd><%= @shipment.sender_address %></dd>
   <dt>To:</dt><dd><%= @shipment.receiver_address %></dd>
+  <dt>Description:</dt><dd><%= @shipment.description %></dd>
 </dl>

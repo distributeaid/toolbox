@@ -7,10 +7,13 @@ defmodule Ferry.Shipments.Shipment do
 
   schema "shipments" do
     field :status, :string
-    field :target_date_to_be_shipped, :string
+    field :description, :string
+    field :target_date, :string
 
     field :sender_address, :string
     field :receiver_address, :string
+
+    field :transport_size, :string
 
     field :items, :string
     field :funding, :string
@@ -26,16 +29,36 @@ defmodule Ferry.Shipments.Shipment do
     shipment
     |> cast(attrs, [
       :status,
-      :target_date_to_be_shipped,
+      :description,
+      :target_date,
 
       :sender_address,
       :receiver_address,
 
+      :transport_size,
+
       :items,
       :funding
     ])
+    |> validate_required([:status, :target_date, :sender_address, :receiver_address])
 
-    |> validate_required([:status, :target_date_to_be_shipped, :sender_address, :receiver_address])
-    |> validate_inclusion(:status, ["planning", "ready", "underway", "received"])
+    |> validate_inclusion(:status, [
+      "planning",
+      "ready",
+      "underway",
+      "received",
+      "other"
+    ])
+
+    |> validate_inclusion(:transport_size, [
+      "",
+      "Full Truck (13m / 40ft)",
+      "Half Truck (13m / 40ft)",
+      "Individual Pallets",
+      "Van",
+      "Car",
+      "Shipping Container",
+      "Other"
+    ])
   end
 end

@@ -18,10 +18,10 @@
     <%= error_tag f, :status %>
   </div>
 
-  <div class="form-group form-group--required <%= validation_status_class(f, :target_date_to_be_shipped) %>">
-    <%= label f, :target_date_to_be_shipped, "Target Date" %>
-    <%= text_input f, :target_date_to_be_shipped, class: "form-input", placeholder: one_month_from_today() %>
-    <%= error_tag f, :target_date_to_be_shipped %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :target_date) %>">
+    <%= label f, :target_date, "Target Date" %>
+    <%= text_input f, :target_date, class: "form-input", placeholder: one_month_from_today() %>
+    <%= error_tag f, :target_date %>
     <p class="form-input-desc">
       A specific date, a month, "summer", etc.
     </p>
@@ -29,7 +29,7 @@
 
   <div class="form-group form-group--required <%= validation_status_class(f, :sender_address) %>">
     <%= label f, :sender_address, "From" %>
-    <%= text_input f, :sender_address, class: "form-input", placeholder: "Glasgow" %>
+    <%= text_input f, :sender_address, class: "form-input", placeholder: "Glasgow, Scotland" %>
     <%= error_tag f, :sender_address %>
     <p class="form-input-desc">
       Keep this short and sweet.  You can add a detailed route once the shipment is created.
@@ -38,11 +38,26 @@
 
   <div class="form-group form-group--required <%= validation_status_class(f, :receiver_address) %>">
     <%= label f, :receiver_address, "To" %>
-    <%= text_input f, :receiver_address, class: "form-input", placeholder: "Greece" %>
+    <%= text_input f, :receiver_address, class: "form-input", placeholder: "Athens, Greece" %>
     <%= error_tag f, :receiver_address %>
     <p class="form-input-desc">
       Keep this short and sweet.  You can add a detailed route once the shipment is created.
     </p>
+  </div>
+
+  <div class="form-group  <%= validation_status_class(f, :transport_size) %>">
+    <%= label f, :transport_size, "Transport Size" %>
+    <%= select f, :transport_size, [nil, "Full Truck (13m / 40ft)", "Half Truck (13m / 40ft)", "Individual Pallets", "Van", "Car", "Shipping Container", "Other"], class: "select-transport-size form-select" %>
+    <%= error_tag f, :transport_size %>
+    <p class="form-input-desc">
+      You can use the shipment description field to provide more information about the shipment's transportation, such as if you'd like to include the length of a van or choose the "Other" option.
+    </p>
+  </div>
+
+  <div class="form-group <%= validation_status_class(f, :description) %>">
+    <%= label f, :description %>
+    <%= textarea f, :description, class: "form-input", placeholder: "Add more information about your shipment..." %>
+    <%= error_tag f, :description %>
   </div>
 
   <!-- TODO: none of this has been styled after switching from Kube => Spectre since it was commented out -->
