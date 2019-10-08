@@ -568,7 +568,8 @@ defmodule Ferry.Factory do
 
   def route_factory do
     %Route{
-      label: sequence("not today"),
+      type: Enum.random(["Pickup", "Dropoff", sequence("Other")]),
+      address: sequence("Somewhere"),
       date: sequence(:date, &Date.add(Date.utc_today(), &1)),
       checklist: ["here", "there"],
       groups: "x"
@@ -579,7 +580,9 @@ defmodule Ferry.Factory do
     struct!(
       route_factory(),
       %{
-        label: ""
+        type: "",
+        address: "",
+        date: ""
       }
     )
   end

@@ -17,7 +17,7 @@
     <div class="columns">
       <div class="column">
         <p>
-          <strong><%= route.label %></strong>
+          <strong><%= route.type %></strong>
           <%= if route.date do %>
             - <%= route.date %>
           <% end %>

@@ -7,22 +7,31 @@
     </div>
   <% end %>
 
-  <div class="form-group form-group--required <%= validation_status_class(f, :label) %>">
-    <%= label f, :label %>
-    <%= text_input f, :label, class: "form-input", placeholder: "Pickup" %>
-    <%= error_tag f, :label %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :type) %>">
+    <%= label f, :type %>
+    <%= select f, :type, ["Pickup": "pickup", "Dropoff": "dropoff"], class: "select-role-type form-select" %>
+    <%= error_tag f, :type %>
+    <p class="form-input-desc">
+      You can also enter a custom value for the type of stop this is!  Simply click on the select box, type in the value, and hit enter.  You should now be able to see this value and it will be saved when you submit the form.
+    </p>
   </div>
 
-  <div class="form-group <%= validation_status_class(f, :address) %>">
+  <div class="form-group form-group--required <%= validation_status_class(f, :address) %>">
     <%= label f, :address %>
     <%= text_input f, :address, class: "form-input", placeholder: "4 Privet Drive, Little Whinging, Surrey" %>
     <%= error_tag f, :address %>
+    <p class="form-input-desc">
+      You can enter an exact address, or just a city / country.
+    </p>
   </div>
 
-  <div class="form-group <%= validation_status_class(f, :date) %>">
-    <%= label f, :date %>
+  <div class="form-group form-group--required <%= validation_status_class(f, :date) %>">
+    <%= label f, :date, "(Estimated) Date" %>
     <%= date_input f, :date, class: "form-input" %>
     <%= error_tag f, :date %>
+    <p class="form-input-desc">
+      Route Stops are ordered by date.  If there isn't an exact date set, it's ok to enter an estimate to get the ordering right.
+    </p>
   </div>
 
   <!--

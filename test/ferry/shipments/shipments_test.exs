@@ -315,9 +315,13 @@ defmodule Ferry.ShipmentsTest do
       route_params = params_for(:route, %{shipment_id: shipment.id})
 
       assert {:ok, %Route{} = route} = Shipments.create_route(route_params)
-      assert route.checklist == route_params.checklist
+      assert route.type == route_params.type
+      assert route.address == route_params.address
       assert route.date == route_params.date
-      assert route.groups == route_params.groups
+
+# TODO: turned off in UI for now
+#      assert route.checklist == route_params.checklist
+#      assert route.groups == route_params.groups
     end
 
     test "create_route/1 with invalid data returns error changeset" do
@@ -331,7 +335,9 @@ defmodule Ferry.ShipmentsTest do
       route_params = params_for(:route)
       assert {:ok, route} = Shipments.update_route(route, route_params)
       assert %Route{} = route
-      assert route.label == route_params.label
+      assert route.type == route_params.type
+      assert route.address == route_params.address
+      assert route.date == route_params.date
     end
 
     test "update_route/2 with invalid data returns error changeset" do

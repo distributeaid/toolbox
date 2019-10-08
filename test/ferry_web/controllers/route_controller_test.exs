@@ -38,7 +38,7 @@ defmodule FerryWeb.RouteControllerTest do
       assert redirected_to(conn) == Routes.group_shipment_path(conn, :show, group, shipment)
 
       conn = get conn, Routes.group_shipment_path(conn, :show, group, shipment)
-      assert html_response(conn, 200) =~ route_params.label
+      assert html_response(conn, 200) =~ route_params.address
     end
 
     test "renders errors when data is invalid", %{conn: conn, group: group, shipment: shipment} do
@@ -64,7 +64,7 @@ defmodule FerryWeb.RouteControllerTest do
       assert redirected_to(conn) == Routes.group_shipment_path(conn, :show, group, shipment)
 
       conn = get conn, Routes.group_shipment_path(conn, :show, group, shipment)
-      assert html_response(conn, 200) =~ route_params.label
+      assert html_response(conn, 200) =~ route_params.address
     end
 
     test "renders errors when data is invalid", %{conn: conn,  group: group, shipment: shipment, route: route} do
@@ -82,7 +82,7 @@ defmodule FerryWeb.RouteControllerTest do
       assert redirected_to(conn) == Routes.group_shipment_path(conn, :show, group, shipment)
 
       conn = get conn, Routes.group_shipment_path(conn, :show, group, shipment)
-      refute html_response(conn, 200) =~ route.label
+      refute html_response(conn, 200) =~ route.address
     end
   end
 end

@@ -32,11 +32,13 @@ $(document).ready(function() {
 
   // multi select
  // ensure the select is initialized and blank
-  $category = $('.select-and-input-cat').select2({tags: true,}).val(null).trigger('change');
-  $item = $('.select-and-input-item').select2({tags: true,}).val(null).trigger('change');
+  $category = $('.select-and-input-cat').select2({tags: true}).val(null).trigger('change');
+  $item = $('.select-and-input-item').select2({tags: true}).val(null).trigger('change');
+  $roleType = $('.select-role-type').select2({tags: true}).val(null).trigger('change');
 
   $category.on("select2:close", function(data){checkInputOffFocus(data, $category)});
   $item.on("select2:close", function(data){checkInputOffFocus(data, $item)});
+  $roleType.on("select2:close", function(data){checkInputOffFocus(data, $roleType)});
 
   function checkInputOffFocus(data, $input){
     var options = data.target.options;
