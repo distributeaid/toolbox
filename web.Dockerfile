@@ -28,6 +28,6 @@ RUN mix local.hex --force && \
     mix deps.compile
 
 WORKDIR /app/assets
-RUN npm install && node node_modules/brunch/bin/brunch build
+RUN npm install
 
 WORKDIR /app
