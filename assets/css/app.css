@@ -1044,6 +1044,10 @@ Shipment Roles
   margin-bottom: 0.8rem;
 }
 
+.role p {
+  margin-bottom: 0;
+}
+
 /*
 Shipment Routes
 ------------------------------------------------------------

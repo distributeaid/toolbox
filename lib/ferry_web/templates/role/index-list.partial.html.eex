@@ -24,9 +24,10 @@
     </div>
     <div class="column">
       <p>
-        <strong><%= role.label %></strong>
         <%= display_role_attributes(role) %>
-        <br /><%= role.group.name %>
+      </p>
+      <p>
+        <%= link role.group.name, to: Routes.group_path(@conn, :show, role.group.id) %>
       </p>
       <%= if role.description do %>
         <p><%= role.description %></p>

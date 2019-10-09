@@ -558,19 +558,31 @@ defmodule Ferry.Factory do
   # ------------------------------------------------------------
 
   def shipment_role_factory do
-    %Role{
-      label: Enum.random(["Collector", "Transporter", "Distributor", "Funder", "Observer"]),
+    role = %Role{
       supplier?: Enum.random([true, false]),
       receiver?: Enum.random([true, false]),
+      organizer?: Enum.random([true, false]),
+      funder?: Enum.random([true, false]),
+      other?: Enum.random([true, false]),
       description: sequence("I am description #")
     }
+
+    unless role.supplier? or role.receiver? or role.organizer? or role.funder? do
+      %{role | other?: true}
+    else
+      role
+    end
   end
 
   def invalid_shipment_role_factory do
     struct!(
       shipment_role_factory(),
       %{
-        label: ""
+        supplier?: false,
+        receiver?: false,
+        organizer?: false,
+        funder?: false,
+        other?: false
       }
     )
   end

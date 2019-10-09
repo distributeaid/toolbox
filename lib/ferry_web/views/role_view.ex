@@ -22,11 +22,41 @@ defmodule FerryWeb.RoleView do
   end
 
   def display_role_attributes(role) do
-    cond do
-      role.supplier? and role.receiver? -> ~E(<small>Supplier, Receiver</small>)
-      role.supplier? -> ~E(<small>Supplier</small>)
-      role.receiver? -> ~E(<small>Receiver</small>)
-      true -> nil
+    # check the roles in reverse order from how we want to display them, since we are prepending
+    role_attributes = []
+
+    role_attributes = if role.other? do
+      ["Other Role" | role_attributes]
+    else
+      role_attributes
     end
+
+    role_attributes = if role.funder? do
+      ["Funder" | role_attributes]
+    else
+      role_attributes
+    end
+
+    role_attributes = if role.receiver? do
+      ["Receiver" | role_attributes]
+    else
+      role_attributes
+    end
+
+    role_attributes = if role.supplier? do
+      ["Supplier" | role_attributes]
+    else
+      role_attributes
+    end
+
+    role_attributes = if role.organizer? do
+      ["Organizer" | role_attributes]
+    else
+      role_attributes
+    end
+
+    role_attributes = Enum.join(role_attributes, " // ")
+
+    ~E(<strong><%= role_attributes %></strong>)
   end
 end

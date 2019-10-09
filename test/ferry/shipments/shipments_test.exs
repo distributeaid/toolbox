@@ -125,6 +125,9 @@ defmodule Ferry.ShipmentsTest do
       # NOTE: shipment attributes are tested above, no need to duplicate here
       assert role.supplier? == role_attrs.supplier?
       assert role.receiver? == role_attrs.receiver?
+      assert role.organizer? == role_attrs.organizer?
+      assert role.funder? == role_attrs.funder?
+      assert role.other? == role_attrs.other?
       assert role.description == role_attrs.description
       assert role.group_id == role_attrs.group_id
       assert role.shipment_id == shipment.id
@@ -219,9 +222,11 @@ defmodule Ferry.ShipmentsTest do
       shipment = insert(:shipment)
       attrs = params_for(:shipment_role, %{group_id: group.id, shipment_id: shipment.id})
       assert {:ok, %Role{} = role} = Shipments.create_role(attrs)
-      assert role.label == attrs.label
       assert role.supplier? == attrs.supplier?
       assert role.receiver? == attrs.receiver?
+      assert role.organizer? == attrs.organizer?
+      assert role.funder? == attrs.funder?
+      assert role.other? == attrs.other?
       assert role.description == attrs.description
       assert role.group_id == group.id
       assert role.shipment_id == shipment.id
@@ -242,9 +247,11 @@ defmodule Ferry.ShipmentsTest do
       attrs = params_for(:shipment_role)
 
       assert {:ok, %Role{} = role} = Shipments.update_role(old_role, attrs)
-      assert role.label == attrs.label
       assert role.supplier? == attrs.supplier?
       assert role.receiver? == attrs.receiver?
+      assert role.organizer? == attrs.organizer?
+      assert role.funder? == attrs.funder?
+      assert role.other? == attrs.other?
       assert role.description == attrs.description
       assert role.group_id == group.id
       assert role.shipment_id == shipment.id

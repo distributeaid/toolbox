@@ -24,10 +24,26 @@
     </div>
   <% end %>
 
-  <div class="form-group form-group--required <%= validation_status_class(f, :label) %>">
-    <%= label f, :label %>
-    <%= text_input f, :label, class: "form-input", placeholder: "EX: Organizer, Funder, etc" %>
-    <%= error_tag f, :label %>
+  <div class="form-group <%= validation_status_class(f, :role) %>">
+    <div class="col-9 col-ml-auto">
+      <p>
+        Check all the roles that describe your contribution to the shipment!  You can use the role description to provide more information, especially if you check "Other".
+      </p>
+      <p class="text-bold">
+        Roles
+      </p>
+    </div>
+    <%= error_tag f, :role %>
+  </div>
+
+  <div class="form-group <%= validation_status_class(f, :supplier?) %>">
+    <%= label f, :organizer?, class: "form-checkbox" do %>
+      <%= checkbox f, :organizer? %>
+      <i class="form-icon fas fa-check"></i>
+      Organizer
+    <% end %>
+    <%= error_tag f, :organizer? %>
+    <p class="form-input-desc">You are the primary point of contact for the shipment, and/or are doing administrative work to put it together.  Other groups who wish to contribute to the shipment should reach out to you to get involved.</p>
   </div>
 
   <div class="form-group <%= validation_status_class(f, :supplier?) %>">
@@ -37,7 +53,7 @@
       Supplier
     <% end %>
     <%= error_tag f, :supplier? %>
-    <p class="form-input-desc">Suppliers will be able to add inventory to the shipment.</p>
+    <p class="form-input-desc">You are adding aid that you've collected to the shipment.  Your available inventory will show up in the list of "Available Aid" on the main shipment page, so that receiving groups can ask for specific items.</p>
   </div>
 
   <div class="form-group <%= validation_status_class(f, :receiver?) %>">
@@ -47,24 +63,27 @@
       Receiver
     <% end %>
     <%= error_tag f, :receiver? %>
-    <p class="form-input-desc">Receiver's needs lists will be shown on the shipment.</p>
+    <p class="form-input-desc">You are receiving some or all of the aid on the shipment, to distribute in the field.  Your needs list will show up in the list of "Needed Aid" on the main shipment page, so that supplying groups know what to include.</p>
   </div>
 
-  <div class="form-input-desc">
-    <p>
-      A group can be a supplier, a receiver, both, or neither.  For example:
-    </p>
-    <ul>
-      <li>
-        One group collects donations at home to send to another group working in the field.  The first group would be a Supplier, and the second a Receiver.
-      </li>
-      <li>
-        A group's home office organizes donation drives.  In this case the group would be both a Supplier and a Receiver.
-      </li>
-      <li>
-        Groups can also be involved in the shipment without supplying or receiving aid, such as if they are only organizing the shipment or funding it.  The Label field is useful to clarify their Role.
-      </li>
-    </ul>
+  <div class="form-group <%= validation_status_class(f, :supplier?) %>">
+    <%= label f, :funder?, class: "form-checkbox" do %>
+      <%= checkbox f, :funder? %>
+      <i class="form-icon fas fa-check"></i>
+      Organizer
+    <% end %>
+    <%= error_tag f, :funder? %>
+    <p class="form-input-desc">You are contributing funds to cover part or all of the costs related to the shipment.</p>
+  </div>
+
+  <div class="form-group <%= validation_status_class(f, :supplier?) %>">
+    <%= label f, :other?, class: "form-checkbox" do %>
+      <%= checkbox f, :other? %>
+      <i class="form-icon fas fa-check"></i>
+      Other
+    <% end %>
+    <%= error_tag f, :other? %>
+    <p class="form-input-desc">You are doing something else not described by the default roles!  You can use the role description to provide more information about your contribution.</p>
   </div>
 
   <div class="form-group <%= validation_status_class(f, :description) %>">
