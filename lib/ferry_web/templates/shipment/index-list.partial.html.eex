@@ -23,7 +23,7 @@
       <li>
         <%= link to: Routes.group_shipment_path(@conn, :show, @group, shipment) do %>
           <!-- TODO: handle corner cases where not all info is present / other status. -->
-          <span class="shipment-details__status"><%= shipment.status %></span> - 
+          <span class="text-capitalize"><%= status_text(shipment.status) %></span> - 
           <%= if shipment.transport_size do %>
             <%= "#{shipment.transport_size} - " %>
           <% end %>

@@ -48,7 +48,7 @@
                 </li>
               </ul>
             </td>
-            <td class="shipment__status"><%= shipment.status %></td>
+            <td class="text-capitalize" data-order="<%= FerryWeb.ShipmentView.status_order(shipment.status) %>"><%= FerryWeb.ShipmentView.status_text(shipment.status) %></td>
             <td><%= shipment.target_date %></td>
             <td><%= shipment.transport_size %></td>
             <td><%= shipment.sender_address %></td>

@@ -1037,10 +1037,6 @@ Shipment
 
 .shipment-details {}
 
-.shipment-details__status {
-  text-transform: capitalize;
-}
-
 /*
 Shipment Roles
 ------------------------------------------------------------

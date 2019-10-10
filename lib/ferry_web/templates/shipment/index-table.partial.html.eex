@@ -37,7 +37,7 @@
           </ul>
         </td>
 
-        <td class="shipment__status"><%= shipment.status %></td>
+        <td class="text-capitalize" data-order="<%= status_order(shipment.status) %>"><%= status_text(shipment.status) %></td>
         <td><%= shipment.target_date %></td>
         <td><%= shipment.transport_size %></td>
         <td><%= shipment.sender_address %></td>

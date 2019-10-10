@@ -46,8 +46,7 @@ defmodule Ferry.Shipments.Shipment do
       "planning",
       "ready",
       "underway",
-      "received",
-      "other"
+      "received"
     ])
 
     |> validate_inclusion(:transport_size, [
