@@ -75,7 +75,7 @@
           <li>
             <%= if @current_user == nil do %>
               <%= link to: Routes.session_path(@conn, :new) do %>
-                <i class="fas fa-fw fa-unlock-alt"></i> Login
+                <i class="fas fa-fw fa-unlock-alt"></i> Login / Signup
               <% end %>
             <% else %>
               <%= link to: Routes.session_path(@conn, :delete), method: :delete do %>

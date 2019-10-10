@@ -1,4 +1,4 @@
-<%= form_for @changeset, @action, [class: "form-horizontal"], fn f -> %>
+<%= form_for @changeset, @action, [multipart: true, class: "form-horizontal"], fn f -> %>
   <%= component "required.partial.html" %>
   
   <%= if @changeset.action do %>
@@ -18,6 +18,32 @@
     <%= password_input f, :password, class: "form-input", placeholder: "A secret!" %>
     <%= error_tag f, :password %>
   </div>
+
+  <%= if @type == :new do %>
+    <%= inputs_for f, :group, fn fg -> %>
+      <fieldset>
+        <legend>Your Group</legend>
+
+        <div class="form-group form-group--required <%= validation_status_class(fg, :name) %>">
+          <%= label fg, :name %>
+          <%= text_input fg, :name, class: "form-input", placeholder: "Mutual Aid Solidarity Club" %>
+          <%= error_tag fg, :name %>
+        </div>
+
+        <div class="form-group <%= validation_status_class(fg, :logo) %>">
+          <%= label fg, :logo %>
+          <%= file_input fg, :logo, class: "form-input" %>
+          <%= error_tag fg, :logo %>
+        </div>
+
+        <div class="form-group <%= validation_status_class(fg, :description) %>">
+          <%= label fg, :description %>
+          <%= textarea fg, :description, class: "form-input", placeholder: "Tell us about your group..." %>
+          <%= error_tag fg, :description %>
+        </div>
+      </fieldset>
+    <% end %>
+  <% end %>
 
   <div class="form-group col-9 col-ml-auto">
     <%= submit "Submit", class: "btn btn-lg btn-primary" %>

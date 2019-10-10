@@ -1,0 +1,16 @@
+<div class="flex-centered">
+  <section class="section section--form col-9">
+
+    <header class="section__header">
+      <h1 class="col-9 col-ml-auto">Add A New User</h1>
+    </header>
+
+    <div class="section__content">
+      <%= render "form.html", Map.merge(assigns, %{
+        type: :add,
+        action: Routes.group_user_path(@conn, :create, @group)
+      }) %>
+    </div>
+
+  </section>
+</div>

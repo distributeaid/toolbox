@@ -33,6 +33,20 @@ defmodule Ferry.Accounts.User do
   end
 
   @doc false
+  def signup_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:email, :password])
+    |> cast_assoc(:group, required: true)
+
+    |> validate_required([:email, :password])
+    |> validate_length(:email, min: 5, max: 255)
+    |> validate_format(:email, ~r/@/)
+    |> unique_constraint(:email)
+    |> validate_length(:password, min: 12)
+    |> put_password_hash()
+  end
+
+  @doc false
   def validate_login(user, %{email: email, password: password} = attrs) do
     user
     |> cast(attrs, [:email, :password])

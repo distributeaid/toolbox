@@ -23,9 +23,14 @@ defmodule Ferry.Profiles.Group do
   def changeset(group, attrs) do
     group
     |> cast(attrs, [:name, :description])
-    |> cast_attachments(attrs, [:logo])
     |> validate_required([:name])
     |> validate_length(:name, min: 1, max: 255)
     |> unique_constraint(:name)
+  end
+
+  @doc false
+  def logo_changeset(group, attrs) do
+    group
+    |> cast_attachments(attrs, [:logo])
   end
 end

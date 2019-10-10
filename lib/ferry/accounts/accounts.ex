@@ -57,6 +57,29 @@ defmodule Ferry.Accounts do
     |> Repo.insert()
   end
 
+  @doc """
+  Creates a user and a group.
+
+  TODO
+  """
+  def create_user_and_group(attrs \\ %{}) do
+    {status, result} = %User{}
+    |> User.signup_changeset(attrs)
+    |> Repo.insert()
+
+    case status do
+      :ok ->
+        if attrs["group"]["logo"] do
+          result.group
+          |> Group.logo_changeset(attrs["group"])
+          |> Repo.update()
+        else
+          {status, result}
+        end
+      :error -> {status, result}
+    end
+  end
+
   # @doc """
   # Updates a user.
 

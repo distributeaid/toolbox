@@ -79,6 +79,7 @@ defmodule Ferry.Profiles do
   def update_group(%Group{} = group, attrs) do
     group
     |> Group.changeset(attrs)
+    |> Group.logo_changeset(attrs)
     |> Repo.update()
   end
 

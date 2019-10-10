@@ -15,11 +15,11 @@ defmodule FerryWeb.SessionController do
   # ----------------------------------------------------------
 
   def new(conn, _) do
-    changeset = Accounts.change_user(%User{})
     maybe_user = Guardian.Plug.current_resource(conn)
     if maybe_user do
       redirect(conn, to: Routes.home_page_path(conn, :index)) # TODO: test redirect
     else
+      changeset = Accounts.change_user(%User{})
       render(conn, "new.html", changeset: changeset)
     end
   end
