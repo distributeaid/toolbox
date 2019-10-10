@@ -2,6 +2,7 @@
 
   <header class="section__header">
     <h1 class="section__title">The Map</h1>
+    <!-- TODO: signup prompt -->
   </header>
 
   <div class="section__content">

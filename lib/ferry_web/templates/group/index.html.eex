@@ -16,6 +16,11 @@
         <% end %>
       </ul>
     </nav>
+    <%= if is_nil(@current_group) do %>
+      <%= link to: Routes.user_path(@conn, :new), class: "btn btn-primary tooltip tooltip-left section__action", data: [tooltip: "Sign up for an account to add your group's profile!"] do %>
+        <i class="fas fa-lg fa-plus-circle is-icon-left"></i> Add Your Group
+      <% end %>
+    <% end %>
   </header>
 
   <div class="section__content">

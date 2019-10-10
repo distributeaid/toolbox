@@ -23,8 +23,11 @@
 
     <footer class="section__footer">
       <%= link to: Routes.session_path(@conn, :new), class: "btn btn-lg btn-primary" do %>
-        Login <i class="fas fa-unlock is-icon-left"></i>
+        <i class="fas fa-unlock is-icon-left"></i> Login
       <% end %>
+      <%= link to: Routes.user_path(@conn, :new), class: "btn btn-lg btn-primary" do %>
+        <i class="fas fa-plus-circle is-icon-left"></i> Signup
+      <% end %>      
     </footer>
 
   </section>

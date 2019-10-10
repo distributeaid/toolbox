@@ -539,7 +539,7 @@ Section
 }
 
 .section--tabs {
-  margin: 0.4rem 0.4rem 1.6rem 0.4rem;
+  margin: 0rem 0.4rem 1.6rem 0.4rem;
 }
 
 .section--text {
@@ -581,6 +581,10 @@ Section
   padding: 0 0.8rem;
 
   /*line-height: 1;*/
+}
+
+.section--tabs .section__action {
+  align-self: center;
 }
 
 .section--tabs .section__nav {
@@ -967,11 +971,11 @@ TODO:
       https://picturepan2.github.io/spectre/utilities/position.html
 */
 .is-icon-left {
-  margin-left: 0.4rem;
+  margin-right: 0.4rem;
 }
 
 .is-icon-right {
-  margin-right: 0.4rem;
+  margin-left: 0.4rem;
 }
 
 /*
