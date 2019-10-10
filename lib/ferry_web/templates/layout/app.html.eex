@@ -47,7 +47,7 @@
     <%= render_existing @view_module, "view-specific-scripts.html" %>
     <script>
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("<%= Routes.static_path(@conn, "/stillsuit.js") %>")
+        navigator.serviceWorker.register("/stillsuit.js")
           .then(function(registration) {
             console.log('ServiceWorker registration successful with scope: ', registration.scope);
           })

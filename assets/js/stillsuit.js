@@ -109,9 +109,6 @@ function getStaticAssetPaths() {
         return path.match(/^(images|css|js|fonts)/);
       });
 
-      paths.push('/offline-not-loaded');
-      paths.push('/offline-not-supported');
-
       console.log('getStaticAssetPaths() => paths: ', paths);
 
       return paths;
