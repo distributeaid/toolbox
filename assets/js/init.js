@@ -65,21 +65,37 @@ $(document).ready(function() {
   */
 
   $('#group-index').DataTable({
+    columnDefs: [
+      {
+        targets: 0,
+        orderable: false,
+        searchable: false
+      }
+    ],
     fixedHeader: true,
     info: false,
     language: {
       emptyTable: "No groups have been created... yet!"
     },
-    paging: false
+    paging: false,
+    order: [[1, 'asc']]
   });
 
   $('#group-stock-table').DataTable({
+    columnDefs: [
+      {
+        targets: 0,
+        orderable: false,
+        searchable: false
+      }
+    ],
     fixedHeader: true,
     info: false,
     language: {
       emptyTable: "No results found.  Try another search term or adding missing inventory?"
     },
-    paging: false
+    paging: false,
+    order: [[1, 'asc']]
   });
 
   $('#inventory-list').DataTable({
@@ -88,16 +104,30 @@ $(document).ready(function() {
     language: {
       emptyTable: "No results found.  Try another search term?"
     },
-    paging: false
+    paging: false,
+    order: [[1, 'asc']]
   });
 
   $('#shipment-overview').DataTable({
+    columnDefs: [
+      {
+        targets: 0,
+        orderable: false,
+        searchable: false
+      },
+      {
+        targets: -1,
+        orderable: false,
+        searchable: false
+      }
+    ],
     fixedHeader: true,
     info: false,
     language: {
       emptyTable: "No shipments have been created... yet!"
     },
-    paging: false
+    paging: false,
+    order: [[1, 'asc']]
   });
 
   /* Smooth Scroll to Anchors

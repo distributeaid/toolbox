@@ -84,7 +84,7 @@
           <%= component "group_logo.partial.html", %{
             conn: @conn,
             group: @group,
-            size: :small
+            size: :xl
           } %>
           <strong><%= @group.name %></strong>
           <%= hidden_input fr, :group_id %>

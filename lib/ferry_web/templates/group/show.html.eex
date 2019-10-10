@@ -40,7 +40,7 @@
       <%= component "group_logo.partial.html", %{
         conn: @conn,
         group: @group,
-        size: :large
+        size: :xxl
       } %>
 
       <h2 class="content-header__title"><%= @group.name %></h2>

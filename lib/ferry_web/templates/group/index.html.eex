@@ -28,42 +28,37 @@
 
       <thead>
         <tr>
+          <th><!-- Actions --></th>
           <th> Group </th>
-          <th></th>
         </tr>
       </thead>
 
       <tbody>
         <%= if has_groups? @groups do %>
-            <%= for group <- @groups do %>
-                <tr>
-                  <td>
-                    <%= link to: Routes.group_path(@conn, :show, group), class: "link--unstyled" do %>
-                      <%= component "group_logo.partial.html", %{
-                          conn: @conn,
-                          group: group,
-                          size: :small,
-                          fill: true
-                        } %>
-                        <div class="group-details">
-                          <%= group.name %>
-                        </div>
-                    <% end %>
-                  </td>
-                  <td class="actions actions--sm">
-                    <%= link to: Routes.group_path(@conn, :show, group), class: "action" do %>
-                      <i class="fas fa-eye"></i>
-                    <% end %>
-                    <%= if @current_group != nil && group == @current_group do %>
-                      <%= link to: Routes.group_path(@conn, :edit, @current_group), class: "action" do %>
-                        <i class="fas fa-pencil-alt"></i>
-                      <% end %>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
+          <%= for group <- @groups do %>
+            <tr>
+              <td class="actions actions--sm">
+                <%= link to: Routes.group_path(@conn, :show, group), class: "action" do %>
+                  <i class="fas fa-eye"></i>
+                <% end %>
+              </td>
+              <td>
+                <%= link to: Routes.group_path(@conn, :show, group), class: "link--unstyled" do %>
+                  <%= component "group_logo.partial.html", %{
+                    conn: @conn,
+                    group: group,
+                    size: :lg,
+                    fill: true
+                  } %>
+                  <div class="group-details">
+                    <%= group.name %>
+                  </div>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
 
-            <% else %>
+        <% else %>
           <p>
             No groups have been created... yet!
           </p>

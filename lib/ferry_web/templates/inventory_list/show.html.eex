@@ -24,7 +24,7 @@
 
   <div class="section__content section__content--thin">
     <%= render FerryWeb.StockView, "search-guidance.partial.html" %>
-    <table id="inventory-list" class="table table-striped">
+    <table id="inventory-list" class="table table-striped text-small">
 
       <thead>
         <tr>
@@ -45,7 +45,7 @@
               <%= component "group_logo.partial.html", %{
                 conn: @conn,
                 group: stock.project.group,
-                size: :small,
+                size: :normal,
                 fill: true
               } %>
               <%= link stock.project.group.name, to: Routes.group_path(@conn, :show, stock.project.group) %>

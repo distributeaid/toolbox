@@ -1,15 +1,8 @@
-<table id="group-stock-table" class="table table-striped">
+<table id="group-stock-table" class="table table-striped text-small">
   <thead>
     <tr>
-      <th>Project</th>
-      <th>Item</th>
-      <th>Have</th>
-      <th>Available</th>
-      <th>Need</th>
-      <th>Units</th>
-      <th>Attributes</th>
       <th>
-        <ul class="actions">
+        <ul class="actions actions--sm">
           <li>
             <%= link to: Routes.group_stock_path(@conn, :new, @group), class: "action" do %>
               <i class="fas fa-plus"></i>
@@ -17,28 +10,19 @@
           </li>
         </ul>
       </th>
+      <th>Project</th>
+      <th>Item</th>
+      <th>Have</th>
+      <th>Available</th>
+      <th>Need</th>
+      <th>Units</th>
+      <th>Attributes</th>
     </tr>
   </thead>
 
   <tbody>
     <%= for stock <- @stocks do %>
       <tr>
-        <td class="col-3"><%= stock.project.name %></td>
-        <td class="col-3">
-          <strong><%= stock.item.category.name %></strong>
-          - <%= stock.item.name %>
-        </td>
-        <td><%= stock.have %></td>
-        <td><%= stock.available %></td>
-        <td><%= stock.need %></td>
-        <td><%= stock.unit %></td>
-        <td>
-          <%= stock.mod.age %>
-          <%= print_gender(stock.mod.gender) %>
-          <%= stock.mod.size %>
-          <%= stock.mod.season %>
-        </td>
-
         <td>
           <ul class="actions actions--sm">
             <li>
@@ -52,6 +36,22 @@
               <% end %>
             </li>
           </ul>
+        </td>
+
+        <td><%= stock.project.name %></td>
+        <td>
+          <strong><%= stock.item.category.name %></strong>
+          - <%= stock.item.name %>
+        </td>
+        <td><%= stock.have %></td>
+        <td><%= stock.available %></td>
+        <td><%= stock.need %></td>
+        <td><%= stock.unit %></td>
+        <td>
+          <%= stock.mod.age %>
+          <%= print_gender(stock.mod.gender) %>
+          <%= stock.mod.size %>
+          <%= stock.mod.season %>
         </td>
 
       </tr>

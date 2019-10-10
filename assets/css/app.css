@@ -478,6 +478,11 @@ table.dataTable thead td {
   border-bottom: 1px solid #8F97E5;
 }
 
+table.dataTable thead th.sorting_disabled,
+table.dataTable thead td.sorting_disabled {
+  padding: 8px 10px;
+}
+
 table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc,
 table.dataTable thead .sorting_desc,
@@ -664,25 +669,16 @@ TODO:
   [ ] use it for map icons too
 */
 .avatar {
+  box-sizing: border-box;
   border: 0.05rem solid #EEF0FF;
 }
 
 .avatar.avatar-xxl {
-  width: 6.2rem;
-  height: 6.2rem;
+  width: 6.4rem;
+  height: 6.4rem;
   border: 0.1rem solid #EEF0FF;  
 
   font-size: 3.2rem;
-}
-
-.avatar.avatar-xl {
-  width: 4.1rem;
-  height: 4.1rem;
-}
-
-.avatar.avatar-lg {
-  width: 2.1rem;
-  height: 2.1rem;
 }
 
 .avatar.avatar--filler {
@@ -715,6 +711,10 @@ TODO:
 
 .actions--inline {
   margin-bottom: 0.8rem;
+}
+
+.action {
+  box-sizing: border-box;
 }
 
 .actions--sm .action {
@@ -1001,6 +1001,7 @@ TODO:
 .map-icon--logo {
   width: 1.6rem;
   height: 1.6rem;
+  margin-left: -0.8rem;
   border: 0.1rem solid #C8C8C8;
   border-radius: 100%;
 }
@@ -1241,12 +1242,11 @@ Text
 ------------------------------------------------------------
 */
 .text-small {
-  font-size: 75% !important;
-  font-weight: 400;
+  font-size: 87.5% !important;
 }
 
 .text-large {
-  font-size: 125% !important;
+  font-size: 112.5% !important;
 }
 
 /*

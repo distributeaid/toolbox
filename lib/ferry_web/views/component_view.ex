@@ -10,21 +10,25 @@ defmodule FerryWeb.ComponentView do
     fill = assigns[:fill] # optional
 
     version = case size do
-      :small -> :thumb
-      :large -> :original
+      :xxl -> :original
+      :xl -> :thumb
+      :lg -> :thumb
+      :normal -> :thumb
       _ -> :thumb
     end
 
     size_class = case size do
-      :large -> "avatar-xxl"
-      :small -> "avatar-lg"
+      :xxl -> "avatar-xxl"
+      :xl -> "avatar-xl"
+      :lg -> "avatar-lg"
+      :normal -> ""
       _ -> ""
     end
 
     cond do
       group.logo -> content_tag :figure, class: "avatar #{size_class}" do
         img_tag Routes.static_path(conn, "/images/1x1.png"),
-          alt: "#Logo: {group.name}",
+          alt: "Logo: #{group.name}",
           class: "lazy",
           data: [src: Logo.url({group.logo, group}, version)]
       end

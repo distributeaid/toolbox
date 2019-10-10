@@ -22,7 +22,7 @@
           <%= component "group_logo.partial.html", %{
             conn: @conn,
             group: stock.project.group,
-            size: :small,
+            size: :normal,
             fill: true
           } %>
         </td>

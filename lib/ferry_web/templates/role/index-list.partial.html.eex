@@ -18,7 +18,7 @@
       <%= component "group_logo.partial.html", %{
         conn: @conn,
         group: role.group,
-        size: :small,
+        size: :xl,
         fill: true
       } %>
     </div>
