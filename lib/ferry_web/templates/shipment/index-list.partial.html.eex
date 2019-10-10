@@ -21,7 +21,7 @@
   <ul class="shipments-list list--unstyled">
     <%= for shipment <- @shipments do %>
       <li>
-        <%= link to: Routes.group_shipment_path(@conn, :show, @group, shipment) do %>
+        <%= link to: Routes.shipment_overview_path(@conn, :show, shipment) do %>
           <!-- TODO: handle corner cases where not all info is present / other status. -->
           <span class="text-capitalize"><%= status_text(shipment.status) %></span> - 
           <%= if shipment.transport_size do %>

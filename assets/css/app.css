@@ -1053,24 +1053,12 @@ Shipment Roles
 Shipment Routes
 ------------------------------------------------------------
 */
-ul.routes {
-  margin-top: 0.8rem;
-}
-
-ul.routes > li {
+.route {
   margin-bottom: 0.8rem;
 }
 
-ul.routes > li:last-child {
-  margin-bottom: 0;
-}
-
-.route {
-  position: relative;
-}
-
 .route p {
-  margin-bottom: 0.2rem;
+  margin-bottom: 0;
 }
 
 /*

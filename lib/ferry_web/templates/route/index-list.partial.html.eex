@@ -14,10 +14,10 @@
 
 <%= if length(@shipment.routes) > 0 do %>
   <%= for route <- @shipment.routes do %>
-    <div class="columns">
+    <div class="columns route">
       <div class="column">
         <p>
-          <strong><%= route.type %></strong>
+          <strong class="text-capitalize"><%= route.type %></strong>
           <%= if route.date do %>
             - <%= route.date %>
           <% end %>
