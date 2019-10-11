@@ -26,6 +26,7 @@ $(document).ready(function() {
   */
 
   // ensure the select is initialized and blank
+  $mapSelect = $(".map-select").select2({});
   $transportSize = $('.select-transport-size').select2({
     allowClear: true,
     placeholder: "Select a transport size..."
