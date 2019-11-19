@@ -109,6 +109,8 @@ INSERT INTO groups (name, description, inserted_at, updated_at) VALUES ('group n
 
 To create more users, visit http://localhost:1312/public/groups/$GROUP_ID/users/new (replace $GROUP_ID with the id of the group you want to add the user to).  You can add multiple users to a single group.
 
+For adding more data (like groups, shipments, items), register as an aid group. [Here is a screencast](https://www.loom.com/share/78a7cc512bbe4885ac3d8671372437a1) explaining this process in detail.
+
 **Trouble Shooting**
 
 * Try not to have PostgreSQL running locally (potential conflict issues).
