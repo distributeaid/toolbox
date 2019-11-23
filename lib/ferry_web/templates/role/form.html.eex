@@ -10,7 +10,7 @@
   <%= if assigns[:create?] do %>
     <div class="form-group form-group--required <%= validation_status_class(f, :group_id) %>">
       <%= label f, :group_id, "Group" %>
-      <%= select f, :group_id, select_group_options(@groups, @shipment.roles), class: "form-select" %>
+      <%= select f, :group_id, select_group_options(@groups, @shipment.roles), class: "form-select select2--role-group" %>
       <%= error_tag f, :group_id %>
     </div>
   <% else %>

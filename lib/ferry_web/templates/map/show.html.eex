@@ -15,7 +15,7 @@
 
       <div class="form-group <%= validation_status_class(f, :group_filter) %>">
         <%= label f, :group_filter, "Groups" %>
-        <%= multiple_select f, :group_filter, @map.group_filter_labels, multiple: true, class: "form-select select" %>
+        <%= multiple_select f, :group_filter, @map.group_filter_labels, multiple: true, class: "form-select select2--map" %>
       </div>
 
       <div class="form-group col-9 col-ml-auto">

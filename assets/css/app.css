@@ -1014,7 +1014,11 @@ Select2
   font-size: 1.6rem;
   line-height: 1;
 
-  color: #B493C4;
+  color: #C6ACD2;
+}
+
+.select2-selection__clear:hover {
+  color: #A284B0;
 }
 
 .select2-container .select2-selection--single {
@@ -1027,6 +1031,20 @@ Select2
 }
 .select2-container--default .select2-selection--single .select2-selection__arrow {
   height: 1.8rem;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  color: #3B4351;
+  background-color: #F2ECF5;
+  border-color: #B493C4;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+  color: #C6ACD2;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+  color: #A284B0;
 }
 
 /*

@@ -23,22 +23,13 @@ $(document).ready(function() {
   Initialize Select2
   Select2 Documentation: https://select2.org/
   ------------------------------------------------------------
+  // TODO: style alignment better, especially for multi-select
+  // TODO: would be nice if clear just cleared & didn't open the input again
   */
 
-  // ensure the select is initialized and blank
-  $transportSize = $('.select-transport-size').select2({
-    allowClear: true,
-    placeholder: "Select a transport size..."
-  });
-  $category = $('.select-and-input-cat').select2({tags: true}).val(null).trigger('change');
-  $item = $('.select-and-input-item').select2({tags: true}).val(null).trigger('change');
-  $roleType = $('.select-role-type').select2({tags: true}).val(null).trigger('change');
-
   // ensure that custom values are entered if the user clicks off the selectbox after typing them in
-  $category.on("select2:close", function(data){checkInputOffFocus(data, $category)});
-  $item.on("select2:close", function(data){checkInputOffFocus(data, $item)});
-  $roleType.on("select2:close", function(data){checkInputOffFocus(data, $roleType)});
-
+  // TODO: for consistencies sake, if the user types in the name of an existing option and then clicks off, this function should select it for them
+  // TODO: what happens if the user types in half an option then clicks off?  right now they'll have the text they typed in, instead of the closest matching option
   function checkInputOffFocus(data, $input){
     var options = data.target.options;
     var test = options[options.length - 1];
@@ -58,6 +49,65 @@ $(document).ready(function() {
       }
     }
   }
+
+  // TODO: show group logos
+  $(".select2--map").select2({ // multi, optional
+    allowClear: true,
+    closeOnSelect: false,
+    placeholder: "Select groups to filter the map..."
+  });
+
+  $(".select2--role-group").select2({ // single
+    placeholder: "Choose a group to add to the shipment..."
+  });
+
+  $(".select2--route-type")// single, customizable
+    .select2({
+      placeholder: "Choose an option or enter your own...",
+      tags: true
+    })
+    .on("select2:close", function(data) {
+      checkInputOffFocus(data, $(this));
+    });
+
+  $(".select2--shipment-status").select2({ // single
+    placeholder: "Select the current status..."
+  });
+
+  // TODO: allow custom entries?
+  $(".select2--shipment-transport").select2({ // single, optional
+    allowClear: true,
+    placeholder: "Select a transport size..."
+  });
+
+  $(".select2--stock-project").select2({ // single
+    placeholder: "Select a project..."
+  });
+
+  $(".select2--stock-category") // single, customizable
+    .select2({
+      placeholder: "Choose a category or enter your own...",
+      tags: true
+    })
+    .on("select2:close", function(data) {
+      checkInputOffFocus(data, $(this));
+    });
+
+
+  $(".select2--stock-item") // single, customizable
+    .select2({
+      placeholder: "Choose an item or enter your own...",
+      tags: true
+    })
+    .on("select2:close", function(data) {
+      checkInputOffFocus(data, $(this));
+    });
+
+  // TODO: allow custom entries- this becomes more like "tagging" items?
+  $(".select2--stock-mod").select2({ // single, optional
+    allowClear: true,
+    placeholder: "---"
+  });
 
   /*
   Initialize Datatables
