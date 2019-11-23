@@ -8,9 +8,11 @@ defmodule FerryWeb.StockView do
   end
 
   def list_projects(projects) do
-    Enum.map(projects, fn project ->
+    projects = Enum.map(projects, fn project ->
       {project.name, project.id}
     end)
+
+    [nil | projects]
   end
 
   def print_gender(gender) do
@@ -22,19 +24,19 @@ defmodule FerryWeb.StockView do
   end
 
   def list_genders do
-    ["---": nil, "Male": "masc", "Female": "fem"]
+    [nil, "Male": "masc", "Female": "fem"]
   end
 
   def list_ages do
-    ["---": nil, "Adult": "adult", "Child": "child", "Baby": "baby"]
+    [nil, "Adult": "adult", "Child": "child", "Baby": "baby"]
   end
 
   def list_sizes do
-    ["---": nil, "Small": "small", "Medium": "medium", "Large": "large", "Extra Large": "x-large"]
+    [nil, "Small": "small", "Medium": "medium", "Large": "large", "Extra Large": "x-large"]
   end
 
   def list_seasons do
-    ["---": nil, "Summer": "summer", "Winter": "winter"]
+    [nil, "Summer": "summer", "Winter": "winter"]
   end
 
   def stock_photo(stock) do
@@ -45,11 +47,11 @@ defmodule FerryWeb.StockView do
 
   # duck typing- works for categories & models since they both have id / name fields
   def selectify(names_list) do
-    names_list
-    |> Enum.map(fn %{name: name} ->
-      name
-    end)
+    names = names_list
+    |> Enum.map(fn %{name: name} -> name end)
     |> Enum.sort()
+
+    [nil | names]
   end
 
 end

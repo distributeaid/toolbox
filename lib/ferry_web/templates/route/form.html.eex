@@ -9,7 +9,7 @@
 
   <div class="form-group form-group--required <%= validation_status_class(f, :type) %>">
     <%= label f, :type %>
-    <%= select f, :type, ["Pickup": "pickup", "Dropoff": "dropoff"], class: "select-role-type form-select" %>
+    <%= select f, :type, [nil, "Pickup": "pickup", "Dropoff": "dropoff"], class: "form-select select2--route-type" %>
     <%= error_tag f, :type %>
     <p class="form-input-desc">
       You can also enter a custom value for the type of stop this is!  Simply click on the select box, type in the value, and hit enter.  You should now be able to see this value and it will be saved when you submit the form.

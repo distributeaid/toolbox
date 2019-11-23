@@ -17,8 +17,8 @@ defmodule FerryWeb.RoleView do
         {group.name, group.id}
       end)
 
-    # add a default option
-    [{"---", nil} | options]
+    # add an option for the placeholder
+    [nil | options]
   end
 
   def display_role_attributes(role) do

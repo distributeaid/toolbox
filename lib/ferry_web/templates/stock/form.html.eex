@@ -9,15 +9,18 @@
 
   <div class="form-group form-group--required <%= validation_status_class(f, :project_id) %>">
     <%= label f, :project_id %>
-    <%= select f, :project_id, list_projects(@projects), class: "form-select" %>
+    <%= select f, :project_id, list_projects(@projects), class: "form-select select2--stock-project" %>
     <%= error_tag f, :project_id %>
+    <p class="form-input-desc">
+      Every item in our system is associated with the project where it is currently at.  This is often a "warehouse" project, but could be others.  This allows groups to track their inventory across multiple projects in the same, or different, locations.  For example, you could track inventory at a warehouse and in your social center separately, so you know when it's time to restock.
+    </p>
   </div>
 
   <%= inputs_for f, :item, fn fi -> %>
     <%= inputs_for fi, :category, fn fc -> %>
       <div class="form-group form-group--required <%= validation_status_class(fc, :name) %>">
         <%= label fc, :name, "Category" %>
-        <%= select fc, :name, selectify(@categories), class: "select-and-input-cat form-select" %>
+        <%= select fc, :name, selectify(@categories), class: "form-select select2--stock-category" %>
         <%= error_tag fc, :name %>
         <p class="form-input-desc">
           Common categories are listed for you to select.  You can enter a custom category by typing it into the search box and pressing enter.
@@ -27,7 +30,7 @@
 
     <div class="form-group form-group--required <%= validation_status_class(fi, :name) %>">
       <%= label fi, :name, "Item" %>
-      <%= select fi, :name, selectify(@items), class: "select-and-input-item form-select" %>
+      <%= select fi, :name, selectify(@items), class: "form-select select2--stock-item" %>
       <%= error_tag fi, :name %>
       <p class="form-input-desc">
         Common items are listed for you to select.  You can enter a custom item by typing it into the search box and pressing enter.
@@ -78,25 +81,25 @@
   <%= inputs_for f, :mod, fn fm -> %>
     <div class="form-group <%= validation_status_class(fm, :age) %>">
       <%= label fm, :age %>
-      <%= select fm, :age, list_ages(), class: "form-select" %>
+      <%= select fm, :age, list_ages(), class: "form-select select2--stock-mod" %>
       <%= error_tag fm, :age %>
     </div>
 
     <div class="form-group <%= validation_status_class(fm, :gender) %>">
       <%= label fm, :gender %>
-      <%= select fm, :gender, list_genders(), class: "form-select" %>
+      <%= select fm, :gender, list_genders(), class: "form-select select2--stock-mod" %>
       <%= error_tag fm, :gender %>
     </div>
 
     <div class="form-group <%= validation_status_class(fm, :size) %>">
       <%= label fm, :size %>
-      <%= select fm, :size, list_sizes(), class: "form-select" %>
+      <%= select fm, :size, list_sizes(), class: "form-select select2--stock-mod" %>
       <%= error_tag fm, :size %>
     </div>
 
     <div class="form-group <%= validation_status_class(fm, :season) %>">
       <%= label fm, :season %>
-      <%= select fm, :season, list_seasons(), class: "form-select" %>
+      <%= select fm, :season, list_seasons(), class: "form-select select2--stock-mod" %>
       <%= error_tag fm, :season %>
     </div>
   <% end %>
