@@ -4,11 +4,6 @@
   <%= if @can_modify? do %>
     <ul class="actions">
       <li>
-        <%= link to: Routes.group_link_path(@conn, :index, @group), class: "action" do %>
-          <i class="fas fa-pencil-alt"></i>
-        <% end %>
-      </li>
-      <li>
         <%= link to: Routes.group_link_path(@conn, :new, @group), class: "action" do %>
           <i class="fas fa-plus"></i>
         <% end %>
@@ -18,10 +13,18 @@
 </div>
 
 <%= if has_links? @links do %>
-  <ul class="list--unstyled">
+  <ul class="list--with-actions">
     <%= for link <- @links do %>
       <li>
         <%= link label_text(link), to: link.url, target: "blank" %>
+        <span class="actions">
+          <%= link to: Routes.group_link_path(@conn, :edit, @group, link), class: "action" do %>
+            <i class="fas fa-pencil-alt"></i>
+          <% end %>
+          <%= link to: Routes.group_link_path(@conn, :delete, @group, link), method: :delete, data: [confirm: "Are you sure?"], class: "action" do %>
+            <i class="fas fa-trash-alt"></i>
+          <% end %>
+        </span>
       </li>
     <% end %>
   </ul>
