@@ -55,13 +55,14 @@
             <td><%= shipment.receiver_address %></td>
             <td>
               <%= for role <- shipment.roles do %>
-                <!-- TOOD: link to group, and show full name on hover) -->
-                <%= component "group_logo.partial.html", %{
-                  conn: @conn,
-                  group: role.group,
-                  size: :normal,
-                  fill: true
-                } %>                
+                <%= link to: Routes.group_path(@conn, :show, role.group), class: "action tooltip tooltip-left", data: [tooltip: role.group.name] do %>
+                  <%= component "group_logo.partial.html", %{
+                    conn: @conn,
+                    group: role.group,
+                    size: :normal,
+                    fill: true
+                  } %>                
+                <% end %>
               <% end %>
             </td>
           </tr>
