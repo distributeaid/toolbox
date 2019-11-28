@@ -19,12 +19,14 @@
     <%= for stock <- @needs do %>
       <tr>
         <td>
-          <%= component "group_logo.partial.html", %{
-            conn: @conn,
-            group: stock.project.group,
-            size: :normal,
-            fill: true
-          } %>
+          <%= link to: Routes.group_path(@conn, :show, stock.project.group), class: "action tooltip tooltip-right", data: [tooltip: stock.project.group.name] do %>
+            <%= component "group_logo.partial.html", %{
+              conn: @conn,
+              group: stock.project.group,
+              size: :normal,
+              fill: true
+            } %>
+          <% end %>
         </td>
         <td><%= stock.item.category.name %></td>
         <td><%= stock.item.name %></td>
