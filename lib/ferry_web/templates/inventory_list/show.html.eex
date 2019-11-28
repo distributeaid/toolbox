@@ -42,15 +42,14 @@
         <%= for stock <- @inventory do %>
           <tr>
             <td class="col-4">
-              <%= component "group_logo.partial.html", %{
-                conn: @conn,
-                group: stock.project.group,
-                size: :normal,
-                fill: true
-              } %>
-              <%= link stock.project.group.name, to: Routes.group_path(@conn, :show, stock.project.group) %>
-              <br />
-              <%= stock.project.name %>
+              <%= link to: Routes.group_path(@conn, :show, stock.project.group), class: "action tooltip tooltip-right", data: [tooltip: "#{stock.project.group.name} (#{stock.project.name})"] do %>
+                <%= component "group_logo.partial.html", %{
+                  conn: @conn,
+                  group: stock.project.group,
+                  size: :normal,
+                  fill: true
+                } %>
+              <% end %>
             </td>
             <td class="col-3">
               <strong><%= stock.item.category.name %></strong>
