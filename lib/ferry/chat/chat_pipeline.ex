@@ -5,10 +5,16 @@ defmodule Ferry.Chat.ChatPipeline do
   use Guardian.Plug.Pipeline,
     otp_app: :ferry,
     error_handler: Ferry.Auth.ErrorHandler,
-    module: Ferry.Chat.Auth
+    module: Ferry.Auth.Guardian
 
   defp assign_chat_jwt(conn, _) do
-    assign(conn, :chat_jwt, Guardian.Plug.current_resource(conn))
+    user = Guardian.Plug.current_resource(conn)
+    if user do
+      # Create JWT here
+      assign(conn, :chat_jwt, user.id)
+    else
+      conn
+    end
   end
 
   # If there is a session token, restrict it to an access token and validate it

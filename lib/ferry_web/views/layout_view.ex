@@ -6,6 +6,9 @@ defmodule FerryWeb.LayoutView do
   end
 
   def chat_jwt(token) do
-    ~E(<meta name="chat:jwt" content="<%= token %>">)
+    ~E(
+      <!-- Chat -->
+      <meta name="chat:jwt" content="<%= token %>">
+    )
   end
 end

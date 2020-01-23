@@ -38,9 +38,6 @@
     <meta name="msapplication-TileImage" content="<%= Routes.static_path(@conn, "/ms-icon-144x144.png") %>">
     <meta name="theme-color" content="#ffffff">
 
-    <!--
-    Chat
-    -->
     <%= chat_jwt(assigns[:chat_jwt]) %>
 
     <!--
