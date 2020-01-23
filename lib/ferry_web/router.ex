@@ -75,4 +75,8 @@ defmodule FerryWeb.Router do
 
   redirect "/admin", "/admin/aid/items", :temporary
   redirect "/admin/aid", "/admin/aid/items", :temporary
+
+  scope "/.well-known", FerryWeb do
+    get "/jwks.json", JWKSController, :show, singleton: true
+  end
 end
