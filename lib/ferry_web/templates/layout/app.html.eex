@@ -39,6 +39,11 @@
     <meta name="theme-color" content="#ffffff">
 
     <!--
+    Chat
+    -->
+    <%= chat_jwt(assigns[:chat_jwt]) %>
+
+    <!--
     Scripts
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     -->
