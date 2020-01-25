@@ -18,7 +18,7 @@
       <li>
         <%= link label_text(link), to: link.url, target: "blank" %>
         <%= if @can_modify? do %>
-        <span class="actions">
+        <span class="actions actions--sm">
           <%= link to: Routes.group_link_path(@conn, :edit, @group, link), class: "action" do %>
             <i class="fas fa-pencil-alt"></i>
           <% end %>
