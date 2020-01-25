@@ -50,7 +50,7 @@ defmodule Ferry.Factory do
       1 -> hd(list)
 
       # follow the path to the n-1 step to find the field's owner
-      _ -> get_in( hd(list), List.pop_at(path, -1) |> elem(1) )
+      _ -> get_in(hd(list), List.pop_at(path, -1) |> elem(1))
     end
 
     not_loaded = %Ecto.Association.NotLoaded{
@@ -294,8 +294,10 @@ defmodule Ferry.Factory do
         "lat" => "44.7287901",
         "licence" => "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
         "lon" => "20.3751818051888",
+        # credo:disable-for-next-line Credo.Check.Readability.LargeNumbers
         "osm_id" => 413883199,
         "osm_type" => "way",
+        # credo:disable-for-next-line Credo.Check.Readability.LargeNumbers
         "place_id" => 167558366,
         "type" => "yes"
       }
@@ -551,6 +553,7 @@ defmodule Ferry.Factory do
     role = insert(:shipment_role, %{shipment_id: shipment.id, group: group})
 
     # append the role to shipment.roles and return the shipment
+    # credo:disable-for-next-line Credo.Check.Refactor.AppendSingleItem
     %{shipment | roles: shipment.roles ++ [role]}
   end
 
@@ -561,6 +564,7 @@ defmodule Ferry.Factory do
     end
 
     # append the route to shipment.routes and return the shipment
+    # credo:disable-for-next-line Credo.Check.Refactor.AppendSingleItem
     %{shipment | routes: shipment.routes ++ [route]}
   end
 
@@ -577,10 +581,10 @@ defmodule Ferry.Factory do
       description: sequence("I am description #")
     }
 
-    unless role.supplier? or role.receiver? or role.organizer? or role.funder? do
-      %{role | other?: true}
-    else
+    if role.supplier? or role.receiver? or role.organizer? or role.funder? do
       role
+    else
+      %{role | other?: true}
     end
   end
 

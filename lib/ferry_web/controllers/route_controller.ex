@@ -19,7 +19,7 @@ defmodule FerryWeb.RouteController do
   end
 
   # TODO: copied from group_controller, refactor into shared function or something
-  defp current_group(_conn = %{assigns: %{current_user: %{group_id: group_id}}}) do
+  defp current_group(%{assigns: %{current_user: %{group_id: group_id}}} = _conn) do
     Profiles.get_group!(group_id)
   end
 

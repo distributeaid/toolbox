@@ -20,7 +20,7 @@ defmodule FerryWeb.GroupController do
     ]
   end
 
-  defp current_group(_conn = %{assigns: %{current_user: %{group_id: group_id}}}) do
+  defp current_group(%{assigns: %{current_user: %{group_id: group_id}}} = _conn) do
     Profiles.get_group!(group_id)
   end
 

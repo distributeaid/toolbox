@@ -198,6 +198,19 @@ Mix commands can be targeted to the test environment / database by setting an en
 2. Run a shell command which executes another command that starts by setting the environment variable.  EX: `docker exec toolbox_web sh -c "MIX_ENV=test mex ecto.reset`.
 3. Finally, you can always open a bash shell on the web container and run the commands directly.  EX: `docker exec -it toolbox_web /bin/bash` and then `MIX_ENV=test mix ecto.reset` in the shell.
 
+**Code Quality**
+```
+# credo performs static code analysis
+docker exec toolbox_web mix credo list
+
+# to learn more about a particular issue in credo
+docker exec toolbox_web mix credo explain file/and/linenumber.ex:101
+
+# format a file in the standard elixir style
+docker exec toolbox_web mix format "path/to/file.ex"
+docker exec toolbox_web mix format "pattern/**/path/*.{ex,exs}"
+```
+
 Managing Dev Databases
 ------------------------------------------------------------
 

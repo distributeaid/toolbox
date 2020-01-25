@@ -176,13 +176,13 @@ defmodule Ferry.Shipments do
   def delete_role(%Role{} = role) do
     shipment = get_shipment!(role.shipment_id)
 
-    cond do
-      length(shipment.roles) > 1 -> Repo.delete(role)
-      true ->
-        role # TODO: make into a delete changeset?
-        |> Changeset.change()
-        |> Changeset.add_error(:shipment, "There must be at least 1 group taking part in this shipment.")
-        |> Changeset.apply_action(:delete)
+    if length(shipment.roles) > 1 do
+      Repo.delete(role)
+    else
+      role # TODO: make into a delete changeset?
+      |> Changeset.change()
+      |> Changeset.add_error(:shipment, "There must be at least 1 group taking part in this shipment.")
+      |> Changeset.apply_action(:delete)
     end
   end
 

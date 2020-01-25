@@ -15,10 +15,12 @@ defmodule FerryWeb.MapView do
   end
 
   defp format_address_for_map(address) do
-    marker_img = cond do
-      is_nil(address.project) -> Logo.url({address.group.logo, address.group}, :thumb)
-      true -> Logo.url({address.project.group.logo, address.project.group}, :thumb)
-    end
+    marker_img =
+      if is_nil(address.project) do
+        Logo.url({address.group.logo, address.group}, :thumb)
+      else
+        Logo.url({address.project.group.logo, address.project.group}, :thumb)
+      end
 
     %{
       lat: address.geocode.lat |> html_escape() |> safe_to_string(),

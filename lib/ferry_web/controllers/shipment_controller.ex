@@ -15,7 +15,7 @@ defmodule FerryWeb.ShipmentController do
   # ----------------------------------------------------------
 
   # TODO: copied from group_controller, refactor into shared function or something
-  defp current_group(_conn = %{assigns: %{current_user: %{group_id: group_id}}}) do
+  defp current_group(%{assigns: %{current_user: %{group_id: group_id}}} = _conn) do
     Profiles.get_group!(group_id)
   end
 
@@ -76,7 +76,7 @@ defmodule FerryWeb.ShipmentController do
           "true" ->
             changeset = Shipments.change_route(%Shipments.Route{})
             shipment = Ferry.Repo.preload(shipment, :routes)
-            render( conn,FerryWeb.RouteView, "new.html", group: group, shipment: shipment, changeset: changeset)
+            render(conn, FerryWeb.RouteView, "new.html", group: group, shipment: shipment, changeset: changeset)
           _ ->
             redirect(conn, to: Routes.group_shipment_path(conn, :show, group.id, shipment))
         end
