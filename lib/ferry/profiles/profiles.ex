@@ -232,22 +232,6 @@ defmodule Ferry.Profiles do
   end
 
   @doc """
-  Transfers the project to another group.
-
-  ## Examples
-
-      iex> transfer_project(project, new_group)
-      {:ok, %Project{}}
-
-      iex> transfer_project(project, invalid_group)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def transfer_project(%Project{} = _project, %Group{} = _group) do
-    throw "Ferry.Profiles.transfer_project/2 is not implemented... yet ;)"
-  end
-
-  @doc """
   Deletes a Project.
 
   ## Examples

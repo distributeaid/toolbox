@@ -48,45 +48,6 @@ defmodule Ferry.Locations do
   end
 
   @doc """
-  Returns a list of countries.
-
-  ## Examples
-
-      iex> list_countries()
-      ["France", "Greece", "Serbia", ...]
-
-  """
-  def list_countries do
-    throw "Ferry.Locations.list_countries/0 is not implemented... yet ;)"
-  end
-
-  @doc """
-  Returns a list of city & country tuples.
-
-  ## Examples
-
-      iex> list_cities()
-      [{"Calais", "France"}, {"Caen", "France"}, {"Rome", "Italy"}, ...]
-
-  """
-  def list_cities do
-    throw "Ferry.Locations.list_cities/0 is not implemented... yet ;)"
-  end
-
-  @doc """
-  Returns a list of city & country tuples for the specified country.
-
-  ## Examples
-
-      iex> list_cities("France")
-      [{"Calais", "France"}, {"Caen", "France"}, ...]
-
-  """
-  def list_cities(_country) do
-    throw "Ferry.Locations.list_cities/1 is not implemented... yet ;)"
-  end
-
-  @doc """
   Gets a single address.
 
   Raises `Ecto.NoResultsError` if the Address does not exist.
