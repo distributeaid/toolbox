@@ -390,7 +390,7 @@ defmodule Ferry.Factory do
   # ------------------------------------------------------------
   def packaging_factory do
     %Packaging{
-      count: sequence(:count, &(&1 + 1)), # 1, 2, ...
+      count: sequence(:count, &(&1 + 1000)), # 1000, 1001, ...
       type: "large bags",
       description: "Large, sturdy bags that contain about 4 trash bags worth of items.",
       photo: nil # TODO: test photo uploads
@@ -420,7 +420,7 @@ defmodule Ferry.Factory do
   # ------------------------------------------------------------
   def stock_factory do
     %Stock{
-      have: sequence(:count, &(&1 + 100)), # 100, 101, ...
+      have: sequence(:count, &(&1 + 1000)), # 1000, 1001, ...
       available: 0,
       need: 0,
       unit: Enum.random(["items", "small bags", "large bags", "small boxes", "large boxes", "pallets"]),
@@ -438,7 +438,7 @@ defmodule Ferry.Factory do
     struct!(
       stock_factory(),
       %{
-        available: sequence(:available, &(&1 + 50)) # 50, 51, ...
+        available: sequence(:available, &(&1 + 500)) # 500, 501, ...
       }
     )
   end
@@ -447,7 +447,7 @@ defmodule Ferry.Factory do
     struct!(
       stock_factory(),
       %{
-        need: sequence(:need, &(&1 + 50)) # 50, 51, ...
+        need: sequence(:need, &(&1 + 500)) # 500, 501, ...
       }
     )
   end
@@ -468,7 +468,8 @@ defmodule Ferry.Factory do
       stock_factory(),
       %{
         # available > have
-        available: sequence(:available, &(&1 + 200)) # 200, 201, ...
+        available: 1000,
+        have: 500
       }
     )
   end
@@ -488,7 +489,7 @@ defmodule Ferry.Factory do
     %{
       "project_id" => project_id,
 
-      "have" => sequence(:count, &(&1 + 201)), # 201, 202, ...
+      "have" => sequence(:count, &(&1 + 1000)), # 1000, 1001, ...
       "need" => 0,
       "available" => 0,
       "unit" => Enum.random(["items", "small bags", "large bags", "small boxes", "large boxes", "pallets"]),
