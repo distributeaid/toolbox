@@ -8,7 +8,6 @@ defmodule Ferry.LocationsTest do
   # Addresses
   # ==============================================================================
   describe "addresses" do
-    alias Ferry.Profiles.Group
     alias Ferry.Locations.Address
     alias Ferry.Locations.Geocoder.GeocoderMock
 
@@ -160,8 +159,6 @@ defmodule Ferry.LocationsTest do
   # Maps
   # ==============================================================================
   describe "maps" do
-#    alias Ferry.Locations.Map
-    alias Ferry.Profiles.Group
 
     # Tests
     # ----------------------------------------------------------

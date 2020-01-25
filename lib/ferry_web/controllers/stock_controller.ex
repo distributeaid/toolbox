@@ -46,7 +46,7 @@ defmodule FerryWeb.StockController do
     group = Profiles.get_group!(group_id)
 
     case Inventory.create_stock(stock_params) do
-      {:ok, stock} ->
+      {:ok, _stock} ->
         conn
         |> put_flash(:info, "Stock created successfully.")
         |> redirect(to: Routes.group_stock_path(conn, :index, group))
@@ -76,7 +76,7 @@ defmodule FerryWeb.StockController do
     stock = Inventory.get_stock!(id)
 
     case Inventory.update_stock(stock, stock_params) do
-      {:ok, stock} ->
+      {:ok, _stock} ->
         conn
         |> put_flash(:info, "Stock updated successfully.")
         |> redirect(to: Routes.group_stock_path(conn, :index, group))

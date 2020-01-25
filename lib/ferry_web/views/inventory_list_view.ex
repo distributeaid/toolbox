@@ -1,8 +1,6 @@
 defmodule FerryWeb.InventoryListView do
   use FerryWeb, :view
 
-  alias Ferry.Inventory.Stock
-
   # copied from FerryWeb.StockView
   # TODO: refactor
   def print_gender(gender) do

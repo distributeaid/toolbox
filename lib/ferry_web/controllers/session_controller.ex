@@ -6,7 +6,6 @@ defmodule FerryWeb.SessionController do
   alias Ferry.Accounts.User
   alias Ferry.Auth
   alias Ferry.Auth.Guardian
-  alias Ferry.Repo
 
   # Session Controller
   # ==============================================================================

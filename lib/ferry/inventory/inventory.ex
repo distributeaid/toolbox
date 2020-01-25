@@ -9,7 +9,6 @@ defmodule Ferry.Inventory do
   alias Ecto.Changeset
 
   alias Ferry.Profiles.Group
-  alias Ferry.Inventory.InventoryList
   alias Ferry.Inventory.{
     Category,
     Item,
@@ -234,8 +233,6 @@ defmodule Ferry.Inventory do
     )
   end
 
-  defp get_or_create_category(attrs \\ %{})
-
   defp get_or_create_category(%{"name" => name} = attrs) do
     case Repo.get_by(Category, name: name) do
       %Category{} = category ->
@@ -249,7 +246,7 @@ defmodule Ferry.Inventory do
     create_category(attrs)
   end
 
-  defp create_category(attrs \\ %{}) do
+  defp create_category(attrs) do
     %Category{}
     |> Category.changeset(attrs)
     |> Repo.insert()
@@ -275,8 +272,6 @@ defmodule Ferry.Inventory do
       select_merge: %{stock_reference_count: count(i.id)}
     )
   end
-
-  defp get_or_create_item(category_or_changeset, attrs \\ %{})
 
   defp get_or_create_item(%Category{} = category, attrs) do
     item = Repo.one(from i in Item,
@@ -305,7 +300,7 @@ defmodule Ferry.Inventory do
   # Mod
   # ================================================================================
 
-  defp get_mod(attrs \\ %{}) do
+  defp get_mod(attrs) do
     query = from m in Mod
 
     filter_keys = [:gender, :age, :size, :season]

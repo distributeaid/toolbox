@@ -1,7 +1,13 @@
 defmodule FerryWeb.ErrorView do
   use FerryWeb, :view
-  # If you want to customize a particular status code
-  # for a certain format, you may uncomment below.
+
+  # By default, Phoenix returns the status message from
+  # the template name. For example, "404.html" becomes
+  # "Not Found".
+  def template_not_found(template, _assigns) do
+    Phoenix.Controller.status_message_from_template(template)
+  end
+
   def render("400.html", _assigns) do
     render("error_page.html", error: "400", reason: "Bad Request")
   end
@@ -14,22 +20,6 @@ defmodule FerryWeb.ErrorView do
     render("error_page.html", error: "403", reason: "Forbidden Page")
   end
 
-  defp check_bad_ids([_, _, _, error, address_error | _tail]) do
-    cond do
-      String.contains? error, "p.id" ->
-        "The Project ID #{String.replace(error, ~r/[^\d]/,"")} Could Not be Found"
-      String.contains? error, "g.id" ->
-        "The Group ID #{String.replace(error, ~r/[^\d]/,"")} Could Not be Found"
-      String.contains? error, "l.id" ->
-        "Link ID #{String.replace(error, ~r/[^\d]/,"")} Could Not be Found"
-      String.contains? address_error, "a.id" ->
-        "Address #{String.replace(address_error, ~r/[^\d]/,"")} Could Not be Found"
-      true ->
-        "Page Not Found"
-    end
-  end
-
-  # custom 404 message
   def render("404.html", %{reason: %{message: message}}) do
     checker = String.split(message, "\n")
     error = "404"
@@ -47,12 +37,19 @@ defmodule FerryWeb.ErrorView do
     render("error_page.html", error: "500", reason: "Internal Server Error")
   end
 
-
-
-  # By default, Phoenix returns the status message from
-  # the template name. For example, "404.html" becomes
-  # "Not Found".
-  def template_not_found(template, _assigns) do
-    Phoenix.Controller.status_message_from_template(template)
+  defp check_bad_ids([_, _, _, error, address_error | _tail]) do
+    cond do
+      String.contains? error, "p.id" ->
+        "The Project ID #{String.replace(error, ~r/[^\d]/,"")} Could Not be Found"
+      String.contains? error, "g.id" ->
+        "The Group ID #{String.replace(error, ~r/[^\d]/,"")} Could Not be Found"
+      String.contains? error, "l.id" ->
+        "Link ID #{String.replace(error, ~r/[^\d]/,"")} Could Not be Found"
+      String.contains? address_error, "a.id" ->
+        "Address #{String.replace(address_error, ~r/[^\d]/,"")} Could Not be Found"
+      true ->
+        "Page Not Found"
+    end
   end
+
 end

@@ -56,7 +56,7 @@ defmodule FerryWeb.ProjectControllerTest do
       )
     end
 
-    test "shows 404 not found for non-existent groups", %{conn: conn, project: project} do
+    test "shows 404 not found for non-existent groups", %{conn: _conn, project: _project} do
       Enum.each(
         [
           # unauthenticated

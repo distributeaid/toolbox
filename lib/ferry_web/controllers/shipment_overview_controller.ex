@@ -2,8 +2,6 @@ defmodule FerryWeb.ShipmentOverviewController do
   use FerryWeb, :controller
 
   alias Ferry.Shipments
-  alias Ferry.Shipments.Shipment
-  alias Ferry.Shipments.Role
   alias Ferry.Profiles
   alias Ferry.Manifests
 

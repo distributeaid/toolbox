@@ -4,7 +4,6 @@ defmodule FerryWeb.GroupController do
   alias Ferry.Links
   alias Ferry.Locations
   alias Ferry.Profiles
-  alias Ferry.Profiles.Group
   alias Ferry.Shipments
 
   # Group Controller

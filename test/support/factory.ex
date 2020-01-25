@@ -130,6 +130,15 @@ defmodule Ferry.Factory do
     )
   end
 
+  def invalid_long_user_factory do
+    struct!(
+      user_factory(),
+      %{
+        email: @long_email
+      }
+    )
+  end
+
   def new_user_factory do
     struct!(
       user_factory(),

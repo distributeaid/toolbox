@@ -18,7 +18,7 @@
     <h2 class="col-9 col-ml-auto">Add A New Item</h2>
     <%= if length(@projects) > 0 do %>
       <%= render "form.html", Map.put(assigns, :action, Routes.group_stock_path(@conn, :create, @group)) %>
-    <%= else %>
+    <% else %>
       <p>
         In order to add an item, you need to add a project first!
       </p>

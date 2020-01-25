@@ -40,7 +40,7 @@ defmodule FerryWeb.RouteController do
     route_params = sanitize_checklist(params, route_params)
 
     case Shipments.create_route(route_params) do
-      {:ok, route} ->
+      {:ok, _route} ->
         conn
         |> put_flash(:info, "Route created successfully.")
         |> redirect(to: Routes.group_shipment_path(conn, :show, group_id, shipment_id))
@@ -72,7 +72,7 @@ defmodule FerryWeb.RouteController do
 
     route = Shipments.get_route!(route_id)
     case Shipments.update_route(route, route_params) do
-      {:ok, route} ->
+      {:ok, _route} ->
         conn
         |> put_flash(:info, "Route updated successfully.")
         |> redirect(to: Routes.group_shipment_path(conn, :show, group_id, shipment_id))
