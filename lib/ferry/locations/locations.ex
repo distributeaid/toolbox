@@ -19,7 +19,7 @@ defmodule Ferry.Locations do
       {:ok, geocode} ->
         attrs = %{"geocode" => geocode}
         Address.geocode_changeset(changeset, attrs)
-      {:error, error} ->
+      {:error, _error} ->
           # TODO: proper error logging
           Changeset.add_error(changeset, :geocoding, "Our geocoding server sometimes can not locate a very specific address. Try removing your organization name, floor, or appartment # from the street line. If that continues to fail, try only city, country and postal code. If the problem persists, please reach out to us: help@distributeaid.org!")
     end
@@ -45,45 +45,6 @@ defmodule Ferry.Locations do
       preload: [geocode: g],
       order_by: [a.id]
     )
-  end
-
-  @doc """
-  Returns a list of countries.
-
-  ## Examples
-
-      iex> list_countries()
-      ["France", "Greece", "Serbia", ...]
-
-  """
-  def list_countries do
-    throw "Ferry.Locations.list_countries/0 is not implemented... yet ;)"
-  end
-
-  @doc """
-  Returns a list of city & country tuples.
-
-  ## Examples
-
-      iex> list_cities()
-      [{"Calais", "France"}, {"Caen", "France"}, {"Rome", "Italy"}, ...]
-
-  """
-  def list_cities do
-    throw "Ferry.Locations.list_cities/0 is not implemented... yet ;)"
-  end
-
-  @doc """
-  Returns a list of city & country tuples for the specified country.
-
-  ## Examples
-
-      iex> list_cities("France")
-      [{"Calais", "France"}, {"Caen", "France"}, ...]
-
-  """
-  def list_cities(_country) do
-    throw "Ferry.Locations.list_cities/1 is not implemented... yet ;)"
   end
 
   @doc """

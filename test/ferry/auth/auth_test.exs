@@ -38,15 +38,6 @@ defmodule Ferry.AuthTest do
       # wrong password
       assert {:error, _} = Auth.authenticate_user(user.email, "wrong-password")
     end
-
-    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
-    test "login/2"
-
-    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
-    test "load_current_user/2"
-
-    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
-    test "logout/0"
   end
 
 end

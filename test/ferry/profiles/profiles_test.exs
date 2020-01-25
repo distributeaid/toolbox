@@ -259,9 +259,6 @@ defmodule Ferry.ProfilesTest do
       assert project.address.geocode.data == geocode.data
     end
 
-    @tag skip: "Stubbed Function. Don't fail the build. Remove this tag & fill in test when the method is implemented."
-    test "transfer_project/2 with valid data transfers the project to another group"
-
     test "update_project/2 with invalid data returns error changeset" do
       project = insert(:project) |> without_assoc([:address, :geocode]) |> without_assoc(:group)
       attrs = params_for(:invalid_project)
@@ -274,9 +271,6 @@ defmodule Ferry.ProfilesTest do
       assert {:ok, %Project{}} = Profiles.delete_project(project)
       assert_raise Ecto.NoResultsError, fn -> Profiles.get_project!(project.id) end
     end
-
-    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
-    test "the database's on_delete:delete_all setting deletes related projects when a group is deleted"
 
     test "change_project/1 returns a project changeset" do
       project = insert(:project)

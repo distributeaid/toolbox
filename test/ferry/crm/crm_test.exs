@@ -136,9 +136,6 @@ defmodule Ferry.CRMTest do
       assert {:error, %Ecto.Changeset{}} = CRM.create_contact(project, @invalid_attrs.too_long)
     end
 
-    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
-    test "the database's has_exactly_one_owner check constraint throws and error if a contact has no or multiple owners"
-
     test "update_contact/2 with valid data updates the contact" do
       {group, _} = group_and_project_fixtures()
       contact = contact_fixture(group)
@@ -165,12 +162,6 @@ defmodule Ferry.CRMTest do
       assert {:ok, %Contact{}} = CRM.delete_contact(contact)
       assert_raise Ecto.NoResultsError, fn -> CRM.get_contact!(contact.id) end
     end
-
-    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
-    test "the database's on_delete:delete_all setting deletes related contacts when a group is deleted"
-
-    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
-    test "the database's on_delete:delete_all setting deletes related contacts when a project is deleted"
 
     test "change_contact/1 returns a contact changeset" do
       {group, _} = group_and_project_fixtures()

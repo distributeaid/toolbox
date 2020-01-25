@@ -1,11 +1,6 @@
 defmodule Ferry.ManifestsTest do
   use Ferry.DataCase
 
-  alias Ferry.Inventory
-  alias Ferry.Inventory.Stock
-  alias Ferry.Shipments
-  alias Ferry.Shipments.Role
-  alias Ferry.Shipments.Shipment
   alias Ferry.Manifests
 
   # Shipment Manifests

@@ -46,33 +46,26 @@ defmodule Ferry.Mixfile do
       {:gettext, "~> 0.16"},
       {:plug_cowboy, "~> 2.0"},
 
-      # json deps
-      {:jason, "~> 1.0"},
+      # utilities
+      {:arc_ecto, "~> 0.11"}, # file uploads
+      {:httpoison, "~> 1.4"}, # http
+      {:jason, "~> 1.0"}, # json
+      {:scrivener_ecto, "~> 2.0"}, # pagination
+      {:timex, "~> 3.0"}, # datetime
 
-      # http deps
-      {:httpoison, "~> 1.4"},
-
-      # authentication deps
-      {:guardian, "~> 1.0"},
-      {:comeonin, "~> 4.0"},
+      # authentication
       {:bcrypt_elixir, "~> 1.0"},
+      {:comeonin, "~> 4.0"},
+      {:guardian, "~> 1.0"},
 
-      # file upload deps
-      {:arc_ecto, "~> 0.11"},
-
-      # testing deps
+      # testing
+      {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.3", only: :test},
       {:excoveralls, "~> 0.11", only: :test},
       {:mox, "~> 0.5", only: :test},
 
-      # deployment deps
-      {:distillery, "~> 2.1"},
-
-      # scrivener library for pagination
-      {:scrivener_ecto, "~> 2.0"},
-
-      # datetime manipulation & formatting
-      {:timex, "~> 3.0"}
+      # deployment
+      {:distillery, "~> 2.1"}
     ]
   end
 

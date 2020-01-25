@@ -33,7 +33,4 @@ defmodule FerryWeb.GroupViewTest do
     assert GroupView.has_projects? projects
   end
 
-  @tag skip: "TODO - Need to mock Arq values 1st, or a whole Group object w/ an uploaded logo file."
-  test "logo_url/1 gives a url for the group's logo"
-
 end

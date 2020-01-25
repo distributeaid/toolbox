@@ -8,7 +8,6 @@ defmodule Ferry.LocationsTest do
   # Addresses
   # ==============================================================================
   describe "addresses" do
-    alias Ferry.Profiles.Group
     alias Ferry.Locations.Address
     alias Ferry.Locations.Geocoder.GeocoderMock
 
@@ -36,15 +35,6 @@ defmodule Ferry.LocationsTest do
       _ = insert(:address, group_id: group2.id) |> with_geocode()
       assert Locations.list_addresses(group) == [address1, address2]
     end
-
-    @tag skip: "Stubbed Function. Don't fail the build. Remove this tag & fill in test when the method is implemented."
-    test "list_countries/0 returns all countries"
-
-    @tag skip: "Stubbed Function. Don't fail the build. Remove this tag & fill in test when the method is implemented."
-    test "list_cities/0 returns tuples for all city / country pairs"
-
-    @tag skip: "Stubbed Function. Don't fail the build. Remove this tag & fill in test when the method is implemented."
-    test "list_cities/1 returns tuples for all cities in the specified country"
 
     test "get_address!/1 returns the address with given id" do
       group = insert(:group)
@@ -111,9 +101,6 @@ defmodule Ferry.LocationsTest do
       assert 6 == length(changeset.errors)
     end
 
-    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
-    test "the database's has_exactly_one_owner check constraint throws and error if an address has no or multiple owners"
-
     test "update_address/2 with valid data updates the address" do
       GeocoderMock |> expect(:geocode_address, fn _address ->
         {:ok, params_for(:geocode)}
@@ -161,9 +148,6 @@ defmodule Ferry.LocationsTest do
       assert_raise Ecto.NoResultsError, fn -> Locations.get_address!(address.id) end
     end
 
-    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
-    test "the database's on_delete:delete_all setting deletes related addresses when a group is deleted"
-
     test "change_address/1 returns a address changeset" do
       group = insert(:group)
       address = insert(:address, group_id: group.id)
@@ -175,14 +159,9 @@ defmodule Ferry.LocationsTest do
   # Maps
   # ==============================================================================
   describe "maps" do
-#    alias Ferry.Locations.Map
-    alias Ferry.Profiles.Group
 
     # Tests
     # ----------------------------------------------------------
-
-    @tag skip: "TODO - Don't fail CI builds.  Remove this tag to force a failure if related problems occur."
-    test "get_map/1 lists all groups (in alphabetical order) in the `group_filter_labels` field"
 
     test "get_map/1 with no controls set returns a map with all addresses included as results" do
       group1 = insert(:group)

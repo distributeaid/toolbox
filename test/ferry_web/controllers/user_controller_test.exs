@@ -51,7 +51,7 @@ defmodule FerryWeb.UserControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn, group: group} do
       conn = post conn, Routes.group_user_path(conn, :create, group), user: params_for(:invalid_user)
-      assert html_response(conn, 200) =~ "New User"
+      assert html_response(conn, 200) =~ "Signup"
     end
   end
 

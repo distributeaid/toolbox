@@ -100,7 +100,7 @@ defmodule FerryWeb.StockControllerTest do
       assert redirected_to(conn) == Routes.group_stock_path(conn, :index, group)
 
       conn = get conn, Routes.group_stock_path(conn, :index, group)
-      refute html_response(conn, 200) =~ Integer.to_string(stock.id)
+      refute html_response(conn, 200) =~ Integer.to_string(stock.have)
     end
   end
 end

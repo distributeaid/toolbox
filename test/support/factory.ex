@@ -50,7 +50,7 @@ defmodule Ferry.Factory do
       1 -> hd(list)
 
       # follow the path to the n-1 step to find the field's owner
-      _ -> get_in( hd(list), List.pop_at(path, -1) |> elem(1) )
+      _ -> get_in(hd(list), List.pop_at(path, -1) |> elem(1))
     end
 
     not_loaded = %Ecto.Association.NotLoaded{
@@ -126,6 +126,15 @@ defmodule Ferry.Factory do
       user_factory(),
       %{
         email: ""
+      }
+    )
+  end
+
+  def invalid_long_user_factory do
+    struct!(
+      user_factory(),
+      %{
+        email: @long_email
       }
     )
   end
@@ -285,8 +294,10 @@ defmodule Ferry.Factory do
         "lat" => "44.7287901",
         "licence" => "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
         "lon" => "20.3751818051888",
+        # credo:disable-for-next-line Credo.Check.Readability.LargeNumbers
         "osm_id" => 413883199,
         "osm_type" => "way",
+        # credo:disable-for-next-line Credo.Check.Readability.LargeNumbers
         "place_id" => 167558366,
         "type" => "yes"
       }
@@ -381,7 +392,7 @@ defmodule Ferry.Factory do
   # ------------------------------------------------------------
   def packaging_factory do
     %Packaging{
-      count: sequence(:count, &(&1 + 1)), # 1, 2, ...
+      count: sequence(:count, &(&1 + 1000)), # 1000, 1001, ...
       type: "large bags",
       description: "Large, sturdy bags that contain about 4 trash bags worth of items.",
       photo: nil # TODO: test photo uploads
@@ -411,7 +422,7 @@ defmodule Ferry.Factory do
   # ------------------------------------------------------------
   def stock_factory do
     %Stock{
-      have: sequence(:count, &(&1 + 100)), # 100, 101, ...
+      have: sequence(:count, &(&1 + 1000)), # 1000, 1001, ...
       available: 0,
       need: 0,
       unit: Enum.random(["items", "small bags", "large bags", "small boxes", "large boxes", "pallets"]),
@@ -429,7 +440,7 @@ defmodule Ferry.Factory do
     struct!(
       stock_factory(),
       %{
-        available: sequence(:available, &(&1 + 50)) # 50, 51, ...
+        available: sequence(:available, &(&1 + 500)) # 500, 501, ...
       }
     )
   end
@@ -438,7 +449,7 @@ defmodule Ferry.Factory do
     struct!(
       stock_factory(),
       %{
-        need: sequence(:need, &(&1 + 50)) # 50, 51, ...
+        need: sequence(:need, &(&1 + 500)) # 500, 501, ...
       }
     )
   end
@@ -459,7 +470,8 @@ defmodule Ferry.Factory do
       stock_factory(),
       %{
         # available > have
-        available: sequence(:available, &(&1 + 200)) # 200, 201, ...
+        available: 1000,
+        have: 500
       }
     )
   end
@@ -479,7 +491,7 @@ defmodule Ferry.Factory do
     %{
       "project_id" => project_id,
 
-      "have" => sequence(:count, &(&1 + 201)), # 201, 202, ...
+      "have" => sequence(:count, &(&1 + 1000)), # 1000, 1001, ...
       "need" => 0,
       "available" => 0,
       "unit" => Enum.random(["items", "small bags", "large bags", "small boxes", "large boxes", "pallets"]),
@@ -541,6 +553,7 @@ defmodule Ferry.Factory do
     role = insert(:shipment_role, %{shipment_id: shipment.id, group: group})
 
     # append the role to shipment.roles and return the shipment
+    # credo:disable-for-next-line Credo.Check.Refactor.AppendSingleItem
     %{shipment | roles: shipment.roles ++ [role]}
   end
 
@@ -551,6 +564,7 @@ defmodule Ferry.Factory do
     end
 
     # append the route to shipment.routes and return the shipment
+    # credo:disable-for-next-line Credo.Check.Refactor.AppendSingleItem
     %{shipment | routes: shipment.routes ++ [route]}
   end
 
@@ -567,10 +581,10 @@ defmodule Ferry.Factory do
       description: sequence("I am description #")
     }
 
-    unless role.supplier? or role.receiver? or role.organizer? or role.funder? do
-      %{role | other?: true}
-    else
+    if role.supplier? or role.receiver? or role.organizer? or role.funder? do
       role
+    else
+      %{role | other?: true}
     end
   end
 

@@ -51,7 +51,7 @@ defmodule FerryWeb.LinkControllerTest do
       )
     end
 
-    test "shows 404 not found for non-existent groups", %{conn: conn, link: link} do
+    test "shows 404 not found for non-existent groups", %{conn: _conn, link: _link} do
       Enum.each(
         [
           # unauthenticated

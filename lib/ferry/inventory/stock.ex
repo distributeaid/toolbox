@@ -74,10 +74,10 @@ defmodule Ferry.Inventory.Stock do
       message: "You cannot list more available items than you currently have."
     )
 
-    cond do
-      available > 0 and need > 0 ->
-        changeset |> add_error(:available, "You cannot list available items if you need more of them.")
-      true -> changeset
+    if available > 0 and need > 0 do
+      changeset |> add_error(:available, "You cannot list available items if you need more of them.")
+    else
+      changeset
     end
   end
 end

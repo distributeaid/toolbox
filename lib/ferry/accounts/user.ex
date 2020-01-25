@@ -5,9 +5,6 @@ defmodule Ferry.Accounts.User do
   alias Comeonin.Bcrypt
 
   alias Ferry.Profiles.Group
-  alias Ferry.Repo
-  alias Ferry.Accounts.User
-  alias Ferry.Auth
 
 
   schema "users" do
@@ -47,7 +44,7 @@ defmodule Ferry.Accounts.User do
   end
 
   @doc false
-  def validate_login(user, %{email: email, password: password} = attrs) do
+  def validate_login(user, attrs) do
     user
     |> cast(attrs, [:email, :password])
     |> validate_required([:email, :password])

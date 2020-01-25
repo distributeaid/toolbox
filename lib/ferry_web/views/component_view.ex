@@ -9,20 +9,12 @@ defmodule FerryWeb.ComponentView do
     size = assigns[:size] # optional
     fill = assigns[:fill] # optional
 
-    version = case size do
-      :xxl -> :original
-      :xl -> :thumb
-      :lg -> :thumb
-      :normal -> :thumb
-      _ -> :thumb
-    end
-
-    size_class = case size do
-      :xxl -> "avatar-xxl"
-      :xl -> "avatar-xl"
-      :lg -> "avatar-lg"
-      :normal -> ""
-      _ -> ""
+    {version, size_class} = case size do
+      :xxl -> {:original, "avatar-xxl"}
+      :xl -> {:thumb, "avatar-xl"}
+      :lg -> {:thumb, "avatar-lg"}
+      :normal -> {:thumb, ""}
+      _ -> {:thumb, ""}
     end
 
     cond do
@@ -42,6 +34,5 @@ defmodule FerryWeb.ComponentView do
       true -> nil
     end
   end
-
 
 end

@@ -122,7 +122,7 @@ defmodule Ferry.Profiles do
       {:ok, geocode} ->
         attrs = %{"address" => Map.put(address_attrs, "geocode", geocode)}
         Project.address_changeset(changeset, attrs)
-      {:error, error} ->
+      {:error, _error} ->
           # TODO: proper error logging
           Changeset.add_error(changeset, :geocoding, "Our geocoding server sometimes can not locate a very specific address. Try removing your organization name, floor, or appartment # from the street line. If that continues to fail, try only city, country and postal code. If the problem persists, please reach out to us: help@distributeaid.org!")
     end
@@ -229,22 +229,6 @@ defmodule Ferry.Profiles do
     |> Project.changeset(attrs)
     |> geocode_project_address(attrs["address"])
     |> Repo.update()
-  end
-
-  @doc """
-  Transfers the project to another group.
-
-  ## Examples
-
-      iex> transfer_project(project, new_group)
-      {:ok, %Project{}}
-
-      iex> transfer_project(project, invalid_group)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def transfer_project(%Project{} = _project, %Group{} = _group) do
-    throw "Ferry.Profiles.transfer_project/2 is not implemented... yet ;)"
   end
 
   @doc """
