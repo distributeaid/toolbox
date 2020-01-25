@@ -28,7 +28,8 @@ defmodule Ferry.LinksTest do
       too_long: %{
         label: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         url: "this-does-not-have-a-length-limit.org"
-      }
+      },
+      with_extra_text: %{url: "https://example.com FOO BAR"}
     }
 
     def link_fixture(owner, attrs \\ %{}) do
@@ -195,6 +196,11 @@ defmodule Ferry.LinksTest do
       assert {:error, %Ecto.Changeset{}} = Links.create_link(group, @invalid_attrs.too_long)
       assert {:error, %Ecto.Changeset{}} = Links.create_link(project, @invalid_attrs.too_long)
       assert {:error, %Ecto.Changeset{}} = Links.create_link(contact, @invalid_attrs.too_long)
+
+      # with extra text
+      assert {:error, %Ecto.Changeset{}} = Links.create_link(group, @invalid_attrs.with_extra_text)
+      assert {:error, %Ecto.Changeset{}} = Links.create_link(project, @invalid_attrs.with_extra_text)
+      assert {:error, %Ecto.Changeset{}} = Links.create_link(contact, @invalid_attrs.with_extra_text)
     end
 
     test "update_link/2 with valid data updates the link" do

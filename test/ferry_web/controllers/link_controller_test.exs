@@ -40,7 +40,6 @@ defmodule FerryWeb.LinkControllerTest do
       Enum.each(
         [
           # authenticated
-          post(conn, Routes.group_link_path(conn, :index, not_my_group)),
           post(conn, Routes.group_link_path(conn, :create, not_my_group), link: params_for(:link)),
           get(conn, Routes.group_link_path(conn, :new, not_my_group)),
           get(conn, Routes.group_link_path(conn, :edit, not_my_group, not_my_link)),
@@ -81,17 +80,6 @@ defmodule FerryWeb.LinkControllerTest do
     end
   end
 
-  # Show
-  # ----------------------------------------------------------
-
-  describe "index" do
-    # TODO: actually lists no links since none are created... test both cases
-    test "lists all links", %{conn: conn, group: group} do
-      conn = get conn, Routes.group_link_path(conn, :index, group)
-      assert html_response(conn, 200) =~ "Links"
-    end
-  end
-
   # Create
   # ----------------------------------------------------------
 
@@ -107,9 +95,9 @@ defmodule FerryWeb.LinkControllerTest do
       link_params = params_for(:link)
       conn = post conn, Routes.group_link_path(conn, :create, group), link: link_params
 
-      assert redirected_to(conn) == Routes.group_link_path(conn, :index, group)
+      assert redirected_to(conn) == Routes.group_path(conn, :show, group)
 
-      conn = get conn, Routes.group_link_path(conn, :index, group)
+      conn = get conn, Routes.group_path(conn, :show, group)
       assert html_response(conn, 200) =~ link_params.url
     end
 
@@ -134,9 +122,9 @@ defmodule FerryWeb.LinkControllerTest do
       link_params = params_for(:link)
       conn = put conn, Routes.group_link_path(conn, :update, group, link), link: link_params
 
-      assert redirected_to(conn) == Routes.group_link_path(conn, :index, group)
+      assert redirected_to(conn) == Routes.group_path(conn, :show, group)
 
-      conn = get conn, Routes.group_link_path(conn, :index, group)
+      conn = get conn, Routes.group_path(conn, :show, group)
       assert html_response(conn, 200) =~ link_params.url
     end
 
@@ -152,9 +140,9 @@ defmodule FerryWeb.LinkControllerTest do
   describe "delete link" do
     test "deletes chosen link", %{conn: conn, group: group, link: link} do
       conn = delete conn, Routes.group_link_path(conn, :delete, group, link)
-      assert redirected_to(conn) == Routes.group_link_path(conn, :index, group)
+      assert redirected_to(conn) == Routes.group_path(conn, :show, group)
 
-      conn = get conn, Routes.group_link_path(conn, :index, group)
+      conn = get conn, Routes.group_path(conn, :show, group)
       refute html_response(conn, 200) =~ link.label
     end
   end

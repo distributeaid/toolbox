@@ -141,6 +141,20 @@ ol.list--unstyled {
   list-style: none;
 }
 
+ul.list--with-actions,
+ol.list--with-actions {
+  margin: 0;
+  list-style: none;
+}
+
+ul.list--with-actions li,
+ol.list--with-actions li {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 ul.list--horizontal,
 ol.list--horizontal {
   margin-left: 0.8rem;

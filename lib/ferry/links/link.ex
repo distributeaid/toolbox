@@ -21,8 +21,7 @@ defmodule Ferry.Links.Link do
     |> cast(attrs, [:label, :url])
     |> validate_required([:url])
     |> validate_length(:label, max: 255)
-    |> validate_length(:url, min: 4) # "a.de"
-    |> validate_format(:url, ~r/\./)
+    |> validate_format(:url, ~r/^https?:\/\/\S+[\.]\S{2,}$/)
     # TODO: add a changeset check constraint that matches the db one?
     #       https://hexdocs.pm/ecto/Ecto.Changeset.html#check_constraint/3
   end
