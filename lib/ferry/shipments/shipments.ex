@@ -28,10 +28,8 @@ defmodule Ferry.Shipments do
     Repo.all(
       from s in Shipment,
       order_by: s.id,
-      left_join: r in assoc(s, :roles),
-      left_join: g in assoc(r, :group),
       preload: [
-        roles: {r, group: g},
+        roles: ^roles_query(),
         routes: ^routes_query()
       ]
     )
@@ -43,12 +41,8 @@ defmodule Ferry.Shipments do
       order_by: s.id,
       left_join: r in assoc(s, :roles),
       where: r.group_id == ^group.id,
-
-      # TODO: Can we do all the queries in one go? Currently need to do extra
-      # queries for these.  If you try to inline it (see list_shipments/0 above)
-      # then the where clause will only select the 1 role that the group is in.
       preload: [
-        roles: :group,
+        roles: ^roles_query(),
         routes: ^routes_query()
       ]
     )
@@ -70,10 +64,8 @@ defmodule Ferry.Shipments do
   """
   def get_shipment!(id) do
     query = from s in Shipment,
-      left_join: r in assoc(s, :roles),
-      left_join: g in assoc(r, :group),
       preload: [
-        roles: {r, group: g},
+        roles: ^roles_query(),
         routes: ^routes_query()
       ]
 
@@ -151,6 +143,15 @@ defmodule Ferry.Shipments do
 
   # Roles
   # ================================================================================
+
+  defp roles_query do
+    from r in Role,
+      left_join: g in assoc(r, :group),
+      order_by: r.id,
+      preload: [
+        group: g
+      ]
+  end
 
   def get_role!(id) do
     query = from r in Role,

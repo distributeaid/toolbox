@@ -37,7 +37,7 @@ defmodule Ferry.ShipmentsTest do
       ]
     end
 
-    test "list_shipments/0 returns all shipments for a group" do
+    test "list_shipments/1 returns all shipments for a group" do
       group = insert(:group)
       group2 = insert(:group)
       group3 = insert(:group)
