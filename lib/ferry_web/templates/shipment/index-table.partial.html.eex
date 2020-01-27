@@ -44,14 +44,11 @@
         <td><%= shipment.receiver_address %></td>
         <td>
           <%= for role <- shipment.roles do %>
-            <%= link to: Routes.group_path(@conn, :show, role.group), class: "action tooltip tooltip-left", data: [tooltip: role.group.name] do %>
-              <%= component "group_logo.partial.html", %{
-                conn: @conn,
-                group: role.group,
-                size: :normal,
-                fill: true
-              } %>                
-            <% end %>
+            <%= component "group_logo_link.partial.html", %{
+              conn: @conn,
+              group: role.group,
+              direction: :left
+            } %>
           <% end %>
         </td>
       </tr>

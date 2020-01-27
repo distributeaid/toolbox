@@ -224,6 +224,7 @@ a.link--unstyled:hover,
 a.link--unstyled:active,
 a.link--unstyled.active {
   border-bottom: none;
+  box-shadow: none;
 
   color: #3B4351;
 }
@@ -685,6 +686,13 @@ TODO:
 .avatar {
   box-sizing: border-box;
   border: 0.05rem solid #EEF0FF;
+}
+
+a:focus > .avatar,
+a:hover > .avatar,
+a:active > .avatar,
+a.active > .avatar {
+  border-color: #8F97E5;
 }
 
 .avatar.avatar-xxl {
