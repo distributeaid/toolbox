@@ -44,13 +44,11 @@
         <td><%= shipment.receiver_address %></td>
         <td>
           <%= for role <- shipment.roles do %>
-            <!-- TOOD: link to group, and show full name on hover) -->
-            <%= component "group_logo.partial.html", %{
+            <%= component "group_logo_link.partial.html", %{
               conn: @conn,
               group: role.group,
-              size: :normal,
-              fill: true
-            } %>                
+              direction: :left
+            } %>
           <% end %>
         </td>
       </tr>

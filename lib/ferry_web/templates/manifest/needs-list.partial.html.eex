@@ -19,11 +19,11 @@
     <%= for stock <- @needs do %>
       <tr>
         <td>
-          <%= component "group_logo.partial.html", %{
+          <%= component "group_logo_link.partial.html", %{
             conn: @conn,
             group: stock.project.group,
-            size: :normal,
-            fill: true
+            project: stock.project,
+            direction: :right
           } %>
         </td>
         <td><%= stock.item.category.name %></td>

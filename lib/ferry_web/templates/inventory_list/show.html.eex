@@ -28,7 +28,7 @@
 
       <thead>
         <tr>
-          <th>Group & Project</th>
+          <th>Group</th>
           <th>Item</th>
           <th>Have</th>
           <th>Available</th>
@@ -41,18 +41,15 @@
       <tbody>
         <%= for stock <- @inventory do %>
           <tr>
-            <td class="col-4">
-              <%= component "group_logo.partial.html", %{
+            <td>
+              <%= component "group_logo_link.partial.html", %{
                 conn: @conn,
                 group: stock.project.group,
-                size: :normal,
-                fill: true
+                project: stock.project,
+                direction: :right
               } %>
-              <%= link stock.project.group.name, to: Routes.group_path(@conn, :show, stock.project.group) %>
-              <br />
-              <%= stock.project.name %>
             </td>
-            <td class="col-3">
+            <td>
               <strong><%= stock.item.category.name %></strong>
               - <%= stock.item.name %>
             </td>
