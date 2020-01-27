@@ -7,25 +7,27 @@ defmodule FerryWeb.ComponentView do
   alias Ferry.Profiles.Project
 
   def render("group_logo_link.partial.html", %{conn: conn, group: %Group{} = group} = assigns) do
-    # optional tooltip params
-    direction = case assigns[:direction] do
+    project = assigns[:project]     # optional
+    text = assigns[:text]            # optional
+    direction = assigns[:direction] # optional
+
+    size = Map.get(assigns, :size, :normal) # optional w/ default, passed on to group_logo.partial
+    fill = Map.get(assigns, :fill, true)    # optional w/ default, passed on to group_logo.partial
+
+    text = cond do
+      # text > group + project > group
+      # TODO: if a project is specified, also include the project location (city / country)?
+      is_bitstring(text) -> text
+      match?(%Project{}, project) -> group.name <> "\n" <> project.name
+      true -> group.name
+    end
+
+    direction = case direction do
       :left -> "tooltip-left"
       :right -> "tooltip-right"
       :bottom -> "tooltip-bottom"
       _ -> "" # Spectre's tooltip css defaults to showing it on top if a direction isn't specified.
     end
-
-    text = cond do
-      # text > group + project > group
-      # TODO: if a project is specified also include the project location (city / country)
-      is_bitstring(assigns[:text]) -> assigns[:text]
-      match?(%Project{}, assigns[:project]) -> group.name <> "\n" <> assigns[:project].name
-      true -> group.name
-    end
-
-    # optional logo params => passed on to group logo partial
-    size = if assigns[:size] != nil, do: assigns[:size], else: :normal
-    fill = if assigns[:fill] != nil, do: assigns[:fill], else: true
 
     link to: Routes.group_path(conn, :show, group),
          class: "link--unstyled tooltip " <> direction,
