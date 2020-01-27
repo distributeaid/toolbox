@@ -15,17 +15,8 @@ defmodule FerryWeb.GroupController do
   # TODO: test
   def groups_list_assigns(conn) do
     [
-      current_group: current_group(conn),
       groups: Profiles.list_groups()
     ]
-  end
-
-  defp current_group(%{assigns: %{current_user: %{group_id: group_id}}} = _conn) do
-    Profiles.get_group!(group_id)
-  end
-
-  defp current_group(_conn) do
-    nil
   end
 
   # Show
@@ -33,7 +24,7 @@ defmodule FerryWeb.GroupController do
 
   # TODO: add pagination
   def index(conn, _params) do
-    render(conn, "index.html", groups_list_assigns(conn))
+    render(conn, "index.html", groups: Profiles.list_groups())
   end
 
   # change (`debug_errors: true` to false in config/dev.exs if you want to
@@ -41,13 +32,14 @@ defmodule FerryWeb.GroupController do
   def show(conn, %{"id" => id}) do
     group = Profiles.get_group!(id)
 
-    assigns = Keyword.merge(groups_list_assigns(conn), [
+    assigns = [
+      groups: Profiles.list_groups(),
       group: group,
       links: Links.list_links(group),
       projects: Profiles.list_projects(group),
       addresses: Locations.list_addresses(group),
       shipments: Shipments.list_shipments(group)
-    ])
+    ]
 
     render(conn, "show.html", assigns)
   end
@@ -62,10 +54,11 @@ defmodule FerryWeb.GroupController do
   def edit(conn, %{"id" => id}) do
     group = Profiles.get_group!(id)
 
-    assigns = Keyword.merge(groups_list_assigns(conn), [
+    assigns = [
+      groups: Profiles.list_groups(),
       group: group,
       changeset: Profiles.change_group(group),
-    ])
+    ]
 
     render(conn, "edit.html", assigns)
   end
@@ -80,10 +73,11 @@ defmodule FerryWeb.GroupController do
         |> redirect(to: Routes.group_path(conn, :show, group))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        assigns = Keyword.merge(groups_list_assigns(conn), [
+        assigns = [
+          groups: Profiles.list_groups(),
           group: group,
           changeset: changeset,
-        ])
+        ]
         render(conn, "edit.html", assigns)
     end
   end

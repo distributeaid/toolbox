@@ -8,18 +8,6 @@ defmodule FerryWeb.RoleController do
   # Role Controller
   # ==============================================================================
 
-  # Helpers
-  # ----------------------------------------------------------
-
-  # TODO: copied from group_controller, refactor into shared function or something
-  defp current_group(%{assigns: %{current_user: %{group_id: group_id}}} = _conn) do
-    Profiles.get_group!(group_id)
-  end
-
-  defp current_group(_conn) do
-    nil
-  end
-
   # Create
   # ----------------------------------------------------------
 
@@ -32,7 +20,7 @@ defmodule FerryWeb.RoleController do
       shipment_id: shipment.id
     })
 
-    render(conn, "new.html", current_group: current_group(conn), group: group, shipment: shipment, groups: groups, changeset: changeset)
+    render(conn, "new.html", group: group, shipment: shipment, groups: groups, changeset: changeset)
   end
 
   def create(conn, %{"group_id" => group_id, "shipment_id" => shipment_id, "role" => role_params}) do
@@ -48,7 +36,7 @@ defmodule FerryWeb.RoleController do
         |> redirect(to: Routes.group_shipment_path(conn, :show, group, shipment))
       {:error, %Ecto.Changeset{} = changeset} ->
         groups = Profiles.list_groups()
-        render(conn, "new.html", current_group: current_group(conn), group: group, shipment: shipment, groups: groups, changeset: changeset)
+        render(conn, "new.html", group: group, shipment: shipment, groups: groups, changeset: changeset)
     end
   end
 
@@ -61,7 +49,7 @@ defmodule FerryWeb.RoleController do
     role = Shipments.get_role!(id)
     changeset = Shipments.change_role(role)
 
-    render(conn, "edit.html", current_group: current_group(conn), group: group, shipment: shipment, role: role, changeset: changeset)
+    render(conn, "edit.html", group: group, shipment: shipment, role: role, changeset: changeset)
   end
 
   def update(conn, %{"group_id" => group_id, "shipment_id" => shipment_id, "id" => id, "role" => role_params}) do
@@ -75,7 +63,7 @@ defmodule FerryWeb.RoleController do
         |> put_flash(:info, "Role updated successfully.")
         |> redirect(to: Routes.group_shipment_path(conn, :show, group, shipment))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", current_group: current_group(conn), group: group, shipment: shipment, role: role, changeset: changeset)
+        render(conn, "edit.html", group: group, shipment: shipment, role: role, changeset: changeset)
     end
   end
 
