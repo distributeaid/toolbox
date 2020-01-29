@@ -6,16 +6,29 @@ defmodule Ferry.Chat.ChatPipeline do
     otp_app: :ferry,
     error_handler: Ferry.Auth.ErrorHandler,
     module: Ferry.Auth.Guardian
-  
-  defp assign_chat_jwt(conn, _) do
+
+  defp assign_chat_meta(conn, _) do
     user = Guardian.Plug.current_resource(conn)
     if user do
       # Create JWT here
       jwtCfg = Application.get_env(:ferry, :jwt)
-      signer = Joken.Signer.create("ES256", %{"key_pem" => Keyword.fetch!(jwtCfg, :privateKey)})
-      extra_claims = %{"user_id" => user.id}
-      token_with_default_plus_custom_claims = Ferry.Token.generate_and_sign!(extra_claims, signer)
-      assign(conn, :chat_jwt, token_with_default_plus_custom_claims)
+      # FIXME: make this work instead:
+      # pem = Keyword.fetch!(jwtCfg, :privateKey)
+      pem = """
+      -----BEGIN EC PRIVATE KEY-----
+      MHcCAQEEICZqujJqPxmKWeyxq4D7bLqOHDKOEM+6jTJcPCQ9hSryoAoGCCqGSM49
+      AwEHoUQDQgAEDCz8s7nGPQyWZY0jkrL5VzKbE9EWLkNwOWoI98nOVU42SYw0ooqX
+      IYNPX2oZSKmvkF17xXd+ThXLsi9it8nplg==
+      -----END EC PRIVATE KEY-----
+      """
+      kid = Keyword.fetch!(jwtCfg, :keyId)
+      signer = Joken.Signer.create("ES256", %{"pem" => pem}, %{"kid" => kid})
+      token = Ferry.Token.generate_and_sign!(%{
+        "contexts" => ["general", "random"], 
+        "sub" => Integer.to_string(user.id),
+        "exp" => System.system_time(:second) + (60 * 60)
+        }, signer)
+      assign(conn, :chat_meta, token)
     else
       conn
     end
@@ -31,5 +44,5 @@ defmodule Ferry.Chat.ChatPipeline do
   plug Guardian.Plug.LoadResource, allow_blank: true
 
   # Provide a JWT for the user so they can use it for the chat
-  plug :assign_chat_jwt
+  plug :assign_chat_meta
 end

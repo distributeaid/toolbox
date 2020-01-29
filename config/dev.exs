@@ -65,7 +65,7 @@ config :ferry, Ferry.Repo,
   pool_size: 10
 
 config :ferry, :jwt, 
-  keyId: "12599b51-11b7-4c45-8f8a-a2bd1a6c574c",
+  keyId: "12599b51-11b7-4c45-8f8a-a2bd1a6c5745",
   privateKey: "-----BEGIN EC PRIVATE KEY-----
     MHcCAQEEICZqujJqPxmKWeyxq4D7bLqOHDKOEM+6jTJcPCQ9hSryoAoGCCqGSM49
     AwEHoUQDQgAEDCz8s7nGPQyWZY0jkrL5VzKbE9EWLkNwOWoI98nOVU42SYw0ooqX
