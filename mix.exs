@@ -49,7 +49,8 @@ defmodule Ferry.Mixfile do
       # utilities
       {:arc_ecto, "~> 0.11"}, # file uploads
       {:httpoison, "~> 1.4"}, # http
-      {:jason, "~> 1.0"}, # json
+      {:jason, "~> 1.1"}, # json
+      {:joken, "~> 2.0"}, # jwt
       {:redirect, "~> 0.3.0"}, # router redirects
       {:scrivener_ecto, "~> 2.0"}, # pagination
       {:timex, "~> 3.0"}, # datetime

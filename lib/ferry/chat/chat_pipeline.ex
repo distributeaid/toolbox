@@ -6,12 +6,16 @@ defmodule Ferry.Chat.ChatPipeline do
     otp_app: :ferry,
     error_handler: Ferry.Auth.ErrorHandler,
     module: Ferry.Auth.Guardian
-
+  
   defp assign_chat_jwt(conn, _) do
     user = Guardian.Plug.current_resource(conn)
     if user do
       # Create JWT here
-      assign(conn, :chat_jwt, user.id)
+      jwtCfg = Application.get_env(:ferry, :jwt)
+      signer = Joken.Signer.create("ES256", %{"key_pem" => Keyword.fetch!(jwtCfg, :privateKey)})
+      extra_claims = %{"user_id" => user.id}
+      token_with_default_plus_custom_claims = Ferry.Token.generate_and_sign!(extra_claims, signer)
+      assign(conn, :chat_jwt, token_with_default_plus_custom_claims)
     else
       conn
     end
