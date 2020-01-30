@@ -75,3 +75,8 @@ config :ferry, :jwt,
     MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDCz8s7nGPQyWZY0jkrL5VzKbE9EW
     LkNwOWoI98nOVU42SYw0ooqXIYNPX2oZSKmvkF17xXd+ThXLsi9it8nplg==
     -----END PUBLIC KEY-----"
+
+config :ferry, :chat,
+  apiKey: "da2-ojgtsxntpnd4loyp67r6nm3lam",
+  endpoint: "https://uftb6vmdvze7nbnrfmk2ygipmm.appsync-api.eu-central-1.amazonaws.com/graphql"
+    
