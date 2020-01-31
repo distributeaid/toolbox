@@ -1124,6 +1124,84 @@ Site
   margin: 0.4rem 0.4rem 0.8rem 0.4rem;
 }
 
+.site-header__logo.-mobile {
+  display: none;
+}
+
+@media (max-width: 815px) {
+  nav {
+    width: 100%;
+  }
+
+  .site-header {
+    z-index: 1200;
+    overflow: hidden;
+    top: 0;
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    height: auto;
+    width: 100%;
+    border-right: none;
+    box-shadow: none;
+  }
+
+  .site-header__logo.-mobile {
+    align-items: center;
+    display: flex;
+    flex: 1 0 0;
+    max-width: 60px;
+    margin: 0.4rem;
+  }
+
+  .site-header__logo {
+    display: none;
+  }
+
+  .site-header__divider {
+    display: none;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .site-nav li {
+      margin-top: 0;
+  }
+
+  .site-nav__top {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    justify-content: flex-end;
+    flex: 1 0 auto;
+  }
+
+  .site-nav__bottom {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    flex: 1 0 auto;
+    align-items: flex-end;
+    justify-content: space-around;
+  }
+
+  .site-nav a {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .site-nav__bottom a svg {
+    display: none;
+  }
+}
+
 .site-header__divider {
   margin: 0.4rem 0.8rem;
   border: none;

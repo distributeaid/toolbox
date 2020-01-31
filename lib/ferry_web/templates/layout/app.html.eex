@@ -67,45 +67,50 @@
 
       <nav>
         <ul class="site-nav">
-          <li>
-            <%= link to: Routes.home_page_path(@conn, :index) do %>
-              <i class="fas fa-fw fa-home"></i> Dashboard
-            <% end %>
-          </li>
-          <li>
-            <%= if @current_user == nil do %>
-              <%= link to: Routes.session_path(@conn, :new) do %>
-                <i class="fas fa-fw fa-unlock-alt"></i> Login / Signup
+          <%= img_tag Routes.static_path(@conn, "/images/logos/DA_lettermark_blue.svg"), class: "site-header__logo -mobile", alt: "Distribute Aid Logo: Outline of Doves" %>
+          <div role="presentation" class="site-nav__top">
+            <li class="col-md-auto">
+              <%= link to: Routes.home_page_path(@conn, :index) do %>
+                <i class="fas fa-fw fa-home"></i> Dashboard
               <% end %>
-            <% else %>
-              <%= link to: Routes.session_path(@conn, :delete), method: :delete do %>
-                <i class="fas fa-fw fa-lock"></i> Logout
+            </li>
+            <li class="col-md-auto">
+              <%= if @current_user == nil do %>
+                <%= link to: Routes.session_path(@conn, :new) do %>
+                  <i class="fas fa-fw fa-unlock-alt"></i> Login / Signup
+                <% end %>
+              <% else %>
+                <%= link to: Routes.session_path(@conn, :delete), method: :delete do %>
+                  <i class="fas fa-fw fa-lock"></i> Logout
+                <% end %>
               <% end %>
-            <% end %>
-          </li>
+            </li>
+          </div>
           <li>
             <hr class="site-header__divider" />
           </li>
-          <li>
-            <%= link to: Routes.group_path(@conn, :index) do %>
-              <i class="fas fa-fw fa-user-circle"></i> Aid Groups
-            <% end %>
-          </li>
-          <li>
-            <%= link to: Routes.map_path(@conn, :show) do %>
-              <i class="fas fa-fw fa-map-marker-alt"></i> Map
-            <% end %>
-          </li>
-          <li>
-            <%= link to: Routes.inventory_list_path(@conn, :show) do %>
-              <i class="fas fa-fw fa-boxes"></i> Inventory
-            <% end %>
-          </li>
-          <li>
-            <%= link to: Routes.shipment_overview_path(@conn, :index) do %>
-              <i class="fas fa-fw fa-truck"></i> Shipments
-            <% end %>
-          </li>
+          <div role="presentation" class="site-nav__bottom">
+            <li>
+              <%= link to: Routes.group_path(@conn, :index) do %>
+                <i class="fas fa-fw fa-user-circle"></i> Aid Groups
+              <% end %>
+            </li>
+            <li>
+              <%= link to: Routes.map_path(@conn, :show) do %>
+                <i class="fas fa-fw fa-map-marker-alt"></i> Map
+              <% end %>
+            </li>
+            <li>
+              <%= link to: Routes.inventory_list_path(@conn, :show) do %>
+                <i class="fas fa-fw fa-boxes"></i> Inventory
+              <% end %>
+            </li>
+            <li>
+              <%= link to: Routes.shipment_overview_path(@conn, :index) do %>
+                <i class="fas fa-fw fa-truck"></i> Shipments
+              <% end %>
+            </li>
+          </div>
         </ul>
       </nav>
 
