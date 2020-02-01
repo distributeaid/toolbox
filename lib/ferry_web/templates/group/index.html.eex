@@ -37,10 +37,12 @@
         <%= if has_groups? @groups do %>
           <%= for group <- @groups do %>
             <tr>
-              <td class="actions actions--sm">
-                <%= link to: Routes.group_path(@conn, :show, group), class: "action" do %>
-                  <i class="fas fa-eye"></i>
-                <% end %>
+              <td>
+                <%= component "action.partial.html", %{
+                  action: :view,
+                  authorized?: true,
+                  route: Routes.group_path(@conn, :show, group)
+                } %>
               </td>
               <td>
                 <%= link to: Routes.group_path(@conn, :show, group), class: "link--unstyled" do %>

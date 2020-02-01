@@ -2,13 +2,19 @@
   <h3 class="content-header__title">Route</h3>
 
   <%= if @can_modify? do %>
-    <ul class="actions">
-      <li>
-        <%= link to: Routes.group_shipment_route_path(@conn, :new, @group, @shipment), class: "action" do %>
-          <i class="fas fa-plus"></i>
-        <% end %>
-      </li>
-    </ul>
+    <%# An Extra check is required here since the shipments overview page
+        currently uses this partial, and can't pass a group in since it's a
+        public page (no logged in user => no group).
+
+        TODO: Clean this up when adding proper authorization checks, so we don't
+              need the extra @can_modify? check.
+              https://gitlab.com/distribute-aid/toolbox/issues/135
+    %>
+    <%= component "action.partial.html", %{
+      action: :new,
+      authorized?: @can_modify?,
+      route: Routes.group_shipment_route_path(@conn, :new, @group, @shipment)
+    } %>
   <% end %>
 </div>
 
@@ -31,22 +37,30 @@
           <p><%= route.groups %></p>
         <% end %>
       </div>
-      <%= if @can_modify? do %>
-        <div class="column col-auto">
-          <ul class="actions actions--sm">
-            <li>
-              <%= link to: Routes.group_shipment_route_path(@conn, :edit, @group, @shipment, route), class: "action" do %>
-                <i class="fas fa-pencil-alt"></i>
-              <% end %>
-            </li>
-            <li>
-              <%= link to: Routes.group_shipment_route_path(@conn, :delete, @group, @shipment, route), method: :delete, data: [confirm: "Are you sure? This will remove the route from the shipment."], class: "action" do %>
-                <i class="fas fa-trash-alt"></i>
-              <% end %>
-            </li>
-          </ul>
-        </div>
-      <% end %>
+
+      <div class="column col-auto actions">
+        <%= if @can_modify? do %>
+          <%# An Extra check is required here since the shipments overview page
+              currently uses this partial, and can't pass a group in since it's a
+              public page (no logged in user => no group).
+
+              TODO: Clean this up when adding proper authorization checks, so we don't
+                    need the extra @can_modify? check.
+                    https://gitlab.com/distribute-aid/toolbox/issues/135
+          %>
+          <%= component "action.partial.html", %{
+            action: :edit,
+            authorized?: @can_modify?,
+            route: Routes.group_shipment_route_path(@conn, :edit, @group, @shipment, route)
+          } %>
+          <%= component "action.partial.html", %{
+            action: :delete,
+            authorized?: @can_modify?,
+            route: Routes.group_shipment_route_path(@conn, :delete, @group, @shipment, route),
+            confirm: "Are you sure? This will remove the route from the shipment."
+          } %>
+        <% end %>
+      </div>
     </div>
   <% end %>
 

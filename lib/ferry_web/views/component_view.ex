@@ -6,9 +6,30 @@ defmodule FerryWeb.ComponentView do
   alias Ferry.Profiles.Group.Logo
   alias Ferry.Profiles.Project
 
+  def render("action.partial.html", %{action: action, route: route, authorized?: true} = assigns)
+  when action in [:view, :new, :edit, :delete] do
+    # TODO: require confirm for :delete actions?
+    confirm = assigns[:confirm] # optional
+
+    icon_class = case action do
+      :view -> "fa-eye"
+      :new -> "fa-plus"
+      :edit -> "fa-pencil-alt"
+      :delete -> "fa-trash-alt"
+    end
+
+    link to: route, class: "action", data: [confirm: confirm] do
+      ~E(<i class="fas <%= icon_class %>"></i>)
+    end
+  end
+
+  def render("action.partial.html", %{authorized?: false}) do
+    nil
+  end
+
   def render("group_logo_link.partial.html", %{conn: conn, group: %Group{} = group} = assigns) do
     project = assigns[:project]     # optional
-    text = assigns[:text]            # optional
+    text = assigns[:text]           # optional
     direction = assigns[:direction] # optional
 
     size = Map.get(assigns, :size, :normal) # optional w/ default, passed on to group_logo.partial

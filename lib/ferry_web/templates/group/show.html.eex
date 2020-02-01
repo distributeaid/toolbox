@@ -45,15 +45,11 @@
 
       <h2 class="content-header__title"><%= @group.name %></h2>
 
-      <ul class="actions">
-        <%= if !is_nil(@current_group) && @group.id == @current_group.id do %>
-          <li>
-            <%= link to: Routes.group_path(@conn, :edit, @current_group), class: "action" do %>
-              <i class="fas fa-pencil-alt"></i>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
+      <%= component "action.partial.html", %{
+        action: :edit,
+        authorized?: !is_nil(@current_group) && @group.id == @current_group.id,
+        route: Routes.group_path(@conn, :edit, @current_group)
+      } %>
     </div>
 
     <%= if @group.description do %>

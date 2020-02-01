@@ -1,6 +1,8 @@
 defmodule FerryWeb.Router do
   use FerryWeb, :router
 
+  import FerryWeb.Plugs
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -11,6 +13,7 @@ defmodule FerryWeb.Router do
 
   pipeline :setup_auth do
     plug Ferry.Auth.SetupPipeline
+    plug :assign_current_group
   end
 
   pipeline :ensure_auth do

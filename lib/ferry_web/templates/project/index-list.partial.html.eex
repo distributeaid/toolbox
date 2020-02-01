@@ -1,15 +1,11 @@
 <div class="content-header">
   <h3 class="content-header__title">Projects</h3>
 
-  <%= if @can_modify? do %>
-    <ul class="actions">
-      <li>
-        <%= link to: Routes.group_project_path(@conn, :new, @group), class: "action" do %>
-          <i class="fas fa-plus"></i>
-        <% end %>
-      </li>
-    </ul>
-  <% end %>
+  <%= component "action.partial.html", %{
+    action: :new,
+    authorized?: @can_modify?,
+    route: Routes.group_project_path(@conn, :new, @group)
+  } %>
 </div>
 
 <%= if has_projects? @projects do %>
@@ -18,20 +14,19 @@
 
     <p><%= project.description %></p>
 
-    <%= if @can_modify? do %>
-      <ul class="actions actions--inline actions--sm">
-        <li>
-          <%= link to: Routes.group_project_path(@conn, :edit, @group, project), class: "action" do %>
-            <i class="fas fa-pencil-alt"></i>
-          <% end %>
-        </li>
-        <li>
-          <%= link to: Routes.group_project_path(@conn, :delete, @group, project), method: :delete, data: [confirm: "This will delete all data associated with the project, including project-specific links and contacts.  Are you sure?"], class: "action" do %>
-            <i class="fas fa-trash-alt"></i>
-          <% end %>
-        </li>
-      </ul>
-    <% end %>
+    <div class="actions actions--inline">
+      <%= component "action.partial.html", %{
+        action: :edit,
+        authorized?: @can_modify?,
+        route: Routes.group_project_path(@conn, :edit, @group, project)
+      } %>
+      <%= component "action.partial.html", %{
+        action: :delete,
+        authorized?: @can_modify?,
+        route: Routes.group_project_path(@conn, :edit, @group, project),
+        confirm: "This will delete all data associated with the project, including project-specific links and contacts.  Are you sure?"
+      } %>
+    </div>
   <% end %>
 
 <% else %>

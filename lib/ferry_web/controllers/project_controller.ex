@@ -7,18 +7,6 @@ defmodule FerryWeb.ProjectController do
   # Project Controller
   # ==============================================================================
 
-  # Helpers
-  # ----------------------------------------------------------
-
-  # TODO: copied from group_controller, refactor into shared function or something
-  defp current_group(%{assigns: %{current_user: %{group_id: group_id}}} = _conn) do
-    Profiles.get_group!(group_id)
-  end
-
-  defp current_group(_conn) do
-    nil
-  end
-
   # Show
   # ----------------------------------------------------------
   # None for now.
@@ -29,7 +17,7 @@ defmodule FerryWeb.ProjectController do
   def new(conn, %{"group_id" => group_id}) do
     group = Profiles.get_group!(group_id)
     changeset = Profiles.change_project(%Project{})
-    render(conn, "new.html", current_group: current_group(conn), group: group, changeset: changeset)
+    render(conn, "new.html", group: group, changeset: changeset)
   end
 
   def create(conn, %{"group_id" => group_id, "project" => project_params}) do
@@ -41,7 +29,7 @@ defmodule FerryWeb.ProjectController do
         |> put_flash(:info, "Project created successfully.")
         |> redirect(to: Routes.group_path(conn, :show, group))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", current_group: current_group(conn), group: group, changeset: changeset)
+        render(conn, "new.html", group: group, changeset: changeset)
     end
   end
 
@@ -52,7 +40,7 @@ defmodule FerryWeb.ProjectController do
     group = Profiles.get_group!(group_id)
     project = Profiles.get_project!(id)
     changeset = Profiles.change_project(project)
-    render(conn, "edit.html", current_group: current_group(conn), group: group, project: project, changeset: changeset)
+    render(conn, "edit.html", group: group, project: project, changeset: changeset)
   end
 
   def update(conn, %{"group_id" => group_id, "id" => id, "project" => project_params}) do
@@ -65,7 +53,7 @@ defmodule FerryWeb.ProjectController do
         |> put_flash(:info, "Project updated successfully.")
         |> redirect(to: Routes.group_path(conn, :show, group))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", current_group: current_group(conn), group: group, project: project, changeset: changeset)
+        render(conn, "edit.html", group: group, project: project, changeset: changeset)
     end
   end
 
