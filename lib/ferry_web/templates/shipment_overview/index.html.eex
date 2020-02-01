@@ -40,13 +40,11 @@
         <%= for shipment <- @shipments do %>
           <tr>
             <td>
-              <ul class="actions actions--sm">
-                <li>
-                  <%= link to: Routes.shipment_overview_path(@conn, :show, shipment), class: "action" do %>
-                    <i class="fas fa-eye"></i>
-                  <% end %>
-                </li>
-              </ul>
+              <%= component "action.partial.html", %{
+                action: :view,
+                authorized?: true,
+                route: Routes.shipment_overview_path(@conn, :show, shipment)
+              } %>
             </td>
             <td class="text-capitalize" data-order="<%= FerryWeb.ShipmentView.status_order(shipment.status) %>"><%= FerryWeb.ShipmentView.status_text(shipment.status) %></td>
             <td><%= shipment.target_date %></td>

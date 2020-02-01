@@ -2,13 +2,11 @@
   <thead>
     <tr>
       <th>
-        <ul class="actions actions--sm">
-          <li>
-            <%= link to: Routes.group_stock_path(@conn, :new, @group), class: "action" do %>
-              <i class="fas fa-plus"></i>
-            <% end %>
-          </li>
-        </ul>
+        <%= component "action.partial.html", %{
+          action: :new,
+          authorized?: true, # this is a private page, TODO: more explicit checks
+          route: Routes.group_stock_path(@conn, :new, @group)
+        } %>
       </th>
       <th>Project</th>
       <th>Item</th>
@@ -24,18 +22,17 @@
     <%= for stock <- @stocks do %>
       <tr>
         <td>
-          <ul class="actions actions--sm">
-            <li>
-              <%= link to: Routes.group_stock_path(@conn, :edit, @group, stock), class: "action" do %>
-                <i class="fas fa-pencil-alt"></i>
-              <% end %>
-            </li>
-            <li>
-              <%= link to: Routes.group_stock_path(@conn, :delete, @group, stock), method: :delete, data: [confirm: "This will remove the stock entry from your inventory.  Are you sure?"], class: "action" do %>
-                <i class="fas fa-trash-alt"></i>
-              <% end %>
-            </li>
-          </ul>
+          <%= component "action.partial.html", %{
+            action: :edit,
+            authorized?: true, # this is a private page, TODO: more explicit checks
+            route: Routes.group_stock_path(@conn, :edit, @group, stock)
+          } %>
+          <%= component "action.partial.html", %{
+            action: :delete,
+            authorized?: true, # this is a private page, TODO: more explicit checks
+            route: Routes.group_stock_path(@conn, :delete, @group, stock),
+            confirm: "This will remove the stock entry from your inventory.  Are you sure?"
+          } %>
         </td>
 
         <td><%= stock.project.name %></td>

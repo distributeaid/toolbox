@@ -2,13 +2,19 @@
   <h3 class="content-header__title">At A Glance</h3>
 
   <%= if @can_modify? do %>
-    <ul class="actions">
-      <li>
-        <%= link to: Routes.group_shipment_path(@conn, :edit, @group, @shipment), class: "action" do %>
-          <i class="fas fa-pencil-alt"></i>
-        <% end %>
-      </li>
-    </ul>
+    <%# An Extra check is required here since the shipments overview page
+        currently uses this partial, and can't pass a group in since it's a
+        public page (no logged in user => no group).
+
+        TODO: Clean this up when adding proper authorization checks, so we don't
+              need the extra @can_modify? check.
+              https://gitlab.com/distribute-aid/toolbox/issues/135
+    %>
+    <%= component "action.partial.html", %{
+      action: :edit,
+      authorized?: @can_modify?,
+      route: Routes.group_shipment_path(@conn, :edit, @group, @shipment)
+    } %>
   <% end %>
 </div>
 

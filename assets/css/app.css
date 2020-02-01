@@ -722,59 +722,32 @@ TODO:
   [ ] is this generic enough to be an Object?
   [ ] colors same as .btn.btn-primary.  should this be a "rounded button"?
 */
-.actions {
-/*
-  position: absolute;
-  top: 0;
-  right: 0;
-*/
-  margin: 0;
-}
+.actions {}
 
 .actions--inline {
   margin-bottom: 0.8rem;
 }
 
-.action {
-  box-sizing: border-box;
-}
-
-.actions--sm .action {
-  width: 1.6rem;
-  height: 1.6rem;
-
-  font-size: 0.8rem;
-}
-
-.actions--left {
-  left: 0;
-}
-
-ul.actions {
-  list-style: none;
-}
-
-ul.actions > li {
-  display: inline-block;
-  margin: 0;
-  padding: 0;
+.actions--inline:last-child {
+  margin-bottom: 0;
 }
 
 .action,
 .action:visited {
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  width: 2rem;
-  height: 2rem;
+  width: 1.6rem;
+  height: 1.6rem;
   border-radius: 100%;
   border: 1px solid #B493C4;
 
   color: #FFF;
   background-color: #C6ACD2;
 
-  font-size: 1.2rem;
+  font-size: 0.8rem;
 }
 
 .action:focus,
@@ -790,6 +763,7 @@ ul.actions > li {
   border-color: #A284B0;
   color: #FFF;
 }
+
 
 /*
 Brand

@@ -1,20 +1,18 @@
 <div class="content-header">
   <h3 class="content-header__title">Shipments</h3>
 
-  <%= if @can_modify? do %>
-    <ul class="actions">
-      <li>
-        <%= link to: Routes.group_shipment_path(@conn, :index, @group), class: "action" do %>
-          <i class="fas fa-list"></i>
-        <% end %>
-      </li>
-      <li>
-        <%= link to: Routes.group_shipment_path(@conn, :new, @group), class: "action" do %>
-          <i class="fas fa-plus"></i>
-        <% end %>
-      </li>
-    </ul>
-  <% end %>
+  <div class="actions">
+    <%= component "action.partial.html", %{
+      action: :view,
+      authorized?: @can_modify?,
+      route: Routes.group_shipment_path(@conn, :index, @group)
+    } %>
+    <%= component "action.partial.html", %{
+      action: :new,
+      authorized?: @can_modify?,
+      route: Routes.group_shipment_path(@conn, :new, @group)
+    } %>
+  </div>
 </div>
 
 <%= if has_shipments? @shipments do %>
