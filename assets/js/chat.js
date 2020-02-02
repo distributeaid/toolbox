@@ -1,3 +1,4 @@
+const chatVersion = '1.16.1'
 
 const loadJsAsync = deps => loadjs(deps, {
     async: true,
@@ -30,7 +31,7 @@ const loadChat = () => {
         'https://twemoji.maxcdn.com/v/latest/twemoji.min.js',
     ])
         .then(() => loadJsAsync([
-            'https://github.com/distributeaid/chat-ui/releases/download/v1.15.1/distribute-aid-chat-ui.v1.15.1.js',
+            `https://github.com/distributeaid/chat-ui/releases/download/v${chatVersion}/distribute-aid-chat-ui.v${chatVersion}.js`,
         ]))
         .then(() => {
             DAChat({
@@ -54,7 +55,7 @@ window.onload = () => {
                 .catch(logError)
         } else {
             loadJsAsync([
-                'https://github.com/distributeaid/chat-ui/releases/download/v1.15.1/distribute-aid-chat-button.v1.15.1.js'
+                `https://github.com/distributeaid/chat-ui/releases/download/v${chatVersion}/distribute-aid-chat-button.v${chatVersion}.js`
             ])
                 .then(() => {
                     DAChatButton((removeButton) => {
