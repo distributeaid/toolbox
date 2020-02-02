@@ -166,6 +166,8 @@
       <%= render @view_module, @view_template, assigns %>
     </main>
 
-    <%= chat_script(assigns[:chat_meta]) %>
+    <!-- Chat -->
+    <script src="https://cdn.rawgit.com/muicss/loadjs/4.2.0/dist/loadjs.min.js" async></script>
+    <script src="<%= Routes.static_path(@conn, "/js/chat.js") %>" async></script>
   </body>
 </html>

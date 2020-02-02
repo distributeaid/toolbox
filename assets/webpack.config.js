@@ -11,7 +11,8 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 module.exports = (env, options) => ({
 
   entry: {
-    app: glob.sync('./vendor/**/*.min.js').concat(['./js/app.js']),
+    app: glob.sync('./vendor/**/*.min.js').concat(['./js/app.js', './js/chat.js']),
+    chat: './js/chat.js',
     '../stillsuit': './js/stillsuit.js'
   },
 
