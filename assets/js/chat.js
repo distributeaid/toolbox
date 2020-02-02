@@ -11,6 +11,12 @@ const log = (...args) =>
         ...args,
     )
 
+const logError = (...args) =>
+    console.error(
+        '%cChat',
+        'background-color: #da2525; color: #ffffff; padding: 0.25rem;',
+        ...args,
+    )
 
 const loadChat = () => {
     const context = document.querySelector("meta[name='chat:context']")
@@ -45,7 +51,7 @@ window.onload = () => {
         }
         if (document.cookie.split(';').filter((item) => item.trim().startsWith('DAChatopen=')).length) {
             loadChat()
-                .catch(console.error)
+                .catch(logError)
         } else {
             loadJsAsync([
                 'https://github.com/distributeaid/chat-ui/releases/download/v1.15.1/distribute-aid-chat-button.v1.15.1.js'
@@ -59,7 +65,7 @@ window.onload = () => {
                             })
                     })
                 })
-                .catch(console.error)
+                .catch(logError)
         }
     } else {
         log('Chat disabled. Run this command to enable it for this browser and reload the page:')
