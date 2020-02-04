@@ -13,14 +13,7 @@ defmodule Ferry.Chat.ChatPipeline do
       # Create JWT here
       jwtCfg = Application.get_env(:ferry, :jwt)
       # FIXME: make this work instead:
-      # pem = Keyword.fetch!(jwtCfg, :privateKey)
-      pem = """
-      -----BEGIN EC PRIVATE KEY-----
-      MHcCAQEEICZqujJqPxmKWeyxq4D7bLqOHDKOEM+6jTJcPCQ9hSryoAoGCCqGSM49
-      AwEHoUQDQgAEDCz8s7nGPQyWZY0jkrL5VzKbE9EWLkNwOWoI98nOVU42SYw0ooqX
-      IYNPX2oZSKmvkF17xXd+ThXLsi9it8nplg==
-      -----END EC PRIVATE KEY-----
-      """
+      pem = Keyword.fetch!(jwtCfg, :privateKey)
       kid = Keyword.fetch!(jwtCfg, :keyId)
       signer = Joken.Signer.create("ES256", %{"pem" => pem}, %{"kid" => kid})
       token = Ferry.Token.generate_and_sign!(%{
