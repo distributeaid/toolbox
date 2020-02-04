@@ -7,8 +7,23 @@ defmodule Ferry.Factory do
 
   use ExMachina.Ecto, repo: Ferry.Repo
 
+  # To prevent conflicts between the new Aid context and the old Inventory
+  # context, the following modules will be referred to by their full namespaces.
+  # Similarly, their factory functions (and related helpers) have been prefixed
+  # with `aid_` to prevent conflicts with the inventory factory functions.
+  #
+  #   - Ferry.Aid.Item // aid_item_factory
+  #   - Ferry.Aid.Mod  // aid_mod_factory
   alias Ferry.{
     Accounts.User,
+    # Aid.Item
+    Aid.ItemCategory,
+    Aid.ListEntry,
+    Aid.Manifest,
+    # Aid.Mod,
+    Aid.ModValue,
+    Aid.AidList,
+    Aid.NeedsList,
     Inventory.Category,
     Inventory.Item,
     Inventory.Mod,
@@ -624,5 +639,182 @@ defmodule Ferry.Factory do
       }
     )
   end
+
+  # Aid
+  # ================================================================================
+  
+  # Item Category
+  # ------------------------------------------------------------
+  
+  def item_category_factory do
+    %ItemCategory{
+      name: sequence("Clothing"),
+      items: []
+    }
+  end
+
+  def invalid_short_item_category_factory do
+    struct!(
+      item_category_factory(),
+      %{
+        name: "Y"
+      }
+    )
+  end
+
+  def invalid_long_item_category_factory do
+    struct!(
+      item_category_factory(),
+      %{
+        # 33 characters long
+        name: String.duplicate("YOLO", 8) <> "!"
+      }
+    )
+  end
+
+  def with_item(category, item_or_attrs \\ %{})
+
+  def with_item(category, %Ferry.Aid.Item{} = item) do
+    items =
+      [item | category.items]
+      |> Enum.sort_by(&(&1.name))
+
+    %{category | items: items}
+  end
+
+  def with_item(category, attrs) do
+    item = insert(:aid_item, Map.merge(attrs, %{category: category}))
+    with_item(category, item)
+  end
+
+  # Item
+  # ------------------------------------------------------------
+
+  def aid_item_factory do
+    %Ferry.Aid.Item{
+      name: sequence("Shirt"),
+      category: build(:item_category),
+      entries: [],
+      mods: []
+    }
+  end
+
+  def invalid_short_aid_item_factory do
+    struct!(
+      aid_item_factory(),
+      %{
+        name: "Y"
+      }
+    )
+  end
+
+  def invalid_long_aid_item_factory do
+    struct!(
+      aid_item_factory(),
+      %{
+        # 33 characters long
+        name: String.duplicate("YOLO", 8) <> "!"
+      }
+    )
+  end
+
+  # Mod
+  # ------------------------------------------------------------
+  def aid_mod_factory(attrs \\ %{}) do
+    type = if attrs[:type] do
+      attrs.type
+    else
+      Enum.random(["integer", "select", "multi-select"])
+    end
+
+    values = case type do
+      "integer" -> nil
+      "select" -> ["small", "large"]
+      "multi-select" -> ["summer", "winter"]
+    end
+
+    mod = %Ferry.Aid.Mod{
+      name: sequence("Size"),
+      description: sequence("I let you specify the sizes of things."),
+      type: type,
+      values: values,
+      items: []
+    }
+
+    merge_attributes(mod, attrs)
+  end
+
+  def invalid_short_aid_mod_factory do
+    struct!(
+      aid_mod_factory(),
+      %{
+        name: "Y",
+        type: "select",
+        values: ["only 1 choice"]
+      }
+    )
+  end
+
+  def invalid_long_aid_mod_factory do
+    struct!(
+      aid_mod_factory(),
+      %{
+        # 33 characters long
+        name: String.duplicate("YOLO", 8) <> "!"
+      }
+    )
+  end
+
+  def invalid_type_aid_mod_factory do
+    struct!(
+      aid_mod_factory(),
+      %{
+        type: "not an option"
+      }
+    )
+  end
+
+  # Mod Value
+  # ------------------------------------------------------------
+  def mod_value_factory(attrs) do
+    mod = if attrs[:mod], do: attrs.mod, else: build(:aid_mod)
+
+    value = case mod.type do
+      "integer" -> sequence(:value, &(&1 + 1000)) # 1000, 1001, ...
+      "select" -> Enum.random(mod.values)
+      "multi-select" ->
+        [Enum.random(mod.values), Enum.random(mod.values)]
+        |> Enum.uniq()
+    end
+
+    %ModValue{
+      value: value,
+      mod: mod,
+      entry: build(:list_entry)
+    }
+  end
+
+  # Aid List
+  # ------------------------------------------------------------
+
+  def list_factory do
+    %AidList{
+      entries: []
+    }
+  end
+
+  # List Entry
+  # ------------------------------------------------------------
+  
+  def list_entry_factory do
+    %ListEntry{
+      amount: sequence(:amount, &(&1 + 1000)), # 1000, 1001, ...
+
+      list: build(:list),
+      item: build(:aid_item),
+      mod_values: []
+    }
+  end
+
 
 end
