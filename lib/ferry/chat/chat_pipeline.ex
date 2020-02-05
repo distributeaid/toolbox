@@ -12,7 +12,6 @@ defmodule Ferry.Chat.ChatPipeline do
     if user do
       # Create JWT here
       jwtCfg = Application.get_env(:ferry, :jwt)
-      # FIXME: make this work instead:
       pem = Keyword.fetch!(jwtCfg, :privateKey)
       kid = Keyword.fetch!(jwtCfg, :keyId)
       signer = Joken.Signer.create("ES256", %{"pem" => pem}, %{"kid" => kid})
