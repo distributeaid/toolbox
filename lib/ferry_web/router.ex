@@ -1,5 +1,6 @@
 defmodule FerryWeb.Router do
   use FerryWeb, :router
+  import Redirect
 
   import FerryWeb.Plugs
 
@@ -61,5 +62,17 @@ defmodule FerryWeb.Router do
     end
   end
 
-  # TODO: setup admin scope, add /groups/new and move /users/* into it
+  # TODO: move "/public/groups/:group_id/users" to admin scope
+  scope "/admin", FerryWeb do
+    # TODO: restrict access to admin scope
+    pipe_through [:browser, :setup_auth]
+
+    # categories are visible / accessible via AidItemController:index
+    resources "/aid/categories", AidCategoryController, except: [:index, :show]
+    resources "/aid/items", AidItemController, except: [:show]
+    resources "/aid/mods", AidModController, except: [:show]
+  end
+
+  redirect "/admin", "/admin/aid/items", :temporary
+  redirect "/admin/aid", "/admin/aid/items", :temporary
 end

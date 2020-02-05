@@ -15,11 +15,11 @@ defmodule Ferry.AidTest do
       assert Aid.list_item_categories() == []
 
       # 1
-      category1 = insert(:item_category)
+      category1 = insert(:item_category, %{name: "M"})
       assert Aid.list_item_categories() == [category1]
 
       # many
-      category2 = insert(:item_category)
+      category2 = insert(:item_category, %{name: "N"})
       assert Aid.list_item_categories() == [category1, category2]
 
       # ordered by name
@@ -181,8 +181,8 @@ defmodule Ferry.AidTest do
       assert item.category_id == category.id
 
       # also creates associations with mods
-      mod1 = insert(:aid_mod)
-      mod2 = insert(:aid_mod)
+      mod1 = insert(:aid_mod) |> without_assoc(:items, :many)
+      mod2 = insert(:aid_mod) |> without_assoc(:items, :many)
       attrs = params_for(:aid_item)
       attrs = %{attrs | mods: [mod1, mod2]}
       assert {:ok, %Item{} = item} = Aid.create_item(category, attrs)
@@ -212,9 +212,9 @@ defmodule Ferry.AidTest do
       assert item.name == attrs.name
 
       # also creates / deletes associations with mods
-      mod1 = insert(:aid_mod)
-      mod2 = insert(:aid_mod)
-      mod3 = insert(:aid_mod)
+      mod1 = insert(:aid_mod) |> without_assoc(:items, :many)
+      mod2 = insert(:aid_mod) |> without_assoc(:items, :many)
+      mod3 = insert(:aid_mod) |> without_assoc(:items, :many)
       old_item = insert(:aid_item, %{mods: [mod1, mod2]})
 
       attrs = params_for(:aid_item)
@@ -275,16 +275,16 @@ defmodule Ferry.AidTest do
       assert Aid.list_mods() == []
 
       # 1
-      mod1 = insert(:aid_mod) |> without_assoc(:items, :many)
+      mod1 = insert(:aid_mod)
       assert Aid.list_mods() == [mod1]
 
       # many
-      mod2 = insert(:aid_mod) |> without_assoc(:items, :many)
+      mod2 = insert(:aid_mod)
       assert Aid.list_mods() == [mod1, mod2]
 
       # ordered by name
-      last_mod = insert(:aid_mod, %{name: "Z"}) |> without_assoc(:items, :many)
-      first_mod = insert(:aid_mod, %{name: "A"}) |> without_assoc(:items, :many)
+      last_mod = insert(:aid_mod, %{name: "Z"})
+      first_mod = insert(:aid_mod, %{name: "A"})
       assert Aid.list_mods() == [
         first_mod,
         mod1,
@@ -345,12 +345,14 @@ defmodule Ferry.AidTest do
       assert mod.values == attrs.values
 
       # also creates association with items
-      item1 = insert(:aid_item)
-      item2 = insert(:aid_item)
+      items = [insert(:aid_item), insert(:aid_item)]
+      |> without_assoc(:entries, :many)
+      |> without_assoc(:mods, :many)
+      |> without_assoc([:category, :items], :many)
       attrs = params_for(:aid_mod)
-      attrs = %{attrs | items: [item1, item2]} # TODO: handle this in the factory?
+      attrs = %{attrs | items: items} # TODO: handle this in the factory?
       assert {:ok, %Mod{} = mod} = Aid.create_mod(attrs)
-      assert mod.items == [item1, item2]
+      assert mod.items == items
     end
 
     # TODO: ensure each changeset has the right errors
@@ -405,9 +407,11 @@ defmodule Ferry.AidTest do
       assert Enum.all?(old_mod.values, &(&1 in mod.values))
 
       # also creates / deletes associations with items
-      item1 = insert(:aid_item)
-      item2 = insert(:aid_item)
-      item3 = insert(:aid_item)
+      [item1, item2, item3] =
+        [insert(:aid_item), insert(:aid_item), insert(:aid_item)]
+        |> without_assoc(:entries, :many)
+        |> without_assoc(:mods, :many)
+        |> without_assoc([:category, :items], :many)
       old_mod = insert(:aid_mod, %{items: [item1, item2]})
       attrs = params_for(:aid_mod, %{type: old_mod.type, values: old_mod.values})
       attrs = %{attrs | items: [item2, item3]}

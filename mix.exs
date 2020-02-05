@@ -36,7 +36,7 @@ defmodule Ferry.Mixfile do
   defp deps do
     [
       # standard deps
-      {:phoenix, "~> 1.4.0"},
+      {:phoenix, "~> 1.4.12"},
       {:phoenix_pubsub, "~> 1.1"},
       {:ecto_sql, "~> 3.1"},
       {:phoenix_ecto, "~> 4.0"},
@@ -50,6 +50,7 @@ defmodule Ferry.Mixfile do
       {:arc_ecto, "~> 0.11"}, # file uploads
       {:httpoison, "~> 1.4"}, # http
       {:jason, "~> 1.0"}, # json
+      {:redirect, "~> 0.3.0"}, # router redirects
       {:scrivener_ecto, "~> 2.0"}, # pagination
       {:timex, "~> 3.0"}, # datetime
 

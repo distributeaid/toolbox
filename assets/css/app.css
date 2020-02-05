@@ -108,6 +108,7 @@ h6, .h6 {
   font-family: Lato, serif;
 }
 
+/* TODO: do the same for :first-child / margin-top? */
 h1:last-child, .h1:last-child,
 h2:last-child, .h2:last-child,
 h3:last-child, .h3:last-child,
@@ -173,6 +174,10 @@ ol.list--horizontal > li:first-child {
   margin-left: 0;
 }
 
+dl {
+  margin-top: 0;
+}
+
 dl.list--grid {
   display: grid;
   grid-template-columns: max-content auto;
@@ -181,12 +186,15 @@ dl.list--grid {
 dl.list--grid > dt {
   padding: 0 0.2rem 0.4rem 0;
 
+  font-weight: normal;
   text-align: right;
 }
 
 dl.list--grid > dd {
   margin: 0;
   padding: 0 0 0.4rem 0.2rem;
+
+  font-weight: bold;
 }
 
 dl.list--grid > dd:last-child {
@@ -333,6 +341,10 @@ textarea.form-input {
 
 .form-horizontal textarea.form-input {
   width: 75%;
+}
+
+.form-horizontal textarea.form-input--aligned {
+  width: 50%;
 }
 
 .form-checkbox,
@@ -790,6 +802,17 @@ TODO:
 }
 
 /*
+Card
+------------------------------------------------------------
+*/
+/* TODO: Quick fix for simple cards on admin pages.  Might not be the best in a
+         more complex case / in general overall.
+*/
+.card-header + .card-body {
+  padding-top: 0.4rem;
+}
+
+/*
 Category
 ------------------------------------------------------
 TODO:
@@ -1000,6 +1023,26 @@ TODO:
   margin-left: -0.8rem;
   border: 0.1rem solid #C8C8C8;
   border-radius: 100%;
+}
+
+/*
+Panel
+------------------------------------------------------------
+*/
+.form-horizontal .form-panel {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form-panel {
+  height: 50vh;
+}
+
+.form-panel label.form-switch {
+  width: auto;
+  margin-left: 0;
+  align-items: start;
 }
 
 /*
@@ -1245,6 +1288,10 @@ Text
 
 .text-large {
   font-size: 112.5% !important;
+}
+
+.text-normal {
+  font-weight: normal !important;
 }
 
 /*

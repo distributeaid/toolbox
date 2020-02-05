@@ -24,6 +24,9 @@ defmodule Ferry.Aid.Mod do
     timestamps()
   end
 
+  # TODO: do we really need two changeset functions?  can't we tell if it's an
+  #       insert or update op based on a field in the changeset (i.e. if id
+  #       isn't set)
   def create_changeset(mod, params \\ %{}) do
     mod
     |> cast(params, [:name, :description, :type, :values])

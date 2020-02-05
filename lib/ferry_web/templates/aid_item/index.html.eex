@@ -1,0 +1,75 @@
+<section class="section section--tabs">
+  <header class="section__header">
+    <h1 class="section__title">Admin - Aid</h1>
+
+    <nav class="section__nav">
+      <ul class="section__tab tab">
+        <li class="tab-item active">
+          <%= link "Categories & Items", to: Routes.aid_item_path(@conn, :index) %>
+        </li>
+        <li class="tab-item">
+          <%= link "Mods", to: Routes.aid_mod_path(@conn, :index) %>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="section__content section__content--thin">
+    <p class="text-center">
+      <%= link "Add A Category", to: Routes.aid_category_path(@conn, :new), class: "btn btn-lg btn-primary" %>
+    </p>
+
+    <div class="columns">
+      <%= for category <- @categories do %>
+        <div class="column col-6 my-2">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title h2">
+                <%= category.name %>
+                <%= component "action.partial.html", %{
+                  action: :edit,
+                  authorized?: true,
+                  route: Routes.aid_category_path(@conn, :edit, category)
+                } %>
+                <%= component "action.partial.html", %{
+                  action: :delete,
+                  authorized?: true,
+                  route: Routes.aid_category_path(@conn, :delete, category)
+                } %>
+                <%= link "Add An Item", to: Routes.aid_item_path(@conn, :new, category_id: category.id), class: "btn btn-primary" %>
+              </div>
+              <div class="divider"></div>
+            </div>
+            <div class="card-body">
+              <%= if length(category.items) > 0 do %>
+                <%= for item <- category.items do %>
+                  <p class="m-0 py-2">
+                    <%= component "action.partial.html", %{
+                      action: :edit,
+                      authorized?: true,
+                      route: Routes.aid_item_path(@conn, :edit, item)
+                    } %>
+                    <%= component "action.partial.html", %{
+                      action: :delete,
+                      authorized?: true,
+                      route: Routes.aid_item_path(@conn, :delete, item)
+                    } %>
+                    <strong><%= item.name %></strong>
+                    <%= if length(item.mods) > 0 do %>
+                      - <%= friendly(item, :mods) %>
+                    <% end %>
+                  </p>
+                <% end %>
+              <% else %>
+                <p>
+                  There are no Items in this Category yet...
+                </p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+</section>

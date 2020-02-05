@@ -6,10 +6,13 @@ defmodule FerryWeb.ComponentView do
   alias Ferry.Profiles.Group.Logo
   alias Ferry.Profiles.Project
 
+  # TODO: add a do: block option to this to insert text after the icon
   def render("action.partial.html", %{action: action, route: route, authorized?: true} = assigns)
   when action in [:view, :new, :edit, :delete] do
     # TODO: require confirm for :delete actions?
     confirm = assigns[:confirm] # optional
+
+    method = if action == :delete, do: :delete, else: :get
 
     icon_class = case action do
       :view -> "fa-eye"
@@ -18,7 +21,7 @@ defmodule FerryWeb.ComponentView do
       :delete -> "fa-trash-alt"
     end
 
-    link to: route, class: "action", data: [confirm: confirm] do
+    link to: route, class: "action", method: method, data: [confirm: confirm] do
       ~E(<i class="fas <%= icon_class %>"></i>)
     end
   end

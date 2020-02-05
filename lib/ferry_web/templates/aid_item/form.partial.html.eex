@@ -1,0 +1,73 @@
+<%= form_for @changeset, @action, [class: "form-horizontal"], fn f -> %>
+  <%= component "required.partial.html" %>
+
+  <%= if @changeset.action do %>
+    <div class="toast toast-error">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%= if assigns[:update?] do %>
+    <div class="form-group form-group--required <%= validation_status_class(f, :category_id) %>">
+      <%= label f, :category_id %>
+      <%= select f, :category_id, Enum.map(@categories, &{&1.name, &1.id}), class: "form-select select2--aid-category", disabled: true %>
+      <%= error_tag f, :category_id %>
+      <p class="form-input-desc">
+        You can't update an Item's category.
+      </p>
+    </div>    
+  <% else %>
+    <div class="form-group form-group--required <%= validation_status_class(f, :category_id) %>">
+      <%= label f, :category_id %>
+      <%= select f, :category_id, Enum.map(@categories, &{&1.name, &1.id}), class: "form-select select2--aid-item-category" %>
+      <%= error_tag f, :category_id %>
+    </div>
+  <% end %>
+
+  <div class="form-group form-group--required <%= validation_status_class(f, :name) %>">
+    <%= label f, :name %>
+    <%= text_input f, :name, class: "form-input", placeholder: "T-Shirt" %>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="form-group">
+    <div class="panel form-panel">
+      <div class="panel-header">
+        <div class="panel-title h4 text-center">Mods</div>
+        <div class="divider"></div>
+      </div>
+      <div class="panel-body">
+        <%= for mod <- @mods do %>
+          <div class="columns my-2">
+            <div class="column col-auto">
+              <label class="form-switch">
+                <input
+                  type="checkbox"
+                  name="item[mods][][id]"
+                  value="<%= mod.id %>"
+                  <%= if item_has_mod(@changeset, mod), do: "checked" %>
+                />
+                <i class="form-icon"></i>
+              </label>
+            </div>
+            <div class="column">
+              <p>
+                <strong><%= mod.name %></strong>
+                - <%= FerryWeb.AidModView.friendly(mod, :type) %>
+                <%= if mod.values do %>
+                  (<%= FerryWeb.AidModView.friendly(mod, :values) %>)
+                <% end %>
+                <br />
+                <%= mod.description %>
+              </p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group col-9 col-ml-auto">
+    <%= submit "Submit", class: "btn btn-lg btn-primary" %>
+  </div>
+<% end %>

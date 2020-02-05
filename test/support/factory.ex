@@ -653,6 +653,10 @@ defmodule Ferry.Factory do
     }
   end
 
+  def invalid_item_category_factory do
+    invalid_short_item_category_factory()
+  end
+
   def invalid_short_item_category_factory do
     struct!(
       item_category_factory(),
@@ -699,6 +703,10 @@ defmodule Ferry.Factory do
     }
   end
 
+  def invalid_aid_item_factory do
+    invalid_short_aid_item_factory()
+  end
+
   def invalid_short_aid_item_factory do
     struct!(
       aid_item_factory(),
@@ -742,6 +750,10 @@ defmodule Ferry.Factory do
     }
 
     merge_attributes(mod, attrs)
+  end
+
+  def invalid_aid_mod_factory do
+    invalid_short_aid_mod_factory()
   end
 
   def invalid_short_aid_mod_factory do

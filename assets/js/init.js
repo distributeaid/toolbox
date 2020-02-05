@@ -50,6 +50,39 @@ $(document).ready(function() {
     }
   }
 
+  $(".select2--aid-item-category").select2({ // single
+    placeholder: "Choose the category this item belongs to..."
+  });
+
+  $(".select2--aid-mod-type") // single
+    .select2({
+      placeholder: "Choose a type for this mod..."
+    })
+    .on('select2:select', function(e) {
+      if (e.params.data.id == "integer") {
+        $(".select2--aid-mod-values").parent().hide();
+      } else {
+        $(".select2--aid-mod-values").parent().show();
+      }
+    });
+
+  $(".select2--aid-mod-values") // multi, customizable
+    .select2({
+      placeholder: "Enter two or more values that users can select from...",
+      tags: true
+    })
+    .on("select2:close", function(data) {
+      checkInputOffFocus(data, $(this));
+    });
+
+  // Initially hide the values field if the Mod's type isn't set, or isn't a
+  // select style option. A .select2--aid-mod-type event handler will control
+  // it's visibility as the user interacts with the form.
+  var modType = $(".select2--aid-mod-type").select2('data')[0].id;
+  if (modType != "select" && modType != "multi-select") {
+    $(".select2--aid-mod-values").parent().hide();
+  }
+
   // TODO: show group logos
   $(".select2--map").select2({ // multi, optional
     allowClear: true,

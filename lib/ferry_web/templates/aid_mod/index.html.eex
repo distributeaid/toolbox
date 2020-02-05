@@ -1,0 +1,64 @@
+<section class="section section--tabs">
+  <header class="section__header">
+    <h1 class="section__title">Admin - Aid</h1>
+
+    <nav class="section__nav">
+      <ul class="section__tab tab">
+        <li class="tab-item">
+          <%= link "Categories & Items", to: Routes.aid_item_path(@conn, :index) %>
+        </li>
+        <li class="tab-item active">
+          <%= link "Mods", to: Routes.aid_mod_path(@conn, :index) %>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="section__content section__content--thin">
+    <p class="text-center">
+      <%= link "Add A Mod", to: Routes.aid_mod_path(@conn, :new), class: "btn btn-lg btn-primary" %>
+    </p>
+
+    <div class="columns">
+      <%= for mod <- @mods do %>
+        <div class="column col-6 my-2">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title h2">
+                <%= mod.name %>
+                <%= component "action.partial.html", %{
+                  action: :edit,
+                  authorized?: true,
+                  route: Routes.aid_mod_path(@conn, :edit, mod)
+                } %>
+                <%= component "action.partial.html", %{
+                  action: :delete,
+                  authorized?: true,
+                  route: Routes.aid_mod_path(@conn, :delete, mod)
+                } %>
+              </div>
+              <div class="divider"></div>
+            </div>
+            <div class="card-body">
+              <dl class="list--grid">
+                <dt>Name:</dt><dd><%= mod.name %></dd>
+                <dt>Type:</dt><dd><%= friendly(mod, :type) %></dd>
+                <%= unless mod.type == "integer" do %>
+                  <dt>Values:</dt><dd><%= friendly(mod, :values) %></dd>
+                <% end %>
+                <%= if length(mod.items) > 0 do %>
+                  <dt>Items:</dt><dd><%= friendly(mod, :items) %></dd>
+                <% end %>
+                <%= if mod.description do %>
+                  <dt>Description:</dt><dd class="text-normal"><%= mod.description %></dd>
+                <% end %>
+              </dl>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+
+</section>

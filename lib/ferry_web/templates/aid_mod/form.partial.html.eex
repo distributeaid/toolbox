@@ -1,0 +1,70 @@
+<%= form_for @changeset, @action, [class: "form-horizontal"], fn f -> %>
+  <%= component "required.partial.html" %>
+
+  <%= if @changeset.action do %>
+    <div class="toast toast-error">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group form-group--required <%= validation_status_class(f, :name) %>">
+    <%= label f, :name %>
+    <%= text_input f, :name, class: "form-input", placeholder: "Size" %>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="form-group <%= validation_status_class(f, :description) %>">
+    <%= label f, :description %>
+    <%= textarea f, :description, class: "form-input form-input--aligned", placeholder: "Additional info: what the mod means, how to use it, etc..." %>
+    <%= error_tag f, :description %>
+  </div>
+
+  <div class="form-group form-group--required <%= validation_status_class(f, :type) %>">
+    <%= label f, :type %>
+    <%= select f, :type, [nil: nil, "Number (..., -1, 0, 1, ...)": "integer", "Select (none or 1)": "select", "Multi-Select (none, any, or every)": "multi-select"], class: "form-select select2--aid-mod-type" %>
+    <%= error_tag f, :type %>
+  </div>
+
+  <div class="form-group form-group--required <%= validation_status_class(f, :values) %>">
+    <%= label f, :values, "Values" %>
+    <%= multiple_select f, :values, [], multiple: true, class: "form-select select2--aid-mod-values" %>
+    <%= error_tag f, :values %>
+  </div>
+
+  <div class="form-group">
+    <div class="panel form-panel">
+      <div class="panel-header">
+        <div class="panel-title h4 text-center">Items</div>
+        <div class="divider"></div>
+      </div>
+      <div class="panel-body">
+        <%= for category <- @categories do %>
+          <%= for item <- category.items do %>
+            <div class="columns my-2">
+              <div class="column col-auto">
+                <label class="form-switch">
+                  <input
+                    type="checkbox"
+                    name="mod[items][][id]"
+                    value="<%= item.id %>"
+                    <%= if mod_has_item(@changeset, item), do: "checked" %>
+                  />
+                  <i class="form-icon"></i>
+                </label>
+              </div>
+              <div class="column">
+                <p>
+                  <%= category.name %> - <strong><%= item.name %></strong>
+                </p>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group col-9 col-ml-auto">
+    <%= submit "Submit", class: "btn btn-lg btn-primary" %>
+  </div>
+<% end %>

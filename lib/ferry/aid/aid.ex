@@ -14,25 +14,17 @@ defmodule Ferry.Aid do
   # Item Category
   # ================================================================================
 
-  # TODO: order items by name
-  def list_item_categories() do
-    query =
-      from category in ItemCategory,
-        left_join: item in assoc(category, :items),
-        order_by: category.name,
-        preload: [items: item]
-
-    Repo.all(query)
+  # TODO: test that items are ordered by name
+  # TODO: test with_mods? == true
+  def list_item_categories(with_mods? \\ false) do
+    item_category_query(with_mods?)
+    |> Repo.all()
   end
 
-  def get_item_category!(id) do
-    query =
-      from category in ItemCategory,
-        left_join: item in assoc(category, :items),
-        order_by: item.name,
-        preload: [items: item]
-
-    Repo.get!(query, id)
+  # TODO: test with_mods? == true
+  def get_item_category!(id, with_mods? \\ false) do
+    item_category_query(with_mods?)
+    |> Repo.get!(id)
   end
 
   # TODO: create_or_get?
@@ -75,39 +67,58 @@ defmodule Ferry.Aid do
     |> Repo.delete()
   end
 
+  # TODO: test
+  def change_item_category(%ItemCategory{} = category) do
+    ItemCategory.changeset(category, %{})
+  end
+
+  # Helpers
+  # ------------------------------------------------------------
+
+  defp item_category_query(false) do
+    from category in ItemCategory,
+      left_join: item in assoc(category, :items),
+      order_by: [category.name, item.name],
+      preload: [items: item]
+  end
+
+  defp item_category_query(true) do
+    from category in ItemCategory,
+      left_join: item in assoc(category, :items),
+      left_join: mod in assoc(item, :mods),
+      order_by: [category.name, item.name, mod.name],
+      preload: [items: {item, mods: mod}]
+  end
+
   # Item
   # ================================================================================
 
-  # TODO: is needed? should probably just use list_categories
-  # def list_items() do
-  # end
+  # NOTE: No `list_items()` because we always want them to be organized by
+  #       category.  Use `list_item_categories()` instead.
 
   def get_item!(id) do
-    query =
-      from item in Item,
-        join: category in assoc(item, :category),
-        left_join: mod in assoc(item, :mods),
-        order_by: mod.name,
-        preload: [
-          category: category,
-          mods: mod
-        ]
-
-    Repo.get!(query, id)
+    item_query()
+    |> Repo.get!(id)
   end
 
-  def create_item(%ItemCategory{} = category, attrs \\ %{mods: []}) do
+  def create_item(%ItemCategory{} = category, attrs \\ %{}) do
+    mods = get_item_mods(attrs)
+
     Ecto.build_assoc(category, :items)
     |> Item.changeset(attrs)
-    |> Changeset.put_assoc(:mods, attrs.mods)
+    |> Changeset.put_assoc(:mods, mods)
     |> Repo.insert()
   end
 
-  def update_item(%Item{} = item, attrs \\ %{mods: []}) do
+  # NOTE: Can't change the Category (Item.changeset doesn't cast `:category_id`).
+  # TODO: Do we want this?  Here or explicitly in a "move_category" function?
+  def update_item(%Item{} = item, attrs \\ %{}) do
+    mods = get_item_mods(attrs)
+
     item
     |> Repo.preload(:mods)
     |> Item.changeset(attrs)
-    |> Changeset.put_assoc(:mods, attrs.mods)
+    |> Changeset.put_assoc(:mods, mods)
     |> Repo.update()
   end
 
@@ -138,33 +149,75 @@ defmodule Ferry.Aid do
     |> Repo.delete()
   end
 
-  # Mod
-  # ================================================================================
+  # TODO: test
+  def change_item(%Item{} = item) do
+    Item.changeset(item, %{})
+  end
 
-  # TODO: preload items & categories
-  def list_mods() do
+  # Helpers
+  # ------------------------------------------------------------
+
+  defp item_query() do
+    from item in Item,
+      join: category in assoc(item, :category),
+      left_join: mod in assoc(item, :mods),
+      order_by: [category.name, item.name, mod.name],
+      preload: [
+        category: category,
+        mods: mod
+      ]
+  end
+
+  # from server data: mods = [%{id: 4}, ...]
+  #                   mods = [%Mod{id: 4}, ...]
+  # NOTE: Should we check if mods is a list of %Mod{} structs and return that
+  #       directly instead of looking them up again?
+  defp get_item_mods(%{mods: mods}) do
+    mods
+    |> Enum.map(&(&1.id))
+    |> get_item_mods()
+  end
+
+  # from client data: mods = [%{"id" => "4"}, ...]
+  defp get_item_mods(%{"mods" => mods}) do
+    mods
+    |> Enum.map(&(&1["id"] |> String.to_integer()))
+    |> get_item_mods()
+  end
+
+  # no mods passed in
+  defp get_item_mods(attrs) when is_map(attrs) do
+    []
+  end
+
+  # mod_ids = [4, ...]
+  defp get_item_mods(mod_ids) when is_list(mod_ids) do
     query =
       from mod in Mod,
-        order_by: mod.name
+        where: mod.id in ^mod_ids
 
     Repo.all(query)
   end
 
-  # TODO: order items by category.name then by item.name
-  def get_mod!(id) do
-    query =
-      from mod in Mod,
-        left_join: item in assoc(mod, :items),
-        left_join: category in assoc(item, :category),
-        preload: [items: {item, category: category}]
+  # Mod
+  # ================================================================================
 
-    Repo.get!(query, id)
+  def list_mods() do
+    mod_query()
+    |> Repo.all()
   end
 
-  def create_mod(attrs \\ %{items: []}) do
+  def get_mod!(id) do
+    mod_query()
+    |> Repo.get!(id)
+  end
+
+  def create_mod(attrs \\ %{}) do
+    items = get_mod_items(attrs)
+
     %Mod{}
     |> Mod.create_changeset(attrs)
-    |> Changeset.put_assoc(:items, attrs.items) # TODO: explicitly lookup items from the db?
+    |> Changeset.put_assoc(:items, items)
     |> Repo.insert()
   end
 
@@ -181,11 +234,13 @@ defmodule Ferry.Aid do
   #     associated ModValues only have 1 value selected
   #   - allow renaming / merging values (probably in another function)
   #   - allow removing values that aren't used in any ModValue
-  def update_mod(%Mod{} = mod, attrs \\ %{items: []}) do
+  def update_mod(%Mod{} = mod, attrs \\ %{}) do
+    items = get_mod_items(attrs)
+
     mod
     |> Repo.preload(:items)
     |> Mod.update_changeset(attrs)
-    |> Changeset.put_assoc(:items, attrs.items)
+    |> Changeset.put_assoc(:items, items)
     |> Repo.update()
   end
 
@@ -213,6 +268,49 @@ defmodule Ferry.Aid do
     # TODO: Mod.delete_changeset that only checks fkey constraints?
     |> Mod.update_changeset() # handle db constraint errors as changeset errors
     |> Repo.delete()
+  end
+
+  # TODO: test
+  def change_mod(%Mod{} = mod) do
+    Mod.update_changeset(mod, %{})
+  end
+
+  # Helpers
+  # ------------------------------------------------------------
+  defp mod_query() do
+    from mod in Mod,
+      left_join: item in assoc(mod, :items),
+      left_join: category in assoc(item, :category),
+      order_by: [mod.name, category.name, item.name],
+      preload: [items: {item, category: category}]
+  end
+
+  # from server data: items = [%{id: 4}, ...]
+  #                   items = [%Item{id: 4}, ...]
+  # NOTE: Should we check if items is a list of %Item{} structs and return that
+  #       directly instead of looking them up again?
+  defp get_mod_items(%{items: items}) do
+    items
+    |> Enum.map(&(&1.id))
+    |> get_mod_items()
+  end
+
+  # from client data: items = [%{"id" => "4"}, ...]
+  defp get_mod_items(%{"items" => items}) do
+    items
+    |> Enum.map(&(&1["id"] |> String.to_integer()))
+    |> get_mod_items()
+  end
+
+  # item_ids = [4, ...]
+  defp get_mod_items(item_ids) when is_list(item_ids) do
+    query =
+      from item in Item,
+        where: item.id in ^item_ids,
+        left_join: category in assoc(item, :category),
+        preload: [category: category]
+
+    Repo.all(query)
   end
 
 end
