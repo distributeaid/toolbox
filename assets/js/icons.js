@@ -9,6 +9,7 @@ import { config, dom, library } from "@fortawesome/fontawesome-svg-core";
 import {
   faBoxes,
   faCheck,
+  faChevronRight,
   faCode,
   faEuroSign,
   faEye,
@@ -39,6 +40,7 @@ config.observeMutations = true;
 library.add(
   faBoxes,
   faCheck,
+  faChevronRight,
   faCode,
   faEuroSign,
   faEye,

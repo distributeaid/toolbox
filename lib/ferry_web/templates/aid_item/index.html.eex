@@ -22,9 +22,10 @@
     <div class="columns">
       <%= for category <- @categories do %>
         <div class="column col-6 my-2">
-          <div class="card">
-            <div class="card-header">
+          <details class="card accordion">
+            <summary class="card-header accordion-header">
               <div class="card-title h2">
+                <i class="icon fas fa-chevron-right mr-1"></i>
                 <%= category.name %>
                 <%= component "action.partial.html", %{
                   action: :edit,
@@ -39,8 +40,8 @@
                 <%= link "Add An Item", to: Routes.aid_item_path(@conn, :new, category_id: category.id), class: "btn btn-primary" %>
               </div>
               <div class="divider"></div>
-            </div>
-            <div class="card-body">
+            </summary>
+            <div class="card-body accordion-body">
               <%= if length(category.items) > 0 do %>
                 <%= for item <- category.items do %>
                   <p class="m-0 py-2">
@@ -66,7 +67,7 @@
                 </p>
               <% end %>
             </div>
-          </div>
+          </details>
         </div>
       <% end %>
     </div>

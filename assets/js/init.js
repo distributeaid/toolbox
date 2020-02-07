@@ -78,9 +78,11 @@ $(document).ready(function() {
   // Initially hide the values field if the Mod's type isn't set, or isn't a
   // select style option. A .select2--aid-mod-type event handler will control
   // it's visibility as the user interacts with the form.
-  var modType = $(".select2--aid-mod-type").select2('data')[0].id;
-  if (modType != "select" && modType != "multi-select") {
-    $(".select2--aid-mod-values").parent().hide();
+  if ($(".select2--aid-mod-type").select2('data')) {
+    var modType = $(".select2--aid-mod-type").select2('data')[0].id;
+    if (modType != "select" && modType != "multi-select") {
+      $(".select2--aid-mod-values").parent().hide();
+    }
   }
 
   // TODO: show group logos

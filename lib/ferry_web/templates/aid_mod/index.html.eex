@@ -22,9 +22,10 @@
     <div class="columns">
       <%= for mod <- @mods do %>
         <div class="column col-6 my-2">
-          <div class="card">
-            <div class="card-header">
+          <details class="card accordion">
+            <summary class="card-header accordion-header">
               <div class="card-title h2">
+                <i class="icon fas fa-chevron-right mr-1"></i>
                 <%= mod.name %>
                 <%= component "action.partial.html", %{
                   action: :edit,
@@ -38,8 +39,8 @@
                 } %>
               </div>
               <div class="divider"></div>
-            </div>
-            <div class="card-body">
+            </summary>
+            <div class="card-body accordion-body">
               <dl class="list--grid">
                 <dt>Name:</dt><dd><%= mod.name %></dd>
                 <dt>Type:</dt><dd><%= friendly(mod, :type) %></dd>
@@ -54,7 +55,7 @@
                 <% end %>
               </dl>
             </div>
-          </div>
+          </details>
         </div>
       <% end %>
     </div>

@@ -258,6 +258,8 @@ Buttons
 */
 /* override default spectre colors */
 .btn {
+  box-sizing: border-box;
+
   color: #A284B0;
   border-color: #C6ACD2;
 }
@@ -686,6 +688,37 @@ Content Header
 Components
 ================================================================================
 */
+
+/*
+Accordion
+------------------------------------------------------------
+*/
+.accordion .accordion-header .icon {
+  cursor: pointer;
+}
+
+/*
+Accordion Card
+------------------------------------------------------------
+Spectre mashup.
+*/
+.accordion.card .accordion-header {
+  padding-bottom: 0.8rem;
+}
+
+.accordion.card .accordion-header .divider {
+  display: none;
+}
+
+.accordion.card input:checked ~ .accordion-header,
+.accordion.card[open] .accordion-header {
+  padding-bottom: 0;
+}
+
+.accordion.card input:checked ~ .accordion-header .divider,
+.accordion.card[open] .accordion-header .divider {
+  display: block;
+}
 
 /*
 Avatar
