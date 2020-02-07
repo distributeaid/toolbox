@@ -38,6 +38,8 @@
     <meta name="msapplication-TileImage" content="<%= Routes.static_path(@conn, "/ms-icon-144x144.png") %>">
     <meta name="theme-color" content="#ffffff">
 
+    <%= chat_meta(assigns[:chat_meta]) %>
+
     <!--
     Scripts
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -164,5 +166,8 @@
       <%= render @view_module, @view_template, assigns %>
     </main>
 
+    <!-- Chat -->
+    <script src="https://cdn.rawgit.com/muicss/loadjs/4.2.0/dist/loadjs.min.js" async></script>
+    <script src="<%= Routes.static_path(@conn, "/js/chat.js") %>" async></script>
   </body>
 </html>

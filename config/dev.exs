@@ -63,3 +63,24 @@ config :ferry, Ferry.Repo,
   database: System.get_env("POSTGRES_DB"),
   hostname: System.get_env("DB_HOSTNAME_DEV"),
   pool_size: 10
+
+config :ferry, :jwt, 
+  keyId: "12599b51-11b7-4c45-8f8a-a2bd1a6c5745",
+  privateKey: """
+              -----BEGIN EC PRIVATE KEY-----
+              MHcCAQEEICZqujJqPxmKWeyxq4D7bLqOHDKOEM+6jTJcPCQ9hSryoAoGCCqGSM49
+              AwEHoUQDQgAEDCz8s7nGPQyWZY0jkrL5VzKbE9EWLkNwOWoI98nOVU42SYw0ooqX
+              IYNPX2oZSKmvkF17xXd+ThXLsi9it8nplg==
+              -----END EC PRIVATE KEY-----
+              """,
+  publicKey:  """
+              -----BEGIN PUBLIC KEY-----
+              MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDCz8s7nGPQyWZY0jkrL5VzKbE9EW
+              LkNwOWoI98nOVU42SYw0ooqXIYNPX2oZSKmvkF17xXd+ThXLsi9it8nplg==
+              -----END PUBLIC KEY-----
+              """
+
+config :ferry, :chat,
+  apiKey: "da2-ojgtsxntpnd4loyp67r6nm3lam",
+  endpoint: "https://uftb6vmdvze7nbnrfmk2ygipmm.appsync-api.eu-central-1.amazonaws.com/graphql"
+    

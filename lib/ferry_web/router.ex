@@ -25,8 +25,12 @@ defmodule FerryWeb.Router do
     plug Ferry.Auth.AuthorizePipeline
   end
 
+  pipeline :chat do
+    plug Ferry.Chat.ChatPipeline
+  end
+
   scope "/", FerryWeb do
-    pipe_through [:browser, :setup_auth]
+    pipe_through [:browser, :setup_auth, :chat]
 
     get "/", HomePageController, :index
   end
@@ -47,7 +51,7 @@ defmodule FerryWeb.Router do
   end
 
   scope "/", FerryWeb do
-    pipe_through [:browser, :setup_auth, :ensure_auth, :authorization]
+    pipe_through [:browser, :setup_auth, :ensure_auth, :authorization, :chat]
 
     resources "/groups", GroupController, only: [:edit, :update, :delete] do
       resources "/addresses", AddressController, except: [:index, :show]
@@ -75,4 +79,8 @@ defmodule FerryWeb.Router do
 
   redirect "/admin", "/admin/aid/items", :temporary
   redirect "/admin/aid", "/admin/aid/items", :temporary
+
+  scope "/.well-known", FerryWeb do
+    get "/jwks.json", JWKSController, :show, singleton: true
+  end
 end

@@ -12,6 +12,7 @@ module.exports = (env, options) => ({
 
   entry: {
     app: glob.sync('./vendor/**/*.min.js').concat(['./js/app.js']),
+    chat: './js/chat.js',
     '../stillsuit': './js/stillsuit.js'
   },
 
