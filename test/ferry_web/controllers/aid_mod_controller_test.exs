@@ -60,7 +60,13 @@ defmodule FerryWeb.AidModControllerTest do
   describe "edit mod" do
     test "renders form for editing chosen mod", %{conn: conn, mod: mod} do
       conn = get conn, Routes.aid_mod_path(conn, :edit, mod)
-      assert html_response(conn, 200) =~ "Edit A Mod"
+      html_response(conn, 200) =~ "Edit A Mod"
+
+      # all select / multi-select values should be prepopulated on the form
+      mod = insert(:aid_mod, %{type: "select"})
+      conn = get conn, Routes.aid_mod_path(conn, :edit, mod)
+      response = html_response(conn, 200)
+      assert Enum.all?(mod.values, &(response =~ &1))
     end    
   end
 

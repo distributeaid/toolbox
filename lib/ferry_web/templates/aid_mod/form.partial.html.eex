@@ -27,7 +27,7 @@
 
   <div class="form-group form-group--required <%= validation_status_class(f, :values) %>">
     <%= label f, :values, "Values" %>
-    <%= multiple_select f, :values, [], multiple: true, class: "form-select select2--aid-mod-values" %>
+    <%= values_select(f, @changeset) %>
     <%= error_tag f, :values %>
   </div>
 

@@ -29,6 +29,6 @@ defmodule Ferry.Aid.Item do
     |> validate_length(:name, min: 2, max: 32)
 
     |> foreign_key_constraint(:entries, name: "aid__list_entries_item_id_fkey")
-    |> unique_constraint(:name, message: "already exists")
+    |> unique_constraint(:name, name: "aid__items_category_id_name_index", message: "already exists")
   end
 end

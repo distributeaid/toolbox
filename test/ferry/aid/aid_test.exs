@@ -180,7 +180,19 @@ defmodule Ferry.AidTest do
       assert item.name == attrs.name
       assert item.category_id == category.id
 
-      # also creates associations with mods
+      # name can be the same across categories
+      category2 = insert(:item_category)
+      item1 = insert(:aid_item, %{name: "SAME", category: category})
+      attrs = params_for(:aid_item, %{name: "SAME", category: category2})
+      assert {:ok, %Item{} = item2} = Aid.create_item(category2, attrs)
+      assert item1.name == item2.name
+      assert item1.category != item2.category
+
+      # doesn't need mods...
+      attrs = params_for(:aid_item, %{mods: nil})
+      assert {:ok, %Item{} = item} = Aid.create_item(category, attrs)
+
+      # ... but also creates associations with mods
       mod1 = insert(:aid_mod) |> without_assoc(:items, :many)
       mod2 = insert(:aid_mod) |> without_assoc(:items, :many)
       attrs = params_for(:aid_item)
@@ -200,6 +212,11 @@ defmodule Ferry.AidTest do
       # too long
       attrs = params_for(:invalid_long_aid_item)
       assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_item(category, attrs)
+
+      # name must be different within a category
+      insert(:aid_item, %{name: "SAME", category: category})
+      attrs = params_for(:aid_item, %{name: "SAME", category: category})
+      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_item(category, attrs)
     end
 
     # TODO: test moving items to a different category
@@ -211,7 +228,22 @@ defmodule Ferry.AidTest do
       assert item.name != old_item.name
       assert item.name == attrs.name
 
-      # also creates / deletes associations with mods
+      # name can be the same across categories
+      category1 = insert(:item_category)
+      category2 = insert(:item_category)
+      item1 = insert(:aid_item, %{name: "SAME", category: category1})
+      item2 = insert(:aid_item, %{name: "DIFFERENT", category: category2})
+      attrs = params_for(:aid_item, %{name: "SAME", category: category2})
+      assert {:ok, %Item{} = item2} = Aid.update_item(item2, attrs)
+      assert item1.name == item2.name
+      assert item1.category != item2.category
+
+      # doesn't need mods...
+      old_item = insert(:aid_item, %{mods: []})
+      attrs = params_for(:aid_item, %{mods: nil})
+      assert {:ok, %Item{} = mod} = Aid.update_item(old_item, attrs)
+
+      # ... but also creates / deletes associations with mods
       mod1 = insert(:aid_mod) |> without_assoc(:items, :many)
       mod2 = insert(:aid_mod) |> without_assoc(:items, :many)
       mod3 = insert(:aid_mod) |> without_assoc(:items, :many)
@@ -238,6 +270,16 @@ defmodule Ferry.AidTest do
       attrs = params_for(:invalid_long_aid_item)
       assert {:error, %Ecto.Changeset{}} = Aid.update_item(item, attrs)
       assert item == Aid.get_item!(item.id)
+
+      # name must be different within a category
+      category = insert(:item_category)
+      _item1 = insert(:aid_item, %{name: "SAME", category: category})
+      item2 = insert(:aid_item, %{name: "DIFFERENT", category: category})
+      |> without_assoc([:category, :items], :many)
+      |> without_assoc(:entries, :many)
+      attrs = params_for(:aid_item, %{name: "SAME", category: category})
+      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.update_item(item2, attrs)
+      assert item2 == Aid.get_item!(item2.id)
     end
 
     test "delete_item/1 deletes an item that isn't referenced by any list entries" do
@@ -344,7 +386,11 @@ defmodule Ferry.AidTest do
       assert mod.type == attrs.type
       assert mod.values == attrs.values
 
-      # also creates association with items
+      # doesn't need items...
+      attrs = params_for(:aid_mod, %{items: nil})
+      assert {:ok, %Mod{} = mod} = Aid.create_mod(attrs)
+
+      # ...but also creates association with items
       items = [insert(:aid_item), insert(:aid_item)]
       |> without_assoc(:entries, :many)
       |> without_assoc(:mods, :many)
@@ -406,7 +452,12 @@ defmodule Ferry.AidTest do
       assert mod.values == attrs.values
       assert Enum.all?(old_mod.values, &(&1 in mod.values))
 
-      # also creates / deletes associations with items
+      # doesn't need items...
+      old_mod = insert(:aid_mod, %{items: []})
+      attrs = params_for(:aid_mod, %{type: old_mod.type, values: old_mod.values, items: nil})
+      assert {:ok, %Mod{} = mod} = Aid.update_mod(old_mod, attrs)
+
+      # ... but also creates / deletes associations with items
       [item1, item2, item3] =
         [insert(:aid_item), insert(:aid_item), insert(:aid_item)]
         |> without_assoc(:entries, :many)
@@ -463,6 +514,8 @@ defmodule Ferry.AidTest do
       mod = insert(:aid_mod)
       assert {:ok, %Mod{}} = Aid.delete_mod(mod)
       assert_raise Ecto.NoResultsError, fn -> Aid.get_mod!(mod.id) end
+
+      # TODO: test that items that reference the mod aren't deleted
 
       # TODO: test that associations with mods are also delete
       #       (i.e. entries in the join table are also removed)

@@ -302,6 +302,11 @@ defmodule Ferry.Aid do
     |> get_mod_items()
   end
 
+  # no items passed in
+  defp get_mod_items(attrs) when is_map(attrs) do
+    []
+  end
+
   # item_ids = [4, ...]
   defp get_mod_items(item_ids) when is_list(item_ids) do
     query =

@@ -27,4 +27,12 @@ defmodule FerryWeb.AidModView do
     items = Ecto.Changeset.get_field(changeset, :items, [])
     Enum.any?(items, &(&1.id == item.id))
   end
+
+  def values_select(%Phoenix.HTML.Form{} = form, %Ecto.Changeset{} = changeset) do
+    values = Ecto.Changeset.get_field(changeset, :values)
+    values = if is_nil(values), do: [], else: values
+
+    # NOTE: we want to select all existing values, so that they are all present unless the user chooses to remove one
+    multiple_select form, :values, values, selected: values, multiple: true, class: "form-select select2--aid-mod-values"
+  end
 end
