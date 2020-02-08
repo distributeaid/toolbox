@@ -2,7 +2,7 @@ defmodule FerryWeb.AidCategoryControllerTest do
   use FerryWeb.ConnCase
   
   setup do
-    category = insert(:item_category)
+    category = insert(:aid_category)
 
     conn = build_conn()
     {:ok, conn: conn, category: category}
@@ -28,8 +28,8 @@ defmodule FerryWeb.AidCategoryControllerTest do
 
   describe "create category" do
     test "redirects to show when data is valid", %{conn: conn} do
-      category_attrs = string_params_for(:item_category)
-      conn = post conn, Routes.aid_category_path(conn, :create), item_category: category_attrs
+      category_attrs = string_params_for(:aid_category)
+      conn = post conn, Routes.aid_category_path(conn, :create), category: category_attrs
 
       assert redirected_to(conn) == Routes.aid_item_path(conn, :index)
 
@@ -38,8 +38,8 @@ defmodule FerryWeb.AidCategoryControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      category_attrs = string_params_for(:invalid_item_category)
-      conn = post conn, Routes.aid_category_path(conn, :create), item_category: category_attrs
+      category_attrs = string_params_for(:invalid_aid_category)
+      conn = post conn, Routes.aid_category_path(conn, :create), category: category_attrs
       assert html_response(conn, 200) =~ "Add A New Category"
     end
   end
@@ -56,8 +56,8 @@ defmodule FerryWeb.AidCategoryControllerTest do
 
   describe "update category" do
     test "redirects when data is valid", %{conn: conn, category: category} do
-      category_attrs = string_params_for(:item_category)
-      conn = put conn, Routes.aid_category_path(conn, :update, category), item_category: category_attrs
+      category_attrs = string_params_for(:aid_category)
+      conn = put conn, Routes.aid_category_path(conn, :update, category), category: category_attrs
       assert redirected_to(conn) == Routes.aid_item_path(conn, :index)
 
       conn = get conn, Routes.aid_item_path(conn, :index)
@@ -65,8 +65,8 @@ defmodule FerryWeb.AidCategoryControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, category: category} do
-      category_attrs = string_params_for(:invalid_item_category)
-      conn = put conn, Routes.aid_category_path(conn, :update, category), item_category: category_attrs
+      category_attrs = string_params_for(:invalid_aid_category)
+      conn = put conn, Routes.aid_category_path(conn, :update, category), category: category_attrs
       assert html_response(conn, 200) =~ "Edit A Category"
     end
   end

@@ -4,7 +4,7 @@ defmodule FerryWeb.AidItemControllerTest do
   setup do
     # TODO: probably don't need all this fancy, 'realistic' setup
     n = Enum.random(1..5)
-    categories = insert_list(n, :item_category)
+    categories = insert_list(n, :aid_category)
 
     n = Enum.random(1..5)
     mods = insert_list(n, :aid_mod)

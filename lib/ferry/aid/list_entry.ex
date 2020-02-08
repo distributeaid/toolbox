@@ -3,8 +3,8 @@ defmodule Ferry.Aid.ListEntry do
 #  import Ecto.Changeset
 
   alias Ferry.Aid.AidList
-  alias Ferry.Aid.Item
   alias Ferry.Aid.ModValue
+  alias Ferry.AidTaxonomy.Item
 
   schema "aid__list_entries" do
     field :amount, :integer, default: 0

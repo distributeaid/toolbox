@@ -1,42 +1,47 @@
-defmodule Ferry.Aid do
+defmodule Ferry.AidTaxonomy do
   @moduledoc """
-  The Aid context.
+  The AidTaxonomy context.
+
+  Prevent circular dependencies with the Aid context!  The Aid context is
+  dependent on an AidTaxonomy, but the reverse is not true.  For example,
+  rather than putting a `get_entries_for_item` function here, put a
+  `get_entries_by_item` function in the Aid context.
   """
 
   import Ecto.Query, warn: false
   alias Ferry.Repo
   alias Ecto.Changeset
 
-  alias Ferry.Aid.Item
-  alias Ferry.Aid.ItemCategory
-  alias Ferry.Aid.Mod
+  alias Ferry.AidTaxonomy.Category
+  alias Ferry.AidTaxonomy.Item
+  alias Ferry.AidTaxonomy.Mod
 
-  # Item Category
+  # Category
   # ================================================================================
 
   # TODO: test that items are ordered by name
   # TODO: test with_mods? == true
-  def list_item_categories(with_mods? \\ false) do
-    item_category_query(with_mods?)
+  def list_categories(with_mods? \\ false) do
+    category_query(with_mods?)
     |> Repo.all()
   end
 
   # TODO: test with_mods? == true
-  def get_item_category!(id, with_mods? \\ false) do
-    item_category_query(with_mods?)
+  def get_category!(id, with_mods? \\ false) do
+    category_query(with_mods?)
     |> Repo.get!(id)
   end
 
   # TODO: create_or_get?
-  def create_item_category(attrs \\ %{}) do
-    %ItemCategory{}
-    |> ItemCategory.changeset(attrs)
+  def create_category(attrs \\ %{}) do
+    %Category{}
+    |> Category.changeset(attrs)
     |> Repo.insert()
   end
 
-  def update_item_category(%ItemCategory{} = category, attrs \\ %{}) do
+  def update_category(%Category{} = category, attrs \\ %{}) do
     category
-    |> ItemCategory.changeset(attrs)
+    |> Category.changeset(attrs)
     |> Repo.update()
   end
 
@@ -60,30 +65,30 @@ defmodule Ferry.Aid do
   #
   # TODO: Add ability to archive Categories & Items, so existing Entries are
   #       unaffected but the Category / Items can't be selected for new Entries.
-  def delete_item_category(%ItemCategory{} = category) do
+  def delete_category(%Category{} = category) do
     category
-    # TODO: ItemCategory.delete_changeset that only checks fkey constraints?
-    |> ItemCategory.changeset() # handle db constraint errors as changeset errors
+    # TODO: Category.delete_changeset that only checks fkey constraints?
+    |> Category.changeset() # handle db constraint errors as changeset errors
     |> Repo.delete()
   end
 
   # TODO: test
-  def change_item_category(%ItemCategory{} = category) do
-    ItemCategory.changeset(category, %{})
+  def change_category(%Category{} = category) do
+    Category.changeset(category, %{})
   end
 
   # Helpers
   # ------------------------------------------------------------
 
-  defp item_category_query(false) do
-    from category in ItemCategory,
+  defp category_query(false) do
+    from category in Category,
       left_join: item in assoc(category, :items),
       order_by: [category.name, item.name],
       preload: [items: item]
   end
 
-  defp item_category_query(true) do
-    from category in ItemCategory,
+  defp category_query(true) do
+    from category in Category,
       left_join: item in assoc(category, :items),
       left_join: mod in assoc(item, :mods),
       order_by: [category.name, item.name, mod.name],
@@ -94,14 +99,14 @@ defmodule Ferry.Aid do
   # ================================================================================
 
   # NOTE: No `list_items()` because we always want them to be organized by
-  #       category.  Use `list_item_categories()` instead.
+  #       category.  Use `list_categories()` instead.
 
   def get_item!(id) do
     item_query()
     |> Repo.get!(id)
   end
 
-  def create_item(%ItemCategory{} = category, attrs \\ %{}) do
+  def create_item(%Category{} = category, attrs \\ %{}) do
     mods = get_item_mods(attrs)
 
     Ecto.build_assoc(category, :items)

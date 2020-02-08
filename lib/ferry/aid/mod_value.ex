@@ -2,10 +2,9 @@ defmodule Ferry.Aid.ModValue do
   use Ecto.Schema
 #  import Ecto.Changeset
 
-  alias Ferry.Aid.ModValueEctoType
-
   alias Ferry.Aid.ListEntry
-  alias Ferry.Aid.Mod
+  alias Ferry.AidTaxonomy.Mod
+  alias Ferry.AidTaxonomy.ModValueEctoType
 
   schema "aid__mod_values" do
     # NOTE: might want to define a custom ecto type to better support value polymorphism
