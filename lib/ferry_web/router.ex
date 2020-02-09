@@ -36,7 +36,7 @@ defmodule FerryWeb.Router do
   end
 
   scope "/public", FerryWeb do
-    pipe_through [:browser, :setup_auth]
+    pipe_through [:browser, :setup_auth, :chat]
 
     resources "/signup", UserController, only: [:new, :create], singleton: true
     resources "/session", SessionController, only: [:new, :create, :delete], singleton: true
