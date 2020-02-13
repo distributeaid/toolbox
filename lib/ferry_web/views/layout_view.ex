@@ -5,14 +5,14 @@ defmodule FerryWeb.LayoutView do
     ""
   end
 
-  def chat_meta(token) do
+  def chat_meta(meta) do
     chatCfg = Application.get_env(:ferry, :chat)
     apiKey = Keyword.fetch!(chatCfg, :apiKey)
     endpoint = Keyword.fetch!(chatCfg, :endpoint)
     ~E(
       <!-- Chat -->
-      <meta name="chat:jwt" content="<%= token %>">
-      <meta name="chat:context" content="general">
+      <meta name="chat:jwt" content="<%= meta.token %>">
+      <meta name="chat:context" content="<%= meta.context %>">
       <meta name="chat:apiKey" content="<%= apiKey %>">
       <meta name="chat:endpoint" content="<%= endpoint %>">
     )
