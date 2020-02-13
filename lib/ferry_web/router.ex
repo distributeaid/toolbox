@@ -26,7 +26,7 @@ defmodule FerryWeb.Router do
   end
 
   pipeline :chat do
-    plug Ferry.Chat.ChatPipeline
+    plug :assign_chat_meta
   end
 
   scope "/", FerryWeb do
