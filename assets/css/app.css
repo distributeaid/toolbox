@@ -88,6 +88,9 @@ Compliment: Cyan
 Elements
 ================================================================================
 */
+html {
+  height: 100%; 
+}
 
 /*
 Typography
@@ -548,6 +551,12 @@ Section
 
 .section__header {
   margin-bottom: 0.4rem;
+}
+
+@media (max-width: 815px) {
+  .section__header {
+    flex-wrap: wrap;
+  }
 }
 
 .section__content {
@@ -1128,13 +1137,28 @@ Site
   display: none;
 }
 
-ul.site-nav--mobile {
+footer.site-nav--mobile {
   display: none;
 }
 
 @media (max-width: 815px) {
+  .site {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    height: 100%;
+  }
+
   nav {
     width: 100%;
+  }
+
+  nav, footer {
+    flex: none;
+  }
+
+  .site-content {
+    flex: 1 0 auto;
   }
 
   .site-header {
@@ -1203,10 +1227,7 @@ ul.site-nav--mobile {
     display: none;
   }
 
-  ul.site-nav--mobile {
-    z-index: 1200;
-    position: fixed;
-    bottom: 0;
+  footer.site-nav--mobile {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -1271,7 +1292,6 @@ ul.site-nav > li {
   color: #082B76;
 }
 
-.site-content {}
 
 /*
 Subsection
