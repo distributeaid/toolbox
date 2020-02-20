@@ -131,7 +131,7 @@ defmodule Ferry.AidTaxonomyTest do
     test "delete_category/1 doesn't delete categories that are referenced by list entries" do
       category = insert(:aid_category)
       item = insert(:aid_item, %{category: category})
-      _entry = insert(:list_entry, %{item: item})
+      _entry = insert(:entry, %{item: item})
 
       assert {:error, %Ecto.Changeset{}} = AidTaxonomy.delete_category(category)
       assert category.name == AidTaxonomy.get_category!(category.id).name
@@ -288,7 +288,7 @@ defmodule Ferry.AidTaxonomyTest do
 
     test "delete_item/1 doesn't delete items that are referenced by list entries" do
       item = insert(:aid_item) |> without_assoc([:category, :items], :many)
-      _entry = insert(:list_entry, %{item: item})
+      _entry = insert(:entry, %{item: item})
 
       assert {:error, %Ecto.Changeset{}} = AidTaxonomy.delete_item(item)
       assert item == AidTaxonomy.get_item!(item.id)

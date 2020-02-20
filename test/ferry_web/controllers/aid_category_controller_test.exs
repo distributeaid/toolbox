@@ -88,7 +88,7 @@ defmodule FerryWeb.AidCategoryControllerTest do
 
     test "renders errors when deletion is invalid", %{conn: conn, category: category} do
       item = insert(:aid_item, %{category: category})
-      _entry = insert(:list_entry, %{item: item})
+      _entry = insert(:entry, %{item: item})
 
       conn = delete conn, Routes.aid_category_path(conn, :delete, category)
       assert redirected_to(conn) == Routes.aid_item_path(conn, :index)
