@@ -57,8 +57,8 @@ config :ferry, :jwt,
               """
 
 config :ferry, :chat,
-  apiKey: "da2-ojgtsxntpnd4loyp67r6nm3lam",
-  endpoint: "https://uftb6vmdvze7nbnrfmk2ygipmm.appsync-api.eu-central-1.amazonaws.com/graphql"
+  apiKey: "da2-mex4f66y3rd6pd7zhocoyaallm",
+  endpoint: "https://iqvxvl3zzfeuxm622y5fcwpfjq.appsync-api.eu-central-1.amazonaws.com/graphql"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
