@@ -19,7 +19,7 @@ const logError = (...args) =>
         ...args,
     )
 
-const loadChat = () => {
+const loadChat = async () => {
     const context = document.querySelector("meta[name='chat:context']")
     if (!context) {
         return Promise.reject('No chat context defined!')
