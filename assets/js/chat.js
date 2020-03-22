@@ -1,4 +1,4 @@
-const chatVersion = '1.17.3'
+const chatVersion = '1.17.8'
 
 const loadJsAsync = deps => loadjs(deps, {
     async: true,
