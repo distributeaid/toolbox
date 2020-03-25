@@ -28,7 +28,6 @@ services:
     alias: dbtest
 
 build ci image:
-  extends: .elixir
   stage: build ci image
   image: docker:stable
   service:
