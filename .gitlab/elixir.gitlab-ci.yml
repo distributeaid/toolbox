@@ -21,12 +21,15 @@ before_script:
 # Pick zero or more services to be used on all builds.
 # Only needed when using a docker container to run your tests in.
 # Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
-services:
-  - name: postgres:11.2
-    alias: dbtest
+# services:
+#   - name: postgres:11.2
+#     alias: dbtest
 
-test elixir:
-  stage: test
+build ci image:
+  stage: build ci image
+  image: docker:stable
+  services:
+      - docker:dind
   script:
   - mix test
   - mix coveralls
