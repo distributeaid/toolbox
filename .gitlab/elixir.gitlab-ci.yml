@@ -33,6 +33,7 @@ build ci image:
   services:
       - docker:dind
   script:
+    - cd ${PROJECT_NAME}
     - docker build -t $CONTAINER_TEST_IMAGE -f web.Dockerfile .
     - docker push $CONTAINER_TEST_IMAGE
 

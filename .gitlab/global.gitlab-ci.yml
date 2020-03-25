@@ -14,10 +14,9 @@
 .elixir:
   only:
     variables:
-      - $PIPELINE_NAME =~ /elixir/
+      - $PIPELINE_NAME =~ /lib/
   variables:
     PROJECT_NAME: lib
-    COV_PACKAGE_NAME: ferry
 
 .cleanup:
   only:
