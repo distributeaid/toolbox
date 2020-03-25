@@ -6,5 +6,4 @@ stages:
   - deploy_production
 
 include:
-  - local: .gitlab/global.gitlab-ci.yml
   - local: .gitlab/elixir.gitlab-ci.yml
