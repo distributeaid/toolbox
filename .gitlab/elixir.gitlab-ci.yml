@@ -33,7 +33,7 @@ build ci image:
   services:
       - docker:dind
   script:
-    - docker-compose build
+    - docker-compose build web
     # - docker-compose push
 
 
