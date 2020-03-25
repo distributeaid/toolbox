@@ -1,9 +1,0 @@
-stages:
-  - build ci image
-  - stylecheck
-  - test
-  - deploy_staging
-  - deploy_production
-
-include:
-  - local: .gitlab/elixir.gitlab-ci.yml
