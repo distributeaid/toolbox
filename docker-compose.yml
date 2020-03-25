@@ -1,4 +1,4 @@
-version: '3.4'
+version: '2.0'
 services:
   db:
     image: "postgres:${DA_POSTGRES_VERSION}"
