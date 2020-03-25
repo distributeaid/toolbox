@@ -1,0 +1,25 @@
+.always: &always
+  except:
+    refs:
+      - tags
+    variables:
+      - $PIPELINE_NAME == "dispatcher"
+
+.master: &master
+  only:
+    refs:
+      - master
+  extends: .always
+
+.elixir:
+  only:
+    variables:
+      - $PIPELINE_NAME =~ /elixir/
+  variables:
+    PROJECT_NAME: lib
+    COV_PACKAGE_NAME: ferry
+
+.cleanup:
+  only:
+    variables:
+      - $PIPELINE_NAME == "cleanup"
