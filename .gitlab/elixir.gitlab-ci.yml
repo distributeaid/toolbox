@@ -32,6 +32,12 @@ build ci image:
   services:
       - docker:dind
   script:
+<<<<<<< HEAD
+=======
+    - docker-compose build
+    - docker-compose push
+
+>>>>>>> trying with docker-compose
 
 # test elixir:
 #   stage: test
