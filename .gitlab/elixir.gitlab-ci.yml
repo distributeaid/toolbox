@@ -2,12 +2,6 @@
 
 # Good overview of GitLab CI setup: https://blog.el-chavez.me/2017/07/13/elixir-phoenix-gitlabci/
 variables:
-<<<<<<< HEAD
-  CONTAINER_TEST_IMAGE: ${CI_REGISTRY_IMAGE}/ci/elixir:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
-
-# This file is a template, and might need editing before it works on your project.
-# image: elixir:latest
-=======
   POSTGRES_USER: toolbox
   POSTGRES_PASSWORD: "1312"
   POSTGRES_DB: toolbox_test
@@ -23,42 +17,10 @@ before_script:
   - mix local.rebar --force
   - mix deps.get --only test
   - mix ecto.reset
->>>>>>> create elixir.gitlab-ci.yml
 
 # Pick zero or more services to be used on all builds.
 # Only needed when using a docker container to run your tests in.
 # Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
-<<<<<<< HEAD
-
-build ci image:
-  extends: .elixir
-  stage: build ci image
-  image: docker:stable
-  services:
-      - docker:dind
-  before_script:
-    - docker info
-    - docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
-  script:
-    - docker build -t $CONTAINER_TEST_IMAGE -f web.Dockerfile .
-    - docker push $CONTAINER_TEST_IMAGE
-
-test elixir:
-  extends: .elixir
-  stage: test
-  image: ${CONTAINER_TEST_IMAGE}
-  services:
-    - name: postgres:11.2
-      alias: dbtest
-  script:
-    - apt-get update && apt-get -y install postgresql-client
-    - mix local.hex --force
-    - mix local.rebar --force
-    - mix deps.get --only test
-    - mix ecto.reset
-    - mix test
-    - mix coveralls
-=======
 services:
   - name: postgres:11.2
     alias: dbtest
@@ -68,4 +30,3 @@ test elixir:
   script:
   - mix test
   - mix coveralls
->>>>>>> create elixir.gitlab-ci.yml
