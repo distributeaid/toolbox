@@ -32,5 +32,9 @@ build ci image:
   services:
       - docker:dind
   script:
-  - mix test
-  - mix coveralls
+
+# test elixir:
+#   stage: test
+#   script:
+#     - mix test
+#     - mix coveralls
