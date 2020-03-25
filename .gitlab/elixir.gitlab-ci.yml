@@ -29,7 +29,7 @@ before_script:
 
 build ci image:
   stage: build ci image
-  image: docker:stable
+  image: docker/compose:stable
   services:
       - docker:dind
   script:
