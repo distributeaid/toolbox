@@ -28,16 +28,13 @@ before_script:
 
 build ci image:
   stage: build ci image
-  image: jonaskello/docker-and-compose:1.12.1-1.8.0
+  image: docker:stable
   services:
       - docker:dind
   script:
-<<<<<<< HEAD
-=======
     - docker-compose build
-    # - docker-compose push
+    - docker-compose push
 
->>>>>>> trying with docker-compose
 
 # test elixir:
 #   stage: test
