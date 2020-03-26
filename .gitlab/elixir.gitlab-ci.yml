@@ -28,7 +28,7 @@ before_script:
 
 build ci image:
   stage: build ci image
-  image: docker:stable
+  image: tmaier/docker-compose:latest
   services:
       - docker:dind
   script:
