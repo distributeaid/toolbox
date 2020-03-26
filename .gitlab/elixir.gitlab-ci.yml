@@ -33,7 +33,7 @@ test elixir:
   image: ${CONTAINER_TEST_IMAGE}
   services:
     - name: postgres:11.2
-    - alias: dbtest
+      alias: dbtest
   script:
     - apt-get update && apt-get -y install postgresql-client
     - mix local.hex --force
