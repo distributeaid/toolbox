@@ -111,6 +111,12 @@ To create more users, visit http://localhost:1312/public/groups/$GROUP_ID/users/
 
 For adding more data (like groups, shipments, items), register as an aid group. [Here is a screencast](https://www.loom.com/share/78a7cc512bbe4885ac3d8671372437a1) explaining this process in detail.
 
+**API**
+
+A GraphQL API is provided at `/api`. The [Absinthe docs](https://hexdocs.pm/absinthe/overview.html) are a good starting place to learn more about GraphQL in the context of elixir.
+
+You can use a browser implementation of graphiql to view the schema documentation and run test queries: http://localhost:1312/api/graphiql
+
 **Trouble Shooting**
 
 * Try not to have PostgreSQL running locally (potential conflict issues).
