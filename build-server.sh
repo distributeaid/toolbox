@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # set local dev variables
 export DA_POSTGRES_VERSION=11.2
