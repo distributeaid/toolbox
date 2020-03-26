@@ -16,8 +16,8 @@ export DA_EXTERNAL_VOLUME_REQUIRED=false
 export DA_DB_VOLUME_NAME=db
 
 # bring up containers
-if [ "$1" != "-v" ]; then
-	docker-compose up
-else
-	docker-compose --verbose up
-  fi
+# if [ "$1" != "-v" ]; then
+# 	docker-compose up
+# else
+# 	docker-compose --verbose up
+#   fi
