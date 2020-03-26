@@ -18,7 +18,6 @@ before_script:
   # - mix local.rebar --force
   # - mix deps.get --only test
   # - mix ecto.reset
-  - ./build-server.sh
   - docker info
   - docker-compose --version
   - docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
