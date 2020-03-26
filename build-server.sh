@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # set local dev variables
 export DA_POSTGRES_VERSION=11.2
@@ -16,8 +16,8 @@ export DA_EXTERNAL_VOLUME_REQUIRED=false
 export DA_DB_VOLUME_NAME=db
 
 # bring up containers
-# if [ "$1" != "-v" ]; then
-# 	docker-compose up
-# else
-# 	docker-compose --verbose up
-#   fi
+if [ "$1" != "-v" ]; then
+	docker-compose up
+else
+	docker-compose --verbose up
+  fi

@@ -48,12 +48,13 @@ services:
     # DB_HOSTNAME value MUST match the name of the db service!
     # DA_DB_HOSTNAME_TEST value MUST match the name of the test db service!
     environment:
-      - POSTGRES_USER=${DA_DB_USERNAME}
-      - POSTGRES_PASSWORD=${DA_DB_PASSWORD}
-      - POSTGRES_DB=${DA_DB_DATABASE}
-      - DB_HOSTNAME_DEV=${DA_DB_HOSTNAME_DEV}
-      - DB_HOSTNAME_TEST=${DA_DB_HOSTNAME_TEST}
-      - DB_PORT=5432
+      - web-variables.env
+      # - POSTGRES_USER=${DA_DB_USERNAME}
+      # - POSTGRES_PASSWORD=${DA_DB_PASSWORD}
+      # - POSTGRES_DB=${DA_DB_DATABASE}
+      # - DB_HOSTNAME_DEV=${DA_DB_HOSTNAME_DEV}
+      # - DB_HOSTNAME_TEST=${DA_DB_HOSTNAME_TEST}
+      # - DB_PORT=5432
     depends_on:
       - db
       - dbtest
