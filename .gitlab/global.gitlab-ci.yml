@@ -1,24 +1,8 @@
-.always: &always
-  except:
-    refs:
-      - tags
-    variables:
-      - $PIPELINE_NAME == "dispatcher"
-
-.master: &master
-  only:
-    refs:
-      - master
-  extends: .always
-
 .elixir:
-  only:
-    variables:
-      - $PIPELINE_NAME =~ /lib/
   variables:
     PROJECT_NAME: lib
-
-.cleanup:
-  only:
-    variables:
-      - $PIPELINE_NAME == "cleanup"
+    POSTGRES_USER: toolbox
+    POSTGRES_PASSWORD: "1312"
+    POSTGRES_DB: toolbox_test
+    DB_HOSTNAME_TEST: dbtest
+    MIX_ENV: "test"
