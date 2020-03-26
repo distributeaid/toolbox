@@ -29,6 +29,13 @@ defmodule FerryWeb.Router do
     plug :assign_chat_meta
   end
 
+  pipeline :api do
+    plug Plug.Parsers,
+      parsers: [:urlencoded, :multipart, :json, Absinthe.Plug.Parser],
+      pass: ["*/*"],
+      json_decoder: Jason
+  end
+
   scope "/", FerryWeb do
     pipe_through [:browser, :setup_auth, :chat]
 
@@ -82,5 +89,18 @@ defmodule FerryWeb.Router do
 
   scope "/.well-known", FerryWeb do
     get "/jwks.json", JWKSController, :show, singleton: true
+  end
+
+  scope "/api" do
+    pipe_through [:api]
+
+    forward "/graphiql",
+      Absinthe.Plug.GraphiQL,
+      schema: Ferry.Schema,
+      interface: :simple
+
+    forward "/",
+      Absinthe.Plug,
+      schema: Ferry.Schema
   end
 end
