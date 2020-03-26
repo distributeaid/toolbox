@@ -36,9 +36,9 @@ build ci image:
     - docker build -t $CONTAINER_TEST_IMAGE -f web.Dockerfile .
     - docker push $CONTAINER_TEST_IMAGE
 
-
 test elixir:
   stage: test
+  image: ${CONTAINER_TEST_IMAGE}
   script:
     - mix test
     - mix coveralls
