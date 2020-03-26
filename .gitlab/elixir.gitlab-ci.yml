@@ -41,3 +41,9 @@ test elixir:
     - mix ecto.reset
     - mix test
     - mix coveralls
+
+stylecheck elixir:
+  stage: stylecheck
+  image: ${CONTAINER_TEST_IMAGE}
+  script: 
+    - mix format --check-formatted
