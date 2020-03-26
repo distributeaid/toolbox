@@ -12,7 +12,7 @@ variables:
 # Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
 
 build ci image:
-  extends: elixir
+  extends: .elixir
   stage: build ci image
   image: docker:stable
   services:
