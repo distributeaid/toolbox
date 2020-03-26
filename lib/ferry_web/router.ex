@@ -49,7 +49,8 @@ defmodule FerryWeb.Router do
     resources "/session", SessionController, only: [:new, :create, :delete], singleton: true
 
     resources "/groups", GroupController, only: [:index, :show] do
-      resources "/users", UserController, only: [:new, :create] # TODO: move into admin scope
+      # TODO: move into admin scope
+      resources "/users", UserController, only: [:new, :create]
     end
 
     resources "/inventory", InventoryListController, only: [:show], singleton: true
@@ -66,6 +67,7 @@ defmodule FerryWeb.Router do
       resources "/projects", ProjectController, except: [:index, :show]
       resources "/inventory", StockController, except: [:show]
       resources "/users", UserController, only: [:edit, :update]
+
       resources "/shipments", ShipmentController do
         resources "/roles", RoleController, except: [:index, :show]
         resources "/routes", RouteController, except: [:index, :show]
@@ -95,11 +97,11 @@ defmodule FerryWeb.Router do
     pipe_through [:api]
 
     forward "/graphiql",
-      Absinthe.Plug.GraphiQL,
-      schema: Ferry.Schema
+            Absinthe.Plug.GraphiQL,
+            schema: Ferry.Schema
 
     forward "/",
-      Absinthe.Plug,
-      schema: Ferry.Schema
+            Absinthe.Plug,
+            schema: Ferry.Schema
   end
 end
