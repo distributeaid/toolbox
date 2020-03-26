@@ -22,7 +22,7 @@ defmodule Ferry.Mixfile do
   def application do
     [
       mod: {Ferry.Application, []},
-      extra_applications: [:logger, :runtime_tools, :scrivener_ecto, :timex]
+      extra_applications: [:logger, :runtime_tools, :scrivener_ecto, :timex, :absinthe_plug]
     ]
   end
 
@@ -54,6 +54,10 @@ defmodule Ferry.Mixfile do
       {:redirect, "~> 0.3.0"}, # router redirects
       {:scrivener_ecto, "~> 2.0"}, # pagination
       {:timex, "~> 3.0"}, # datetime
+
+      # graphql api
+      {:absinthe, "~> 1.4"},
+      {:absinthe_plug, "~> 1.4"},
 
       # authentication
       {:bcrypt_elixir, "~> 1.0"},
