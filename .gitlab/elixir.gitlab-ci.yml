@@ -54,4 +54,4 @@ stylecheck elixir:
     - mix local.rebar --force
     - mix deps.get
     - mix ecto.reset
-    - mix format --check-formatted
+    - mix format
