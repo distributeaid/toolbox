@@ -13,7 +13,7 @@ variables:
 
 build ci image:
   extends: .elixir
-  stage: build ci image
+  stage: build ci image elixir
   image: docker:stable
   services:
       - docker:dind
