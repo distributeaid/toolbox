@@ -30,4 +30,5 @@ test react:
   script:
     - cd ${REACT_DIR}
     - npm install 
+    - npm run lint
     - npm test
