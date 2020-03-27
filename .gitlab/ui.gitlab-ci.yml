@@ -1,7 +1,7 @@
 # CI FILE FOR react_ui
 
 variables:
-  CONTAINER_TEST_IMAGE: ${CI_REGISTRY_IMAGE}/ci/ui:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+  UI_CONTAINER_TEST_IMAGE: ${CI_REGISTRY_IMAGE}/ci/ui:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
 
 # This file is a template, and might need editing before it works on your project.
 # image: elixir:latest
@@ -20,13 +20,13 @@ build ci image:
     - docker info
     - docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
   script:
-    - docker build -t $CONTAINER_TEST_IMAGE -f ui.Dockerfile .
-    - docker push $CONTAINER_TEST_IMAGE
+    - docker build -t $UI_CONTAINER_TEST_IMAGE -f ui.Dockerfile .
+    - docker push $UI_CONTAINER_TEST_IMAGE
 
 test react:
   extends: .react
   stage: test
-  image: ${CONTAINER_TEST_IMAGE}
+  image: ${UI_CONTAINER_TEST_IMAGE}
   script:
     - cd react_ui
     - npm install 
