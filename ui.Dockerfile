@@ -14,7 +14,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 COPY ./ ./
 
-RUN npm install
-RUN npm install react-scripts -g 
+# RUN npm install
+# RUN npm install react-scripts -g 
 
-CMD ["npm", "start"] 
+# CMD ["npm", "start"] 
