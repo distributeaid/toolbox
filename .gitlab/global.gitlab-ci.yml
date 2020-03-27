@@ -6,3 +6,7 @@
     POSTGRES_DB: toolbox_test
     DB_HOSTNAME_TEST: dbtest
     MIX_ENV: "test"
+
+.react:
+  variables:
+    DUMMY: dummy
