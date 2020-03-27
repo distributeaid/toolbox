@@ -1,7 +1,7 @@
 # CI FILE FOR react_ui
 
 variables:
-  CONTAINER_TEST_IMAGE: ${CI_REGISTRY_IMAGE}/ci/elixir:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+  CONTAINER_TEST_IMAGE: ${CI_REGISTRY_IMAGE}/ci/ui:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
 
 # This file is a template, and might need editing before it works on your project.
 # image: elixir:latest
