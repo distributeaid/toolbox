@@ -10,7 +10,7 @@ variables:
 # Only needed when using a docker container to run your tests in.
 # Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
 
-build ci image ui:
+build ci image_ui:
   extends: .react
   stage: build ci image
   image: docker:stable
