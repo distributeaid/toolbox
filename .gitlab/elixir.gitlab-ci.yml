@@ -11,9 +11,9 @@ variables:
 # Only needed when using a docker container to run your tests in.
 # Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
 
-build ci image:
+build ci image elixir:
   extends: .elixir
-  stage: build ci image elixir
+  stage: build ci image
   image: docker:stable
   services:
       - docker:dind
