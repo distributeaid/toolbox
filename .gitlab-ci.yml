@@ -8,3 +8,4 @@ stages:
 include:
   - local: .gitlab/global.gitlab-ci.yml
   - local: .gitlab/elixir.gitlab-ci.yml
+  - local: .gitlab/ui.gitlab-ci.yml
