@@ -1,5 +1,4 @@
 .elixir:
-<<<<<<< HEAD
   variables:
     PROJECT_NAME: lib
     POSTGRES_USER: toolbox
@@ -7,15 +6,9 @@
     POSTGRES_DB: toolbox_test
     DB_HOSTNAME_TEST: dbtest
     MIX_ENV: "test"
-=======
-  only:
-    variables:
-      - $PIPELINE_NAME =~ /lib/
   variables:
     PROJECT_NAME: lib
 
-.cleanup:
-  only:
-    variables:
-      - $PIPELINE_NAME == "cleanup"
->>>>>>> trying different image build
+.react:
+  variables:
+    DUMMY: dummy
