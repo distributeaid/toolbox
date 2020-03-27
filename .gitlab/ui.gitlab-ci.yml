@@ -28,6 +28,6 @@ test react:
   stage: test
   image: ${CONTAINER_TEST_IMAGE}
   script:
-    - cd react_ui
+    - cd ${REACT_DIR}
     - npm install 
     - npm test
