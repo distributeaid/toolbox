@@ -9,4 +9,4 @@
 
 .react:
   variables:
-    DUMMY: dummy
+    REACT_DIR: ./react_ui
