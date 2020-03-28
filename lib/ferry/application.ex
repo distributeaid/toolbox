@@ -6,6 +6,23 @@ defmodule Ferry.Application do
   def start(_type, _args) do
     import Supervisor.Spec
 
+    # Start all the instrumenters
+    FerryWeb.PhoenixInstrumenter.setup()
+    FerryWeb.PipelineInstrumenter.setup()
+    FerryWeb.RepoInstrumenter.setup()
+    FerryWeb.PrometheusExporter.setup()
+
+    # NOTE: Only for FreeBSD, Linux and OSX (experimental)
+    # https://github.com/deadtrickster/prometheus_process_collector
+    Prometheus.Registry.register_collector(:prometheus_process_collector)
+
+    :telemetry.attach(
+      "prometheus-ecto",
+      [:elixir_monitoring_prom, :repo, :query],
+      &FerryWeb.RepoInstrumenter.handle_event/4,
+      nil
+    )
+
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository

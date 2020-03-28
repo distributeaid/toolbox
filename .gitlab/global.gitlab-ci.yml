@@ -1,0 +1,14 @@
+.elixir:
+  variables:
+    PROJECT_NAME: lib
+    POSTGRES_USER: toolbox
+    POSTGRES_PASSWORD: "1312"
+    POSTGRES_DB: toolbox_test
+    DB_HOSTNAME_TEST: dbtest
+    MIX_ENV: "test"
+    DOCKER_DRIVER: overlay
+
+.react:
+  variables:
+    REACT_DIR: ./react_ui
+    DOCKER_DRIVER: overlay
