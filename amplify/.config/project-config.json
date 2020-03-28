@@ -1,0 +1,17 @@
+{
+    "projectName": "masks_for_docs",
+    "version": "3.0",
+    "frontend": "javascript",
+    "javascript": {
+        "framework": "none",
+        "config": {
+            "SourceDir": "react_ui/src",
+            "DistributionDir": "react_ui/build",
+            "BuildCommand": "npm build --prefix react_ui",
+            "StartCommand": "npm start --prefix react_ui"
+        }
+    },
+    "providers": [
+        "awscloudformation"
+    ]
+}
