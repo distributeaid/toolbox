@@ -1,5 +1,13 @@
 import React from "react";
 import "./App.css";
+import Amplify from "aws-amplify";
+
+Amplify.configure({
+  Auth: {
+    identityPoolId: "us-east-2_W0AH6xG63", // Amazon Cognito Identity Pool ID
+    region: "us-east-2" // Amazon Cognito Region
+  }
+});
 
 function App() {
   const [username, setUsername] = React.useState("");
