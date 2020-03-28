@@ -1,6 +1,5 @@
 stages:
   - build ci image
-  - stylecheck
   - test
   - deploy_staging
   - deploy_production
