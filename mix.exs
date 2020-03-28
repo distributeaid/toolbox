@@ -67,7 +67,15 @@ defmodule Ferry.Mixfile do
       {:mox, "~> 0.5", only: :test},
 
       # deployment
-      {:distillery, "~> 2.1"}
+      {:distillery, "~> 2.1"},
+
+      # metrics
+      {:prometheus, "~> 4.4.1"},
+      {:prometheus_ex, "~> 3.0.5"},
+      {:prometheus_ecto, "~> 1.4.3"},
+      {:prometheus_phoenix, "~> 1.3.0"},
+      {:prometheus_plugs, "~> 1.1.5"},
+      {:prometheus_process_collector, "~> 1.4.3"}
     ]
   end
 
