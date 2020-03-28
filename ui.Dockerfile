@@ -3,13 +3,13 @@
 FROM node:13.12.0-alpine3.11
 
 # Update OpenSSL
-RUN apk update && apk add --update openssl  
+RUN apk update && apk add --update openssl 
 
 WORKDIR /app
 
 ENV PATH /app/node_modules/.bin:$PATH
 
-COPY ./ ./
+COPY ./react_ui ./
 
 RUN npm install
 RUN npm install react-scripts -g 
