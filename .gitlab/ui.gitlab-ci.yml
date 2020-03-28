@@ -28,7 +28,7 @@ test react:
   stage: test
   image: ${CONTAINER_TEST_IMAGE}
   script:
-    # - cd ${REACT_DIR}
+    - cd ${REACT_DIR}
     - npm install 
     - npm run lint
     - npm test
