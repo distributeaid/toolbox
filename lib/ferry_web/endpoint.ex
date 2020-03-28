@@ -45,6 +45,10 @@ defmodule FerryWeb.Endpoint do
     key: "_ferry_key",
     signing_salt: "/jd4eLEC"
 
+  # Creates the /metrics endpoint for prometheus & collect stats
+  plug FerryWeb.PrometheusExporter
+  plug FerryWeb.PipelineInstrumenter
+  
   plug FerryWeb.Router
 
   @doc """

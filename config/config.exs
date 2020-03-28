@@ -60,6 +60,22 @@ config :ferry, :chat,
   apiKey: "da2-mex4f66y3rd6pd7zhocoyaallm",
   endpoint: "https://iqvxvl3zzfeuxm622y5fcwpfjq.appsync-api.eu-central-1.amazonaws.com/graphql"
 
+# Configures the endpoint
+config :ferry, FerryWebWeb.Endpoint,
+  instrumenters: [FerryWeb.PhoenixInstrumenter]
+
+config :prometheus, FerryWeb.PipelineInstrumenter,
+  labels: [:status_class, :method, :host, :scheme, :request_path],
+  duration_buckets: [
+    0,
+    10,
+    30,
+    100,
+    300
+  ],
+  registry: :default,
+  duration_unit: :microseconds
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
