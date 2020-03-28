@@ -1,6 +1,6 @@
 # Using this Dockerfile to define the react CI environment
 
-FROM node:alpine
+FROM node:13.12.0-alpine3.10
 
 # Update OpenSSL
 RUN apk update && apk add --update openssl  
