@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import Amplify from "aws-amplify";
+import Amplify, { Auth } from "aws-amplify";
 
 Amplify.configure({
   Auth: {
@@ -15,7 +15,14 @@ function App() {
   return (
     <div>
       Throw this form away
-      <form>
+      <form
+        onSubmit={event => {
+          event.preventDefault();
+          Auth.signIn(username, password)
+            .then(user => console.log(user))
+            .catch(err => console.log(err));
+        }}
+      >
         <label>
           Username / email
           <input
@@ -31,6 +38,7 @@ function App() {
             name="password"
           ></input>
         </label>
+        <input type="submit" value="Sign in" />
       </form>
       <div>{username}</div>
       <div>{password}</div>
