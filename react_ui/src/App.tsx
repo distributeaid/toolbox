@@ -2,84 +2,82 @@ import React from "react";
 import "./App.css";
 import Amplify, { Auth } from "aws-amplify";
 import amplifyConfig from "./aws-exports";
+import { Button } from "./components/Button";
+import { Input } from "./components/Input";
+import { Checkbox } from "./components/Checkbox";
+import { Divider } from "./components/Divider";
 
 Amplify.configure(amplifyConfig);
 
 function App() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+
   return (
-    <div className="grid gap-5 p-5">
-      <h1 className="text-2xl">Welcome</h1>
-      <div className="mb">
-        Sign in
-        <form
-          onSubmit={event => {
-            event.preventDefault();
-            Auth.signIn(username, password)
-              .then(user => console.log(user))
-              .catch(err => console.log(err));
-          }}
-        >
-          <div className="grid">
-            <label>
-              Email
-              <input
-                className="border"
-                name="username"
-                onChange={event => setUsername(event.currentTarget.value)}
-              ></input>
-            </label>
-            <label>
-              Password
-              <input
-                className="border"
-                onChange={event => setPassword(event.currentTarget.value)}
-                type="password"
-                name="password"
-              ></input>
-            </label>
+    <>
+      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
+            Sign in to your account
+          </h2>
+        </div>
 
-            <input type="submit" value="Submit" />
-          </div>
-        </form>
-      </div>
-      <div className="mb-5">
-        Sign up
-        <form
-          onSubmit={event => {
-            event.preventDefault();
-            Auth.signUp({ username, password })
-              .then(user => console.log(user))
-              .catch(err => console.log(err));
-          }}
-        >
-          <div className="grid">
-            <label>
-              Email
-              <input
-                className="border"
-                name="username"
-                onChange={event => setUsername(event.currentTarget.value)}
-              ></input>
-            </label>
-            <label>
-              Password
-              <input
-                className="border"
-                onChange={event => setPassword(event.currentTarget.value)}
-                type="password"
-                name="password"
-              ></input>
-            </label>
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            <form
+                onSubmit={event => {
+                  event.preventDefault();
+                  Auth.signIn(username, password)
+                    .then(user => console.log(user))
+                    .catch(err => console.log(err));
+                }}
+            >
+              <Input id="email" type="email" title="Email address" onChange={(event) => setUsername(event.currentTarget.value)} />
+              <Input id="password" type="password" title="Password" onChange={(event) => setPassword(event.currentTarget.value)} />
 
-            <input type="submit" value="Sign up" />
+              <div className="mt-6 flex items-center justify-between">
+                <Checkbox title="Remember me" id="remember_me" />
+
+                <div className="text-sm leading-5">
+                  <a
+                    href="#"
+                    className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
+                  >
+                    Forgot your password?
+                  </a>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <Button title="Sign in" />
+              </div>
+            </form>
+
+            <div className="mt-6">
+              <Divider>Or</Divider>
+            </div>
+
+            <form
+                onSubmit={event => {
+                  event.preventDefault();
+                  Auth.signUp(username, password)
+                    .then(user => console.log(user))
+                    .catch(err => console.log(err));
+                }}
+            >
+              <Input id="email" type="email" title="Email address" onChange={(event) => setUsername(event.currentTarget.value)} />
+              <Input id="password" type="password" title="Password" onChange={(event) => setPassword(event.currentTarget.value)} />
+
+              <div className="mt-6">
+                <Button title="Sign up" />
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
       <div>{username}</div>
       <div>{password}</div>
-    </div>
+    </>
   );
 }
 
