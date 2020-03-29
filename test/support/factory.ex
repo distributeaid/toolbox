@@ -7,23 +7,28 @@ defmodule Ferry.Factory do
 
   use ExMachina.Ecto, repo: Ferry.Repo
 
-  # To prevent conflicts between the new Aid context and the old Inventory
+  alias Timex
+
+  # To prevent conflicts between the new AidTaxonomy context and the old Inventory
   # context, the following modules will be referred to by their full namespaces.
   # Similarly, their factory functions (and related helpers) have been prefixed
   # with `aid_` to prevent conflicts with the inventory factory functions.
   #
-  #   - Ferry.Aid.Item // aid_item_factory
-  #   - Ferry.Aid.Mod  // aid_mod_factory
+  #   - Ferry.AidTaxonomy.Category // aid_category_factory
+  #   - Ferry.AidTaxonomy.Item     // aid_item_factory
+  #   - Ferry.AidTaxonomy.Mod      // aid_mod_factory
   alias Ferry.{
     Accounts.User,
-    # Aid.Item
-    Aid.ItemCategory,
-    Aid.ListEntry,
-    Aid.Manifest,
-    # Aid.Mod,
-    Aid.ModValue,
     Aid.AidList,
+    Aid.AvailableList,
+    Aid.Entry,
+    Aid.ManifestList,
+    Aid.ModValue,
     Aid.NeedsList,
+    # See note above the alias statement.
+    # AidTaxonomy.Category,
+    # AidTaxonomy.Item
+    # AidTaxonomy.Mod,
     Inventory.Category,
     Inventory.Item,
     Inventory.Mod,
@@ -640,35 +645,35 @@ defmodule Ferry.Factory do
     )
   end
 
-  # Aid
+  # Aid Taxonomy
   # ================================================================================
   
-  # Item Category
+  # Category
   # ------------------------------------------------------------
   
-  def item_category_factory do
-    %ItemCategory{
+  def aid_category_factory do
+    %Ferry.AidTaxonomy.Category{
       name: sequence("Clothing"),
       items: []
     }
   end
 
-  def invalid_item_category_factory do
-    invalid_short_item_category_factory()
+  def invalid_aid_category_factory do
+    invalid_short_aid_category_factory()
   end
 
-  def invalid_short_item_category_factory do
+  def invalid_short_aid_category_factory do
     struct!(
-      item_category_factory(),
+      aid_category_factory(),
       %{
         name: "Y"
       }
     )
   end
 
-  def invalid_long_item_category_factory do
+  def invalid_long_aid_category_factory do
     struct!(
-      item_category_factory(),
+      aid_category_factory(),
       %{
         # 33 characters long
         name: String.duplicate("YOLO", 8) <> "!"
@@ -678,7 +683,7 @@ defmodule Ferry.Factory do
 
   def with_item(category, item_or_attrs \\ %{})
 
-  def with_item(category, %Ferry.Aid.Item{} = item) do
+  def with_item(%Ferry.AidTaxonomy.Category{} = category, %Ferry.AidTaxonomy.Item{} = item) do
     items =
       [item | category.items]
       |> Enum.sort_by(&(&1.name))
@@ -686,7 +691,7 @@ defmodule Ferry.Factory do
     %{category | items: items}
   end
 
-  def with_item(category, attrs) do
+  def with_item(%Ferry.AidTaxonomy.Category{} = category, attrs) do
     item = insert(:aid_item, Map.merge(attrs, %{category: category}))
     with_item(category, item)
   end
@@ -695,10 +700,9 @@ defmodule Ferry.Factory do
   # ------------------------------------------------------------
 
   def aid_item_factory do
-    %Ferry.Aid.Item{
+    %Ferry.AidTaxonomy.Item{
       name: sequence("Shirt"),
-      category: build(:item_category),
-      entries: [],
+      category: build(:aid_category),
       mods: []
     }
   end
@@ -741,7 +745,7 @@ defmodule Ferry.Factory do
       "multi-select" -> ["summer", "winter"]
     end
 
-    mod = %Ferry.Aid.Mod{
+    mod = %Ferry.AidTaxonomy.Mod{
       name: sequence("Size"),
       description: sequence("I let you specify the sizes of things."),
       type: type,
@@ -786,6 +790,168 @@ defmodule Ferry.Factory do
     )
   end
 
+
+  # Aid
+  # ================================================================================
+
+  # Aid List
+  # ------------------------------------------------------------
+
+  def aid_list_factory(attrs \\ %{}) do
+    attrs =
+      if attrs[:available_list] == nil and attrs[:manifest_list] == nil and attrs[:needs_list] == nil do
+        owner_options = [
+          %{available_list: build(:available_list)},
+          %{manifest_list: build(:manifest_list)},
+          %{needs_list: build(:needs_list)},
+        ]
+        Map.merge(attrs, Enum.random(owner_options))
+      else
+        attrs
+      end
+
+    list = %AidList{
+      entries: []
+    }
+
+    merge_attributes(list, attrs)
+  end
+
+  def invalid_aid_list_factory do
+
+  end
+
+  def invalid_owner_aid_list_factory do
+    struct!(
+      aid_list_factory(),
+      %{
+
+      }
+    )
+  end
+
+  # Available List
+  # ------------------------------------------------------------
+  def available_list_factory do
+    project = build(:project)
+    address = build(:address, %{project: project})
+
+    %AvailableList{
+      at: address
+    }
+  end
+
+  # Manifest List
+  # ------------------------------------------------------------
+  def manifest_list_factory do
+    shipment = build(:shipment)
+    sender = build(:shipment_role, %{shipment: shipment, group: build(:group)})
+    receiver = build(:shipment_role, %{shipment: shipment, group: build(:group)})
+    origin = build(:route, %{shipment: shipment})
+    destination = build(:route, %{shipment: shipment})
+
+    %ManifestList{
+      packaging: sequence(:packaging, &"#{&1} pallets"),
+
+      shipment: shipment,
+      from: sender,
+      to: receiver,
+      origin: origin,
+      destination: destination
+    }
+  end
+
+  # Needs List
+  # ------------------------------------------------------------
+  # TODO: need to prevent needs lists from overlapping, probably using sequences
+  #       OR that may be too complex here, & let the calling code handle it
+  #          the helpers are very useful:
+  #          1) list1 = insert(:needs_list)
+  #          2) list2 = insert(:needs_list_after, %{to: list1.to})
+  def needs_list_factory do
+    from = Timex.today() |> Timex.beginning_of_month()
+    to = from |> Timex.end_of_month()
+
+    needs_list = %NeedsList{
+      from: from,
+      to: to,
+
+      project: build(:project) |> without_assoc(:address)
+    }
+
+    aid_list = build(:aid_list, %{needs_list: needs_list})
+
+    struct!(
+      needs_list,
+      %{
+        entries: aid_list.entries
+      }
+    )
+  end
+
+  def needs_list_before_factory(%{from: from} = attrs) do
+    before = from |> Timex.shift(days: -1)
+    attrs = Map.merge(attrs, %{
+      from: before |> Timex.shift(months: -1),
+      to: before
+    })
+    struct!(needs_list_factory(), attrs)
+  end
+
+  def needs_list_start_overlap_factory(%{from: from} = attrs) do
+    attrs = Map.merge(attrs, %{
+      from: from |> Timex.shift(months: -1),
+      to: from
+    })
+    struct!(needs_list_factory(), attrs)
+  end
+
+  def needs_list_end_overlap_factory(%{to: to} = attrs) do
+    attrs = Map.merge(attrs, %{
+      from: to,
+      to: to |> Timex.shift(months: 1)
+    })
+    struct!(needs_list_factory(), attrs)    
+  end
+
+  def needs_list_after_factory(%{to: to} = attrs) do
+    after_end = to |> Timex.shift(days: 1)
+    attrs = Map.merge(attrs, %{
+      from: after_end,
+      to: after_end |> Timex.shift(months: 1)
+    })
+    struct!(needs_list_factory(), attrs)
+  end
+
+  def invalid_needs_list_factory do
+    invalid_duration_needs_list_factory()
+  end
+
+  def invalid_duration_needs_list_factory do
+    list = needs_list_factory()
+
+    struct!(
+      list,
+      %{
+        from: list.to,
+        to: list.from
+      }
+    )
+  end
+
+  # Entry
+  # ------------------------------------------------------------
+  
+  def entry_factory do
+    %Entry{
+      amount: sequence(:amount, &(&1 + 1000)), # 1000, 1001, ...
+
+      list: build(:aid_list),
+      item: build(:aid_item),
+      mod_values: []
+    }
+  end
+
   # Mod Value
   # ------------------------------------------------------------
   def mod_value_factory(attrs) do
@@ -802,31 +968,8 @@ defmodule Ferry.Factory do
     %ModValue{
       value: value,
       mod: mod,
-      entry: build(:list_entry)
+      entry: build(:entry)
     }
   end
-
-  # Aid List
-  # ------------------------------------------------------------
-
-  def list_factory do
-    %AidList{
-      entries: []
-    }
-  end
-
-  # List Entry
-  # ------------------------------------------------------------
-  
-  def list_entry_factory do
-    %ListEntry{
-      amount: sequence(:amount, &(&1 + 1000)), # 1000, 1001, ...
-
-      list: build(:list),
-      item: build(:aid_item),
-      mod_values: []
-    }
-  end
-
 
 end

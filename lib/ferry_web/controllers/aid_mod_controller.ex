@@ -1,14 +1,14 @@
 defmodule FerryWeb.AidModController do
   use FerryWeb, :controller
 
-  alias Ferry.Aid
-  alias Ferry.Aid.Mod
+  alias Ferry.AidTaxonomy
+  alias Ferry.AidTaxonomy.Mod
 
   # Read
   # ------------------------------------------------------------
 
   def index(conn, _params) do
-    mods = Aid.list_mods()
+    mods = AidTaxonomy.list_mods()
     render(conn, "index.html", mods: mods)
   end
 
@@ -16,19 +16,19 @@ defmodule FerryWeb.AidModController do
   # ------------------------------------------------------------
 
   def new(conn, _params) do
-    categories = Aid.list_item_categories()
-    changeset = Aid.change_mod(%Mod{items: []})
+    categories = AidTaxonomy.list_categories()
+    changeset = AidTaxonomy.change_mod(%Mod{items: []})
     render(conn, "new.html", categories: categories, changeset: changeset)
   end
 
   def create(conn, %{"mod" => mod_params}) do
-    case Aid.create_mod(mod_params) do
+    case AidTaxonomy.create_mod(mod_params) do
       {:ok, _mod} ->
         conn
         |> put_flash(:info, "Item created successfully.")
         |> redirect(to: Routes.aid_mod_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
-        categories = Aid.list_item_categories()
+        categories = AidTaxonomy.list_categories()
         render(conn, "new.html", categories: categories, changeset: changeset)
     end
   end
@@ -37,21 +37,21 @@ defmodule FerryWeb.AidModController do
   # ------------------------------------------------------------
 
   def edit(conn, %{"id" => id}) do
-    categories = Aid.list_item_categories()
-    mod = Aid.get_mod!(id)
-    changeset = Aid.change_mod(mod)
+    categories = AidTaxonomy.list_categories()
+    mod = AidTaxonomy.get_mod!(id)
+    changeset = AidTaxonomy.change_mod(mod)
     render(conn, "edit.html", categories: categories, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "mod" => mod_params}) do
-    mod = Aid.get_mod!(id)
-    case Aid.update_mod(mod, mod_params) do
+    mod = AidTaxonomy.get_mod!(id)
+    case AidTaxonomy.update_mod(mod, mod_params) do
       {:ok, _mod} ->
         conn
         |> put_flash(:info, "Mod updated successfully.")
         |> redirect(to: Routes.aid_mod_path(conn, :index))
       {:error, changeset} ->
-        categories = Aid.list_item_categories()
+        categories = AidTaxonomy.list_categories()
         render(conn, "edit.html", categories: categories, changeset: changeset)
     end
   end
@@ -60,8 +60,8 @@ defmodule FerryWeb.AidModController do
   # ------------------------------------------------------------
 
   def delete(conn, %{"id" => id}) do
-    mod = Aid.get_mod!(id)
-    case Aid.delete_mod(mod) do
+    mod = AidTaxonomy.get_mod!(id)
+    case AidTaxonomy.delete_mod(mod) do
       {:ok, _mod} ->
         conn
         |> put_flash(:info, "Mod deleted successfully.")

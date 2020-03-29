@@ -1,16 +1,14 @@
-defmodule Ferry.Aid.Item do
+defmodule Ferry.AidTaxonomy.Item do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Ferry.Aid.ItemCategory
-  alias Ferry.Aid.ListEntry
-  alias Ferry.Aid.Mod
+  alias Ferry.AidTaxonomy.Category
+  alias Ferry.AidTaxonomy.Mod
 
   schema "aid__items" do
     field :name, :string
 
-    belongs_to :category, ItemCategory, foreign_key: :category_id
-    has_many :entries, ListEntry
+    belongs_to :category, Category, foreign_key: :category_id
 
     # TODO: probably want to setup a schema for the join table with
     # has_many / belongs_to on each side, to provide flexibility if we ever need

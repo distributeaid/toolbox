@@ -2,7 +2,7 @@ defmodule FerryWeb.AidModControllerTest do
   use FerryWeb.ConnCase
 
   setup do
-    category = insert(:item_category)
+    category = insert(:aid_category)
     items = insert_list(3, :aid_item, %{category: category})
     mod = insert(:aid_mod, %{items: items})
 
