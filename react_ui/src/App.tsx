@@ -1,24 +1,84 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import Amplify, { Auth } from "aws-amplify";
+import amplifyConfig from "./aws-exports";
+
+Amplify.configure(amplifyConfig);
 
 function App() {
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className="grid gap-5 p-5">
+      <h1 className="text-2xl">Welcome</h1>
+      <div className="mb">
+        Sign in
+        <form
+          onSubmit={event => {
+            event.preventDefault();
+            Auth.signIn(username, password)
+              .then(user => console.log(user))
+              .catch(err => console.log(err));
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          <div className="grid">
+            <label>
+              Email
+              <input
+                className="border"
+                name="username"
+                onChange={event => setUsername(event.currentTarget.value)}
+              ></input>
+            </label>
+            <label>
+              Password
+              <input
+                className="border"
+                onChange={event => setPassword(event.currentTarget.value)}
+                type="password"
+                name="password"
+              ></input>
+            </label>
+
+            <input type="submit" value="Submit" />
+          </div>
+        </form>
+      </div>
+      <div className="mb-5">
+        Sign up
+        <form
+          onSubmit={event => {
+            event.preventDefault();
+            Auth.signUp({ username, password })
+              .then(user => console.log(user))
+              .catch(err => console.log(err));
+          }}
+        >
+          <div className="grid">
+            <label>
+              Email
+              <input
+                className="border"
+                name="username"
+                onChange={event => setUsername(event.currentTarget.value)}
+              ></input>
+            </label>
+            <label>
+              Password
+              <input
+                className="border"
+                onChange={event => setPassword(event.currentTarget.value)}
+                type="password"
+                name="password"
+              ></input>
+            </label>
+
+            <input type="submit" value="Sign up" />
+          </div>
+        </form>
+      </div>
+      <div>{username}</div>
+      <div>{password}</div>
     </div>
   );
 }

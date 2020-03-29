@@ -29,6 +29,7 @@ test react:
   image: ${CONTAINER_TEST_IMAGE}
   script:
     - cd ${REACT_DIR}
-    - npm install 
+    - npm install
     - npm run lint
+    - cp src/aws-exports.ci.js src/aws-exports.js
     - npm test
