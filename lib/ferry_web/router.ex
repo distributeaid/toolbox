@@ -29,6 +29,13 @@ defmodule FerryWeb.Router do
     plug :assign_chat_meta
   end
 
+  pipeline :api do
+    plug Plug.Parsers,
+      parsers: [:urlencoded, :multipart, :json, Absinthe.Plug.Parser],
+      pass: ["*/*"],
+      json_decoder: Jason
+  end
+
   scope "/", FerryWeb do
     pipe_through [:browser, :setup_auth, :chat]
 
@@ -42,7 +49,8 @@ defmodule FerryWeb.Router do
     resources "/session", SessionController, only: [:new, :create, :delete], singleton: true
 
     resources "/groups", GroupController, only: [:index, :show] do
-      resources "/users", UserController, only: [:new, :create] # TODO: move into admin scope
+      # TODO: move into admin scope
+      resources "/users", UserController, only: [:new, :create]
     end
 
     resources "/inventory", InventoryListController, only: [:show], singleton: true
@@ -59,6 +67,7 @@ defmodule FerryWeb.Router do
       resources "/projects", ProjectController, except: [:index, :show]
       resources "/inventory", StockController, except: [:show]
       resources "/users", UserController, only: [:edit, :update]
+
       resources "/shipments", ShipmentController do
         resources "/roles", RoleController, except: [:index, :show]
         resources "/routes", RouteController, except: [:index, :show]
@@ -82,5 +91,17 @@ defmodule FerryWeb.Router do
 
   scope "/.well-known", FerryWeb do
     get "/jwks.json", JWKSController, :show, singleton: true
+  end
+
+  scope "/api" do
+    pipe_through [:api]
+
+    forward "/graphiql",
+            Absinthe.Plug.GraphiQL,
+            schema: Ferry.Schema
+
+    forward "/",
+            Absinthe.Plug,
+            schema: Ferry.Schema
   end
 end

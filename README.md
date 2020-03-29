@@ -95,8 +95,8 @@ docker exec toolbox_db /bin/bash seed-test-group.sh
 
 Make sure you only run the following two lines once. 
 ```
-docker exec toolbox_web mix run priv/repo/seeds.exs
-docker exec --env MIX_ENV=test toolbox_web mix run priv/repo/seeds.exs
+docker exec toolbox_web mix ecto.setup
+docker exec --env MIX_ENV=test toolbox_web mix ecto.setup
 ```
 
 You can now visit http://localhost:1312/public/groups/1/users/new to create a user associated with that group.  Finally, visit http://localhost:1312/public/session/new to log in.
@@ -110,6 +110,12 @@ INSERT INTO groups (name, description, inserted_at, updated_at) VALUES ('group n
 To create more users, visit http://localhost:1312/public/groups/$GROUP_ID/users/new (replace $GROUP_ID with the id of the group you want to add the user to).  You can add multiple users to a single group.
 
 For adding more data (like groups, shipments, items), register as an aid group. [Here is a screencast](https://www.loom.com/share/78a7cc512bbe4885ac3d8671372437a1) explaining this process in detail.
+
+**API**
+
+A GraphQL API is provided at `/api`. The [Absinthe docs](https://hexdocs.pm/absinthe/overview.html) are a good starting place to learn more about GraphQL in the context of elixir.
+
+You can use a browser implementation of graphiql to view the schema documentation and run test queries: http://localhost:1312/api/graphiql
 
 **Trouble Shooting**
 
