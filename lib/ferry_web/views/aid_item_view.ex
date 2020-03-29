@@ -1,7 +1,7 @@
 defmodule FerryWeb.AidItemView do
   use FerryWeb, :view
 
-  alias Ferry.Aid.Item
+  alias Ferry.AidTaxonomy.Item
 
   def friendly(%Item{} = item, :mods) do
     item.mods |> Enum.map(&(&1.name)) |> Enum.join(", ")

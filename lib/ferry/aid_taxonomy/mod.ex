@@ -1,8 +1,8 @@
-defmodule Ferry.Aid.Mod do
+defmodule Ferry.AidTaxonomy.Mod do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Ferry.Aid.Item
+  alias Ferry.AidTaxonomy.Item
 
   # TODO: add boolean mods
   schema "aid__mods" do

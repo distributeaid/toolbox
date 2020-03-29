@@ -1,7 +1,7 @@
 defmodule FerryWeb.AidModView do
   use FerryWeb, :view
 
-  alias Ferry.Aid.Mod
+  alias Ferry.AidTaxonomy.Mod
 
   def friendly(%Mod{} = mod, :type) do
     case mod.type do

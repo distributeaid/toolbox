@@ -4,7 +4,13 @@ defmodule Ferry.Mixfile do
   def project do
     [
       app: :ferry,
-      version: "0.0.11",
+
+      # version: "0.0.28",
+      # We got it this far!
+      # Who's gonna be the lucky one to bump it up next?!
+      # <3 Distribute Aid
+      version: "0.0.29",
+
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,

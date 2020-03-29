@@ -94,10 +94,51 @@ const SignUp = () => {
             </form>
           </div>
         </div>
+        <ConfirmEmail></ConfirmEmail>
       </div>
       <div>{username}</div>
       <div>{password}</div>
     </>
+  );
+};
+
+const ConfirmEmail = () => {
+  const [username, setUsername] = React.useState("");
+  const [verificationCode, setVerificationCode] = React.useState("");
+  return (
+    <div>
+      Verify with code from email
+      <form
+        onSubmit={event => {
+          event.preventDefault();
+          Auth.confirmSignUp(username, verificationCode)
+            .then(user => console.log(user))
+            .catch(err => console.log(err));
+        }}
+      >
+        <div className="grid">
+          <label>
+            Email
+            <input
+              className="border"
+              name="username"
+              onChange={event => setUsername(event.currentTarget.value)}
+            ></input>
+          </label>
+          <label>
+            Verification code (check email)
+            <input
+              className="border"
+              onChange={event => setVerificationCode(event.currentTarget.value)}
+              type="text"
+              name="verification-code"
+            ></input>
+          </label>
+
+          <input type="submit" value="Verify" />
+        </div>
+      </form>
+    </div>
   );
 };
 

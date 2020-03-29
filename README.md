@@ -3,7 +3,7 @@ Toolbox
 
 The collection of tools for newcomer (refugee) aid groups that make up the Distribute Aid platform.
 
-[![pipeline status](https://gitlab.com/distribute-aid/toolbox/badges/master/pipeline.svg)](https://gitlab.com/distribute-aid/toolbox/commits/master) [![coverage report](https://gitlab.com/distribute-aid/toolbox/badges/master/coverage.svg)](https://gitlab.com/distribute-aid/toolbox/commits/master)
+[![pipeline status](https://gitlab.com/masksfordocs/toolbox/badges/master/pipeline.svg)](https://gitlab.com/masksfordocs/toolbox/commits/master) [![coverage report](https://gitlab.com/masksfordocs/toolbox/badges/master/coverage.svg)](https://gitlab.com/masksfordocs/toolbox/commits/master)
 
 Contributing
 ------------------------------------------------------------
@@ -56,7 +56,7 @@ See the _Common Docker Commands_ section below for more info about how we use Do
 
 **Clone The Project**
 ```
-git clone git@gitlab.com:distribute-aid/toolbox.git
+git clone git@gitlab.com:masksfordocs/toolbox.git
 cd toolbox/
 
 # Create a 'db' directory.
@@ -232,66 +232,6 @@ docker exec -it toolbox_db sh -c "psql -U toolbox -d toolbox_dev"
 docker exec -it dbtest sh -c "psql -U toolbox -d toolbox_dev"
 ```
 
-Deployment
-------------------------------------------------------------
-
-**Deployment Setup**
-
-```
-# log into the server
-ssh [user]@distributeaid.org
-cd ~/toolbox/
-
-# build
-git pull
-mix deps.get --only prod
-MIX_ENV=prod mix compile
-MIX_ENV=prod mix ecto.migrate
-cd assets && npm install && npm run deploy && cd ..
-MIX_ENV=prod mix phx.digest
-MIX_ENV=prod mix Distillery.release --env=prod --upgrade
-
-# deploy
-cd [/path/to/webroot]
-mkdir releases/[version]
-cp ~/toolbox/_build/prod/rel/ferry/releases/[version]/ferry.tar.gz releases/[version]
-./bin/ferry upgrade [version]
-PORT=1337 ./bin/ferry restart # needed to ensure updated static assets are used
-```
-
-Metrics
-------------------------------------------------------------
-
-TODO
-
-Backups
-------------------------------------------------------------
-
-**Secrets**
-
-Backup:
-
-```
-scp [user]@distributeaid.org:/home/[user]/toolbox/config/prod.secret.exs [/path/to/backups]/toolbox/
-```
-
-Restore:
-
-```
-TODO
-```
-
-**Nginx Config**
-
-Backup:
-
-```
-scp [user]@distributeaid.org:/etc/nginx/nginx.conf [/path/to/backups]/nginx
-
-scp -r [user]@distributeaid.org:/etc/nginx/sites-available [/path/to/backups]/nginx
-```
-
-Restore:
 
 ```
 TODO
