@@ -1,12 +1,12 @@
 import React from "react";
 import { Auth } from "aws-amplify";
-import { Button } from "./components/Button";
-import { Input } from "./components/Input";
-import { Checkbox } from "./components/Checkbox";
-import { Divider } from "./components/Divider";
+import { Button } from "../components/Button";
+import { Input } from "../components/Input";
+import { Checkbox } from "../components/Checkbox";
+import { Divider } from "../components/Divider";
 
 import Amplify from "aws-amplify";
-import amplifyConfig from "./aws-exports";
+import amplifyConfig from "../aws-exports";
 
 Amplify.configure(amplifyConfig);
 
