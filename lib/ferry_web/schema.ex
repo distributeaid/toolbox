@@ -55,7 +55,7 @@ defmodule Ferry.Schema do
   end
 
   def get_group!(_parent, %{id: id}, _resolution) do
-    {:ok, Ferry.Profiles.get_group(id)}
+    {:ok, Ferry.Profiles.get_group!(id)}
   end
 
 end
