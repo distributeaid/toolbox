@@ -14,7 +14,7 @@ defmodule FerryWeb.Plugs do
     assign(conn, :current_group, nil)
   end
 
-  def assign_chat_meta(%{assigns: %{current_user: %{id: user_id}}} = conn, _opts) do
+  def assign_chat_meta(%{assigns: %{current_user: %{id: user_id, email: email}}} = conn, _opts) do
     # If we are on a known route (e.g. shipments or groups)
     secondToLastPathElement = conn.path_info |> Enum.at(-2)
     additionalSectionsWithChat = ["shipments", "groups"]
@@ -36,6 +36,7 @@ defmodule FerryWeb.Plugs do
     token = Ferry.Token.generate_and_sign!(%{
       "contexts" => contexts, 
       "sub" => Integer.to_string(user_id),
+      "email" => email,
       "exp" => System.system_time(:second) + (60 * 60)
       }, signer)
 

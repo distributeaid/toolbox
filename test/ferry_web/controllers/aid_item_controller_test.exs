@@ -4,7 +4,7 @@ defmodule FerryWeb.AidItemControllerTest do
   setup do
     # TODO: probably don't need all this fancy, 'realistic' setup
     n = Enum.random(1..5)
-    categories = insert_list(n, :item_category)
+    categories = insert_list(n, :aid_category)
 
     n = Enum.random(1..5)
     mods = insert_list(n, :aid_mod)
@@ -110,7 +110,7 @@ defmodule FerryWeb.AidItemControllerTest do
     end
 
     test "renders errors when deletion is invalid", %{conn: conn, item: item} do
-      _entry = insert(:list_entry, %{item: item})
+      _entry = insert(:entry, %{item: item})
       conn = delete conn, Routes.aid_item_path(conn, :delete, item)
       assert redirected_to(conn) == Routes.aid_item_path(conn, :index)
 

@@ -1,538 +1,237 @@
 defmodule Ferry.AidTest do
   use Ferry.DataCase
 
+  import Ecto.Query, warn: false
+  alias Ferry.Repo
+  alias Timex
+
   alias Ferry.Aid
-  alias Ferry.Aid.Item
-  alias Ferry.Aid.ItemCategory
-  alias Ferry.Aid.Mod
+  alias Ferry.Aid.AidList
+#  alias Ferry.Aid.AvailableList
+  alias Ferry.Aid.Entry
+#  alias Ferry.Aid.ManifestList
+#  alias Ferry.Aid.ModValue
+  alias Ferry.Aid.NeedsList
 
-  # Item Category
+  # Needs List
   # ================================================================================
-  
-  describe "item categories" do
-    test "list_item_categories/0 returns all categories" do
+  # TODO: verify that list_* and get_* include entries
+
+  describe "needs list" do
+    test "list_needs_lists/3 returns all needs lists for a project that overlap a duration" do
+      project = insert(:project) |> without_assoc(:address)
+      from = Timex.today() |> Timex.shift(years: -2)
+      to = Timex.today() |> Timex.shift(years: 2)
+
       # none
-      assert Aid.list_item_categories() == []
+      assert Aid.list_needs_lists(project, from, to) == []
 
       # 1
-      category1 = insert(:item_category, %{name: "M"})
-      assert Aid.list_item_categories() == [category1]
+      list1 = insert(:needs_list, %{project: project})
+      assert Aid.list_needs_lists(project, from, to) == [list1]
 
       # many
-      category2 = insert(:item_category, %{name: "N"})
-      assert Aid.list_item_categories() == [category1, category2]
+      list2 = insert(:needs_list_after, %{project: project, to: list1.to})
+      assert Aid.list_needs_lists(project, from, to) == [list1, list2]
 
-      # ordered by name
-      last_category = insert(:item_category, %{name: "Z"})
-      first_category = insert(:item_category, %{name: "A"})
-      assert Aid.list_item_categories() == [
-        first_category,
-        category1,
-        category2,
-        last_category
+      # ordered by from date
+      last_list = insert(:needs_list_after, %{project: project, to: list2.to})
+      first_list = insert(:needs_list_before, %{project: project, from: list2.from})
+      assert Aid.list_needs_lists(project, from, to) == [
+        first_list,
+        list1,
+        list2,
+        last_list
+      ]
+
+      # includes lists that overlap with the duration (inclusive)
+      start_overlap_list = insert(:needs_list_start_overlap, %{project: project, from: from})
+      end_overlap_list = insert(:needs_list_end_overlap, %{project: project, to: to})
+      lists = Aid.list_needs_lists(project, from, to)
+      assert start_overlap_list in lists
+      assert end_overlap_list in lists
+
+      # doesn't include lists that fall outside the duration
+      before_list = insert(:needs_list_before, %{project: project, from: from})
+      after_list = insert(:needs_list_after, %{project: project, to: to})
+      lists = Aid.list_needs_lists(project, from, to)
+      refute Enum.any?(lists, &(&1.id == before_list.id))
+      refute Enum.any?(lists, &(&1.id == after_list.id))
+
+      # doesn't include needs lists from other projects
+      other_project_list = insert(:needs_list)
+      lists = Aid.list_needs_lists(project, from, to)
+      refute Enum.any?(lists, &(&1.id == other_project_list.id))
+    end
+
+    test "list_needs_lists/2 returns all needs lists for a project that overlap within 6 months of the given date" do
+      project = insert(:project) |> without_assoc(:address)
+      from = Timex.today() |> Timex.shift(months: 1)
+      to = from |> Timex.shift(months: 6)
+
+      _before_list = insert(:needs_list_before, %{project: project, from: from})
+      start_overlap_list = insert(:needs_list_start_overlap, %{project: project, from: from})
+      within_list = insert(:needs_list, %{
+        project: project,
+        from: from |> Timex.shift(months: 1),
+        to: to |> Timex.shift(months: 2)
+      })
+      end_overlap_list = insert(:needs_list_end_overlap, %{project: project, to: to})
+      _after_list = insert(:needs_list_after, %{project: project, to: to})
+
+      assert Aid.list_needs_lists(project, from) == [
+        start_overlap_list,
+        within_list,
+        end_overlap_list
       ]
     end
 
-    test "get_item_category!/1 returns the requested category" do
-      category = insert(:item_category)
-      assert Aid.get_item_category!(category.id) == category
+    test "list_needs_lists/2 returns all needs lists for a project that overlap within 6 months of today" do
+      project = insert(:project) |> without_assoc(:address)
+      from = Timex.today
+      to = from |> Timex.shift(months: 6)
 
-      # with items ordered by name
-      #
-      # NOTE: The `with_item` adds them to the category.items field in order.
-      #       This allows us to simply compare the category without having to do
-      #       additional checks to validate the category.items order.
-      #
-      #       We do, however, have to unload some associations the factory sets
-      #       by default.
-      category =
-        category
-        |> with_item(%{name: "Z"})
-        |> with_item(%{name: "A"})
-        |> with_item(%{name: "M"})
+      _before_list = insert(:needs_list_before, %{project: project, from: from})
+      start_overlap_list = insert(:needs_list_start_overlap, %{project: project, from: from})
+      within_list = insert(:needs_list, %{
+        project: project,
+        from: from |> Timex.shift(months: 1),
+        to: from |> Timex.shift(months: 2)
+      })
+      end_overlap_list = insert(:needs_list_end_overlap, %{project: project, to: to})
+      _after_list = insert(:needs_list_after, %{project: project, to: to})
 
-      items =
-        category.items
-        |> without_assoc(:category)
-        |> without_assoc(:entries, :many)
-        |> without_assoc(:mods, :many)
-
-      category = %{category | items: items}
-
-      assert Aid.get_item_category!(category.id) == category
-    end
-
-    test "get_item_category!/1 with a non-existent id throws an error" do
-      assert_raise Ecto.NoResultsError, ~r/^expected at least one result but got none in query/, fn ->
-        Aid.get_item_category!(1312)
-      end
-    end
-
-    test "create_item_category/1 with valid data creates a category" do
-      attrs = params_for(:item_category)
-      assert {:ok, %ItemCategory{} = category} = Aid.create_item_category(attrs)
-      assert category.name == attrs.name
-    end
-
-    # TODO: ensure each changeset has the right errors
-    test "create_item_category/1 with invalid data returns an error changeset" do
-      # too short
-      attrs = params_for(:invalid_short_item_category)
-      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_item_category(attrs)
-
-      # too long
-      attrs = params_for(:invalid_long_item_category)
-      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_item_category(attrs)
-    end
-
-    test "update_item_category/2 with valid data updates a category" do
-      old_category = insert(:item_category) |> with_item() |> with_item()
-      attrs = params_for(:item_category)
-
-      assert {:ok, %ItemCategory{} = category} = Aid.update_item_category(old_category, attrs)
-
-      assert category.name != old_category.name
-      assert category.name == attrs.name
-
-      # item list shouldn't change
-      assert category.items == old_category.items
-    end
-
-    # TODO: ensure each changeset has the right errors
-    test "update_item_category/2 with invalid data returns error changeset" do
-      category = insert(:item_category)
-
-      # too short
-      attrs = params_for(:invalid_short_item_category)
-      assert {:error, %Ecto.Changeset{}} = Aid.update_item_category(category, attrs)
-      assert category == Aid.get_item_category!(category.id)
-
-      # too long
-      attrs = params_for(:invalid_long_item_category)
-      assert {:error, %Ecto.Changeset{}} = Aid.update_item_category(category, attrs)
-      assert category == Aid.get_item_category!(category.id)
-    end
-
-    test "delete_item_category/1 deletes a category that isn't referenced by any list entries" do
-      # not referenced by items
-      category = insert(:item_category)
-      assert {:ok, %ItemCategory{}} = Aid.delete_item_category(category)
-      assert_raise Ecto.NoResultsError, fn -> Aid.get_item_category!(category.id) end
-
-      # referenced by items that aren't referenced by list entries
-      category = insert(:item_category) |> with_item() |> with_item()
-      assert {:ok, %ItemCategory{}} = Aid.delete_item_category(category)
-      assert_raise Ecto.NoResultsError, fn -> Aid.get_item_category!(category.id) end
-
-      # the items should be deleted as well
-      assert_raise Ecto.NoResultsError, fn -> Aid.get_item!(Enum.at(category.items, 0).id) end
-      assert_raise Ecto.NoResultsError, fn -> Aid.get_item!(Enum.at(category.items, 1).id) end
-    end
-
-    test "delete_item_category/1 doesn't delete categories that are referenced by list entries" do
-      category = insert(:item_category)
-      item = insert(:aid_item, %{category: category})
-      _entry = insert(:list_entry, %{item: item})
-
-      assert {:error, %Ecto.Changeset{}} = Aid.delete_item_category(category)
-      assert category.name == Aid.get_item_category!(category.id).name
-      assert item.name == Aid.get_item!(item.id).name
-      # TODO: getting an entry is still undefined
-      # assert entry = Aid.get_entry!(entry.id)
-    end
-  end
-
-  # Item
-  # ================================================================================
-  describe "items" do
-    test "get_item!/1 returns the requested item" do
-      # no mods
-      item = insert(:aid_item)
-      retrieved_item = Aid.get_item!(item.id)
-      assert retrieved_item ==
-        item
-        |> without_assoc([:category, :items], :many)
-        |> without_assoc(:entries, :many)
-      assert %ItemCategory{} = retrieved_item.category
-      assert retrieved_item.mods == []
-
-      # with mods preloaded in order
-      mod1 = insert(:aid_mod, %{name: "Z"}) |> without_assoc(:items, :many)
-      mod2 = insert(:aid_mod, %{name: "A"}) |> without_assoc(:items, :many)
-      mod3 = insert(:aid_mod, %{name: "M"}) |> without_assoc(:items, :many)
-      item = insert(:aid_item, %{mods: [mod1, mod2, mod3]})
-      retrieved_item = Aid.get_item!(item.id)
-      assert retrieved_item.mods == [mod2, mod3, mod1]
-    end
-
-    test "get_item!/1 with a non-existent id throws an error" do
-      assert_raise Ecto.NoResultsError, ~r/^expected at least one result but got none in query/, fn ->
-        Aid.get_item!(1312)
-      end
-    end
-
-    test "create_item/2 with valid data creates an item" do
-      category = insert(:item_category)
-
-      # simple case
-      attrs = params_for(:aid_item)
-      assert {:ok, %Item{} = item} = Aid.create_item(category, attrs)
-      assert item.name == attrs.name
-      assert item.category_id == category.id
-
-      # name can be the same across categories
-      category2 = insert(:item_category)
-      item1 = insert(:aid_item, %{name: "SAME", category: category})
-      attrs = params_for(:aid_item, %{name: "SAME", category: category2})
-      assert {:ok, %Item{} = item2} = Aid.create_item(category2, attrs)
-      assert item1.name == item2.name
-      assert item1.category != item2.category
-
-      # doesn't need mods...
-      attrs = params_for(:aid_item, %{mods: nil})
-      assert {:ok, %Item{} = item} = Aid.create_item(category, attrs)
-
-      # ... but also creates associations with mods
-      mod1 = insert(:aid_mod) |> without_assoc(:items, :many)
-      mod2 = insert(:aid_mod) |> without_assoc(:items, :many)
-      attrs = params_for(:aid_item)
-      attrs = %{attrs | mods: [mod1, mod2]}
-      assert {:ok, %Item{} = item} = Aid.create_item(category, attrs)
-      assert item.mods == [mod1, mod2]
-    end
-
-    # TODO: ensure each changeset has the right errors
-    test "create_item/2 with invalid data returns an error changeset" do
-      category = insert(:item_category)
-
-      # too short
-      attrs = params_for(:invalid_short_aid_item)
-      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_item(category, attrs)
-
-      # too long
-      attrs = params_for(:invalid_long_aid_item)
-      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_item(category, attrs)
-
-      # name must be different within a category
-      insert(:aid_item, %{name: "SAME", category: category})
-      attrs = params_for(:aid_item, %{name: "SAME", category: category})
-      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_item(category, attrs)
-    end
-
-    # TODO: test moving items to a different category
-    test "update_item/2 with valid data updates an item" do
-      old_item = insert(:aid_item)
-      attrs = params_for(:aid_item)
-
-      assert {:ok, %Item{} = item} = Aid.update_item(old_item, attrs)
-      assert item.name != old_item.name
-      assert item.name == attrs.name
-
-      # name can be the same across categories
-      category1 = insert(:item_category)
-      category2 = insert(:item_category)
-      item1 = insert(:aid_item, %{name: "SAME", category: category1})
-      item2 = insert(:aid_item, %{name: "DIFFERENT", category: category2})
-      attrs = params_for(:aid_item, %{name: "SAME", category: category2})
-      assert {:ok, %Item{} = item2} = Aid.update_item(item2, attrs)
-      assert item1.name == item2.name
-      assert item1.category != item2.category
-
-      # doesn't need mods...
-      old_item = insert(:aid_item, %{mods: []})
-      attrs = params_for(:aid_item, %{mods: nil})
-      assert {:ok, %Item{} = mod} = Aid.update_item(old_item, attrs)
-
-      # ... but also creates / deletes associations with mods
-      mod1 = insert(:aid_mod) |> without_assoc(:items, :many)
-      mod2 = insert(:aid_mod) |> without_assoc(:items, :many)
-      mod3 = insert(:aid_mod) |> without_assoc(:items, :many)
-      old_item = insert(:aid_item, %{mods: [mod1, mod2]})
-
-      attrs = params_for(:aid_item)
-      attrs = %{attrs | mods: [mod2, mod3]}
-      assert {:ok, %Item{} = item} = Aid.update_item(old_item, attrs)
-      assert item.mods == [mod2, mod3]
-    end
-
-    # TODO: ensure each changeset has the right errors
-    test "update_item/2 with invalid data returns error changeset" do
-      item = insert(:aid_item)
-      |> without_assoc([:category, :items], :many)
-      |> without_assoc(:entries, :many)
-
-      # too short
-      attrs = params_for(:invalid_short_aid_item)
-      assert {:error, %Ecto.Changeset{}} = Aid.update_item(item, attrs)
-      assert item == Aid.get_item!(item.id)
-
-      # too long
-      attrs = params_for(:invalid_long_aid_item)
-      assert {:error, %Ecto.Changeset{}} = Aid.update_item(item, attrs)
-      assert item == Aid.get_item!(item.id)
-
-      # name must be different within a category
-      category = insert(:item_category)
-      _item1 = insert(:aid_item, %{name: "SAME", category: category})
-      item2 = insert(:aid_item, %{name: "DIFFERENT", category: category})
-      |> without_assoc([:category, :items], :many)
-      |> without_assoc(:entries, :many)
-      attrs = params_for(:aid_item, %{name: "SAME", category: category})
-      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.update_item(item2, attrs)
-      assert item2 == Aid.get_item!(item2.id)
-    end
-
-    test "delete_item/1 deletes an item that isn't referenced by any list entries" do
-      # not referenced by entries
-      item = insert(:aid_item)
-      assert {:ok, %Item{}} = Aid.delete_item(item)
-      assert_raise Ecto.NoResultsError, fn -> Aid.get_item!(item.id) end
-
-      # TODO: test that associations with mods are also delete
-      #       (i.e. entries in the join table are also removed)
-      #
-      #       can possibly do this by getting a mod and ensuring that item
-      #       doesn't show up in mod.items
-    end
-
-    test "delete_item/1 doesn't delete items that are referenced by list entries" do
-      item = insert(:aid_item)
-      |> without_assoc([:category, :items], :many)
-      |> without_assoc(:entries, :many)
-
-      _entry = insert(:list_entry, %{item: item})
-
-      assert {:error, %Ecto.Changeset{}} = Aid.delete_item(item)
-      assert item == Aid.get_item!(item.id)
-      # TODO: getting an entry is still undefined
-      # assert entry = Aid.get_entry!(entry.id)
-    end
-  end
-
-  # Mod
-  # ================================================================================
-  describe "mods" do
-    test "list_mods/0 returns all mods" do
-      # none
-      assert Aid.list_mods() == []
-
-      # 1
-      mod1 = insert(:aid_mod)
-      assert Aid.list_mods() == [mod1]
-
-      # many
-      mod2 = insert(:aid_mod)
-      assert Aid.list_mods() == [mod1, mod2]
-
-      # ordered by name
-      last_mod = insert(:aid_mod, %{name: "Z"})
-      first_mod = insert(:aid_mod, %{name: "A"})
-      assert Aid.list_mods() == [
-        first_mod,
-        mod1,
-        mod2,
-        last_mod
+      assert Aid.list_needs_lists(project, from) == [
+        start_overlap_list,
+        within_list,
+        end_overlap_list
       ]
     end
 
-    test "get_mod!/1 returns the requested mod" do
-      mod = insert(:aid_mod)
-      assert Aid.get_mod!(mod.id) == mod
-
-      # with items and categories preloaded
-      items = [insert(:aid_item), insert(:aid_item)]
-      |> without_assoc(:entries, :many)
-      |> without_assoc(:mods, :many)
-      |> without_assoc([:category, :items], :many)
-      mod = insert(:aid_mod, %{items: items})
-
-      retrieved_mod = Aid.get_mod!(mod.id)
-      assert retrieved_mod == mod
-      assert length(retrieved_mod.items) == 2
+    test "get_needs_list!/1 returns the requested needs list" do
+      list = insert(:needs_list)
+      assert Aid.get_needs_list!(list.id) == list
     end
 
-    test "get_mod!/1 with a non-existent id throws an error" do
+    test "get_needs_list!/1 with a non-existent id throws an error" do
       assert_raise Ecto.NoResultsError, ~r/^expected at least one result but got none in query/, fn ->
-        Aid.get_mod!(1312)
-      end
+        Aid.get_needs_list!(1312)
+      end      
     end
 
-    test "create_mod/1 with valid data creates a mod" do
-      # integer mod
-      attrs = params_for(:aid_mod, %{type: "integer"})
-      assert {:ok, %Mod{} = mod} = Aid.create_mod(attrs)
-      assert mod.name == attrs.name
-      assert mod.description == attrs.description
-      assert mod.type == attrs.type
+    test "get_needs_list/2 returns the project's needs list for the specified date" do
+      project = insert(:project) |> without_assoc(:address)
+      from = ~D[1999-12-31]
+      to = ~D[2000-01-01]
+      list = insert(:needs_list, %{project: project, from: from, to: to})
 
-      # integer mods should never have the "values" field set
-      attrs = params_for(:aid_mod, %{type: "integer", values: ["not", "set"]})
-      assert {:ok, %Mod{} = mod} = Aid.create_mod(attrs)
-      assert mod.values == nil
+      assert Aid.get_needs_list(project, from) == list
+      assert Aid.get_needs_list(project, to) == list
 
-      # select mod
-      attrs = params_for(:aid_mod, %{type: "select"})
-      assert {:ok, %Mod{} = mod} = Aid.create_mod(attrs)
-      assert mod.name == attrs.name
-      assert mod.description == attrs.description
-      assert mod.type == attrs.type
-      assert mod.values == attrs.values
+      # other project lists covering that day are ignored
+      _another_list = insert(:needs_list, %{from: from, to: to})
+      assert Aid.get_needs_list(project, from) == list
 
-      # multi-select mod
-      attrs = params_for(:aid_mod, %{type: "multi-select"})
-      assert {:ok, %Mod{} = mod} = Aid.create_mod(attrs)
-      assert mod.name == attrs.name
-      assert mod.description == attrs.description
-      assert mod.type == attrs.type
-      assert mod.values == attrs.values
-
-      # doesn't need items...
-      attrs = params_for(:aid_mod, %{items: nil})
-      assert {:ok, %Mod{} = mod} = Aid.create_mod(attrs)
-
-      # ...but also creates association with items
-      items = [insert(:aid_item), insert(:aid_item)]
-      |> without_assoc(:entries, :many)
-      |> without_assoc(:mods, :many)
-      |> without_assoc([:category, :items], :many)
-      attrs = params_for(:aid_mod)
-      attrs = %{attrs | items: items} # TODO: handle this in the factory?
-      assert {:ok, %Mod{} = mod} = Aid.create_mod(attrs)
-      assert mod.items == items
+      # returns nil if there isn't a list
+      assert Aid.get_needs_list(project, ~D[1900-01-01]) == nil
     end
 
-    # TODO: ensure each changeset has the right errors
-    test "create_mod/1 with invalid data returns an error changeset" do
-      # too short
-      attrs = params_for(:invalid_short_aid_mod)
-      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_mod(attrs)
+    test "get_current_needs_list/1 returns the project's needs list for today" do
+      project = insert(:project) |> without_assoc(:address)
 
-      # too long
-      attrs = params_for(:invalid_long_aid_mod)
-      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_mod(attrs)
+      # returns nil if there isn't a list covering today
+      assert Aid.get_current_needs_list(project) == nil
 
-      # invalid type
-      attrs = params_for(:invalid_type_aid_mod)
-      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_mod(attrs)
+      # returns the needs list covering today
+      from = Timex.today() |> Timex.shift(weeks: -1)
+      to = Timex.today() |> Timex.shift(weeks: 1)
+      list = insert(:needs_list, %{project: project, from: from, to: to})
+      assert Aid.get_current_needs_list(project) == list
 
-      # duplicate name
-      # TODO: check unique constraints in other aid schema tests
-      insert(:aid_mod, %{name: "the same"})
-      attrs = params_for(:aid_mod, %{name: "the same"})
-      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_mod(attrs)
+      # other project lists covering today are ignored
+      _another_list = insert(:needs_list, %{from: from, to: to})
+      assert Aid.get_current_needs_list(project) == list
     end
 
-    test "update_mod/2 with valid data updates a mod" do
-      # basic fields
-      old_mod = insert(:aid_mod)
-      attrs = params_for(:aid_mod, %{type: old_mod.type, values: old_mod.values})
-
-      assert {:ok, %Mod{} = mod} = Aid.update_mod(old_mod, attrs)
-      assert mod.name != old_mod.name
-      assert mod.name == attrs.name
-      assert mod.description != old_mod.description
-      assert mod.description == attrs.description
-      assert mod.type == old_mod.type
-      assert mod.values == old_mod.values
-
-      # type change
-      old_mod = insert(:aid_mod, %{type: "select", values: ["a", "b"]})
-      attrs = params_for(:aid_mod, %{type: "multi-select", values: old_mod.values})
-
-      assert {:ok, %Mod{} = mod} = Aid.update_mod(old_mod, attrs)
-      assert mod.type != old_mod.type
-      assert mod.type == attrs.type
-
-      # values change
-      old_mod = insert(:aid_mod, %{type: "select", values: ["a", "b"]})
-      attrs = params_for(:aid_mod, %{type: old_mod.type, values: ["c" | old_mod.values]})
-
-      assert {:ok, %Mod{} = mod} = Aid.update_mod(old_mod, attrs)
-      assert mod.values != old_mod.values
-      assert mod.values == attrs.values
-      assert Enum.all?(old_mod.values, &(&1 in mod.values))
-
-      # doesn't need items...
-      old_mod = insert(:aid_mod, %{items: []})
-      attrs = params_for(:aid_mod, %{type: old_mod.type, values: old_mod.values, items: nil})
-      assert {:ok, %Mod{} = mod} = Aid.update_mod(old_mod, attrs)
-
-      # ... but also creates / deletes associations with items
-      [item1, item2, item3] =
-        [insert(:aid_item), insert(:aid_item), insert(:aid_item)]
-        |> without_assoc(:entries, :many)
-        |> without_assoc(:mods, :many)
-        |> without_assoc([:category, :items], :many)
-      old_mod = insert(:aid_mod, %{items: [item1, item2]})
-      attrs = params_for(:aid_mod, %{type: old_mod.type, values: old_mod.values})
-      attrs = %{attrs | items: [item2, item3]}
-
-      assert {:ok, %Mod{} = mod} = Aid.update_mod(old_mod, attrs)
-      assert mod.items == [item2, item3]
+    test "create_needs_list/2 with valid data creates a needs list & related aid list" do
+      project = insert(:project) |> without_assoc(:address)
+      attrs = params_for(:needs_list)
+      assert {:ok, %NeedsList{} = needs} = Aid.create_needs_list(project, attrs)
+      assert needs.from == attrs.from
+      assert needs.to == attrs.to
+      assert %AidList{} = needs.list
+      # TODO: inject normal get preloads on successful insert? and include .list in those normal preloads?
+      # assert needs.entries == []
+      # assert needs.project == project
     end
 
     # TODO: ensure each changeset has the right errors
-    test "update_mod/2 with invalid data returns error changeset" do
-      mod = insert(:aid_mod, %{type: "select"})
+    test "create_needs_list/2 with invalid data returns an error changeset" do
+      project = insert(:project) |> without_assoc(:address)
 
-      # too short
-      attrs = params_for(:invalid_short_aid_mod)
-      assert {:error, %Ecto.Changeset{}} = Aid.update_mod(mod, attrs)
-      assert mod == Aid.get_mod!(mod.id)
+      # duration
+      attrs = params_for(:invalid_duration_needs_list)
+      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_needs_list(project, attrs)
 
-      # too long
-      attrs = params_for(:invalid_long_aid_mod)
-      assert {:error, %Ecto.Changeset{}} = Aid.update_mod(mod, attrs)
-      assert mod == Aid.get_mod!(mod.id)
+      # overlap
+      needs = insert(:needs_list, %{project: project})
 
-      # invalid type
-      attrs = params_for(:invalid_type_aid_mod)
-      assert {:error, %Ecto.Changeset{}} = Aid.update_mod(mod, attrs)
-      assert mod == Aid.get_mod!(mod.id)
+      attrs = params_for(:needs_list_start_overlap, Map.from_struct(needs))
+      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_needs_list(project, attrs)
 
-      # duplicate name
-      insert(:aid_mod, %{name: "the same"})
-      old_mod = insert(:aid_mod, %{name: "different"})
-      attrs = params_for(:aid_mod, %{name: "the same", type: old_mod.type, values: old_mod.values})
-      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_mod(attrs)
-
-      # invalid type change
-      # TODO: test all change combos except select => multi-select?
-      mod = insert(:aid_mod, %{type: "integer"})
-      attrs = params_for(:aid_mod, %{type: "select"})
-      assert {:error, %Ecto.Changeset{}} = Aid.update_mod(mod, attrs)
-      assert mod == Aid.get_mod!(mod.id)
-
-      # invalid values change
-      mod = insert(:aid_mod, %{type: "select", values: ["a", "b", "c"]})
-      attrs = params_for(:aid_mod, %{type: "select", values: ["a", "b"]})
-      assert {:error, %Ecto.Changeset{}} = Aid.update_mod(mod, attrs)
-      assert mod == Aid.get_mod!(mod.id)
+      attrs = params_for(:needs_list_end_overlap, Map.from_struct(needs))
+      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.create_needs_list(project, attrs)
     end
 
-    test "delete_mod/1 deletes a mod that isn't referenced by any mod values" do
-      mod = insert(:aid_mod)
-      assert {:ok, %Mod{}} = Aid.delete_mod(mod)
-      assert_raise Ecto.NoResultsError, fn -> Aid.get_mod!(mod.id) end
+    test "update_needs_list/2 with valid data updates a needs list" do
+      old_needs = insert(:needs_list)
+      attrs = params_for(:needs_list_end_overlap, Map.from_struct(old_needs))
+      
+      assert {:ok, %NeedsList{} = needs} = Aid.update_needs_list(old_needs, attrs)
+      assert needs.from == attrs.from
+      assert needs.to == attrs.to
 
-      # TODO: test that items that reference the mod aren't deleted
-
-      # TODO: test that associations with mods are also delete
-      #       (i.e. entries in the join table are also removed)
-      #
-      #       can possibly do this by getting an mod and ensuring that mod
-      #       doesn't show up in item.mods
+      # project & aid list (& aid list entries) shouldn't change
+      assert needs.project == old_needs.project
+      assert needs.list == old_needs.list
+      assert needs.entries == old_needs.entries
     end
 
-    test "delete_mod/1 doesn't delete mods that are referenced by mod values" do
-      mod = insert(:aid_mod)
-      _mod_value = insert(:mod_value, %{mod: mod})
+    # TODO: ensure each changeset has the right errors
+    test "update_needs_list/2 with invalid data returns error changeset" do
+      project = insert(:project) |> without_assoc(:address)
+      needs = insert(:needs_list, %{project: project})
 
-      assert {:error, %Ecto.Changeset{}} = Aid.delete_mod(mod)
-      assert mod == Aid.get_mod!(mod.id)
-      # TODO: getting an entry is still undefined
-      # assert mod_value == Aid.get_mod_value!(mod_value.id)
+      # duration
+      attrs = params_for(:invalid_duration_needs_list, %{project: project})
+      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.update_needs_list(needs, attrs)
+
+      # overlap
+      _prev_needs = insert(:needs_list_before, %{project: project, from: needs.from})
+      attrs = params_for(:needs_list_start_overlap, Map.from_struct(needs))
+      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.update_needs_list(needs, attrs)
+
+      _next_needs = insert(:needs_list_after, %{project: project, to: needs.to})
+      attrs = params_for(:needs_list_end_overlap, Map.from_struct(needs))
+      assert {:error, %Ecto.Changeset{} = _changeset} = Aid.update_needs_list(needs, attrs)
+    end
+
+    test "delete_needs_list/1 deletes a needs list" do
+      needs = insert(:needs_list)
+      insert_list(3, :entry, %{list: needs.list})
+      assert {:ok, %NeedsList{}} = Aid.delete_needs_list(needs)
+      assert_raise Ecto.NoResultsError, fn -> Aid.get_needs_list!(needs.id) end
+
+      # also deletes the referenced aid list & entries
+      refute Repo.exists?(
+        from list in AidList,
+          where: list.needs_list_id == ^needs.id
+      )
+      refute Repo.exists?(
+        from entry in Entry,
+          join: list in assoc(entry, :list),
+          where: list.needs_list_id == ^needs.id
+      )
     end
   end
-
 end
