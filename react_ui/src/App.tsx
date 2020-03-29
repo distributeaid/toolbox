@@ -10,7 +10,7 @@ function App() {
   const [password, setPassword] = React.useState("");
   return (
     <div className="grid gap-5 p-5">
-      <h1 className="text-2xl">Throw away sign up / Sign in</h1>
+      <h1 className="text-2xl">Welcome</h1>
       <div className="mb">
         Sign in
         <form
@@ -40,7 +40,7 @@ function App() {
               ></input>
             </label>
 
-            <input type="submit" value="Sign in" />
+            <input type="submit" value="Submit" />
           </div>
         </form>
       </div>
