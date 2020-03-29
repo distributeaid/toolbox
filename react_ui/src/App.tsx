@@ -3,8 +3,8 @@ import "./App.css";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import SignUp from "./pages/SignUp";
-import { GroupList } from './pages/GroupList'
-import { Group } from "./pages/Group";
+import { ChapterList } from './pages/ChapterList'
+import { Chapter } from "./pages/Chapter";
 
 const App: React.FunctionComponent = () => {
   return (
@@ -18,18 +18,18 @@ const App: React.FunctionComponent = () => {
             <Link to="/sign-up">Sign up</Link>
           </li>
           <li>
-            <Link to="/groups">Group list</Link>
+            <Link to="/chapters">Group list</Link>
           </li>
         </ul>
       </nav>
       <Switch>
-        <Route path="/groups/:id" render={({ match }) => <Group id={match.params.id} />} />
-        <Route path="/groups">
-          <GroupList />
+        <Route path="/chapters">
+          <ChapterList />
         </Route>
         <Route path="/sign-up">
           <SignUp />
         </Route>
+        <Route path="/:slug" render={({ match }) => <Chapter slug={match.params.slug} />} />
         <Route path="/">
           <Home />
         </Route>
