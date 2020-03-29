@@ -1,84 +1,34 @@
 import React from "react";
 import "./App.css";
-import Amplify, { Auth } from "aws-amplify";
-import amplifyConfig from "./aws-exports";
-import { Button } from "./components/Button";
-import { Input } from "./components/Input";
-import { Checkbox } from "./components/Checkbox";
-import { Divider } from "./components/Divider";
 
-Amplify.configure(amplifyConfig);
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import SignUp from "./pages/SignUp";
 
-function App() {
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-
+const App: React.FunctionComponent = () => {
   return (
-    <>
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
-            Sign in to your account
-          </h2>
-        </div>
-
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <form
-                onSubmit={event => {
-                  event.preventDefault();
-                  Auth.signIn(username, password)
-                    .then(user => console.log(user))
-                    .catch(err => console.log(err));
-                }}
-            >
-              <Input id="email" type="email" title="Email address" onChange={(event) => setUsername(event.currentTarget.value)} />
-              <Input id="password" type="password" title="Password" onChange={(event) => setPassword(event.currentTarget.value)} />
-
-              <div className="mt-6 flex items-center justify-between">
-                <Checkbox title="Remember me" id="remember_me" />
-
-                <div className="text-sm leading-5">
-                  <a
-                    href="#"
-                    className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
-              </div>
-
-              <div className="mt-6">
-                <Button title="Sign in" />
-              </div>
-            </form>
-
-            <div className="mt-6">
-              <Divider>Or</Divider>
-            </div>
-
-            <form
-                onSubmit={event => {
-                  event.preventDefault();
-                  Auth.signUp(username, password)
-                    .then(user => console.log(user))
-                    .catch(err => console.log(err));
-                }}
-            >
-              <Input id="email" type="email" title="Email address" onChange={(event) => setUsername(event.currentTarget.value)} />
-              <Input id="password" type="password" title="Password" onChange={(event) => setPassword(event.currentTarget.value)} />
-
-              <div className="mt-6">
-                <Button title="Sign up" />
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-      <div>{username}</div>
-      <div>{password}</div>
-    </>
+    <Router>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/sign-up">Sign up</Link>
+          </li>
+        </ul>
+      </nav>
+      <Switch>
+        <Route path="/sign-up">
+          <SignUp />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+    </Router>
   );
-}
+};
+
+const Home = () => <div>Welcome Home</div>;
 
 export default App;
