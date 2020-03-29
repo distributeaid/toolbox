@@ -1,7 +1,12 @@
-defmodule Ferry.Aid.ModValueEctoType do
+defmodule Ferry.AidTaxonomy.ModValueEctoType do
   @moduledoc """
   A custom Ecto.Type to handle the polymorphc nature of ModValues.
   We essentially abuse maps to achieve this.
+
+  Even though this is only used by ModValues, it is closely tied to the
+  different types of Mods themselves and thus is part of the AidTaxonomy
+  context. For example, in order for a new Mod.type to be implemented, the
+  ModValueEctoType will need to be updated to recognize and handle it.
 
   Limitations:
 

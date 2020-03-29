@@ -1,14 +1,14 @@
 defmodule FerryWeb.AidCategoryController do
   use FerryWeb, :controller
 
-  alias Ferry.Aid
-  alias Ferry.Aid.ItemCategory
+  alias Ferry.AidTaxonomy
+  alias Ferry.AidTaxonomy.Category
 
   # Read
   # ------------------------------------------------------------
 
   def index(conn, _params) do
-    categories = Aid.list_item_categories(true)
+    categories = AidTaxonomy.list_categories(true)
     render(conn, "index.html", categories: categories)
   end
 
@@ -18,12 +18,12 @@ defmodule FerryWeb.AidCategoryController do
   # ------------------------------------------------------------
 
   def new(conn, _params) do
-    changeset = Aid.change_item_category(%ItemCategory{})
+    changeset = AidTaxonomy.change_category(%Category{})
     render(conn, "new.html", changeset: changeset)
   end
 
-  def create(conn, %{"item_category" => category_params}) do
-    case Aid.create_item_category(category_params) do
+  def create(conn, %{"category" => category_params}) do
+    case AidTaxonomy.create_category(category_params) do
       {:ok, _category} ->
         conn
         |> put_flash(:info, "Category created successfully.")
@@ -37,14 +37,14 @@ defmodule FerryWeb.AidCategoryController do
   # ------------------------------------------------------------
 
   def edit(conn, %{"id" => id}) do
-    category = Aid.get_item_category!(id)
-    changeset = Aid.change_item_category(category)
+    category = AidTaxonomy.get_category!(id)
+    changeset = AidTaxonomy.change_category(category)
     render(conn, "edit.html", changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "item_category" => category_params}) do
-    category = Aid.get_item_category!(id)
-    case Aid.update_item_category(category, category_params) do
+  def update(conn, %{"id" => id, "category" => category_params}) do
+    category = AidTaxonomy.get_category!(id)
+    case AidTaxonomy.update_category(category, category_params) do
       {:ok, _category} ->
         conn
         |> put_flash(:info, "Category updated successfully.")
@@ -58,8 +58,8 @@ defmodule FerryWeb.AidCategoryController do
   # ------------------------------------------------------------
 
   def delete(conn, %{"id" => id}) do
-    category = Aid.get_item_category!(id)
-    case Aid.delete_item_category(category) do
+    category = AidTaxonomy.get_category!(id)
+    case AidTaxonomy.delete_category(category) do
       {:ok, _category} ->
         conn
         |> put_flash(:info, "Category and #{length(category.items)} related item(s) deleted successfully.  No items were linked to any aid list entries.")

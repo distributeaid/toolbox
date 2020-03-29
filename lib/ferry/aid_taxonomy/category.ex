@@ -1,8 +1,8 @@
-defmodule Ferry.Aid.ItemCategory do
+defmodule Ferry.AidTaxonomy.Category do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Ferry.Aid.Item
+  alias Ferry.AidTaxonomy.Item
 
   schema "aid__item_categories" do
     field :name, :string

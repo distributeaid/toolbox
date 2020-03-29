@@ -1,321 +1,152 @@
 defmodule Ferry.Aid do
   @moduledoc """
   The Aid context.
-  """
 
+  This context focuses on actual representations of aid (available items, needs,
+  shipment manifests, etc).  It uses the AidTaxonomy context in order to
+  categorize and compare these representations.
+
+  It takes a list-first approach:
+
+    - TODO: describe what this means
+  """
   import Ecto.Query, warn: false
   alias Ferry.Repo
   alias Ecto.Changeset
 
-  alias Ferry.Aid.Item
-  alias Ferry.Aid.ItemCategory
-  alias Ferry.Aid.Mod
+  alias Timex
 
-  # Item Category
+  alias Ferry.Aid.AidList
+  alias Ferry.Aid.NeedsList
+  alias Ferry.Profiles.Project
+
+  # Needs List
   # ================================================================================
+  # NOTE: The needs lists for a project shouldn't overlap.  In other words,
+  #       a project should only have 1 needs list that spans a given day.
+  #
+  # TODO: how to add / update / delete entries? handle that generally w/ AidList functions?
 
-  # TODO: test that items are ordered by name
-  # TODO: test with_mods? == true
-  def list_item_categories(with_mods? \\ false) do
-    item_category_query(with_mods?)
-    |> Repo.all()
+  # Defaults to a 6 month duration (today => 6 months from now).
+  #
+  # Includes any needs list that overlaps with the duration (inclusive), even if
+  # they begin or end outside of it.
+  def list_needs_lists(%Project{} = project, %Date{} = from, %Date{} = to) do
+    query =
+      from [needs_list, proj] in needs_list_query(),
+        where: proj.id == ^project.id and
+               needs_list.from <= ^to and
+               needs_list.to >= ^from
+    
+    Repo.all(query)
   end
 
-  # TODO: test with_mods? == true
-  def get_item_category!(id, with_mods? \\ false) do
-    item_category_query(with_mods?)
+  def list_needs_lists(%Project{} = project, %Date{} = from) do
+    # TODO: probably want 5 months > end of month
+    #       OR make from inclusive and to exclusive, ie [from, to)
+    to = Timex.shift(from, months: 6)
+    list_needs_lists(project, from, to)
+  end
+
+  def list_needs_lists(%Project{} = project) do
+    list_needs_lists(project, Timex.today())
+  end
+
+  # TODO: useful to have project independent list_ functions?
+  #       EX: list_needs_lists(%Date{} = from, %Date{} = to)
+  #           list_needs_lists(%Date{} = on)
+  #           list_current_needs_lists()
+  #
+  # TODO: or generalized ones with optional search parameters?
+  #       EX: list_needs_lists(%{project, from, to, contains item, above/below amount, etc})
+
+  # ------------------------------------------------------------
+
+  def get_needs_list!(id) do
+    needs_list_query()
     |> Repo.get!(id)
   end
 
-  # TODO: create_or_get?
-  def create_item_category(attrs \\ %{}) do
-    %ItemCategory{}
-    |> ItemCategory.changeset(attrs)
+  def get_needs_list(%Project{} = project, %Date{} = on) do
+    query =
+      from [needs_list, proj] in needs_list_query(),
+        where: proj.id == ^project.id and
+               needs_list.from <= ^on and
+               needs_list.to >= ^on
+
+    Repo.one(query)
+  end
+
+  def get_current_needs_list(%Project{} = project) do
+    # TODO: probably want to choose 'today' in the user's local timezone instead of utc
+    get_needs_list(project, Timex.today)
+  end
+
+  # ------------------------------------------------------------
+
+  # TODO: inject normal preloads after successful insert- entries & project?
+  def create_needs_list(%Project{} = project, attrs \\ %{}) do
+    %NeedsList{project_id: project.id}
+    |> NeedsList.changeset(attrs, &has_overlap?/1)
+    |> Changeset.put_assoc(:list, %AidList{entries: []})
     |> Repo.insert()
   end
 
-  def update_item_category(%ItemCategory{} = category, attrs \\ %{}) do
-    category
-    |> ItemCategory.changeset(attrs)
+  def update_needs_list(%NeedsList{} = list, attrs \\ %{}) do
+    list
+    |> NeedsList.changeset(attrs, &has_overlap?/1)
     |> Repo.update()
   end
 
-  # Categories can ONLY be deleted when:
-  #
-  #   - The Category doesn't reference any Items.
-  #   - The Category references Items, but they aren't referenced by Entries.
-  #     In this case all the Items will be deleted, but Mods referenced by the
-  #     Item will be left as is (even if that's the only Item referencing them).
-  #
-  # Categories CANNOT be deleted when:
-  #
-  #   - The Category references Items which are referenced by Entries.
-  #     Categories are controlled by site admins, and an admin action should not
-  #     affect user data in such a sweeping way.  It'd be too easy to
-  #     unintentionally wipe a lot of Entries off of lists, and usage is a good
-  #     indication that the Category is needed.
-  #
-  # This policy is enforced at the database level, by setting appropriate values
-  # for the reference's :on_delete option in a migration.
-  #
-  # TODO: Add ability to archive Categories & Items, so existing Entries are
-  #       unaffected but the Category / Items can't be selected for new Entries.
-  def delete_item_category(%ItemCategory{} = category) do
-    category
-    # TODO: ItemCategory.delete_changeset that only checks fkey constraints?
-    |> ItemCategory.changeset() # handle db constraint errors as changeset errors
+  def delete_needs_list(%NeedsList{} = list) do
+    list
+    # TODO: maybe run the changeset to handle db constraint errors
     |> Repo.delete()
   end
 
-  # TODO: test
-  def change_item_category(%ItemCategory{} = category) do
-    ItemCategory.changeset(category, %{})
+  # ------------------------------------------------------------
+
+  def change_needs_list(%NeedsList{} = list) do
+    NeedsList.changeset(list, %{})
   end
 
   # Helpers
   # ------------------------------------------------------------
 
-  defp item_category_query(false) do
-    from category in ItemCategory,
-      left_join: item in assoc(category, :items),
-      order_by: [category.name, item.name],
-      preload: [items: item]
-  end
+  # TODO: include .list field in preloads?
+  defp needs_list_query() do
+    from needs_list in NeedsList,
+      join: project in assoc(needs_list, :project),
+      join: group in assoc(project, :group),
 
-  defp item_category_query(true) do
-    from category in ItemCategory,
-      left_join: item in assoc(category, :items),
-      left_join: mod in assoc(item, :mods),
-      order_by: [category.name, item.name, mod.name],
-      preload: [items: {item, mods: mod}]
-  end
+      left_join: entries in assoc(needs_list, :entries),
 
-  # Item
-  # ================================================================================
+      order_by: needs_list.from,
 
-  # NOTE: No `list_items()` because we always want them to be organized by
-  #       category.  Use `list_item_categories()` instead.
-
-  def get_item!(id) do
-    item_query()
-    |> Repo.get!(id)
-  end
-
-  def create_item(%ItemCategory{} = category, attrs \\ %{}) do
-    mods = get_item_mods(attrs)
-
-    Ecto.build_assoc(category, :items)
-    |> Item.changeset(attrs)
-    |> Changeset.put_assoc(:mods, mods)
-    |> Repo.insert()
-  end
-
-  # NOTE: Can't change the Category (Item.changeset doesn't cast `:category_id`).
-  # TODO: Do we want this?  Here or explicitly in a "move_category" function?
-  def update_item(%Item{} = item, attrs \\ %{}) do
-    mods = get_item_mods(attrs)
-
-    item
-    |> Repo.preload(:mods)
-    |> Item.changeset(attrs)
-    |> Changeset.put_assoc(:mods, mods)
-    |> Repo.update()
-  end
-
-  # Mods referenced by the Item will be left as is (even if that's the only Item
-  # referencing them).
-  #
-  # Items can ONLY be deleted when:
-  #
-  #   - The Item doesn't reference any Entries.
-  #
-  # Items CANNOT be deleted when:
-  #
-  #   - Items are referenced by Entries.
-  #     Items are controlled by site admins, and an admin action should not
-  #     affect user data in such a sweeping way.  It'd be too easy to
-  #     unintentionally wipe a lot of Entries off of lists, and usage is a good
-  #     indication that the Item is needed.
-  #
-  # This policy is enforced at the database level, by setting appropriate values
-  # for the reference's :on_delete option in a migration.
-  #
-  # TODO: Add ability to archive Categories & Items, so existing Entries are
-  #       unaffected but the Category / Items can't be selected for new Entries.
-  def delete_item(%Item{} = item) do
-    item
-    # TODO: Item.delete_changeset that only checks fkey constraints?
-    |> Item.changeset() # handle db constraint errors as changeset errors
-    |> Repo.delete()
-  end
-
-  # TODO: test
-  def change_item(%Item{} = item) do
-    Item.changeset(item, %{})
-  end
-
-  # Helpers
-  # ------------------------------------------------------------
-
-  defp item_query() do
-    from item in Item,
-      join: category in assoc(item, :category),
-      left_join: mod in assoc(item, :mods),
-      order_by: [category.name, item.name, mod.name],
       preload: [
-        category: category,
-        mods: mod
+        project: {project, group: group},
+        entries: entries
       ]
   end
 
-  # from server data: mods = [%{id: 4}, ...]
-  #                   mods = [%Mod{id: 4}, ...]
-  # NOTE: Should we check if mods is a list of %Mod{} structs and return that
-  #       directly instead of looking them up again?
-  defp get_item_mods(%{mods: mods}) do
-    mods
-    |> Enum.map(&(&1.id))
-    |> get_item_mods()
-  end
-
-  # from client data: mods = [%{"id" => "4"}, ...]
-  defp get_item_mods(%{"mods" => mods}) do
-    mods
-    |> Enum.map(&(&1["id"] |> String.to_integer()))
-    |> get_item_mods()
-  end
-
-  # no mods passed in
-  defp get_item_mods(attrs) when is_map(attrs) do
-    []
-  end
-
-  # mod_ids = [4, ...]
-  defp get_item_mods(mod_ids) when is_list(mod_ids) do
+  defp has_overlap?(%NeedsList{} = needs) do
     query =
-      from mod in Mod,
-        where: mod.id in ^mod_ids
+      from needs_list in NeedsList,
+        where: needs_list.project_id == ^needs.project_id and
+               needs_list.from <= ^needs.to and
+               needs_list.to >= ^needs.from
 
-    Repo.all(query)
-  end
-
-  # Mod
-  # ================================================================================
-
-  def list_mods() do
-    mod_query()
-    |> Repo.all()
-  end
-
-  def get_mod!(id) do
-    mod_query()
-    |> Repo.get!(id)
-  end
-
-  def create_mod(attrs \\ %{}) do
-    items = get_mod_items(attrs)
-
-    %Mod{}
-    |> Mod.create_changeset(attrs)
-    |> Changeset.put_assoc(:items, items)
-    |> Repo.insert()
-  end
-
-  # NOTE: Only non-destructive updates are allowed.  Similar reasoning to the
-  #       delete_mod restrictions.
-  #
-  #   - Can only change mod.type from "select" to "multi-select".
-  #   - Can only extend the list of values, not remove existing ones.
-  #
-  # TODO:
-  #
-  #   - allow changing anything if there are no ModValues
-  #   - allow changing the type from "multi-select" to "select" if all
-  #     associated ModValues only have 1 value selected
-  #   - allow renaming / merging values (probably in another function)
-  #   - allow removing values that aren't used in any ModValue
-  def update_mod(%Mod{} = mod, attrs \\ %{}) do
-    items = get_mod_items(attrs)
-
-    mod
-    |> Repo.preload(:items)
-    |> Mod.update_changeset(attrs)
-    |> Changeset.put_assoc(:items, items)
-    |> Repo.update()
-  end
-
-  # Items referenced by the Mod will be left as is.
-  # 
-  # Mods can ONLY be deleted when:
-  #
-  #   - The Mod isn't referenced by any ModValues.
-  #
-  # Mods CANNOT be deleted when:
-  #
-  #   - ModValues reference the Mod.
-  #     Mods are controlled by site admins, and an admin action should not
-  #     affect user data in such a sweeping way.  It'd be too easy to
-  #     unintentionally wipe a lot of ModValues off of Entries, and usage is a
-  #     good indication that the Item is needed.
-  #
-  # This policy is enforced at the database level, by setting appropriate values
-  # for the reference's :on_delete option in a migration.
-  #
-  # TODO: Add ability to archive Mods, so existing ModValues are unaffected but
-  #       new ModValues referencing the Mod can't be created.
-  def delete_mod(%Mod{} = mod) do
-    mod
-    # TODO: Mod.delete_changeset that only checks fkey constraints?
-    |> Mod.update_changeset() # handle db constraint errors as changeset errors
-    |> Repo.delete()
-  end
-
-  # TODO: test
-  def change_mod(%Mod{} = mod) do
-    Mod.update_changeset(mod, %{})
-  end
-
-  # Helpers
-  # ------------------------------------------------------------
-  defp mod_query() do
-    from mod in Mod,
-      left_join: item in assoc(mod, :items),
-      left_join: category in assoc(item, :category),
-      order_by: [mod.name, category.name, item.name],
-      preload: [items: {item, category: category}]
-  end
-
-  # from server data: items = [%{id: 4}, ...]
-  #                   items = [%Item{id: 4}, ...]
-  # NOTE: Should we check if items is a list of %Item{} structs and return that
-  #       directly instead of looking them up again?
-  defp get_mod_items(%{items: items}) do
-    items
-    |> Enum.map(&(&1.id))
-    |> get_mod_items()
-  end
-
-  # from client data: items = [%{"id" => "4"}, ...]
-  defp get_mod_items(%{"items" => items}) do
-    items
-    |> Enum.map(&(&1["id"] |> String.to_integer()))
-    |> get_mod_items()
-  end
-
-  # no items passed in
-  defp get_mod_items(attrs) when is_map(attrs) do
-    []
-  end
-
-  # item_ids = [4, ...]
-  defp get_mod_items(item_ids) when is_list(item_ids) do
+    # if the needs list has an id (exists in the DB), then don't check it
+    # against itself for an overlap
     query =
-      from item in Item,
-        where: item.id in ^item_ids,
-        left_join: category in assoc(item, :category),
-        preload: [category: category]
+      if needs.id == nil do
+        query
+      else
+        from [needs_list] in query,
+          where: needs_list.id != ^needs.id
+      end
 
-    Repo.all(query)
+    Repo.exists?(query)
   end
 
 end
