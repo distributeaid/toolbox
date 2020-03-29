@@ -11,6 +11,14 @@ function App() {
   return (
     <div className="grid gap-5 p-5">
       <h1 className="text-2xl">Welcome</h1>
+      <div>Step 1: create an account</div>
+      <div>Step 2: check your email, get the code</div>
+      <div>Step 3: Enter the verification code in the form below</div>
+      <div>Step 4: Sign in</div>
+      <div>
+        (This is not the real process... Proof of concept to get auth between
+        front / backend)
+      </div>
       <div className="mb">
         Sign in
         <form
@@ -77,10 +85,51 @@ function App() {
           </div>
         </form>
       </div>
+      <ConfirmEmail></ConfirmEmail>
       <div>{username}</div>
       <div>{password}</div>
     </div>
   );
 }
+
+const ConfirmEmail = () => {
+  const [username, setUsername] = React.useState("");
+  const [verificationCode, setVerificationCode] = React.useState("");
+  return (
+    <div>
+      Verify with code from email
+      <form
+        onSubmit={event => {
+          event.preventDefault();
+          Auth.confirmSignUp(username, verificationCode)
+            .then(user => console.log(user))
+            .catch(err => console.log(err));
+        }}
+      >
+        <div className="grid">
+          <label>
+            Email
+            <input
+              className="border"
+              name="username"
+              onChange={event => setUsername(event.currentTarget.value)}
+            ></input>
+          </label>
+          <label>
+            Verification code (check email)
+            <input
+              className="border"
+              onChange={event => setVerificationCode(event.currentTarget.value)}
+              type="text"
+              name="verification-code"
+            ></input>
+          </label>
+
+          <input type="submit" value="Verify" />
+        </div>
+      </form>
+    </div>
+  );
+};
 
 export default App;
