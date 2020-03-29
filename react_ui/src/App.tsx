@@ -3,6 +3,7 @@ import "./App.css";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import SignUp from "./pages/SignUp";
+import { GroupList } from './pages/GroupList'
 
 const App: React.FunctionComponent = () => {
   return (
@@ -15,9 +16,15 @@ const App: React.FunctionComponent = () => {
           <li>
             <Link to="/sign-up">Sign up</Link>
           </li>
+          <li>
+            <Link to="/groups">Group list</Link>
+          </li>
         </ul>
       </nav>
       <Switch>
+        <Route path="/groups">
+          <GroupList />
+        </Route>
         <Route path="/sign-up">
           <SignUp />
         </Route>
