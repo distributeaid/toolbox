@@ -13,7 +13,7 @@ RUN apt-get update && \
     curl -sSLO https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb && \
     dpkg -i erlang-solutions_2.0_all.deb && \
     curl -sSL https://deb.nodesource.com/setup_13.x | bash - && \
-    apt-get install -y esl-erlang elixir imagemagick nodejs inotify-tools build-essential && \
+    apt-get install -y esl-erlang=1:21.3.8.14-1 elixir=1.9.4-1 imagemagick nodejs inotify-tools build-essential && \
     echo "\033[0;34mErlang release:\033[0m \033[0;32m" $(erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().'  -noshell) "\033[0m" && \
     echo "\033[0;34mNode version:\033[0m \033[0;32m" $(node --version) "\033[0m" && \
     echo "\033[0;34mNPM version:\033[0m \033[0;32m" $(npm --version) "\033[0m" && \
