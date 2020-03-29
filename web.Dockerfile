@@ -6,7 +6,7 @@ ENV LC_ALL en_US.UTF-8
 
 # install packages
 RUN apt-get update && \
-    apt-get -y -q install curl gnupg2 locales && \
+    apt-get -y -q install curl gnupg2 locales git && \
     sed -i -e 's/# \(en_US\.UTF-8 .*\)/\1/' /etc/locale.gen && \
     locale-gen && \
     locale && \
