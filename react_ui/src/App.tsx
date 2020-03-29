@@ -11,6 +11,14 @@ function App() {
   return (
     <div className="grid gap-5 p-5">
       <h1 className="text-2xl">Welcome</h1>
+      <div>Step 1: create an account</div>
+      <div>Step 2: check your email, get the code</div>
+      <div>Step 3: Enter the verification code in the form below</div>
+      <div>Step 4: Sign in</div>
+      <div>
+        (This is not the real process... Proof of concept to get auth between
+        front / backend)
+      </div>
       <div className="mb">
         Sign in
         <form
