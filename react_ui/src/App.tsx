@@ -4,6 +4,7 @@ import "./App.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import SignUp from "./pages/SignUp";
 import { GroupList } from './pages/GroupList'
+import { Group } from "./pages/Group";
 
 const App: React.FunctionComponent = () => {
   return (
@@ -22,6 +23,7 @@ const App: React.FunctionComponent = () => {
         </ul>
       </nav>
       <Switch>
+        <Route path="/groups/:id" render={({ match }) => <Group id={match.params.id} />} />
         <Route path="/groups">
           <GroupList />
         </Route>

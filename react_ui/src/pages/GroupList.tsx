@@ -41,7 +41,7 @@ export const GroupItem: React.FC<{ group: Group }> = ({ group }) => {
   return (
     <li>
       <a
-        href="#"
+        href={`/groups/${group.id}`}
         className="block hover:bg-gray-50 focus:outline-none focus:bg-gray-50 transition duration-150 ease-in-out"
       >
         <div className="px-4 py-4 sm:px-6">
