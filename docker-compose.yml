@@ -32,7 +32,6 @@ services:
     build:
       context: .
       dockerfile: web.Dockerfile
-      target: build-env
     command: [
       "/app/development/wait-for-it.sh", 
       "db:5432", 
