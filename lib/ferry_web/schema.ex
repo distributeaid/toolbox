@@ -2,8 +2,10 @@ defmodule Ferry.Schema do
   use Absinthe.Schema
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
-  # import_types Ferry.Schema.DataTypes
 
+  # GROUPS
+  # ================================================================================
+  
   # Objects
   # ------------------------------------------------------------
   
@@ -43,9 +45,26 @@ defmodule Ferry.Schema do
     @desc "Get a group"
     field :group, :group do
       arg :id, non_null(:id)
-      resolve &get_group!/3
+      resolve &get_group/3
     end
   end
+
+  # Mutuations
+  # ------------------------------------------------------------
+
+  mutation do
+
+    @desc "Create a group"
+    field :create_group, type: :group do
+      arg :name, non_null(:string)
+      arg :description, non_null(:string)
+      resolve &create_group/3
+    end
+
+  end
+
+
+
 
   # Resolvers
   # ------------------------------------------------------------
@@ -54,8 +73,15 @@ defmodule Ferry.Schema do
     {:ok, Ferry.Profiles.list_groups()}
   end
 
-  def get_group!(_parent, %{id: id}, _resolution) do
-    {:ok, Ferry.Profiles.get_group!(id)}
+  def get_group(_parent, %{id: id}, _resolution) do
+    case Ferry.Profiles.get_group(id) do
+      nil -> {:error, message: "Group not found.", id: id}
+      group -> {:ok, group}
+    end
+  end
+
+  def create_group(_parent, args, _resolution) do
+    Ferry.Profiles.create_group(args)
   end
 
 end

@@ -2,7 +2,10 @@ defmodule Ferry.GroupTest do
   use FerryWeb.ConnCase, async: true
 
 
-  # List Groups
+  # GROUPS
+  # ================================================================================
+
+  # Queries
   # ------------------------------------------------------------
   
   test "get all groups - none", %{conn: conn} do
@@ -58,7 +61,7 @@ defmodule Ferry.GroupTest do
         "name" => group.name,
         "description" => group.description
       }
-    end)
+    end)    
 
     query = """
     {
@@ -78,10 +81,7 @@ defmodule Ferry.GroupTest do
     assert res == %{"data" => %{"groups" => groups_params}}
   end
 
-
-  # Get Groups
-  # ------------------------------------------------------------
-  test "get a groups - found", %{conn: conn} do
+  test "get a group - found", %{conn: conn} do
     group = insert(:group)
     group_params = %{
       "id" => Integer.to_string(group.id),
@@ -107,10 +107,10 @@ defmodule Ferry.GroupTest do
     assert res == %{"data" => %{"group" => group_params}}
   end
 
-  test "get all groups - no group", %{conn: conn} do
+  test "get a group - no group", %{conn: conn} do
     query = """
     {
-      groups {
+      group(id: 161) {
         id,
         name,
         description
@@ -123,8 +123,44 @@ defmodule Ferry.GroupTest do
       |> post("/api", %{query: query})
       |> json_response(200)
 
-    assert res == %{"data" => %{"groups" => []}}
+    assert res == %{
+      "data" => %{"group" => nil},
+      "errors" => [%{
+        "id" => "161",
+        "locations" => [%{"column" => 0, "line" => 2}],
+        "message" => "Group not found.",
+        "path" => ["group"]
+      }]
+    }
   end
+
+  # Mutations
+  # ------------------------------------------------------------
+
+  test "create a group - success", %{conn: conn} do
+    group_attrs = params_for(:group)
+
+    mutation = """
+      mutation {
+        createGroup(name: "#{group_attrs.name}", description: "#{group_attrs.description}") {
+          id,
+          name,
+          description
+        }
+      }
+    """
+
+    res =
+      conn
+      |> post("/api", %{query: mutation})
+      |> json_response(200)
+
+    %{"data" => %{"createGroup" => %{"id" =>  id, "name" => name, "description" => description}}} = res
+    assert id
+    assert name == group_attrs.name
+    assert description == group_attrs.description
+  end
+
 
 
 end
