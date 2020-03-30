@@ -1,6 +1,8 @@
 defmodule Ferry.GroupTest do
   use FerryWeb.ConnCase, async: true
 
+  alias Ferry.Profiles
+
 
   # GROUPS
   # ================================================================================
@@ -161,6 +163,48 @@ defmodule Ferry.GroupTest do
     assert description == group_attrs.description
   end
 
+  test "update a group - success", %{conn: conn} do
+    group = insert(:group)
+    updates = params_for(:group)
 
+    mutation = """
+      mutation {
+        updateGroup(id: #{group.id}, description: "#{group.description}") {
+          id,
+          name,
+          description
+        }
+      }
+    """
+
+    res =
+      conn
+      |> post("/api", %{query: mutation})
+      |> json_response(200)
+
+    %{"data" => %{"updateGroup" => %{"id" => id, "name" => name, "description" => description}}} = res
+    assert id == Integer.to_string(group.id)
+    assert name == group.name
+    assert description == updates.description
+  end
+
+  test "delete a group - success", %{conn: conn} do
+    group = insert(:group)
+
+    mutation = """
+      mutation {
+        deleteGroup(id: #{group.id}) {
+          id
+        }
+      }
+    """
+
+    _res =
+      conn
+      |> post("/api", %{query: mutation})
+      |> json_response(200)
+
+    assert Profiles.get_group(group.id) == nil
+  end
 
 end
