@@ -40,7 +40,7 @@ config :phoenix, :json_library, Jason
 # Configure modules which can be overridden in test.exs by mocks for testing.
 config :ferry, :geocoder, Ferry.Locations.Geocoder.Nominatim
 
-config :ferry, :jwt, 
+config :ferry, :jwt,
   keyId: "12599b51-11b7-4c45-8f8a-a2bd1a6c5745",
   privateKey: """
               -----BEGIN EC PRIVATE KEY-----

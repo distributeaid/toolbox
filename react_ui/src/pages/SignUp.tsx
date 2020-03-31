@@ -94,8 +94,18 @@ const SignUp = () => {
             </form>
           </div>
         </div>
+        <button
+          onClick={() => {
+            Auth.signOut({ global: true })
+              .then(data => console.log("signed out", data))
+              .catch(err => console.log("signed out error", err));
+          }}
+        >
+          Sign out
+        </button>
         <ConfirmEmail></ConfirmEmail>
       </div>
+
       <div>{username}</div>
       <div>{password}</div>
     </>
