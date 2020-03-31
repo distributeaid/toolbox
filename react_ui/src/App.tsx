@@ -3,6 +3,8 @@ import "./App.css";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import SignUp from "./pages/SignUp";
+import { ChapterList } from './pages/ChapterList'
+import { Chapter } from "./pages/Chapter";
 import StyleGuide from "./pages/StyleGuide";
 
 const App: React.FunctionComponent = () => {
@@ -17,17 +19,27 @@ const App: React.FunctionComponent = () => {
           <li>
             <Link to="/sign-up">Sign up</Link>
           </li>
+
+          <li>
+            <Link to="/chapters">Group list</Link>
+          </li>
         </ul>
       </nav>
 
       <Switch>
-        <Route path="/style-guide">
-          <StyleGuide />
+        <Route path="/chapters">
+          <ChapterList />
         </Route>
 
         <Route path="/sign-up">
           <SignUp />
         </Route>
+
+        <Route path="/style-guide">
+          <StyleGuide />
+        </Route>
+
+        <Route path="/:slug" render={({ match }) => <Chapter slug={match.params.slug} />} />
 
         <Route path="/">
           <Home />
