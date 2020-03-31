@@ -96,6 +96,18 @@ defmodule Ferry.Factory do
     without_assoc([struct], [field], cardinality) |> hd()
   end
 
+  def string_keys_to_atoms(string_key_map) when is_map(string_key_map) do
+    for {key, val} <- string_key_map,
+      into: %{},
+      do: {String.to_atom(key), val}
+  end
+
+  def atom_keys_to_strings(atom_key_map) when is_map(atom_key_map) do
+    for {key, val} <- Map.to_list(atom_key_map),
+      into: %{},
+      do: {Atom.to_string(key), val}
+  end
+
 
   # ExMachina Factories
   # ==============================================================================
