@@ -98,10 +98,10 @@ defmodule FerryWeb.Router do
 
     forward "/graphiql",
             Absinthe.Plug.GraphiQL,
-            schema: Ferry.Schema
+            schema: FerryApi.Schema
 
     forward "/",
             Absinthe.Plug,
-            schema: Ferry.Schema
+            schema: FerryApi.Schema
   end
 end

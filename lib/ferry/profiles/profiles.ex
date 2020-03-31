@@ -46,6 +46,11 @@ defmodule Ferry.Profiles do
     Repo.get!(Group, id)
   end
 
+  def get_group(id) do
+    Repo.get(Group, id)
+  end
+
+
   @doc """
   Creates a group.
 
