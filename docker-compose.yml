@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 services:
   db:
     image: "postgres:${DA_POSTGRES_VERSION}"
@@ -33,12 +33,13 @@ services:
       context: .
       dockerfile: web.Dockerfile
       target: build-env
-    command: [
-      "/app/development/wait-for-it.sh", 
-      "db:5432", 
-      "--", 
-      "/app/development/web-entrypoint.sh"
-    ]
+    command:
+      [
+        "/app/development/wait-for-it.sh",
+        "db:5432",
+        "--",
+        "/app/development/web-entrypoint.sh",
+      ]
     container_name: toolbox_web
     volumes:
       - ./:/app
@@ -54,6 +55,8 @@ services:
       - DB_HOSTNAME_DEV=${DA_DB_HOSTNAME_DEV}
       - DB_HOSTNAME_TEST=${DA_DB_HOSTNAME_TEST}
       - DB_PORT=5432
+    env_file:
+      - .env.secret
     depends_on:
       - db
       - dbtest
