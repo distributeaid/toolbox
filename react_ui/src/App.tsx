@@ -3,6 +3,7 @@ import "./App.css";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import SignUp from "./pages/SignUp";
+import StyleGuide from "./pages/StyleGuide";
 
 const App: React.FunctionComponent = () => {
   return (
@@ -12,15 +13,22 @@ const App: React.FunctionComponent = () => {
           <li>
             <Link to="/">Home</Link>
           </li>
+
           <li>
             <Link to="/sign-up">Sign up</Link>
           </li>
         </ul>
       </nav>
+
       <Switch>
+        <Route path="/style-guide">
+          <StyleGuide />
+        </Route>
+
         <Route path="/sign-up">
           <SignUp />
         </Route>
+
         <Route path="/">
           <Home />
         </Route>
