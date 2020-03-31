@@ -11,7 +11,7 @@ export const Checkbox: React.FC<Props> = ({ title, id, onChange }) => (
     <input
       id={id}
       type="checkbox"
-      className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+      className="form-checkbox h-4 w-4 text-black transition duration-150 ease-in-out"
       onChange={onChange}
     />
     <label
