@@ -63,5 +63,3 @@ config :ferry, Ferry.Repo,
   database: System.get_env("POSTGRES_DB"),
   hostname: System.get_env("DB_HOSTNAME_DEV"),
   pool_size: 10
-
-import_config "dev.secret.exs"

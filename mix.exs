@@ -67,10 +67,7 @@ defmodule Ferry.Mixfile do
 
       # aws
       {:ex_aws, "~> 2.1"},
-      {:ex_aws_s3, "~> 2.0"},
       {:hackney, "~> 1.9"},
-      {:sweet_xml, "~> 0.6"},
-      {:configparser_ex, "~> 4.0"},
 
       # authentication
       {:bcrypt_elixir, "~> 1.0"},
