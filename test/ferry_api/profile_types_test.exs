@@ -7,9 +7,45 @@ defmodule Ferry.GroupTest do
   # GROUPS
   # ================================================================================
 
-  # Queries
+  # Query - Count Groups
   # ------------------------------------------------------------
-  
+
+  test "count groups - none", %{conn: conn} do
+    query = """
+    {
+      countGroups
+    }
+    """
+
+    res =
+      conn
+      |> post("/api", %{query: query})
+      |> json_response(200)
+
+    %{"data" => %{"countGroups" => count}} = res
+    assert count == 0    
+  end
+
+  test "count groups - many", %{conn: conn} do
+    groups = insert_list(3, :group)
+
+    query = """
+    {
+      countGroups
+    }
+    """
+
+    res =
+      conn
+      |> post("/api", %{query: query})
+      |> json_response(200)
+
+    %{"data" => %{"countGroups" => count}} = res
+    assert count == 3
+  end
+
+  # Query - Get All Groups
+  # ------------------------------------------------------------  
   test "get all groups - none", %{conn: conn} do
     query = """
     {
@@ -83,6 +119,8 @@ defmodule Ferry.GroupTest do
     assert res == %{"data" => %{"groups" => groups_params}}
   end
 
+  # Query - Get A Group
+  # ------------------------------------------------------------  
   test "get a group - found", %{conn: conn} do
     group = insert(:group)
     group_params = %{
@@ -136,9 +174,8 @@ defmodule Ferry.GroupTest do
     }
   end
 
-  # Mutations
+  # Mutation - Create A Group
   # ------------------------------------------------------------
-
   test "create a group - success", %{conn: conn} do
     group_attrs = params_for(:group)
 
@@ -163,6 +200,8 @@ defmodule Ferry.GroupTest do
     assert description == group_attrs.description
   end
 
+  # Mutation - Update A Group
+  # ------------------------------------------------------------
   test "update a group - success", %{conn: conn} do
     group = insert(:group)
     updates = params_for(:group)
@@ -188,6 +227,8 @@ defmodule Ferry.GroupTest do
     assert description == updates.description
   end
 
+  # Delete A Group
+  # ------------------------------------------------------------
   test "delete a group - success", %{conn: conn} do
     group = insert(:group)
 
