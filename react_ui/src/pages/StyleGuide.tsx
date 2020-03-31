@@ -5,7 +5,7 @@ import { Checkbox } from "../components/Checkbox";
 import { Divider } from "../components/Divider";
 
 const StyleGuide: React.FC = () => (
-  <div className="m-10">
+  <div className="grid gap-4 m-4">
     <Divider outerClasses="m-4">A Divider, margin: m-4</Divider>
 
     <Button title="Default Button" />
