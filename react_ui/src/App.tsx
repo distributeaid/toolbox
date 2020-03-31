@@ -19,10 +19,6 @@ const App: React.FunctionComponent = () => {
           <li>
             <Link to="/style-guide">Style guide</Link>
           </li>
-
-          <li>
-            <Link to="/chapters">Chapter Directory</Link>
-          </li>
         </ul>
       </nav>
 
