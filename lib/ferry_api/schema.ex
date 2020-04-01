@@ -2,7 +2,6 @@ defmodule FerryApi.Schema do
   use Absinthe.Schema
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
-
   # Types
   # ------------------------------------------------------------
 
@@ -25,7 +24,11 @@ defmodule FerryApi.Schema do
 
     import_fields :group_queries
 
-    import_fields :session_queries
+    @desc "Get current users session"
+    field :session, :session do
+      arg :access_token, non_null(:string)
+      resolve &get_session/3
+    end
   end
 
   # Mutuations
@@ -37,4 +40,13 @@ defmodule FerryApi.Schema do
 
   end
 
+  def get_session(_parent, %{access_token: access_token}, _resolution) do
+    access_token
+    |> Ferry.Cognito.get_user
+    |> ExAws.request
+    |> case do
+      {:ok, _} -> {:ok, %{id: "me"}}
+      _ -> {:error, message: "Invalid access token", code: "UNAUTHORIZED"}
+    end
+  end
 end
