@@ -1,16 +1,16 @@
-import React from "react";
+import React from "react"
 
-import {ContentContainer} from "../components/ContentContainer";
-import {TextLink} from "../components/TextLink";
+import {ContentContainer} from "../components/ContentContainer"
+import {TextLink} from "../components/TextLink"
 
 type Country = {
-  id: string,
-  code: string,
+  id: string
+  code: string
   name: string
 }
 
 type ChapterLocation = {
-  country: Country,
+  country: Country
   province: string
 }
 
@@ -82,8 +82,8 @@ const useStubChapterList = (): { chapters: Chapter[] } => {
         }
       },
     ]
-  };
-};
+  }
+}
 
 export const ChapterItem: React.FC<{ chapter: Chapter }> = ({ chapter }) => {
   return (
@@ -107,11 +107,11 @@ export const ChapterItem: React.FC<{ chapter: Chapter }> = ({ chapter }) => {
         </div>
       </a>
     </li>
-  );
-};
+  )
+}
 
 export const ChapterList: React.FC = () => {
-  const { chapters } = useStubChapterList();
+  const { chapters } = useStubChapterList()
 
   return (
     <ContentContainer>
@@ -136,5 +136,5 @@ export const ChapterList: React.FC = () => {
         </div>
       </div>
     </ContentContainer>
-  );
-};
+  )
+}

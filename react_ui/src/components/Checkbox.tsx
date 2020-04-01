@@ -21,4 +21,4 @@ export const Checkbox: React.FC<Props> = ({ title, id, onChange }) => (
       {title}
     </label>
   </div>
-);
+)

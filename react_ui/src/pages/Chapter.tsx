@@ -1,16 +1,16 @@
-import React from "react";
+import React from "react"
 
 type Country = {
-  id: string;
-  name: string;
+  id: string
+  name: string
 };
 
 type Chapter = {
-  id: string;
-  slug: string;
-  name: string;
-  country: Country;
-  members: number;
+  id: string
+  slug: string
+  name: string
+  country: Country
+  members: number
 };
 
 type Maybe<T> = T | null
@@ -46,7 +46,7 @@ const useChapter = (slug: string): Maybe<Chapter> => {
 }
 
 type Props = {
-  slug: string;
+  slug: string
 };
 
 export const Chapter: React.FC<Props> = ({ slug }) => {
@@ -56,5 +56,5 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
     return <div>Chapter <i>{slug}</i> not found</div>
   }
 
-  return <div>{chapter.name}</div>;
-};
+  return <div>{chapter.name}</div>
+}

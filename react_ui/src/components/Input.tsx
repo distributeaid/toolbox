@@ -25,4 +25,4 @@ export const Input: React.FC<Props> = ({ id, title, type, onChange }) => (
       />
     </div>
   </div>
-);
+)

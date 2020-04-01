@@ -1,10 +1,11 @@
-import React from "react";
-import { Button } from "../components/Button";
-import { Input } from "../components/Input";
-import { Checkbox } from "../components/Checkbox";
-import { Divider } from "../components/Divider";
-import { ContentContainer } from "../components/ContentContainer";
-import {TextLink} from "../components/TextLink";
+import React from "react"
+
+import { Button } from "../components/Button"
+import { Checkbox } from "../components/Checkbox"
+import { ContentContainer } from "../components/ContentContainer"
+import { Divider } from "../components/Divider"
+import { Input } from "../components/Input"
+import {TextLink} from "../components/TextLink"
 
 const StyleGuide: React.FC = () => (
   <ContentContainer>
@@ -29,6 +30,6 @@ const StyleGuide: React.FC = () => (
       <TextLink href="http://www.example.com">Example Link</TextLink>
     </div>
   </ContentContainer>
-);
+)
 
-export default StyleGuide;
+export default StyleGuide
