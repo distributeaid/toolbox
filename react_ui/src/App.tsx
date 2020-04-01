@@ -1,5 +1,6 @@
 import './App.css'
 
+import { ApolloProvider } from '@apollo/react-hooks'
 import React from 'react'
 import {
   BrowserRouter as Router,
@@ -8,13 +9,12 @@ import {
   Route,
   Switch,
 } from 'react-router-dom'
-import { ApolloProvider } from '@apollo/react-hooks'
 
+import { client } from './apollo/client'
 import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
 import SignUp from './pages/SignUp'
 import StyleGuide from './pages/StyleGuide'
-import { client } from './apollo/client'
 
 const App: React.FunctionComponent = () => {
   return (

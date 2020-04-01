@@ -1,9 +1,9 @@
+import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 import React from 'react'
 
 import { ContentContainer } from '../components/ContentContainer'
 import { TextLink } from '../components/TextLink'
-import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
 
 type Country = {
   id: string
