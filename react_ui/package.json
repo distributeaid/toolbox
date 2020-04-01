@@ -43,6 +43,7 @@
     "prebuild": "npm run build:css",
     "prestart": "npm run build:css"
   },
+  "proxy": "http://localhost:1312",
   "prettier": {
     "printWidth": 80,
     "quoteProps": "consistent",

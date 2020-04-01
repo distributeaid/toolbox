@@ -2,6 +2,8 @@ import React from 'react'
 
 import { ContentContainer } from '../components/ContentContainer'
 import { TextLink } from '../components/TextLink'
+import gql from 'graphql-tag'
+import { useQuery } from '@apollo/react-hooks'
 
 type Country = {
   id: string
@@ -14,81 +16,20 @@ type ChapterLocation = {
   province: string
 }
 
-type Chapter = {
+type Group = {
   id: string
-  slug: string
   name: string
-  location: ChapterLocation
-  members: number
+  description: string
 }
 
-const useStubChapterList = (): { chapters: Chapter[] } => {
-  return {
-    chapters: [
-      {
-        id: '1',
-        slug: 'seattle',
-        name: 'Seattle',
-        members: 23,
-        location: {
-          country: {
-            id: '1',
-            code: 'US',
-            name: 'United States',
-          },
-          province: 'Washington',
-        },
-      },
-      {
-        id: '2',
-        slug: 'oakland',
-        name: 'Oakland',
-        members: 45,
-        location: {
-          country: {
-            id: '2',
-            code: 'US',
-            name: 'United States',
-          },
-          province: 'California',
-        },
-      },
-      {
-        id: '3',
-        slug: 'Vancouver',
-        name: 'Vancouver',
-        members: 23,
-        location: {
-          country: {
-            id: '2',
-            code: 'CA',
-            name: 'Canada',
-          },
-          province: 'British Columbia',
-        },
-      },
-      {
-        id: '4',
-        slug: 'derry',
-        name: 'Derry',
-        members: 23,
-        location: {
-          country: {
-            id: '3',
-            code: 'IR',
-            name: 'Ireland',
-          },
-          province: 'County Londonderry',
-        },
-      },
-    ],
-  }
+type GroupsQuery = {
+  groups: Group[]
 }
 
-export const ChapterItem: React.FC<{ chapter: Chapter }> = ({ chapter }) => {
+export const ChapterItem: React.FC<{ chapter: Group }> = ({ chapter }) => {
   return (
     <li className="border-t border-gray-200">
-      <a href={`/${chapter.slug}`} className="">
+      <a href={`/${chapter.id}`} className="">
         <div className="py-4 hover:bg-gray-200">
           <div className="flex items-center justify-between">
             <div className="text-sm leading-5 font-medium text-black">
@@ -97,7 +38,7 @@ export const ChapterItem: React.FC<{ chapter: Chapter }> = ({ chapter }) => {
 
             <div className="ml-2 flex-shrink-0 flex">
               <span className="px-2 inline-flex text-xs leading-5 font-semibold">
-                {chapter.location.province}, {chapter.location.country.name}
+                {/* {chapter.location.province}, {chapter.location.country.name} */}
               </span>
             </div>
           </div>
@@ -108,7 +49,25 @@ export const ChapterItem: React.FC<{ chapter: Chapter }> = ({ chapter }) => {
 }
 
 export const ChapterList: React.FC = () => {
-  const { chapters } = useStubChapterList()
+  const { loading, error, data } = useQuery<GroupsQuery>(gql`
+    query {
+      groups {
+        id
+        description
+        name
+      }
+    }
+  `)
+
+  if (loading || !data) {
+    return null
+  }
+
+  if (error) {
+    return <div>{error.toString()}</div>
+  }
+
+  const { groups: chapters } = data
 
   return (
     <ContentContainer>
