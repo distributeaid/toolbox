@@ -1,11 +1,11 @@
-import React from "react"
+import React from 'react'
 
-import { Button } from "../components/Button"
-import { Checkbox } from "../components/Checkbox"
-import { ContentContainer } from "../components/ContentContainer"
-import { Divider } from "../components/Divider"
-import { Input } from "../components/Input"
-import {TextLink} from "../components/TextLink"
+import { Button } from '../components/Button'
+import { Checkbox } from '../components/Checkbox'
+import { ContentContainer } from '../components/ContentContainer'
+import { Divider } from '../components/Divider'
+import { Input } from '../components/Input'
+import { TextLink } from '../components/TextLink'
 
 const StyleGuide: React.FC = () => (
   <ContentContainer>
@@ -22,7 +22,7 @@ const StyleGuide: React.FC = () => (
         id="demo"
         type="text"
         title="Input, type: text"
-        onChange={event => null}
+        onChange={(event) => null}
       />
 
       <Divider outerClasses="m-4">A Divider, margin: m-4</Divider>

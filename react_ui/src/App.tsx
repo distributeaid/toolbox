@@ -1,12 +1,18 @@
-import "./App.css"
+import './App.css'
 
-import React from "react"
-import { BrowserRouter as Router, Link, Redirect,Route, Switch } from "react-router-dom"
+import React from 'react'
+import {
+  BrowserRouter as Router,
+  Link,
+  Redirect,
+  Route,
+  Switch,
+} from 'react-router-dom'
 
-import { Chapter } from "./pages/Chapter"
+import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
-import SignUp from "./pages/SignUp"
-import StyleGuide from "./pages/StyleGuide"
+import SignUp from './pages/SignUp'
+import StyleGuide from './pages/StyleGuide'
 
 const App: React.FunctionComponent = () => {
   return (
@@ -36,7 +42,11 @@ const App: React.FunctionComponent = () => {
           <StyleGuide />
         </Route>
 
-        <Route exact path="/:slug" render={({ match }) => <Chapter slug={match.params.slug} />} />
+        <Route
+          exact
+          path="/:slug"
+          render={({ match }) => <Chapter slug={match.params.slug} />}
+        />
 
         <Route exact path="/">
           <Redirect to="/chapters" />

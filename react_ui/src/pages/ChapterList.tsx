@@ -1,7 +1,7 @@
-import React from "react"
+import React from 'react'
 
-import {ContentContainer} from "../components/ContentContainer"
-import {TextLink} from "../components/TextLink"
+import { ContentContainer } from '../components/ContentContainer'
+import { TextLink } from '../components/TextLink'
 
 type Country = {
   id: string
@@ -28,70 +28,67 @@ const useStubChapterList = (): { chapters: Chapter[] } => {
       {
         id: '1',
         slug: 'seattle',
-        name: "Seattle",
+        name: 'Seattle',
         members: 23,
         location: {
           country: {
             id: '1',
-            code: "US",
-            name: "United States"
+            code: 'US',
+            name: 'United States',
           },
-          province: 'Washington'
-        }
+          province: 'Washington',
+        },
       },
       {
         id: '2',
         slug: 'oakland',
-        name: "Oakland",
+        name: 'Oakland',
         members: 45,
         location: {
           country: {
             id: '2',
-            code: "US",
-            name: "United States"
+            code: 'US',
+            name: 'United States',
           },
-          province: 'California'
-        }
+          province: 'California',
+        },
       },
       {
         id: '3',
         slug: 'Vancouver',
-        name: "Vancouver",
+        name: 'Vancouver',
         members: 23,
         location: {
           country: {
             id: '2',
-            code: "CA",
-            name: "Canada"
+            code: 'CA',
+            name: 'Canada',
           },
-          province: 'British Columbia'
-        }
+          province: 'British Columbia',
+        },
       },
       {
         id: '4',
         slug: 'derry',
-        name: "Derry",
+        name: 'Derry',
         members: 23,
         location: {
           country: {
             id: '3',
-            code: "IR",
-            name: "Ireland"
+            code: 'IR',
+            name: 'Ireland',
           },
-          province: 'County Londonderry'
-        }
+          province: 'County Londonderry',
+        },
       },
-    ]
+    ],
   }
 }
 
 export const ChapterItem: React.FC<{ chapter: Chapter }> = ({ chapter }) => {
   return (
     <li className="border-t border-gray-200">
-      <a
-        href={`/${chapter.slug}`}
-        className=""
-      >
+      <a href={`/${chapter.slug}`} className="">
         <div className="py-4 hover:bg-gray-200">
           <div className="flex items-center justify-between">
             <div className="text-sm leading-5 font-medium text-black">
@@ -122,17 +119,21 @@ export const ChapterList: React.FC = () => {
           <p className="py-4">
             Find the chapter nearest you in the list below to get involved.
           </p>
-          
+
           <p>
-            If your area doesn't have a Masks For Docs Chapter yet,
-            we are looking for volunteers to start new ones. Get in touch
-            on <TextLink href="https://masksfordocs.slack.com">Slack</TextLink>{' '}
-            to start one [Need better copy here].
+            If your area doesn't have a Masks For Docs Chapter yet, we are
+            looking for volunteers to start new ones. Get in touch on{' '}
+            <TextLink href="https://masksfordocs.slack.com">Slack</TextLink> to
+            start one [Need better copy here].
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 gap-4">
-          <ul>{chapters.map((g, i) => <ChapterItem key={g.id} chapter={g} />)}</ul>
+          <ul>
+            {chapters.map((g, i) => (
+              <ChapterItem key={g.id} chapter={g} />
+            ))}
+          </ul>
         </div>
       </div>
     </ContentContainer>

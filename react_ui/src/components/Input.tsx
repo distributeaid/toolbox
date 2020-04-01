@@ -11,8 +11,7 @@ export const Input: React.FC<Props> = ({ id, title, type, onChange }) => (
   <div>
     <label
       htmlFor={id}
-      className="block text-sm font-medium leading-5 text-gray-700"
-    >
+      className="block text-sm font-medium leading-5 text-gray-700">
       {title}
     </label>
     <div className="mt-1 rounded-md shadow-sm">
