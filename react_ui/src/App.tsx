@@ -1,6 +1,6 @@
 import './App.css'
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import {
   BrowserRouter as Router,
   Link,
@@ -30,27 +30,29 @@ const App: React.FunctionComponent = () => {
       </nav>
 
       <Switch>
-        <Route exact path="/chapters">
-          <ChapterList />
-        </Route>
+        <Suspense fallback="Loading...">
+          <Route exact path="/chapters">
+            <ChapterList />
+          </Route>
 
-        <Route exact path="/sign-up">
-          <SignUp />
-        </Route>
+          <Route exact path="/sign-up">
+            <SignUp />
+          </Route>
 
-        <Route exact path="/style-guide">
-          <StyleGuide />
-        </Route>
+          <Route exact path="/style-guide">
+            <StyleGuide />
+          </Route>
 
-        <Route
-          exact
-          path="/:slug"
-          render={({ match }) => <Chapter slug={match.params.slug} />}
-        />
+          <Route
+            exact
+            path="/:slug"
+            render={({ match }) => <Chapter slug={match.params.slug} />}
+          />
 
-        <Route exact path="/">
-          <Redirect to="/chapters" />
-        </Route>
+          <Route exact path="/">
+            <Redirect to="/chapters" />
+          </Route>
+        </Suspense>
       </Switch>
     </Router>
   )
