@@ -8,51 +8,55 @@ import {
   Route,
   Switch,
 } from 'react-router-dom'
+import { ApolloProvider } from '@apollo/react-hooks'
 
 import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
 import SignUp from './pages/SignUp'
 import StyleGuide from './pages/StyleGuide'
+import { client } from './apollo/client'
 
 const App: React.FunctionComponent = () => {
   return (
-    <Router>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/sign-up">Sign up</Link>
-          </li>
+    <ApolloProvider client={client}>
+      <Router>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/sign-up">Sign up</Link>
+            </li>
 
-          <li>
-            <Link to="/style-guide">Style guide</Link>
-          </li>
-        </ul>
-      </nav>
+            <li>
+              <Link to="/style-guide">Style guide</Link>
+            </li>
+          </ul>
+        </nav>
 
-      <Switch>
-        <Route exact path="/chapters">
-          <ChapterList />
-        </Route>
+        <Switch>
+          <Route exact path="/chapters">
+            <ChapterList />
+          </Route>
 
-        <Route exact path="/sign-up">
-          <SignUp />
-        </Route>
+          <Route exact path="/sign-up">
+            <SignUp />
+          </Route>
 
-        <Route exact path="/style-guide">
-          <StyleGuide />
-        </Route>
+          <Route exact path="/style-guide">
+            <StyleGuide />
+          </Route>
 
-        <Route
-          exact
-          path="/:slug"
-          render={({ match }) => <Chapter slug={match.params.slug} />}
-        />
+          <Route
+            exact
+            path="/:slug"
+            render={({ match }) => <Chapter slug={match.params.slug} />}
+          />
 
-        <Route exact path="/">
-          <Redirect to="/chapters" />
-        </Route>
-      </Switch>
-    </Router>
+          <Route exact path="/">
+            <Redirect to="/chapters" />
+          </Route>
+        </Switch>
+      </Router>
+    </ApolloProvider>
   )
 }
 
