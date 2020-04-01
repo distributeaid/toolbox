@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 type Props = {
   outerClasses?: string
@@ -14,4 +14,4 @@ export const Divider: React.FC<Props> = ({ children, outerClasses }) => (
       <span className="px-2 bg-white text-gray-500">{children}</span>
     </div>
   </div>
-);
+)

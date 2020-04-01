@@ -1,11 +1,18 @@
-import React from "react";
-import "./App.css";
+import './App.css'
 
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
-import SignUp from "./pages/SignUp";
+import React from 'react'
+import {
+  BrowserRouter as Router,
+  Link,
+  Redirect,
+  Route,
+  Switch,
+} from 'react-router-dom'
+
+import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
-import { Chapter } from "./pages/Chapter";
-import StyleGuide from "./pages/StyleGuide";
+import SignUp from './pages/SignUp'
+import StyleGuide from './pages/StyleGuide'
 
 const App: React.FunctionComponent = () => {
   return (
@@ -35,14 +42,18 @@ const App: React.FunctionComponent = () => {
           <StyleGuide />
         </Route>
 
-        <Route exact path="/:slug" render={({ match }) => <Chapter slug={match.params.slug} />} />
+        <Route
+          exact
+          path="/:slug"
+          render={({ match }) => <Chapter slug={match.params.slug} />}
+        />
 
         <Route exact path="/">
           <Redirect to="/chapters" />
         </Route>
       </Switch>
     </Router>
-  );
-};
+  )
+}
 
-export default App;
+export default App
