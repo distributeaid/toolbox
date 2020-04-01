@@ -20,7 +20,11 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "autoprefixer": "^9.7.5",
+    "eslint-plugin-jest": "^23.8.2",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-simple-import-sort": "^5.0.2",
     "postcss-cli": "^7.1.0",
+    "prettier": "^2.0.2",
     "react-scripts": "3.4.1",
     "typescript": "~3.8.3"
   },
@@ -34,8 +38,16 @@
     "prebuild": "npm run build:css",
     "prestart": "npm run build:css"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "prettier": {
+    "printWidth": 80,
+    "quoteProps": "consistent",
+    "semi": false,
+    "singleQuote": true,
+    "jsxSingleQuote": false,
+    "jsxBracketSameLine": true,
+    "arrowParens": "always",
+    "useTabs": false,
+    "trailingComma": "es5"
   },
   "browserslist": {
     "production": [
