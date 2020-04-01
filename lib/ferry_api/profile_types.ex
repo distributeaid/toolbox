@@ -6,9 +6,11 @@ defmodule FerryApi.Schema.ProfileTypes do
 
   # Group
   # ================================================================================
-  
+
   # Type
   # ------------------------------------------------------------
+
+  # TODO: this should probably move to FerryApi.Schema.GroupType to make it easier to reuse
   object :group do
     field :id, :id
     field :name, :string

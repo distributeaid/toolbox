@@ -2,12 +2,13 @@ defmodule FerryApi.Schema do
   use Absinthe.Schema
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
-  
+
   # Types
   # ------------------------------------------------------------
 
   import_types Absinthe.Plug.Types
-  import_types FerryApi.Schema.ProfileTypes  
+  import_types FerryApi.Schema.ProfileTypes
+  import_types FerryApi.Schema.SessionType
 
 
   # Queries
@@ -23,6 +24,8 @@ defmodule FerryApi.Schema do
     end
 
     import_fields :group_queries
+
+    import_fields :session_queries
   end
 
   # Mutuations
