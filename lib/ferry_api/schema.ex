@@ -7,8 +7,9 @@ defmodule FerryApi.Schema do
 
   import_types Absinthe.Plug.Types
   import_types FerryApi.Schema.ProfileTypes
-  import_types FerryApi.Schema.SessionType
 
+  import_types FerryApi.Schema.SessionType
+  import_types FerryApi.Schema.Session
 
   # Queries
   # ------------------------------------------------------------
@@ -23,12 +24,8 @@ defmodule FerryApi.Schema do
     end
 
     import_fields :group_queries
+    import_fields :session_queries
 
-    @desc "Get current users session"
-    field :session, :session do
-      arg :access_token, non_null(:string)
-      resolve &get_session/3
-    end
   end
 
   # Mutuations
@@ -38,15 +35,5 @@ defmodule FerryApi.Schema do
 
     import_fields :group_mutations
 
-  end
-
-  def get_session(_parent, %{access_token: access_token}, _resolution) do
-    access_token
-    |> Ferry.Cognito.get_user
-    |> ExAws.request
-    |> case do
-      {:ok, _} -> {:ok, %{id: "me"}}
-      _ -> {:error, message: "Invalid access token", code: "UNAUTHORIZED"}
-    end
   end
 end
