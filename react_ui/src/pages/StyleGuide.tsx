@@ -4,6 +4,7 @@ import { Input } from "../components/Input";
 import { Checkbox } from "../components/Checkbox";
 import { Divider } from "../components/Divider";
 import { ContentContainer } from "../components/ContentContainer";
+import {TextLink} from "../components/TextLink";
 
 const StyleGuide: React.FC = () => (
   <ContentContainer>
@@ -22,6 +23,10 @@ const StyleGuide: React.FC = () => (
         title="Input, type: text"
         onChange={event => null}
       />
+
+      <Divider outerClasses="m-4">A Divider, margin: m-4</Divider>
+
+      <TextLink href="http://www.example.com">Example Link</TextLink>
     </div>
   </ContentContainer>
 );

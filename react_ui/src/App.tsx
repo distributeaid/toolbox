@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import SignUp from "./pages/SignUp";
 import { ChapterList } from './pages/ChapterList'
 import { Chapter } from "./pages/Chapter";
@@ -13,42 +13,36 @@ const App: React.FunctionComponent = () => {
       <nav>
         <ul>
           <li>
-            <Link to="/">Home</Link>
-          </li>
-
-          <li>
             <Link to="/sign-up">Sign up</Link>
           </li>
 
           <li>
-            <Link to="/chapters">Group list</Link>
+            <Link to="/style-guide">Style guide</Link>
           </li>
         </ul>
       </nav>
 
       <Switch>
-        <Route path="/chapters">
+        <Route exact path="/chapters">
           <ChapterList />
         </Route>
 
-        <Route path="/sign-up">
+        <Route exact path="/sign-up">
           <SignUp />
         </Route>
 
-        <Route path="/style-guide">
+        <Route exact path="/style-guide">
           <StyleGuide />
         </Route>
 
-        <Route path="/:slug" render={({ match }) => <Chapter slug={match.params.slug} />} />
+        <Route exact path="/:slug" render={({ match }) => <Chapter slug={match.params.slug} />} />
 
-        <Route path="/">
-          <Home />
+        <Route exact path="/">
+          <Redirect to="/chapters" />
         </Route>
       </Switch>
     </Router>
   );
 };
-
-const Home = () => <div>Welcome Home</div>;
 
 export default App;
