@@ -36,6 +36,12 @@ defmodule FerryWeb.Router do
       json_decoder: Jason
   end
 
+  scope "/" do
+    pipe_through :browser
+
+    forward "/health", HeartCheck.Plug, heartcheck: FerryWeb.HeartCheck
+  end
+
   scope "/", FerryWeb do
     pipe_through [:browser, :setup_auth, :chat]
 

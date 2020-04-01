@@ -85,7 +85,7 @@ defmodule Ferry.Mixfile do
       {:prometheus_ecto, "~> 1.4.3"},
       {:prometheus_phoenix, "~> 1.3.0"},
       {:prometheus_plugs, "~> 1.1.5"},
-      {:prometheus_process_collector, "~> 1.4.3"}
+      {:heartcheck, "~> 0.4"}
     ]
   end
 
