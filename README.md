@@ -111,11 +111,15 @@ To create more users, visit http://localhost:1312/public/groups/$GROUP_ID/users/
 
 For adding more data (like groups, shipments, items), register as an aid group. [Here is a screencast](https://www.loom.com/share/78a7cc512bbe4885ac3d8671372437a1) explaining this process in detail.
 
-**API**
+**Dev Environment**
 
-A GraphQL API is provided at `/api`. The [Absinthe docs](https://hexdocs.pm/absinthe/overview.html) are a good starting place to learn more about GraphQL in the context of elixir.
+You'll need AWS credentials to integrate with Cognito for authentication. Copy the example config, then update with keys from the AWS console or CLI.
 
-You can use a browser implementation of graphiql to view the schema documentation and run test queries: http://localhost:1312/api/graphiql
+```
+cp .env.secret.example .env.secret
+```
+
+If you don't have AWS credentials yet, ask someone on the team. Still run the command above, the app will run without proper creds, but you will not be able to use authenticated features.
 
 **Trouble Shooting**
 
@@ -128,6 +132,14 @@ To verify that the seeds ran correctly select all entries in the groups table (t
 SELECT * FROM groups;
 SELECT * FROM inventory_mods;
 ```
+
+API
+------------------------------------
+
+A GraphQL API is provided at `/api`. The [Absinthe docs](https://hexdocs.pm/absinthe/overview.html) are a good starting place to learn more about GraphQL in the context of elixir.
+
+You can use a browser implementation of graphiql to view the schema documentation and run test queries: http://localhost:1312/api/graphiql
+
 
 Common Docker Commands
 ------------------------------------------------------------

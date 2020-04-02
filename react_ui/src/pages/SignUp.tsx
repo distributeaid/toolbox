@@ -93,8 +93,19 @@ const SignUp = () => {
             </form>
           </div>
         </div>
+        <button
+          onClick={() => {
+            Auth.signOut({ global: true })
+              // eslint-disable-next-line no-console
+              .then((data) => console.log('signed out', data))
+              // eslint-disable-next-line no-console
+              .catch((err) => console.log('signed out error', err))
+          }}>
+          Sign out
+        </button>
         <ConfirmEmail></ConfirmEmail>
       </div>
+
       <div>{username}</div>
       <div>{password}</div>
     </>

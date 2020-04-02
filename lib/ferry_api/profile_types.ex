@@ -3,12 +3,13 @@ defmodule FerryApi.Schema.ProfileTypes do
 
   alias Ferry.Profiles
 
-
   # Group
   # ================================================================================
-  
+
   # Type
   # ------------------------------------------------------------
+
+  # TODO: this should probably move to FerryApi.Schema.GroupType to make it easier to reuse
   object :group do
     field :id, :id
     field :name, :string
@@ -22,49 +23,45 @@ defmodule FerryApi.Schema.ProfileTypes do
   # Query
   # ------------------------------------------------------------
   object :group_queries do
-
     @desc "Get the # of groups"
     field :count_groups, :integer do
-      resolve &count_groups/3
+      resolve(&count_groups/3)
     end
 
     @desc "Get all groups"
     field :groups, list_of(:group) do
-      resolve &list_groups/3
+      resolve(&list_groups/3)
     end
 
     @desc "Get a group"
     field :group, :group do
-      arg :id, non_null(:id)
-      resolve &get_group/3
+      arg(:id, non_null(:id))
+      resolve(&get_group/3)
     end
-
   end
 
   # Mutation
   # ------------------------------------------------------------
   object :group_mutations do
-
     @desc "Create a group"
     field :create_group, type: :group do
-      arg :name, non_null(:string)
-      arg :description, :string
-      resolve &create_group/3
+      arg(:name, non_null(:string))
+      arg(:description, :string)
+      resolve(&create_group/3)
     end
 
     @desc "Update a group"
     field :update_group, type: :group do
-      arg :id, non_null(:id)
-      arg :description, :string
-      resolve &update_group/3
+      arg(:id, non_null(:id))
+      arg(:description, :string)
+      resolve(&update_group/3)
     end
 
     @desc "Delete a group"
     field :delete_group, type: :group do
-      arg :id, non_null(:id)
-      resolve &delete_group/3
+      arg(:id, non_null(:id))
+      resolve(&delete_group/3)
     end
-
   end
 
   # Resolvers
@@ -97,5 +94,4 @@ defmodule FerryApi.Schema.ProfileTypes do
     group = Profiles.get_group!(id)
     Profiles.delete_group(group)
   end
-
 end

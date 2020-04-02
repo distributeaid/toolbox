@@ -66,6 +66,10 @@ defmodule Ferry.Mixfile do
       {:absinthe_plug, "~> 1.4"},
       {:dataloader, "~> 1.0.0"},
 
+      # aws
+      {:ex_aws, "~> 2.1"},
+      {:hackney, "~> 1.9"},
+
       # authentication
       {:bcrypt_elixir, "~> 1.0"},
       {:comeonin, "~> 4.0"},
