@@ -1,7 +1,14 @@
 # CI FILE FOR react_ui
+prepare_ui:
+  extends: .ui
+  stage: prepare
+  script:
+    - "true"
+
 unit_test_ui:
   extends: .ui
   stage: unit_test
+  needs: ["prepare_ui"]
   image: node:13.12.0-alpine3.11
   script:
     - cd ${REACT_DIR}
@@ -15,8 +22,8 @@ image_ui:
   stage: image
   needs: ["unit_test_ui"]
   image: docker:stable
-  # services:
-  #   - docker:dind
+  services:
+    - docker:dind
   before_script:
     - apk upgrade -ql ; apk add -ql python3
     - pip3 install -q awscli

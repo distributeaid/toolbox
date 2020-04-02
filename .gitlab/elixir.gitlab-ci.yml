@@ -1,7 +1,14 @@
 # CI FILE FOR lib/
+prepare_elixir:
+  extends: .elixir
+  stage: prepare
+  script:
+    - "true"
+
 build_elixir:
   extends: .elixir
   stage: build
+  needs: ["prepare_elixir"]
   image: docker:stable
   services:
       - docker:dind
