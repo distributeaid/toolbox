@@ -1,0 +1,10 @@
+# Minimal example using environment vars or instance role credentials
+# Fetch all hosts in us-east-1, the hostname is the public DNS if it exists, otherwise the private IP address
+plugin: aws_ec2
+boto_profile: masksfordocs
+regions:
+  - us-east-2
+hostnames:
+  - ip-address
+compose:
+  ansible_ssh_user: "ec2-user"
