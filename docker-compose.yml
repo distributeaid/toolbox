@@ -57,6 +57,17 @@ services:
     depends_on:
       - db
       - dbtest
+  ui:
+    build:
+      context: .
+      dockerfile: ui.Dockerfile
+    container_name: toolbox_ui
+    volumes:
+      - ./etc/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+    depends_on:
+      - web
 volumes:
   db:
     name: ${DA_DB_VOLUME_NAME}

@@ -1,20 +1,18 @@
 # Using this Dockerfile to define the react CI environment
-FROM node:13.12.0-alpine3.11
-
-# Update OpenSSL and dumb-init
-RUN apk add --no-cache --update openssl dumb-init
+FROM node:13.12.0-alpine3.11 AS base
 
 WORKDIR /app
 
 ENV PATH /app/node_modules/.bin:$PATH
 
 # Grab the UI stuff only
-COPY ./react_ui ./
+COPY ./react_ui /app
 
 RUN npm install && \
-    npm install react-scripts
+    npm install react-scripts && \
+    cp src/aws-exports.ci.js src/aws-exports.js && \
+    npm run-script build
 
-# define dumb-init as the entrypoint
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+FROM nginx:1.17.9-alpine
 
-CMD ["npm", "start"]
+COPY --from=base /app/build /usr/share/nginx/html
