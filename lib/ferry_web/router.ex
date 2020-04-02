@@ -3,6 +3,7 @@ defmodule FerryWeb.Router do
   import Redirect
 
   import FerryWeb.Plugs
+  import FerryApi.UserIdPlug
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -34,6 +35,8 @@ defmodule FerryWeb.Router do
       parsers: [:urlencoded, :multipart, :json, Absinthe.Plug.Parser],
       pass: ["*/*"],
       json_decoder: Jason
+
+    plug :put_user_id
   end
 
   scope "/" do
