@@ -1,7 +1,10 @@
 stages:
-  - build ci image
-  - test
+  - prepare
+  - build
+  - unit_test
+  - image
   - deploy_staging
+  - integration_test
   - deploy_production
 
 include:
