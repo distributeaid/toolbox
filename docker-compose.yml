@@ -1,22 +1,22 @@
 version: "3.4"
 services:
   db:
-    image: "postgres:${DA_POSTGRES_VERSION}"
+    image: "postgres:${DA_POSTGRES_VERSION:-11.2}"
     container_name: toolbox_db
     volumes:
-      - ./${DA_DB_VOLUME_NAME}:/var/lib/postgresql/data
+      - ./${DA_DB_VOLUME_NAME:-db}:/var/lib/postgresql/data
       - ./development/seed-test-group.sh:/seed-test-group.sh
     environment:
-      - POSTGRES_USER=${DA_DB_USERNAME}
-      - POSTGRES_PASSWORD=${DA_DB_PASSWORD}
-      - POSTGRES_DB=${DA_DB_DATABASE}
+      - POSTGRES_USER=${DA_DB_USERNAME:-toolbox}
+      - POSTGRES_PASSWORD=${DA_DB_PASSWORD:-1312}
+      - POSTGRES_DB=${DA_DB_DATABASE:-toolbox_dev}
   dbtest:
-    image: "postgres:${DA_POSTGRES_VERSION}"
+    image: "postgres:${DA_POSTGRES_VERSION:-11.2}"
     container_name: dbtest
     environment:
-      - POSTGRES_USER=${DA_DB_USERNAME}
-      - POSTGRES_PASSWORD=${DA_DB_PASSWORD}
-      - POSTGRES_DB=${DA_DB_DATABASE}
+      - POSTGRES_USER=${DA_DB_USERNAME:-toolbox}
+      - POSTGRES_PASSWORD=${DA_DB_PASSWORD:-1312}
+      - POSTGRES_DB=${DA_DB_DATABASE:-toolbox_dev}
   dbadmin:
     image: "dpage/pgadmin4:4"
     container_name: dbadmin
@@ -48,11 +48,11 @@ services:
     # DB_HOSTNAME value MUST match the name of the db service!
     # DA_DB_HOSTNAME_TEST value MUST match the name of the test db service!
     environment:
-      - POSTGRES_USER=${DA_DB_USERNAME}
-      - POSTGRES_PASSWORD=${DA_DB_PASSWORD}
-      - POSTGRES_DB=${DA_DB_DATABASE}
-      - DB_HOSTNAME_DEV=${DA_DB_HOSTNAME_DEV}
-      - DB_HOSTNAME_TEST=${DA_DB_HOSTNAME_TEST}
+      - POSTGRES_USER=${DA_DB_USERNAME:-toolbox}
+      - POSTGRES_PASSWORD=${DA_DB_PASSWORD:-1312}
+      - POSTGRES_DB=${DA_DB_DATABASE:-toolbox_dev}
+      - DB_HOSTNAME_DEV=${DA_DB_HOSTNAME_DEV:-db}
+      - DB_HOSTNAME_TEST=${DA_DB_HOSTNAME_TEST:-dbtest}
       - DB_PORT=5432
     env_file:
       - .env.secret
@@ -72,5 +72,5 @@ services:
       - web
 volumes:
   db:
-    name: ${DA_DB_VOLUME_NAME}
-    external: ${DA_EXTERNAL_VOLUME_REQUIRED}
+    name: ${DA_DB_VOLUME_NAME:-db}
+    external: ${DA_EXTERNAL_VOLUME_REQUIRED:-false}
