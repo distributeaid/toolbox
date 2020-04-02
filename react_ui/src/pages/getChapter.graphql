@@ -1,0 +1,5 @@
+query getChapter($id: ID!) {
+  group(id: $id) {
+    id
+  }
+}
