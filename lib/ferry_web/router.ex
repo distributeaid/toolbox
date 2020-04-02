@@ -3,6 +3,7 @@ defmodule FerryWeb.Router do
   import Redirect
 
   import FerryWeb.Plugs
+  import FerryWeb.Plugs.PutUserId
 
   pipeline :browser do
     plug :accepts, ["html"]
