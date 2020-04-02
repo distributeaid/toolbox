@@ -77,7 +77,8 @@ defmodule FerryWeb.Plugs do
       end
       |> validate_token
 
-    Absinthe.Plug.put_options(conn, context: %{user_id: user_id})
+    conn
+    |> Absinthe.Plug.put_options(context: %{user_id: user_id})
   end
 
   defp validate_token(nil), do: nil

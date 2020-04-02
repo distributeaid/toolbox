@@ -1,6 +1,5 @@
 defmodule FerryApi.Schema do
   use Absinthe.Schema
-  import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
   # Types
   # ------------------------------------------------------------

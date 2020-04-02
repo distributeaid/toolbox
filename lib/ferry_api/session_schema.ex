@@ -9,6 +9,6 @@ defmodule FerryApi.Schema.Session do
   end
 
   def get_session(_parent, _args, %{context: %{user_id: user_id}}) do
-    {:ok, %{id: user_id}}
+    {:ok, %{user_id: user_id}}
   end
 end
