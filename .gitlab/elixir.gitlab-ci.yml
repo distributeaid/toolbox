@@ -11,7 +11,7 @@ build_elixir:
   needs: ["prepare_elixir"]
   image: docker:${DOCKER_VERSION}
   services:
-      - docker:${DOCKER_VERSION}-dind
+    - docker:${DOCKER_VERSION}-dind
   before_script:
     - apk upgrade -ql ; apk add -ql python3
     - pip3 install -q awscli

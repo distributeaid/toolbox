@@ -35,11 +35,12 @@ image_ui:
   extends: .ui
   stage: image
   needs: ["unit_test_ui"]
-  image: registry.gitlab.com/gitlab-org/cloud-deploy:v0.1.3
+  image: docker:${DOCKER_VERSION}
   services:
     - docker:${DOCKER_VERSION}-dind
   before_script:
-    - curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz | tar zxvf - --strip 1 -C /usr/bin docker/docker
+    - apk upgrade -ql ; apk add -ql python3
+    - pip3 install -q awscli
     - docker info
   script:
     - cd ${REACT_DIR}
