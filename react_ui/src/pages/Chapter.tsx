@@ -1,44 +1,21 @@
 import React from 'react'
 
-type Country = {
-  id: string
-  name: string
-}
+import { Group, Maybe } from '../generated/graphql'
 
-type Chapter = {
-  id: string
-  slug: string
-  name: string
-  country: Country
-  members: number
-}
-
-type Maybe<T> = T | null
-
-const useChapter = (slug: string): Maybe<Chapter> => {
+const useChapter = (slug: string): Maybe<Group> => {
   if (slug === 'seattle') {
     return {
       id: '1',
-      slug: 'seattle',
       name: 'Seattle',
-      members: 23,
-      country: {
-        id: '1',
-        name: 'US',
-      },
+      description: 'The Seattle group',
     }
   }
 
   if (slug === 'oakland') {
     return {
       id: '2',
-      slug: 'oakland',
       name: 'Oakland',
-      members: 45,
-      country: {
-        id: '2',
-        name: 'US',
-      },
+      description: 'The Oakland group',
     }
   }
 
