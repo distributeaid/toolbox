@@ -13,7 +13,9 @@ build_ui:
   artifacts:
     expire_in: 1 day
     paths:
-      - ${REACT_DIR}
+      - ${REACT_DIR}/build
+      - ${REACT_DIR}/node_modules
+      - ${REACT_DIR}/package*.json
   script:
     - cd ${REACT_DIR}
     - npm install
@@ -37,8 +39,9 @@ image_ui:
   needs: ["unit_test_ui"]
   image: registry.gitlab.com/gitlab-org/cloud-deploy:v0.1.3
   services:
-    - docker:dind
+    - docker:${DOCKER_VERSION}-dind
   before_script:
+    - curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz | tar zxvf - --strip 1 -C /usr/bin docker/docker
     - docker info
   script:
     - cd ${REACT_DIR}
