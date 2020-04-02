@@ -1,6 +1,7 @@
 import './App.css'
+import '@aws-amplify/ui/dist/style.css'
 
-import React, { Suspense } from 'react'
+import React, { Suspense, useState } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import {
   BrowserRouter as Router,
@@ -9,23 +10,60 @@ import {
   Route,
   Switch,
 } from 'react-router-dom'
+import Amplify, { Auth } from 'aws-amplify'
+import amplifyConfig from './aws-exports'
+import { Authenticator } from 'aws-amplify-react'
 
 import { client } from './apollo/client'
 import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
-import SignUp from './pages/SignUp'
 import StyleGuide from './pages/StyleGuide'
+import PrivateRoute from './auth/PrivateRoute'
+import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
+
+Amplify.configure({
+  Auth: {
+    identityPoolId: amplifyConfig.aws_cognito_identity_pool_id,
+    region: amplifyConfig.aws_cognito_region,
+    userPoolId: amplifyConfig.aws_user_pools_id,
+    userPoolWebClientId: amplifyConfig.aws_user_pools_web_client_id,
+    mandatorySignIn: false,
+  },
+})
+
+const SecretComponent = () => <p>Secret!</p>
 
 const App: React.FunctionComponent = () => {
+  const [isSignedIn, setSignedIn] = useState<boolean>(false)
   return (
     <ApolloProvider client={client}>
       <Suspense fallback="Loading...">
         <Router>
           <nav>
             <ul>
-              <li>
-                <Link to="/sign-up">Sign up</Link>
-              </li>
+              {!isSignedIn && (
+                <li>
+                  <Link to="/auth">Sign up</Link>
+                </li>
+              )}
+              {isSignedIn && (
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      Auth.signOut()
+                        .then(() => {
+                          window.location.pathname = '/'
+                        })
+                        .catch((error) => {
+                          // Woot?!
+                          console.error(error)
+                        })
+                    }}>
+                    Log out
+                  </button>
+                </li>
+              )}
 
               <li>
                 <Link to="/style-guide">Style guide</Link>
@@ -33,13 +71,27 @@ const App: React.FunctionComponent = () => {
             </ul>
           </nav>
 
+          <RedirectAfterAuth isSignedIn={isSignedIn} />
+
           <Switch>
-            <Route exact path="/chapters">
-              <ChapterList />
+            <Route path="/auth">
+              <Authenticator
+                onStateChange={(state) => {
+                  const isSignedIn = state === 'signedIn'
+                  setSignedIn(isSignedIn)
+                }}
+              />
             </Route>
 
-            <Route exact path="/sign-up">
-              <SignUp />
+            <PrivateRoute
+              exact
+              path="/secret"
+              isSignedIn={isSignedIn}
+              component={SecretComponent}
+            />
+
+            <Route exact path="/chapters">
+              <ChapterList />
             </Route>
 
             <Route exact path="/style-guide">
