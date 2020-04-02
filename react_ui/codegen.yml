@@ -2,7 +2,7 @@ overwrite: true
 schema: "http://localhost:1312/api/graphiql"
 documents: "src/**/*.graphql"
 generates:
-  src/generated/graphql.tsx:
+  src/generated/graphql.ts:
     plugins:
       - "typescript"
       - "typescript-operations"
@@ -18,5 +18,7 @@ generates:
       withHOC: false
       withHooks: true
       avoidOptionals: true
+      apolloReactCommonImportFrom: '@apollo/react-common'
+      apolloReactHooksImportFrom: '@apollo/react-hooks'
       namingConvention:
         enumValues: keep
