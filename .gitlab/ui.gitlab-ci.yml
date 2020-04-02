@@ -42,6 +42,7 @@ image_ui:
   before_script:
     - apk upgrade -ql ; apk add -ql python3
     - pip3 install -q awscli
+    - rm .dockerignore
     - docker info
   script:
     - docker build -t $ECR_CONTAINER_TEST_IMAGE -f ui.Dockerfile .
