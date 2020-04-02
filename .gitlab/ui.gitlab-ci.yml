@@ -11,9 +11,9 @@ build_ui:
   needs: ["prepare_ui"]
   image: node:13.12.0-alpine3.11
   artifacts:
+    expire_in: 1 day
     paths:
-      - ${REACT_DIR}/node_modules/
-      - ${REACT_DIR}/dist/
+      - ${REACT_DIR}
   script:
     - cd ${REACT_DIR}
     - npm install
@@ -41,6 +41,7 @@ image_ui:
   before_script:
     - docker info
   script:
-    - docker build -t $ECR_CONTAINER_TEST_IMAGE -f ui.Dockerfile .
+    - cd ${REACT_DIR}
+    - docker build -t $ECR_CONTAINER_TEST_IMAGE -f ../ui.Dockerfile .
     - echo $(aws ecr get-login-password) | docker login --username AWS --password-stdin 299303747484.dkr.ecr.us-east-2.amazonaws.com
     - docker push $ECR_CONTAINER_TEST_IMAGE
