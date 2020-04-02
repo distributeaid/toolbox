@@ -1,0 +1,18 @@
+---
+
+- name: Deploy Docker containers
+  hosts: all
+  tasks:
+    - name: Start API
+      docker_container:
+        name: masksfordocs-api
+        image: 299303747484.dkr.ecr.us-east-2.amazonaws.com/masksfordocs/toolbox/ci/ui:{{ version }}
+        network_mode: network_mode
+        state: started
+
+    - name: Start UI
+      docker_container:
+        name: masksfordocs-ui
+        image: 299303747484.dkr.ecr.us-east-2.amazonaws.com/masksfordocs/toolbox/ci/elixir:{{ version }}
+        network_mode: network_mode
+        state: started

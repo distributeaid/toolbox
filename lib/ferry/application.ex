@@ -12,10 +12,6 @@ defmodule Ferry.Application do
     FerryWeb.RepoInstrumenter.setup()
     FerryWeb.PrometheusExporter.setup()
 
-    # NOTE: Only for FreeBSD, Linux and OSX (experimental)
-    # https://github.com/deadtrickster/prometheus_process_collector
-    Prometheus.Registry.register_collector(:prometheus_process_collector)
-
     :telemetry.attach(
       "prometheus-ecto",
       [:elixir_monitoring_prom, :repo, :query],
