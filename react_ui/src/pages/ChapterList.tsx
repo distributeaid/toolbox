@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import React from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { ContentContainer } from '../components/ContentContainer'
 import { TextLink } from '../components/TextLink'
@@ -49,6 +50,8 @@ export const ChapterItem: React.FC<{ chapter: Group }> = ({ chapter }) => {
 }
 
 export const ChapterList: React.FC = () => {
+  const { t } = useTranslation()
+
   const { loading, error, data } = useQuery<GroupsQuery>(gql`
     query {
       groups {
@@ -73,17 +76,19 @@ export const ChapterList: React.FC = () => {
     <ContentContainer>
       <div className="p-4 md:p-8">
         <div className="mb-4 md:mb-8">
-          <h1 className="font-bold text-xl">Chapter Directory</h1>
+          <h1 className="font-bold text-xl">{t("chapterList.title")}</h1>
 
           <p className="py-4">
-            Find the chapter nearest you in the list below to get involved.
+            {t("chapterList.subtitle")}
           </p>
 
           <p>
-            If your area doesn't have a Masks For Docs Chapter yet, we are
-            looking for volunteers to start new ones. Get in touch on{' '}
-            <TextLink href="https://masksfordocs.slack.com">Slack</TextLink> to
-            start one [Need better copy here].
+            <Trans i18nKey="chapterList.instructions">
+              If your area doesn't have a Masks For Docs Chapter yet, we are
+              looking for volunteers to start new ones. Get in touch on{' '}
+              <TextLink href="https://masksfordocs.slack.com">Slack</TextLink>
+              to start one [Need better copy here].
+            </Trans>
           </p>
         </div>
 
