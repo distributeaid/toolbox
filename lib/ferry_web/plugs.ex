@@ -86,9 +86,8 @@ defmodule FerryWeb.Plugs do
     token
     |> Ferry.Cognito.get_user()
     |> ExAws.request()
-    |> IO.inspect()
     |> case do
-      {:ok, _} -> "me"
+      {:ok, %{"Username" => user_id}} -> user_id
       _ -> nil
     end
   end
