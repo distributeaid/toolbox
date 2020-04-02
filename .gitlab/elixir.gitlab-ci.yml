@@ -9,9 +9,9 @@ build_elixir:
   extends: .elixir
   stage: build
   needs: ["prepare_elixir"]
-  image: docker:stable
+  image: docker:${DOCKER_VERSION}
   services:
-      - docker:dind
+      - docker:${DOCKER_VERSION}-dind
   before_script:
     - apk upgrade -ql ; apk add -ql python3
     - pip3 install -q awscli
