@@ -1,31 +1,9 @@
-import { useQuery } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
 import React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { ContentContainer } from '../components/ContentContainer'
 import { TextLink } from '../components/TextLink'
-
-type Country = {
-  id: string
-  code: string
-  name: string
-}
-
-type ChapterLocation = {
-  country: Country
-  province: string
-}
-
-type Group = {
-  id: string
-  name: string
-  description: string
-}
-
-type GroupsQuery = {
-  groups: Group[]
-}
+import { Group, useGetChapterListQuery } from '../generated/graphql'
 
 export const ChapterItem: React.FC<{ chapter: Group }> = ({ chapter }) => {
   return (
@@ -52,17 +30,9 @@ export const ChapterItem: React.FC<{ chapter: Group }> = ({ chapter }) => {
 export const ChapterList: React.FC = () => {
   const { t } = useTranslation()
 
-  const { loading, error, data } = useQuery<GroupsQuery>(gql`
-    query {
-      groups {
-        id
-        description
-        name
-      }
-    }
-  `)
+  const { loading, error, data } = useGetChapterListQuery()
 
-  if (loading || !data) {
+  if (loading || !data?.groups) {
     return null
   }
 
@@ -94,9 +64,9 @@ export const ChapterList: React.FC = () => {
 
         <div className="grid grid-cols-1 gap-4">
           <ul>
-            {chapters.map((g, i) => (
-              <ChapterItem key={g.id} chapter={g} />
-            ))}
+            {chapters.map(
+              (g) => g && g.id && <ChapterItem key={g.id} chapter={g} />
+            )}
           </ul>
         </div>
       </div>

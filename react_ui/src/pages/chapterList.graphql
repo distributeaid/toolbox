@@ -1,0 +1,7 @@
+query getChapterList {
+  groups {
+    id
+    description
+    name
+  }
+}
