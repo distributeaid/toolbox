@@ -13,9 +13,7 @@ build_ui:
   artifacts:
     expire_in: 1 day
     paths:
-      - ${REACT_DIR}/build
-      - ${REACT_DIR}/node_modules
-      - ${REACT_DIR}/package*.json
+      - ${REACT_DIR}
   script:
     - cd ${REACT_DIR}
     - npm install
