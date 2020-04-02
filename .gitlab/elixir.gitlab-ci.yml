@@ -1,25 +1,33 @@
 # CI FILE FOR lib/
-build-image elixir:
+prepare_elixir:
   extends: .elixir
-  stage: build ci image
-  image: docker:stable
+  stage: prepare
+  script:
+    - "true"
+
+build_elixir:
+  extends: .elixir
+  stage: build
+  needs: ["prepare_elixir"]
+  image: docker:${DOCKER_VERSION}
   services:
-      - docker:dind
+    - docker:${DOCKER_VERSION}-dind
   before_script:
     - apk upgrade -ql ; apk add -ql python3
     - pip3 install -q awscli
     - docker info
-    - docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
+    - echo ${CI_REGISTRY_PASSWORD} | docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} --password-stdin
   script:
     - docker build -t $GITLAB_CONTAINER_TEST_IMAGE -f web.Dockerfile .
     - docker push $GITLAB_CONTAINER_TEST_IMAGE
     - echo $(aws ecr get-login-password) | docker login --username AWS --password-stdin 299303747484.dkr.ecr.us-east-2.amazonaws.com
-    - docker build -t $ECR_CONTAINER_TEST_IMAGE -f web.Dockerfile .
+    - docker tag $GITLAB_CONTAINER_TEST_IMAGE $ECR_CONTAINER_TEST_IMAGE 
     - docker push $ECR_CONTAINER_TEST_IMAGE
 
-test elixir:
+unit_test_elixir:
   extends: .elixir
-  stage: test
+  stage: unit_test
+  needs: ["build_elixir"]
   image: ${GITLAB_CONTAINER_TEST_IMAGE}
   services:
     - name: postgres:11.2

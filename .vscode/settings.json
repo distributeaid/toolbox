@@ -1,0 +1,3 @@
+{
+  "typescript.tsdk": "./react_ui/node_modules/typescript/lib",
+}

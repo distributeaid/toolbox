@@ -18,27 +18,47 @@ defmodule FerryWeb.Plugs do
     # If we are on a known route (e.g. shipments or groups)
     secondToLastPathElement = conn.path_info |> Enum.at(-2)
     additionalSectionsWithChat = ["shipments", "groups"]
-    extraContext = if additionalSectionsWithChat |> Enum.find(fn el -> el == secondToLastPathElement end) != nil
-    and conn.path_params["id"] != nil
-    do
-      # construct the context identifier for this context
-      "#{secondToLastPathElement}-#{conn.path_params["id"]}" # shipments-42, groups-17
-    end
+
+    extraContext =
+      if additionalSectionsWithChat |> Enum.find(fn el -> el == secondToLastPathElement end) !=
+           nil and conn.path_params["id"] != nil do
+        # construct the context identifier for this context
+        # shipments-42, groups-17
+        "#{secondToLastPathElement}-#{conn.path_params["id"]}"
+      end
+
     # Default context is "general", but if we are on a known context
-    context = if extraContext do extraContext else "general" end
+    context =
+      if extraContext do
+        extraContext
+      else
+        "general"
+      end
+
     # By default all users have access to the room "general"
-    contexts = if extraContext do ["general", extraContext] else ["general"] end
+    contexts =
+      if extraContext do
+        ["general", extraContext]
+      else
+        ["general"]
+      end
+
     # Create JWT here
     jwtCfg = Application.get_env(:ferry, :jwt)
     pem = Keyword.fetch!(jwtCfg, :privateKey)
     kid = Keyword.fetch!(jwtCfg, :keyId)
     signer = Joken.Signer.create("ES256", %{"pem" => pem}, %{"kid" => kid})
-    token = Ferry.Token.generate_and_sign!(%{
-      "contexts" => contexts,
-      "sub" => Integer.to_string(user_id),
-      "email" => email,
-      "exp" => System.system_time(:second) + (60 * 60)
-      }, signer)
+
+    token =
+      Ferry.Token.generate_and_sign!(
+        %{
+          "contexts" => contexts,
+          "sub" => Integer.to_string(user_id),
+          "email" => email,
+          "exp" => System.system_time(:second) + 60 * 60
+        },
+        signer
+      )
 
     assign(conn, :chat_meta, %{token: token, context: context})
   end
@@ -47,16 +67,17 @@ defmodule FerryWeb.Plugs do
     conn
   end
 
-  def put_user_id(conn) do
-    user_id = conn
-    |> get_req_header("authorization")
-    |> case do
-      ["Bearer " <> token] -> token
-      _ -> nil
-    end
-    |> validate_token
+  def put_user_id(conn, _opts) do
+    user_id =
+      conn
+      |> get_req_header("authorization")
+      |> case do
+        ["Bearer " <> token] -> token
+        _ -> nil
+      end
+      |> validate_token
 
-    assign(conn, :user_id, user_id)
+    Absinthe.Plug.put_options(conn, context: %{user_id: user_id})
   end
 
   defp validate_token(nil), do: nil
@@ -71,5 +92,4 @@ defmodule FerryWeb.Plugs do
       _ -> nil
     end
   end
-
 end
