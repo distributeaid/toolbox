@@ -44,7 +44,6 @@ image_ui:
     - pip3 install -q awscli
     - docker info
   script:
-    - cd ${REACT_DIR}
-    - docker build -t $ECR_CONTAINER_TEST_IMAGE -f ../ui.Dockerfile .
+    - docker build -t $ECR_CONTAINER_TEST_IMAGE -f ${REACT_DIR}/ui.Dockerfile .
     - echo $(aws ecr get-login-password) | docker login --username AWS --password-stdin 299303747484.dkr.ecr.us-east-2.amazonaws.com
     - docker push $ECR_CONTAINER_TEST_IMAGE
