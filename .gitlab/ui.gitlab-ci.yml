@@ -5,33 +5,38 @@ prepare_ui:
   script:
     - "true"
 
-unit_test_ui:
+build_ui:
   extends: .ui
-  stage: unit_test
+  stage: build
   needs: ["prepare_ui"]
   image: node:13.12.0-alpine3.11
   script:
     - cd ${REACT_DIR}
     - npm install
+    - npm install react-scripts
     - npm run lint
     - cp src/aws-exports.ci.js src/aws-exports.js
+    - npm run-script build
+
+unit_test_ui:
+  extends: .ui
+  stage: unit_test
+  needs: ["build_ui"]
+  image: node:13.12.0-alpine3.11
+  script:
+    - cd ${REACT_DIR}
     - npm test
 
 image_ui:
   extends: .ui
   stage: image
   needs: ["unit_test_ui"]
-  image: docker:stable
+  image: registry.gitlab.com/gitlab-org/cloud-deploy:v0.1.3
   services:
     - docker:dind
   before_script:
-    - apk upgrade -ql ; apk add -ql python3
-    - pip3 install -q awscli
     - docker info
-    - echo ${CI_REGISTRY_PASSWORD} | docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} --password-stdin
   script:
-    - docker build -t $GITLAB_CONTAINER_TEST_IMAGE -f ui.Dockerfile .
-    - docker push $GITLAB_CONTAINER_TEST_IMAGE
+    - docker build -t $ECR_CONTAINER_TEST_IMAGE -f ui.Dockerfile .
     - echo $(aws ecr get-login-password) | docker login --username AWS --password-stdin 299303747484.dkr.ecr.us-east-2.amazonaws.com
-    - docker tag $GITLAB_CONTAINER_TEST_IMAGE $ECR_CONTAINER_TEST_IMAGE 
     - docker push $ECR_CONTAINER_TEST_IMAGE
