@@ -119,6 +119,8 @@ You'll need AWS credentials to integrate with Cognito for authentication. Copy t
 cp .env.secret.example .env.secret
 ```
 
+If you don't have AWS credentials yet, ask someone on the team. Still run the command above, the app will run without proper creds, but you will not be able to use authenticated features.
+
 **Trouble Shooting**
 
 * Try not to have PostgreSQL running locally (potential conflict issues).
