@@ -2,5 +2,10 @@
   "styleguide": {
     "title": "Style Guide",
     "linkExample": "Here is a translated <2>Example Link</2> with a few different <4>react</4> nodes."
+  },
+  "chapterList": {
+    "title": "Chapter Directory",
+    "subtitle": "Find the chapter nearest you in the list below to get involved.",
+    "instructions": "If your area doesn't have a Masks For Docs Chapter yet, we are looking for volunteers to start new ones. Get in touch on <2>Slack</2> to start one [Need better copy here]."
   }
 }
