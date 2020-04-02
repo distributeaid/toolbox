@@ -1,35 +1,19 @@
 import React from 'react'
 
-import { Group, Maybe } from '../generated/graphql'
-
-const useChapter = (slug: string): Maybe<Group> => {
-  if (slug === 'seattle') {
-    return {
-      id: '1',
-      name: 'Seattle',
-      description: 'The Seattle group',
-    }
-  }
-
-  if (slug === 'oakland') {
-    return {
-      id: '2',
-      name: 'Oakland',
-      description: 'The Oakland group',
-    }
-  }
-
-  return null
-}
+import { useGetChapterQuery } from '../generated/graphql'
 
 type Props = {
   slug: string
 }
 
 export const Chapter: React.FC<Props> = ({ slug }) => {
-  const chapter = useChapter(slug)
+  const { loading, data } = useGetChapterQuery({ variables: { id: slug }})
 
-  if (!chapter) {
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  if (!data?.group) {
     return (
       <div>
         Chapter <i>{slug}</i> not found
@@ -37,5 +21,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
     )
   }
 
-  return <div>{chapter.name}</div>
+  const { group: chapter } = data
+
+  return <div>Found chapter: {chapter.id}</div>
 }
