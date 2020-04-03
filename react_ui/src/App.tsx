@@ -15,6 +15,7 @@ import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
 import SignUp from './pages/SignUp'
 import StyleGuide from './pages/StyleGuide'
+import { SessionActions } from './components/SessionActions'
 
 const App: React.FunctionComponent = () => {
   return (
@@ -24,7 +25,7 @@ const App: React.FunctionComponent = () => {
           <nav>
             <ul>
               <li>
-                <Link to="/sign-up">Sign up</Link>
+                <SessionActions />
               </li>
 
               <li>
