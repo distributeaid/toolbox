@@ -16,7 +16,7 @@ const StyleGuide: React.FC = () => {
       <div className="grid grid-cols-1 gap-4 m-16">
         <h1 className="font-bold text-3xl mb-6">{t('styleguide.title')}</h1>
 
-        <Button title="Default Button" />
+        <Button>Default button</Button>
 
         <Divider outerClasses="m-4">A Divider, margin: m-4</Divider>
 

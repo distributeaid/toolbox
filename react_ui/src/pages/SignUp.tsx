@@ -57,7 +57,7 @@ const SignUp = () => {
               </div>
 
               <div className="mt-6">
-                <Button title="Sign in" />
+                <Button>Sign In</Button>
               </div>
             </form>
 
@@ -88,7 +88,7 @@ const SignUp = () => {
               />
 
               <div className="mt-6">
-                <Button title="Sign up" />
+                <Button>Sign Up</Button>
               </div>
             </form>
           </div>
