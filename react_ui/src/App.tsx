@@ -10,7 +10,7 @@ import {
   Switch,
 } from 'react-router-dom'
 
-import { client } from './apollo/client'
+import { getClient } from './apollo/client'
 import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
 import SignUp from './pages/SignUp'
@@ -18,6 +18,10 @@ import StyleGuide from './pages/StyleGuide'
 import { SessionActions } from './components/SessionActions'
 
 const App: React.FunctionComponent = () => {
+  const [authToken, setAuthToken] = React.useState<string | undefined>()
+
+  const client = getClient(authToken)
+
   return (
     <ApolloProvider client={client}>
       <Suspense fallback="Loading...">
@@ -25,7 +29,10 @@ const App: React.FunctionComponent = () => {
           <nav>
             <ul>
               <li>
-                <SessionActions />
+                <SessionActions
+                  authToken={authToken}
+                  setAuthToken={setAuthToken}
+                />
               </li>
 
               <li>
@@ -40,7 +47,7 @@ const App: React.FunctionComponent = () => {
             </Route>
 
             <Route exact path="/sign-up">
-              <SignUp />
+              <SignUp setAuthToken={setAuthToken} />
             </Route>
 
             <Route exact path="/style-guide">

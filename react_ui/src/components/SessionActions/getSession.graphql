@@ -1,5 +1,6 @@
 query getSession {
   session {
+    id
     userId
   }
 }

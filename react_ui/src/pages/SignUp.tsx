@@ -8,9 +8,15 @@ import { Checkbox } from '../components/Checkbox'
 import { Divider } from '../components/Divider'
 import { Input } from '../components/Input'
 
+import { CognitoUser } from 'amazon-cognito-identity-js'
+
 Amplify.configure(amplifyConfig)
 
-const SignUp = () => {
+interface Props {
+  setAuthToken: React.Dispatch<React.SetStateAction<string | undefined>>
+}
+
+const SignUp: React.FunctionComponent<Props> = ({ setAuthToken }) => {
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
   return (
@@ -28,8 +34,13 @@ const SignUp = () => {
               onSubmit={(event) => {
                 event.preventDefault()
                 Auth.signIn(username, password)
-                  // eslint-disable-next-line no-console
-                  .then((user) => console.log(user))
+                  .then((user: CognitoUser) => {
+                    const token = user
+                      .getSignInUserSession()
+                      ?.getAccessToken()
+                      .getJwtToken()
+                    setAuthToken(token)
+                  })
                   // eslint-disable-next-line no-console
                   .catch((err) => console.log(err))
               }}>
@@ -93,21 +104,8 @@ const SignUp = () => {
             </form>
           </div>
         </div>
-        <button
-          onClick={() => {
-            Auth.signOut({ global: true })
-              // eslint-disable-next-line no-console
-              .then((data) => console.log('signed out', data))
-              // eslint-disable-next-line no-console
-              .catch((err) => console.log('signed out error', err))
-          }}>
-          Sign out
-        </button>
         <ConfirmEmail></ConfirmEmail>
       </div>
-
-      <div>{username}</div>
-      <div>{password}</div>
     </>
   )
 }
