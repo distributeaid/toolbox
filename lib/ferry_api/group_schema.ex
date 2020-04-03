@@ -1,24 +1,7 @@
-defmodule FerryApi.Schema.ProfileTypes do
+defmodule FerryApi.Schema.Group do
   use Absinthe.Schema.Notation
 
   alias Ferry.Profiles
-
-  # Group
-  # ================================================================================
-
-  # Type
-  # ------------------------------------------------------------
-
-  # TODO: this should probably move to FerryApi.Schema.GroupType to make it easier to reuse
-  object :group do
-    field :id, :id
-    field :name, :string
-    field :description, :string
-
-    # field :logo, :file (?)
-
-    # field :users, list_of(:user), resolve: dataloader(Group)
-  end
 
   # Query
   # ------------------------------------------------------------
@@ -94,4 +77,5 @@ defmodule FerryApi.Schema.ProfileTypes do
     group = Profiles.get_group!(id)
     Profiles.delete_group(group)
   end
+
 end

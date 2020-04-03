@@ -5,23 +5,21 @@ defmodule FerryApi.Schema do
   # ------------------------------------------------------------
 
   import_types(Absinthe.Plug.Types)
-  import_types(FerryApi.Schema.ProfileTypes)
+
+  import_types(FerryApi.Schema.GroupType)
+  import_types(FerryApi.Schema.Group)
 
   import_types(FerryApi.Schema.SessionType)
   import_types(FerryApi.Schema.Session)
+
+  import_types(FerryApi.Schema.SelfCare)
 
   # Queries
   # ------------------------------------------------------------
 
   query do
-    @desc "Health check"
-    field :health_check, :string do
-      resolve(fn _parent, _args, _resolution ->
-        {:ok, "ok"}
-      end)
-    end
-
     import_fields(:group_queries)
+    import_fields(:self_care_queries)
     import_fields(:session_queries)
   end
 
