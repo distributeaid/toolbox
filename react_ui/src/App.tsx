@@ -9,6 +9,7 @@ import {
   Route,
   Switch,
 } from 'react-router-dom'
+import { useLocalStorage } from 'react-use'
 
 import { getClient } from './apollo/client'
 import { Chapter } from './pages/Chapter'
@@ -18,8 +19,13 @@ import StyleGuide from './pages/StyleGuide'
 import { SessionActions } from './components/SessionActions'
 
 const App: React.FunctionComponent = () => {
-  const [authToken, setAuthToken] = React.useState<string | undefined>()
+  const [authToken, setAuthToken] = useLocalStorage<string | undefined>(
+    'authToken',
+    undefined
+  )
 
+  // QUESTION: should we be getting client like this? We could wrap this in useMemo
+  // Would this blow away the cache?
   const client = getClient(authToken)
 
   return (

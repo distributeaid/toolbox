@@ -38,7 +38,6 @@ export const SessionActions: React.FunctionComponent<Props> = ({
           Auth.signOut({ global: true })
             // eslint-disable-next-line no-console
             .then((data) => {
-              console.log('signed out', data)
               setAuthToken(undefined)
             })
             // eslint-disable-next-line no-console
