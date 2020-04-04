@@ -16,7 +16,9 @@ export const SessionActions: React.FunctionComponent<Props> = ({
   setAuthToken,
   authToken,
 }) => {
-  const [loadSession, { data }] = useGetSessionLazyQuery()
+  const [loadSession, { data }] = useGetSessionLazyQuery({
+    fetchPolicy: 'network-only',
+  })
 
   useEffect(() => {
     loadSession()
