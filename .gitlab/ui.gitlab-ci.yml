@@ -21,7 +21,6 @@ build_ui:
     - npm install
     - npm install react-scripts
     - npm run lint
-    - cp src/aws-exports.ci.js src/aws-exports.js
     - npm run-script build
 
 unit_test_ui:
