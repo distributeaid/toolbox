@@ -10,6 +10,7 @@ services:
       - POSTGRES_USER=${DA_DB_USERNAME:-toolbox}
       - POSTGRES_PASSWORD=${DA_DB_PASSWORD:-1312}
       - POSTGRES_DB=${DA_DB_DATABASE:-toolbox_dev}
+
   dbtest:
     image: "postgres:${DA_POSTGRES_VERSION:-11.2}"
     container_name: dbtest
@@ -17,6 +18,7 @@ services:
       - POSTGRES_USER=${DA_DB_USERNAME:-toolbox}
       - POSTGRES_PASSWORD=${DA_DB_PASSWORD:-1312}
       - POSTGRES_DB=${DA_DB_DATABASE:-toolbox_dev}
+
   dbadmin:
     image: "dpage/pgadmin4:4"
     container_name: dbadmin
@@ -28,6 +30,7 @@ services:
     depends_on:
       - db
     restart: unless-stopped
+
   web:
     build:
       context: .
@@ -59,17 +62,7 @@ services:
     depends_on:
       - db
       - dbtest
-  ui:
-    build:
-      context: .
-      dockerfile: ui.Dockerfile
-    container_name: toolbox_ui
-    volumes:
-      - ./etc/nginx/conf.d:/etc/nginx/conf.d
-    ports:
-      - "80:80"
-    depends_on:
-      - web
+
 volumes:
   db:
     name: ${DA_DB_VOLUME_NAME:-db}
