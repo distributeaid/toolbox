@@ -11,7 +11,7 @@ import {
 } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
-import { getClient } from './apollo/client'
+import { client } from './apollo/client'
 import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
 import SignUp from './pages/SignUp'
@@ -23,10 +23,6 @@ const App: React.FunctionComponent = () => {
     'authToken',
     undefined
   )
-
-  // QUESTION: should we be getting client like this? We could wrap this in useMemo
-  // Would this blow away the cache?
-  const client = getClient(authToken)
 
   return (
     <ApolloProvider client={client}>

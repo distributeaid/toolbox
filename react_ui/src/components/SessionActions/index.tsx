@@ -16,7 +16,6 @@ export const SessionActions: React.FunctionComponent<Props> = ({
   setAuthToken,
   authToken,
 }) => {
-  // const { data } = useGetSessionQuery()
   const [loadSession, { data }] = useGetSessionLazyQuery()
 
   useEffect(() => {
@@ -32,19 +31,20 @@ export const SessionActions: React.FunctionComponent<Props> = ({
   return (
     <div className="flex">
       <div>Welcome, {userId}</div>
-      <Button
-        moreClassNames="ml-auto"
-        onClick={() => {
-          Auth.signOut({ global: true })
-            // eslint-disable-next-line no-console
-            .then((data) => {
-              setAuthToken(undefined)
-            })
-            // eslint-disable-next-line no-console
-            .catch((err) => console.log('signed out error', err))
-        }}>
-        Sign out
-      </Button>
+      <div className="ml-auto">
+        <Button
+          onClick={() => {
+            Auth.signOut({ global: true })
+              // eslint-disable-next-line no-console
+              .then((data) => {
+                setAuthToken(undefined)
+              })
+              // eslint-disable-next-line no-console
+              .catch((err) => console.log('signed out error', err))
+          }}>
+          Sign out
+        </Button>
+      </div>
     </div>
   )
 }
