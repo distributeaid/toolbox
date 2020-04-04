@@ -18,7 +18,8 @@ services:
       - POSTGRES_USER=${DA_DB_USERNAME:-toolbox}
       - POSTGRES_PASSWORD=${DA_DB_PASSWORD:-1312}
       - POSTGRES_DB=${DA_DB_DATABASE:-toolbox_dev}
-
+    ports:
+      - "5432:5432"
   dbadmin:
     image: "dpage/pgadmin4:4"
     container_name: dbadmin
@@ -44,8 +45,7 @@ services:
       ]
     container_name: toolbox_web
     volumes:
-      - ./:/app
-      - /app/assets/node_modules
+      - ./development:/app/development
     ports:
       - "1312:1312"
     # DB_HOSTNAME value MUST match the name of the db service!
@@ -54,9 +54,12 @@ services:
       - POSTGRES_USER=${DA_DB_USERNAME:-toolbox}
       - POSTGRES_PASSWORD=${DA_DB_PASSWORD:-1312}
       - POSTGRES_DB=${DA_DB_DATABASE:-toolbox_dev}
+      - POSTGRES_HOST=${DA_DB_HOSTNAME_DEV}
+      - POSTGRES_PORT=5432
       - DB_HOSTNAME_DEV=${DA_DB_HOSTNAME_DEV:-db}
       - DB_HOSTNAME_TEST=${DA_DB_HOSTNAME_TEST:-dbtest}
       - DB_PORT=5432
+      - PORT=1312
     env_file:
       - .env.secret
     depends_on:
