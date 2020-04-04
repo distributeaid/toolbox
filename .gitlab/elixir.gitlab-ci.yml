@@ -7,6 +7,8 @@ prepare_elixir:
 
 build_elixir:
   extends: .elixir
+  variables:
+    MIX_ENV: "prod"
   stage: build
   needs: ["prepare_elixir"]
   image: docker:${DOCKER_VERSION}
@@ -26,9 +28,11 @@ build_elixir:
 
 unit_test_elixir:
   extends: .elixir
+  variables:
+    MIX_ENV: "test"
   stage: unit_test
-  needs: ["build_elixir"]
-  image: ${GITLAB_CONTAINER_TEST_IMAGE}
+  needs: ["prepare_elixir"]
+  image: elixir:1.7
   services:
     - name: postgres:11.2
       alias: dbtest
