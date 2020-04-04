@@ -65,7 +65,7 @@ mkdir db && chmod -R +x db
 
 **Run Containers**
 
-* Start: `./build-server.sh` (for Windows, use `./build-server.bat`)
+* Start: `docker-compose up`
 * Stop: `ctrl-c` in the same window, or `docker-compose down` in another
 
 When starting the containers, once you see this message it is ready:
