@@ -5,6 +5,7 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import Amplify, { Auth } from 'aws-amplify'
 import { Authenticator } from 'aws-amplify-react'
 import React, { Suspense, useEffect, useState } from 'react'
+
 import {
   BrowserRouter as Router,
   Link,
@@ -21,6 +22,8 @@ import { Footer } from './components/layout/Footer'
 import { NavBar } from './components/layout/NavBar'
 import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
+import { ChapterNew } from './pages/ChapterNew'
+import SignUp from './pages/SignUp'
 import StyleGuide from './pages/StyleGuide'
 
 Amplify.configure(amplifyConfig)
@@ -114,6 +117,10 @@ const App: React.FunctionComponent = () => {
 
             <Route exact path="/style-guide">
               <StyleGuide />
+            </Route>
+
+            <Route exact path="/chapters/new">
+              <ChapterNew />
             </Route>
 
             <Route
