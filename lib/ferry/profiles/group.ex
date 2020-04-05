@@ -24,6 +24,7 @@ defmodule Ferry.Profiles.Group do
     field :request_form, :string
     field :volunteer_form, :string
     field :donation_form, :string
+    # TODO: uri type
 
     has_one :users, User # on_delete set in database via migration
     has_many :projects, Project # on_delete set in database via migration
@@ -38,10 +39,11 @@ defmodule Ferry.Profiles.Group do
 
     |> validate_required([:name, :slack_channel_name])
     |> validate_length(:name, min: 1, max: 255)
-    |> validate_format(:name, ~r/[A-Za-z0-9\ ]+/)
+    |> validate_format(:name, ~r/[A-Za-z\ ]+/)
     |> unique_constraint(:name)
 
     |> set_slug()
+    |> unique_constraint(:slug)
 
     # Just set the type for now, while there's only one valid type.
     |> put_change(:type, "M4D_CHAPTER")
@@ -69,7 +71,11 @@ defmodule Ferry.Profiles.Group do
       {_source, name} ->
         name
         |> String.downcase()
-        |> String.replace(" ", "-")
+        |> String.trim()
+        |> String.replace(~r/\s+/, "-")
+
+        # TODO: strip whitespace
+        # TODO: remove all spaces in a row w/ "-"
     end
 
     put_change(changeset, :slug, slug)
