@@ -61,12 +61,15 @@ cd toolbox/
 
 # Create a 'db' directory.
 mkdir db && chmod -R +x db
+
+# Create local .env.secret
+cp .env.secret{.example,}
 ```
 
 **Run Containers**
 
-* Start: `docker-compose up`
-* Stop: `ctrl-c` in the same window, or `docker-compose down` in another
+* Start: `bin/dev-server`
+* Stop: `ctrl-c` in the same window, or `bin/dev-server down` in another
 
 When starting the containers, once you see this message it is ready:
 
