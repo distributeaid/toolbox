@@ -16,15 +16,18 @@ export const SessionActions: React.FunctionComponent<Props> = ({
   setAuthToken,
   authToken,
 }) => {
-  const [loadSession, { data }] = useGetSessionLazyQuery({
-    fetchPolicy: 'network-only',
-  })
+  // const [loadSession, { data }] = useGetSessionLazyQuery({
+  //   fetchPolicy: 'network-only',
+  // })
 
-  useEffect(() => {
-    loadSession()
-  }, [authToken])
+  // useEffect(() => {
+  //   loadSession()
+  // }, [authToken])
 
-  const userId = data?.session?.userId
+  // const userId = data?.session?.userId
+  console.log(authToken)
+  Auth.currentAuthenticatedUser().then(console.log)
+  const userId = 123
 
   if (!userId) {
     return <Link to="/sign-up">Sign up / Sign in</Link>
