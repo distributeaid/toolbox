@@ -1,7 +1,7 @@
 import './App.css'
 import '@aws-amplify/ui/dist/style.css'
 
-import React, { Suspense, useState } from 'react'
+import React, { Suspense, useState, useEffect } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import {
   BrowserRouter as Router,
@@ -23,30 +23,41 @@ import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
 
 Amplify.configure(amplifyConfig)
 
+type AuthenticationState = 'unknown' | 'authenticated' | 'anonymous'
+
 const SecretComponent = () => <p>Secret!</p>
 
 const App: React.FunctionComponent = () => {
-  const [isSignedIn, setSignedIn] = useState<boolean>(false)
-  console.log('isSignedIn', isSignedIn)
+  const [authState, setAuthState] = useState<AuthenticationState>('unknown')
+
+  useEffect(() => {
+    Auth.currentAuthenticatedUser()
+      .then(() => setAuthState('authenticated'))
+      .catch(() => setAuthState('anonymous'))
+  }, [])
+
+  if (authState === 'unknown') {
+    return null
+  }
+
   return (
     <ApolloProvider client={client}>
       <Suspense fallback="Loading...">
         <Router>
           <nav>
             <ul>
-              {!isSignedIn && (
+              {authState === 'anonymous' && (
                 <li>
-                  <Link to="/auth">Sign up</Link>
+                  <Link to="/auth">Sign up / Sign in</Link>
                 </li>
               )}
-              {isSignedIn && (
+              {authState === 'authenticated' && (
                 <li>
                   <button
                     type="button"
                     onClick={() => {
                       Auth.signOut()
                         .then(() => {
-                          // Maybe use react router redirect?
                           window.location.pathname = '/'
                         })
                         .catch((error) => {
@@ -65,22 +76,27 @@ const App: React.FunctionComponent = () => {
             </ul>
           </nav>
 
-          <RedirectAfterAuth isSignedIn={isSignedIn} />
+          {authState === 'authenticated' && <RedirectAfterAuth />}
 
           <Switch>
+            {/* What should we call this path? */}
             <Route path="/auth">
-              <Authenticator
-                onStateChange={(state) => {
-                  const isSignedIn = state === 'signedIn'
-                  setSignedIn(isSignedIn)
-                }}
-              />
+              <>
+                <h1>Authenticator</h1>
+                <Authenticator
+                  onStateChange={(state) => {
+                    const newState: AuthenticationState =
+                      state === 'signedIn' ? 'authenticated' : 'anonymous'
+                    setAuthState(newState)
+                  }}
+                />
+              </>
             </Route>
 
             <PrivateRoute
               exact
               path="/secret"
-              isSignedIn={isSignedIn}
+              isSignedIn={authState === 'authenticated'}
               component={SecretComponent}
             />
 

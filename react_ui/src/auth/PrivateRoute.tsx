@@ -21,8 +21,8 @@ const PrivateRoute = (props: PrivateRouteProps) => {
         ) : (
           <Redirect
             to={{
-              pathname: `/auth?redirect=${location.pathname}${location.search}`,
-              state: { from: routeProps.location },
+              pathname: '/auth',
+              state: { redirectAfterAuth: routeProps.location },
             }}
           />
         )
