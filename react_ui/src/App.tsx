@@ -48,7 +48,7 @@ const App: React.FunctionComponent = () => {
             <ul>
               {authState === 'anonymous' && (
                 <li>
-                  <Link to="/auth">Sign up / Sign in</Link>
+                  <Link to="/sign-in">Sign up / Sign in</Link>
                 </li>
               )}
               {authState === 'authenticated' && (
@@ -79,8 +79,7 @@ const App: React.FunctionComponent = () => {
           {authState === 'authenticated' && <RedirectAfterAuth />}
 
           <Switch>
-            {/* What should we call this path? */}
-            <Route path="/auth">
+            <Route path="/sign-in">
               <>
                 <h1>Authenticator</h1>
                 <Authenticator
