@@ -25,25 +25,34 @@ defmodule FerryApi.Schema.Group do
 
   # Mutation
   # ------------------------------------------------------------
+  input_object :group_input do
+    field :name, :string
+    field :description, :string
+
+    field :type, :group_type
+
+    field :donation_link, :string
+    field :slack_channel_name, :string
+
+    field :request_form, :string
+    field :request_form_results, :string
+    field :volunteer_form, :string
+    field :volunteer_form_results, :string
+    field :donation_form, :string
+    field :donation_form_results, :string
+  end
+
   object :group_mutations do
     @desc "Create a group"
     field :create_group, type: :group do
-      arg(:name, non_null(:string))
-      arg(:description, non_null(:string))
-      arg(:slack_channel_name, non_null(:string))
-      arg(:request_form, non_null(:string))
-      arg(:request_form_results, non_null(:string))
-      arg(:volunteer_form, non_null(:string))
-      arg(:volunteer_form_results, non_null(:string))
-      arg(:donation_form, non_null(:string))
-      arg(:donation_form_results, non_null(:string))
+      arg(:group_input, non_null(:group_input))
       resolve(&create_group/3)
     end
 
     @desc "Update a group"
     field :update_group, type: :group do
       arg(:id, non_null(:id))
-      arg(:description, :string)
+      arg(:group_input, non_null(:group_input))
       resolve(&update_group/3)
     end
 
@@ -71,13 +80,13 @@ defmodule FerryApi.Schema.Group do
     end
   end
 
-  def create_group(_parent, args, _resolution) do
-    Profiles.create_group(args)
+  def create_group(_parent, %{group_input: group_attrs}, _resolution) do
+    Profiles.create_group(group_attrs)
   end
 
-  def update_group(_parent, %{id: id} = args, _resolution) do
+  def update_group(_parent, %{id: id, group_input: group_attrs} = args, _resolution) do
     group = Profiles.get_group!(id)
-    Profiles.update_group(group, args)
+    Profiles.update_group(group, group_attrs)
   end
 
   def delete_group(_parent, %{id: id}, _resolution) do

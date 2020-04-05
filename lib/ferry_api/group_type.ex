@@ -29,12 +29,12 @@ defmodule FerryApi.Schema.GroupType do
     field :donation_link, :string
     field :slack_channel_name, non_null(:string)
 
-    field :request_form, :string
-    field :request_form_results, :string
-    field :volunteer_form, :string
-    field :volunteer_form_results, :string
-    field :donation_form, :string
-    field :donation_form_results, :string
+    field :request_form, non_null(:string)
+    field :request_form_results, non_null(:string)
+    field :volunteer_form, non_null(:string)
+    field :volunteer_form_results, non_null(:string)
+    field :donation_form, non_null(:string)
+    field :donation_form_results, non_null(:string)
 
     # field :users, list_of(:user), resolve: dataloader(Group)
   end
