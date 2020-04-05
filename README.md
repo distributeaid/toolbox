@@ -82,8 +82,8 @@ See the _Common Docker Commands_ section below for a list of container names.
 **Setup PG Admin**
 
 1. With the containers running, go to http://localhost:8088 in your browser.
-2. Log in with username `admin` and password `admin` (unless you overrode the defaults).
-3. Create new servers for our dev and test dbs.  See `./build-server.sh` for the connection information (including the hostnames).
+1. Log in with username `admin` and password `admin` (unless you overrode the defaults).
+1. Create new servers for our dev and test dbs.  See the contents of the `bin/dev-server` script for the connection information (including the hostnames).
 
 **Setup Up Our Site**
 
