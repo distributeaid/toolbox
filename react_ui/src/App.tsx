@@ -21,15 +21,7 @@ import StyleGuide from './pages/StyleGuide'
 import PrivateRoute from './auth/PrivateRoute'
 import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
 
-Amplify.configure({
-  Auth: {
-    identityPoolId: amplifyConfig.aws_cognito_identity_pool_id,
-    region: amplifyConfig.aws_cognito_region,
-    userPoolId: amplifyConfig.aws_user_pools_id,
-    userPoolWebClientId: amplifyConfig.aws_user_pools_web_client_id,
-    mandatorySignIn: false,
-  },
-})
+Amplify.configure(amplifyConfig)
 
 const SecretComponent = () => <p>Secret!</p>
 
