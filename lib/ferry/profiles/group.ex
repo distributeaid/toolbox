@@ -21,9 +21,15 @@ defmodule Ferry.Profiles.Group do
     # TODO: social media links
 
     field :slack_channel_name, :string
+
     field :request_form, :string
+    field :request_form_results, :string
+
     field :volunteer_form, :string
+    field :volunteer_form_results, :string
+
     field :donation_form, :string
+    field :donation_form_results, :string
     # TODO: uri type
 
     has_one :users, User # on_delete set in database via migration
@@ -35,9 +41,34 @@ defmodule Ferry.Profiles.Group do
   @doc false
   def changeset(group, attrs) do
     group
-    |> cast(attrs, [:name, :description, :donation_link, :slack_channel_name, :request_form, :volunteer_form, :donation_form])
+    |> cast(attrs, [
+      :name,
+      :description,
 
-    |> validate_required([:name, :slack_channel_name])
+      :donation_link,
+      :slack_channel_name,
+
+      :request_form,
+      :request_form_results,
+      :volunteer_form,
+      :volunteer_form_results,
+      :donation_form,
+      :donation_form_results
+    ])
+    |> validate_required([
+      :name,
+      :description,
+
+      :slack_channel_name,
+
+      :request_form,
+      :request_form_results,
+      :volunteer_form,
+      :volunteer_form_results,
+      :donation_form,
+      :donation_form_results
+    ])
+
     |> validate_length(:name, min: 1, max: 255)
     |> validate_format(:name, ~r/[A-Za-z\ ]+/)
     |> unique_constraint(:name)

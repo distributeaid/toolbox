@@ -29,8 +29,14 @@ defmodule FerryApi.Schema.Group do
     @desc "Create a group"
     field :create_group, type: :group do
       arg(:name, non_null(:string))
-      arg(:description, :string)
+      arg(:description, non_null(:string))
       arg(:slack_channel_name, non_null(:string))
+      arg(:request_form, non_null(:string))
+      arg(:request_form_results, non_null(:string))
+      arg(:volunteer_form, non_null(:string))
+      arg(:volunteer_form_results, non_null(:string))
+      arg(:donation_form, non_null(:string))
+      arg(:donation_form_results, non_null(:string))
       resolve(&create_group/3)
     end
 

@@ -126,7 +126,14 @@ defmodule Ferry.Factory do
       # add other group types here
       type: sequence(:group_type, ["M4D_CHAPTER"]),
 
-      slack_channel_name: "FCRC is on IRC Baby #cool"
+      slack_channel_name: "FCRC is on IRC Baby #cool",
+
+      request_form: "https://request.example.com",
+      request_form_results: "https://request.example.com/results",
+      volunteer_form: "https://volunteer.example.com",
+      volunteer_form_results: "https://volunteer.example.com/results",
+      donation_form: "https://donation.example.com",
+      donation_form_results: "https://donation.example.com/results"
     }
   end
 

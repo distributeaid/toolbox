@@ -183,7 +183,14 @@ defmodule Ferry.GroupTest do
       mutation {
         createGroup(
           name: "#{group_attrs.name}",
-          slackChannelName: "#{group_attrs.slack_channel_name}"
+          description: "#{group_attrs.description}",
+          slackChannelName: "#{group_attrs.slack_channel_name}",
+          requestForm: "#{group_attrs.request_form}",
+          requestFormResults: "#{group_attrs.request_form_results}",
+          volunteerForm: "#{group_attrs.volunteer_form}",
+          volunteerFormResults: "#{group_attrs.volunteer_form_results}",
+          donationForm: "#{group_attrs.donation_form}",
+          donationFormResults: "#{group_attrs.donation_form_results}"
         ) {
           id,
           name,
