@@ -27,6 +27,7 @@ const SecretComponent = () => <p>Secret!</p>
 
 const App: React.FunctionComponent = () => {
   const [isSignedIn, setSignedIn] = useState<boolean>(false)
+  console.log('isSignedIn', isSignedIn)
   return (
     <ApolloProvider client={client}>
       <Suspense fallback="Loading...">
@@ -45,6 +46,7 @@ const App: React.FunctionComponent = () => {
                     onClick={() => {
                       Auth.signOut()
                         .then(() => {
+                          // Maybe use react router redirect?
                           window.location.pathname = '/'
                         })
                         .catch((error) => {
