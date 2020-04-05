@@ -44,8 +44,11 @@ const App: React.FunctionComponent = () => {
     <ApolloProvider client={client}>
       <Suspense fallback="Loading...">
         <Router>
-          <nav>
+          <nav className="mb-4 shadow">
             <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
               {authState === 'anonymous' && (
                 <li>
                   <Link to="/sign-in">Sign up / Sign in</Link>
@@ -73,6 +76,12 @@ const App: React.FunctionComponent = () => {
               <li>
                 <Link to="/style-guide">Style guide</Link>
               </li>
+
+              {authState === 'authenticated' && (
+                <li>
+                  <Link to="/secret">Page behind login</Link>
+                </li>
+              )}
             </ul>
           </nav>
 
@@ -80,16 +89,13 @@ const App: React.FunctionComponent = () => {
 
           <Switch>
             <Route path="/sign-in">
-              <>
-                <h1>Authenticator</h1>
-                <Authenticator
-                  onStateChange={(state) => {
-                    const newState: AuthenticationState =
-                      state === 'signedIn' ? 'authenticated' : 'anonymous'
-                    setAuthState(newState)
-                  }}
-                />
-              </>
+              <Authenticator
+                onStateChange={(state) => {
+                  const newState: AuthenticationState =
+                    state === 'signedIn' ? 'authenticated' : 'anonymous'
+                  setAuthState(newState)
+                }}
+              />
             </Route>
 
             <PrivateRoute
