@@ -1,4 +1,4 @@
-FROM debian:buster-20200224-slim
+FROM debian:buster-20200224-slim AS build
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
@@ -12,11 +12,9 @@ RUN apt-get update && \
     locale && \
     curl -sSLO https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb && \
     dpkg -i erlang-solutions_2.0_all.deb && \
-    curl -sSL https://deb.nodesource.com/setup_13.x | bash - && \
-    apt-get install -y esl-erlang=1:21.3.8.14-1 elixir=1.9.4-1 imagemagick nodejs inotify-tools build-essential && \
+    apt-get update && \
+    apt-get install -y esl-erlang=1:21.3.8.14-1 elixir=1.9.4-1 imagemagick inotify-tools build-essential && \
     echo "\033[0;34mErlang release:\033[0m \033[0;32m" $(erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().'  -noshell) "\033[0m" && \
-    echo "\033[0;34mNode version:\033[0m \033[0;32m" $(node --version) "\033[0m" && \
-    echo "\033[0;34mNPM version:\033[0m \033[0;32m" $(npm --version) "\033[0m" && \
     echo "\033[0;34mImageMagick version:\033[0m \033[0;32m" $(convert -version) "\033[0m" # This is installed in one of the base containers
 
 RUN mkdir -p /app
@@ -26,12 +24,23 @@ COPY . .
 RUN mix local.hex --force && \
     mix local.rebar --force && \
     mix deps.get && \
-    mix deps.update postgrex && \
-    mix deps.compile
+    MIX_ENV=prod mix release
 
-WORKDIR /app/assets
-RUN npm install
+FROM debian:buster-20200224-slim
 
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+RUN apt-get update && \
+    apt-get -y -q install openssl locales imagemagick && \
+    sed -i -e 's/# \(en_US\.UTF-8 .*\)/\1/' /etc/locale.gen && \
+    locale-gen && \
+    locale
+
+RUN mkdir -p /app
 WORKDIR /app
 
-CMD ["iex"]
+COPY --from=build /app/_build/prod /app
+
+CMD [ "/app/rel/ferry/bin/ferry", "start" ]

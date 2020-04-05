@@ -1,3 +1,11 @@
 #!/usr/bin/env bash
 
-docker exec toolbox_web mix test --color "$@"
+export POSTGRES_USER=toolbox
+export POSTGRES_PASSWORD=1312
+export POSTGRES_DB=toolbox_dev
+export DB_HOSTNAME_TEST=localhost
+export POSTGRES_PORT=5432
+export MIX_ENV=test
+
+mix ecto.reset
+mix test
