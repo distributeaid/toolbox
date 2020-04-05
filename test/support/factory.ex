@@ -120,7 +120,13 @@ defmodule Ferry.Factory do
   def group_factory do
     %Group{
       name: sequence("Food Clothing and Resistance Collective"),
-      description: "We show solidarity with our neighbors by using mutual aid to collect food and clothing from the community and distribute it to those in need."
+      slug: sequence("food-clothing-and-resistance-collective"),
+      description: "We show solidarity with our neighbors by using mutual aid to collect food and clothing from the community and distribute it to those in need.",
+
+      # add other group types here
+      type: sequence(:group_type, ["M4D_CHAPTER"]),
+
+      slack_channel_name: "FCRC is on IRC Baby #cool"
     }
   end
 

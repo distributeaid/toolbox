@@ -6,60 +6,27 @@ defmodule Ferry.AccountsTest do
   # Users
   # ==============================================================================
   describe "users" do
-    alias Ferry.Profiles
     alias Ferry.Accounts.User
-
-    # Data & Helpers
-    # ----------------------------------------------------------
-
-    @valid_attrs %{
-      typical: %{email: "welcome.newcomers.1@example.org", password: "048urwcu0pmuqw0-c94u*(@$0"},
-      min: %{email: "a@b.de", password: "123456789012"}
-    }
-
-    @update_attrs %{
-      typical: %{email: "welcome.newcomers.3@example.org", password: "2opqiurefdlaksjfO#Q$*@&#?"}
-    }
-
-    @invalid_attrs %{
-      is_nil: %{email: nil, password: nil},
-      bad_format: %{email: "not_an_email", password: "üöäååø∂ßˆå√øπ∑å´˙ƒ¬åß˚∂∆ƒå´ "},
-      too_short: %{email: "a@b", password: "1234"},
-      too_long: %{email: "way_too_long_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@example.com", password: "als;kdjfa 2834#(*$"},
-    }
-
-    def user_fixture(group, attrs \\ %{}) do
-      attrs = Enum.into(attrs, @valid_attrs.typical)
-      {:ok, user} = Accounts.create_user(group, attrs)
-
-      user
-    end
-
-    def group_fixture(n \\ 1) do
-      n = Integer.to_string(n)
-      {:ok, group} = Profiles.create_group(%{name: "Antifa" <> n})
-
-      group
-    end
 
     # Tests
     # ----------------------------------------------------------
 
     test "list_users/0 returns all users" do
-      group1 = group_fixture(1)
-      group2 = group_fixture(2)
+      group1 = insert(:group)
+      group2 = insert(:group)
 
       # no users
       assert Accounts.list_users() == []
 
       # 1 user, 1 group
-      user1 = user_fixture(group1)
+      user1 = insert(:user, %{group: group1})
       users = Accounts.list_users()
       assert users |> length == 1
       assert Enum.at(users, 0).id == user1.id
+      assert Enum.at(users, 0).group_id == group1.id
 
       # multiple users, multiple groups
-      user2 = user_fixture(group2, %{email: "a_different_email@example.org"})
+      user2 = insert(:user, %{group: group2})
       users = Accounts.list_users()
       assert users |> length == 2
       assert Enum.at(users, 0).id == user1.id
@@ -67,8 +34,8 @@ defmodule Ferry.AccountsTest do
     end
 
     test "get_user!/1 returns the user with given id" do
-      group = group_fixture()
-      user = user_fixture(group)
+      group = insert(:group)
+      user = insert(:user, %{group: group})
       assert Accounts.get_user!(user.id).email == user.email
     end
 
@@ -79,75 +46,57 @@ defmodule Ferry.AccountsTest do
     end
 
     test "create_user/2 with valid data creates a user" do
-      # typical
-      group = group_fixture(1)
-      assert {:ok, %User{} = user} = Accounts.create_user(group, @valid_attrs.typical)
-      assert user.email == @valid_attrs.typical.email
-      assert user.password == @valid_attrs.typical.password
-
-      # min
-      group = group_fixture(2)
-      assert {:ok, %User{} = user} = Accounts.create_user(group, @valid_attrs.min)
-      assert user.email == @valid_attrs.min.email
-      assert user.password == @valid_attrs.min.password
+      group = insert(:group)
+      user_params = params_for(:user, %{password: "super-secret"})
+      assert {:ok, %User{} = user} = Accounts.create_user(group, user_params)
+      assert user.email == user_params.email
+      assert user.password == user_params.password
     end
 
     test "create_user/2 with invalid data returns error changeset" do
-      # is nil
-      group = group_fixture(1)
-      assert {:error, %Ecto.Changeset{} = changeset} = Accounts.create_user(group, @invalid_attrs.is_nil)
-      assert 2 == changeset.errors |> length
+      group = insert(:group)
 
-      # bad format
-      group = group_fixture(2)
-      assert {:error, %Ecto.Changeset{} = changeset} = Accounts.create_user(group, @invalid_attrs.bad_format)
+      # generally invalid
+      invalid_params = params_for(:invalid_user, %{password: "super-secret"})
+      assert {:error, %Ecto.Changeset{} = changeset} = Accounts.create_user(group, invalid_params)
       assert 1 == changeset.errors |> length
 
-      # too short
-      group = group_fixture(3)
-      assert {:error, %Ecto.Changeset{} = changeset} = Accounts.create_user(group, @invalid_attrs.too_short)
-      assert 2 == changeset.errors |> length
-
       # too long
-      group = group_fixture(4)
-      assert {:error, %Ecto.Changeset{} = changeset} = Accounts.create_user(group, @invalid_attrs.too_long)
+      invalid_params = params_for(:invalid_long_user, %{password: "super-secret"})
+      assert {:error, %Ecto.Changeset{} = changeset} = Accounts.create_user(group, invalid_params)
       assert 1 == changeset.errors |> length
     end
 
     test "update_user/2 with valid data updates the user" do
-      group = group_fixture(1)
-      assert {:ok, %User{} = user} = Accounts.create_user(group, @valid_attrs.typical)
+      group = insert(:group)
+      user = insert(:user, %{group: group})
 
       # typical
-      assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs.typical)
-      assert user.email == @update_attrs.typical.email
-      assert user.password == @update_attrs.typical.password
+      updated_params = params_for(:user, %{password: "super-secret"})
+      assert {:ok, %User{} = updated_user} = Accounts.update_user(user, updated_params)
+      assert updated_user.id == user.id
+      assert updated_user.group_id == user.group_id
+      assert updated_user.email == updated_params.email
     end
 
     test "update_user/2 with invalid data returns error changeset" do
-      group = group_fixture(1)
-      assert {:ok, %User{} = user} = Accounts.create_user(group, @valid_attrs.typical)
+      group = insert(:group)
+      user = insert(:user, %{group: group})
 
-      # is nil
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs.is_nil)
-      assert user = Accounts.get_user!(user.id)
-
-      # bad format
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs.bad_format)
-      assert user = Accounts.get_user!(user.id)
-
-      # too short
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs.too_short)
+      # generally invalid
+      invalid_params = params_for(:invalid_user, %{password: "super-secret"})
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, invalid_params)
       assert user = Accounts.get_user!(user.id)
 
       # too long
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs.too_long)
+      invalid_params = params_for(:invalid_user, %{password: "super-secret"})
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, invalid_params)
       assert user = Accounts.get_user!(user.id)
     end
 
     test "change_user/1 returns a user changeset" do
-      group = group_fixture()
-      user = user_fixture(group)
+      group = insert(:group)
+      user = insert(:user, %{group: group})
       assert %Ecto.Changeset{} = Accounts.change_user(user)
     end
   end

@@ -181,10 +181,15 @@ defmodule Ferry.GroupTest do
 
     mutation = """
       mutation {
-        createGroup(name: "#{group_attrs.name}", description: "#{group_attrs.description}") {
+        createGroup(
+          name: "#{group_attrs.name}",
+          slackChannelName: "#{group_attrs.slack_channel_name}"
+        ) {
           id,
           name,
-          description
+          type,
+          slug,
+          slackChannelName
         }
       }
     """
@@ -194,10 +199,12 @@ defmodule Ferry.GroupTest do
       |> post("/api", %{query: mutation})
       |> json_response(200)
 
-    %{"data" => %{"createGroup" => %{"id" =>  id, "name" => name, "description" => description}}} = res
+    %{"data" => %{"createGroup" => %{"id" =>  id, "name" => name, "type" => type, "slug" => slug, "slackChannelName" => slack_channel_name}}} = res
     assert id
+    assert slug
     assert name == group_attrs.name
-    assert description == group_attrs.description
+    assert type == group_attrs.type
+    assert slack_channel_name == group_attrs.slack_channel_name
   end
 
   # Mutation - Update A Group

@@ -30,6 +30,7 @@ defmodule FerryApi.Schema.Group do
     field :create_group, type: :group do
       arg(:name, non_null(:string))
       arg(:description, :string)
+      arg(:slack_channel_name, non_null(:string))
       resolve(&create_group/3)
     end
 

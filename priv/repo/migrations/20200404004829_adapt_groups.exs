@@ -1,4 +1,4 @@
-defmodule :"Elixir.Ferry.Repo.Migrations.Adapt groups" do
+defmodule Ferry.Repo.Migrations.AdaptGroups do
   use Ecto.Migration
 
   def change do

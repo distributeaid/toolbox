@@ -2,7 +2,7 @@ defmodule FerryApi.Schema.GroupType do
   use Absinthe.Schema.Notation
 
   enum :group_type do
-    value :md4_chapter, as: "M4D_CHAPTER"
+    value :m4d_chapter, as: "M4D_CHAPTER"
   end
 
   object :group do
