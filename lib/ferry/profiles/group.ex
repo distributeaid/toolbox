@@ -7,7 +7,6 @@ defmodule Ferry.Profiles.Group do
   alias Ferry.Profiles.Group.Logo
   alias Ferry.Profiles.Project
 
-
   @group_types ["M4D_CHAPTER"]
 
   schema "groups" do
@@ -17,19 +16,19 @@ defmodule Ferry.Profiles.Group do
     field :slug, :string
     field :type, :string
 
-    field :donation_link, :string
+    field :donation_link, Ferry.EctoType.URL
     # TODO: social media links
 
     field :slack_channel_name, :string
 
-    field :request_form, :string
-    field :request_form_results, :string
+    field :request_form, Ferry.EctoType.URL
+    field :request_form_results, Ferry.EctoType.URL
 
-    field :volunteer_form, :string
-    field :volunteer_form_results, :string
+    field :volunteer_form, Ferry.EctoType.URL
+    field :volunteer_form_results, Ferry.EctoType.URL
 
-    field :donation_form, :string
-    field :donation_form_results, :string
+    field :donation_form, Ferry.EctoType.URL
+    field :donation_form_results, Ferry.EctoType.URL
     # TODO: uri type
 
     has_one :users, User # on_delete set in database via migration

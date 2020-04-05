@@ -127,6 +127,7 @@ defmodule Ferry.Factory do
       type: sequence(:group_type, ["M4D_CHAPTER"]),
 
       slack_channel_name: "FCRC is on IRC Baby #cool",
+      donation_link: "https://liecheatstealkillwin.com/listentoit.html",
 
       request_form: "https://request.example.com",
       request_form_results: "https://request.example.com/results",
@@ -142,6 +143,21 @@ defmodule Ferry.Factory do
       group_factory(),
       %{
         name: ""
+      }
+    )
+  end
+
+  def invalid_url_group_factory do
+    struct!(
+      group_factory(),
+      %{
+        donation_link: "nah://example.org",
+        request_form: "https:/example.org",
+        request_form_results: "exmple.org",
+        volunteer_form: "",
+        volunteer_form_results: "https://example.",
+        donation_form: "https://example..org",
+        donation_form_results: "https://.example.org"
       }
     )
   end

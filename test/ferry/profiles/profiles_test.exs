@@ -45,6 +45,10 @@ defmodule Ferry.ProfilesTest do
     test "create_group/1 with invalid data returns error changeset" do
       invalid_params = params_for(:invalid_group)
       assert {:error, %Ecto.Changeset{}} = Profiles.create_group(invalid_params)
+
+      invalid_params = params_for(:invalid_url_group)
+      assert {:error, %Ecto.Changeset{} = changeset} = Profiles.create_group(invalid_params)
+      assert length(changeset.errors) == 7
     end
 
     test "update_group/2 with valid data updates the group" do
@@ -60,8 +64,14 @@ defmodule Ferry.ProfilesTest do
 
     test "update_group/2 with invalid data returns error changeset" do
       group = insert(:group)
+
       invalid_params = params_for(:invalid_group)
       assert {:error, %Ecto.Changeset{}} = Profiles.update_group(group, invalid_params)
+      assert group == Profiles.get_group!(group.id)
+
+      invalid_params = params_for(:invalid_url_group)
+      assert {:error, %Ecto.Changeset{} = changeset} = Profiles.update_group(group, invalid_params)
+      assert length(changeset.errors) == 7
       assert group == Profiles.get_group!(group.id)
     end
 
