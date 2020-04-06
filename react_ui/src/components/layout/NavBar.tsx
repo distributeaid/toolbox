@@ -2,14 +2,8 @@ import React, { useState, useCallback } from 'react'
 
 import { NavLink } from 'react-router-dom'
 
-import { useMediaQuery } from 'react-responsive'
-
 export const NavBar: React.FC = () => {
-  const bigScreen = useMediaQuery({
-    query: '(min-width: 1024px)',
-  })
-
-  const [menuOpen, setMenuOpen] = useState(bigScreen)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const toggleMenu = useCallback(() => {
     setMenuOpen((open) => !open)
@@ -36,7 +30,7 @@ export const NavBar: React.FC = () => {
             </span>
           </NavLink>
         </div>
-        <div className={`${bigScreen ? 'hidden' : 'block'}`}>
+        <div className="block lg:hidden">
           <button
             onClick={toggleMenu}
             className="flex items-center px-3 py-2 border rounded border-white focus:outline-none">
@@ -49,26 +43,27 @@ export const NavBar: React.FC = () => {
             </svg>
           </button>
         </div>
-        {(menuOpen || bigScreen) && (
-          <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-            <div className="text-sm lg:flex-grow">
-              <MyNavLink to="/about" label="About Us" />
-              <MyNavLink to="/news" label="News" />
-              <MyNavLink to="/involved" label="Get Involved" />
-              <MyNavLink to="/supplies" label="Get Supplies" />
-              <MyNavLink to="/chapters" label="Local Chapters" />
-              <MyNavLink to="/resources" label="Resources" />
-              <MyNavLink to="/faq" label="FAQ" />
-            </div>
-            <div>
-              <a
-                href="/donate"
-                className="bg-pink-500 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
-                Donate
-              </a>
-            </div>
+        <div
+          className={`w-full ${
+            menuOpen ? 'block' : 'hidden'
+          } flex-grow lg:flex lg:items-center lg:w-auto`}>
+          <div className="text-sm lg:flex-grow">
+            <MyNavLink to="/about" label="About Us" />
+            <MyNavLink to="/news" label="News" />
+            <MyNavLink to="/involved" label="Get Involved" />
+            <MyNavLink to="/supplies" label="Get Supplies" />
+            <MyNavLink to="/chapters" label="Local Chapters" />
+            <MyNavLink to="/resources" label="Resources" />
+            <MyNavLink to="/faq" label="FAQ" />
           </div>
-        )}
+          <div>
+            <a
+              href="/donate"
+              className="bg-pink-500 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
+              Donate
+            </a>
+          </div>
+        </div>
       </nav>
     </header>
   )
