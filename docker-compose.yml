@@ -1,22 +1,25 @@
 version: "3.4"
 services:
   db:
-    image: "postgres:${DA_POSTGRES_VERSION}"
+    image: "postgres:${DA_POSTGRES_VERSION:-11.2}"
     container_name: toolbox_db
     volumes:
-      - ./${DA_DB_VOLUME_NAME}:/var/lib/postgresql/data
+      - ./${DA_DB_VOLUME_NAME:-db}:/var/lib/postgresql/data
       - ./development/seed-test-group.sh:/seed-test-group.sh
     environment:
-      - POSTGRES_USER=${DA_DB_USERNAME}
-      - POSTGRES_PASSWORD=${DA_DB_PASSWORD}
-      - POSTGRES_DB=${DA_DB_DATABASE}
+      - POSTGRES_USER=${DA_DB_USERNAME:-toolbox}
+      - POSTGRES_PASSWORD=${DA_DB_PASSWORD:-1312}
+      - POSTGRES_DB=${DA_DB_DATABASE:-toolbox_dev}
+
   dbtest:
-    image: "postgres:${DA_POSTGRES_VERSION}"
+    image: "postgres:${DA_POSTGRES_VERSION:-11.2}"
     container_name: dbtest
     environment:
-      - POSTGRES_USER=${DA_DB_USERNAME}
-      - POSTGRES_PASSWORD=${DA_DB_PASSWORD}
-      - POSTGRES_DB=${DA_DB_DATABASE}
+      - POSTGRES_USER=${DA_DB_USERNAME:-toolbox}
+      - POSTGRES_PASSWORD=${DA_DB_PASSWORD:-1312}
+      - POSTGRES_DB=${DA_DB_DATABASE:-toolbox_dev}
+    ports:
+      - "5432:5432"
   dbadmin:
     image: "dpage/pgadmin4:4"
     container_name: dbadmin
@@ -28,6 +31,7 @@ services:
     depends_on:
       - db
     restart: unless-stopped
+
   web:
     build:
       context: .
@@ -41,36 +45,28 @@ services:
       ]
     container_name: toolbox_web
     volumes:
-      - ./:/app
-      - /app/assets/node_modules
+      - ./development:/app/development
     ports:
       - "1312:1312"
     # DB_HOSTNAME value MUST match the name of the db service!
     # DA_DB_HOSTNAME_TEST value MUST match the name of the test db service!
     environment:
-      - POSTGRES_USER=${DA_DB_USERNAME}
-      - POSTGRES_PASSWORD=${DA_DB_PASSWORD}
-      - POSTGRES_DB=${DA_DB_DATABASE}
-      - DB_HOSTNAME_DEV=${DA_DB_HOSTNAME_DEV}
-      - DB_HOSTNAME_TEST=${DA_DB_HOSTNAME_TEST}
+      - POSTGRES_USER=${DA_DB_USERNAME:-toolbox}
+      - POSTGRES_PASSWORD=${DA_DB_PASSWORD:-1312}
+      - POSTGRES_DB=${DA_DB_DATABASE:-toolbox_dev}
+      - POSTGRES_HOST=${DA_DB_HOSTNAME_DEV:-db}
+      - POSTGRES_PORT=5432
+      - DB_HOSTNAME_DEV=${DA_DB_HOSTNAME_DEV:-db}
+      - DB_HOSTNAME_TEST=${DA_DB_HOSTNAME_TEST:-dbtest}
       - DB_PORT=5432
+      - PORT=1312
     env_file:
       - .env.secret
     depends_on:
       - db
       - dbtest
-  ui:
-    build:
-      context: .
-      dockerfile: ui.Dockerfile
-    container_name: toolbox_ui
-    volumes:
-      - ./etc/nginx/conf.d:/etc/nginx/conf.d
-    ports:
-      - "80:80"
-    depends_on:
-      - web
+
 volumes:
   db:
-    name: ${DA_DB_VOLUME_NAME}
-    external: ${DA_EXTERNAL_VOLUME_REQUIRED}
+    name: ${DA_DB_VOLUME_NAME:-db}
+    external: ${DA_EXTERNAL_VOLUME_REQUIRED:-false}

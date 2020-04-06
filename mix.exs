@@ -61,6 +61,11 @@ defmodule Ferry.Mixfile do
       {:scrivener_ecto, "~> 2.0"}, # pagination
       {:timex, "~> 3.0"}, # datetime
 
+      # file uploads
+      {:ex_aws_s3, "~> 2.0"},
+      {:poison, "~> 3.1"},
+      {:sweet_xml, "~> 0.6"},
+
       # graphql api
       {:absinthe, "~> 1.4"},
       {:absinthe_plug, "~> 1.4"},

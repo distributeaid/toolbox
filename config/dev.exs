@@ -61,5 +61,6 @@ config :ferry, Ferry.Repo,
   username: System.get_env("POSTGRES_USER"),
   password: System.get_env("POSTGRES_PASSWORD"),
   database: System.get_env("POSTGRES_DB"),
-  hostname: System.get_env("DB_HOSTNAME_DEV"),
+  hostname: System.get_env("POSTGRES_HOSTNAME"),
+  hostname: System.get_env("POSTGRES_PORT"),
   pool_size: 10

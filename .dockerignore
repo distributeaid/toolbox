@@ -2,6 +2,7 @@
 /_build
 /db
 /*.ez
-/assets/node_modules
+
+/deps
 
 react_ui/node_modules
