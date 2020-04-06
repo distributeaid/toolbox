@@ -68,8 +68,8 @@ cp .env.secret{.example,}
 
 **Run Containers**
 
-* Start: `bin/dev-server`
-* Stop: `ctrl-c` in the same window, or `bin/dev-server down` in another
+* Start: `docker-compose up`
+* Stop: `ctrl-c` in the same window, or `docker-compose down` in another
 
 When starting the containers, once you see this message it is ready:
 
@@ -83,7 +83,7 @@ See the _Common Docker Commands_ section below for a list of container names.
 
 1. With the containers running, go to http://localhost:8088 in your browser.
 1. Log in with username `admin` and password `admin` (unless you overrode the defaults).
-1. Create new servers for our dev and test dbs.  See the contents of the `bin/dev-server` script for the connection information (including the hostnames).
+1. Create new servers for our dev and test dbs.  See the contents of the `docker-compose.yml` file for the connection information (including the hostnames).
 
 **Setup Up Our Site**
 
