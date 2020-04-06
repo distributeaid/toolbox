@@ -3,7 +3,7 @@ import React from 'react'
 // TODO: factor out buttons into reusable component - add the appropriate props to Button.tsx
 
 export const Footer: React.FC = () => (
-  <footer className="mt-5 pt-24 pb-14 pl-3 pl-2 md:px-3 lg:pl-14 lg:pr-14 bg-gray-900 text-gray-100">
+  <footer className="mt-5 pt-24 pb-14 pl-3 pl-2 md:px-3 lg:px-14 bg-gray-900 text-gray-100">
     <div className="block md:flex md:space-between">
       <div className="column flex-1 mr-3">
         <div className="heading whitespace-no-wrap text-gray-200 mb-3 text-3xl text-white">
@@ -14,12 +14,12 @@ export const Footer: React.FC = () => (
         {/* <div style={{ width: 200 }}>
           <button
             type="button"
-            className="mb-5 w-full bg-blue-600 hover:border-transparent hover:text-blue-900 hover:bg-white text-white font-medium shadow-button-white py-2 px-3 flex justify-center rounded-sm">
+            className="shadow-button-white mb-5 w-full bg-blue-600 hover:border-transparent hover:text-blue-900 hover:bg-white text-white font-medium py-2 px-3 flex justify-center rounded-sm">
             Request Supplies
           </button>
           <button
             type="button"
-            className="w-full bg-orange-100 hover:border-transparent hover:text-orange-700 hover:bg-white text-black font-medium shadow-button-white py-2 px-3 flex justify-center rounded-sm">
+            className="shadow-button-white w-full bg-orange-100 hover:border-transparent hover:text-orange-700 hover:bg-white text-black font-medium py-2 px-3 flex justify-center rounded-sm">
             Get Involved
           </button>
         </div> */}
@@ -52,7 +52,7 @@ export const Footer: React.FC = () => (
             </div>
             <div className="item text-xs font-light mb-3">
               <a href="/field-guides" target="_blank">
-                Field Guies
+                Field Guides
               </a>
             </div>
             <div className="item text-xs font-light mb-3">
