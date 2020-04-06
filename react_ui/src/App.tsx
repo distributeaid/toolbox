@@ -16,6 +16,7 @@ import { ChapterList } from './pages/ChapterList'
 import SignUp from './pages/SignUp'
 import StyleGuide from './pages/StyleGuide'
 import { NavBar } from './components/layout/NavBar'
+import { Footer } from './components/layout/Footer'
 
 const App: React.FunctionComponent = () => {
   return (
@@ -58,6 +59,7 @@ const App: React.FunctionComponent = () => {
               <Redirect to="/chapters" />
             </Route>
           </Switch>
+          <Footer />
         </Router>
       </Suspense>
     </ApolloProvider>
