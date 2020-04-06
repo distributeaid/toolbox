@@ -15,12 +15,14 @@ import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
 import SignUp from './pages/SignUp'
 import StyleGuide from './pages/StyleGuide'
+import { NavBar } from './components/layout/NavBar'
 
 const App: React.FunctionComponent = () => {
   return (
     <ApolloProvider client={client}>
       <Suspense fallback="Loading...">
         <Router>
+          <NavBar />
           <nav>
             <ul>
               <li>
