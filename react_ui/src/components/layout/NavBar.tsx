@@ -9,6 +9,10 @@ export const NavBar: React.FC = () => {
     setMenuOpen((open) => !open)
   }, [])
 
+  const hideMenu = useCallback(() => {
+    setMenuOpen(false)
+  }, [])
+
   return (
     <header className="sticky top-0 z-50">
       <nav className="flex items-center justify-between flex-wrap bg-gray-900 text-gray-100 py-2 px-3">
@@ -48,13 +52,17 @@ export const NavBar: React.FC = () => {
             menuOpen ? 'block' : 'hidden'
           } flex-grow lg:flex lg:items-center lg:w-auto`}>
           <div className="text-sm lg:flex-grow">
-            <MyNavLink to="/about" label="About Us" />
-            <MyNavLink to="/news" label="News" />
-            <MyNavLink to="/involved" label="Get Involved" />
-            <MyNavLink to="/supplies" label="Get Supplies" />
-            <MyNavLink to="/chapters" label="Local Chapters" />
-            <MyNavLink to="/resources" label="Resources" />
-            <MyNavLink to="/faq" label="FAQ" />
+            <MyNavLink onClick={hideMenu} to="/about" label="About Us" />
+            <MyNavLink onClick={hideMenu} to="/news" label="News" />
+            <MyNavLink onClick={hideMenu} to="/involved" label="Get Involved" />
+            <MyNavLink onClick={hideMenu} to="/supplies" label="Get Supplies" />
+            <MyNavLink
+              onClick={hideMenu}
+              to="/chapters"
+              label="Local Chapters"
+            />
+            <MyNavLink onClick={hideMenu} to="/resources" label="Resources" />
+            <MyNavLink onClick={hideMenu} to="/faq" label="FAQ" />
           </div>
           <div>
             <a
@@ -69,8 +77,13 @@ export const NavBar: React.FC = () => {
   )
 }
 
-const MyNavLink: React.FC<{ to: string; label: string }> = ({ to, label }) => (
+const MyNavLink: React.FC<{
+  onClick?: () => any
+  to: string
+  label: string
+}> = ({ to, label, onClick }) => (
   <NavLink
+    onClick={onClick}
     activeClassName="text-pink-400"
     to={to}
     className="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 mr-9">
