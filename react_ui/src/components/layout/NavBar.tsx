@@ -36,10 +36,10 @@ export const NavBar: React.FC = () => {
             </span>
           </NavLink>
         </div>
-        <div
-          onClick={toggleMenu}
-          className={`${bigScreen ? 'hidden' : 'block'}`}>
-          <button className="flex items-center px-3 py-2 border rounded border-white outline-none">
+        <div className={`${bigScreen ? 'hidden' : 'block'}`}>
+          <button
+            onClick={toggleMenu}
+            className="flex items-center px-3 py-2 border rounded border-white focus:outline-none">
             <svg
               className="fill-current h-3 w-3"
               viewBox="0 0 20 20"
@@ -52,54 +52,13 @@ export const NavBar: React.FC = () => {
         {(menuOpen || bigScreen) && (
           <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
             <div className="text-sm lg:flex-grow">
-              <NavLink
-                activeClassName="text-pink-400"
-                to="/about"
-                className="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 mr-9">
-                About Us
-              </NavLink>
-              <NavLink
-                activeClassName="text-pink-400"
-                to="/news"
-                className="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 mr-9">
-                News
-              </NavLink>
-              <NavLink
-                activeClassName="text-pink-400"
-                to="/involved"
-                className="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 mr-9">
-                Get Involved
-              </NavLink>
-              <NavLink
-                activeClassName="text-pink-400"
-                to="/supplies"
-                className="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 mr-9">
-                Get Supplies
-              </NavLink>
-              <NavLink
-                activeClassName="text-pink-400"
-                to="/chapters"
-                className="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 mr-9">
-                Local Chapters
-              </NavLink>
-              <NavLink
-                activeClassName="text-pink-400"
-                to="/resources"
-                className="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 mr-9">
-                Resources
-              </NavLink>
-              <NavLink
-                activeClassName="text-pink-400"
-                to="/faq"
-                className="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 mr-9">
-                FAQ
-              </NavLink>
-              <NavLink
-                activeClassName="text-pink-400"
-                to="/style-guide"
-                className="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 mr-9">
-                Style Guide
-              </NavLink>
+              <MyNavLink to="/about" label="About Us" />
+              <MyNavLink to="/news" label="News" />
+              <MyNavLink to="/involved" label="Get Involved" />
+              <MyNavLink to="/supplies" label="Get Supplies" />
+              <MyNavLink to="/chapters" label="Local Chapters" />
+              <MyNavLink to="/resources" label="Resources" />
+              <MyNavLink to="/faq" label="FAQ" />
             </div>
             <div>
               <a
@@ -114,3 +73,12 @@ export const NavBar: React.FC = () => {
     </header>
   )
 }
+
+const MyNavLink: React.FC<{ to: string; label: string }> = ({ to, label }) => (
+  <NavLink
+    activeClassName="text-pink-400"
+    to={to}
+    className="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 mr-9">
+    {label}
+  </NavLink>
+)
