@@ -6,7 +6,7 @@ import { useMediaQuery } from 'react-responsive'
 
 export const NavBar: React.FC = () => {
   const bigScreen = useMediaQuery({
-    query: '(min-width: 600px)',
+    query: '(min-width: 1024px)',
   })
 
   const [menuOpen, setMenuOpen] = useState(bigScreen)
