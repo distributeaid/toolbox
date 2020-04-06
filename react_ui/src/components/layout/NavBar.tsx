@@ -78,7 +78,7 @@ export const NavBar: React.FC = () => {
 }
 
 const MyNavLink: React.FC<{
-  onClick?: () => any
+  onClick?: () => void
   to: string
   label: string
 }> = ({ to, label, onClick }) => (
