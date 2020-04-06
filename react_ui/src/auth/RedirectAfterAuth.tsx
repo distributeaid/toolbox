@@ -6,7 +6,9 @@ export const RedirectAfterAuth = () => {
 
   const redirect = location.state && location.state.redirectAfterAuth
 
-  if (!redirect) return null
+  if (location.pathname !== '/sign-in') {
+    return null
+  }
 
-  return <Redirect to={redirect} />
+  return <Redirect to={redirect || '/'} />
 }
