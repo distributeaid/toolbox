@@ -11,7 +11,7 @@ export const Footer: React.FC = () => (
           workers on the <br />
           frontlines.
         </div>
-        <div style={{ width: 200 }}>
+        {/* <div style={{ width: 200 }}>
           <button
             type="button"
             className="mb-5 w-full bg-blue-600 hover:border-transparent hover:text-blue-900 hover:bg-white text-white font-medium shadow-button-white py-2 px-3 flex justify-center rounded-sm">
@@ -22,7 +22,7 @@ export const Footer: React.FC = () => (
             className="w-full bg-orange-100 hover:border-transparent hover:text-orange-700 hover:bg-white text-black font-medium shadow-button-white py-2 px-3 flex justify-center rounded-sm">
             Get Involved
           </button>
-        </div>
+        </div> */}
       </div>
 
       <div className="flex-1 mt-10 md:mt-0 flex">
