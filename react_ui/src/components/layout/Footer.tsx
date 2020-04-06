@@ -1,5 +1,7 @@
 import React from 'react'
 
+// TODO: factor out buttons into reusable component - add the appropriate props to Button.tsx
+
 export const Footer: React.FC = () => (
   <footer className="mt-5 pt-24 pb-14 pl-3 pl-2 md:px-3 lg:pl-14 lg:pr-14 bg-gray-900 text-gray-100">
     <div className="block md:flex md:space-between">
