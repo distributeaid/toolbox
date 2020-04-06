@@ -1,22 +1,18 @@
 import * as React from 'react'
-import { Route, Redirect, RouteProps } from 'react-router-dom'
-import { useLocation } from 'react-router-dom'
+import { Redirect, Route, RouteProps } from 'react-router-dom'
 
 interface PrivateRouteProps extends RouteProps {
-  component: any
   isSignedIn: boolean
 }
 
 const PrivateRoute = (props: PrivateRouteProps) => {
   const { component: Component, isSignedIn, ...rest } = props
 
-  const location = useLocation()
-
   return (
     <Route
       {...rest}
       render={(routeProps) =>
-        isSignedIn ? (
+        isSignedIn && Component ? (
           <Component {...routeProps} />
         ) : (
           <Redirect

@@ -7,7 +7,7 @@ type Props = {
 }
 
 export const Chapter: React.FC<Props> = ({ slug }) => {
-  const { loading, data } = useGetChapterQuery({ variables: { id: slug }})
+  const { loading, data } = useGetChapterQuery({ variables: { id: slug } })
 
   if (loading) {
     return <div>Loading...</div>

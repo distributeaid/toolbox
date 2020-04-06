@@ -1,8 +1,10 @@
 import './App.css'
 import '@aws-amplify/ui/dist/style.css'
 
-import React, { Suspense, useState, useEffect } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
+import Amplify, { Auth } from 'aws-amplify'
+import { Authenticator } from 'aws-amplify-react'
+import React, { Suspense, useEffect, useState } from 'react'
 import {
   BrowserRouter as Router,
   Link,
@@ -10,16 +12,14 @@ import {
   Route,
   Switch,
 } from 'react-router-dom'
-import Amplify, { Auth } from 'aws-amplify'
-import amplifyConfig from './aws-exports'
-import { Authenticator } from 'aws-amplify-react'
 
 import { client } from './apollo/client'
+import PrivateRoute from './auth/PrivateRoute'
+import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
+import amplifyConfig from './aws-exports'
 import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
 import StyleGuide from './pages/StyleGuide'
-import PrivateRoute from './auth/PrivateRoute'
-import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
 
 Amplify.configure(amplifyConfig)
 
