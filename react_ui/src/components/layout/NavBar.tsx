@@ -30,7 +30,7 @@ export const NavBar: React.FC = () => {
           </NavLink>
           <NavLink to="/">
             <span className="font-semibold text-l tracking-tight">
-              masks for Docs
+              Masks For Docs
             </span>
           </NavLink>
         </div>
