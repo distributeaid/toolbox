@@ -34,7 +34,7 @@ unit_test_ui:
 
 cypress_e2e:
   extends: .ui
-  stage: unit_test
+  stage: e2e_test
   needs: ["build_ui", "unit_test_ui"]
   image: cypress/base:10
   script:
