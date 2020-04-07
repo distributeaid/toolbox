@@ -39,6 +39,12 @@ cypress_e2e:
   image: cypress/base:10
   script:
     - cd ${REACT_DIR}
+    - npm ci
+    # show where the Cypress test runner binaries are cached
+    - $(npm bin)/cypress cache path
+    # show all installed versions of Cypress binary
+    - $(npm bin)/cypress cache list
+    - $(npm bin)/cypress verify
     - npm run cypress:ci
 
 image_ui:
