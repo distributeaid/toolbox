@@ -1,6 +1,7 @@
 import React from 'react'
 
 // TODO: factor out buttons into reusable component - add the appropriate props to Button.tsx
+// TODO use our own social icons assets
 
 export const Footer: React.FC = () => (
   <footer className="mt-5 pt-24 pb-14 pl-3 pl-2 md:px-8 lg:px-14 bg-gray-900 text-gray-100">
