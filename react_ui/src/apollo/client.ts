@@ -1,4 +1,4 @@
-import { CognitoUser } from 'amazon-cognito-identity-js'
+import { CognitoUserSession } from 'amazon-cognito-identity-js'
 import ApolloClient from 'apollo-boost'
 import Amplify, { Auth } from 'aws-amplify'
 
@@ -9,12 +9,9 @@ Amplify.configure(amplifyConfig)
 export const client = new ApolloClient({
   uri: '/api/graphiql',
   request: (operation) => {
-    return Auth.currentAuthenticatedUser()
-      .then((user: CognitoUser) => {
-        const token = user
-          .getSignInUserSession()
-          ?.getAccessToken()
-          .getJwtToken()
+    return Auth.currentSession()
+      .then((session: CognitoUserSession) => {
+        const token = session.getAccessToken().getJwtToken()
 
         operation.setContext({
           headers: {
