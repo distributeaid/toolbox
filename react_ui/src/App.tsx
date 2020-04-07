@@ -17,6 +17,7 @@ import { client } from './apollo/client'
 import PrivateRoute from './auth/PrivateRoute'
 import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
 import amplifyConfig from './aws-exports'
+import { Footer } from './components/layout/Footer'
 import { NavBar } from './components/layout/NavBar'
 import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
@@ -125,6 +126,7 @@ const App: React.FunctionComponent = () => {
               <Redirect to="/chapters" />
             </Route>
           </Switch>
+          <Footer />
         </Router>
       </Suspense>
     </ApolloProvider>
