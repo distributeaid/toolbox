@@ -119,8 +119,23 @@ defmodule Ferry.Factory do
 
   def group_factory do
     %Group{
-      name: sequence("Food Clothing and Resistance Collective"),
-      description: "We show solidarity with our neighbors by using mutual aid to collect food and clothing from the community and distribute it to those in need."
+      name: sequence("Food Clothing -and- Resistance Collective"),
+      slug: sequence("food-clothing--and--resistance-collective"),
+
+      # add other group types here
+      type: sequence(:group_type, ["M4D_CHAPTER"]),
+
+      # TODO: logo
+      description: "We show solidarity with our neighbors by using mutual aid to collect food and clothing from the community and distribute it to those in need.",
+      donation_link: "https://liecheatstealkillwin.com/listentoit.html",
+      slack_channel_name: "FCRC is on IRC Baby #cool",
+
+      request_form: "https://request.example.com",
+      request_form_results: "https://request.example.com/results",
+      volunteer_form: "https://volunteer.example.com",
+      volunteer_form_results: "https://volunteer.example.com/results",
+      donation_form: "https://donation.example.com",
+      donation_form_results: "https://donation.example.com/results"
     }
   end
 
@@ -129,6 +144,21 @@ defmodule Ferry.Factory do
       group_factory(),
       %{
         name: ""
+      }
+    )
+  end
+
+  def invalid_url_group_factory do
+    struct!(
+      group_factory(),
+      %{
+        donation_link: "nah://example.org",
+        request_form: "https:/example.org",
+        request_form_results: "example.org",
+        volunteer_form: "nope",
+        volunteer_form_results: "https://example.",
+        donation_form: "https://example..org",
+        donation_form_results: "https://.example.org"
       }
     )
   end
