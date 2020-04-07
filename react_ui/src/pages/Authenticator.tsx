@@ -12,7 +12,7 @@ import React from 'react'
 
 import amplifyConfig from '../aws-exports'
 import { Input } from '../components/Input'
-import { AuthenticationState } from '../types'
+import { AuthenticationState } from '../auth/types'
 
 Amplify.configure(amplifyConfig)
 

@@ -181,10 +181,24 @@ defmodule Ferry.GroupTest do
 
     mutation = """
       mutation {
-        createGroup(name: "#{group_attrs.name}", description: "#{group_attrs.description}") {
+        createGroup(
+          groupInput: {
+            name: "#{group_attrs.name}",
+            description: "#{group_attrs.description}",
+            slackChannelName: "#{group_attrs.slack_channel_name}",
+            requestForm: "#{group_attrs.request_form}",
+            requestFormResults: "#{group_attrs.request_form_results}",
+            volunteerForm: "#{group_attrs.volunteer_form}",
+            volunteerFormResults: "#{group_attrs.volunteer_form_results}",
+            donationForm: "#{group_attrs.donation_form}",
+            donationFormResults: "#{group_attrs.donation_form_results}"
+          }
+        ) {
           id,
           name,
-          description
+          type,
+          slug,
+          slackChannelName
         }
       }
     """
@@ -194,10 +208,12 @@ defmodule Ferry.GroupTest do
       |> post("/api", %{query: mutation})
       |> json_response(200)
 
-    %{"data" => %{"createGroup" => %{"id" =>  id, "name" => name, "description" => description}}} = res
+    %{"data" => %{"createGroup" => %{"id" =>  id, "name" => name, "type" => type, "slug" => slug, "slackChannelName" => slack_channel_name}}} = res
     assert id
+    assert slug
     assert name == group_attrs.name
-    assert description == group_attrs.description
+    assert type == group_attrs.type
+    assert slack_channel_name == group_attrs.slack_channel_name
   end
 
   # Mutation - Update A Group
@@ -208,7 +224,20 @@ defmodule Ferry.GroupTest do
 
     mutation = """
       mutation {
-        updateGroup(id: #{group.id}, description: "#{group.description}") {
+        updateGroup(
+          id: #{group.id},
+          groupInput: {
+            name: "#{updates.name}",
+            description: "#{updates.description}",
+            slackChannelName: "#{updates.slack_channel_name}",
+            requestForm: "#{updates.request_form}",
+            requestFormResults: "#{updates.request_form_results}",
+            volunteerForm: "#{updates.volunteer_form}",
+            volunteerFormResults: "#{updates.volunteer_form_results}",
+            donationForm: "#{updates.donation_form}",
+            donationFormResults: "#{updates.donation_form_results}"
+          }
+        ) {
           id,
           name,
           description
@@ -223,7 +252,6 @@ defmodule Ferry.GroupTest do
 
     %{"data" => %{"updateGroup" => %{"id" => id, "name" => name, "description" => description}}} = res
     assert id == Integer.to_string(group.id)
-    assert name == group.name
     assert description == updates.description
   end
 

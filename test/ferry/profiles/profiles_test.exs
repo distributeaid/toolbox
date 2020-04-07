@@ -10,52 +10,22 @@ defmodule Ferry.ProfilesTest do
   describe "groups" do
     alias Ferry.Profiles.Group
 
-    # Data & Helpers
-    # ----------------------------------------------------------
-
-    @valid_attrs %{
-      typical: %{name: "My Refugee Aid Group", description: "We help newcomers!"},
-      min: %{name: "My Other Refugee Aid Group"}
-    }
-
-    @update_attrs %{
-      typical: %{name: "My Refugee Squat", description: "We house newcomers!"}
-    }
-
-    @invalid_attrs %{
-      is_nil: %{name: nil},
-      too_short: %{name: ""},
-      too_long: %{name: "This name is really way too long.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}
-    }
-
-    def group_fixture(attrs \\ %{}) do
-      {:ok, group} =
-        attrs
-        |> Enum.into(@valid_attrs.typical)
-        |> Profiles.create_group()
-
-      group
-    end
-
-    # Tests
-    # ----------------------------------------------------------
-
      test "list_groups/0 returns all groups" do
       # no groups
       assert Profiles.list_groups() == [],
       "returns an empty list if no groups have been created"
 
       # 1 group
-      group1 = group_fixture()
+      group1 = insert(:group)
       assert Profiles.list_groups() == [group1]
 
       # multiple groups
-      group2 = group_fixture(%{name: "A Second Group"})
+      group2 = insert(:group, %{name: "A Second Group"})
       assert Profiles.list_groups() == [group1, group2]
     end
 
     test "get_group!/1 returns the group with given id" do
-      group = group_fixture()
+      group = insert(:group)
       assert Profiles.get_group!(group.id) == group
     end
 
@@ -66,62 +36,53 @@ defmodule Ferry.ProfilesTest do
     end
 
     test "create_group/1 with valid data creates a group" do
-      # typical
-      assert {:ok, %Group{} = group} = Profiles.create_group(@valid_attrs.typical)
-      assert group.name == @valid_attrs.typical.name
-      assert group.description == @valid_attrs.typical.description
-
-      # min
-      assert {:ok, %Group{} = group} = Profiles.create_group(@valid_attrs.min)
-      assert group.name == @valid_attrs.min.name
-      assert group.description == nil
+      params = params_for(:group)
+      assert {:ok, %Group{} = group} = Profiles.create_group(params)
+      assert group.name == params.name
+      assert group.description == params.description
     end
 
     test "create_group/1 with invalid data returns error changeset" do
-      # is nil
-      assert {:error, %Ecto.Changeset{}} = Profiles.create_group(@invalid_attrs.is_nil)
+      invalid_params = params_for(:invalid_group)
+      assert {:error, %Ecto.Changeset{}} = Profiles.create_group(invalid_params)
 
-      # too short
-      assert {:error, %Ecto.Changeset{}} = Profiles.create_group(@invalid_attrs.too_short)
-
-      # too long
-      assert {:error, %Ecto.Changeset{}} = Profiles.create_group(@invalid_attrs.too_long)
+      invalid_params = params_for(:invalid_url_group)
+      assert {:error, %Ecto.Changeset{} = changeset} = Profiles.create_group(invalid_params)
+      assert length(changeset.errors) == 7
     end
 
     test "update_group/2 with valid data updates the group" do
-      group = group_fixture()
+      group = insert(:group)
+      update_params = params_for(:group)
 
       # typical
-      assert {:ok, group} = Profiles.update_group(group, @update_attrs.typical)
+      assert {:ok, group} = Profiles.update_group(group, update_params)
       assert %Group{} = group
-      assert group.name == @update_attrs.typical.name
-      assert group.description == @update_attrs.typical.description
+      assert group.name == update_params.name
+      assert group.description == update_params.description
     end
 
     test "update_group/2 with invalid data returns error changeset" do
-      group = group_fixture()
-      
-      # is nil
-      assert {:error, %Ecto.Changeset{}} = Profiles.update_group(group, @invalid_attrs.is_nil)
+      group = insert(:group)
+
+      invalid_params = params_for(:invalid_group)
+      assert {:error, %Ecto.Changeset{}} = Profiles.update_group(group, invalid_params)
       assert group == Profiles.get_group!(group.id)
 
-      # too short
-      assert {:error, %Ecto.Changeset{}} = Profiles.update_group(group, @invalid_attrs.too_short)
-      assert group == Profiles.get_group!(group.id)
-
-      #too long
-      assert {:error, %Ecto.Changeset{}} = Profiles.update_group(group, @invalid_attrs.too_long)
+      invalid_params = params_for(:invalid_url_group)
+      assert {:error, %Ecto.Changeset{} = changeset} = Profiles.update_group(group, invalid_params)
+      assert length(changeset.errors) == 7
       assert group == Profiles.get_group!(group.id)
     end
 
     test "delete_group/1 deletes the group" do
-      group = group_fixture()
+      group = insert(:group)
       assert {:ok, %Group{}} = Profiles.delete_group(group)
       assert_raise Ecto.NoResultsError, fn -> Profiles.get_group!(group.id) end
     end
 
     test "change_group/1 returns a group changeset" do
-      group = group_fixture()
+      group = insert(:group)
       assert %Ecto.Changeset{} = Profiles.change_group(group)
     end
   end
