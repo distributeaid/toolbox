@@ -1,5 +1,4 @@
-import React, { useState, useCallback } from 'react'
-
+import React, { useCallback, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 export const NavBar: React.FC = () => {
@@ -30,7 +29,7 @@ export const NavBar: React.FC = () => {
           </NavLink>
           <NavLink to="/">
             <span className="font-semibold text-l tracking-tight">
-              masks for Docs
+              Masks For Docs
             </span>
           </NavLink>
         </div>
@@ -42,7 +41,7 @@ export const NavBar: React.FC = () => {
               className="fill-current h-3 w-3"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg">
-              <title>Menu</title>
+              <title>Toggle Menu</title>
               <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
             </svg>
           </button>
@@ -78,7 +77,7 @@ export const NavBar: React.FC = () => {
 }
 
 const MyNavLink: React.FC<{
-  onClick?: () => any
+  onClick?: () => void
   to: string
   label: string
 }> = ({ to, label, onClick }) => (

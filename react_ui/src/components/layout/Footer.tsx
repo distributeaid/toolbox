@@ -46,24 +46,16 @@ export const Footer: React.FC = () => (
               Resources
             </div>
             <div className="item text-xs font-light mb-3">
-              <a href="/covid10-updates" target="_blank">
-                COVID-19 Updates
-              </a>
+              <a href="/covid10-updates">COVID-19 Updates</a>
             </div>
             <div className="item text-xs font-light mb-3">
-              <a href="/field-guides" target="_blank">
-                Field Guides
-              </a>
+              <a href="/field-guides">Field Guides</a>
             </div>
             <div className="item text-xs font-light mb-3">
-              <a href="/local-chapters" target="_blank">
-                Local Chapters
-              </a>
+              <a href="/local-chapters">Local Chapters</a>
             </div>
             <div className="item text-xs font-light mb-3">
-              <a href="/login" target="_blank">
-                Local Lead Login
-              </a>
+              <a href="/login">Local Lead Login</a>
             </div>
           </div>
           <div className="column flex-1 px-5">
@@ -71,24 +63,16 @@ export const Footer: React.FC = () => (
               More
             </div>
             <div className="item text-xs font-light mb-3">
-              <a href="/tos" target="_blank">
-                Terms of Use
-              </a>
+              <a href="/tos">Terms of Use</a>
             </div>
             <div className="item text-xs font-light mb-3">
-              <a href="/privacy" target="_blank">
-                Privacy Policy
-              </a>
+              <a href="/privacy">Privacy Policy</a>
             </div>
             <div className="item text-xs font-light mb-3">
-              <a href="/code-of-conduct" target="_blank">
-                Code of Conduct
-              </a>
+              <a href="/code-of-conduct">Code of Conduct</a>
             </div>
             <div className="item text-xs font-light mb-3">
-              <a href="/contact" target="_blank">
-                Contact Us
-              </a>
+              <a href="/contact">Contact Us</a>
             </div>
             <div className="heading text-gray-200 mt-10 text-lg">
               <a
@@ -107,7 +91,7 @@ export const Footer: React.FC = () => (
       </div>
       <div className="flex justify-end flex-1 pr-14">
         {/* <div className="m-2">
-          <a href="https://.com/discover/popular#recent" target="_blank">
+          <a href="https://.com/discover/popular#recent">
             <img
               className="w-6 h-6"
               src="https://d3e54v103j8qbb.cloudfront.net/img/-black.ef3f174957.svg"
@@ -115,7 +99,7 @@ export const Footer: React.FC = () => (
           </a>
         </div>
         <div className="m-2">
-          <a href="https://www.youtube.com/" target="_blank">
+          <a href="https://www.youtube.com/">
             <img
               className="w-6 h-6"
               src="https://d3e54v103j8qbb.cloudfront.net/img/youtube-black.68dd269ade.svg"
@@ -123,24 +107,27 @@ export const Footer: React.FC = () => (
           </a>
         </div> */}
         <div className="m-2">
-          <a href="https://twitter.com/MasksForDocs" target="_blank">
+          <a href="https://twitter.com/MasksForDocs">
             <img
+              alt="twitter-social"
               className="w-6 h-6"
               src="https://d3e54v103j8qbb.cloudfront.net/img/twitter-black.596d4717a4.svg"
             />
           </a>
         </div>
         <div className="m-2">
-          <a href="https://www.facebook.com/MasksForDocs/" target="_blank">
+          <a href="https://www.facebook.com/MasksForDocs/">
             <img
+              alt="facebook-social"
               className="w-6 h-6"
               src="https://d3e54v103j8qbb.cloudfront.net/img/fb-black.2aa4f89c90.svg"
             />
           </a>
         </div>
         <div className="m-2">
-          <a href="https://www.instagram.com/masksfordocs/" target="_blank">
+          <a href="https://www.instagram.com/masksfordocs/">
             <img
+              alt="instagram-social"
               className="w-6 h-6"
               src="https://d3e54v103j8qbb.cloudfront.net/img/insta-black.7a9a600ec2.svg"
             />
