@@ -3,6 +3,8 @@ defmodule FerryApi.Schema.Group do
 
   alias Ferry.Profiles
 
+  alias FerryApi.Schema.Constants
+
   # Query
   # ------------------------------------------------------------
   object :group_queries do
@@ -80,7 +82,11 @@ defmodule FerryApi.Schema.Group do
     end
   end
 
-  def create_group(_parent, %{group_input: group_attrs}, _resolution) do
+  def create_group(_parent, %{group_input: group_attrs}, %{context: %{user_id: nil}}) do
+    {:error, message: "Not authorized", code: Constants.errors().unauthorized}
+  end
+
+  def create_group(_parent, %{group_input: group_attrs}, , %{context: %{user_id: _user_id}}) do
     Profiles.create_group(group_attrs)
   end
 
