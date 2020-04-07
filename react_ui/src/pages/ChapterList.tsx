@@ -46,11 +46,9 @@ export const ChapterList: React.FC = () => {
     <ContentContainer>
       <div className="p-4 md:p-8">
         <div className="mb-4 md:mb-8">
-          <h1 className="font-bold text-xl">{t("chapterList.title")}</h1>
+          <h1 className="font-bold text-xl">{t('chapterList.title')}</h1>
 
-          <p className="py-4">
-            {t("chapterList.subtitle")}
-          </p>
+          <p className="py-4">{t('chapterList.subtitle')}</p>
 
           <p>
             <Trans i18nKey="chapterList.instructions">
