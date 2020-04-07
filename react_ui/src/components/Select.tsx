@@ -17,7 +17,7 @@ export const Select: React.FC<SelectProps> = ({
     {label}
 
     <div>
-      <select className="border border-gray-300 rounded-md" onChange={onChange}>
+      <select className="w-full border border-gray-300 rounded-md truncate" onChange={onChange}>
         {includeBlank && <option key="blank" value="" />}
         {options}
       </select>

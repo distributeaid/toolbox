@@ -23,7 +23,6 @@ import { NavBar } from './components/layout/NavBar'
 import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
 import { ChapterNew } from './pages/ChapterNew'
-import SignUp from './pages/SignUp'
 import StyleGuide from './pages/StyleGuide'
 
 Amplify.configure(amplifyConfig)

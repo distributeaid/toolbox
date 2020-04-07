@@ -366,7 +366,7 @@ export const ChapterNew: React.FC = () => {
 
   return (
     <ContentContainer>
-      <div className="grid grid-cols-1 gap-4 m-16">
+      <div className="grid grid-cols-1 gap-4 m-4 md:m-16">
         <h1 className="font-bold text-3xl mb-4">{t('chapterNew.title')}</h1>
 
         <p>
