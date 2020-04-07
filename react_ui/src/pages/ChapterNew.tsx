@@ -34,7 +34,7 @@ const sectionHeader = (contents: string) => (
   <h2 className="font-bold text-xl mt-4">{contents}</h2>
 )
 
-const VALID_CHAPTER_NAME_REGEX = /^[a-zA-Z ]*$/
+const VALID_CHAPTER_NAME_REGEX = /^[a-zA-Z -]*$/
 
 type ChapterNameProps = {
   t: (key: string) => string
