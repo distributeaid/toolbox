@@ -45,6 +45,7 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
         <div className="block lg:hidden">
           <button
             onClick={toggleMenu}
+            data-cy="toggle-menu"
             className="flex items-center px-3 py-2 border rounded border-white focus:outline-none">
             <svg
               className="fill-current h-3 w-3"
@@ -72,7 +73,12 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
             <MyNavLink onClick={hideMenu} to="/resources" label="Resources" />
             <MyNavLink onClick={hideMenu} to="/faq" label="FAQ" />
             {authState === 'anonymous' && (
-              <MyNavLink to="/sign-in" label="Sign up / Sign in" />
+              <MyNavLink
+                to="/sign-in"
+                label="Sign up / Sign in"
+                data-cy="sign-up-link"
+                onClick={hideMenu}
+              />
             )}
             {authState === 'authenticated' && (
               <button type="button" onClick={onSignOut}>
@@ -100,11 +106,12 @@ const MyNavLink: React.FC<{
   onClick?: () => void
   to: string
   label: string
-}> = ({ to, label, onClick }) => (
+}> = ({ to, label, onClick, ...rest }) => (
   <NavLink
     onClick={onClick}
     activeClassName="text-pink-400"
     to={to}
+    {...rest}
     className="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 mr-9">
     {label}
   </NavLink>
