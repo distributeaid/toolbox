@@ -11,7 +11,6 @@ import {
   Route,
   Switch,
 } from 'react-router-dom'
-import { useLocalStorage } from 'react-use'
 
 import { client } from './apollo/client'
 import PrivateRoute from './auth/PrivateRoute'
@@ -24,7 +23,6 @@ import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
 import { ChapterNew } from './pages/ChapterNew'
 import StyleGuide from './pages/StyleGuide'
-import { CognitoUser } from 'amazon-cognito-identity-js'
 
 Amplify.configure(amplifyConfig)
 
@@ -32,19 +30,10 @@ const SecretComponent = () => <p>Secret!</p>
 
 const App: React.FunctionComponent = () => {
   const [authState, setAuthState] = useState<AuthenticationState>('unknown')
-  const [, setAuthToken] = useLocalStorage<string | undefined>(
-    'authToken',
-    undefined
-  )
 
   useEffect(() => {
     Auth.currentAuthenticatedUser()
-      .then((user: CognitoUser) => {
-        setAuthState('authenticated')
-        setAuthToken(
-          user.getSignInUserSession()?.getAccessToken().getJwtToken()
-        )
-      })
+      .then(() => setAuthState('authenticated'))
       .catch(() => setAuthState('anonymous'))
   }, [])
 
