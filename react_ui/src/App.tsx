@@ -46,7 +46,7 @@ const App: React.FunctionComponent = () => {
       <Suspense fallback="Loading...">
         <Router>
           <NavBar />
-          <nav className="mb-4 shadow>
+          <nav className="mb-4 shadow">
             <ul>
               <li>
                 <Link to="/">Home</Link>
