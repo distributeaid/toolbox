@@ -14,8 +14,11 @@ defmodule Ferry.AuthTest do
     # ----------------------------------------------------------
 
     def user_and_group_fixtures() do
-      {:ok, group} = Profiles.create_group(%{name: "Dundee Refugee Support"})
-      {:ok, user} = Accounts.create_user(group, %{email: "ruby@awesome.com", password: "super-secret"})
+      group_params = params_for(:group, %{name: "Dundee Refugee Support"})
+      {:ok, group} = Profiles.create_group(group_params)
+
+      user_params = params_for(:user, %{email: "ruby@awesome.com", password: "super-secret"})
+      {:ok, user} = Accounts.create_user(group, user_params)
 
       {user, group}
     end
