@@ -17,6 +17,7 @@ import { client } from './apollo/client'
 import PrivateRoute from './auth/PrivateRoute'
 import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
 import amplifyConfig from './aws-exports'
+import { NavBar } from './components/layout/NavBar'
 import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
 import StyleGuide from './pages/StyleGuide'
@@ -44,6 +45,7 @@ const App: React.FunctionComponent = () => {
     <ApolloProvider client={client}>
       <Suspense fallback="Loading...">
         <Router>
+          <NavBar />
           <nav className="mb-4 shadow">
             <ul>
               <li>
