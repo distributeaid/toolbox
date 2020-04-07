@@ -8,7 +8,6 @@ import React, { Suspense, useEffect, useState } from 'react'
 
 import {
   BrowserRouter as Router,
-  Link,
   Redirect,
   Route,
   Switch,
@@ -17,6 +16,7 @@ import {
 import { client } from './apollo/client'
 import PrivateRoute from './auth/PrivateRoute'
 import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
+import { AuthenticationState } from './auth/types'
 import amplifyConfig from './aws-exports'
 import { Footer } from './components/layout/Footer'
 import { NavBar } from './components/layout/NavBar'
@@ -26,8 +26,6 @@ import { ChapterNew } from './pages/ChapterNew'
 import StyleGuide from './pages/StyleGuide'
 
 Amplify.configure(amplifyConfig)
-
-type AuthenticationState = 'unknown' | 'authenticated' | 'anonymous'
 
 const SecretComponent = () => <p>Secret!</p>
 
@@ -48,47 +46,19 @@ const App: React.FunctionComponent = () => {
     <ApolloProvider client={client}>
       <Suspense fallback="Loading...">
         <Router>
-          <NavBar />
-          <nav className="mb-4 shadow">
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              {authState === 'anonymous' && (
-                <li>
-                  <Link to="/sign-in">Sign up / Sign in</Link>
-                </li>
-              )}
-              {authState === 'authenticated' && (
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      Auth.signOut()
-                        .then(() => {
-                          window.location.pathname = '/'
-                        })
-                        .catch((error) => {
-                          // Woot?!
-                          console.error(error)
-                        })
-                    }}>
-                    Log out
-                  </button>
-                </li>
-              )}
-
-              <li>
-                <Link to="/style-guide">Style guide</Link>
-              </li>
-
-              {authState === 'authenticated' && (
-                <li>
-                  <Link to="/secret">Page behind login</Link>
-                </li>
-              )}
-            </ul>
-          </nav>
+          <NavBar
+            authState={authState}
+            onSignOut={() => {
+              Auth.signOut()
+                .then(() => {
+                  window.location.pathname = '/'
+                })
+                .catch((error) => {
+                  // Woot?!
+                  console.error(error)
+                })
+            }}
+          />
 
           {authState === 'authenticated' && <RedirectAfterAuth />}
 
