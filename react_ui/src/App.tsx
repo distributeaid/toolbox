@@ -39,7 +39,7 @@ const App: React.FunctionComponent = () => {
   }, [])
 
   if (authState === 'unknown') {
-    return null
+    return <div>Loading...</div>
   }
 
   return (
