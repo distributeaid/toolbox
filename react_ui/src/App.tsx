@@ -3,7 +3,6 @@ import '@aws-amplify/ui/dist/style.css'
 
 import { ApolloProvider } from '@apollo/react-hooks'
 import Amplify, { Auth } from 'aws-amplify'
-import { Authenticator } from 'aws-amplify-react'
 import React, { Suspense, useEffect, useState } from 'react'
 import {
   BrowserRouter as Router,
@@ -17,13 +16,13 @@ import { client } from './apollo/client'
 import PrivateRoute from './auth/PrivateRoute'
 import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
 import amplifyConfig from './aws-exports'
+import AuthenticatorWrapper from './pages/Authenticator'
 import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
 import StyleGuide from './pages/StyleGuide'
+import { AuthenticationState } from './types'
 
 Amplify.configure(amplifyConfig)
-
-type AuthenticationState = 'unknown' | 'authenticated' | 'anonymous'
 
 const SecretComponent = () => <p>Secret!</p>
 
@@ -89,13 +88,7 @@ const App: React.FunctionComponent = () => {
 
           <Switch>
             <Route path="/sign-in">
-              <Authenticator
-                onStateChange={(state) => {
-                  const newState: AuthenticationState =
-                    state === 'signedIn' ? 'authenticated' : 'anonymous'
-                  setAuthState(newState)
-                }}
-              />
+              <AuthenticatorWrapper setAuthState={setAuthState} />
             </Route>
 
             <PrivateRoute
