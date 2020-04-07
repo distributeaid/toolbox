@@ -1,7 +1,10 @@
 import './App.css'
+import '@aws-amplify/ui/dist/style.css'
 
-import React, { Suspense } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
+import Amplify, { Auth } from 'aws-amplify'
+import { Authenticator } from 'aws-amplify-react'
+import React, { Suspense, useEffect, useState } from 'react'
 import {
   BrowserRouter as Router,
   Link,
@@ -11,35 +14,99 @@ import {
 } from 'react-router-dom'
 
 import { client } from './apollo/client'
+import PrivateRoute from './auth/PrivateRoute'
+import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
+import amplifyConfig from './aws-exports'
 import { Chapter } from './pages/Chapter'
 import { ChapterList } from './pages/ChapterList'
-import SignUp from './pages/SignUp'
 import StyleGuide from './pages/StyleGuide'
 
+Amplify.configure(amplifyConfig)
+
+type AuthenticationState = 'unknown' | 'authenticated' | 'anonymous'
+
+const SecretComponent = () => <p>Secret!</p>
+
 const App: React.FunctionComponent = () => {
+  const [authState, setAuthState] = useState<AuthenticationState>('unknown')
+
+  useEffect(() => {
+    Auth.currentAuthenticatedUser()
+      .then(() => setAuthState('authenticated'))
+      .catch(() => setAuthState('anonymous'))
+  }, [])
+
+  if (authState === 'unknown') {
+    return null
+  }
+
   return (
     <ApolloProvider client={client}>
       <Suspense fallback="Loading...">
         <Router>
-          <nav>
+          <nav className="mb-4 shadow">
             <ul>
               <li>
-                <Link to="/sign-up">Sign up</Link>
+                <Link to="/">Home</Link>
               </li>
+              {authState === 'anonymous' && (
+                <li>
+                  <Link to="/sign-in">Sign up / Sign in</Link>
+                </li>
+              )}
+              {authState === 'authenticated' && (
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      Auth.signOut()
+                        .then(() => {
+                          window.location.pathname = '/'
+                        })
+                        .catch((error) => {
+                          // Woot?!
+                          console.error(error)
+                        })
+                    }}>
+                    Log out
+                  </button>
+                </li>
+              )}
 
               <li>
                 <Link to="/style-guide">Style guide</Link>
               </li>
+
+              {authState === 'authenticated' && (
+                <li>
+                  <Link to="/secret">Page behind login</Link>
+                </li>
+              )}
             </ul>
           </nav>
 
+          {authState === 'authenticated' && <RedirectAfterAuth />}
+
           <Switch>
-            <Route exact path="/chapters">
-              <ChapterList />
+            <Route path="/sign-in">
+              <Authenticator
+                onStateChange={(state) => {
+                  const newState: AuthenticationState =
+                    state === 'signedIn' ? 'authenticated' : 'anonymous'
+                  setAuthState(newState)
+                }}
+              />
             </Route>
 
-            <Route exact path="/sign-up">
-              <SignUp />
+            <PrivateRoute
+              exact
+              path="/secret"
+              isSignedIn={authState === 'authenticated'}
+              component={SecretComponent}
+            />
+
+            <Route exact path="/chapters">
+              <ChapterList />
             </Route>
 
             <Route exact path="/style-guide">
