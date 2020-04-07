@@ -5,8 +5,8 @@ import React from 'react'
 export const Footer: React.FC = () => (
   <footer className="mt-5 pt-24 pb-14 pl-3 pl-2 md:px-3 lg:px-14 bg-gray-900 text-gray-100">
     <div className="block md:flex md:space-between">
-      <div className="column flex-1 mr-3">
-        <div className="heading whitespace-no-wrap text-gray-200 mb-3 text-3xl text-white">
+      <div className="flex-1 mr-3">
+        <div className="whitespace-no-wrap text-gray-200 mb-3 text-3xl text-white">
           Let's get PPE to <br />
           workers on the <br />
           frontlines.
@@ -27,54 +27,54 @@ export const Footer: React.FC = () => (
 
       <div className="flex-1 mt-10 md:mt-0 flex">
         <div className="flex-1 flex space-around flex">
-          <div className="column flex-1 pr-5">
-            <div className="heading text-gray-200 mb-7 text-sm text-white uppercase semi-bold">
+          <div className="flex-1 pr-5">
+            <div className="text-gray-200 mb-7 text-sm text-white uppercase semi-bold">
               About Us
             </div>
-            <div className="item text-xs font-light mb-3">
+            <div className="text-xs font-light mb-3">
               <a href="/mission">Our Mission</a>
             </div>
-            <div className="item text-xs font-light mb-3">
+            <div className="text-xs font-light mb-3">
               <a href="/whoweare">Who We Are</a>
             </div>
-            <div className="item text-xs font-light mb-3">
+            <div className="text-xs font-light mb-3">
               <a href="/success-stories">Success Stories</a>
             </div>
           </div>
-          <div className="column flex-1 px-5">
-            <div className="heading text-gray-200 mb-7 text-sm text-white uppercase semi-bold">
+          <div className="flex-1 px-5">
+            <div className="text-gray-200 mb-7 text-sm text-white uppercase semi-bold">
               Resources
             </div>
-            <div className="item text-xs font-light mb-3">
+            <div className="text-xs font-light mb-3">
               <a href="/covid10-updates">COVID-19 Updates</a>
             </div>
-            <div className="item text-xs font-light mb-3">
+            <div className="text-xs font-light mb-3">
               <a href="/field-guides">Field Guides</a>
             </div>
-            <div className="item text-xs font-light mb-3">
+            <div className="text-xs font-light mb-3">
               <a href="/local-chapters">Local Chapters</a>
             </div>
-            <div className="item text-xs font-light mb-3">
+            <div className="text-xs font-light mb-3">
               <a href="/login">Local Lead Login</a>
             </div>
           </div>
-          <div className="column flex-1 px-5">
-            <div className="heading text-gray-200 mb-7 text-sm text-white uppercase semi-bold">
+          <div className="flex-1 px-5">
+            <div className="text-gray-200 mb-7 text-sm text-white uppercase semi-bold">
               More
             </div>
-            <div className="item text-xs font-light mb-3">
+            <div className="text-xs font-light mb-3">
               <a href="/tos">Terms of Use</a>
             </div>
-            <div className="item text-xs font-light mb-3">
+            <div className="text-xs font-light mb-3">
               <a href="/privacy">Privacy Policy</a>
             </div>
-            <div className="item text-xs font-light mb-3">
+            <div className="text-xs font-light mb-3">
               <a href="/code-of-conduct">Code of Conduct</a>
             </div>
-            <div className="item text-xs font-light mb-3">
+            <div className="text-xs font-light mb-3">
               <a href="/contact">Contact Us</a>
             </div>
-            <div className="heading text-gray-200 mt-10 text-lg">
+            <div className="text-gray-200 mt-10 text-lg">
               <a
                 href="/donate"
                 className="bg-pink-500 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 lg:mt-0">
