@@ -37,6 +37,7 @@
     "eslint-plugin-jest": "^23.8.2",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-simple-import-sort": "^5.0.2",
+    "mutationobserver-shim": "^0.3.5",
     "postcss-cli": "^7.1.0",
     "prettier": "^2.0.2",
     "react-scripts": "3.4.1",

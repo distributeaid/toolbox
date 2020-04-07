@@ -1,7 +1,16 @@
 import React, { useCallback, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
-export const NavBar: React.FC = () => {
+import { AuthenticationState } from '../../auth/types'
+
+type Props = {
+  authState: AuthenticationState
+  onSignOut: () => void
+}
+
+const showStyleguide = process.env.NODE_ENV === 'development'
+
+export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const toggleMenu = useCallback(() => {
@@ -62,6 +71,17 @@ export const NavBar: React.FC = () => {
             />
             <MyNavLink onClick={hideMenu} to="/resources" label="Resources" />
             <MyNavLink onClick={hideMenu} to="/faq" label="FAQ" />
+            {authState === 'anonymous' && (
+              <MyNavLink to="/sign-in" label="Sign up / Sign in" />
+            )}
+            {authState === 'authenticated' && (
+              <button type="button" onClick={onSignOut}>
+                Log out
+              </button>
+            )}
+            {showStyleguide && (
+              <MyNavLink to="/style-guide" label="Style guide" />
+            )}
           </div>
           <div>
             <a
