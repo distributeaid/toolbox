@@ -7,7 +7,7 @@ import amplifyConfig from '../aws-exports'
 Amplify.configure(amplifyConfig)
 
 export const client = new ApolloClient({
-  uri: '/api/graphiql',
+  uri: '/api',
   request: (operation) => {
     return Auth.currentSession()
       .then((session: CognitoUserSession) => {
