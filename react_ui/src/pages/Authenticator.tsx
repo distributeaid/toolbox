@@ -1,3 +1,4 @@
+import { ISignUpResult } from 'amazon-cognito-identity-js'
 import Amplify, { Auth } from 'aws-amplify'
 import {
   Authenticator,
@@ -16,7 +17,7 @@ import { AuthenticationState } from '../types'
 Amplify.configure(amplifyConfig)
 
 interface SignUpProps {
-  onStateChange?: (eventName: string, payload: Record<string, string>) => void
+  onStateChange?: (eventName: string, payload: ISignUpResult | {}) => void
   authState?: string
   override: string
 }
