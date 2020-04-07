@@ -7,25 +7,6 @@ Amplify.configure(amplifyConfig)
 
 export const client = new ApolloClient({
   uri: '/api/graphiql',
-  // request: async (operation) => {
-  //   let user: CognitoUser | undefined = undefined
-  //   try {
-  //     user = await Auth.currentAuthenticatedUser()
-  //   } catch {
-  //     // not signed in
-  //   }
-  //   if (!user) {
-  //     return
-  //   }
-
-  //   const token = user.getSignInUserSession()?.getAccessToken().getJwtToken()
-
-  //   operation.setContext({
-  //     headers: {
-  //       authorization: token ? `Bearer ${token}` : '',
-  //     },
-  //   })
-  // },
   request: (operation) => {
     return Auth.currentAuthenticatedUser()
       .then((user: CognitoUser) => {

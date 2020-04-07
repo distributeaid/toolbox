@@ -64,11 +64,6 @@ export type Session = {
   readonly userId: Maybe<Scalars['ID']>;
 };
 
-export type GetSessionQueryVariables = {};
-
-
-export type GetSessionQuery = { readonly __typename?: 'RootQueryType', readonly session: Maybe<{ readonly __typename?: 'Session', readonly userId: Maybe<string> }> };
-
 export type GetChapterListQueryVariables = {};
 
 
@@ -82,38 +77,6 @@ export type GetChapterQueryVariables = {
 export type GetChapterQuery = { readonly __typename?: 'RootQueryType', readonly group: Maybe<{ readonly __typename?: 'Group', readonly id: Maybe<string> }> };
 
 
-export const GetSessionDocument = gql`
-    query getSession {
-  session {
-    userId
-  }
-}
-    `;
-
-/**
- * __useGetSessionQuery__
- *
- * To run a query within a React component, call `useGetSessionQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetSessionQuery` returns an object from Apollo Client that contains loading, error, and data properties 
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetSessionQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetSessionQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetSessionQuery, GetSessionQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetSessionQuery, GetSessionQueryVariables>(GetSessionDocument, baseOptions);
-      }
-export function useGetSessionLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetSessionQuery, GetSessionQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetSessionQuery, GetSessionQueryVariables>(GetSessionDocument, baseOptions);
-        }
-export type GetSessionQueryHookResult = ReturnType<typeof useGetSessionQuery>;
-export type GetSessionLazyQueryHookResult = ReturnType<typeof useGetSessionLazyQuery>;
-export type GetSessionQueryResult = ApolloReactCommon.QueryResult<GetSessionQuery, GetSessionQueryVariables>;
 export const GetChapterListDocument = gql`
     query getChapterList {
   groups {
