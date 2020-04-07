@@ -10,27 +10,28 @@ defmodule Ferry.Profiles.Group do
   @group_types ["M4D_CHAPTER"]
 
   schema "groups" do
+    # required
     field :name, :string
-    field :description, :string
-    field :logo, Logo.Type
     field :slug, :string
     field :type, :string
 
+    # profile
+    field :logo, Logo.Type
+    field :description, :string
     field :donation_link, Ferry.EctoType.URL
+    field :slack_channel_name, :string
     # TODO: social media links
 
-    field :slack_channel_name, :string
-
+    # initial data entry
+    # NOTE: will likely be removed soon (as each form is replaced by related functionality in the app)
     field :request_form, Ferry.EctoType.URL
     field :request_form_results, Ferry.EctoType.URL
-
     field :volunteer_form, Ferry.EctoType.URL
     field :volunteer_form_results, Ferry.EctoType.URL
-
     field :donation_form, Ferry.EctoType.URL
     field :donation_form_results, Ferry.EctoType.URL
-    # TODO: uri type
 
+    # relations
     has_one :users, User # on_delete set in database via migration
     has_many :projects, Project # on_delete set in database via migration
 
@@ -42,8 +43,8 @@ defmodule Ferry.Profiles.Group do
     group
     |> cast(attrs, [
       :name,
-      :description,
 
+      :description,
       :donation_link,
       :slack_channel_name,
 
@@ -55,21 +56,14 @@ defmodule Ferry.Profiles.Group do
       :donation_form_results
     ])
     |> validate_required([
-      :name,
-      :description,
-
-      :slack_channel_name,
-
-      :request_form,
-      :request_form_results,
-      :volunteer_form,
-      :volunteer_form_results,
-      :donation_form,
-      :donation_form_results
+      :name
+      # slug is generated from name
+      # type is a constant for now
+      # TODO: ^^^ that will likely change later
     ])
 
     |> validate_length(:name, min: 1, max: 255)
-    |> validate_format(:name, ~r/[A-Za-z\ ]+/)
+    |> validate_format(:name, ~r/[A-Za-z\ \-]+/)
     |> unique_constraint(:name)
 
     |> set_slug()
@@ -103,9 +97,6 @@ defmodule Ferry.Profiles.Group do
         |> String.downcase()
         |> String.trim()
         |> String.replace(~r/\s+/, "-")
-
-        # TODO: strip whitespace
-        # TODO: remove all spaces in a row w/ "-"
     end
 
     put_change(changeset, :slug, slug)

@@ -27,10 +27,10 @@ defmodule FerryApi.Schema.Group do
   # ------------------------------------------------------------
   input_object :group_input do
     field :name, :string
+    # slug is generated from the name
+    field :type # currently a constant on the backend "M4D_CHAPTER"
+
     field :description, :string
-
-    field :type, :group_type
-
     field :donation_link, :string
     field :slack_channel_name, :string
 

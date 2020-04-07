@@ -119,15 +119,16 @@ defmodule Ferry.Factory do
 
   def group_factory do
     %Group{
-      name: sequence("Food Clothing and Resistance Collective"),
-      slug: sequence("food-clothing-and-resistance-collective"),
-      description: "We show solidarity with our neighbors by using mutual aid to collect food and clothing from the community and distribute it to those in need.",
+      name: sequence("Food Clothing -and- Resistance Collective"),
+      slug: sequence("food-clothing--and--resistance-collective"),
 
       # add other group types here
       type: sequence(:group_type, ["M4D_CHAPTER"]),
 
-      slack_channel_name: "FCRC is on IRC Baby #cool",
+      # TODO: logo
+      description: "We show solidarity with our neighbors by using mutual aid to collect food and clothing from the community and distribute it to those in need.",
       donation_link: "https://liecheatstealkillwin.com/listentoit.html",
+      slack_channel_name: "FCRC is on IRC Baby #cool",
 
       request_form: "https://request.example.com",
       request_form_results: "https://request.example.com/results",
@@ -153,8 +154,8 @@ defmodule Ferry.Factory do
       %{
         donation_link: "nah://example.org",
         request_form: "https:/example.org",
-        request_form_results: "exmple.org",
-        volunteer_form: "",
+        request_form_results: "example.org",
+        volunteer_form: "nope",
         volunteer_form_results: "https://example.",
         donation_form: "https://example..org",
         donation_form_results: "https://.example.org"
