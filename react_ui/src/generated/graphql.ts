@@ -51,11 +51,17 @@ export type RootQueryType = {
   readonly group: Maybe<Group>;
   readonly groups: Maybe<ReadonlyArray<Maybe<Group>>>;
   readonly healthCheck: Maybe<Scalars['String']>;
+  readonly session: Maybe<Session>;
 };
 
 
 export type RootQueryTypeGroupArgs = {
   id: Scalars['ID'];
+};
+
+export type Session = {
+  readonly __typename?: 'Session';
+  readonly userId: Maybe<Scalars['ID']>;
 };
 
 export type GetChapterListQueryVariables = {};
