@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react'
+import React from 'react'
 
 // QUESTION: is there a better way to get these props?
 type Props = React.DetailedHTMLProps<

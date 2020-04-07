@@ -1,7 +1,8 @@
+import { CognitoUser } from 'amazon-cognito-identity-js'
 import ApolloClient from 'apollo-boost'
 import Amplify, { Auth } from 'aws-amplify'
+
 import amplifyConfig from '../aws-exports'
-import { CognitoUser } from 'amazon-cognito-identity-js'
 
 Amplify.configure(amplifyConfig)
 

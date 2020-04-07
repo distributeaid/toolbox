@@ -421,7 +421,7 @@ export const ChapterNew: React.FC = () => {
 
         <Divider outerClasses="my-6" />
 
-        <Button title="Create Chapter" />
+        <Button>Create Chapter</Button>
       </div>
     </ContentContainer>
   )
