@@ -5,7 +5,6 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import Amplify, { Auth } from 'aws-amplify'
 import { Authenticator } from 'aws-amplify-react'
 import React, { Suspense, useEffect, useState } from 'react'
-
 import {
   BrowserRouter as Router,
   Redirect,
