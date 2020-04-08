@@ -1,9 +1,10 @@
 import React from 'react'
 
 // TODO: factor out buttons into reusable component - add the appropriate props to Button.tsx
+// TODO use our own social icons assets
 
 export const Footer: React.FC = () => (
-  <footer className="mt-5 pt-24 pb-14 pl-3 pl-2 md:px-3 lg:px-14 bg-gray-900 text-gray-100">
+  <footer className="mt-5 pt-24 pb-14 pl-3 pl-2 md:px-8 lg:px-14 bg-gray-900 text-gray-100">
     <div className="block md:flex md:space-between">
       <div className="flex-1 mr-3">
         <div className="whitespace-no-wrap text-gray-200 mb-3 text-3xl text-white">
@@ -86,10 +87,10 @@ export const Footer: React.FC = () => (
       </div>
     </div>
     <div className="mt-20 text-xs flex space-between">
-      <div className="flex items-center">
+      <div className="flex items-center mr-3">
         &copy; 2020 Masks For Docs Foundation
       </div>
-      <div className="flex justify-end flex-1 pr-14">
+      <div className="flex justify-end flex-1 pr-3 sm:pr-14">
         {/* <div className="m-2">
           <a href="https://.com/discover/popular#recent">
             <img
@@ -106,7 +107,7 @@ export const Footer: React.FC = () => (
             />
           </a>
         </div> */}
-        <div className="m-2">
+        <div className="rounded-full bg-white w-8 h-8 flex items-center justify-center m-2">
           <a href="https://twitter.com/MasksForDocs">
             <img
               alt="twitter-social"
@@ -115,7 +116,7 @@ export const Footer: React.FC = () => (
             />
           </a>
         </div>
-        <div className="m-2">
+        <div className="rounded-full bg-white w-8 h-8 flex items-center justify-center m-2">
           <a href="https://www.facebook.com/MasksForDocs/">
             <img
               alt="facebook-social"
@@ -124,7 +125,7 @@ export const Footer: React.FC = () => (
             />
           </a>
         </div>
-        <div className="m-2">
+        <div className="rounded-full bg-white w-8 h-8 flex items-center justify-center m-2">
           <a href="https://www.instagram.com/masksfordocs/">
             <img
               alt="instagram-social"
