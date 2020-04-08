@@ -21,6 +21,11 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
     setMenuOpen(false)
   }, [])
 
+  const handleSignout = useCallback(() => {
+    hideMenu()
+    return onSignOut()
+  }, [hideMenu, onSignOut])
+
   return (
     <header className="sticky top-0 z-50">
       <nav className="flex items-center justify-between flex-wrap bg-gray-900 text-gray-100 py-2 px-3">
@@ -81,17 +86,22 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
               />
             )}
             {authState === 'authenticated' && (
-              <button type="button" onClick={onSignOut}>
+              <span onClick={handleSignout} className={navLinkClassName}>
                 Log out
-              </button>
+              </span>
             )}
             {showStyleguide && (
-              <MyNavLink to="/style-guide" label="Style guide" />
+              <MyNavLink
+                onClick={hideMenu}
+                to="/style-guide"
+                label="Style guide"
+              />
             )}
           </div>
           <div>
             <a
               href="/donate"
+              onClick={hideMenu}
               className="bg-pink-500 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
               Donate
             </a>
@@ -102,17 +112,15 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
   )
 }
 
+const navLinkClassName =
+  'block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 active:text-pink-400 cursor-pointer mr-9'
+
 const MyNavLink: React.FC<{
   onClick?: () => void
   to: string
   label: string
 }> = ({ to, label, onClick, ...rest }) => (
-  <NavLink
-    onClick={onClick}
-    activeClassName="text-pink-400"
-    to={to}
-    {...rest}
-    className="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 mr-9">
+  <NavLink onClick={onClick} to={to} className={navLinkClassName} {...rest}>
     {label}
   </NavLink>
 )

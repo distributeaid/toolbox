@@ -2,8 +2,8 @@ import Amplify from 'aws-amplify'
 import { Authenticator, UsernameAttributes } from 'aws-amplify-react'
 import React from 'react'
 
-import amplifyConfig from '../aws-exports'
 import { AuthenticationState } from '../auth/types'
+import amplifyConfig from '../aws-exports'
 
 Amplify.configure(amplifyConfig)
 
