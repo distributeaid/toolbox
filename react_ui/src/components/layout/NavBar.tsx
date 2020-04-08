@@ -21,6 +21,11 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
     setMenuOpen(false)
   }, [])
 
+  const handleSignout = useCallback(() => {
+    hideMenu()
+    return onSignOut()
+  }, [onSignOut])
+
   return (
     <header className="sticky top-0 z-50">
       <nav className="flex items-center justify-between flex-wrap bg-gray-900 text-gray-100 py-2 px-3">
@@ -72,20 +77,25 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
             <MyNavLink onClick={hideMenu} to="/resources" label="Resources" />
             <MyNavLink onClick={hideMenu} to="/faq" label="FAQ" />
             {authState === 'anonymous' && (
-              <MyNavLink to="/sign-in" label="Sign up / Sign in" />
+              <MyNavLink
+                onClick={hideMenu}
+                to="/sign-in"
+                label="Sign up / Sign in"
+              />
             )}
             {authState === 'authenticated' && (
-              <span onClick={onSignOut} className={navLinkClassName}>
+              <span onClick={handleSignout} className={navLinkClassName}>
                 Log out
               </span>
             )}
             {showStyleguide && (
-              <MyNavLink to="/style-guide" label="Style guide" />
+              <MyNavLink onClick={hideMenu} to="/style-guide" label="Style guide" />
             )}
           </div>
           <div>
             <a
               href="/donate"
+              onClick={hideMenu}
               className="bg-pink-500 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
               Donate
             </a>
