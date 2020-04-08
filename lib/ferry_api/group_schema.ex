@@ -2,8 +2,7 @@ defmodule FerryApi.Schema.Group do
   use Absinthe.Schema.Notation
 
   alias Ferry.Profiles
-
-  alias FerryApi.Schema.Constants
+  alias FerryApi.Middleware
 
   # Query
   # ------------------------------------------------------------
@@ -49,6 +48,7 @@ defmodule FerryApi.Schema.Group do
     @desc "Create a group"
     field :create_group, type: :group do
       arg(:group_input, non_null(:group_input))
+      middleware(Middleware.RequireUser)
       resolve(&create_group/3)
     end
 
@@ -56,12 +56,14 @@ defmodule FerryApi.Schema.Group do
     field :update_group, type: :group do
       arg(:id, non_null(:id))
       arg(:group_input, non_null(:group_input))
+      middleware(Middleware.RequireUser)
       resolve(&update_group/3)
     end
 
     @desc "Delete a group"
     field :delete_group, type: :group do
       arg(:id, non_null(:id))
+      middleware(Middleware.RequireUser)
       resolve(&delete_group/3)
     end
   end
@@ -83,15 +85,11 @@ defmodule FerryApi.Schema.Group do
     end
   end
 
-  def create_group(_parent, _args, %{context: %{user_id: nil}}) do
-    {:error, message: "Not authorized", code: Constants.errors().unauthorized}
-  end
-
-  def create_group(_parent, %{group_input: group_attrs}, %{context: %{user_id: _user_id}}) do
+  def create_group(_parent, %{group_input: group_attrs}, _resolution) do
     Profiles.create_group(group_attrs)
   end
 
-  def update_group(_parent, %{id: id, group_input: group_attrs} = args, _resolution) do
+  def update_group(_parent, %{id: id, group_input: group_attrs}, _resolution) do
     group = Profiles.get_group!(id)
     Profiles.update_group(group, group_attrs)
   end
