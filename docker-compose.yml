@@ -35,19 +35,14 @@ services:
   web:
     build:
       context: .
-      dockerfile: web.Dockerfile
-    command:
-      [
-        "/app/development/wait-for-it.sh",
-        "db:5432",
-        "--",
-        "/app/development/web-entrypoint.sh",
-      ]
+      dockerfile: mix.Dockerfile
     container_name: toolbox_web
     volumes:
-      - ./development:/app/development
+      - .:/app
     ports:
       - "1312:1312"
+    command: >
+      /bin/sh -c "/app/development/wait-for-it.sh db:5432 -- mix deps.get && mix ecto.setup && mix phx.server"
     # DB_HOSTNAME value MUST match the name of the db service!
     # DA_DB_HOSTNAME_TEST value MUST match the name of the test db service!
     environment:
@@ -55,10 +50,8 @@ services:
       - POSTGRES_PASSWORD=${DA_DB_PASSWORD:-1312}
       - POSTGRES_DB=${DA_DB_DATABASE:-toolbox_dev}
       - POSTGRES_HOST=${DA_DB_HOSTNAME_DEV:-db}
-      - POSTGRES_PORT=5432
-      - DB_HOSTNAME_DEV=${DA_DB_HOSTNAME_DEV:-db}
+      - POSTGRES_PORT=${DA_DB_PORT_DEV:-5432}
       - DB_HOSTNAME_TEST=${DA_DB_HOSTNAME_TEST:-dbtest}
-      - DB_PORT=5432
       - PORT=1312
     env_file:
       - .env.secret

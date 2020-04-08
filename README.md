@@ -79,12 +79,6 @@ If you see that a container has exited (ex: "toolbox_web_1 exited with code 1") 
 
 See the _Common Docker Commands_ section below for a list of container names.
 
-**Setup PG Admin**
-
-1. With the containers running, go to http://localhost:8088 in your browser.
-1. Log in with username `admin` and password `admin` (unless you overrode the defaults).
-1. Create new servers for our dev and test dbs.  See the contents of the `docker-compose.yml` file for the connection information (including the hostnames).
-
 **Setup Up Our Site**
 
 If everything is running correctly, you should be able to visit http://localhost:1312 or http://0.0.0.0:1312 and see our site.  The localhost address is used in the rest of this readme, but the 0.0.0.0 address should be the same thing.
@@ -92,11 +86,11 @@ If everything is running correctly, you should be able to visit http://localhost
 We now need to seed a test group and some database constants:
 
 ```
+docker exec toolbox_web mix ecto.migrate
 docker exec toolbox_db /bin/bash seed-test-group.sh
-
 ```
 
-Make sure you only run the following two lines once. 
+Make sure you only run the following two lines once.
 ```
 docker exec toolbox_web mix ecto.setup
 docker exec --env MIX_ENV=test toolbox_web mix ecto.setup
@@ -258,21 +252,21 @@ Copyright & Licensing
 Our source code is released under the AGPLv3 license.  You can find the full license in `LICENSE.md`.  The license notice has been included below:
 
 > Toolbox: Web tools for refugee aid groups.
-> 
+>
 > Copyright (C) 2018-2019  Distribute Aid
-> 
+>
 > https://distributeaid.org --- code@distributeaid.org
-> 
+>
 > Toolbox is free software: you can redistribute it and/or modify
 > it under the terms of the GNU Affero General Public License as
 > published by the Free Software Foundation, either version 3 of
 > the License, or (at your option) any later version.
-> 
+>
 > This program is distributed in the hope that it will be useful,
 > but WITHOUT ANY WARRANTY; without even the implied warranty of
 > MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 > GNU Affero General Public License for more details.
-> 
+>
 > You should have received a copy of the GNU Affero General Public License
 > along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
