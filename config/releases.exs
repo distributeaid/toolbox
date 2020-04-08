@@ -15,7 +15,7 @@ import Config
 # which you typically run after static files are built.
 config :ferry, FerryWeb.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "localhost", port: {:system, "PORT"}], # This is critical for ensuring web-sockets properly authorize.
+  url: [host: {:system, "HOSTNAME"}, port: {:system, "PORT"}], # This is critical for ensuring web-sockets properly authorize.
   cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
   root: ".",
