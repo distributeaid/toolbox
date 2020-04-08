@@ -3,16 +3,33 @@
 - name: Deploy Docker containers
   hosts: all
   tasks:
+    - name: Create a network
+      docker_network:
+        name: ferry
+
     - name: Start API
       docker_container:
-        name: masksfordocs-api
+        name: web
         image: 299303747484.dkr.ecr.us-east-2.amazonaws.com/masksfordocs/toolbox/ci/ui:{{ version }}
         network_mode: host
+        ports:
+          - "80:80"
         state: started
 
     - name: Start UI
       docker_container:
-        name: masksfordocs-ui
+        name: ui
         image: 299303747484.dkr.ecr.us-east-2.amazonaws.com/masksfordocs/toolbox/ci/elixir:{{ version }}
         network_mode: host
+        ports:
+          - "1312:1312"
+        env:
+          POSTGRES_USER: toolbox
+          POSTGRES_PASSWORD: "13121312"
+          POSTGRES_DB: "toolbox"
+          POSTGRES_HOST: "staging.csjgndowwhv4.us-east-2.rds.amazonaws.com"
+          POSTGRES_PORT: "5432"
+          DB_PORT: "5432"
+          HOSTNAME: "0.0.0.0"
+          PORT: "1312"
         state: started
