@@ -96,17 +96,15 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
   )
 }
 
-const navLinkClassName = "block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 active:text-pink-400 cursor-pointer mr-9"
+const navLinkClassName =
+  'block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 active:text-pink-400 cursor-pointer mr-9'
 
 const MyNavLink: React.FC<{
   onClick?: () => void
   to: string
   label: string
 }> = ({ to, label, onClick }) => (
-  <NavLink
-    onClick={onClick}
-    to={to}
-    className={navLinkClassName}>
+  <NavLink onClick={onClick} to={to} className={navLinkClassName}>
     {label}
   </NavLink>
 )

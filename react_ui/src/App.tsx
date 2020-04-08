@@ -59,42 +59,44 @@ const App: React.FunctionComponent = () => {
             }}
           />
 
-          {authState === 'authenticated' && <RedirectAfterAuth />}
+          <main className="flex-grow">
+            {authState === 'authenticated' && <RedirectAfterAuth />}
 
-          <Switch>
-            <Route path="/sign-in">
-              <AuthenticatorWrapper setAuthState={setAuthState} />
-            </Route>
+            <Switch>
+              <Route path="/sign-in">
+                <AuthenticatorWrapper setAuthState={setAuthState} />
+              </Route>
 
-            <PrivateRoute
-              exact
-              path="/secret"
-              isSignedIn={authState === 'authenticated'}
-              component={SecretComponent}
-            />
+              <PrivateRoute
+                exact
+                path="/secret"
+                isSignedIn={authState === 'authenticated'}
+                component={SecretComponent}
+              />
 
-            <Route exact path="/chapters">
-              <ChapterList />
-            </Route>
+              <Route exact path="/chapters">
+                <ChapterList />
+              </Route>
 
-            <Route exact path="/style-guide">
-              <StyleGuide />
-            </Route>
+              <Route exact path="/style-guide">
+                <StyleGuide />
+              </Route>
 
-            <Route exact path="/chapters/new">
-              <ChapterNew />
-            </Route>
+              <Route exact path="/chapters/new">
+                <ChapterNew />
+              </Route>
 
-            <Route
-              exact
-              path="/:slug"
-              render={({ match }) => <Chapter slug={match.params.slug} />}
-            />
+              <Route
+                exact
+                path="/:slug"
+                render={({ match }) => <Chapter slug={match.params.slug} />}
+              />
 
-            <Route exact path="/">
-              <Redirect to="/chapters" />
-            </Route>
-          </Switch>
+              <Route exact path="/">
+                <Redirect to="/chapters" />
+              </Route>
+            </Switch>
+          </main>
           <Footer />
         </Router>
       </Suspense>
