@@ -1,17 +1,13 @@
 import React from 'react'
 
-// QUESTION: is there a better way to get these props?
-type Props = React.DetailedHTMLProps<
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
+export const Button: React.FC<React.ButtonHTMLAttributes<
   HTMLButtonElement
->
-
-export const Button: React.FC<Props> = ({ children, ...buttonProps }) => (
+>> = ({ children, ...buttonProps }) => (
   <span className="block w-full rounded-md">
     <button
+      {...buttonProps}
       type="submit"
-      className="flex justify-center py-2 px-4 text-sm font-medium rounded-md text-white bg-black"
-      {...buttonProps}>
+      className="flex justify-center py-2 px-4 text-sm font-medium rounded-md text-white bg-black">
       {children}
     </button>
   </span>
