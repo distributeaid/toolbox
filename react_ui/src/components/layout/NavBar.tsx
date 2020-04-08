@@ -24,7 +24,7 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
   const handleSignout = useCallback(() => {
     hideMenu()
     return onSignOut()
-  }, [onSignOut])
+  }, [hideMenu, onSignOut])
 
   return (
     <header className="sticky top-0 z-50">
@@ -89,7 +89,11 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
               </span>
             )}
             {showStyleguide && (
-              <MyNavLink onClick={hideMenu} to="/style-guide" label="Style guide" />
+              <MyNavLink
+                onClick={hideMenu}
+                to="/style-guide"
+                label="Style guide"
+              />
             )}
           </div>
           <div>
