@@ -86,8 +86,8 @@ If everything is running correctly, you should be able to visit http://localhost
 We now need to seed a test group and some database constants:
 
 ```
+docker exec toolbox_web mix ecto.migrate
 docker exec toolbox_db /bin/bash seed-test-group.sh
-
 ```
 
 Make sure you only run the following two lines once.

@@ -1,8 +1,8 @@
 # App artifacts
-/_build
-/db
+_build
+db
 /*.ez
 
-/deps
+deps
 
 react_ui/node_modules
