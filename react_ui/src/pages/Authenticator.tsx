@@ -10,9 +10,9 @@ import {
 import { Button } from 'aws-amplify-react'
 import React from 'react'
 
+import { AuthenticationState } from '../auth/types'
 import amplifyConfig from '../aws-exports'
 import { Input } from '../components/Input'
-import { AuthenticationState } from '../auth/types'
 
 Amplify.configure(amplifyConfig)
 
