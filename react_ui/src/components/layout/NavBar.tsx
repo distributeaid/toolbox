@@ -75,9 +75,9 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
               <MyNavLink to="/sign-in" label="Sign up / Sign in" />
             )}
             {authState === 'authenticated' && (
-              <button type="button" onClick={onSignOut}>
+              <span onClick={onSignOut} className={navLinkClassName}>
                 Log out
-              </button>
+              </span>
             )}
             {showStyleguide && (
               <MyNavLink to="/style-guide" label="Style guide" />
@@ -96,6 +96,8 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
   )
 }
 
+const navLinkClassName = "block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 active:text-pink-400 cursor-pointer mr-9"
+
 const MyNavLink: React.FC<{
   onClick?: () => void
   to: string
@@ -103,9 +105,8 @@ const MyNavLink: React.FC<{
 }> = ({ to, label, onClick }) => (
   <NavLink
     onClick={onClick}
-    activeClassName="text-pink-400"
     to={to}
-    className="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 mr-9">
+    className={navLinkClassName}>
     {label}
   </NavLink>
 )
