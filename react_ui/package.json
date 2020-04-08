@@ -71,7 +71,15 @@
     "jsxBracketSameLine": true,
     "arrowParens": "always",
     "useTabs": false,
-    "trailingComma": "es5"
+    "trailingComma": "es5",
+    "overrides": [
+      {
+        "files": "*.md",
+        "options": {
+          "proseWrap": "always"
+        }
+      }
+    ]
   },
   "browserslist": {
     "production": [
