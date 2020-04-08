@@ -15,7 +15,7 @@ import Config
 # which you typically run after static files are built.
 config :ferry, FerryWeb.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "localhost", port: {:system, "PORT"}], # This is critical for ensuring web-sockets properly authorize.
+  url: [host: {:system, "HOSTNAME"}, port: {:system, "PORT"}], # This is critical for ensuring web-sockets properly authorize.
   cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
   root: ".",
@@ -24,11 +24,11 @@ config :ferry, FerryWeb.Endpoint,
 # Configure your database
 config :ferry, Ferry.Repo,
   adapter: Ecto.Adapters.Postgres,
-  show_sensitive_data_on_connection_error: true,
   username: System.get_env("POSTGRES_USER"),
   password: System.get_env("POSTGRES_PASSWORD"),
   database: System.get_env("POSTGRES_DB"),
   hostname: System.get_env("POSTGRES_HOST"),
+  port: System.get_env("POSTGRES_PORT"),
   pool_size: 15
 
 # Generate a new secret: https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Secret.html#content
