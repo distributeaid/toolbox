@@ -30,7 +30,8 @@ defmodule FerryApi.Schema.Group do
   input_object :group_input do
     field :name, :string
     # slug is generated from the name
-    field :type # currently a constant on the backend "M4D_CHAPTER"
+    # currently a constant on the backend "M4D_CHAPTER"
+    field :type
 
     field :description, :string
     field :donation_link, :string
@@ -82,11 +83,11 @@ defmodule FerryApi.Schema.Group do
     end
   end
 
-  def create_group(_parent, %{group_input: group_attrs}, %{context: %{user_id: nil}}) do
+  def create_group(_parent, _args, %{context: %{user_id: nil}}) do
     {:error, message: "Not authorized", code: Constants.errors().unauthorized}
   end
 
-  def create_group(_parent, %{group_input: group_attrs}, , %{context: %{user_id: _user_id}}) do
+  def create_group(_parent, %{group_input: group_attrs}, %{context: %{user_id: _user_id}}) do
     Profiles.create_group(group_attrs)
   end
 
@@ -99,5 +100,4 @@ defmodule FerryApi.Schema.Group do
     group = Profiles.get_group!(id)
     Profiles.delete_group(group)
   end
-
 end
