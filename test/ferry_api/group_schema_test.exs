@@ -1,9 +1,17 @@
 defmodule Ferry.GroupTest do
-  import Mox
-
   use FerryWeb.ConnCase, async: true
 
   alias Ferry.Profiles
+
+  import Mox
+
+  # TODO: extract me to a test helper
+  def sign_in_user do
+    Ferry.Mocks.AwsClient
+    |> expect(:request, fn _args ->
+      {:ok, %{"Username" => "test_user"}}
+    end)
+  end
 
   # GROUPS
   # ================================================================================
@@ -186,6 +194,8 @@ defmodule Ferry.GroupTest do
   # Mutation - Create A Group
   # ------------------------------------------------------------
   test "create a group - success", %{conn: conn} do
+    sign_in_user()
+
     group_attrs = params_for(:group)
 
     mutation = """
@@ -239,10 +249,7 @@ defmodule Ferry.GroupTest do
   # Mutation - Update A Group
   # ------------------------------------------------------------
   test "update a group - success", %{conn: conn} do
-    Ferry.Mocks.AwsClient
-    |> expect(:request, fn _args ->
-      {:ok, %{"Username" => "test_user"}}
-    end)
+    sign_in_user()
 
     group = insert(:group)
     updates = params_for(:group)
@@ -285,6 +292,8 @@ defmodule Ferry.GroupTest do
   # Delete A Group
   # ------------------------------------------------------------
   test "delete a group - success", %{conn: conn} do
+    sign_in_user()
+
     group = insert(:group)
 
     mutation = """
