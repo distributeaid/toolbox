@@ -14,12 +14,15 @@ it('loads the chapter details and renders the page', () => {
     data: {
       group: {
         id: '1',
+        name: 'Oakland',
+        description: 'the Oakland group',
       },
     },
   })
 
   const { container, getByText } = render(<Chapter slug="1" />)
-  expect(getByText('Found chapter: 1')).toBeVisible()
+  expect(getByText('Oakland')).toBeVisible()
+  expect(getByText('the Oakland group')).toBeVisible()
   expect(useGetChapterQuery).toHaveBeenCalledWith({ variables: { id: '1' } })
 
   expect(container).toMatchSnapshot()
