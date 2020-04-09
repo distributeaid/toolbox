@@ -2,6 +2,7 @@ defmodule FerryApi.Schema.Group do
   use Absinthe.Schema.Notation
 
   alias Ferry.Profiles
+  alias FerryApi.Middleware
 
   # Query
   # ------------------------------------------------------------
@@ -28,7 +29,8 @@ defmodule FerryApi.Schema.Group do
   input_object :group_input do
     field :name, :string
     # slug is generated from the name
-    field :type # currently a constant on the backend "M4D_CHAPTER"
+    # currently a constant on the backend "M4D_CHAPTER"
+    field :type
 
     field :description, :string
     field :donation_link, :string
@@ -46,6 +48,7 @@ defmodule FerryApi.Schema.Group do
     @desc "Create a group"
     field :create_group, type: :group do
       arg(:group_input, non_null(:group_input))
+      middleware(Middleware.RequireUser)
       resolve(&create_group/3)
     end
 
@@ -53,12 +56,14 @@ defmodule FerryApi.Schema.Group do
     field :update_group, type: :group do
       arg(:id, non_null(:id))
       arg(:group_input, non_null(:group_input))
+      middleware(Middleware.RequireUser)
       resolve(&update_group/3)
     end
 
     @desc "Delete a group"
     field :delete_group, type: :group do
       arg(:id, non_null(:id))
+      middleware(Middleware.RequireUser)
       resolve(&delete_group/3)
     end
   end
@@ -84,7 +89,7 @@ defmodule FerryApi.Schema.Group do
     Profiles.create_group(group_attrs)
   end
 
-  def update_group(_parent, %{id: id, group_input: group_attrs} = args, _resolution) do
+  def update_group(_parent, %{id: id, group_input: group_attrs}, _resolution) do
     group = Profiles.get_group!(id)
     Profiles.update_group(group, group_attrs)
   end
@@ -93,5 +98,4 @@ defmodule FerryApi.Schema.Group do
     group = Profiles.get_group!(id)
     Profiles.delete_group(group)
   end
-
 end

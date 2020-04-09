@@ -1,7 +1,3 @@
-defmodule FerryApi.Schema.Constants do
-  def errors do
-    %{
-      unauthorized: "UNAUTHORIZED"
-    }
-  end
+defmodule FerryApi.Constants do
+  def unauthorized, do: "UNAUTHORIZED"
 end

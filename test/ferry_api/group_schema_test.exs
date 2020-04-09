@@ -3,6 +3,15 @@ defmodule Ferry.GroupTest do
 
   alias Ferry.Profiles
 
+  import Mox
+
+  # TODO: extract me to a test helper
+  def sign_in_user do
+    Ferry.Mocks.AwsClient
+    |> expect(:request, fn _args ->
+      {:ok, %{"Username" => "test_user"}}
+    end)
+  end
 
   # GROUPS
   # ================================================================================
@@ -23,7 +32,7 @@ defmodule Ferry.GroupTest do
       |> json_response(200)
 
     %{"data" => %{"countGroups" => count}} = res
-    assert count == 0    
+    assert count == 0
   end
 
   test "count groups - many", %{conn: conn} do
@@ -45,7 +54,7 @@ defmodule Ferry.GroupTest do
   end
 
   # Query - Get All Groups
-  # ------------------------------------------------------------  
+  # ------------------------------------------------------------
   test "get all groups - none", %{conn: conn} do
     query = """
     {
@@ -67,6 +76,7 @@ defmodule Ferry.GroupTest do
 
   test "get all groups - one", %{conn: conn} do
     group = insert(:group)
+
     group_params = %{
       "id" => Integer.to_string(group.id),
       "name" => group.name,
@@ -93,13 +103,15 @@ defmodule Ferry.GroupTest do
 
   test "get all groups - many", %{conn: conn} do
     groups = insert_pair(:group)
-    groups_params = Enum.map(groups, fn group ->
-      %{
-        "id" => Integer.to_string(group.id),
-        "name" => group.name,
-        "description" => group.description
-      }
-    end)    
+
+    groups_params =
+      Enum.map(groups, fn group ->
+        %{
+          "id" => Integer.to_string(group.id),
+          "name" => group.name,
+          "description" => group.description
+        }
+      end)
 
     query = """
     {
@@ -120,9 +132,10 @@ defmodule Ferry.GroupTest do
   end
 
   # Query - Get A Group
-  # ------------------------------------------------------------  
+  # ------------------------------------------------------------
   test "get a group - found", %{conn: conn} do
     group = insert(:group)
+
     group_params = %{
       "id" => Integer.to_string(group.id),
       "name" => group.name,
@@ -163,20 +176,26 @@ defmodule Ferry.GroupTest do
       |> post("/api", %{query: query})
       |> json_response(200)
 
-    assert res == %{
-      "data" => %{"group" => nil},
-      "errors" => [%{
-        "id" => "161",
-        "locations" => [%{"column" => 0, "line" => 2}],
-        "message" => "Group not found.",
-        "path" => ["group"]
-      }]
-    }
+    assert(
+      res == %{
+        "data" => %{"group" => nil},
+        "errors" => [
+          %{
+            "id" => "161",
+            "locations" => [%{"column" => 0, "line" => 2}],
+            "message" => "Group not found.",
+            "path" => ["group"]
+          }
+        ]
+      }
+    )
   end
 
   # Mutation - Create A Group
   # ------------------------------------------------------------
   test "create a group - success", %{conn: conn} do
+    sign_in_user()
+
     group_attrs = params_for(:group)
 
     mutation = """
@@ -208,7 +227,18 @@ defmodule Ferry.GroupTest do
       |> post("/api", %{query: mutation})
       |> json_response(200)
 
-    %{"data" => %{"createGroup" => %{"id" =>  id, "name" => name, "type" => type, "slug" => slug, "slackChannelName" => slack_channel_name}}} = res
+    %{
+      "data" => %{
+        "createGroup" => %{
+          "id" => id,
+          "name" => name,
+          "type" => type,
+          "slug" => slug,
+          "slackChannelName" => slack_channel_name
+        }
+      }
+    } = res
+
     assert id
     assert slug
     assert name == group_attrs.name
@@ -219,6 +249,8 @@ defmodule Ferry.GroupTest do
   # Mutation - Update A Group
   # ------------------------------------------------------------
   test "update a group - success", %{conn: conn} do
+    sign_in_user()
+
     group = insert(:group)
     updates = params_for(:group)
 
@@ -250,7 +282,9 @@ defmodule Ferry.GroupTest do
       |> post("/api", %{query: mutation})
       |> json_response(200)
 
-    %{"data" => %{"updateGroup" => %{"id" => id, "name" => name, "description" => description}}} = res
+    %{"data" => %{"updateGroup" => %{"id" => id, "name" => name, "description" => description}}} =
+      res
+
     assert id == Integer.to_string(group.id)
     assert description == updates.description
   end
@@ -258,6 +292,8 @@ defmodule Ferry.GroupTest do
   # Delete A Group
   # ------------------------------------------------------------
   test "delete a group - success", %{conn: conn} do
+    sign_in_user()
+
     group = insert(:group)
 
     mutation = """
@@ -275,5 +311,4 @@ defmodule Ferry.GroupTest do
 
     assert Profiles.get_group(group.id) == nil
   end
-
 end
