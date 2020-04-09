@@ -91,11 +91,6 @@ export type Session = {
   readonly userId: Maybe<Scalars['ID']>;
 };
 
-export type GetChapterListQueryVariables = {};
-
-
-export type GetChapterListQuery = { readonly __typename?: 'RootQueryType', readonly groups: Maybe<ReadonlyArray<Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly description: Maybe<string>, readonly name: string }>>> };
-
 export type GetChapterQueryVariables = {
   id: Scalars['ID'];
 };
@@ -103,7 +98,45 @@ export type GetChapterQueryVariables = {
 
 export type GetChapterQuery = { readonly __typename?: 'RootQueryType', readonly group: Maybe<{ readonly __typename?: 'Group', readonly id: string }> };
 
+export type GetChapterListQueryVariables = {};
 
+
+export type GetChapterListQuery = { readonly __typename?: 'RootQueryType', readonly groups: Maybe<ReadonlyArray<Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly description: Maybe<string>, readonly name: string }>>> };
+
+
+export const GetChapterDocument = gql`
+    query getChapter($id: ID!) {
+  group(id: $id) {
+    id
+  }
+}
+    `;
+
+/**
+ * __useGetChapterQuery__
+ *
+ * To run a query within a React component, call `useGetChapterQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetChapterQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetChapterQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetChapterQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetChapterQuery, GetChapterQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetChapterQuery, GetChapterQueryVariables>(GetChapterDocument, baseOptions);
+      }
+export function useGetChapterLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetChapterQuery, GetChapterQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetChapterQuery, GetChapterQueryVariables>(GetChapterDocument, baseOptions);
+        }
+export type GetChapterQueryHookResult = ReturnType<typeof useGetChapterQuery>;
+export type GetChapterLazyQueryHookResult = ReturnType<typeof useGetChapterLazyQuery>;
+export type GetChapterQueryResult = ApolloReactCommon.QueryResult<GetChapterQuery, GetChapterQueryVariables>;
 export const GetChapterListDocument = gql`
     query getChapterList {
   groups {
@@ -138,38 +171,5 @@ export function useGetChapterListLazyQuery(baseOptions?: ApolloReactHooks.LazyQu
 export type GetChapterListQueryHookResult = ReturnType<typeof useGetChapterListQuery>;
 export type GetChapterListLazyQueryHookResult = ReturnType<typeof useGetChapterListLazyQuery>;
 export type GetChapterListQueryResult = ApolloReactCommon.QueryResult<GetChapterListQuery, GetChapterListQueryVariables>;
-export const GetChapterDocument = gql`
-    query getChapter($id: ID!) {
-  group(id: $id) {
-    id
-  }
-}
-    `;
-
-/**
- * __useGetChapterQuery__
- *
- * To run a query within a React component, call `useGetChapterQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterQuery` returns an object from Apollo Client that contains loading, error, and data properties 
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetChapterQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetChapterQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetChapterQuery, GetChapterQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetChapterQuery, GetChapterQueryVariables>(GetChapterDocument, baseOptions);
-      }
-export function useGetChapterLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetChapterQuery, GetChapterQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetChapterQuery, GetChapterQueryVariables>(GetChapterDocument, baseOptions);
-        }
-export type GetChapterQueryHookResult = ReturnType<typeof useGetChapterQuery>;
-export type GetChapterLazyQueryHookResult = ReturnType<typeof useGetChapterLazyQuery>;
-export type GetChapterQueryResult = ApolloReactCommon.QueryResult<GetChapterQuery, GetChapterQueryVariables>;
 
 
