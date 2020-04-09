@@ -1,12 +1,12 @@
 overwrite: true
-schema: "http://localhost:1312/api/graphiql"
-documents: "src/**/*.graphql"
+schema: 'http://localhost:1312/api/graphiql'
+documents: 'src/**/*.graphql'
 generates:
   src/generated/graphql.ts:
     plugins:
-      - "typescript"
-      - "typescript-operations"
-      - "typescript-react-apollo"
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
       - add: '/* eslint-disable */'
       - add: '// This file was automatically generated and should not be edited.'
       - add: '// --'
@@ -18,7 +18,7 @@ generates:
       withHOC: false
       withHooks: true
       avoidOptionals: true
-      apolloReactCommonImportFrom: '@apollo/react-common'
-      apolloReactHooksImportFrom: '@apollo/react-hooks'
+      apolloReactCommonImportFrom: '@apollo/client'
+      apolloReactHooksImportFrom: '@apollo/client'
       namingConvention:
         enumValues: keep

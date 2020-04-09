@@ -1,5 +1,16 @@
 query getChapter($id: ID!) {
   group(id: $id) {
     id
+    name
+    slug
+    description
+    donationForm
+    donationLink
+    donationFormResults
+    slackChannelName
+    volunteerForm
+    volunteerFormResults
+    requestForm
+    requestFormResults
   }
 }

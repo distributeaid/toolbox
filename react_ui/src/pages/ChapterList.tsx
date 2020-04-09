@@ -1,14 +1,17 @@
 import React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import { NavLink } from 'react-router-dom'
 
 import { ContentContainer } from '../components/ContentContainer'
 import { TextLink } from '../components/TextLink'
 import { Group, useGetChapterListQuery } from '../generated/graphql'
 
-export const ChapterItem: React.FC<{ chapter: Group }> = ({ chapter }) => {
+export const ChapterItem: React.FC<{ chapter: Partial<Group> }> = ({
+  chapter,
+}) => {
   return (
     <li className="border-t border-gray-200">
-      <a href={`/${chapter.id}`} className="">
+      <NavLink to={`/${chapter.id}`}>
         <div className="py-4 hover:bg-gray-200">
           <div className="flex items-center justify-between">
             <div className="text-sm leading-5 font-medium text-black">
@@ -22,7 +25,7 @@ export const ChapterItem: React.FC<{ chapter: Group }> = ({ chapter }) => {
             </div>
           </div>
         </div>
-      </a>
+      </NavLink>
     </li>
   )
 }

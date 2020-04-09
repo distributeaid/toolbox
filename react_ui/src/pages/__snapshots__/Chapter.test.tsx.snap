@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`loads the chapter details and renders the page 1`] = `
+<div>
+  <a
+    href="/chapters"
+  >
+    chapter.backLink
+  </a>
+  <div
+    class="w-full max-w-3xl mx-auto bg-white overflow-hidden md:shadow md:rounded-lg md:border-t md:border-gray-100"
+  >
+    <div
+      class="p-4 md:p-8"
+    >
+      <div
+        class="mb-4 md:mb-8"
+      >
+        <h1
+          class="font-bold text-xl"
+        >
+          Oakland
+        </h1>
+        <p
+          class="py-4"
+        >
+          the Oakland group
+        </p>
+        <p
+          class="py-4"
+        >
+          slug: 
+          ca-oakland
+        </p>
+        <p
+          class="py-4"
+        >
+          slack channel: 
+          slack-channel-name
+        </p>
+        <p
+          class="py-4"
+        >
+          request form: 
+          request form link
+        </p>
+        <p
+          class="py-4"
+        >
+          request form results: 
+          request form results link
+        </p>
+        <p
+          class="py-4"
+        >
+          volunteer form: 
+          volunteer form link
+        </p>
+        <p
+          class="py-4"
+        >
+          volunteer form results: 
+          volunteer form results link
+        </p>
+        <p
+          class="py-4"
+        >
+          donation form: 
+          donation form link
+        </p>
+        <p
+          class="py-4"
+        >
+          donation form results: 
+          donation form results link
+        </p>
+        <p
+          class="py-4"
+        >
+          donation link: 
+          donation link
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shows a loading message when loading 1`] = `
+<div>
+  <div>
+    Loading...
+  </div>
+</div>
+`;
+
+exports[`shows an error message when chapter not found 1`] = `
+<div>
+  <div>
+    Chapter 
+    1
+     not found
+  </div>
+</div>
+`;
