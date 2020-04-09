@@ -2,7 +2,7 @@ import { render } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
-import { useGetChapterQuery, Group } from '../generated/graphql'
+import { Group, useGetChapterQuery } from '../generated/graphql'
 import { Chapter } from './Chapter'
 
 jest.mock('../generated/graphql', () => ({
