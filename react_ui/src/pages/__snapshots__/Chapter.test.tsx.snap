@@ -30,46 +30,55 @@ exports[`loads the chapter details and renders the page 1`] = `
           class="py-4"
         >
           slug: 
+          ca-oakland
         </p>
         <p
           class="py-4"
         >
           slack channel: 
+          slack-channel-name
         </p>
         <p
           class="py-4"
         >
           request form: 
+          request form link
         </p>
         <p
           class="py-4"
         >
           request form results: 
+          request form results link
         </p>
         <p
           class="py-4"
         >
           volunteer form: 
+          volunteer form link
         </p>
         <p
           class="py-4"
         >
           volunteer form results: 
+          volunteer form results link
         </p>
         <p
           class="py-4"
         >
           donation form: 
+          donation form link
         </p>
         <p
           class="py-4"
         >
           donation form results: 
+          donation form results link
         </p>
         <p
           class="py-4"
         >
           donation link: 
+          donation link
         </p>
       </div>
     </div>

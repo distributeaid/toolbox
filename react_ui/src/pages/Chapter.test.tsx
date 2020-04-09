@@ -2,7 +2,7 @@ import { render } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
-import { useGetChapterQuery } from '../generated/graphql'
+import { useGetChapterQuery, Group } from '../generated/graphql'
 import { Chapter } from './Chapter'
 
 jest.mock('../generated/graphql', () => ({
@@ -16,8 +16,17 @@ it('loads the chapter details and renders the page', () => {
       group: {
         id: '1',
         name: 'Oakland',
+        slug: 'ca-oakland',
         description: 'the Oakland group',
-      },
+        donationForm: 'donation form link',
+        donationFormResults: 'donation form results link',
+        donationLink: 'donation link',
+        volunteerForm: 'volunteer form link',
+        volunteerFormResults: 'volunteer form results link',
+        slackChannelName: 'slack-channel-name',
+        requestForm: 'request form link',
+        requestFormResults: 'request form results link',
+      } as Group,
     },
   })
 
