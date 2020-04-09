@@ -32,10 +32,25 @@ unit_test_ui:
     - cd ${REACT_DIR}
     - npm test
 
+cypress_e2e:
+  extends: .ui
+  stage: e2e_test
+  needs: ["build_ui", "unit_test_ui"]
+  image: cypress/base:10
+  script:
+    - cd ${REACT_DIR}
+    - npm ci
+    # show where the Cypress test runner binaries are cached
+    - $(npm bin)/cypress cache path
+    # show all installed versions of Cypress binary
+    - $(npm bin)/cypress cache list
+    - $(npm bin)/cypress verify
+    - npm run cypress:ci
+
 image_ui:
   extends: .ui
   stage: image
-  needs: ["build_ui", "unit_test_ui"]
+  needs: ["build_ui", "unit_test_ui", "cypress_e2e"]
   image: docker:${DOCKER_VERSION}
   services:
     - docker:${DOCKER_VERSION}-dind

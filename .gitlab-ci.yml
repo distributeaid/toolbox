@@ -2,6 +2,7 @@ stages:
   - prepare
   - build
   - unit_test
+  - e2e_test
   - image
   - deploy_staging
   - integration_test
