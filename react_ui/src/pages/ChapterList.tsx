@@ -1,10 +1,10 @@
 import React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import { NavLink } from 'react-router-dom'
 
 import { ContentContainer } from '../components/ContentContainer'
 import { TextLink } from '../components/TextLink'
 import { Group, useGetChapterListQuery } from '../generated/graphql'
-import { NavLink } from 'react-router-dom'
 
 export const ChapterItem: React.FC<{ chapter: Partial<Group> }> = ({
   chapter,

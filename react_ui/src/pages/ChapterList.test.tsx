@@ -1,14 +1,14 @@
-import { render, fireEvent, waitFor, wait } from '@testing-library/react'
+import { FetchResult } from '@apollo/client'
+import { fireEvent, render, waitFor } from '@testing-library/react'
+import { createMemoryHistory } from 'history'
 import React, { Suspense } from 'react'
-
-import { ChapterList } from './ChapterList'
 import { Router } from 'react-router-dom'
+
 import {
   GetChapterListQuery,
   useGetChapterListQuery,
 } from '../generated/graphql'
-import { FetchResult } from '@apollo/client'
-import { createMemoryHistory } from 'history'
+import { ChapterList } from './ChapterList'
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => {

@@ -96,7 +96,7 @@ export type GetChapterQueryVariables = {
 };
 
 
-export type GetChapterQuery = { readonly __typename?: 'RootQueryType', readonly group: Maybe<{ readonly __typename?: 'Group', readonly id: string }> };
+export type GetChapterQuery = { readonly __typename?: 'RootQueryType', readonly group: Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly name: string, readonly slug: string, readonly description: Maybe<string>, readonly donationForm: Maybe<string>, readonly donationLink: Maybe<string>, readonly donationFormResults: Maybe<string>, readonly slackChannelName: Maybe<string>, readonly volunteerForm: Maybe<string>, readonly volunteerFormResults: Maybe<string>, readonly requestForm: Maybe<string>, readonly requestFormResults: Maybe<string> }> };
 
 export type GetChapterListQueryVariables = {};
 
@@ -108,6 +108,17 @@ export const GetChapterDocument = gql`
     query getChapter($id: ID!) {
   group(id: $id) {
     id
+    name
+    slug
+    description
+    donationForm
+    donationLink
+    donationFormResults
+    slackChannelName
+    volunteerForm
+    volunteerFormResults
+    requestForm
+    requestFormResults
   }
 }
     `;
