@@ -2,6 +2,11 @@
 
 exports[`loads the chapter details and renders the page 1`] = `
 <div>
+  <a
+    href="/chapters"
+  >
+    chapter.backLink
+  </a>
   <div
     class="w-full max-w-3xl mx-auto bg-white overflow-hidden md:shadow md:rounded-lg md:border-t md:border-gray-100"
   >
@@ -20,6 +25,51 @@ exports[`loads the chapter details and renders the page 1`] = `
           class="py-4"
         >
           the Oakland group
+        </p>
+        <p
+          class="py-4"
+        >
+          slug: 
+        </p>
+        <p
+          class="py-4"
+        >
+          slack channel: 
+        </p>
+        <p
+          class="py-4"
+        >
+          request form: 
+        </p>
+        <p
+          class="py-4"
+        >
+          request form results: 
+        </p>
+        <p
+          class="py-4"
+        >
+          volunteer form: 
+        </p>
+        <p
+          class="py-4"
+        >
+          volunteer form results: 
+        </p>
+        <p
+          class="py-4"
+        >
+          donation form: 
+        </p>
+        <p
+          class="py-4"
+        >
+          donation form results: 
+        </p>
+        <p
+          class="py-4"
+        >
+          donation link: 
         </p>
       </div>
     </div>

@@ -10,13 +10,6 @@ import {
 } from '../generated/graphql'
 import { ChapterList } from './ChapterList'
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => {
-    return { t: jest.fn().mockImplementation((v) => v) }
-  },
-  Trans: ({ children }: React.PropsWithChildren<{}>) => <>{children}</>,
-}))
-
 jest.mock('../generated/graphql', () => ({
   useGetChapterListQuery: jest.fn(),
   useGetChapterQuery: jest.fn(),

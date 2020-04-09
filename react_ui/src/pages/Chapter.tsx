@@ -1,9 +1,9 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { NavLink } from 'react-router-dom'
 
 import { ContentContainer } from '../components/ContentContainer'
 import { useGetChapterQuery } from '../generated/graphql'
-import { NavLink } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 
 type Props = {
   slug: string
@@ -32,6 +32,21 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
             <h1 className="font-bold text-xl">{chapter.name}</h1>
 
             <p className="py-4">{chapter.description}</p>
+            <p className="py-4">slug: {chapter.slug}</p>
+            <p className="py-4">slack channel: {chapter.slackChannelName}</p>
+            <p className="py-4">request form: {chapter.requestForm}</p>
+            <p className="py-4">
+              request form results: {chapter.requestFormResults}
+            </p>
+            <p className="py-4">volunteer form: {chapter.volunteerForm}</p>
+            <p className="py-4">
+              volunteer form results: {chapter.volunteerFormResults}
+            </p>
+            <p className="py-4">donation form: {chapter.donationForm}</p>
+            <p className="py-4">
+              donation form results: {chapter.donationFormResults}
+            </p>
+            <p className="py-4">donation link: {chapter.donationLink}</p>
           </div>
         </div>
       </ContentContainer>

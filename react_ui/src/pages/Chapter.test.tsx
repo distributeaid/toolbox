@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react'
 import React from 'react'
+import { MemoryRouter } from 'react-router-dom'
 
 import { useGetChapterQuery } from '../generated/graphql'
 import { Chapter } from './Chapter'
@@ -20,7 +21,11 @@ it('loads the chapter details and renders the page', () => {
     },
   })
 
-  const { container, getByText } = render(<Chapter slug="1" />)
+  const { container, getByText } = render(
+    <MemoryRouter>
+      <Chapter slug="1" />
+    </MemoryRouter>
+  )
   expect(getByText('Oakland')).toBeVisible()
   expect(getByText('the Oakland group')).toBeVisible()
   expect(useGetChapterQuery).toHaveBeenCalledWith({ variables: { id: '1' } })
