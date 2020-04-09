@@ -16,7 +16,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
   if (!data?.group) {
     return (
       <div>
-        Chapter <i>{slug}</i> not found
+        Chapter {slug} not found
       </div>
     )
   }

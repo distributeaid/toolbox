@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`loads the chapter details and renders the page 1`] = `
+<div>
+  <div>
+    Found chapter: 
+    1
+  </div>
+</div>
+`;
+
+exports[`shows a loading message when loading 1`] = `
+<div>
+  <div>
+    Loading...
+  </div>
+</div>
+`;
+
+exports[`shows an error message when chapter not found 1`] = `
+<div>
+  <div>
+    Chapter 
+    1
+     not found
+  </div>
+</div>
+`;
