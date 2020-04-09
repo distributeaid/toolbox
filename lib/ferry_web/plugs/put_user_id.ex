@@ -1,6 +1,8 @@
 defmodule FerryWeb.Plugs.PutUserId do
   import Plug.Conn
 
+  def aws_client, do: Application.get_env(:ferry, :aws_client)
+
   def put_user_id(conn, _opts) do
     user_id =
       conn
@@ -20,7 +22,7 @@ defmodule FerryWeb.Plugs.PutUserId do
   defp validate_token(token) do
     token
     |> Ferry.Cognito.get_user()
-    |> ExAws.request()
+    |> aws_client().request()
     |> case do
       {:ok, %{"Username" => user_id}} -> user_id
       _ -> nil

@@ -25,3 +25,4 @@ config :bcrypt_elixir, log_rounds: 4
 
 # Override modules with mocks for testing.
 config :ferry, :geocoder, Ferry.Locations.Geocoder.GeocoderMock
+config :ferry, :aws_client, Ferry.Mocks.AwsClient

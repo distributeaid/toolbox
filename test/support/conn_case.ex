@@ -32,13 +32,26 @@ defmodule FerryWeb.ConnCase do
     end
   end
 
-
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Ferry.Repo)
+
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Ferry.Repo, {:shared, self()})
     end
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
-  end
 
+    conn =
+      Phoenix.ConnTest.build_conn()
+      |> Plug.Conn.put_req_header("authorization", "Bearer fake.token")
+
+    Ferry.Mocks.AwsClient
+    |> Mox.stub(:request, fn _ ->
+      {:error,
+       """
+       You can explicitly change this mock in your test with
+       Ferry.Mocks.AwsClient |> expect(...)
+       """}
+    end)
+
+    {:ok, conn: conn}
+  end
 end
