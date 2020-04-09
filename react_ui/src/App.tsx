@@ -1,7 +1,7 @@
 import './App.css'
 import '@aws-amplify/ui/dist/style.css'
 
-import { ApolloProvider } from '@apollo/react-hooks'
+import { ApolloProvider } from '@apollo/client'
 import Amplify, { Auth } from 'aws-amplify'
 import React, { Suspense, useEffect, useState } from 'react'
 import {

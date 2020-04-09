@@ -2,8 +2,8 @@
 // This file was automatically generated and should not be edited.
 // --
 import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as ApolloReactCommon from '@apollo/client';
+import * as ApolloReactHooks from '@apollo/client';
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -17,9 +17,36 @@ export type Scalars = {
 export type Group = {
   readonly __typename?: 'Group';
   readonly description: Maybe<Scalars['String']>;
-  readonly id: Maybe<Scalars['ID']>;
-  readonly name: Maybe<Scalars['String']>;
+  readonly donationForm: Maybe<Scalars['String']>;
+  readonly donationFormResults: Maybe<Scalars['String']>;
+  readonly donationLink: Maybe<Scalars['String']>;
+  readonly id: Scalars['ID'];
+  readonly name: Scalars['String'];
+  readonly requestForm: Maybe<Scalars['String']>;
+  readonly requestFormResults: Maybe<Scalars['String']>;
+  readonly slackChannelName: Maybe<Scalars['String']>;
+  readonly slug: Scalars['String'];
+  readonly type: GroupType;
+  readonly volunteerForm: Maybe<Scalars['String']>;
+  readonly volunteerFormResults: Maybe<Scalars['String']>;
 };
+
+export type GroupInput = {
+  readonly description: Maybe<Scalars['String']>;
+  readonly donationForm: Maybe<Scalars['String']>;
+  readonly donationFormResults: Maybe<Scalars['String']>;
+  readonly donationLink: Maybe<Scalars['String']>;
+  readonly name: Maybe<Scalars['String']>;
+  readonly requestForm: Maybe<Scalars['String']>;
+  readonly requestFormResults: Maybe<Scalars['String']>;
+  readonly slackChannelName: Maybe<Scalars['String']>;
+  readonly volunteerForm: Maybe<Scalars['String']>;
+  readonly volunteerFormResults: Maybe<Scalars['String']>;
+};
+
+export enum GroupType {
+  M4D_CHAPTER = 'M4D_CHAPTER'
+}
 
 export type RootMutationType = {
   readonly __typename?: 'RootMutationType';
@@ -30,8 +57,7 @@ export type RootMutationType = {
 
 
 export type RootMutationTypeCreateGroupArgs = {
-  description: Maybe<Scalars['String']>;
-  name: Scalars['String'];
+  groupInput: GroupInput;
 };
 
 
@@ -41,7 +67,7 @@ export type RootMutationTypeDeleteGroupArgs = {
 
 
 export type RootMutationTypeUpdateGroupArgs = {
-  description: Maybe<Scalars['String']>;
+  groupInput: GroupInput;
   id: Scalars['ID'];
 };
 
@@ -61,20 +87,21 @@ export type RootQueryTypeGroupArgs = {
 
 export type Session = {
   readonly __typename?: 'Session';
+  readonly id: Maybe<Scalars['ID']>;
   readonly userId: Maybe<Scalars['ID']>;
 };
 
 export type GetChapterListQueryVariables = {};
 
 
-export type GetChapterListQuery = { readonly __typename?: 'RootQueryType', readonly groups: Maybe<ReadonlyArray<Maybe<{ readonly __typename?: 'Group', readonly id: Maybe<string>, readonly description: Maybe<string>, readonly name: Maybe<string> }>>> };
+export type GetChapterListQuery = { readonly __typename?: 'RootQueryType', readonly groups: Maybe<ReadonlyArray<Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly description: Maybe<string>, readonly name: string }>>> };
 
 export type GetChapterQueryVariables = {
   id: Scalars['ID'];
 };
 
 
-export type GetChapterQuery = { readonly __typename?: 'RootQueryType', readonly group: Maybe<{ readonly __typename?: 'Group', readonly id: Maybe<string> }> };
+export type GetChapterQuery = { readonly __typename?: 'RootQueryType', readonly group: Maybe<{ readonly __typename?: 'Group', readonly id: string }> };
 
 
 export const GetChapterListDocument = gql`

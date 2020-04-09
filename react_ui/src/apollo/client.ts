@@ -1,26 +1,44 @@
 import { CognitoUserSession } from 'amazon-cognito-identity-js'
-import ApolloClient from 'apollo-boost'
+import {
+  ApolloClient,
+  HttpLink,
+  InMemoryCache,
+  ApolloLink,
+  fromPromise,
+} from '@apollo/client'
 import Amplify, { Auth } from 'aws-amplify'
 
 import amplifyConfig from '../aws-exports'
 
 Amplify.configure(amplifyConfig)
 
-export const client = new ApolloClient({
+const httpLink = new HttpLink({
   uri: '/api',
-  request: (operation) => {
-    return Auth.currentSession()
-      .then((session: CognitoUserSession) => {
-        const token = session.getAccessToken().getJwtToken()
+  credentials: 'same-origin',
+  fetch,
+})
 
-        operation.setContext({
-          headers: {
-            authorization: token ? `Bearer ${token}` : '',
-          },
-        })
+const authLink = new ApolloLink((operation, forward) => {
+  return fromPromise(Auth.currentSession()
+    .then((session: CognitoUserSession) => {
+      const token = session.getAccessToken().getJwtToken()
+
+      operation.setContext({
+        headers: {
+          authorization: token ? `Bearer ${token}` : '',
+        },
       })
-      .catch(() => {
-        // not signed in
-      })
-  },
+
+      return operation
+    })
+    .catch(() => {
+      // not signed in
+      return operation
+    })
+  ).flatMap(forward)
+})
+
+export const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: ApolloLink.from([authLink.concat(httpLink)]),
 })
