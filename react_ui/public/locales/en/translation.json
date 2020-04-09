@@ -22,6 +22,9 @@
     "volunteerFormHeader": "Volunteer Sign-Up Form",
     "topDescription": "Submitting this form will create a new public-facing page for your local chapter. Please double-check all of the information you provide here since it will immediately be visible to visitors to the Masks For Docs website after you click submit. For examples, see the <2>list of pages here</2> (opens in a new tab)."
   },
+  "chapter": {
+    "backLink": "Back to Directory"
+  },
   "styleguide": {
     "title": "Style Guide",
     "linkExample": "Here is a translated <2>Example Link</2> with a few different <4>react</4> nodes."
