@@ -16,6 +16,26 @@ import {
   useCreateChapterMutation,
 } from '../generated/graphql'
 
+const isValidUrl = (value: Maybe<string>) => {
+  if (value == null) {
+    return false
+  }
+
+  let url
+
+  try {
+    url = new URL(value)
+  } catch (_) {
+    return false
+  }
+
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    return false
+  }
+
+  return true
+}
+
 const isValidGDocsUrl = (requiredBasePath: string, value: Maybe<string>) => {
   if (value == null) {
     return false
@@ -350,6 +370,16 @@ const validateChapterArgs = (chapterArgs: GroupInput): string[] => {
 
   const resultsUrlNotSpreadsheetMessage = (formName: string) =>
     `${formName} form results URL must be a google spreadsheet if ${formName} is a google form.`
+
+  if (!isValidUrl(chapterArgs.donationForm)) {
+    errors.push('Donation form link must be a full url (https://example.com)')
+  }
+  if (!isValidUrl(chapterArgs.volunteerForm)) {
+    errors.push('Volunteer form link must be a full url (https://example.com)')
+  }
+  if (!isValidUrl(chapterArgs.requestForm)) {
+    errors.push('Request form link must be a full url (https://example.com)')
+  }
 
   if (
     isValidGDocsUrl('/forms', chapterArgs.donationForm) &&
