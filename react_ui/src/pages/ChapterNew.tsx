@@ -9,6 +9,7 @@ import { Select } from '../components/Select'
 import { TextLink } from '../components/TextLink'
 import countries from '../data/countries.json'
 import usStates from '../data/us_states.json'
+import { Group, useCreateChapterMutation } from '../generated/graphql'
 
 const isValidGDocsUrl = (requiredBasePath: string, value: string) => {
   let url
@@ -72,13 +73,13 @@ const ChapterNameSection: React.FC<ChapterNameProps> = ({
       />
 
       {chapterUrl !== '' && (
-        <p>
-          <span className="font-bold mb-1">The URL for your new chapter</span>
+         <p>
+           <span className="font-bold mb-1">The URL for your new chapter</span>
 
-          <br />
+           <br />
 
-          <span className="font-mono">local.masksfordocs.com/{chapterUrl}</span>
-        </p>
+           <span className="font-mono">local.masksfordocs.com/{chapterUrl}</span>
+         </p>
       )}
     </>
   )
@@ -143,43 +144,43 @@ const ChapterLocationSection: React.FC<ChapterLocationProps> = ({
       />
 
       {showStateSelect && (
-        <Select
-          label={t('terms.state') + '*'}
-          onChange={onProvinceSelect}
-          includeBlank={true}
-          options={usStates.map((state: { name: string; code: string }) => (
-            <option key={state.code} value={state.code}>
-              {state.name}
-            </option>
-          ))}
-        />
+         <Select
+           label={t('terms.state') + '*'}
+           onChange={onProvinceSelect}
+           includeBlank={true}
+           options={usStates.map((state: { name: string; code: string }) => (
+             <option key={state.code} value={state.code}>
+               {state.name}
+             </option>
+           ))}
+         />
       )}
 
       {showProvinceInput && (
-        <Input
-          id="province"
-          type="text"
-          title={t('terms.province') + '*'}
-          onChange={onProvinceChange}
-          value={chapterProvince}
-        />
+         <Input
+           id="province"
+           type="text"
+           title={t('terms.province') + '*'}
+           onChange={onProvinceChange}
+           value={chapterProvince}
+         />
       )}
 
       {showPostalCodeInput && (
-        <div>
-          <p className="mt-2">
-            Note: the postal code will not be displayed publicly. It's for
-            internal use only.
-          </p>
+         <div>
+           <p className="mt-2">
+             Note: the postal code will not be displayed publicly. It's for
+             internal use only.
+           </p>
 
-          <Input
-            id="postal-code"
-            type="text"
-            title={t('terms.postalCode') + '*'}
-            onChange={onPostalCodeChange}
-            value={chapterPostalCode}
-          />
-        </div>
+           <Input
+             id="postal-code"
+             type="text"
+             title={t('terms.postalCode') + '*'}
+             onChange={onPostalCodeChange}
+             value={chapterPostalCode}
+           />
+         </div>
       )}
     </>
   )
@@ -322,8 +323,8 @@ const ChapterFormLinksSection: React.FC<ChapterFormLinksSectionProps> = ({
         id="volunteer-form-link"
         type="text"
         title={t('chapterNew.volunteerFormInputLabel') + '*'}
-        onChange={formUrlOnChange(setChapterDonateFormLink)}
-        value={chapterDonateFormLink}
+        onChange={formUrlOnChange(setChapterVolunteerFormLink)}
+        value={chapterVolunteerFormLink}
       />
 
       <Input
@@ -361,6 +362,23 @@ export const ChapterNew: React.FC = () => {
     chapterDonateResultsLink,
     setChapterDonateResultsLink,
   ] = React.useState('')
+
+  const [createChapterMutation, { data, loading, error }] = useCreateChapterMutation({
+    variables: {
+      groupInput: {
+        description: chapterDescription,
+        donationForm: chapterDonateFormLink,
+        donationFormResults: chapterDonateResultsLink,
+        donationLink: "http://www.example.com/donate",
+        name: chapterName,
+        requestForm: chapterRequestFormLink,
+        requestFormResults: chapterRequestResultsLink,
+        slackChannelName: "zlocal-ex-example",
+        volunteerForm: chapterVolunteerFormLink,
+        volunteerFormResults: chapterVolunteerResultsLink
+      }
+    }
+  })
 
   const { t } = useTranslation()
 
@@ -409,10 +427,12 @@ export const ChapterNew: React.FC = () => {
           chapterVolunteerResultsLink={chapterVolunteerResultsLink}
           setChapterVolunteerFormLink={setChapterVolunteerFormLink}
           setChapterVolunteerResultsLink={setChapterVolunteerResultsLink}
+
           chapterRequestFormLink={chapterRequestFormLink}
           chapterRequestResultsLink={chapterRequestResultsLink}
           setChapterRequestFormLink={setChapterRequestFormLink}
           setChapterRequestResultsLink={setChapterRequestResultsLink}
+
           chapterDonateFormLink={chapterDonateFormLink}
           chapterDonateResultsLink={chapterDonateResultsLink}
           setChapterDonateFormLink={setChapterDonateFormLink}
@@ -421,7 +441,7 @@ export const ChapterNew: React.FC = () => {
 
         <Divider outerClasses="my-6" />
 
-        <Button>Create Chapter</Button>
+        <Button onClick={() => createChapterMutation()}>Create Chapter</Button>
       </div>
     </ContentContainer>
   )
