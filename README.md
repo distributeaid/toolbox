@@ -158,7 +158,6 @@ the following SELECT statement:
 
 ```
 SELECT * FROM groups;
-SELECT * FROM inventory_mods;
 ```
 
 ## API
