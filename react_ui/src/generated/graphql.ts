@@ -75,6 +75,7 @@ export type RootQueryType = {
   readonly __typename?: 'RootQueryType';
   readonly countGroups: Maybe<Scalars['Int']>;
   readonly group: Maybe<Group>;
+  readonly groupBySlug: Maybe<Group>;
   readonly groups: Maybe<ReadonlyArray<Maybe<Group>>>;
   readonly healthCheck: Maybe<Scalars['String']>;
   readonly session: Maybe<Session>;
@@ -83,6 +84,11 @@ export type RootQueryType = {
 
 export type RootQueryTypeGroupArgs = {
   id: Scalars['ID'];
+};
+
+
+export type RootQueryTypeGroupBySlugArgs = {
+  slug: Scalars['String'];
 };
 
 export type Session = {
@@ -98,10 +104,17 @@ export type GetChapterQueryVariables = {
 
 export type GetChapterQuery = { readonly __typename?: 'RootQueryType', readonly group: Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly name: string, readonly slug: string, readonly description: Maybe<string>, readonly donationForm: Maybe<string>, readonly donationLink: Maybe<string>, readonly donationFormResults: Maybe<string>, readonly slackChannelName: Maybe<string>, readonly volunteerForm: Maybe<string>, readonly volunteerFormResults: Maybe<string>, readonly requestForm: Maybe<string>, readonly requestFormResults: Maybe<string> }> };
 
+export type GetChapterBySlugQueryVariables = {
+  slug: Scalars['String'];
+};
+
+
+export type GetChapterBySlugQuery = { readonly __typename?: 'RootQueryType', readonly groupBySlug: Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly name: string, readonly slug: string, readonly description: Maybe<string>, readonly donationForm: Maybe<string>, readonly donationLink: Maybe<string>, readonly donationFormResults: Maybe<string>, readonly slackChannelName: Maybe<string>, readonly volunteerForm: Maybe<string>, readonly volunteerFormResults: Maybe<string>, readonly requestForm: Maybe<string>, readonly requestFormResults: Maybe<string> }> };
+
 export type GetChapterListQueryVariables = {};
 
 
-export type GetChapterListQuery = { readonly __typename?: 'RootQueryType', readonly groups: Maybe<ReadonlyArray<Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly description: Maybe<string>, readonly name: string }>>> };
+export type GetChapterListQuery = { readonly __typename?: 'RootQueryType', readonly groups: Maybe<ReadonlyArray<Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly slug: string, readonly description: Maybe<string>, readonly name: string }>>> };
 
 
 export const GetChapterDocument = gql`
@@ -148,10 +161,55 @@ export function useGetChapterLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryH
 export type GetChapterQueryHookResult = ReturnType<typeof useGetChapterQuery>;
 export type GetChapterLazyQueryHookResult = ReturnType<typeof useGetChapterLazyQuery>;
 export type GetChapterQueryResult = ApolloReactCommon.QueryResult<GetChapterQuery, GetChapterQueryVariables>;
+export const GetChapterBySlugDocument = gql`
+    query getChapterBySlug($slug: String!) {
+  groupBySlug(slug: $slug) {
+    id
+    name
+    slug
+    description
+    donationForm
+    donationLink
+    donationFormResults
+    slackChannelName
+    volunteerForm
+    volunteerFormResults
+    requestForm
+    requestFormResults
+  }
+}
+    `;
+
+/**
+ * __useGetChapterBySlugQuery__
+ *
+ * To run a query within a React component, call `useGetChapterBySlugQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetChapterBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetChapterBySlugQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetChapterBySlugQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetChapterBySlugQuery, GetChapterBySlugQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetChapterBySlugQuery, GetChapterBySlugQueryVariables>(GetChapterBySlugDocument, baseOptions);
+      }
+export function useGetChapterBySlugLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetChapterBySlugQuery, GetChapterBySlugQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetChapterBySlugQuery, GetChapterBySlugQueryVariables>(GetChapterBySlugDocument, baseOptions);
+        }
+export type GetChapterBySlugQueryHookResult = ReturnType<typeof useGetChapterBySlugQuery>;
+export type GetChapterBySlugLazyQueryHookResult = ReturnType<typeof useGetChapterBySlugLazyQuery>;
+export type GetChapterBySlugQueryResult = ApolloReactCommon.QueryResult<GetChapterBySlugQuery, GetChapterBySlugQueryVariables>;
 export const GetChapterListDocument = gql`
     query getChapterList {
   groups {
     id
+    slug
     description
     name
   }
