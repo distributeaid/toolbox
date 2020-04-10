@@ -30,7 +30,7 @@ exports[`loads the chapter details and renders the page 1`] = `
           class="py-4"
         >
           slug: 
-          ca-oakland
+          oakland
         </p>
         <p
           class="py-4"

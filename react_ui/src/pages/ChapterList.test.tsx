@@ -50,6 +50,6 @@ it('loads the chapter list', async () => {
   fireEvent.click(getByText('Oakland'))
 
   await waitFor(() =>
-    expect(history.location).toMatchObject({ pathname: '/2' })
+    expect(history.location).toMatchObject({ pathname: '/ca-oak' })
   )
 })

@@ -2,21 +2,21 @@ import { render } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
-import { Group, useGetChapterQuery } from '../generated/graphql'
+import { Group, useGetChapterBySlugQuery } from '../generated/graphql'
 import { Chapter } from './Chapter'
 
 jest.mock('../generated/graphql', () => ({
-  useGetChapterQuery: jest.fn(),
+  useGetChapterBySlugQuery: jest.fn(),
 }))
 
 it('loads the chapter details and renders the page', () => {
-  ;(useGetChapterQuery as jest.Mock).mockReturnValueOnce({
+  ;(useGetChapterBySlugQuery as jest.Mock).mockReturnValueOnce({
     loading: false,
     data: {
-      group: {
+      groupBySlug: {
         id: '1',
+        slug: 'oakland',
         name: 'Oakland',
-        slug: 'ca-oakland',
         description: 'the Oakland group',
         donationForm: 'donation form link',
         donationFormResults: 'donation form results link',
@@ -32,35 +32,39 @@ it('loads the chapter details and renders the page', () => {
 
   const { container, getByText } = render(
     <MemoryRouter>
-      <Chapter slug="1" />
+      <Chapter slug="oakland" />
     </MemoryRouter>
   )
   expect(getByText('Oakland')).toBeVisible()
   expect(getByText('the Oakland group')).toBeVisible()
-  expect(useGetChapterQuery).toHaveBeenCalledWith({ variables: { id: '1' } })
+  expect(useGetChapterBySlugQuery).toHaveBeenCalledWith({
+    variables: { slug: 'oakland' },
+  })
 
   expect(container).toMatchSnapshot()
 })
 
 it('shows an error message when chapter not found', () => {
-  ;(useGetChapterQuery as jest.Mock).mockReturnValueOnce({
+  ;(useGetChapterBySlugQuery as jest.Mock).mockReturnValueOnce({
     loading: false,
     error: 'Whoops',
   })
 
   const { container, getByText } = render(<Chapter slug="1" />)
   expect(getByText('Chapter 1 not found')).toBeVisible()
-  expect(useGetChapterQuery).toHaveBeenCalledWith({ variables: { id: '1' } })
+  expect(useGetChapterBySlugQuery).toHaveBeenCalledWith({
+    variables: { slug: 'oakland' },
+  })
 
   expect(container).toMatchSnapshot()
 })
 
 it('shows a loading message when loading', () => {
-  ;(useGetChapterQuery as jest.Mock).mockReturnValueOnce({
+  ;(useGetChapterBySlugQuery as jest.Mock).mockReturnValueOnce({
     loading: true,
   })
 
-  const { container, getByText } = render(<Chapter slug="1" />)
+  const { container, getByText } = render(<Chapter slug="oakland" />)
   expect(getByText('Loading...')).toBeVisible()
 
   expect(container).toMatchSnapshot()
