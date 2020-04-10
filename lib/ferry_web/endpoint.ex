@@ -1,10 +1,6 @@
 defmodule FerryWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :ferry
 
-  socket "/socket", FerryWeb.UserSocket,
-    websocket: true,
-    longpoll: false
-
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phoenix.digest
@@ -15,7 +11,7 @@ defmodule FerryWeb.Endpoint do
     only_matching: ~w(android-icon apple-icon favicon)
     # TODO: `manifest.json` was recommended by the .ico generator, is it needed?
 
-  plug Plug.Static, 
+  plug Plug.Static,
     at: "/uploads", from: Path.expand("./uploads"), gzip: false
     # TODO: add an `only:` clause to limit file types that users can download from eachother
 
@@ -48,7 +44,7 @@ defmodule FerryWeb.Endpoint do
   # Creates the /metrics endpoint for prometheus & collect stats
   plug FerryWeb.PrometheusExporter
   plug FerryWeb.PipelineInstrumenter
-  
+
   plug FerryWeb.Router
 
   @doc """
