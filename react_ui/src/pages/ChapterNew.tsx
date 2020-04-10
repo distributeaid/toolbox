@@ -10,7 +10,11 @@ import { Select } from '../components/Select'
 import { TextLink } from '../components/TextLink'
 import countries from '../data/countries.json'
 import usStates from '../data/us_states.json'
-import { GroupInput, useCreateChapterMutation, Maybe } from '../generated/graphql'
+import {
+  GroupInput,
+  Maybe,
+  useCreateChapterMutation,
+} from '../generated/graphql'
 
 const isValidGDocsUrl = (requiredBasePath: string, value: Maybe<string>) => {
   if (value == null) {
@@ -78,13 +82,13 @@ const ChapterNameSection: React.FC<ChapterNameProps> = ({
       />
 
       {chapterUrl !== '' && (
-         <p>
-           <span className="font-bold mb-1">The URL for your new chapter</span>
+        <p>
+          <span className="font-bold mb-1">The URL for your new chapter</span>
 
-           <br />
+          <br />
 
-           <span className="font-mono">local.masksfordocs.com/{chapterUrl}</span>
-         </p>
+          <span className="font-mono">local.masksfordocs.com/{chapterUrl}</span>
+        </p>
       )}
     </>
   )
@@ -149,43 +153,43 @@ const ChapterLocationSection: React.FC<ChapterLocationProps> = ({
       />
 
       {showStateSelect && (
-         <Select
-           label={t('terms.state') + '*'}
-           onChange={onProvinceSelect}
-           includeBlank={true}
-           options={usStates.map((state: { name: string; code: string }) => (
-             <option key={state.code} value={state.code}>
-               {state.name}
-             </option>
-           ))}
-         />
+        <Select
+          label={t('terms.state') + '*'}
+          onChange={onProvinceSelect}
+          includeBlank={true}
+          options={usStates.map((state: { name: string; code: string }) => (
+            <option key={state.code} value={state.code}>
+              {state.name}
+            </option>
+          ))}
+        />
       )}
 
       {showProvinceInput && (
-         <Input
-           id="province"
-           type="text"
-           title={t('terms.province') + '*'}
-           onChange={onProvinceChange}
-           value={chapterProvince}
-         />
+        <Input
+          id="province"
+          type="text"
+          title={t('terms.province') + '*'}
+          onChange={onProvinceChange}
+          value={chapterProvince}
+        />
       )}
 
       {showPostalCodeInput && (
-         <div>
-           <p className="mt-2">
-             Note: the postal code will not be displayed publicly. It's for
-             internal use only.
-           </p>
+        <div>
+          <p className="mt-2">
+            Note: the postal code will not be displayed publicly. It's for
+            internal use only.
+          </p>
 
-           <Input
-             id="postal-code"
-             type="text"
-             title={t('terms.postalCode') + '*'}
-             onChange={onPostalCodeChange}
-             value={chapterPostalCode}
-           />
-         </div>
+          <Input
+            id="postal-code"
+            type="text"
+            title={t('terms.postalCode') + '*'}
+            onChange={onPostalCodeChange}
+            value={chapterPostalCode}
+          />
+        </div>
       )}
     </>
   )
@@ -335,16 +339,17 @@ const validateChapterArgs = (chapterArgs: GroupInput): string[] => {
     'description',
     'donationForm',
     'requestForm',
-    'volunteerForm'
+    'volunteerForm',
   ]
 
   requiredValues.forEach((key: keyof GroupInput) => {
     if (!chapterArgs[key]) {
-      errors.push(key + " is required.")
+      errors.push(key + ' is required.')
     }
   })
 
-  const resultsUrlNotSpreadsheetMessage = (formName: string) => `${formName} form results URL must be a google spreadsheet if ${formName} is a google form.`
+  const resultsUrlNotSpreadsheetMessage = (formName: string) =>
+    `${formName} form results URL must be a google spreadsheet if ${formName} is a google form.`
 
   if (
     isValidGDocsUrl('/forms', chapterArgs.donationForm) &&
@@ -408,18 +413,18 @@ export const ChapterNew: React.FC = () => {
     requestFormResults: chapterRequestResultsLink,
     slackChannelName: null,
     volunteerForm: chapterVolunteerFormLink,
-    volunteerFormResults: chapterVolunteerResultsLink
+    volunteerFormResults: chapterVolunteerResultsLink,
   }
 
-  const [createChapterMutation, { data, loading, error }] = useCreateChapterMutation({
+  const [createChapterMutation, { loading, error }] = useCreateChapterMutation({
     variables: {
-      groupInput: chapterArgs
+      groupInput: chapterArgs,
     },
     onCompleted: (responseData) => {
       if (responseData?.createGroup?.slug) {
-        history.push("/" + responseData.createGroup.slug)
+        history.push('/' + responseData.createGroup.slug)
       }
-    }
+    },
   })
 
   const submit = () => {
@@ -477,12 +482,10 @@ export const ChapterNew: React.FC = () => {
           chapterVolunteerResultsLink={chapterVolunteerResultsLink}
           setChapterVolunteerFormLink={setChapterVolunteerFormLink}
           setChapterVolunteerResultsLink={setChapterVolunteerResultsLink}
-
           chapterRequestFormLink={chapterRequestFormLink}
           chapterRequestResultsLink={chapterRequestResultsLink}
           setChapterRequestFormLink={setChapterRequestFormLink}
           setChapterRequestResultsLink={setChapterRequestResultsLink}
-
           chapterDonateFormLink={chapterDonateFormLink}
           chapterDonateResultsLink={chapterDonateResultsLink}
           setChapterDonateFormLink={setChapterDonateFormLink}
@@ -491,10 +494,15 @@ export const ChapterNew: React.FC = () => {
 
         <Divider outerClasses="my-6" />
 
-        {errorMessages.map((message: string, i: number) =>
-          <div key={i}>{message}</div>)}
+        {errorMessages.map((message: string, i: number) => (
+          <div key={i}>{message}</div>
+        ))}
+
+        {error && <div>server error: {error}</div>}
 
         <Button onClick={submit}>Create Chapter</Button>
+
+        {loading && <div>creating chapter...</div>}
       </div>
     </ContentContainer>
   )
