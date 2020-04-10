@@ -6,7 +6,6 @@ defmodule Ferry.Manifests do
   import Ecto.Query, warn: false
   alias Ferry.Repo
 
-  alias Ferry.Inventory.Stock
   alias Ferry.Shipments.Role
   alias Ferry.Shipments.Shipment
 

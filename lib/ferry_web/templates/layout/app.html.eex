@@ -103,11 +103,6 @@
               <% end %>
             </li>
             <li>
-              <%= link to: Routes.inventory_list_path(@conn, :show) do %>
-                <i class="fas fa-fw fa-boxes"></i> Inventory
-              <% end %>
-            </li>
-            <li>
               <%= link to: Routes.shipment_overview_path(@conn, :index) do %>
                 <i class="fas fa-fw fa-truck"></i> Shipments
               <% end %>

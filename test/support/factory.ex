@@ -29,11 +29,6 @@ defmodule Ferry.Factory do
     # AidTaxonomy.Category,
     # AidTaxonomy.Item
     # AidTaxonomy.Mod,
-    Inventory.Category,
-    Inventory.Item,
-    Inventory.Mod,
-    Inventory.Packaging,
-    Inventory.Stock,
     Links.Link,
     Locations.Address,
     Locations.Geocode,
@@ -53,7 +48,7 @@ defmodule Ferry.Factory do
 
   # Helpers
   # ------------------------------------------------------------
-  
+
   # Partly based on: https://stackoverflow.com/questions/49996642/ecto-remove-preload/49997873#49997873
   def without_assoc(data, access, cardinality \\ :one)
 
@@ -366,206 +361,6 @@ defmodule Ferry.Factory do
     }
   end
 
-  # Inventory
-  # ================================================================================
-  
-  # Category
-  # ------------------------------------------------------------
-  def category_factory do
-    %Category{
-      name: sequence("Clothing")
-    }
-  end
-
-  def invalid_short_category_factory do
-    struct!(
-      category_factory(),
-      %{
-        name: ""
-      }
-    )
-  end
-
-  def invalid_long_category_factory do
-    struct!(
-      category_factory(),
-      %{
-        name: @long_text
-      }
-    )
-  end
-
-  # Item
-  # ------------------------------------------------------------
-  def item_factory do
-    %Item{
-      name: sequence("Shirt"),
-
-      category: build(:category)
-    }
-  end
-
-  def invalid_short_item_factory do
-    struct!(
-      item_factory(),
-      %{
-        name: ""
-      }
-    )
-  end
-
-  def invalid_long_item_factory do
-    struct!(
-      item_factory(),
-      %{
-        name: @long_text
-      }
-    )
-  end
-
-  # Mod
-  # ------------------------------------------------------------
-  # NOTE: Every combination of mods already exists in the DB.
-  #       Never use `insert(:mod)` in tests.
-  #
-  # TODO: randomly rotate through all possible combos
-  def mod_factory do
-    %Mod{
-      gender: sequence(:gender, ["", "masc", "fem"]),
-      age: sequence(:age, ["", "adult", "child", "baby"]),
-      size: sequence(:size, ["", "small", "medium", "large", "x-large"]),
-      season: sequence(:season, ["", "summer", "winter"])
-    }
-  end
-
-  def invalid_unkown_mod_factory do
-    %Mod{
-      # This is to test an error, not a political commentary.  Distribute Aid is
-      # an inclusive organization!  Non-binary / gender neutral items should
-      # leave the gender field blank / nil.
-      gender: "???",
-      age: "???",
-      size: "???",
-      season: "???"
-    }
-  end
-
-  # Packaging
-  # ------------------------------------------------------------
-  def packaging_factory do
-    %Packaging{
-      count: sequence(:count, &(&1 + 1000)), # 1000, 1001, ...
-      type: "large bags",
-      description: "Large, sturdy bags that contain about 4 trash bags worth of items.",
-      photo: nil # TODO: test photo uploads
-    }
-  end
-
-  def invalid_short_packaging_factory do
-    struct!(
-      packaging_factory(),
-      %{
-        count: -1,
-        type: "",
-      }
-    )
-  end
-
-  def invalid_long_packaging_factor do
-    struct!(
-      packaging_factory(),
-      %{
-        type: @long_text
-      }
-    )
-  end
-
-  # Stock
-  # ------------------------------------------------------------
-  def stock_factory do
-    %Stock{
-      have: sequence(:count, &(&1 + 1000)), # 1000, 1001, ...
-      available: 0,
-      need: 0,
-      unit: Enum.random(["items", "small bags", "large bags", "small boxes", "large boxes", "pallets"]),
-      description: "We got shirts yo.",
-      photo: nil, # TODO: test photo uploads
-
-      project: build(:project),
-      item: build(:item),
-      mod: build(:mod),
-      packaging: build(:packaging)
-    }
-  end
-
-  def available_stock_factory do
-    struct!(
-      stock_factory(),
-      %{
-        available: sequence(:available, &(&1 + 500)) # 500, 501, ...
-      }
-    )
-  end
-
-  def need_stock_factory do
-    struct!(
-      stock_factory(),
-      %{
-        need: sequence(:need, &(&1 + 500)) # 500, 501, ...
-      }
-    )
-  end
-
-  def invalid_short_stock_factory do
-    struct!(
-      stock_factory(),
-      %{
-        have: -1,
-        available: -1,
-        need: -1
-      }
-    )
-  end
-
-  def invalid_long_stock_factory do
-    struct!(
-      stock_factory(),
-      %{
-        # available > have
-        available: 1000,
-        have: 500
-      }
-    )
-  end
-
-  def invalid_available_stock_factory do
-    struct!(
-      stock_factory(),
-      %{
-        # available > 0 & need > 0
-        available: 1,
-        need: 1
-      }
-    )
-  end
-
-  def stock_attrs_factory(%{project: %{id: project_id}} = _attrs) do
-    %{
-      "project_id" => project_id,
-
-      "have" => sequence(:count, &(&1 + 1000)), # 1000, 1001, ...
-      "need" => 0,
-      "available" => 0,
-      "unit" => Enum.random(["items", "small bags", "large bags", "small boxes", "large boxes", "pallets"]),
-      "description" => "Tons of shirts yo.",
-      "photo" => nil, # TODO: test photo uploads
-
-      "item" => Map.put(string_params_for(:item), "category", string_params_for(:category)),
-      "mod" => string_params_for(:mod),
-      "packaging" => string_params_for(:packaging)
-    }
-  end
-
   # Shipments
   # ------------------------------------------------------------
 
@@ -689,10 +484,10 @@ defmodule Ferry.Factory do
 
   # Aid Taxonomy
   # ================================================================================
-  
+
   # Category
   # ------------------------------------------------------------
-  
+
   def aid_category_factory do
     %Ferry.AidTaxonomy.Category{
       name: sequence("Clothing"),
@@ -953,7 +748,7 @@ defmodule Ferry.Factory do
       from: to,
       to: to |> Timex.shift(months: 1)
     })
-    struct!(needs_list_factory(), attrs)    
+    struct!(needs_list_factory(), attrs)
   end
 
   def needs_list_after_factory(%{to: to} = attrs) do
@@ -983,7 +778,7 @@ defmodule Ferry.Factory do
 
   # Entry
   # ------------------------------------------------------------
-  
+
   def entry_factory do
     %Entry{
       amount: sequence(:amount, &(&1 + 1000)), # 1000, 1001, ...
