@@ -1,5 +1,6 @@
 import React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import { useHistory } from 'react-router-dom'
 
 import { Button } from '../components/Button'
 import { ContentContainer } from '../components/ContentContainer'
@@ -9,9 +10,13 @@ import { Select } from '../components/Select'
 import { TextLink } from '../components/TextLink'
 import countries from '../data/countries.json'
 import usStates from '../data/us_states.json'
-import { Group, useCreateChapterMutation } from '../generated/graphql'
+import { GroupInput, useCreateChapterMutation, Maybe } from '../generated/graphql'
 
-const isValidGDocsUrl = (requiredBasePath: string, value: string) => {
+const isValidGDocsUrl = (requiredBasePath: string, value: Maybe<string>) => {
+  if (value == null) {
+    return false
+  }
+
   let url
 
   try {
@@ -251,25 +256,9 @@ const ChapterFormLinksSection: React.FC<ChapterFormLinksSectionProps> = ({
   setChapterDonateFormLink,
   setChapterDonateResultsLink,
 }) => {
-  const formUrlOnChange = (setter: (value: string) => void) => (
+  const urlOnChange = (setter: (value: string) => void) => (
     event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { value } = event.target
-
-    if (value === '' || isValidGDocsUrl('/forms', value)) {
-      setter(value)
-    }
-  }
-
-  const resultsUrlOnChange = (setter: (value: string) => void) => (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { value } = event.target
-
-    if (value === '' || isValidGDocsUrl('/spreadsheets', value)) {
-      setter(value)
-    }
-  }
+  ) => setter(event.target.value)
 
   return (
     <>
@@ -283,15 +272,15 @@ const ChapterFormLinksSection: React.FC<ChapterFormLinksSectionProps> = ({
         id="request-form-link"
         type="text"
         title={t('chapterNew.requestFormInputLabel') + '*'}
-        onChange={formUrlOnChange(setChapterRequestFormLink)}
+        onChange={urlOnChange(setChapterRequestFormLink)}
         value={chapterRequestFormLink}
       />
 
       <Input
         id="request-results-link"
         type="text"
-        title={t('chapterNew.requestResultsInputLabel') + '*'}
-        onChange={resultsUrlOnChange(setChapterRequestResultsLink)}
+        title={t('chapterNew.requestResultsInputLabel')}
+        onChange={urlOnChange(setChapterRequestResultsLink)}
         value={chapterRequestResultsLink}
       />
 
@@ -303,15 +292,15 @@ const ChapterFormLinksSection: React.FC<ChapterFormLinksSectionProps> = ({
         id="donate-form-link"
         type="text"
         title={t('chapterNew.donateFormInputLabel') + '*'}
-        onChange={formUrlOnChange(setChapterDonateFormLink)}
+        onChange={urlOnChange(setChapterDonateFormLink)}
         value={chapterDonateFormLink}
       />
 
       <Input
         id="donate-results-link"
         type="text"
-        title={t('chapterNew.donateResultsInputLabel') + '*'}
-        onChange={resultsUrlOnChange(setChapterDonateResultsLink)}
+        title={t('chapterNew.donateResultsInputLabel')}
+        onChange={urlOnChange(setChapterDonateResultsLink)}
         value={chapterDonateResultsLink}
       />
 
@@ -323,22 +312,68 @@ const ChapterFormLinksSection: React.FC<ChapterFormLinksSectionProps> = ({
         id="volunteer-form-link"
         type="text"
         title={t('chapterNew.volunteerFormInputLabel') + '*'}
-        onChange={formUrlOnChange(setChapterVolunteerFormLink)}
+        onChange={urlOnChange(setChapterVolunteerFormLink)}
         value={chapterVolunteerFormLink}
       />
 
       <Input
         id="volunteer-results-link"
         type="text"
-        title={t('chapterNew.volunteerResultsInputLabel') + '*'}
-        onChange={resultsUrlOnChange(setChapterVolunteerResultsLink)}
+        title={t('chapterNew.volunteerResultsInputLabel')}
+        onChange={urlOnChange(setChapterVolunteerResultsLink)}
         value={chapterVolunteerResultsLink}
       />
     </>
   )
 }
 
+const validateChapterArgs = (chapterArgs: GroupInput): string[] => {
+  const errors: string[] = []
+
+  const requiredValues: Array<keyof GroupInput> = [
+    'name',
+    'description',
+    'donationForm',
+    'requestForm',
+    'volunteerForm'
+  ]
+
+  requiredValues.forEach((key: keyof GroupInput) => {
+    if (!chapterArgs[key]) {
+      errors.push(key + " is required.")
+    }
+  })
+
+  const resultsUrlNotSpreadsheetMessage = (formName: string) => `${formName} form results URL must be a google spreadsheet if ${formName} is a google form.`
+
+  if (
+    isValidGDocsUrl('/forms', chapterArgs.donationForm) &&
+    !isValidGDocsUrl('/spreadsheets', chapterArgs.donationFormResults)
+  ) {
+    errors.push(resultsUrlNotSpreadsheetMessage('donation'))
+  }
+
+  if (
+    isValidGDocsUrl('/forms', chapterArgs.volunteerForm) &&
+    !isValidGDocsUrl('/spreadsheets', chapterArgs.volunteerFormResults)
+  ) {
+    errors.push(resultsUrlNotSpreadsheetMessage('voluneer'))
+  }
+
+  if (
+    isValidGDocsUrl('/forms', chapterArgs.requestForm) &&
+    !isValidGDocsUrl('/spreadsheets', chapterArgs.requestFormResults)
+  ) {
+    errors.push(resultsUrlNotSpreadsheetMessage('request'))
+  }
+
+  return errors
+}
+
 export const ChapterNew: React.FC = () => {
+  const { t } = useTranslation()
+  const history = useHistory()
+  const [errorMessages, setErrorMessages] = React.useState<Array<string>>([])
   const [chapterName, setChapterName] = React.useState('')
   const [chapterCountry, setChapterCountry] = React.useState('')
   const [chapterProvince, setChapterProvince] = React.useState('')
@@ -363,24 +398,39 @@ export const ChapterNew: React.FC = () => {
     setChapterDonateResultsLink,
   ] = React.useState('')
 
+  const chapterArgs: GroupInput = {
+    description: chapterDescription,
+    donationForm: chapterDonateFormLink,
+    donationFormResults: chapterDonateResultsLink,
+    donationLink: null,
+    name: chapterName,
+    requestForm: chapterRequestFormLink,
+    requestFormResults: chapterRequestResultsLink,
+    slackChannelName: null,
+    volunteerForm: chapterVolunteerFormLink,
+    volunteerFormResults: chapterVolunteerResultsLink
+  }
+
   const [createChapterMutation, { data, loading, error }] = useCreateChapterMutation({
     variables: {
-      groupInput: {
-        description: chapterDescription,
-        donationForm: chapterDonateFormLink,
-        donationFormResults: chapterDonateResultsLink,
-        donationLink: "http://www.example.com/donate",
-        name: chapterName,
-        requestForm: chapterRequestFormLink,
-        requestFormResults: chapterRequestResultsLink,
-        slackChannelName: "zlocal-ex-example",
-        volunteerForm: chapterVolunteerFormLink,
-        volunteerFormResults: chapterVolunteerResultsLink
+      groupInput: chapterArgs
+    },
+    onCompleted: (responseData) => {
+      if (responseData?.createGroup?.slug) {
+        history.push("/" + responseData.createGroup.slug)
       }
     }
   })
 
-  const { t } = useTranslation()
+  const submit = () => {
+    const errorMessages: string[] = validateChapterArgs(chapterArgs)
+
+    if (errorMessages.length === 0) {
+      createChapterMutation()
+    } else {
+      setErrorMessages(errorMessages)
+    }
+  }
 
   return (
     <ContentContainer>
@@ -441,7 +491,10 @@ export const ChapterNew: React.FC = () => {
 
         <Divider outerClasses="my-6" />
 
-        <Button onClick={() => createChapterMutation()}>Create Chapter</Button>
+        {errorMessages.map((message: string, i: number) =>
+          <div key={i}>{message}</div>)}
+
+        <Button onClick={submit}>Create Chapter</Button>
       </div>
     </ContentContainer>
   )
