@@ -36,7 +36,7 @@ defmodule Ferry.GroupTest do
   end
 
   test "count groups - many", %{conn: conn} do
-    groups = insert_list(3, :group)
+    insert_list(3, :group)
 
     query = """
     {
@@ -282,7 +282,7 @@ defmodule Ferry.GroupTest do
       |> post("/api", %{query: mutation})
       |> json_response(200)
 
-    %{"data" => %{"updateGroup" => %{"id" => id, "name" => name, "description" => description}}} =
+    %{"data" => %{"updateGroup" => %{"id" => id, "name" => _name, "description" => description}}} =
       res
 
     assert id == Integer.to_string(group.id)
