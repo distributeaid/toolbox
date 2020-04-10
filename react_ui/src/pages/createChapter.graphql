@@ -1,0 +1,6 @@
+mutation createChapter($groupInput: GroupInput!) {
+  createGroup(groupInput: $groupInput) {
+    id
+    slug
+  }
+}

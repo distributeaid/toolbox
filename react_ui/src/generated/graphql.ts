@@ -91,6 +91,13 @@ export type Session = {
   readonly userId: Maybe<Scalars['ID']>;
 };
 
+export type CreateChapterMutationVariables = {
+  groupInput: GroupInput;
+};
+
+
+export type CreateChapterMutation = { readonly __typename?: 'RootMutationType', readonly createGroup: Maybe<{ readonly __typename?: 'Group', readonly slug: string }> };
+
 export type GetChapterQueryVariables = {
   id: Scalars['ID'];
 };
@@ -104,6 +111,38 @@ export type GetChapterListQueryVariables = {};
 export type GetChapterListQuery = { readonly __typename?: 'RootQueryType', readonly groups: Maybe<ReadonlyArray<Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly description: Maybe<string>, readonly name: string }>>> };
 
 
+export const CreateChapterDocument = gql`
+    mutation createChapter($groupInput: GroupInput!) {
+  createGroup(groupInput: $groupInput) {
+    slug
+  }
+}
+    `;
+export type CreateChapterMutationFn = ApolloReactCommon.MutationFunction<CreateChapterMutation, CreateChapterMutationVariables>;
+
+/**
+ * __useCreateChapterMutation__
+ *
+ * To run a mutation, you first call `useCreateChapterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateChapterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createChapterMutation, { data, loading, error }] = useCreateChapterMutation({
+ *   variables: {
+ *      groupInput: // value for 'groupInput'
+ *   },
+ * });
+ */
+export function useCreateChapterMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateChapterMutation, CreateChapterMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateChapterMutation, CreateChapterMutationVariables>(CreateChapterDocument, baseOptions);
+      }
+export type CreateChapterMutationHookResult = ReturnType<typeof useCreateChapterMutation>;
+export type CreateChapterMutationResult = ApolloReactCommon.MutationResult<CreateChapterMutation>;
+export type CreateChapterMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateChapterMutation, CreateChapterMutationVariables>;
 export const GetChapterDocument = gql`
     query getChapter($id: ID!) {
   group(id: $id) {
@@ -127,7 +166,7 @@ export const GetChapterDocument = gql`
  * __useGetChapterQuery__
  *
  * To run a query within a React component, call `useGetChapterQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetChapterQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -162,7 +201,7 @@ export const GetChapterListDocument = gql`
  * __useGetChapterListQuery__
  *
  * To run a query within a React component, call `useGetChapterListQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterListQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetChapterListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -182,5 +221,3 @@ export function useGetChapterListLazyQuery(baseOptions?: ApolloReactHooks.LazyQu
 export type GetChapterListQueryHookResult = ReturnType<typeof useGetChapterListQuery>;
 export type GetChapterListLazyQueryHookResult = ReturnType<typeof useGetChapterListLazyQuery>;
 export type GetChapterListQueryResult = ApolloReactCommon.QueryResult<GetChapterListQuery, GetChapterListQueryVariables>;
-
-

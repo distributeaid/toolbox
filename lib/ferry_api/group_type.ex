@@ -26,7 +26,7 @@ defmodule FerryApi.Schema.GroupType do
 #    field :location, non_null(:location_type)
 
     # Optional Fields
-    # ------------------------------------------------------------    
+    # ------------------------------------------------------------
 
     # TODO: field :logo, :file (?)
     field :description, :string
