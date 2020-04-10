@@ -1,5 +1,3 @@
-cache:
-  key: ${CI_JOB_NAME}
 variables:
     DOCKER_DRIVER: overlay2
     DOCKER_VERSION: "19.03.8"
@@ -15,9 +13,20 @@ variables:
     POSTGRES_PORT: 5432
     ECR_CONTAINER_TEST_IMAGE: 299303747484.dkr.ecr.us-east-2.amazonaws.com/masksfordocs/toolbox/ci/elixir:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     GITLAB_CONTAINER_TEST_IMAGE: ${CI_REGISTRY_IMAGE}/ci/elixir:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+  cache:
+    key: "$CI_JOB_STAGE-$CI_COMMIT_REF_SLUG"
+    paths:
+    - deps/
+    - .cache/rebar3
+    - _build/
 
 .ui:
   variables:
     REACT_DIR: ./react_ui
     ECR_CONTAINER_TEST_IMAGE: 299303747484.dkr.ecr.us-east-2.amazonaws.com/masksfordocs/toolbox/ci/ui:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     GITLAB_CONTAINER_TEST_IMAGE: ${CI_REGISTRY_IMAGE}/ci/ui:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+  cache:
+    key: "$CI_JOB_STAGE-$CI_COMMIT_REF_SLUG"
+    paths:
+    - .npm/
+    - react_ui/node_modules/
