@@ -22,7 +22,7 @@ WORKDIR /app
 COPY . .
 
 RUN mix local.hex --force && \
-    mix local.rebar --force && \
+    mix local.rebar && \
     mix deps.get && \
     MIX_ENV=prod mix release
 
