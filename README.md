@@ -227,7 +227,7 @@ docker exec toolbox_web mix ecto.migrate
 docker exec toolbox_web mix ecto.rollback -n 1
 docker exec toolbox_web mix ecto.reset
 
-mix ecto.gen.migration "migration name"
+docker exec toolbox_web mix ecto.gen.migration "migration name"
 ```
 
 **Testing:**
