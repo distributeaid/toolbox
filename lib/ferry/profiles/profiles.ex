@@ -50,6 +50,10 @@ defmodule Ferry.Profiles do
     Repo.get(Group, id)
   end
 
+  def get_group_by_slug(slug) do
+    Repo.get_by(Group, slug: slug)
+  end
+
 
   @doc """
   Creates a group.
