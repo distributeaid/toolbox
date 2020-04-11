@@ -44,15 +44,22 @@ export type GroupInput = {
   readonly volunteerFormResults: Maybe<Scalars['String']>;
 };
 
+export type GroupPayload = {
+  readonly __typename?: 'GroupPayload';
+  readonly messages: Maybe<ReadonlyArray<Maybe<ValidationMessage>>>;
+  readonly result: Maybe<Group>;
+  readonly successful: Scalars['Boolean'];
+};
+
 export enum GroupType {
   M4D_CHAPTER = 'M4D_CHAPTER'
 }
 
 export type RootMutationType = {
   readonly __typename?: 'RootMutationType';
-  readonly createGroup: Maybe<Group>;
+  readonly createGroup: Maybe<GroupPayload>;
   readonly deleteGroup: Maybe<Group>;
-  readonly updateGroup: Maybe<Group>;
+  readonly updateGroup: Maybe<GroupPayload>;
 };
 
 
@@ -97,12 +104,27 @@ export type Session = {
   readonly userId: Maybe<Scalars['ID']>;
 };
 
+export type ValidationMessage = {
+  readonly __typename?: 'ValidationMessage';
+  readonly code: Scalars['String'];
+  readonly field: Maybe<Scalars['String']>;
+  readonly message: Maybe<Scalars['String']>;
+  readonly options: Maybe<ReadonlyArray<Maybe<ValidationOption>>>;
+  readonly template: Maybe<Scalars['String']>;
+};
+
+export type ValidationOption = {
+  readonly __typename?: 'ValidationOption';
+  readonly key: Scalars['String'];
+  readonly value: Scalars['String'];
+};
+
 export type CreateChapterMutationVariables = {
   groupInput: GroupInput;
 };
 
 
-export type CreateChapterMutation = { readonly __typename?: 'RootMutationType', readonly createGroup: Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly slug: string }> };
+export type CreateChapterMutation = { readonly __typename?: 'RootMutationType', readonly createGroup: Maybe<{ readonly __typename?: 'GroupPayload', readonly successful: boolean, readonly result: Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly slug: string }>, readonly messages: Maybe<ReadonlyArray<Maybe<{ readonly __typename?: 'ValidationMessage', readonly field: Maybe<string>, readonly message: Maybe<string> }>>> }> };
 
 export type GetChapterQueryVariables = {
   id: Scalars['ID'];
@@ -129,14 +151,21 @@ export type UpdateChapterMutationVariables = {
 };
 
 
-export type UpdateChapterMutation = { readonly __typename?: 'RootMutationType', readonly updateGroup: Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly slug: string }> };
+export type UpdateChapterMutation = { readonly __typename?: 'RootMutationType', readonly updateGroup: Maybe<{ readonly __typename?: 'GroupPayload', readonly successful: boolean, readonly result: Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly slug: string }>, readonly messages: Maybe<ReadonlyArray<Maybe<{ readonly __typename?: 'ValidationMessage', readonly field: Maybe<string>, readonly message: Maybe<string> }>>> }> };
 
 
 export const CreateChapterDocument = gql`
     mutation createChapter($groupInput: GroupInput!) {
   createGroup(groupInput: $groupInput) {
-    id
-    slug
+    successful
+    result {
+      id
+      slug
+    }
+    messages {
+      field
+      message
+    }
   }
 }
     `;
@@ -188,7 +217,7 @@ export const GetChapterDocument = gql`
  * __useGetChapterQuery__
  *
  * To run a query within a React component, call `useGetChapterQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetChapterQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -232,7 +261,7 @@ export const GetChapterBySlugDocument = gql`
  * __useGetChapterBySlugQuery__
  *
  * To run a query within a React component, call `useGetChapterBySlugQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetChapterBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -268,7 +297,7 @@ export const GetChapterListDocument = gql`
  * __useGetChapterListQuery__
  *
  * To run a query within a React component, call `useGetChapterListQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterListQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetChapterListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -291,8 +320,15 @@ export type GetChapterListQueryResult = ApolloReactCommon.QueryResult<GetChapter
 export const UpdateChapterDocument = gql`
     mutation updateChapter($id: ID!, $groupInput: GroupInput!) {
   updateGroup(id: $id, groupInput: $groupInput) {
-    id
-    slug
+    successful
+    result {
+      id
+      slug
+    }
+    messages {
+      field
+      message
+    }
   }
 }
     `;
@@ -322,5 +358,3 @@ export function useUpdateChapterMutation(baseOptions?: ApolloReactHooks.Mutation
 export type UpdateChapterMutationHookResult = ReturnType<typeof useUpdateChapterMutation>;
 export type UpdateChapterMutationResult = ApolloReactCommon.MutationResult<UpdateChapterMutation>;
 export type UpdateChapterMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateChapterMutation, UpdateChapterMutationVariables>;
-
-

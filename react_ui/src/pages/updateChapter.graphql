@@ -1,6 +1,13 @@
 mutation updateChapter($id: ID!, $groupInput: GroupInput!) {
   updateGroup(id: $id, groupInput: $groupInput) {
-    id
-    slug
+    successful
+    result {
+      id
+      slug
+    }
+    messages {
+      field
+      message
+    }
   }
 }
