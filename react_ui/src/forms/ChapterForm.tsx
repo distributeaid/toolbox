@@ -413,6 +413,14 @@ type ChapterFormProps = {
   editChapter?: Group
 }
 
+// This form was written quickly to unblock the Masks For Docs project timeline.
+// It is regrettably not very maintainable and generally packs much too much
+// logic into a single file. It also maintains two mutation hooks, one for
+// edit and one for new, at the same time regardless of which use of the form
+// is actually taking place.
+//
+// Please feel free to re-use as little of this code as necessary when
+// refactoring into hopefully something more reasonable.
 export const ChapterForm: React.FC<ChapterFormProps> = ({ editChapter }) => {
   const chapter = editChapter || ({} as Group)
   const isNewChapter = !chapter.id
