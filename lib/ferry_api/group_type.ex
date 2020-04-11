@@ -1,6 +1,8 @@
 defmodule FerryApi.Schema.GroupType do
   use Absinthe.Schema.Notation
 
+  import AbsintheErrorPayload.Payload
+
   enum :group_type do
     value :m4d_chapter, as: "M4D_CHAPTER"
   end
@@ -50,4 +52,6 @@ defmodule FerryApi.Schema.GroupType do
     # field :projects
 
   end
+
+  payload_object(:group_payload, :group)
 end

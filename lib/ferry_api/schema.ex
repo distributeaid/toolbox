@@ -5,6 +5,7 @@ defmodule FerryApi.Schema do
   # ------------------------------------------------------------
 
   import_types(Absinthe.Plug.Types)
+  import_types(AbsintheErrorPayload.ValidationMessageTypes)
 
   import_types(FerryApi.Schema.GroupType)
   import_types(FerryApi.Schema.Group)

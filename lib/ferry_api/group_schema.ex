@@ -1,8 +1,11 @@
 defmodule FerryApi.Schema.Group do
   use Absinthe.Schema.Notation
 
+  import AbsintheErrorPayload.Payload
+
   alias Ferry.Profiles
   alias FerryApi.Middleware
+
 
   # Query
   # ------------------------------------------------------------
@@ -52,18 +55,20 @@ defmodule FerryApi.Schema.Group do
 
   object :group_mutations do
     @desc "Create a group"
-    field :create_group, type: :group do
+    field :create_group, type: :group_payload do
       arg(:group_input, non_null(:group_input))
       middleware(Middleware.RequireUser)
       resolve(&create_group/3)
+      middleware(&build_payload/2)
     end
 
     @desc "Update a group"
-    field :update_group, type: :group do
+    field :update_group, type: :group_payload do
       arg(:id, non_null(:id))
       arg(:group_input, non_null(:group_input))
       middleware(Middleware.RequireUser)
       resolve(&update_group/3)
+      middleware(&build_payload/2)
     end
 
     @desc "Delete a group"
