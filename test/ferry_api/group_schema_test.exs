@@ -278,7 +278,7 @@ defmodule Ferry.GroupTest do
             message
           }
           result {
-            id            
+            id
           }
         }
       }
@@ -296,6 +296,10 @@ defmodule Ferry.GroupTest do
           "messages" => [
             %{
               "field" => field,
+              "message" => "can't be blank"
+            },
+            %{
+              "field" => "slug",
               "message" => "can't be blank"
             }
           ],
@@ -323,6 +327,7 @@ defmodule Ferry.GroupTest do
           id: #{group.id},
           groupInput: {
             name: "#{updates.name}",
+            slug: "#{updates.slug}",
             description: "#{updates.description}",
             slackChannelName: "#{updates.slack_channel_name}",
             requestForm: "#{updates.request_form}",
