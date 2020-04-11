@@ -8,7 +8,7 @@ defmodule Ferry.AidTaxonomyTest do
 
   # Category
   # ================================================================================
-  
+
   describe "categories" do
     test "list_categories/0 returns all categories" do
       # none
@@ -25,12 +25,15 @@ defmodule Ferry.AidTaxonomyTest do
       # ordered by name
       last_category = insert(:aid_category, %{name: "Z"})
       first_category = insert(:aid_category, %{name: "A"})
-      assert AidTaxonomy.list_categories() == [
-        first_category,
-        category1,
-        category2,
-        last_category
-      ]
+
+      assert(
+        AidTaxonomy.list_categories() == [
+          first_category,
+          category1,
+          category2,
+          last_category
+        ]
+      )
     end
 
     test "get_category!/1 returns the requested category" do
@@ -62,9 +65,13 @@ defmodule Ferry.AidTaxonomyTest do
     end
 
     test "get_category!/1 with a non-existent id throws an error" do
-      assert_raise Ecto.NoResultsError, ~r/^expected at least one result but got none in query/, fn ->
-        AidTaxonomy.get_category!(1312)
-      end
+      assert_raise(
+        Ecto.NoResultsError,
+        ~r/^expected at least one result but got none in query/,
+        fn ->
+          AidTaxonomy.get_category!(1312)
+        end
+      )
     end
 
     test "create_category/1 with valid data creates a category" do
@@ -124,8 +131,13 @@ defmodule Ferry.AidTaxonomyTest do
       assert_raise Ecto.NoResultsError, fn -> AidTaxonomy.get_category!(category.id) end
 
       # the items should be deleted as well
-      assert_raise Ecto.NoResultsError, fn -> AidTaxonomy.get_item!(Enum.at(category.items, 0).id) end
-      assert_raise Ecto.NoResultsError, fn -> AidTaxonomy.get_item!(Enum.at(category.items, 1).id) end
+      assert_raise Ecto.NoResultsError, fn ->
+        AidTaxonomy.get_item!(Enum.at(category.items, 0).id)
+      end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        AidTaxonomy.get_item!(Enum.at(category.items, 1).id)
+      end
     end
 
     test "delete_category/1 doesn't delete categories that are referenced by list entries" do
@@ -162,9 +174,13 @@ defmodule Ferry.AidTaxonomyTest do
     end
 
     test "get_item!/1 with a non-existent id throws an error" do
-      assert_raise Ecto.NoResultsError, ~r/^expected at least one result but got none in query/, fn ->
-        AidTaxonomy.get_item!(1312)
-      end
+      assert_raise(
+        Ecto.NoResultsError,
+        ~r/^expected at least one result but got none in query/,
+        fn ->
+          AidTaxonomy.get_item!(1312)
+        end
+      )
     end
 
     test "create_item/2 with valid data creates an item" do
@@ -267,7 +283,11 @@ defmodule Ferry.AidTaxonomyTest do
       # name must be different within a category
       category = insert(:aid_category)
       _item1 = insert(:aid_item, %{name: "SAME", category: category})
-      item2 = insert(:aid_item, %{name: "DIFFERENT", category: category}) |> without_assoc([:category, :items], :many)
+
+      item2 =
+        insert(:aid_item, %{name: "DIFFERENT", category: category})
+        |> without_assoc([:category, :items], :many)
+
       attrs = params_for(:aid_item, %{name: "SAME", category: category})
       assert {:error, %Ecto.Changeset{} = _changeset} = AidTaxonomy.update_item(item2, attrs)
       assert item2 == AidTaxonomy.get_item!(item2.id)
@@ -315,12 +335,13 @@ defmodule Ferry.AidTaxonomyTest do
       # ordered by name
       last_mod = insert(:aid_mod, %{name: "Z"})
       first_mod = insert(:aid_mod, %{name: "A"})
+
       assert AidTaxonomy.list_mods() == [
-        first_mod,
-        mod1,
-        mod2,
-        last_mod
-      ]
+               first_mod,
+               mod1,
+               mod2,
+               last_mod
+             ]
     end
 
     test "get_mod!/1 returns the requested mod" do
@@ -328,9 +349,11 @@ defmodule Ferry.AidTaxonomyTest do
       assert AidTaxonomy.get_mod!(mod.id) == mod
 
       # with items and categories preloaded
-      items = [insert(:aid_item), insert(:aid_item)]
-      |> without_assoc(:mods, :many)
-      |> without_assoc([:category, :items], :many)
+      items =
+        [insert(:aid_item), insert(:aid_item)]
+        |> without_assoc(:mods, :many)
+        |> without_assoc([:category, :items], :many)
+
       mod = insert(:aid_mod, %{items: items})
 
       retrieved_mod = AidTaxonomy.get_mod!(mod.id)
@@ -339,9 +362,13 @@ defmodule Ferry.AidTaxonomyTest do
     end
 
     test "get_mod!/1 with a non-existent id throws an error" do
-      assert_raise Ecto.NoResultsError, ~r/^expected at least one result but got none in query/, fn ->
-        AidTaxonomy.get_mod!(1312)
-      end
+      assert_raise(
+        Ecto.NoResultsError,
+        ~r/^expected at least one result but got none in query/,
+        fn ->
+          AidTaxonomy.get_mod!(1312)
+        end
+      )
     end
 
     test "create_mod/1 with valid data creates a mod" do
@@ -378,11 +405,14 @@ defmodule Ferry.AidTaxonomyTest do
       assert {:ok, %Mod{} = mod} = AidTaxonomy.create_mod(attrs)
 
       # ...but also creates association with items
-      items = [insert(:aid_item), insert(:aid_item)]
-      |> without_assoc(:mods, :many)
-      |> without_assoc([:category, :items], :many)
+      items =
+        [insert(:aid_item), insert(:aid_item)]
+        |> without_assoc(:mods, :many)
+        |> without_assoc([:category, :items], :many)
+
       attrs = params_for(:aid_mod)
-      attrs = %{attrs | items: items} # TODO: handle this in the factory?
+      # TODO: handle this in the factory?
+      attrs = %{attrs | items: items}
       assert {:ok, %Mod{} = mod} = AidTaxonomy.create_mod(attrs)
       assert mod.items == items
     end
@@ -448,6 +478,7 @@ defmodule Ferry.AidTaxonomyTest do
         [insert(:aid_item), insert(:aid_item), insert(:aid_item)]
         |> without_assoc(:mods, :many)
         |> without_assoc([:category, :items], :many)
+
       old_mod = insert(:aid_mod, %{items: [item1, item2]})
       attrs = params_for(:aid_mod, %{type: old_mod.type, values: old_mod.values})
       attrs = %{attrs | items: [item2, item3]}
@@ -478,7 +509,10 @@ defmodule Ferry.AidTaxonomyTest do
       # duplicate name
       insert(:aid_mod, %{name: "the same"})
       old_mod = insert(:aid_mod, %{name: "different"})
-      attrs = params_for(:aid_mod, %{name: "the same", type: old_mod.type, values: old_mod.values})
+
+      attrs =
+        params_for(:aid_mod, %{name: "the same", type: old_mod.type, values: old_mod.values})
+
       assert {:error, %Ecto.Changeset{} = _changeset} = AidTaxonomy.create_mod(attrs)
 
       # invalid type change
@@ -519,5 +553,4 @@ defmodule Ferry.AidTaxonomyTest do
       # assert mod_value == AidTaxonomy.get_mod_value!(mod_value.id)
     end
   end
-
 end
