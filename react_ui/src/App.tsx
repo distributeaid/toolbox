@@ -20,6 +20,7 @@ import { Footer } from './components/layout/Footer'
 import { NavBar } from './components/layout/NavBar'
 import AuthenticatorWrapper from './pages/Authenticator'
 import { Chapter } from './pages/Chapter'
+import { ChapterEdit } from './pages/ChapterEdit'
 import { ChapterList } from './pages/ChapterList'
 import { ChapterNew } from './pages/ChapterNew'
 import StyleGuide from './pages/StyleGuide'
@@ -90,6 +91,12 @@ const App: React.FunctionComponent = () => {
                 exact
                 path="/:slug"
                 render={({ match }) => <Chapter slug={match.params.slug} />}
+              />
+
+              <Route
+                exact
+                path="/:slug/edit"
+                render={({ match }) => <ChapterEdit slug={match.params.slug} />}
               />
 
               <Route exact path="/">
