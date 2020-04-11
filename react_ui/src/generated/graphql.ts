@@ -102,7 +102,7 @@ export type CreateChapterMutationVariables = {
 };
 
 
-export type CreateChapterMutation = { readonly __typename?: 'RootMutationType', readonly createGroup: Maybe<{ readonly __typename?: 'Group', readonly slug: string }> };
+export type CreateChapterMutation = { readonly __typename?: 'RootMutationType', readonly createGroup: Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly slug: string }> };
 
 export type GetChapterQueryVariables = {
   id: Scalars['ID'];
@@ -123,10 +123,19 @@ export type GetChapterListQueryVariables = {};
 
 export type GetChapterListQuery = { readonly __typename?: 'RootQueryType', readonly groups: Maybe<ReadonlyArray<Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly slug: string, readonly description: Maybe<string>, readonly name: string }>>> };
 
+export type UpdateChapterMutationVariables = {
+  id: Scalars['ID'];
+  groupInput: GroupInput;
+};
+
+
+export type UpdateChapterMutation = { readonly __typename?: 'RootMutationType', readonly updateGroup: Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly slug: string }> };
+
 
 export const CreateChapterDocument = gql`
     mutation createChapter($groupInput: GroupInput!) {
   createGroup(groupInput: $groupInput) {
+    id
     slug
   }
 }
@@ -179,7 +188,7 @@ export const GetChapterDocument = gql`
  * __useGetChapterQuery__
  *
  * To run a query within a React component, call `useGetChapterQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * When your component renders, `useGetChapterQuery` returns an object from Apollo Client that contains loading, error, and data properties 
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -259,7 +268,7 @@ export const GetChapterListDocument = gql`
  * __useGetChapterListQuery__
  *
  * To run a query within a React component, call `useGetChapterListQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * When your component renders, `useGetChapterListQuery` returns an object from Apollo Client that contains loading, error, and data properties 
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -279,3 +288,39 @@ export function useGetChapterListLazyQuery(baseOptions?: ApolloReactHooks.LazyQu
 export type GetChapterListQueryHookResult = ReturnType<typeof useGetChapterListQuery>;
 export type GetChapterListLazyQueryHookResult = ReturnType<typeof useGetChapterListLazyQuery>;
 export type GetChapterListQueryResult = ApolloReactCommon.QueryResult<GetChapterListQuery, GetChapterListQueryVariables>;
+export const UpdateChapterDocument = gql`
+    mutation updateChapter($id: ID!, $groupInput: GroupInput!) {
+  updateGroup(id: $id, groupInput: $groupInput) {
+    id
+    slug
+  }
+}
+    `;
+export type UpdateChapterMutationFn = ApolloReactCommon.MutationFunction<UpdateChapterMutation, UpdateChapterMutationVariables>;
+
+/**
+ * __useUpdateChapterMutation__
+ *
+ * To run a mutation, you first call `useUpdateChapterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateChapterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateChapterMutation, { data, loading, error }] = useUpdateChapterMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      groupInput: // value for 'groupInput'
+ *   },
+ * });
+ */
+export function useUpdateChapterMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateChapterMutation, UpdateChapterMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateChapterMutation, UpdateChapterMutationVariables>(UpdateChapterDocument, baseOptions);
+      }
+export type UpdateChapterMutationHookResult = ReturnType<typeof useUpdateChapterMutation>;
+export type UpdateChapterMutationResult = ApolloReactCommon.MutationResult<UpdateChapterMutation>;
+export type UpdateChapterMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateChapterMutation, UpdateChapterMutationVariables>;
+
+

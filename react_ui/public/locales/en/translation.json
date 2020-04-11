@@ -4,13 +4,14 @@
     "subtitle": "Find the chapter nearest you in the list below to get involved.",
     "instructions": "If your area doesn't have a Masks For Docs Chapter yet, we are looking for volunteers to start new ones. Get in touch on <2>Slack</2> to start one [Need better copy here]."
   },
-  "chapterNew": {
+  "chapterForm": {
     "chapterName": "Chapter Name",
-    "chapterNameDescription": "The name of the new chapter. This should describe the geographic area covered by the chapter as succinctly as possible. For sparsely populated areas this may be large e.g. 'Western Montana', for more densely populated areas may be a subsection of a city e.g. 'Upper Manhattan', 'Kowloon City'.",
+    "chapterNameDescription": "The name of the chapter. This should describe the geographic area covered by the chapter as succinctly as possible. For sparsely populated areas this may be large e.g. 'Western Montana', for more densely populated areas may be a subsection of a city e.g. 'Upper Manhattan', 'Kowloon City'.",
     "chapterDescriptionHeader": "Chapter Note",
     "chapterLocation": "Chapter Location",
     "chapterFormLinksHeader": "Chapter Form Links",
-    "title": "Create A New Local Chapter",
+    "newTitle": "Create A New Local Chapter",
+    "editTitle": "Edit Local Chapter",
     "donationFormHeader": "Materials Donation Form",
     "requestFormHeader": "PPE Request Form",
     "requestFormInputLabel": "PPE Request Form URL (link)",
@@ -20,7 +21,8 @@
     "volunteerFormInputLabel": "Volunteer Sign-Up Form URL (link)",
     "volunteerResultsInputLabel": "Volunteer Sign-Up Results Sheet URL (link)",
     "volunteerFormHeader": "Volunteer Sign-Up Form",
-    "topDescription": "Submitting this form will create a new public-facing page for your local chapter. Please double-check all of the information you provide here since it will immediately be visible to visitors to the Masks For Docs website after you click submit. For examples, see the <2>list of pages here</2> (opens in a new tab)."
+    "topDescriptionNew": "Submitting this form will create a new public-facing page for your local chapter. Please double-check all of the information you provide here since it will immediately be visible to visitors to the Masks For Docs website after you click submit. For examples, see the <2>list of pages here</2> (opens in a new tab).",
+    "topDescriptionEdit": "Submitting this form will update the public-facing page for this local chapter. Please double-check all of the information you provide here since it will immediately be visible to visitors to the Masks For Docs website after you click submit. For examples, see the <2>list of pages here</2> (opens in a new tab)."
   },
   "chapter": {
     "backLink": "Back to Directory"
