@@ -203,6 +203,7 @@ defmodule Ferry.GroupTest do
         createGroup(
           groupInput: {
             name: "#{group_attrs.name}",
+            slug: "#{group_attrs.slug}",
             description: "#{group_attrs.description}",
             slackChannelName: "#{group_attrs.slack_channel_name}",
             requestForm: "#{group_attrs.request_form}",
@@ -240,7 +241,7 @@ defmodule Ferry.GroupTest do
     } = res
 
     assert id
-    assert slug
+    assert slug == group_attrs.slug
     assert name == group_attrs.name
     assert type == group_attrs.type
     assert slack_channel_name == group_attrs.slack_channel_name

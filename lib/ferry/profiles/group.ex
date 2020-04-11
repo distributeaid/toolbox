@@ -45,6 +45,7 @@ defmodule Ferry.Profiles.Group do
     group
     |> cast(attrs, [
       :name,
+      :slug,
       :description,
       :donation_link,
       :slack_channel_name,
@@ -55,18 +56,11 @@ defmodule Ferry.Profiles.Group do
       :donation_form,
       :donation_form_results
     ])
-    |> validate_required([
-      :name
-      # slug is generated from name
-      # type is a constant for now
-      # TODO: ^^^ that will likely change later
-    ])
+    |> validate_required([:name, :slug])
     |> validate_length(:name, min: 1, max: 255)
     |> validate_format(:name, ~r/[A-Za-z\ \-]+/)
-    |> unique_constraint(:name)
-    |> set_slug()
     |> unique_constraint(:slug)
-
+    |> unique_constraint(:name)
     # Just set the type for now, while there's only one valid type.
     |> put_change(:type, "M4D_CHAPTER")
     |> validate_inclusion(:type, @group_types)
@@ -76,31 +70,5 @@ defmodule Ferry.Profiles.Group do
   def logo_changeset(group, attrs) do
     group
     |> cast_attachments(attrs, [:logo])
-  end
-
-  # don't do anything if there are :name errors, b/c :slug is derived from :name
-  defp set_slug(%{errors: [name: {_, _}]} = changeset) do
-    changeset
-  end
-
-  defp set_slug(changeset) do
-    slug =
-      case fetch_field(changeset, :name) do
-        # Bets on if Taylor's going to regret not handling this edge case better later on? ;)
-        :error ->
-          "we'll never get here cause we validate that :name exists already"
-
-        {_source, nil} ->
-          "we'll never get here cause we validate that :name exists already"
-
-        # success case
-        {_source, name} ->
-          name
-          |> String.downcase()
-          |> String.trim()
-          |> String.replace(~r/\s+/, "-")
-      end
-
-    put_change(changeset, :slug, slug)
   end
 end
