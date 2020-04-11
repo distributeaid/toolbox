@@ -58,7 +58,10 @@ defmodule Ferry.Profiles.Group do
     ])
     |> validate_required([:name, :slug])
     |> validate_length(:name, min: 1, max: 255)
-    |> validate_format(:name, ~r/[A-Za-z\ \-]+/)
+    # allow letters, spaces, dashes, parens
+    |> validate_format(:name, ~r/[A-Za-z\ \-,\(\)]+/)
+    # allow letters and dashes
+    |> validate_format(:slug, ~r/[A-Za-z\-]+/)
     |> unique_constraint(:slug)
     |> unique_constraint(:name)
     # Just set the type for now, while there's only one valid type.
