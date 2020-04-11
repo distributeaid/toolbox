@@ -8,7 +8,7 @@ defmodule Ferry.AidTaxonomyTest do
 
   # Category
   # ================================================================================
-  
+
   describe "categories" do
     test "list_categories/0 returns all categories" do
       # none

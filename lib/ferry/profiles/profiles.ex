@@ -10,7 +10,6 @@ defmodule Ferry.Profiles do
 
   @geocoder Application.get_env(:ferry, :geocoder)
 
-
   # Group
   # ==============================================================================
   alias Ferry.Profiles.Group
@@ -53,7 +52,6 @@ defmodule Ferry.Profiles do
   def get_group_by_slug(slug) do
     Repo.get_by(Group, slug: slug)
   end
-
 
   @doc """
   Creates a group.
@@ -131,9 +129,14 @@ defmodule Ferry.Profiles do
       {:ok, geocode} ->
         attrs = %{"address" => Map.put(address_attrs, "geocode", geocode)}
         Project.address_changeset(changeset, attrs)
+
       {:error, _error} ->
-          # TODO: proper error logging
-          Changeset.add_error(changeset, :geocoding, "Our geocoding server sometimes can not locate a very specific address. Try removing your organization name, floor, or appartment # from the street line. If that continues to fail, try only city, country and postal code. If the problem persists, please reach out to us: help@distributeaid.org!")
+        # TODO: proper error logging
+        Changeset.add_error(
+          changeset,
+          :geocoding,
+          "Our geocoding server sometimes can not locate a very specific address. Try removing your organization name, floor, or appartment # from the street line. If that continues to fail, try only city, country and postal code. If the problem persists, please reach out to us: help@distributeaid.org!"
+        )
     end
   end
 
@@ -153,9 +156,9 @@ defmodule Ferry.Profiles do
   def list_projects do
     Repo.all(
       from p in Project,
-      left_join: g in assoc(p, :group),
-      left_join: a in assoc(p, :address),
-      preload: [group: g, address: a]
+        left_join: g in assoc(p, :group),
+        left_join: a in assoc(p, :address),
+        preload: [group: g, address: a]
     )
   end
 
@@ -171,10 +174,10 @@ defmodule Ferry.Profiles do
   def list_projects(%Group{} = group) do
     Repo.all(
       from p in Project,
-      where: p.group_id == ^group.id,
-      left_join: a in assoc(p, :address),
-      order_by: p.id,
-      preload: [address: a]
+        where: p.group_id == ^group.id,
+        left_join: a in assoc(p, :address),
+        order_by: p.id,
+        preload: [address: a]
     )
   end
 
@@ -195,8 +198,8 @@ defmodule Ferry.Profiles do
   def get_project!(id) do
     query =
       from p in Project,
-      left_join: a in assoc(p, :address),
-      preload: [address: a]
+        left_join: a in assoc(p, :address),
+        preload: [address: a]
 
     Repo.get!(query, id)
   end
@@ -234,7 +237,7 @@ defmodule Ferry.Profiles do
   """
   def update_project(%Project{} = project, attrs) do
     project
-    |> Repo.preload([address: [:geocode]])
+    |> Repo.preload(address: [:geocode])
     |> Project.changeset(attrs)
     |> geocode_project_address(attrs["address"])
     |> Repo.update()
