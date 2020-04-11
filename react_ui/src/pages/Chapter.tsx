@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
 import { ContentContainer } from '../components/ContentContainer'
-import { useGetChapterQuery } from '../generated/graphql'
+import { useGetChapterBySlugQuery } from '../generated/graphql'
 
 type Props = {
   slug: string
@@ -11,17 +11,17 @@ type Props = {
 
 export const Chapter: React.FC<Props> = ({ slug }) => {
   const { t } = useTranslation()
-  const { loading, data } = useGetChapterQuery({ variables: { id: slug } })
+  const { loading, data } = useGetChapterBySlugQuery({ variables: { slug } })
 
   if (loading) {
     return <div>Loading...</div>
   }
 
-  if (!data?.group) {
+  if (!data?.groupBySlug) {
     return <div>Chapter {slug} not found</div>
   }
 
-  const { group: chapter } = data
+  const { groupBySlug: chapter } = data
 
   return (
     <>

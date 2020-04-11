@@ -1,0 +1,16 @@
+query getChapterBySlug($slug: String!) {
+  groupBySlug(slug: $slug) {
+    id
+    name
+    slug
+    description
+    donationForm
+    donationLink
+    donationFormResults
+    slackChannelName
+    volunteerForm
+    volunteerFormResults
+    requestForm
+    requestFormResults
+  }
+}

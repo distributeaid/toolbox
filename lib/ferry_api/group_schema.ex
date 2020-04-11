@@ -22,6 +22,12 @@ defmodule FerryApi.Schema.Group do
       arg(:id, non_null(:id))
       resolve(&get_group/3)
     end
+
+    @desc "Get a group by slug"
+    field :group_by_slug, :group do
+      arg(:slug, non_null(:string))
+      resolve(&get_group_by_slug/3)
+    end
   end
 
   # Mutation
@@ -81,6 +87,13 @@ defmodule FerryApi.Schema.Group do
   def get_group(_parent, %{id: id}, _resolution) do
     case Profiles.get_group(id) do
       nil -> {:error, message: "Group not found.", id: id}
+      group -> {:ok, group}
+    end
+  end
+
+  def get_group_by_slug(_parent, %{slug: slug}, _resolution) do
+    case Profiles.get_group_by_slug(slug) do
+      nil -> {:error, message: "Group not found.", slug: slug}
       group -> {:ok, group}
     end
   end

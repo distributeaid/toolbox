@@ -11,7 +11,7 @@ export const ChapterItem: React.FC<{ chapter: Partial<Group> }> = ({
 }) => {
   return (
     <li className="border-t border-gray-200">
-      <NavLink to={`/${chapter.id}`}>
+      <NavLink to={`/${chapter.slug}`}>
         <div className="py-4 hover:bg-gray-200">
           <div className="flex items-center justify-between">
             <div className="text-sm leading-5 font-medium text-black">
