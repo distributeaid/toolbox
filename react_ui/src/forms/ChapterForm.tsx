@@ -165,6 +165,7 @@ const ChapterLocationSection: React.FC<ChapterLocationProps> = ({
 
       <Select
         label={t('terms.country') + '*'}
+        value={chapterCountry}
         onChange={onCountrySelect}
         includeBlank={true}
         options={countries.map((country: { name: string; code: string }) => (
@@ -177,6 +178,7 @@ const ChapterLocationSection: React.FC<ChapterLocationProps> = ({
       {showStateSelect && (
         <Select
           label={t('terms.state') + '*'}
+          value={chapterProvince}
           onChange={onProvinceSelect}
           includeBlank={true}
           options={usStates.map((state: { name: string; code: string }) => (

@@ -5,6 +5,7 @@ type SelectProps = {
   onChange: (value: React.ChangeEvent<HTMLSelectElement>) => void
   options: JSX.Element[]
   includeBlank?: boolean
+  value: string
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -12,6 +13,7 @@ export const Select: React.FC<SelectProps> = ({
   options,
   includeBlank,
   onChange,
+  value,
 }) => (
   <label>
     {label}
@@ -19,6 +21,7 @@ export const Select: React.FC<SelectProps> = ({
     <div>
       <select
         className="w-full border border-gray-300 rounded-md truncate"
+        value={value}
         onChange={onChange}>
         {includeBlank && <option key="blank" value="" />}
         {options}
