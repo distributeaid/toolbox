@@ -15,6 +15,7 @@ import {
   GroupInput,
   Maybe,
   useCreateChapterMutation,
+  useUpdateChapterMutation,
 } from '../generated/graphql'
 
 const isValidUrl = (value: Maybe<string>) => {
@@ -407,12 +408,12 @@ const validateChapterArgs = (chapterArgs: GroupInput): string[] => {
 }
 
 type ChapterFormProps = {
-  chapter?: Group
+  editChapter?: Group
 }
 
-export const ChapterForm: React.FC<ChapterFormProps> = ({ chapter }) => {
-  chapter = chapter || ({} as Group)
-	const isNewChapter = !!chapter.id
+export const ChapterForm: React.FC<ChapterFormProps> = ({ editChapter }) => {
+  const chapter = editChapter || ({} as Group)
+  const isNewChapter = !chapter.id
 
   const { t } = useTranslation()
   const history = useHistory()
@@ -439,14 +440,14 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ chapter }) => {
   const [
     chapterRequestResultsLink,
     setChapterRequestResultsLink,
-  ] = React.useState('')
+  ] = React.useState(chapter.requestFormResults || '')
   const [chapterDonateFormLink, setChapterDonateFormLink] = React.useState(
-    chapter.requestForm || ''
+    chapter.donationForm || ''
   )
   const [
     chapterDonateResultsLink,
     setChapterDonateResultsLink,
-  ] = React.useState(chapter.requestFormResults || '')
+  ] = React.useState(chapter.donationFormResults || '')
 
   const chapterArgs: GroupInput = {
     description: chapterDescription,
@@ -461,24 +462,32 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ chapter }) => {
     volunteerFormResults: chapterVolunteerResultsLink,
   }
 
-  const mutationVariables = isNewChapter
-    ? { groupInput: chapterArgs, id: chapter.id }
-    : { groupInput: chapterArgs }
-	
-  const [createChapterMutation, { loading, error }] = useCreateChapterMutation({
-    variables: mutationVariables,
-    onCompleted: (responseData) => {
-      if (responseData?.createGroup?.slug) {
-        history.push('/' + responseData.createGroup.slug)
-      }
-    },
+  const onCompleted = () => history.push('/chapters')
+
+  const [
+    createChapterMutation,
+    { loading: createLoading, error: createError },
+  ] = useCreateChapterMutation({
+    variables: { groupInput: chapterArgs },
+    onCompleted,
   })
+
+  const [
+    updateChapterMutation,
+    { loading: updateLoading, error: updateError },
+  ] = useUpdateChapterMutation({
+    variables: { groupInput: chapterArgs, id: chapter.id },
+    onCompleted,
+  })
+
+  const loading = createLoading || updateLoading
+  const error = createError || updateError
 
   const submit = () => {
     const errorMessages: string[] = validateChapterArgs(chapterArgs)
 
     if (errorMessages.length === 0) {
-      createChapterMutation()
+      isNewChapter ? createChapterMutation() : updateChapterMutation()
     } else {
       setErrorMessages(errorMessages)
     }
@@ -488,11 +497,18 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ chapter }) => {
     <ContentContainer>
       <div className="grid grid-cols-1 gap-4 m-4 md:m-16">
         <h1 className="font-bold text-3xl mb-4">
-					{isNewChapter ? t('chapterForm.editTitle') : t('chapterForm.newTitle')}
-				</h1>
+          {isNewChapter
+            ? t('chapterForm.newTitle')
+            : t('chapterForm.editTitle')}
+        </h1>
 
         <p>
-          <Trans i18nKey={isNewChapter ? "chapterForm.topDescriptionNew" : "chapterForm.topDescriptionEdit"}>
+          <Trans
+            i18nKey={
+              isNewChapter
+                ? 'chapterForm.topDescriptionNew'
+                : 'chapterForm.topDescriptionEdit'
+            }>
             placeholder{' '}
             <TextLink newTab={true} href="/chapters">
               placeholder link text
@@ -549,7 +565,7 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ chapter }) => {
 
         {error && <div>server error: {error}</div>}
 
-        <Button onClick={submit}>Create Chapter</Button>
+        <Button onClick={submit}>Submit</Button>
 
         {loading && <div>creating chapter...</div>}
       </div>
