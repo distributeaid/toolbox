@@ -32,8 +32,10 @@ defmodule Ferry.Profiles.Group do
     field :donation_form_results, Ferry.EctoType.URL
 
     # relations
-    has_one :users, User # on_delete set in database via migration
-    has_many :projects, Project # on_delete set in database via migration
+    # on_delete set in database via migration
+    has_one :users, User
+    # on_delete set in database via migration
+    has_many :projects, Project
 
     timestamps()
   end
@@ -43,11 +45,9 @@ defmodule Ferry.Profiles.Group do
     group
     |> cast(attrs, [
       :name,
-
       :description,
       :donation_link,
       :slack_channel_name,
-
       :request_form,
       :request_form_results,
       :volunteer_form,
@@ -61,11 +61,9 @@ defmodule Ferry.Profiles.Group do
       # type is a constant for now
       # TODO: ^^^ that will likely change later
     ])
-
     |> validate_length(:name, min: 1, max: 255)
     |> validate_format(:name, ~r/[A-Za-z\ \-]+/)
     |> unique_constraint(:name)
-
     |> set_slug()
     |> unique_constraint(:slug)
 
@@ -86,18 +84,22 @@ defmodule Ferry.Profiles.Group do
   end
 
   defp set_slug(changeset) do
-    slug = case fetch_field(changeset, :name) do
-      # Bets on if Taylor's going to regret not handling this edge case better later on? ;)
-      :error -> "we'll never get here cause we validate that :name exists already"
-      {_source, nil} -> "we'll never get here cause we validate that :name exists already"
+    slug =
+      case fetch_field(changeset, :name) do
+        # Bets on if Taylor's going to regret not handling this edge case better later on? ;)
+        :error ->
+          "we'll never get here cause we validate that :name exists already"
 
-      # success case
-      {_source, name} ->
-        name
-        |> String.downcase()
-        |> String.trim()
-        |> String.replace(~r/\s+/, "-")
-    end
+        {_source, nil} ->
+          "we'll never get here cause we validate that :name exists already"
+
+        # success case
+        {_source, name} ->
+          name
+          |> String.downcase()
+          |> String.trim()
+          |> String.replace(~r/\s+/, "-")
+      end
 
     put_change(changeset, :slug, slug)
   end
