@@ -18,6 +18,138 @@ import {
   useUpdateChapterMutation,
 } from '../generated/graphql'
 
+import { Formik, Form } from 'formik'
+import * as yup from 'yup'
+import { FormInput } from '../components/FormInput'
+
+const initialValues = {
+  name: '',
+  // description: '',
+  // donationForm: '',
+  // donationFormResults: '',
+  // requestForm: '',
+  // requestFormResults: '',
+  // volunteerForm: '',
+  // volunteerFormResults: '',
+}
+
+const isValidGDocsUrl = (requiredBasePath: string, url: URL) => {
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    return false
+  }
+
+  if (url.hostname !== 'docs.google.com') {
+    return false
+  }
+
+  return url.pathname.indexOf(requiredBasePath) === 0
+}
+
+const validationSchema = yup.object({
+  name: yup.string().required('Please enter a chapter name'),
+  // description: yup.string().required('Please enter a description'),
+  // donationForm: yup
+  //   .string()
+  //   .url('Donation form link must be a full url (https://example.com)')
+  //   .required('Please include the donation form link'),
+  // donationFormResults: yup
+  //   .string()
+  //   .url('Donation form results link must be a full url (https://example.com)')
+  //   .when('donationForm', {
+  //     is: (value: URL) => isValidGDocsUrl('/form', value),
+  //     then: (value: URL) => isValidGDocsUrl('/spreadsheets', value),
+  //   })
+  //   .typeError(
+  //     'Donation form results URL must be a Google spreadsheet if donation form is a Google form'
+  //   ),
+  // requestForm: yup
+  //   .string()
+  //   .url('Request form link must be a full url (https://example.com)')
+  //   .required('Please enter a request form link'),
+  // requestFormResults: yup
+  //   .string()
+  //   .url('Request form results link must be a full url (https://example.com)')
+  //   .when('requestForm', {
+  //     is: (value: URL) => isValidGDocsUrl('/form', value),
+  //     then: (value: URL) => isValidGDocsUrl('/spreadsheets', value),
+  //   })
+  //   .typeError(
+  //     'Request form results URL must be a Google spreadsheet if request form is a Google form'
+  //   ),
+  // volunteerForm: yup.string().url().required('Please enter a volunteer form'),
+  // volunteerFormResults: yup
+  //   .string()
+  //   .url()
+  //   .when('volunteerForm', {
+  //     is: (value: URL) => isValidGDocsUrl('/form', value),
+  //     then: (value: URL) => isValidGDocsUrl('/spreadsheets', value),
+  //   })
+  //   .typeError(
+  //     'Volunteer form results URL must be a Google spreadsheet if volunteer form is a Google form'
+  //   ),
+})
+
+type Props = {
+  editChapter?: Group
+}
+
+const ChapterForm2: React.FC<Props> = ({ editChapter }) => {
+  const chapter = editChapter || ({} as Group)
+  const isNewChapter = !chapter.id
+  const { t } = useTranslation()
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={() => {
+        // TODO
+      }}>
+      {() => {
+        return (
+          <ContentContainer>
+            <Form>
+              <div className="grid grid-cols-1 gap-4 m-4 md:m-16">
+                <h1 className="font-bold text-3xl mb-4">
+                  {isNewChapter
+                    ? t('chapterForm.newTitle')
+                    : t('chapterForm.editTitle')}
+                </h1>
+                <p>
+                  <Trans
+                    i18nKey={
+                      isNewChapter
+                        ? 'chapterForm.topDescriptionNew'
+                        : 'chapterForm.topDescriptionEdit'
+                    }>
+                    placeholder{' '}
+                    <TextLink newTab={true} href="/chapters">
+                      placeholder link text
+                    </TextLink>
+                    placeholder end text
+                  </Trans>
+                </p>
+                <Divider />
+                <>
+                  {sectionHeader(t('chapterForm.chapterName'))}
+
+                  <p>{t('chapterForm.chapterNameDescription')}</p>
+
+                  <FormInput
+                    id="chapter-name"
+                    type="text"
+                    title={t('chapterForm.chapterName') + '*'}
+                    name="name"
+                  />
+                </>
+              </div>
+            </Form>
+          </ContentContainer>
+        )
+      }}
+    </Formik>
+  )
+}
+
 const isValidUrl = (value: Maybe<string>) => {
   if (value == null) {
     return false
@@ -36,30 +168,6 @@ const isValidUrl = (value: Maybe<string>) => {
   }
 
   return true
-}
-
-const isValidGDocsUrl = (requiredBasePath: string, value: Maybe<string>) => {
-  if (value == null) {
-    return false
-  }
-
-  let url
-
-  try {
-    url = new URL(value)
-  } catch (_) {
-    return false
-  }
-
-  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
-    return false
-  }
-
-  if (url.hostname !== 'docs.google.com') {
-    return false
-  }
-
-  return url.pathname.indexOf(requiredBasePath) === 0
 }
 
 const sectionHeader = (contents: string) => (
@@ -417,27 +525,6 @@ const validateChapterArgs = (chapterArgs: GroupInput): string[] => {
     errors.push('Request form link must be a full url (https://example.com)')
   }
 
-  if (
-    isValidGDocsUrl('/forms', chapterArgs.donationForm) &&
-    !isValidGDocsUrl('/spreadsheets', chapterArgs.donationFormResults)
-  ) {
-    errors.push(resultsUrlNotSpreadsheetMessage('donation'))
-  }
-
-  if (
-    isValidGDocsUrl('/forms', chapterArgs.volunteerForm) &&
-    !isValidGDocsUrl('/spreadsheets', chapterArgs.volunteerFormResults)
-  ) {
-    errors.push(resultsUrlNotSpreadsheetMessage('voluneer'))
-  }
-
-  if (
-    isValidGDocsUrl('/forms', chapterArgs.requestForm) &&
-    !isValidGDocsUrl('/spreadsheets', chapterArgs.requestFormResults)
-  ) {
-    errors.push(resultsUrlNotSpreadsheetMessage('request'))
-  }
-
   return errors
 }
 
@@ -539,6 +626,7 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ editChapter }) => {
 
   return (
     <ContentContainer>
+      <ChapterForm2 editChapter={editChapter} />
       <div className="grid grid-cols-1 gap-4 m-4 md:m-16">
         <h1 className="font-bold text-3xl mb-4">
           {isNewChapter
