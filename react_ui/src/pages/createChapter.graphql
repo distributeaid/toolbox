@@ -1,6 +1,13 @@
 mutation createChapter($groupInput: GroupInput!) {
   createGroup(groupInput: $groupInput) {
-    id
-    slug
+    successful
+    result {
+      id
+      slug
+    }
+    messages {
+      field
+      message
+    }
   }
 }

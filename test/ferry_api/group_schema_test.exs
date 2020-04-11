@@ -214,11 +214,18 @@ defmodule Ferry.GroupTest do
             donationFormResults: "#{group_attrs.donation_form_results}"
           }
         ) {
-          id,
-          name,
-          type,
-          slug,
-          slackChannelName
+          successful
+          messages {
+            field
+            message
+          }
+          result {
+            id,
+            name,
+            type,
+            slug,
+            slackChannelName
+          }
         }
       }
     """
@@ -231,20 +238,75 @@ defmodule Ferry.GroupTest do
     %{
       "data" => %{
         "createGroup" => %{
-          "id" => id,
-          "name" => name,
-          "type" => type,
-          "slug" => slug,
-          "slackChannelName" => slack_channel_name
+          "successful" => successful,
+          "messages" => messages,
+          "result" => %{
+            "id" => id,
+            "name" => name,
+            "slackChannelName" => slack_channel_name,
+            "slug" => slug,
+            "type" => type
+          }
         }
       }
     } = res
 
+    assert successful
+    assert messages == []
     assert id
     assert slug == group_attrs.slug
     assert name == group_attrs.name
     assert type == group_attrs.type
     assert slack_channel_name == group_attrs.slack_channel_name
+  end
+
+  test "create a group - error", %{conn: conn} do
+    sign_in_user()
+
+    group_attrs = params_for(:invalid_group)
+
+    mutation = """
+      mutation {
+        createGroup(
+          groupInput: {
+            name: "#{group_attrs.name}"
+          }
+        ) {
+          successful
+          messages {
+            field
+            message
+          }
+          result {
+            id            
+          }
+        }
+      }
+    """
+
+    res =
+      conn
+      |> post("/api", %{query: mutation})
+      |> json_response(200)
+
+    %{
+      "data" => %{
+        "createGroup" => %{
+          "successful" => successful,
+          "messages" => [
+            %{
+              "field" => field,
+              "message" => "can't be blank"
+            }
+          ],
+          "result" => result
+        }
+      }
+    } = res
+
+    refute successful
+    assert field == "name"
+    assert result == nil
   end
 
   # Mutation - Update A Group
@@ -271,9 +333,16 @@ defmodule Ferry.GroupTest do
             donationFormResults: "#{updates.donation_form_results}"
           }
         ) {
-          id,
-          name,
-          description
+          successful
+          messages {
+            field
+            message
+          }
+          result {
+            id
+            name
+            description
+          }
         }
       }
     """
@@ -283,11 +352,71 @@ defmodule Ferry.GroupTest do
       |> post("/api", %{query: mutation})
       |> json_response(200)
 
-    %{"data" => %{"updateGroup" => %{"id" => id, "name" => _name, "description" => description}}} =
-      res
+    %{"data" => %{"updateGroup" => %{"messages" => [], "result" => %{"description" => description, "id" => id, "name" => _name}, "successful" => true}}} = res
 
     assert id == Integer.to_string(group.id)
     assert description == updates.description
+  end
+
+  test "update a group - error", %{conn: conn} do
+    sign_in_user()
+
+    group = insert(:group)
+    updates = params_for(:invalid_group)
+
+    mutation = """
+      mutation {
+        updateGroup(
+          id: #{group.id},
+          groupInput: {
+            name: "#{updates.name}",
+            description: "#{updates.description}",
+            slackChannelName: "#{updates.slack_channel_name}",
+            requestForm: "#{updates.request_form}",
+            requestFormResults: "#{updates.request_form_results}",
+            volunteerForm: "#{updates.volunteer_form}",
+            volunteerFormResults: "#{updates.volunteer_form_results}",
+            donationForm: "#{updates.donation_form}",
+            donationFormResults: "#{updates.donation_form_results}"
+          }
+        ) {
+          successful
+          messages {
+            field
+            message
+          }
+          result {
+            id
+            name
+            description
+          }
+        }
+      }
+    """
+
+    res =
+      conn
+      |> post("/api", %{query: mutation})
+      |> json_response(200)
+
+    %{
+      "data" => %{
+        "updateGroup" => %{
+          "successful" => successful,
+          "messages" => [
+            %{
+              "field" => field,
+              "message" => "can't be blank"
+            }
+          ],
+          "result" => result
+        }
+      }
+    } = res
+
+    refute successful
+    assert field == "name"
+    assert result == nil
   end
 
   # Delete A Group

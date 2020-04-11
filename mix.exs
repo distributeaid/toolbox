@@ -68,6 +68,7 @@ defmodule Ferry.Mixfile do
 
       # graphql api
       {:absinthe, "~> 1.4"},
+      {:absinthe_error_payload, "~> 1.0"},
       {:absinthe_plug, "~> 1.4"},
       {:dataloader, "~> 1.0.0"},
 
