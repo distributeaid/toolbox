@@ -7,6 +7,8 @@
   "chapterForm": {
     "chapterName": "Chapter Name",
     "chapterNameDescription": "The name of the chapter. This should describe the geographic area covered by the chapter as succinctly as possible. For sparsely populated areas this may be large e.g. 'Western Montana', for more densely populated areas may be a subsection of a city e.g. 'Upper Manhattan', 'Kowloon City'.",
+    "chapterSlug": "Chapter URL Slug",
+    "chapterSlugDescription": "The URL extension for the chapter. This should be easy to type and remember so that chapters can share the link to their page on phyiscal media like flyers and mailers. Some examples: 'western-montana', 'upper-manhattan', 'kowloon-city'",
     "chapterDescriptionHeader": "Chapter Note",
     "chapterLocation": "Chapter Location",
     "chapterFormLinksHeader": "Chapter Form Links",

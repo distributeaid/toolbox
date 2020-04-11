@@ -66,7 +66,7 @@ const sectionHeader = (contents: string) => (
   <h2 className="font-bold text-xl mt-4">{contents}</h2>
 )
 
-const VALID_CHAPTER_NAME_REGEX = /^[a-zA-Z -]*$/
+const VALID_CHAPTER_NAME_REGEX = /^[a-zA-Z \-,()]*$/
 
 type ChapterNameProps = {
   t: (key: string) => string
@@ -79,8 +79,6 @@ const ChapterNameSection: React.FC<ChapterNameProps> = ({
   chapterName,
   setChapterName,
 }) => {
-  const chapterUrl = chapterName.toLowerCase().trim().replace(/\s+/gi, '-')
-
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value
 
@@ -102,16 +100,50 @@ const ChapterNameSection: React.FC<ChapterNameProps> = ({
         onChange={onChange}
         value={chapterName}
       />
+    </>
+  )
+}
 
-      {chapterUrl !== '' && (
-        <p>
-          <span className="font-bold mb-1">The URL for your new chapter</span>
+const VALID_CHAPTER_SLUG_REGEX = /^[a-zA-Z-]*$/
 
-          <br />
+type ChapterSlugProps = {
+  t: (key: string) => string
+  chapterSlug: string
+  setChapterSlug: (chapterSlug: string) => void
+}
 
-          <span className="font-mono">local.masksfordocs.com/{chapterUrl}</span>
-        </p>
-      )}
+const ChapterSlugSection: React.FC<ChapterSlugProps> = ({
+  t,
+  chapterSlug,
+  setChapterSlug,
+}) => {
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value
+
+    if (VALID_CHAPTER_SLUG_REGEX.test(newValue)) {
+      setChapterSlug(newValue)
+    }
+  }
+
+  return (
+    <>
+      {sectionHeader(t('chapterForm.chapterSlug'))}
+
+      <p>{t('chapterForm.chapterSlugDescription')}</p>
+
+      <Input
+        id="chapter-slug"
+        type="text"
+        title={t('chapterForm.chapterSlug') + '*'}
+        onChange={onChange}
+        value={chapterSlug}
+      />
+
+      <p>
+        <span className="font-bold mb-1">The URL for the chapter</span>
+
+        <span className="font-mono">local.masksfordocs.com/{chapterSlug}</span>
+      </p>
     </>
   )
 }
@@ -430,6 +462,7 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ editChapter }) => {
   const [errorMessages, setErrorMessages] = React.useState<Array<string>>([])
 
   const [chapterName, setChapterName] = React.useState(chapter.name || '')
+  const [chapterSlug, setChapterSlug] = React.useState('')
   const [chapterCountry, setChapterCountry] = React.useState('')
   const [chapterProvince, setChapterProvince] = React.useState('')
   const [chapterPostalCode, setChapterPostalCode] = React.useState('')
@@ -468,6 +501,7 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ editChapter }) => {
     requestForm: chapterRequestFormLink,
     requestFormResults: chapterRequestResultsLink,
     slackChannelName: null,
+    slug: chapterSlug,
     volunteerForm: chapterVolunteerFormLink,
     volunteerFormResults: chapterVolunteerResultsLink,
   }
@@ -535,6 +569,12 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ editChapter }) => {
           setChapterName={setChapterName}
         />
 
+        <ChapterSlugSection
+          t={t}
+          chapterSlug={chapterSlug}
+          setChapterSlug={setChapterSlug}
+        />
+
         <ChapterLocationSection
           t={t}
           chapterCountry={chapterCountry}
@@ -577,7 +617,11 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ editChapter }) => {
 
         <Button onClick={submit}>Submit</Button>
 
-        {loading && <div>creating chapter...</div>}
+        {loading && (
+          <div>
+            {isNewChapter ? 'creating chapter...' : 'updating chapter...'}
+          </div>
+        )}
       </div>
     </ContentContainer>
   )

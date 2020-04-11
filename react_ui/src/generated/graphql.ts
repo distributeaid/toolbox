@@ -40,6 +40,7 @@ export type GroupInput = {
   readonly requestForm: Maybe<Scalars['String']>;
   readonly requestFormResults: Maybe<Scalars['String']>;
   readonly slackChannelName: Maybe<Scalars['String']>;
+  readonly slug: Maybe<Scalars['String']>;
   readonly volunteerForm: Maybe<Scalars['String']>;
   readonly volunteerFormResults: Maybe<Scalars['String']>;
 };
