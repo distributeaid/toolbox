@@ -11,7 +11,7 @@ const LinkList: React.FC<{
       {title}
     </div>
     {links.map(({ title, href }) => (
-      <div className="text-xs font-mono mb-3">
+      <div key={title} className="text-xs font-mono mb-3">
         <a href={href}>{title}</a>
       </div>
     ))}
