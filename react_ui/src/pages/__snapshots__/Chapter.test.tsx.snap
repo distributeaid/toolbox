@@ -81,7 +81,7 @@ exports[`loads the chapter details and renders the page 1`] = `
             </p>
           </div>
           <div
-            class="sm:w-5/12 sm:pr-2 z-50"
+            class="sm:w-5/12 sm:pr-2 z-30"
           >
             <a
               class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-blue-600 w-full mb-8"
