@@ -69,3 +69,35 @@ it('shows a loading message when loading', () => {
 
   expect(container).toMatchSnapshot()
 })
+
+
+it('splits descriptions with multiple lines', () => {
+  ;(useGetChapterBySlugQuery as jest.Mock).mockReturnValueOnce({
+    loading: false,
+    data: {
+      groupBySlug: {
+        id: '1',
+        slug: 'oakland',
+        name: 'Oakland',
+        description: 'the Oakland group\n\nLorem ipsum',
+        donationForm: 'donation form link',
+        donationFormResults: 'donation form results link',
+        donationLink: 'donation link',
+        volunteerForm: 'volunteer form link',
+        volunteerFormResults: 'volunteer form results link',
+        slackChannelName: 'slack-channel-name',
+        requestForm: 'request form link',
+        requestFormResults: 'request form results link',
+      } as Group,
+    },
+  })
+
+  const { getByText, queryByText } = render(
+    <MemoryRouter>
+      <Chapter slug="oakland" />
+    </MemoryRouter>
+  )
+
+  expect(getByText('the Oakland group')).toBeVisible()
+  expect(getByText('Lorem ipsum')).toBeVisible()
+})

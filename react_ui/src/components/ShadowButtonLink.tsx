@@ -1,5 +1,6 @@
 import React from 'react'
 import { NavLink, NavLinkProps } from 'react-router-dom'
+import { classnames } from './classnames'
 
 export const ShadowButtonLink: React.FC<NavLinkProps> = ({
   children,
@@ -7,10 +8,10 @@ export const ShadowButtonLink: React.FC<NavLinkProps> = ({
   ...props
 }) => (
   <NavLink
-    className={[
-      'inline-block mx-auto px-8 py-4 rounded font-mono font-bold text-2xl text-center text-white shadow-button',
+    className={classnames(
+      'inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button',
       className,
-    ].filter((x) => !!x).join(' ')}
+    )}
     {...props}>
     {children}
   </NavLink>

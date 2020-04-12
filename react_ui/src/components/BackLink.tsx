@@ -2,9 +2,9 @@ import React from 'react'
 import { NavLink, NavLinkProps } from 'react-router-dom'
 
 export const BackLink: React.FC<NavLinkProps> = ({ children, ...props }) => (
-  <NavLink className="font-body text-sm leading-3" {...props}>
+  <NavLink className="font-body text-xs sm:text-sm leading-3" {...props}>
     <svg
-      className="inline mr-4 mb-1"
+      className="inline mr-2 sm:mr-4 mb-1"
       width="9"
       height="13"
       viewBox="0 0 9 13"

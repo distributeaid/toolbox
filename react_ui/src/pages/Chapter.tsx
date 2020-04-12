@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ContentContainer } from '../components/ContentContainer'
-import { useGetChapterBySlugQuery } from '../generated/graphql'
+import { useGetChapterBySlugQuery, Maybe } from '../generated/graphql'
 import { MainHeader } from '../components/MainHeader'
 import { P } from '../components/P'
 import { BackLink } from '../components/BackLink'
@@ -15,6 +15,9 @@ import { ShadowButtonLink } from '../components/ShadowButtonLink'
 type Props = {
   slug: string
 }
+
+const splitIntoParagraphs = (text: Maybe<string>) =>
+  text?.split(/\n+/).filter(x => x.length > 0).map((line) => <P key={line}>{line}</P>)
 
 export const Chapter: React.FC<Props> = ({ slug }) => {
   const { t } = useTranslation()
@@ -34,7 +37,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
     <MainContent>
       <Background />
       <ContentContainer>
-        <div className="pb-32">
+        <div className="pb-16 sm:pb-32">
           <BackLink to="/chapters">{t('chapter.backLink')}</BackLink>
         </div>
         <PreHeader>California — USA</PreHeader>
@@ -43,25 +46,43 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
 
       <BorderBlock>
         <ContentContainer>
-          <P>{chapter.description}</P>
-          <P>slug: {chapter.slug}</P>
-          <P>slack channel: {chapter.slackChannelName}</P>
-          <P>request form: {chapter.requestForm}</P>
-          <P>request form results: {chapter.requestFormResults}</P>
-          <P>volunteer form: {chapter.volunteerForm}</P>
-          <P>volunteer form results: {chapter.volunteerFormResults}</P>
-          <P>donation form: {chapter.donationForm}</P>
-          <P>donation form results: {chapter.donationFormResults}</P>
-          <P>donation link: {chapter.donationLink}</P>
+          <div className="sm:flex py-6 sm:py-12">
+            <div className="sm:w-7/12 pb-6" data-testid="description">
+              {splitIntoParagraphs(chapter.description)}
+            </div>
+            <div className="sm:w-5/12 sm:pr-2">
+              {chapter.requestForm && (
+                <ShadowButtonLink
+                  className="bg-blue-600 w-full mb-8"
+                  to={chapter.requestForm}>
+                  Request Supplies
+                </ShadowButtonLink>
+              )}
+              {chapter.donationForm && (
+                <ShadowButtonLink
+                  className="bg-red-600 w-full mb-8"
+                  to={chapter.donationForm}>
+                  Donate Supplies
+                </ShadowButtonLink>
+              )}
+              {chapter.volunteerForm && (
+                <ShadowButtonLink
+                  className="bg-purple-600 w-full"
+                  to={chapter.volunteerForm}>
+                  Volunteer
+                </ShadowButtonLink>
+              )}
+            </div>
+          </div>
         </ContentContainer>
       </BorderBlock>
 
       <ContentContainer>
-        <div className="flex flex-col justify-center py-20">
-          <h2 className="text-center font-heading font-semibold text-5xl leading-loose mb-4">
+        <div className="flex flex-col justify-center py-10 sm:py-20">
+          <h2 className="text-center font-heading font-semibold text-2xl sm:text-5xl leading-loose mb-4">
             Have a question?
           </h2>
-          <ShadowButtonLink className="bg-blue-600" to="/faq">
+          <ShadowButtonLink className="bg-blue-600 sm:w-auto" to="/faq">
             Check Out Our FAQs
           </ShadowButtonLink>
         </div>
