@@ -2,6 +2,10 @@
 
 - name: Deploy Docker containers
   hosts: all
+  vars:
+    datadog_api_key: "f087be8381ff342f364dba31a23b31b5"
+  roles:
+    - { role: datadog.datadog, become: yes }
   tasks:
     - name: Create a network
       docker_network:
@@ -32,4 +36,7 @@
           DB_PORT: "5432"
           HOSTNAME: "0.0.0.0"
           PORT: "1312"
+          TRACE: "1"
+          ENV: "staging"
+          MIX_ENV: "staging"
         state: started

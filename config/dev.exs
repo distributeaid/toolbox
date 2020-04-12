@@ -65,3 +65,7 @@ config :ferry, Ferry.Repo,
   hostname: System.get_env("POSTGRES_HOST"),
   port: System.get_env("POSTGRES_PORT"),
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :ferry, FerryWeb.Tracer,
+  disabled?: true,
+  env: "dev"

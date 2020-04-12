@@ -1,5 +1,6 @@
 defmodule FerryWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :ferry
+  use SpandexPhoenix, tracer: FerryWeb.Tracer
 
   # Serve at "/" the static files from "priv/static" directory.
   #
