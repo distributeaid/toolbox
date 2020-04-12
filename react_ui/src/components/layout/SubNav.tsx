@@ -1,7 +1,7 @@
 import React from 'react'
 
+import { AuthLink } from '../../auth/AuthLink'
 import { MainContent } from '../MainContent'
-import { AuthLink } from './AuthLink'
 
 export const SubNav: React.FC = () => (
   <MainContent>

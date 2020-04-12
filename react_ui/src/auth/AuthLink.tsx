@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
-import { useAuthState } from '../../auth/useAuthState'
+import { useAuthState } from './useAuthState'
 
 export const AuthLink: React.FC = () => {
   const { t } = useTranslation()
