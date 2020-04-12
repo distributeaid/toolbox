@@ -60,5 +60,29 @@
     "faqLink": "FAQ",
     "styleGuideLink": "Style Guide",
     "toggleMenu": "Toggle Menu"
+  },
+  "footer": {
+    "cta": "Let's get PPE to\nworkers on the\nfrontlines.",
+    "about": {
+      "title": "About Us",
+      "mission": "Our Mission",
+      "whoWeAre": "Who We Are",
+      "successStories": "Success Stories"
+    },
+    "resources": {
+      "title": "Resources",
+      "covidUpdates": "COVID-19 Updates",
+      "fieldGuides": "Field Guides",
+      "localChapters": "Local Chapters",
+      "localLeadLogin": "Local Lead Login"
+    },
+    "more": {
+      "title": "More",
+      "termsOfUse": "Terms of Use",
+      "privacyPolicy": "Privacy Policy",
+      "codeOfConduct": "Code of Conduct",
+      "contactUs": "Contact Us"
+    },
+    "donateLink": "Donate"
   }
 }
