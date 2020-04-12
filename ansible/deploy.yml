@@ -39,4 +39,5 @@
           TRACE: "1"
           ENV: "staging"
           MIX_ENV: "staging"
+          AWS_REGION: "us-east-2"
         state: started
