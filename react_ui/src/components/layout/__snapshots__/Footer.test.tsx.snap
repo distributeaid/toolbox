@@ -3,7 +3,7 @@
 exports[`shows the footer 1`] = `
 <div>
   <footer
-    class="mt-5 pb-14 pl-3 pl-2 md:px-8 lg:px-14 bg-gray-900 text-gray-100"
+    class="mt-5 pb-14 pl-3 pl-2 md:px-8 md:px-14 bg-gray-900 text-gray-100"
   >
     <div
       class="-mt-5"
@@ -30,16 +30,16 @@ exports[`shows the footer 1`] = `
       </svg>
     </div>
     <div
-      class="pt-10 sm:pt-20"
+      class="pt-10 md:pt-20"
     >
       <div
-        class="flex flex-row-reverse sm:flex-col justify-evenly sm:justify-start"
+        class="flex flex-row-reverse md:flex-col justify-evenly md:justify-start"
       >
         <div
-          class="flex-1 sm:mt-10 md:mt-0 flex"
+          class="flex-1 md:mt-10 md:mt-0 flex"
         >
           <div
-            class="hidden sm:block flex-1 mr-3"
+            class="hidden md:block flex-1 mr-3"
           >
             <div
               class="whitespace-no-wrap text-gray-200 mb-3 text-3xl text-white font-heading whitespace-pre-line"
@@ -48,13 +48,13 @@ exports[`shows the footer 1`] = `
             </div>
           </div>
           <div
-            class="flex-1 flex-col sm:flex-row space-around flex"
+            class="flex-1 flex-col md:flex-row space-around flex"
           >
             <div
-              class="flex-1 mb-7 sm:mb-0 pr-5 sm:pl-5 sm:pr-0 text-right sm:text-left "
+              class="flex-1 mb-7 md:mb-0 pr-5 md:pl-5 md:pr-0 text-right md:text-left"
             >
               <div
-                class="text-gray-200 mb-2 sm:mb-7 text-sm text-white font-heading font-semibold uppercase"
+                class="text-gray-200 mb-2 md:mb-7 text-sm text-white font-heading font-semibold uppercase"
               >
                 footer.about.title
               </div>
@@ -87,10 +87,10 @@ exports[`shows the footer 1`] = `
               </div>
             </div>
             <div
-              class="flex-1 mb-7 sm:mb-0 pr-5 sm:pl-5 sm:pr-0 text-right sm:text-left "
+              class="flex-1 mb-7 md:mb-0 pr-5 md:pl-5 md:pr-0 text-right md:text-left"
             >
               <div
-                class="text-gray-200 mb-2 sm:mb-7 text-sm text-white font-heading font-semibold uppercase"
+                class="text-gray-200 mb-2 md:mb-7 text-sm text-white font-heading font-semibold uppercase"
               >
                 footer.resources.title
               </div>
@@ -132,10 +132,10 @@ exports[`shows the footer 1`] = `
               </div>
             </div>
             <div
-              class="flex-1 mb-7 sm:mb-0 pr-5 sm:pl-5 sm:pr-0 text-right sm:text-left "
+              class="flex-1 mb-7 md:mb-0 pr-5 md:pl-5 md:pr-0 text-right md:text-left"
             >
               <div
-                class="text-gray-200 mb-2 sm:mb-7 text-sm text-white font-heading font-semibold uppercase"
+                class="text-gray-200 mb-2 md:mb-7 text-sm text-white font-heading font-semibold uppercase"
               >
                 footer.more.title
               </div>
@@ -179,7 +179,7 @@ exports[`shows the footer 1`] = `
                 class="text-gray-200 mt-10 text-lg"
               >
                 <a
-                  class="bg-pink-500 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 lg:mt-0"
+                  class="bg-pink-500 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 md:mt-0"
                   href="/donate"
                 >
                   footer.donateLink
@@ -189,15 +189,15 @@ exports[`shows the footer 1`] = `
           </div>
         </div>
         <div
-          class="sm:mt-20 text-xs flex flex-col sm:flex-row"
+          class="md:mt-20 text-xs flex flex-col md:flex-row"
         >
           <div
-            class="flex items-center mr-3 font-mono text-xs hidden sm:block"
+            class="flex items-center mr-3 font-mono text-xs hidden md:block"
           >
             © 2020 Masks For Docs Foundation
           </div>
           <div
-            class="flex flex-col sm:flex-row justify-start sm:justify-end flex-1 pr-3 sm:pr-14"
+            class="flex flex-col md:flex-row justify-start md:justify-end flex-1 pr-3 md:pr-14"
           >
             <div
               class="w-8 h-8 flex items-center justify-center m-2 mx-5"
@@ -307,7 +307,7 @@ exports[`shows the footer 1`] = `
         </div>
       </div>
       <div
-        class="flex items-center mr-3 font-mono text-xs sm:hidden mt-4 justify-end"
+        class="flex items-center mr-3 font-mono text-xs md:hidden mt-4 justify-end"
       >
         © 2020 Masks For Docs Foundation
       </div>

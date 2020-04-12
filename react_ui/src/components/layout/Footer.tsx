@@ -8,8 +8,8 @@ const LinkList: React.FC<{
   links: { title: string; href: string }[]
   children?: React.ReactChild
 }> = ({ title, links, children }) => (
-  <div className="flex-1 mb-7 sm:mb-0 pr-5 sm:pl-5 sm:pr-0 text-right sm:text-left ">
-    <div className="text-gray-200 mb-2 sm:mb-7 text-sm text-white font-heading font-semibold uppercase">
+  <div className="flex-1 mb-7 md:mb-0 pr-5 md:pl-5 md:pr-0 text-right md:text-left">
+    <div className="text-gray-200 mb-2 md:mb-7 text-sm text-white font-heading font-semibold uppercase">
       {title}
     </div>
     {links.map(({ title, href }) => (
@@ -35,19 +35,19 @@ export const Footer: React.FC = () => {
   const { t } = useTranslation()
 
   return (
-    <footer className="mt-5 pb-14 pl-3 pl-2 md:px-8 lg:px-14 bg-gray-900 text-gray-100">
+    <footer className="mt-5 pb-14 pl-3 pl-2 md:px-8 md:px-14 bg-gray-900 text-gray-100">
       <div className="-mt-5">
         <FooterIcon />
       </div>
-      <div className="pt-10 sm:pt-20">
-        <div className="flex flex-row-reverse sm:flex-col justify-evenly sm:justify-start">
-          <div className="flex-1 sm:mt-10 md:mt-0 flex">
-            <div className="hidden sm:block flex-1 mr-3">
+      <div className="pt-10 md:pt-20">
+        <div className="flex flex-row-reverse md:flex-col justify-evenly md:justify-start">
+          <div className="flex-1 md:mt-10 md:mt-0 flex">
+            <div className="hidden md:block flex-1 mr-3">
               <div className="whitespace-no-wrap text-gray-200 mb-3 text-3xl text-white font-heading whitespace-pre-line">
                 {t('footer.cta')}
               </div>
             </div>
-            <div className="flex-1 flex-col sm:flex-row space-around flex">
+            <div className="flex-1 flex-col md:flex-row space-around flex">
               <LinkList
                 title={t('footer.about.title')}
                 links={[
@@ -105,17 +105,17 @@ export const Footer: React.FC = () => {
                 <div className="text-gray-200 mt-10 text-lg">
                   <a
                     href="/donate"
-                    className="bg-pink-500 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 lg:mt-0">
+                    className="bg-pink-500 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 md:mt-0">
                     {t('footer.donateLink')}
                   </a>
                 </div>
               </LinkList>
             </div>
           </div>
-          <div className="sm:mt-20 text-xs flex flex-col sm:flex-row">
-            <Copyright className="hidden sm:block" />
+          <div className="md:mt-20 text-xs flex flex-col md:flex-row">
+            <Copyright className="hidden md:block" />
 
-            <div className="flex flex-col sm:flex-row justify-start sm:justify-end flex-1 pr-3 sm:pr-14">
+            <div className="flex flex-col md:flex-row justify-start md:justify-end flex-1 pr-3 md:pr-14">
               <SocialIcon href="https://www.facebook.com/MasksForDocs/">
                 <svg
                   width="30"
@@ -186,7 +186,7 @@ export const Footer: React.FC = () => {
             </div>
           </div>
         </div>
-        <Copyright className="sm:hidden mt-4 justify-end" />
+        <Copyright className="md:hidden mt-4 justify-end" />
       </div>
     </footer>
   )
