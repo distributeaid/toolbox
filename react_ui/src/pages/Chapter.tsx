@@ -24,17 +24,11 @@ const splitIntoParagraphs = (text: Maybe<string>) =>
 
 export const Chapter: React.FC<Props> = ({ slug }) => {
   const { t } = useTranslation()
-  const { loading, data } = useGetChapterBySlugQuery({ variables: { slug } })
+  const { loading, error, data } = useGetChapterBySlugQuery({
+    variables: { slug },
+  })
 
-  if (loading) {
-    return <div>Loading...</div>
-  }
-
-  if (!data?.groupBySlug) {
-    return <div>Chapter {slug} not found</div>
-  }
-
-  const { groupBySlug: chapter } = data
+  const chapter = loading || error ? undefined : data?.groupBySlug
 
   return (
     <MainContent>
@@ -45,49 +39,59 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
           <BackLink to="/chapters">{t('chapter.backLink')}</BackLink>
         </div>
 
-        <PreHeader>California — USA</PreHeader>
+        {loading && <div>Loading...</div>}
+        {error && <PreHeader>Chapter "{slug}" not found</PreHeader>}
+        {chapter && (
+          <>
+            <PreHeader>California — USA</PreHeader>
 
-        <MainHeader>{chapter.name}</MainHeader>
+            <MainHeader>{chapter.name}</MainHeader>
+          </>
+        )}
       </ContentContainer>
 
-      <BorderBlock>
-        <ContentContainer>
-          <div className="sm:flex py-6 sm:py-12">
-            <div className="sm:w-7/12 pb-6" data-testid="description">
-              {splitIntoParagraphs(chapter.description)}
-            </div>
+      {chapter && (
+        <>
+          <BorderBlock>
+            <ContentContainer>
+              <div className="sm:flex py-6 sm:py-12">
+                <div className="sm:w-7/12 pb-6" data-testid="description">
+                  {splitIntoParagraphs(chapter.description)}
+                </div>
 
-            <div className="sm:w-5/12 sm:pr-2 z-30">
-              {chapter.requestForm && (
-                <ShadowButtonLink
-                  external={true}
-                  className="bg-blue-600 w-full mb-8"
-                  to={chapter.requestForm}>
-                  {t('chapter.requestSuppliesLink')}
-                </ShadowButtonLink>
-              )}
+                <div className="sm:w-5/12 sm:pr-2 z-30">
+                  {chapter.requestForm && (
+                    <ShadowButtonLink
+                      external={true}
+                      className="bg-blue-600 w-full mb-8"
+                      to={chapter.requestForm}>
+                      {t('chapter.requestSuppliesLink')}
+                    </ShadowButtonLink>
+                  )}
 
-              {chapter.donationForm && (
-                <ShadowButtonLink
-                  external={true}
-                  className="bg-red-600 w-full mb-8"
-                  to={chapter.donationForm}>
-                  {t('chapter.donateSuppliesLink')}
-                </ShadowButtonLink>
-              )}
+                  {chapter.donationForm && (
+                    <ShadowButtonLink
+                      external={true}
+                      className="bg-red-600 w-full mb-8"
+                      to={chapter.donationForm}>
+                      {t('chapter.donateSuppliesLink')}
+                    </ShadowButtonLink>
+                  )}
 
-              {chapter.volunteerForm && (
-                <ShadowButtonLink
-                  external={true}
-                  className="bg-purple-600 w-full"
-                  to={chapter.volunteerForm}>
-                  {t('chapter.volunteerLink')}
-                </ShadowButtonLink>
-              )}
-            </div>
-          </div>
-        </ContentContainer>
-      </BorderBlock>
+                  {chapter.volunteerForm && (
+                    <ShadowButtonLink
+                      external={true}
+                      className="bg-purple-600 w-full"
+                      to={chapter.volunteerForm}>
+                      {t('chapter.volunteerLink')}
+                    </ShadowButtonLink>
+                  )}
+                </div>
+              </div>
+            </ContentContainer>
+          </BorderBlock>
+        </>
+      )}
 
       <ContentContainer>
         <div className="flex flex-col justify-center py-10 sm:py-20">
