@@ -21,17 +21,12 @@ import {
 import { Formik, Form } from 'formik'
 import * as yup from 'yup'
 import { FormInput } from '../components/FormInput'
+import { FormSelect } from '../components/FormSelect'
+import { FormTextarea } from '../components/FormTextarea'
 
-const initialValues = {
-  name: '',
-  // description: '',
-  // donationForm: '',
-  // donationFormResults: '',
-  // requestForm: '',
-  // requestFormResults: '',
-  // volunteerForm: '',
-  // volunteerFormResults: '',
-}
+const sectionHeader = (contents: string) => (
+  <h2 className="font-bold text-xl mt-4">{contents}</h2>
+)
 
 const isValidGDocsUrl = (requiredBasePath: string, url: URL) => {
   if (url.protocol !== 'http:' && url.protocol !== 'https:') {
@@ -45,9 +40,37 @@ const isValidGDocsUrl = (requiredBasePath: string, url: URL) => {
   return url.pathname.indexOf(requiredBasePath) === 0
 }
 
+const initialValues = {
+  name: '',
+  country: '',
+  state: '',
+  province: '',
+  postalCode: '',
+  description: '',
+  // donationForm: '',
+  // donationFormResults: '',
+  // requestForm: '',
+  // requestFormResults: '',
+  // volunteerForm: '',
+  // volunteerFormResults: '',
+}
+
 const validationSchema = yup.object({
-  name: yup.string().required('Please enter a chapter name'),
-  // description: yup.string().required('Please enter a description'),
+  name: yup
+    .string()
+    .matches(/^[a-zA-Z -]*$/)
+    .required('Please enter a chapter name'),
+  country: yup.string().required('Please select a country'),
+  state: yup.string().when('country', {
+    is: 'US',
+    then: yup.string().required('Please select a state'),
+  }),
+  province: yup.string().when('country', {
+    is: (country) => country !== 'US',
+    then: yup.string().required('Please enter a province'),
+  }),
+  postalCode: yup.string().required('Please enter a postal code'),
+  description: yup.string().required('Please enter a description'),
   // donationForm: yup
   //   .string()
   //   .url('Donation form link must be a full url (https://example.com)')
@@ -97,6 +120,7 @@ const ChapterForm2: React.FC<Props> = ({ editChapter }) => {
   const chapter = editChapter || ({} as Group)
   const isNewChapter = !chapter.id
   const { t } = useTranslation()
+
   return (
     <Formik
       initialValues={initialValues}
@@ -104,7 +128,15 @@ const ChapterForm2: React.FC<Props> = ({ editChapter }) => {
       onSubmit={() => {
         // TODO
       }}>
-      {() => {
+      {({ values }) => {
+        const chapterUrl = values.name
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/gi, '-')
+        const showStateSelect = values.country === 'US'
+        const showProvinceInput = !showStateSelect && values.country !== ''
+        const showPostalCodeInput = showStateSelect || showProvinceInput
+
         return (
           <ContentContainer>
             <Form>
@@ -129,18 +161,80 @@ const ChapterForm2: React.FC<Props> = ({ editChapter }) => {
                   </Trans>
                 </p>
                 <Divider />
-                <>
-                  {sectionHeader(t('chapterForm.chapterName'))}
 
-                  <p>{t('chapterForm.chapterNameDescription')}</p>
+                {/* Chapter Name */}
+                {sectionHeader(t('chapterForm.chapterName'))}
+                <p>{t('chapterForm.chapterNameDescription')}</p>
+                <FormInput
+                  name="name"
+                  title={t('chapterForm.chapterName') + '*'}
+                  type="text"
+                />
+                {chapterUrl !== '' && (
+                  <p>
+                    <span className="font-bold mb-1">
+                      The URL for your new chapter
+                    </span>
 
-                  <FormInput
-                    id="chapter-name"
-                    type="text"
-                    title={t('chapterForm.chapterName') + '*'}
-                    name="name"
+                    <br />
+
+                    <span className="font-mono">
+                      local.masksfordocs.com/{chapterUrl}
+                    </span>
+                  </p>
+                )}
+
+                {/* Chapter Location */}
+                {sectionHeader(t('chapterForm.chapterLocation'))}
+                <FormSelect
+                  name="country"
+                  label={t('terms.country') + '*'}
+                  options={countries.map((country) => ({
+                    name: country.name,
+                    value: country.code,
+                  }))}
+                  value={values.country}
+                  includeBlank
+                />
+                {showStateSelect && (
+                  <FormSelect
+                    name="state"
+                    label={t('terms.state') + '*'}
+                    options={usStates.map((state) => ({
+                      name: state.name,
+                      value: state.code,
+                    }))}
+                    value={values.state}
+                    includeBlank
                   />
-                </>
+                )}
+                {showProvinceInput && (
+                  <FormInput
+                    name="province"
+                    title={t('terms.province') + '*'}
+                    type="text"
+                  />
+                )}
+                {showPostalCodeInput && (
+                  <div>
+                    <FormInput
+                      name="postalCode"
+                      type="text"
+                      title={t('terms.postalCode') + '*'}
+                    />
+                    <p className="mt-2">
+                      Note: the postal code will not be displayed publicly. It's
+                      for internal use only.
+                    </p>
+                  </div>
+                )}
+
+                {/* Chapter Description */}
+                {sectionHeader(t('chapterForm.chapterDescriptionHeader'))}
+                <FormTextarea
+                  name="description"
+                  title={t('terms.description') + '*'}
+                />
               </div>
             </Form>
           </ContentContainer>
@@ -169,10 +263,6 @@ const isValidUrl = (value: Maybe<string>) => {
 
   return true
 }
-
-const sectionHeader = (contents: string) => (
-  <h2 className="font-bold text-xl mt-4">{contents}</h2>
-)
 
 const VALID_CHAPTER_NAME_REGEX = /^[a-zA-Z \-,()]*$/
 
@@ -305,27 +395,27 @@ const ChapterLocationSection: React.FC<ChapterLocationProps> = ({
 
       <Select
         label={t('terms.country') + '*'}
+        id="country"
         value={chapterCountry}
         onChange={onCountrySelect}
         includeBlank={true}
-        options={countries.map((country: { name: string; code: string }) => (
-          <option key={country.code} value={country.code}>
-            {country.name}
-          </option>
-        ))}
+        options={countries.map((country) => ({
+          name: country.name,
+          value: country.code,
+        }))}
       />
 
       {showStateSelect && (
         <Select
           label={t('terms.state') + '*'}
+          id="state"
           value={chapterProvince}
           onChange={onProvinceSelect}
           includeBlank={true}
-          options={usStates.map((state: { name: string; code: string }) => (
-            <option key={state.code} value={state.code}>
-              {state.name}
-            </option>
-          ))}
+          options={usStates.map((state) => ({
+            name: state.name,
+            value: state.code,
+          }))}
         />
       )}
 
