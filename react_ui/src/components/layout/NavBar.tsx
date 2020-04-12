@@ -93,7 +93,12 @@ const HeaderNavLink: React.FC<{
   onClick?: () => void
   to: string
 }> = ({ to, children, onClick, ...rest }) => (
-  <NavLink onClick={onClick} to={to} className={navLinkClassName} {...rest}>
+  <NavLink
+    onClick={onClick}
+    to={to}
+    activeClassName="text-pink-400"
+    className={navLinkClassName}
+    {...rest}>
     {children}
   </NavLink>
 )
