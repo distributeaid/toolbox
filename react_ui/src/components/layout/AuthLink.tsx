@@ -9,7 +9,7 @@ export const AuthLink: React.FC = () => {
   const { authState, signOut } = useAuthState()
 
   return (
-    <>
+    <div className="cursor-pointer relative z-10">
       {authState === 'anonymous' && (
         <NavLink to="/sign-in" data-cy="sign-up-link">
           {t('auth.signIn')}
@@ -18,6 +18,6 @@ export const AuthLink: React.FC = () => {
       {authState === 'authenticated' && (
         <span onClick={signOut}>{t('auth.signOut')}</span>
       )}
-    </>
+    </div>
   )
 }

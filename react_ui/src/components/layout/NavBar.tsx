@@ -43,19 +43,31 @@ export const NavBar: React.FC = () => {
             menuOpen ? 'block' : 'hidden'
           } flex-grow lg:flex lg:items-center lg:w-auto`}>
           <div className="text-sm lg:flex-grow">
-            <MyNavLink onClick={hideMenu} to="/about" label="About Us" />
-            <MyNavLink onClick={hideMenu} to="/news" label="News" />
-            <MyNavLink onClick={hideMenu} to="/involved" label="Get Involved" />
-            <MyNavLink onClick={hideMenu} to="/supplies" label="Get Supplies" />
-            <MyNavLink
+            <HeaderNavLink onClick={hideMenu} to="/about" label="About Us" />
+            <HeaderNavLink onClick={hideMenu} to="/news" label="News" />
+            <HeaderNavLink
+              onClick={hideMenu}
+              to="/involved"
+              label="Get Involved"
+            />
+            <HeaderNavLink
+              onClick={hideMenu}
+              to="/supplies"
+              label="Get Supplies"
+            />
+            <HeaderNavLink
               onClick={hideMenu}
               to="/chapters"
               label="Local Chapters"
             />
-            <MyNavLink onClick={hideMenu} to="/resources" label="Resources" />
-            <MyNavLink onClick={hideMenu} to="/faq" label="FAQ" />
+            <HeaderNavLink
+              onClick={hideMenu}
+              to="/resources"
+              label="Resources"
+            />
+            <HeaderNavLink onClick={hideMenu} to="/faq" label="FAQ" />
             {showStyleguide && (
-              <MyNavLink
+              <HeaderNavLink
                 onClick={hideMenu}
                 to="/style-guide"
                 label="Style guide"
@@ -63,12 +75,12 @@ export const NavBar: React.FC = () => {
             )}
           </div>
           <div>
-            <a
-              href="/donate"
+            <NavLink
+              to="/donate"
               onClick={hideMenu}
               className="bg-pink-500 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
               Donate
-            </a>
+            </NavLink>
           </div>
         </div>
       </nav>
@@ -79,7 +91,7 @@ export const NavBar: React.FC = () => {
 const navLinkClassName =
   'block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 active:text-pink-400 cursor-pointer mr-9'
 
-const MyNavLink: React.FC<{
+const HeaderNavLink: React.FC<{
   onClick?: () => void
   to: string
   label: string
