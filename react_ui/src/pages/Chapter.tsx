@@ -57,7 +57,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
               {splitIntoParagraphs(chapter.description)}
             </div>
 
-            <div className="sm:w-5/12 sm:pr-2 z-50">
+            <div className="sm:w-5/12 sm:pr-2 z-30">
               {chapter.requestForm && (
                 <ShadowButtonLink
                   external={true}
