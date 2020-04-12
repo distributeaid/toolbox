@@ -10,7 +10,9 @@ module.exports = {
         'button-white': '3px 3px 0 white',
       },
       fontFamily: {
-        sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+        heading: ['Poppins', ...defaultTheme.fontFamily.sans],
+        body: ['Open Sans', ...defaultTheme.fontFamily.sans],
+        mono: ['PT Mono', ...defaultTheme.fontFamily.mono],
       },
     },
   },
