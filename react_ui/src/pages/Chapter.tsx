@@ -10,6 +10,7 @@ import { PreHeader } from '../components/PreHeader'
 import { MainContent } from '../components/MainContent'
 import { BorderBlock } from '../components/BorderBlock'
 import { Background } from '../components/Background'
+import { ShadowButtonLink } from '../components/ShadowButtonLink'
 
 type Props = {
   slug: string
@@ -54,6 +55,17 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
           <P>donation link: {chapter.donationLink}</P>
         </ContentContainer>
       </BorderBlock>
+
+      <ContentContainer>
+        <div className="flex flex-col justify-center py-20">
+          <h2 className="text-center font-heading font-semibold text-5xl leading-loose mb-4">
+            Have a question?
+          </h2>
+          <ShadowButtonLink className="bg-blue-600" to="/faq">
+            Check Out Our FAQs
+          </ShadowButtonLink>
+        </div>
+      </ContentContainer>
     </MainContent>
   )
 }

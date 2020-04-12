@@ -14,6 +14,9 @@ module.exports = {
         body: ['Open Sans', ...defaultTheme.fontFamily.sans],
         mono: ['PT Mono', ...defaultTheme.fontFamily.mono],
       },
+      boxShadow: {
+        button: '0.25rem 0.25rem 0 black'
+      }
     },
   },
   variants: {},

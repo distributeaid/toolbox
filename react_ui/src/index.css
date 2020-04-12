@@ -19069,19 +19069,7 @@ video {
 }
 
 .shadow-button {
-  box-shadow: 3px 3px 0 #222;
-}
-
-.shadow-button-darkgrey {
-  box-shadow: 3px 3px 0 grey;
-}
-
-.shadow-button-pink {
-  box-shadow: 3px 3px 0 pink;
-}
-
-.shadow-button-white {
-  box-shadow: 3px 3px 0 white;
+  box-shadow: 0.5rem 0.5rem 0 black;
 }
 
 .hover\:shadow-xs:hover {
@@ -19169,19 +19157,7 @@ video {
 }
 
 .hover\:shadow-button:hover {
-  box-shadow: 3px 3px 0 #222;
-}
-
-.hover\:shadow-button-darkgrey:hover {
-  box-shadow: 3px 3px 0 grey;
-}
-
-.hover\:shadow-button-pink:hover {
-  box-shadow: 3px 3px 0 pink;
-}
-
-.hover\:shadow-button-white:hover {
-  box-shadow: 3px 3px 0 white;
+  box-shadow: 0.5rem 0.5rem 0 black;
 }
 
 .focus\:shadow-xs:focus {
@@ -19269,19 +19245,7 @@ video {
 }
 
 .focus\:shadow-button:focus {
-  box-shadow: 3px 3px 0 #222;
-}
-
-.focus\:shadow-button-darkgrey:focus {
-  box-shadow: 3px 3px 0 grey;
-}
-
-.focus\:shadow-button-pink:focus {
-  box-shadow: 3px 3px 0 pink;
-}
-
-.focus\:shadow-button-white:focus {
-  box-shadow: 3px 3px 0 white;
+  box-shadow: 0.5rem 0.5rem 0 black;
 }
 
 .fill-current {
@@ -46350,19 +46314,7 @@ video {
   }
 
   .sm\:shadow-button {
-    box-shadow: 3px 3px 0 #222;
-  }
-
-  .sm\:shadow-button-darkgrey {
-    box-shadow: 3px 3px 0 grey;
-  }
-
-  .sm\:shadow-button-pink {
-    box-shadow: 3px 3px 0 pink;
-  }
-
-  .sm\:shadow-button-white {
-    box-shadow: 3px 3px 0 white;
+    box-shadow: 0.5rem 0.5rem 0 black;
   }
 
   .sm\:hover\:shadow-xs:hover {
@@ -46450,19 +46402,7 @@ video {
   }
 
   .sm\:hover\:shadow-button:hover {
-    box-shadow: 3px 3px 0 #222;
-  }
-
-  .sm\:hover\:shadow-button-darkgrey:hover {
-    box-shadow: 3px 3px 0 grey;
-  }
-
-  .sm\:hover\:shadow-button-pink:hover {
-    box-shadow: 3px 3px 0 pink;
-  }
-
-  .sm\:hover\:shadow-button-white:hover {
-    box-shadow: 3px 3px 0 white;
+    box-shadow: 0.5rem 0.5rem 0 black;
   }
 
   .sm\:focus\:shadow-xs:focus {
@@ -46550,19 +46490,7 @@ video {
   }
 
   .sm\:focus\:shadow-button:focus {
-    box-shadow: 3px 3px 0 #222;
-  }
-
-  .sm\:focus\:shadow-button-darkgrey:focus {
-    box-shadow: 3px 3px 0 grey;
-  }
-
-  .sm\:focus\:shadow-button-pink:focus {
-    box-shadow: 3px 3px 0 pink;
-  }
-
-  .sm\:focus\:shadow-button-white:focus {
-    box-shadow: 3px 3px 0 white;
+    box-shadow: 0.5rem 0.5rem 0 black;
   }
 
   .sm\:fill-current {
@@ -73632,19 +73560,7 @@ video {
   }
 
   .md\:shadow-button {
-    box-shadow: 3px 3px 0 #222;
-  }
-
-  .md\:shadow-button-darkgrey {
-    box-shadow: 3px 3px 0 grey;
-  }
-
-  .md\:shadow-button-pink {
-    box-shadow: 3px 3px 0 pink;
-  }
-
-  .md\:shadow-button-white {
-    box-shadow: 3px 3px 0 white;
+    box-shadow: 0.5rem 0.5rem 0 black;
   }
 
   .md\:hover\:shadow-xs:hover {
@@ -73732,19 +73648,7 @@ video {
   }
 
   .md\:hover\:shadow-button:hover {
-    box-shadow: 3px 3px 0 #222;
-  }
-
-  .md\:hover\:shadow-button-darkgrey:hover {
-    box-shadow: 3px 3px 0 grey;
-  }
-
-  .md\:hover\:shadow-button-pink:hover {
-    box-shadow: 3px 3px 0 pink;
-  }
-
-  .md\:hover\:shadow-button-white:hover {
-    box-shadow: 3px 3px 0 white;
+    box-shadow: 0.5rem 0.5rem 0 black;
   }
 
   .md\:focus\:shadow-xs:focus {
@@ -73832,19 +73736,7 @@ video {
   }
 
   .md\:focus\:shadow-button:focus {
-    box-shadow: 3px 3px 0 #222;
-  }
-
-  .md\:focus\:shadow-button-darkgrey:focus {
-    box-shadow: 3px 3px 0 grey;
-  }
-
-  .md\:focus\:shadow-button-pink:focus {
-    box-shadow: 3px 3px 0 pink;
-  }
-
-  .md\:focus\:shadow-button-white:focus {
-    box-shadow: 3px 3px 0 white;
+    box-shadow: 0.5rem 0.5rem 0 black;
   }
 
   .md\:fill-current {
@@ -100914,19 +100806,7 @@ video {
   }
 
   .lg\:shadow-button {
-    box-shadow: 3px 3px 0 #222;
-  }
-
-  .lg\:shadow-button-darkgrey {
-    box-shadow: 3px 3px 0 grey;
-  }
-
-  .lg\:shadow-button-pink {
-    box-shadow: 3px 3px 0 pink;
-  }
-
-  .lg\:shadow-button-white {
-    box-shadow: 3px 3px 0 white;
+    box-shadow: 0.5rem 0.5rem 0 black;
   }
 
   .lg\:hover\:shadow-xs:hover {
@@ -101014,19 +100894,7 @@ video {
   }
 
   .lg\:hover\:shadow-button:hover {
-    box-shadow: 3px 3px 0 #222;
-  }
-
-  .lg\:hover\:shadow-button-darkgrey:hover {
-    box-shadow: 3px 3px 0 grey;
-  }
-
-  .lg\:hover\:shadow-button-pink:hover {
-    box-shadow: 3px 3px 0 pink;
-  }
-
-  .lg\:hover\:shadow-button-white:hover {
-    box-shadow: 3px 3px 0 white;
+    box-shadow: 0.5rem 0.5rem 0 black;
   }
 
   .lg\:focus\:shadow-xs:focus {
@@ -101114,19 +100982,7 @@ video {
   }
 
   .lg\:focus\:shadow-button:focus {
-    box-shadow: 3px 3px 0 #222;
-  }
-
-  .lg\:focus\:shadow-button-darkgrey:focus {
-    box-shadow: 3px 3px 0 grey;
-  }
-
-  .lg\:focus\:shadow-button-pink:focus {
-    box-shadow: 3px 3px 0 pink;
-  }
-
-  .lg\:focus\:shadow-button-white:focus {
-    box-shadow: 3px 3px 0 white;
+    box-shadow: 0.5rem 0.5rem 0 black;
   }
 
   .lg\:fill-current {
@@ -128196,19 +128052,7 @@ video {
   }
 
   .xl\:shadow-button {
-    box-shadow: 3px 3px 0 #222;
-  }
-
-  .xl\:shadow-button-darkgrey {
-    box-shadow: 3px 3px 0 grey;
-  }
-
-  .xl\:shadow-button-pink {
-    box-shadow: 3px 3px 0 pink;
-  }
-
-  .xl\:shadow-button-white {
-    box-shadow: 3px 3px 0 white;
+    box-shadow: 0.5rem 0.5rem 0 black;
   }
 
   .xl\:hover\:shadow-xs:hover {
@@ -128296,19 +128140,7 @@ video {
   }
 
   .xl\:hover\:shadow-button:hover {
-    box-shadow: 3px 3px 0 #222;
-  }
-
-  .xl\:hover\:shadow-button-darkgrey:hover {
-    box-shadow: 3px 3px 0 grey;
-  }
-
-  .xl\:hover\:shadow-button-pink:hover {
-    box-shadow: 3px 3px 0 pink;
-  }
-
-  .xl\:hover\:shadow-button-white:hover {
-    box-shadow: 3px 3px 0 white;
+    box-shadow: 0.5rem 0.5rem 0 black;
   }
 
   .xl\:focus\:shadow-xs:focus {
@@ -128396,19 +128228,7 @@ video {
   }
 
   .xl\:focus\:shadow-button:focus {
-    box-shadow: 3px 3px 0 #222;
-  }
-
-  .xl\:focus\:shadow-button-darkgrey:focus {
-    box-shadow: 3px 3px 0 grey;
-  }
-
-  .xl\:focus\:shadow-button-pink:focus {
-    box-shadow: 3px 3px 0 pink;
-  }
-
-  .xl\:focus\:shadow-button-white:focus {
-    box-shadow: 3px 3px 0 white;
+    box-shadow: 0.5rem 0.5rem 0 black;
   }
 
   .xl\:fill-current {
