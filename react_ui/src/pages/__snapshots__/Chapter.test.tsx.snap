@@ -87,19 +87,19 @@ exports[`loads the chapter details and renders the page 1`] = `
               class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-blue-600 w-full mb-8"
               href="request form link"
             >
-              Request Supplies
+              chapter.requestSuppliesLink
             </a>
             <a
               class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-red-600 w-full mb-8"
               href="donation form link"
             >
-              Donate Supplies
+              chapter.donateSuppliesLink
             </a>
             <a
               class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-purple-600 w-full"
               href="volunteer form link"
             >
-              Volunteer
+              chapter.volunteerLink
             </a>
           </div>
         </div>
@@ -114,13 +114,13 @@ exports[`loads the chapter details and renders the page 1`] = `
         <h2
           class="text-center font-heading font-semibold text-2xl sm:text-5xl leading-loose mb-4"
         >
-          Have a question?
+          chapter.faqHeader
         </h2>
         <a
           class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-blue-600 sm:w-auto"
           href="/faq"
         >
-          Check Out Our FAQs
+          chapter.faqLink
         </a>
       </div>
     </div>
