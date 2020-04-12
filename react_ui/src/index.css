@@ -19069,7 +19069,7 @@ video {
 }
 
 .shadow-button {
-  box-shadow: 0.5rem 0.5rem 0 black;
+  box-shadow: 0.25rem 0.25rem 0 black;
 }
 
 .hover\:shadow-xs:hover {
@@ -19157,7 +19157,7 @@ video {
 }
 
 .hover\:shadow-button:hover {
-  box-shadow: 0.5rem 0.5rem 0 black;
+  box-shadow: 0.25rem 0.25rem 0 black;
 }
 
 .focus\:shadow-xs:focus {
@@ -19245,7 +19245,7 @@ video {
 }
 
 .focus\:shadow-button:focus {
-  box-shadow: 0.5rem 0.5rem 0 black;
+  box-shadow: 0.25rem 0.25rem 0 black;
 }
 
 .fill-current {
@@ -46314,7 +46314,7 @@ video {
   }
 
   .sm\:shadow-button {
-    box-shadow: 0.5rem 0.5rem 0 black;
+    box-shadow: 0.25rem 0.25rem 0 black;
   }
 
   .sm\:hover\:shadow-xs:hover {
@@ -46402,7 +46402,7 @@ video {
   }
 
   .sm\:hover\:shadow-button:hover {
-    box-shadow: 0.5rem 0.5rem 0 black;
+    box-shadow: 0.25rem 0.25rem 0 black;
   }
 
   .sm\:focus\:shadow-xs:focus {
@@ -46490,7 +46490,7 @@ video {
   }
 
   .sm\:focus\:shadow-button:focus {
-    box-shadow: 0.5rem 0.5rem 0 black;
+    box-shadow: 0.25rem 0.25rem 0 black;
   }
 
   .sm\:fill-current {
@@ -73560,7 +73560,7 @@ video {
   }
 
   .md\:shadow-button {
-    box-shadow: 0.5rem 0.5rem 0 black;
+    box-shadow: 0.25rem 0.25rem 0 black;
   }
 
   .md\:hover\:shadow-xs:hover {
@@ -73648,7 +73648,7 @@ video {
   }
 
   .md\:hover\:shadow-button:hover {
-    box-shadow: 0.5rem 0.5rem 0 black;
+    box-shadow: 0.25rem 0.25rem 0 black;
   }
 
   .md\:focus\:shadow-xs:focus {
@@ -73736,7 +73736,7 @@ video {
   }
 
   .md\:focus\:shadow-button:focus {
-    box-shadow: 0.5rem 0.5rem 0 black;
+    box-shadow: 0.25rem 0.25rem 0 black;
   }
 
   .md\:fill-current {
@@ -100806,7 +100806,7 @@ video {
   }
 
   .lg\:shadow-button {
-    box-shadow: 0.5rem 0.5rem 0 black;
+    box-shadow: 0.25rem 0.25rem 0 black;
   }
 
   .lg\:hover\:shadow-xs:hover {
@@ -100894,7 +100894,7 @@ video {
   }
 
   .lg\:hover\:shadow-button:hover {
-    box-shadow: 0.5rem 0.5rem 0 black;
+    box-shadow: 0.25rem 0.25rem 0 black;
   }
 
   .lg\:focus\:shadow-xs:focus {
@@ -100982,7 +100982,7 @@ video {
   }
 
   .lg\:focus\:shadow-button:focus {
-    box-shadow: 0.5rem 0.5rem 0 black;
+    box-shadow: 0.25rem 0.25rem 0 black;
   }
 
   .lg\:fill-current {
@@ -128052,7 +128052,7 @@ video {
   }
 
   .xl\:shadow-button {
-    box-shadow: 0.5rem 0.5rem 0 black;
+    box-shadow: 0.25rem 0.25rem 0 black;
   }
 
   .xl\:hover\:shadow-xs:hover {
@@ -128140,7 +128140,7 @@ video {
   }
 
   .xl\:hover\:shadow-button:hover {
-    box-shadow: 0.5rem 0.5rem 0 black;
+    box-shadow: 0.25rem 0.25rem 0 black;
   }
 
   .xl\:focus\:shadow-xs:focus {
@@ -128228,7 +128228,7 @@ video {
   }
 
   .xl\:focus\:shadow-button:focus {
-    box-shadow: 0.5rem 0.5rem 0 black;
+    box-shadow: 0.25rem 0.25rem 0 black;
   }
 
   .xl\:fill-current {

@@ -2,7 +2,7 @@ import './App.css'
 import '@aws-amplify/ui/dist/style.css'
 
 import { ApolloProvider } from '@apollo/client'
-import React, { Suspense, useEffect, useState } from 'react'
+import React, { Suspense } from 'react'
 import {
   BrowserRouter as Router,
   Redirect,
@@ -10,13 +10,13 @@ import {
   Switch,
 } from 'react-router-dom'
 
-import { Auth } from './amplify'
 import { client } from './apollo/client'
 import PrivateRoute from './auth/PrivateRoute'
 import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
-import { AuthenticationState } from './auth/types'
+import { useAuthState } from './auth/useAuthState'
 import { Footer } from './components/layout/Footer'
 import { NavBar } from './components/layout/NavBar'
+import { SubNav } from './components/layout/SubNav'
 import AuthenticatorWrapper from './pages/Authenticator'
 import { Chapter } from './pages/Chapter'
 import { ChapterEdit } from './pages/ChapterEdit'
@@ -27,35 +27,14 @@ import StyleGuide from './pages/StyleGuide'
 const SecretComponent = () => <p>Secret!</p>
 
 const App: React.FunctionComponent = () => {
-  const [authState, setAuthState] = useState<AuthenticationState>('unknown')
-
-  useEffect(() => {
-    Auth.currentAuthenticatedUser()
-      .then(() => setAuthState('authenticated'))
-      .catch(() => setAuthState('anonymous'))
-  }, [])
-
-  if (authState === 'unknown') {
-    return <div>Loading...</div>
-  }
+  const { authState, setAuthState } = useAuthState()
 
   return (
     <ApolloProvider client={client}>
       <Suspense fallback="Loading...">
         <Router>
-          <NavBar
-            authState={authState}
-            onSignOut={() => {
-              Auth.signOut()
-                .then(() => {
-                  window.location.pathname = '/'
-                })
-                .catch((error) => {
-                  // Woot?!
-                  console.error(error)
-                })
-            }}
-          />
+          <NavBar />
+          <SubNav />
 
           <main className="flex-grow">
             {authState === 'authenticated' && <RedirectAfterAuth />}

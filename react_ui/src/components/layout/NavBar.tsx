@@ -1,16 +1,13 @@
 import React, { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
-import { AuthenticationState } from '../../auth/types'
-
-type Props = {
-  authState: AuthenticationState
-  onSignOut: () => void
-}
+import { M4DLogo } from './M4DLogo'
 
 const showStyleguide = process.env.NODE_ENV === 'development'
 
-export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
+export const NavBar: React.FC = () => {
+  const { t } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
 
   const toggleMenu = useCallback(() => {
@@ -21,106 +18,85 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
     setMenuOpen(false)
   }, [])
 
-  const handleSignout = useCallback(() => {
-    hideMenu()
-    return onSignOut()
-  }, [hideMenu, onSignOut])
-
   return (
     <header className="sticky top-0 z-50">
-      <nav className="flex items-center justify-between flex-wrap bg-gray-900 text-gray-100 py-2 px-3">
-        <div className="flex items-center flex-shrink-0 mr-9">
-          <NavLink to="/">
-            {/* todo replace with mask for docs logo */}
-            <svg
-              className="fill-current h-8 w-8 mr-2"
-              width="54"
-              height="54"
-              viewBox="0 0 54 54"
-              xmlns="http://www.w3.org/2000/svg">
-              <path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z" />
-            </svg>
-          </NavLink>
-          <NavLink to="/">
-            <span className="font-semibold text-l tracking-tight">
-              Masks For Docs
-            </span>
-          </NavLink>
-        </div>
-        <div className="block lg:hidden">
-          <button
-            onClick={toggleMenu}
-            data-cy="toggle-menu"
-            className="flex items-center px-3 py-2 border rounded border-white focus:outline-none">
-            <svg
-              className="fill-current h-3 w-3"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg">
-              <title>Toggle Menu</title>
-              <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-            </svg>
-          </button>
-        </div>
+      <nav className="flex flex-row items-center justify-between flex-wrap flex-shrink-0 w-full max-w-7xl mx-auto rounded-b bg-gray-900 font-heading text-gray-100 p-2 lg:py-3 lg:px-4">
+        <button
+          onClick={toggleMenu}
+          data-cy="toggle-menu"
+          className="lg:hidden flex items-center px-3 py-2 focus:outline-none">
+          <svg
+            width="18"
+            height="17"
+            viewBox="0 0 18 17"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <title>{t('navBar.toggleMenu')}</title>
+            <path
+              d="M1.8 3.27407H16.2C17.19 3.27407 18 2.53741 18 1.63704C18 0.736667 17.19 0 16.2 0H1.8C0.81 0 0 0.736667 0 1.63704C0 2.53741 0.81 3.27407 1.8 3.27407ZM16.2 13.7259H1.8C0.81 13.7259 0 14.4626 0 15.363C0 16.2633 0.81 17 1.8 17H16.2C17.19 17 18 16.2633 18 15.363C18 14.4626 17.19 13.7259 16.2 13.7259ZM16.2 6.86296H1.8C0.81 6.86296 0 7.59963 0 8.5C0 9.40037 0.81 10.137 1.8 10.137H16.2C17.19 10.137 18 9.40037 18 8.5C18 7.59963 17.19 6.86296 16.2 6.86296Z"
+              fill="white"
+            />
+          </svg>
+        </button>
+        <NavLink
+          className="flex items-center flex-shrink-0 lg:mr-9 flex-grow lg:flex-grow-0"
+          to="/">
+          <M4DLogo />
+        </NavLink>
         <div
           className={`w-full ${
             menuOpen ? 'block' : 'hidden'
-          } flex-grow lg:flex lg:items-center lg:w-auto`}>
-          <div className="text-sm lg:flex-grow">
-            <MyNavLink onClick={hideMenu} to="/about" label="About Us" />
-            <MyNavLink onClick={hideMenu} to="/news" label="News" />
-            <MyNavLink onClick={hideMenu} to="/involved" label="Get Involved" />
-            <MyNavLink onClick={hideMenu} to="/supplies" label="Get Supplies" />
-            <MyNavLink
-              onClick={hideMenu}
-              to="/chapters"
-              label="Local Chapters"
-            />
-            <MyNavLink onClick={hideMenu} to="/resources" label="Resources" />
-            <MyNavLink onClick={hideMenu} to="/faq" label="FAQ" />
-            {authState === 'anonymous' && (
-              <MyNavLink
-                to="/sign-in"
-                label="Sign up / Sign in"
-                data-cy="sign-up-link"
-                onClick={hideMenu}
-              />
-            )}
-            {authState === 'authenticated' && (
-              <span onClick={handleSignout} className={navLinkClassName}>
-                Log out
-              </span>
-            )}
+          } flex-grow lg:flex lg:items-center lg:w-auto flex-shrink-0`}>
+          <div className="text-sm pb-4 lg:pb-0 lg:flex-grow flex-shrink-0">
+            <HeaderNavLink onClick={hideMenu} to="/about">
+              {t('navBar.aboutLink')}
+            </HeaderNavLink>
+            <HeaderNavLink onClick={hideMenu} to="/news">
+              {t('navBar.newsLink')}
+            </HeaderNavLink>
+            <HeaderNavLink onClick={hideMenu} to="/involved">
+              {t('navBar.getInvolvedLink')}
+            </HeaderNavLink>
+            <HeaderNavLink onClick={hideMenu} to="/supplies">
+              {t('navBar.suppliesLink')}
+            </HeaderNavLink>
+            <HeaderNavLink onClick={hideMenu} to="/chapters">
+              {t('navBar.chaptersLink')}
+            </HeaderNavLink>
+            <HeaderNavLink onClick={hideMenu} to="/resources">
+              {t('navBar.resourcesLink')}
+            </HeaderNavLink>
+            <HeaderNavLink onClick={hideMenu} to="/faq">
+              {t('navBar.faqLink')}
+            </HeaderNavLink>
             {showStyleguide && (
-              <MyNavLink
-                onClick={hideMenu}
-                to="/style-guide"
-                label="Style guide"
-              />
+              <HeaderNavLink onClick={hideMenu} to="/style-guide">
+                {t('navBar.styleGuideLink')}
+              </HeaderNavLink>
             )}
-          </div>
-          <div>
-            <a
-              href="/donate"
-              onClick={hideMenu}
-              className="bg-pink-500 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
-              Donate
-            </a>
           </div>
         </div>
+        <NavLink
+          to="/donate"
+          onClick={hideMenu}
+          className="bg-pink-500 block text-sm px-4 py-2 self-end leading-none rounded hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0">
+          {t('navBar.donateLink')}
+        </NavLink>
       </nav>
     </header>
   )
 }
 
-const navLinkClassName =
-  'block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 active:text-pink-400 cursor-pointer mr-9'
-
-const MyNavLink: React.FC<{
+const HeaderNavLink: React.FC<{
   onClick?: () => void
   to: string
-  label: string
-}> = ({ to, label, onClick, ...rest }) => (
-  <NavLink onClick={onClick} to={to} className={navLinkClassName} {...rest}>
-    {label}
+}> = ({ to, children, onClick, ...rest }) => (
+  <NavLink
+    onClick={onClick}
+    to={to}
+    activeClassName="text-pink-400"
+    className="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 active:text-pink-400 cursor-pointer mr-9"
+    {...rest}>
+    {children}
   </NavLink>
 )
