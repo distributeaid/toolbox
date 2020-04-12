@@ -6,9 +6,10 @@ exports[`loads the chapter details and renders the page 1`] = `
     class="w-full mx-auto bg-white overflow-hidden"
   >
     <div
-      class="absolute top-0 right-0 hidden sm:block"
+      class="absolute top-0 right-0 hidden sm:block z-0"
     >
       <svg
+        class="z-0"
         fill="none"
         height="698"
         viewBox="0 0 593 698"
@@ -16,6 +17,7 @@ exports[`loads the chapter details and renders the page 1`] = `
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
+          class="z-0"
           d="M760 -96.0684H40.8515C18.7238 -96.0684 0 -79.57 0 -58.3579V344.673C0 538.724 179.574 697.422 400 697.422C620.426 697.422 800 539.51 800 344.673V-58.3579C800 -78.7844 782.128 -96.0684 760 -96.0684Z"
           fill="#3968DA"
           fill-opacity="0.06"
@@ -79,23 +81,23 @@ exports[`loads the chapter details and renders the page 1`] = `
             </p>
           </div>
           <div
-            class="sm:w-5/12 sm:pr-2"
+            class="sm:w-5/12 sm:pr-2 z-50"
           >
             <a
               class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-blue-600 w-full mb-8"
-              href="/request form link"
+              href="request form link"
             >
               Request Supplies
             </a>
             <a
               class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-red-600 w-full mb-8"
-              href="/donation form link"
+              href="donation form link"
             >
               Donate Supplies
             </a>
             <a
               class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-purple-600 w-full"
-              href="/volunteer form link"
+              href="volunteer form link"
             >
               Volunteer
             </a>

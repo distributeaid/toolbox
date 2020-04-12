@@ -57,6 +57,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
             <div className="sm:w-5/12 sm:pr-2 z-50">
               {chapter.requestForm && (
                 <ShadowButtonLink
+                  external={true}
                   className="bg-blue-600 w-full mb-8"
                   to={chapter.requestForm}>
                   Request Supplies
@@ -64,6 +65,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
               )}
               {chapter.donationForm && (
                 <ShadowButtonLink
+                  external={true}
                   className="bg-red-600 w-full mb-8"
                   to={chapter.donationForm}>
                   Donate Supplies
@@ -71,6 +73,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
               )}
               {chapter.volunteerForm && (
                 <ShadowButtonLink
+                  external={true}
                   className="bg-purple-600 w-full"
                   to={chapter.volunteerForm}>
                   Volunteer
