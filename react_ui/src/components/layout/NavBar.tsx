@@ -1,17 +1,11 @@
 import React, { useCallback, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
-import { AuthenticationState } from '../../auth/types'
 import { M4DLogo } from './M4DLogo'
-
-type Props = {
-  authState: AuthenticationState
-  onSignOut: () => void
-}
 
 const showStyleguide = process.env.NODE_ENV === 'development'
 
-export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
+export const NavBar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const toggleMenu = useCallback(() => {
@@ -22,14 +16,9 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
     setMenuOpen(false)
   }, [])
 
-  const handleSignout = useCallback(() => {
-    hideMenu()
-    return onSignOut()
-  }, [hideMenu, onSignOut])
-
   return (
     <header className="sticky top-0 z-50">
-      <nav className="flex items-center justify-between flex-wrap bg-gray-900 font-heading text-gray-100 py-2 px-3">
+      <nav className="flex items-center justify-between flex-wrap flex-shrink-0 w-full max-w-7xl mx-auto rounded-b bg-gray-900 font-heading text-gray-100 py-3 px-4">
         <div className="flex items-center flex-shrink-0 mr-9">
           <NavLink to="/">
             <M4DLogo />
@@ -65,19 +54,6 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
             />
             <MyNavLink onClick={hideMenu} to="/resources" label="Resources" />
             <MyNavLink onClick={hideMenu} to="/faq" label="FAQ" />
-            {authState === 'anonymous' && (
-              <MyNavLink
-                to="/sign-in"
-                label="Sign up / Sign in"
-                data-cy="sign-up-link"
-                onClick={hideMenu}
-              />
-            )}
-            {authState === 'authenticated' && (
-              <span onClick={handleSignout} className={navLinkClassName}>
-                Log out
-              </span>
-            )}
             {showStyleguide && (
               <MyNavLink
                 onClick={hideMenu}

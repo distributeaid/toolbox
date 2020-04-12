@@ -17,6 +17,7 @@ import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
 import { AuthenticationState } from './auth/types'
 import { Footer } from './components/layout/Footer'
 import { NavBar } from './components/layout/NavBar'
+import { SubNav } from './components/layout/SubNav'
 import AuthenticatorWrapper from './pages/Authenticator'
 import { Chapter } from './pages/Chapter'
 import { ChapterEdit } from './pages/ChapterEdit'
@@ -43,19 +44,8 @@ const App: React.FunctionComponent = () => {
     <ApolloProvider client={client}>
       <Suspense fallback="Loading...">
         <Router>
-          <NavBar
-            authState={authState}
-            onSignOut={() => {
-              Auth.signOut()
-                .then(() => {
-                  window.location.pathname = '/'
-                })
-                .catch((error) => {
-                  // Woot?!
-                  console.error(error)
-                })
-            }}
-          />
+          <NavBar />
+          <SubNav />
 
           <main className="flex-grow">
             {authState === 'authenticated' && <RedirectAfterAuth />}

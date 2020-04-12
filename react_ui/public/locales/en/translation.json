@@ -44,5 +44,9 @@
     "postalCode": "Postal Code",
     "province": "Province",
     "state": "State"
+  },
+  "auth": {
+    "signIn": "Local Lead Login",
+    "signOut": "Log Out"
   }
 }
