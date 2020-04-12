@@ -3,7 +3,7 @@
 exports[`loads the chapter list 1`] = `
 <div>
   <div
-    class="w-full max-w-3xl mx-auto bg-white overflow-hidden md:shadow md:rounded-lg md:border-t md:border-gray-100"
+    class="container w-full max-w-3xl p-4 md:mx-auto bg-white overflow-hidden"
   >
     <div
       class="p-4 md:p-8"

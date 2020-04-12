@@ -27,7 +27,12 @@
     "topDescriptionEdit": "Submitting this form will update the public-facing page for this local chapter. Please double-check all of the information you provide here since it will immediately be visible to visitors to the Masks For Docs website after you click submit. For examples, see the <2>list of pages here</2> (opens in a new tab)."
   },
   "chapter": {
-    "backLink": "Back to Directory"
+    "backLink": "Back to Directory",
+    "requestSuppliesLink": "Request Supplies",
+    "donateSuppliesLink": "Donate Supplies",
+    "volunteerLink": "Volunteer",
+    "faqHeader": "Have a question?",
+    "faqLink": "Check Out Our FAQs"
   },
   "styleguide": {
     "title": "Style Guide",
