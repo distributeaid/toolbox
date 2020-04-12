@@ -29,7 +29,7 @@ export const NavBar: React.FC<Props> = ({ authState, onSignOut }) => {
 
   return (
     <header className="sticky top-0 z-50">
-      <nav className="flex items-center justify-between flex-wrap bg-gray-900 text-gray-100 py-2 px-3">
+      <nav className="flex items-center justify-between flex-wrap bg-gray-900 font-heading text-gray-100 py-2 px-3">
         <div className="flex items-center flex-shrink-0 mr-9">
           <NavLink to="/">
             <M4DLogo />
