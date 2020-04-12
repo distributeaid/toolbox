@@ -15,6 +15,8 @@ import { client } from './apollo/client'
 import PrivateRoute from './auth/PrivateRoute'
 import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
 import { AuthenticationState } from './auth/types'
+import { useAuthState } from './auth/useAuthState'
+import amplifyConfig from './aws-exports'
 import { Footer } from './components/layout/Footer'
 import { NavBar } from './components/layout/NavBar'
 import { SubNav } from './components/layout/SubNav'
@@ -28,17 +30,7 @@ import StyleGuide from './pages/StyleGuide'
 const SecretComponent = () => <p>Secret!</p>
 
 const App: React.FunctionComponent = () => {
-  const [authState, setAuthState] = useState<AuthenticationState>('unknown')
-
-  useEffect(() => {
-    Auth.currentAuthenticatedUser()
-      .then(() => setAuthState('authenticated'))
-      .catch(() => setAuthState('anonymous'))
-  }, [])
-
-  if (authState === 'unknown') {
-    return <div>Loading...</div>
-  }
+  const { authState, setAuthState } = useAuthState()
 
   return (
     <ApolloProvider client={client}>

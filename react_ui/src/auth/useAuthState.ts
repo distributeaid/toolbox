@@ -22,5 +22,5 @@ export const useAuthState = () => {
         console.error(error)
       })
 
-  return { authState, signOut }
+  return { authState, setAuthState, signOut }
 }
