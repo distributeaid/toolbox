@@ -63,7 +63,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
                   external={true}
                   className="bg-blue-600 w-full mb-8"
                   to={chapter.requestForm}>
-                  Request Supplies
+                  {t('chapter.requestSuppliesLink')}
                 </ShadowButtonLink>
               )}
 
@@ -72,7 +72,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
                   external={true}
                   className="bg-red-600 w-full mb-8"
                   to={chapter.donationForm}>
-                  Donate Supplies
+                  {t('chapter.donateSuppliesLink')}
                 </ShadowButtonLink>
               )}
 
@@ -81,7 +81,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
                   external={true}
                   className="bg-purple-600 w-full"
                   to={chapter.volunteerForm}>
-                  Volunteer
+                  {t('chapter.volunteerLink')}
                 </ShadowButtonLink>
               )}
             </div>
@@ -92,11 +92,11 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
       <ContentContainer>
         <div className="flex flex-col justify-center py-10 sm:py-20">
           <h2 className="text-center font-heading font-semibold text-2xl sm:text-5xl leading-loose mb-4">
-            Have a question?
+            {t('chapter.faqHeader')}
           </h2>
 
           <ShadowButtonLink className="bg-blue-600 sm:w-auto" to="/faq">
-            Check Out Our FAQs
+            {t('chapter.faqLink')}
           </ShadowButtonLink>
         </div>
       </ContentContainer>
