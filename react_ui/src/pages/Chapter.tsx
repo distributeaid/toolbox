@@ -39,11 +39,14 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
   return (
     <MainContent>
       <Background />
+
       <ContentContainer>
         <div className="pb-16 sm:pb-32">
           <BackLink to="/chapters">{t('chapter.backLink')}</BackLink>
         </div>
+
         <PreHeader>California — USA</PreHeader>
+
         <MainHeader>{chapter.name}</MainHeader>
       </ContentContainer>
 
@@ -63,6 +66,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
                   Request Supplies
                 </ShadowButtonLink>
               )}
+
               {chapter.donationForm && (
                 <ShadowButtonLink
                   external={true}
@@ -71,6 +75,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
                   Donate Supplies
                 </ShadowButtonLink>
               )}
+
               {chapter.volunteerForm && (
                 <ShadowButtonLink
                   external={true}
@@ -89,6 +94,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
           <h2 className="text-center font-heading font-semibold text-2xl sm:text-5xl leading-loose mb-4">
             Have a question?
           </h2>
+
           <ShadowButtonLink className="bg-blue-600 sm:w-auto" to="/faq">
             Check Out Our FAQs
           </ShadowButtonLink>
