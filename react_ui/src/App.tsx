@@ -2,7 +2,6 @@ import './App.css'
 import '@aws-amplify/ui/dist/style.css'
 
 import { ApolloProvider } from '@apollo/client'
-import Amplify, { Auth } from 'aws-amplify'
 import React, { Suspense, useEffect, useState } from 'react'
 import {
   BrowserRouter as Router,
@@ -11,11 +10,11 @@ import {
   Switch,
 } from 'react-router-dom'
 
+import { Auth } from './amplify'
 import { client } from './apollo/client'
 import PrivateRoute from './auth/PrivateRoute'
 import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
 import { AuthenticationState } from './auth/types'
-import amplifyConfig from './aws-exports'
 import { Footer } from './components/layout/Footer'
 import { NavBar } from './components/layout/NavBar'
 import AuthenticatorWrapper from './pages/Authenticator'
@@ -24,8 +23,6 @@ import { ChapterEdit } from './pages/ChapterEdit'
 import { ChapterList } from './pages/ChapterList'
 import { ChapterNew } from './pages/ChapterNew'
 import StyleGuide from './pages/StyleGuide'
-
-Amplify.configure(amplifyConfig)
 
 const SecretComponent = () => <p>Secret!</p>
 
