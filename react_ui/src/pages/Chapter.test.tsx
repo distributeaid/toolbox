@@ -70,7 +70,6 @@ it('shows a loading message when loading', () => {
   expect(container).toMatchSnapshot()
 })
 
-
 it('splits descriptions with multiple lines', () => {
   ;(useGetChapterBySlugQuery as jest.Mock).mockReturnValueOnce({
     loading: false,
@@ -92,7 +91,7 @@ it('splits descriptions with multiple lines', () => {
     },
   })
 
-  const { getByText, queryByText } = render(
+  const { getByText } = render(
     <MemoryRouter>
       <Chapter slug="oakland" />
     </MemoryRouter>

@@ -1,23 +1,26 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Background } from '../components/Background'
+import { BackLink } from '../components/BackLink'
+import { BorderBlock } from '../components/BorderBlock'
 import { ContentContainer } from '../components/ContentContainer'
-import { useGetChapterBySlugQuery, Maybe } from '../generated/graphql'
+import { MainContent } from '../components/MainContent'
 import { MainHeader } from '../components/MainHeader'
 import { P } from '../components/P'
-import { BackLink } from '../components/BackLink'
 import { PreHeader } from '../components/PreHeader'
-import { MainContent } from '../components/MainContent'
-import { BorderBlock } from '../components/BorderBlock'
-import { Background } from '../components/Background'
 import { ShadowButtonLink } from '../components/ShadowButtonLink'
+import { Maybe, useGetChapterBySlugQuery } from '../generated/graphql'
 
 type Props = {
   slug: string
 }
 
 const splitIntoParagraphs = (text: Maybe<string>) =>
-  text?.split(/\n+/).filter(x => x.length > 0).map((line) => <P key={line}>{line}</P>)
+  text
+    ?.split(/\n+/)
+    .filter((x) => x.length > 0)
+    .map((line) => <P key={line}>{line}</P>)
 
 export const Chapter: React.FC<Props> = ({ slug }) => {
   const { t } = useTranslation()
