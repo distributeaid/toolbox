@@ -7,6 +7,9 @@ import { MainHeader } from '../components/MainHeader'
 import { P } from '../components/P'
 import { BackLink } from '../components/BackLink'
 import { PreHeader } from '../components/PreHeader'
+import { MainContent } from '../components/MainContent'
+import { BorderBlock } from '../components/BorderBlock'
+import { Background } from '../components/Background'
 
 type Props = {
   slug: string
@@ -27,15 +30,18 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
   const { groupBySlug: chapter } = data
 
   return (
-    <>
+    <MainContent>
+      <Background />
       <ContentContainer>
-        <div className="py-4">
-          <div className="pb-32">
-            <BackLink to="/chapters">{t('chapter.backLink')}</BackLink>
-          </div>
-          <PreHeader>California — USA</PreHeader>
-          <MainHeader>{chapter.name}</MainHeader>
+        <div className="pb-32">
+          <BackLink to="/chapters">{t('chapter.backLink')}</BackLink>
+        </div>
+        <PreHeader>California — USA</PreHeader>
+        <MainHeader>{chapter.name}</MainHeader>
+      </ContentContainer>
 
+      <BorderBlock>
+        <ContentContainer>
           <P>{chapter.description}</P>
           <P>slug: {chapter.slug}</P>
           <P>slack channel: {chapter.slackChannelName}</P>
@@ -46,8 +52,8 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
           <P>donation form: {chapter.donationForm}</P>
           <P>donation form results: {chapter.donationFormResults}</P>
           <P>donation link: {chapter.donationLink}</P>
-        </div>
-      </ContentContainer>
-    </>
+        </ContentContainer>
+      </BorderBlock>
+    </MainContent>
   )
 }
