@@ -2,7 +2,7 @@ import './App.css'
 import '@aws-amplify/ui/dist/style.css'
 
 import { ApolloProvider } from '@apollo/client'
-import React, { Suspense, useEffect, useState } from 'react'
+import React, { Suspense } from 'react'
 import {
   BrowserRouter as Router,
   Redirect,
@@ -10,13 +10,10 @@ import {
   Switch,
 } from 'react-router-dom'
 
-import { Auth } from './amplify'
 import { client } from './apollo/client'
 import PrivateRoute from './auth/PrivateRoute'
 import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
-import { AuthenticationState } from './auth/types'
 import { useAuthState } from './auth/useAuthState'
-import amplifyConfig from './aws-exports'
 import { Footer } from './components/layout/Footer'
 import { NavBar } from './components/layout/NavBar'
 import { SubNav } from './components/layout/SubNav'
