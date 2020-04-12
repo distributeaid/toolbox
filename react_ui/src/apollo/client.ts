@@ -6,11 +6,8 @@ import {
   InMemoryCache,
 } from '@apollo/client'
 import { CognitoUserSession } from 'amazon-cognito-identity-js'
-import Amplify, { Auth } from 'aws-amplify'
 
-import amplifyConfig from '../aws-exports'
-
-Amplify.configure(amplifyConfig)
+import { Auth } from '../amplify'
 
 const httpLink = new HttpLink({
   uri: '/api',
