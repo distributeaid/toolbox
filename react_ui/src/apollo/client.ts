@@ -37,6 +37,12 @@ const authLink = new ApolloLink((operation, forward) => {
 })
 
 export const client = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Group: {
+        keyFields: ['slug'],
+      },
+    },
+  }),
   link: ApolloLink.from([authLink.concat(httpLink)]),
 })
