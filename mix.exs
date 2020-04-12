@@ -96,7 +96,13 @@ defmodule Ferry.Mixfile do
       {:prometheus_ecto, "~> 1.4.3"},
       {:prometheus_phoenix, "~> 1.3.0"},
       {:prometheus_plugs, "~> 1.1.5"},
-      {:heartcheck, "~> 0.4"}
+      {:heartcheck, "~> 0.4"},
+
+      # tracing
+      {:spandex, "~> 2.4.3"},
+      {:spandex_datadog, "~> 0.5.0"},
+      {:spandex_ecto, "~> 0.6.1"},
+      {:spandex_phoenix, "~> 0.4.1"}
     ]
   end
 

@@ -6,5 +6,8 @@ regions:
   - us-east-2
 hostnames:
   - ip-address
+filters:
+  tag:Role:
+    - toolbox
 compose:
   ansible_ssh_user: "ec2-user"
