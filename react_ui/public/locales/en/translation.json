@@ -48,5 +48,17 @@
   "auth": {
     "signIn": "Local Lead Login",
     "signOut": "Log Out"
+  },
+  "navBar": {
+    "donateLink": "Donate",
+    "aboutLink": "About Us",
+    "newsLink": "News",
+    "getInvolvedLink": "Get Involved",
+    "suppliesLink": "Get Supplies",
+    "chaptersLink": "Local Chapters",
+    "resourcesLink": "Resources",
+    "faqLink": "FAQ",
+    "styleGuideLink": "Style Guide",
+    "toggleMenu": "Toggle Menu"
   }
 }
