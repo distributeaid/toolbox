@@ -39,6 +39,8 @@ services:
     container_name: toolbox_web
     volumes:
       - .:/app
+      - build_cache:/app/_build
+      - deps_cache:/app/deps
     ports:
       - "1312:1312"
     command: >
@@ -63,3 +65,9 @@ volumes:
   db:
     name: ${DA_DB_VOLUME_NAME:-db}
     external: ${DA_EXTERNAL_VOLUME_REQUIRED:-false}
+  build_cache:
+    name: build
+    external: false
+  deps_cache:
+    name: deps
+    external: false
