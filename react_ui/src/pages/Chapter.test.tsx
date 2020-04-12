@@ -9,6 +9,13 @@ jest.mock('../generated/graphql', () => ({
   useGetChapterBySlugQuery: jest.fn(),
 }))
 
+const renderUI = (slug: string) =>
+  render(
+    <MemoryRouter>
+      <Chapter slug={slug} />
+    </MemoryRouter>
+  )
+
 it('loads the chapter details and renders the page', () => {
   ;(useGetChapterBySlugQuery as jest.Mock).mockReturnValueOnce({
     loading: false,
@@ -30,11 +37,7 @@ it('loads the chapter details and renders the page', () => {
     },
   })
 
-  const { container, getByText } = render(
-    <MemoryRouter>
-      <Chapter slug="oakland" />
-    </MemoryRouter>
-  )
+  const { container, getByText } = renderUI('oakland')
   expect(getByText('Oakland')).toBeVisible()
   expect(getByText('the Oakland group')).toBeVisible()
   expect(useGetChapterBySlugQuery).toHaveBeenCalledWith({
@@ -50,8 +53,8 @@ it('shows an error message when chapter not found', () => {
     error: 'Whoops',
   })
 
-  const { container, getByText } = render(<Chapter slug="1" />)
-  expect(getByText('Chapter 1 not found')).toBeVisible()
+  const { container, getByText } = renderUI('1')
+  expect(getByText('Chapter "1" not found')).toBeVisible()
   expect(useGetChapterBySlugQuery).toHaveBeenCalledWith({
     variables: { slug: 'oakland' },
   })
@@ -64,39 +67,8 @@ it('shows a loading message when loading', () => {
     loading: true,
   })
 
-  const { container, getByText } = render(<Chapter slug="oakland" />)
+  const { container, getByText } = renderUI('oakland')
   expect(getByText('Loading...')).toBeVisible()
 
   expect(container).toMatchSnapshot()
-})
-
-it('splits descriptions with multiple lines', () => {
-  ;(useGetChapterBySlugQuery as jest.Mock).mockReturnValueOnce({
-    loading: false,
-    data: {
-      groupBySlug: {
-        id: '1',
-        slug: 'oakland',
-        name: 'Oakland',
-        description: 'the Oakland group\n\nLorem ipsum',
-        donationForm: 'donation form link',
-        donationFormResults: 'donation form results link',
-        donationLink: 'donation link',
-        volunteerForm: 'volunteer form link',
-        volunteerFormResults: 'volunteer form results link',
-        slackChannelName: 'slack-channel-name',
-        requestForm: 'request form link',
-        requestFormResults: 'request form results link',
-      } as Group,
-    },
-  })
-
-  const { getByText } = render(
-    <MemoryRouter>
-      <Chapter slug="oakland" />
-    </MemoryRouter>
-  )
-
-  expect(getByText('the Oakland group')).toBeVisible()
-  expect(getByText('Lorem ipsum')).toBeVisible()
 })

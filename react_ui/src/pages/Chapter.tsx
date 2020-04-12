@@ -10,17 +10,11 @@ import { MainHeader } from '../components/MainHeader'
 import { P } from '../components/P'
 import { PreHeader } from '../components/PreHeader'
 import { ShadowButtonLink } from '../components/ShadowButtonLink'
-import { Maybe, useGetChapterBySlugQuery } from '../generated/graphql'
+import { useGetChapterBySlugQuery } from '../generated/graphql'
 
 type Props = {
   slug: string
 }
-
-const splitIntoParagraphs = (text: Maybe<string>) =>
-  text
-    ?.split(/\n+/)
-    .filter((x) => x.length > 0)
-    .map((line) => <P key={line}>{line}</P>)
 
 export const Chapter: React.FC<Props> = ({ slug }) => {
   const { t } = useTranslation()
@@ -55,9 +49,11 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
           <BorderBlock>
             <ContentContainer>
               <div className="sm:flex py-6 sm:py-12">
-                <div className="sm:w-7/12 pb-6" data-testid="description">
-                  {splitIntoParagraphs(chapter.description)}
-                </div>
+                <P
+                  className="sm:w-7/12 pb-6 whitespace-pre-line"
+                  data-testid="description">
+                  {chapter.description}
+                </P>
 
                 <div className="sm:w-5/12 sm:pr-2 z-30">
                   {chapter.requestForm && (

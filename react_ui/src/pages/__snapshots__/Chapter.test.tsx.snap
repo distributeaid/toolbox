@@ -70,16 +70,12 @@ exports[`loads the chapter details and renders the page 1`] = `
         <div
           class="sm:flex py-6 sm:py-12"
         >
-          <div
-            class="sm:w-7/12 pb-6"
+          <p
+            class="pb-4 font-body text-sm sm:text-lg sm:w-7/12 pb-6 whitespace-pre-line"
             data-testid="description"
           >
-            <p
-              class="pb-4 font-body text-sm sm:text-lg"
-            >
-              the Oakland group
-            </p>
-          </div>
+            the Oakland group
+          </p>
           <div
             class="sm:w-5/12 sm:pr-2 z-30"
           >
@@ -130,18 +126,158 @@ exports[`loads the chapter details and renders the page 1`] = `
 
 exports[`shows a loading message when loading 1`] = `
 <div>
-  <div>
-    Loading...
+  <div
+    class="w-full mx-auto bg-white overflow-hidden"
+  >
+    <div
+      class="absolute top-0 right-0 hidden sm:block z-0"
+    >
+      <svg
+        class="z-0"
+        fill="none"
+        height="698"
+        viewBox="0 0 593 698"
+        width="593"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          class="z-0"
+          d="M760 -96.0684H40.8515C18.7238 -96.0684 0 -79.57 0 -58.3579V344.673C0 538.724 179.574 697.422 400 697.422C620.426 697.422 800 539.51 800 344.673V-58.3579C800 -78.7844 782.128 -96.0684 760 -96.0684Z"
+          fill="#3968DA"
+          fill-opacity="0.06"
+        />
+      </svg>
+    </div>
+    <div
+      class="container w-full max-w-6xl p-4 md:mx-auto bg-white overflow-hidden"
+    >
+      <div
+        class="pb-16 sm:pb-32"
+      >
+        <a
+          class="font-body text-xs sm:text-sm leading-3"
+          href="/chapters"
+        >
+          <svg
+            class="inline mr-2 sm:mr-4 mb-1"
+            fill="none"
+            height="13"
+            viewBox="0 0 9 13"
+            width="9"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.33792 11.4776C8.74305 11.0847 8.74306 10.4347 8.33792 10.0418L5.44758 7.23902C5.04245 6.84616 5.04245 6.19608 5.44758 5.80322L8.33792 3.00045C8.74306 2.60759 8.74306 1.95752 8.33792 1.56465L7.42079 0.675304C7.0329 0.299168 6.41638 0.299167 6.02849 0.675303L0.740359 5.80322C0.335224 6.19608 0.335223 6.84616 0.740358 7.23902L6.02849 12.3669C6.41637 12.7431 7.0329 12.7431 7.42078 12.3669L8.33792 11.4776Z"
+              fill="#ED2E69"
+            />
+          </svg>
+          chapter.backLink
+        </a>
+      </div>
+      <div>
+        Loading...
+      </div>
+    </div>
+    <div
+      class="container w-full max-w-6xl p-4 md:mx-auto bg-white overflow-hidden"
+    >
+      <div
+        class="flex flex-col justify-center py-10 sm:py-20"
+      >
+        <h2
+          class="text-center font-heading font-semibold text-2xl sm:text-5xl leading-loose mb-4"
+        >
+          chapter.faqHeader
+        </h2>
+        <a
+          class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-blue-600 sm:w-auto"
+          href="/faq"
+        >
+          chapter.faqLink
+        </a>
+      </div>
+    </div>
   </div>
 </div>
 `;
 
 exports[`shows an error message when chapter not found 1`] = `
 <div>
-  <div>
-    Chapter 
-    1
-     not found
+  <div
+    class="w-full mx-auto bg-white overflow-hidden"
+  >
+    <div
+      class="absolute top-0 right-0 hidden sm:block z-0"
+    >
+      <svg
+        class="z-0"
+        fill="none"
+        height="698"
+        viewBox="0 0 593 698"
+        width="593"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          class="z-0"
+          d="M760 -96.0684H40.8515C18.7238 -96.0684 0 -79.57 0 -58.3579V344.673C0 538.724 179.574 697.422 400 697.422C620.426 697.422 800 539.51 800 344.673V-58.3579C800 -78.7844 782.128 -96.0684 760 -96.0684Z"
+          fill="#3968DA"
+          fill-opacity="0.06"
+        />
+      </svg>
+    </div>
+    <div
+      class="container w-full max-w-6xl p-4 md:mx-auto bg-white overflow-hidden"
+    >
+      <div
+        class="pb-16 sm:pb-32"
+      >
+        <a
+          class="font-body text-xs sm:text-sm leading-3"
+          href="/chapters"
+        >
+          <svg
+            class="inline mr-2 sm:mr-4 mb-1"
+            fill="none"
+            height="13"
+            viewBox="0 0 9 13"
+            width="9"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.33792 11.4776C8.74305 11.0847 8.74306 10.4347 8.33792 10.0418L5.44758 7.23902C5.04245 6.84616 5.04245 6.19608 5.44758 5.80322L8.33792 3.00045C8.74306 2.60759 8.74306 1.95752 8.33792 1.56465L7.42079 0.675304C7.0329 0.299168 6.41638 0.299167 6.02849 0.675303L0.740359 5.80322C0.335224 6.19608 0.335223 6.84616 0.740358 7.23902L6.02849 12.3669C6.41637 12.7431 7.0329 12.7431 7.42078 12.3669L8.33792 11.4776Z"
+              fill="#ED2E69"
+            />
+          </svg>
+          chapter.backLink
+        </a>
+      </div>
+      <h3
+        class="font-heading font-normal text-xl sm:text-2xl leading-normal"
+      >
+        Chapter "
+        1
+        " not found
+      </h3>
+    </div>
+    <div
+      class="container w-full max-w-6xl p-4 md:mx-auto bg-white overflow-hidden"
+    >
+      <div
+        class="flex flex-col justify-center py-10 sm:py-20"
+      >
+        <h2
+          class="text-center font-heading font-semibold text-2xl sm:text-5xl leading-loose mb-4"
+        >
+          chapter.faqHeader
+        </h2>
+        <a
+          class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-blue-600 sm:w-auto"
+          href="/faq"
+        >
+          chapter.faqLink
+        </a>
+      </div>
+    </div>
   </div>
 </div>
 `;
