@@ -1,12 +1,18 @@
 query getChapterBySlug($slug: String!) {
   groupBySlug(slug: $slug) {
     id
+    __typename
     name
     slug
     description
     donationForm
     donationLink
     donationFormResults
+    location {
+      countryCode
+      province
+      postalCode
+    }
     slackChannelName
     volunteerForm
     volunteerFormResults

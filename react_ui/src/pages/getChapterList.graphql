@@ -1,6 +1,7 @@
 query getChapterList {
   groups {
     id
+    __typename
     slug
     description
     name
