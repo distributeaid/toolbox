@@ -69,6 +69,14 @@ defmodule Ferry.Locations do
     Repo.get!(query, id)
   end
 
+  def get_hq(%Group{} = group) do
+    # TODO: will break as soon as there are multiple addresses for a group
+    query = from a in Address,
+      where: a.group_id == ^group.id
+
+    Repo.one(query)
+  end
+
   @doc """
   Creates a address.
 
@@ -85,7 +93,7 @@ defmodule Ferry.Locations do
     %Address{}
     |> Address.changeset(attrs)
     |> Changeset.put_change(:group_id, group.id)
-    |> geocode_address()
+#    |> geocode_address()
     |> Repo.insert()
   end
 
@@ -103,9 +111,9 @@ defmodule Ferry.Locations do
   """
   def update_address(%Address{} = address, attrs) do
     address
-    |> Repo.preload([:geocode])
+#    |> Repo.preload([:geocode])
     |> Address.changeset(attrs)
-    |> geocode_address()
+#    |> geocode_address()
     |> Repo.update()
   end
 

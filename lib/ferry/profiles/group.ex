@@ -6,6 +6,7 @@ defmodule Ferry.Profiles.Group do
   alias Ferry.Accounts.User
   alias Ferry.Profiles.Group.Logo
   alias Ferry.Profiles.Project
+  alias Ferry.Locations.Address
 
   @group_types ["M4D_CHAPTER"]
 
@@ -36,6 +37,8 @@ defmodule Ferry.Profiles.Group do
     has_one :users, User
     # on_delete set in database via migration
     has_many :projects, Project
+
+    has_one :location, Address
 
     timestamps()
   end

@@ -61,7 +61,12 @@ defmodule Ferry.GroupTest do
       groups {
         id,
         name,
-        description
+        description,
+        location {
+          province,
+          country_code,
+          postal_code
+        }
       }
     }
     """
@@ -80,7 +85,12 @@ defmodule Ferry.GroupTest do
     group_params = %{
       "id" => Integer.to_string(group.id),
       "name" => group.name,
-      "description" => group.description
+      "description" => group.description,
+      "location" => %{
+        "province" => group.location.province,
+        "country_code" => group.location.country_code,
+        "postal_code" => group.location.postal_code
+      }
     }
 
     query = """
@@ -88,7 +98,12 @@ defmodule Ferry.GroupTest do
       groups {
         id,
         name,
-        description
+        description,
+        location {
+          province,
+          country_code,
+          postal_code
+        }
       }
     }
     """
@@ -109,7 +124,12 @@ defmodule Ferry.GroupTest do
         %{
           "id" => Integer.to_string(group.id),
           "name" => group.name,
-          "description" => group.description
+          "description" => group.description,
+          "location" => %{
+            "province" => group.location.province,
+            "country_code" => group.location.country_code,
+            "postal_code" => group.location.postal_code
+          }
         }
       end)
 
@@ -118,7 +138,12 @@ defmodule Ferry.GroupTest do
       groups {
         id,
         name,
-        description
+        description,
+        location {
+          province,
+          country_code,
+          postal_code
+        }
       }
     }
     """
@@ -196,7 +221,7 @@ defmodule Ferry.GroupTest do
   test "create a group - success", %{conn: conn} do
     sign_in_user()
 
-    group_attrs = params_for(:group)
+    group_attrs = params_with_assocs(:group)
 
     mutation = """
       mutation {
@@ -204,14 +229,22 @@ defmodule Ferry.GroupTest do
           groupInput: {
             name: "#{group_attrs.name}",
             slug: "#{group_attrs.slug}",
+
             description: "#{group_attrs.description}",
             slackChannelName: "#{group_attrs.slack_channel_name}",
+
             requestForm: "#{group_attrs.request_form}",
             requestFormResults: "#{group_attrs.request_form_results}",
             volunteerForm: "#{group_attrs.volunteer_form}",
             volunteerFormResults: "#{group_attrs.volunteer_form_results}",
             donationForm: "#{group_attrs.donation_form}",
-            donationFormResults: "#{group_attrs.donation_form_results}"
+            donationFormResults: "#{group_attrs.donation_form_results}",
+
+            location: {
+              province: "#{group_attrs.location.province}",
+              country_code: "#{group_attrs.location.country_code}",
+              postal_code: "#{group_attrs.location.postal_code}",
+            }
           }
         ) {
           successful
@@ -224,7 +257,12 @@ defmodule Ferry.GroupTest do
             name,
             type,
             slug,
-            slackChannelName
+            slackChannelName,
+            location {
+              province,
+              country_code,
+              postal_code
+            }
           }
         }
       }
@@ -245,7 +283,12 @@ defmodule Ferry.GroupTest do
             "name" => name,
             "slackChannelName" => slack_channel_name,
             "slug" => slug,
-            "type" => type
+            "type" => type,
+            "location" => %{
+              "province" => province,
+              "country_code" => country_code,
+              "postal_code" => postal_code
+            }
           }
         }
       }
@@ -258,6 +301,9 @@ defmodule Ferry.GroupTest do
     assert name == group_attrs.name
     assert type == group_attrs.type
     assert slack_channel_name == group_attrs.slack_channel_name
+    assert province == group_attrs.location.province
+    assert country_code == group_attrs.location.country_code
+    assert postal_code == group_attrs.location.postal_code
   end
 
   test "create a group - error", %{conn: conn} do
@@ -319,7 +365,7 @@ defmodule Ferry.GroupTest do
     sign_in_user()
 
     group = insert(:group)
-    updates = params_for(:group)
+    updates = params_with_assocs(:group)
 
     mutation = """
       mutation {
@@ -336,6 +382,12 @@ defmodule Ferry.GroupTest do
             volunteerFormResults: "#{updates.volunteer_form_results}",
             donationForm: "#{updates.donation_form}",
             donationFormResults: "#{updates.donation_form_results}"
+
+            location: {
+              province: "#{updates.location.province}",
+              country_code: "#{updates.location.country_code}",
+              postal_code: "#{updates.location.postal_code}",
+            }
           }
         ) {
           successful

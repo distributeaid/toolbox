@@ -25,7 +25,7 @@ defmodule FerryApi.Schema.GroupType do
     # currently a constant set by the backend: "M4D_CHAPTER"
     field :type, non_null(:group_type)
 
-#    field :location, non_null(:location_type)
+    field :location, non_null(:address)
 
     # Optional Fields
     # ------------------------------------------------------------

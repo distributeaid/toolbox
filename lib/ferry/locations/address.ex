@@ -9,9 +9,9 @@ defmodule Ferry.Locations.Address do
     field :label, :string
     field :street, :string
     field :city, :string
-    field :state, :string
-    field :country, :string
-    field :zip_code, :string
+    field :province, :string
+    field :country_code, :string
+    field :postal_code, :string
 
     has_one :geocode, Geocode, on_replace: :update # on_delete set in database via migration
 
@@ -24,18 +24,20 @@ defmodule Ferry.Locations.Address do
   @doc false
   def changeset(address, attrs) do
     address
-    |> cast(attrs, [:label, :street, :city, :state, :country, :zip_code])
-    |> validate_required([:label, :city, :country])
+    |> cast(attrs, [:label, :street, :city, :province, :country_code, :postal_code])
+    |> validate_required([:province, :country_code, :postal_code])
     |> validate_length(:label, min: 1, max: 255)
     |> validate_length(:street, max: 255)
     |> validate_length(:city, min: 1, max: 255)
-    |> validate_length(:state, max: 255)
-    |> validate_length(:country, min: 2, max: 255) # must be at least a 2 letter country code
-    |> validate_length(:zip_code, max: 255)
+    |> validate_length(:province, max: 255)
+    |> validate_length(:country_code, min: 2, max: 255) # must be at least a 2 letter country code
+    |> validate_length(:postal_code, max: 255)
     # TODO: add a changeset check constraint that matches the db one?
     #       https://hexdocs.pm/ecto/Ecto.Changeset.html#check_constraint/3
     #
     # TODO: test format for some fields (letters / whitespace only?)
+
+    # TODO: validate :country_code against ISO list at some point
   end
 
   @doc false
@@ -48,14 +50,14 @@ defmodule Ferry.Locations.Address do
   @doc false
   def full_changeset(address, attrs) do
     address
-    |> cast(attrs, [:label, :street, :city, :state, :country, :zip_code])
+    |> cast(attrs, [:label, :street, :city, :province, :country_code, :zip_code])
     |> cast_assoc(:geocode, required: true)
-    |> validate_required([:label, :city, :country])
+    |> validate_required([:province, :country_code, :postal_code])
     |> validate_length(:label, min: 1, max: 255)
     |> validate_length(:street, max: 255)
     |> validate_length(:city, min: 1, max: 255)
-    |> validate_length(:state, max: 255)
-    |> validate_length(:country, min: 2, max: 255) # must be at least a 2 letter country code
+    |> validate_length(:province, max: 255)
+    |> validate_length(:country_code, min: 2, max: 255) # must be at least a 2 letter country code
     |> validate_length(:zip_code, max: 255)
     # TODO: add a changeset check constraint that matches the db one?
     #       https://hexdocs.pm/ecto/Ecto.Changeset.html#check_constraint/3

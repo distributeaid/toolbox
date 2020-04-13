@@ -120,6 +120,8 @@ defmodule Ferry.Factory do
       # add other group types here
       type: sequence(:group_type, ["M4D_CHAPTER"]),
 
+      location: build(:address),
+
       # TODO: logo
       description: "We show solidarity with our neighbors by using mutual aid to collect food and clothing from the community and distribute it to those in need.",
       donation_link: "https://liecheatstealkillwin.com/listentoit.html",
@@ -263,9 +265,9 @@ defmodule Ferry.Factory do
       label: sequence("Where I Want To Move"),
       street: sequence(:street, &"161#{&1} Exarchia Avenue"),
       city: "Athens",
-      state: "Attica",
-      country: "Greece",
-      zip_code: "106 81"
+      province: "Attica",
+      country_code: "GR",
+      postal_code: "106 81"
     }
   end
 
@@ -273,9 +275,9 @@ defmodule Ferry.Factory do
     struct!(
       address_factory(),
       %{
+        label: nil,
         street: nil,
-        state: nil,
-        zip_code: nil
+        city: nil
       }
     )
   end
@@ -288,9 +290,9 @@ defmodule Ferry.Factory do
     struct!(
       address_factory(),
       %{
-        label: nil,
-        city: nil,
-        country: nil
+        province: nil,
+        country_code: nil,
+        postal_code: nil
       }
     )
   end
@@ -299,9 +301,9 @@ defmodule Ferry.Factory do
     struct!(
       address_factory(),
       %{
-        label: "",
-        city: "",
-        country: "1"
+        province: "",
+        country_code: "",
+        postal_code: "1"
       }
     )
   end
@@ -313,9 +315,9 @@ defmodule Ferry.Factory do
         label: @long_text,
         street: @long_text,
         city: @long_text,
-        state: @long_text,
-        country: @long_text,
-        zip_code: @long_text
+        province: @long_text,
+        country_code: @long_text,
+        postal_code: @long_text
       }
     )
   end
