@@ -46,9 +46,9 @@ defmodule Ferry.Locations.Geocoder.Nominatim do
 
       street: address["street"],
       city: address["city"],
-      state: address["state"],
-      postalcode: address["zip_code"],
-      country: address["country"]
+      state: address["province"],
+      postalcode: address["postal_code"],
+      country: address["country_code"]
     }
 
     "https://nominatim.openstreetmap.org/search"

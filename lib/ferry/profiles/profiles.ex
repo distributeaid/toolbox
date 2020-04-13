@@ -23,8 +23,16 @@ defmodule Ferry.Profiles do
       [%Group{}, ...]
 
   """
-  def list_groups do
+  def list_groups() do
     Repo.all(Group)
+  end
+
+  def list_groups(preload: [:location]) do
+    Repo.all(from g in Group,
+      join: a in assoc(g, :location),
+      preload: [location: a],
+      order_by: [g.id]
+    )
   end
 
   @doc """
@@ -47,6 +55,14 @@ defmodule Ferry.Profiles do
 
   def get_group(id) do
     Repo.get(Group, id)
+  end
+
+  def get_group(id, preload: [:location]) do
+    query = from g in Group,
+      join: a in assoc(g, :location),
+      preload: [location: a]
+
+    Repo.get(query, id)
   end
 
   def get_group_by_slug(slug) do

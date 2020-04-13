@@ -134,6 +134,22 @@ defmodule Ferry.Factory do
     }
   end
 
+  def with_location(%Group{} = group) do
+    address = insert(:address, group: group)
+
+    %{group | location: address}
+  end
+
+  def with_location(groups) when is_list(groups) do
+    Enum.map(groups, &(with_location(&1)))
+  end
+
+  def with_location(group_attrs) when is_map(group_attrs) do
+    address = params_for(:address)
+
+    Map.put(group_attrs, :location, address)
+  end
+
   def invalid_group_factory do
     struct!(
       group_factory(),
@@ -263,9 +279,9 @@ defmodule Ferry.Factory do
       label: sequence("Where I Want To Move"),
       street: sequence(:street, &"161#{&1} Exarchia Avenue"),
       city: "Athens",
-      state: "Attica",
-      country: "Greece",
-      zip_code: "106 81"
+      province: "Attica",
+      country_code: "GR",
+      postal_code: "106 81"
     }
   end
 
@@ -273,9 +289,9 @@ defmodule Ferry.Factory do
     struct!(
       address_factory(),
       %{
+        label: nil,
         street: nil,
-        state: nil,
-        zip_code: nil
+        city: nil
       }
     )
   end
@@ -288,9 +304,9 @@ defmodule Ferry.Factory do
     struct!(
       address_factory(),
       %{
-        label: nil,
-        city: nil,
-        country: nil
+        province: nil,
+        country_code: nil,
+        postal_code: nil
       }
     )
   end
@@ -299,9 +315,9 @@ defmodule Ferry.Factory do
     struct!(
       address_factory(),
       %{
-        label: "",
-        city: "",
-        country: "1"
+        province: "",
+        country_code: "1",
+        postal_code: ""
       }
     )
   end
@@ -313,9 +329,9 @@ defmodule Ferry.Factory do
         label: @long_text,
         street: @long_text,
         city: @long_text,
-        state: @long_text,
-        country: @long_text,
-        zip_code: @long_text
+        province: @long_text,
+        country_code: @long_text,
+        postal_code: @long_text
       }
     )
   end

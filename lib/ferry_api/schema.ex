@@ -10,6 +10,9 @@ defmodule FerryApi.Schema do
   import_types(FerryApi.Schema.GroupType)
   import_types(FerryApi.Schema.Group)
 
+  import_types(FerryApi.Schema.AddressType)
+  import_types(FerryApi.Schema.Address)
+
   import_types(FerryApi.Schema.SessionType)
   import_types(FerryApi.Schema.Session)
 
