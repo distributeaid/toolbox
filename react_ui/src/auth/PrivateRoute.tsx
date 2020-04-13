@@ -6,14 +6,14 @@ interface PrivateRouteProps extends RouteProps {
 }
 
 const PrivateRoute = (props: PrivateRouteProps) => {
-  const { component: Component, isSignedIn, ...rest } = props
+  const { render, isSignedIn, ...rest } = props
 
   return (
     <Route
       {...rest}
       render={(routeProps) =>
-        isSignedIn && Component ? (
-          <Component {...routeProps} />
+        isSignedIn && render ? (
+          render(routeProps)
         ) : (
           <Redirect
             to={{
