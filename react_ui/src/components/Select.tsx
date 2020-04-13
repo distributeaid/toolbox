@@ -26,7 +26,7 @@ export const Select: React.FC<SelectProps> = ({
     <div className="relative">
       <select
         id={id}
-        className="block appearance-none w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 truncate"
+        className="block appearance-none w-full border border-gray-200 text-gray-700 py-2 px-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 truncate"
         value={value}
         onChange={onChange}>
         {includeBlank && <option key="blank" value="" />}
