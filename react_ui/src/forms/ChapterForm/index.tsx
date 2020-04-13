@@ -58,6 +58,11 @@ export const ChapterForm: React.FC<Props> = ({ editChapter }) => {
           donationForm: values.donationForm,
           donationFormResults: values.donationFormResults,
           donationLink: null,
+          location: {
+            countryCode: values.country,
+            province: values.state,
+            postalCode: values.postalCode
+          },
           name: values.name,
           requestForm: values.requestForm,
           requestFormResults: values.requestFormResults,
