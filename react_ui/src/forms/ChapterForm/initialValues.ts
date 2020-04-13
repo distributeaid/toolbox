@@ -1,0 +1,15 @@
+export const initialValues = {
+  name: '',
+  slug: '',
+  country: '',
+  state: '',
+  province: '',
+  postalCode: '',
+  description: '',
+  requestForm: '',
+  requestFormResults: '',
+  donationForm: '',
+  donationFormResults: '',
+  volunteerForm: '',
+  volunteerFormResults: '',
+}
