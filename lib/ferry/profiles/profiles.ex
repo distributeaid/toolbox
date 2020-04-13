@@ -54,15 +54,11 @@ defmodule Ferry.Profiles do
   end
 
   def get_group(id, preload: [:location]) do
-    query = from g in Group,
-      join: a in assoc(g, :location),
-      preload: [location: a]
-
-    Repo.get(query, id)
+    Repo.get(Group, id) |> Repo.preload([:location])
   end
 
   def get_group_by_slug(slug) do
-    Repo.get_by(Group, slug: slug)
+    Repo.get_by(Group, slug: slug) |> Repo.preload([:location])
   end
 
   @doc """
