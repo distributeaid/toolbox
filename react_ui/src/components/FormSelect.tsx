@@ -1,6 +1,7 @@
-import { Select } from './Select'
+import { ErrorMessage, Field, FieldProps } from 'formik'
 import React from 'react'
-import { Field, FieldProps, ErrorMessage } from 'formik'
+
+import { Select } from './Select'
 
 type Props = {
   name: string

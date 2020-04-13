@@ -1,6 +1,7 @@
-import { Input } from './Input'
+import { ErrorMessage, Field, FieldProps } from 'formik'
 import React from 'react'
-import { Field, FieldProps, ErrorMessage } from 'formik'
+
+import { Input } from './Input'
 
 type Props = {
   name: string

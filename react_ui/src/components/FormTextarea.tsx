@@ -1,5 +1,5 @@
+import { ErrorMessage, Field, FieldProps } from 'formik'
 import React from 'react'
-import { Field, FieldProps, ErrorMessage } from 'formik'
 
 type Props = {
   name: string
