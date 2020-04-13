@@ -33,6 +33,11 @@ it('loads the chapter details and renders the page', () => {
         slackChannelName: 'slack-channel-name',
         requestForm: 'request form link',
         requestFormResults: 'request form results link',
+        location: {
+          countryCode: 'US',
+          province: 'CA',
+          postalCode: '11111',
+        },
       } as Group,
     },
   })
