@@ -1,18 +1,20 @@
 import * as React from 'react'
 import { Redirect, Route, RouteProps } from 'react-router-dom'
 
+import { AuthenticationState } from './types'
+
 interface PrivateRouteProps extends RouteProps {
-  isSignedIn: boolean
+  authState: AuthenticationState
 }
 
 const PrivateRoute = (props: PrivateRouteProps) => {
-  const { render, isSignedIn, ...rest } = props
+  const { render, authState, ...rest } = props
 
   return (
     <Route
       {...rest}
       render={(routeProps) =>
-        isSignedIn && render ? (
+        authState === 'authenticated' && render ? (
           render(routeProps)
         ) : (
           <Redirect

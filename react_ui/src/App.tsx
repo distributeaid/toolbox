@@ -51,7 +51,7 @@ const App: React.FunctionComponent = () => {
               </Route>
 
               <PrivateRoute
-                isSignedIn={authState === 'authenticated'}
+                authState={authState}
                 exact
                 path="/chapters/new"
                 render={() => <ChapterNew />}
@@ -64,9 +64,9 @@ const App: React.FunctionComponent = () => {
               />
 
               <PrivateRoute
+                authState={authState}
                 exact
                 path="/:slug/edit"
-                isSignedIn={authState === 'authenticated'}
                 render={({ match }) => <ChapterEdit slug={match.params.slug} />}
               />
 
