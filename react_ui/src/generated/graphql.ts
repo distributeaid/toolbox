@@ -158,7 +158,7 @@ export type GetChapterBySlugQueryVariables = {
 };
 
 
-export type GetChapterBySlugQuery = { readonly __typename?: 'RootQueryType', readonly groupBySlug: Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly name: string, readonly slug: string, readonly description: Maybe<string>, readonly donationForm: Maybe<string>, readonly donationLink: Maybe<string>, readonly donationFormResults: Maybe<string>, readonly slackChannelName: Maybe<string>, readonly volunteerForm: Maybe<string>, readonly volunteerFormResults: Maybe<string>, readonly requestForm: Maybe<string>, readonly requestFormResults: Maybe<string> }> };
+export type GetChapterBySlugQuery = { readonly __typename?: 'RootQueryType', readonly groupBySlug: Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly name: string, readonly slug: string, readonly description: Maybe<string>, readonly donationForm: Maybe<string>, readonly donationLink: Maybe<string>, readonly donationFormResults: Maybe<string>, readonly slackChannelName: Maybe<string>, readonly volunteerForm: Maybe<string>, readonly volunteerFormResults: Maybe<string>, readonly requestForm: Maybe<string>, readonly requestFormResults: Maybe<string>, readonly location: { readonly __typename?: 'Address', readonly countryCode: string, readonly province: string, readonly postalCode: string } }> };
 
 export type GetChapterListQueryVariables = {};
 
@@ -237,7 +237,7 @@ export const GetChapterDocument = gql`
  * __useGetChapterQuery__
  *
  * To run a query within a React component, call `useGetChapterQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * When your component renders, `useGetChapterQuery` returns an object from Apollo Client that contains loading, error, and data properties 
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -268,6 +268,11 @@ export const GetChapterBySlugDocument = gql`
     donationForm
     donationLink
     donationFormResults
+    location {
+      countryCode
+      province
+      postalCode
+    }
     slackChannelName
     volunteerForm
     volunteerFormResults
@@ -281,7 +286,7 @@ export const GetChapterBySlugDocument = gql`
  * __useGetChapterBySlugQuery__
  *
  * To run a query within a React component, call `useGetChapterBySlugQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * When your component renders, `useGetChapterBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties 
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -317,7 +322,7 @@ export const GetChapterListDocument = gql`
  * __useGetChapterListQuery__
  *
  * To run a query within a React component, call `useGetChapterListQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * When your component renders, `useGetChapterListQuery` returns an object from Apollo Client that contains loading, error, and data properties 
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -378,3 +383,5 @@ export function useUpdateChapterMutation(baseOptions?: ApolloReactHooks.Mutation
 export type UpdateChapterMutationHookResult = ReturnType<typeof useUpdateChapterMutation>;
 export type UpdateChapterMutationResult = ApolloReactCommon.MutationResult<UpdateChapterMutation>;
 export type UpdateChapterMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateChapterMutation, UpdateChapterMutationVariables>;
+
+

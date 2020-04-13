@@ -11,6 +11,7 @@ import { P } from '../components/P'
 import { PreHeader } from '../components/PreHeader'
 import { ShadowButtonLink } from '../components/ShadowButtonLink'
 import { useGetChapterBySlugQuery } from '../generated/graphql'
+import { countryCodeToName, usStateCodeToName } from '../util/placeCodeToName'
 
 type Props = {
   slug: string
@@ -37,7 +38,12 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
         {error && <PreHeader>Chapter "{slug}" not found</PreHeader>}
         {chapter && (
           <>
-            <PreHeader>California — USA</PreHeader>
+            <PreHeader>
+              {chapter.location.countryCode === 'US'
+                ? usStateCodeToName(chapter.location.province)
+                : chapter.location.province}{' '}
+              — {countryCodeToName(chapter.location.countryCode)}
+            </PreHeader>
 
             <MainHeader>{chapter.name}</MainHeader>
           </>

@@ -7,6 +7,11 @@ query getChapterBySlug($slug: String!) {
     donationForm
     donationLink
     donationFormResults
+    location {
+      countryCode
+      province
+      postalCode
+    }
     slackChannelName
     volunteerForm
     volunteerFormResults
