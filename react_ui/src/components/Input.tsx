@@ -3,7 +3,7 @@ import React from 'react'
 export const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = ({
   id,
   title,
-  type,
+  type = 'text',
   onChange,
   ...rest
 }) => (

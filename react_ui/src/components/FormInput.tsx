@@ -5,7 +5,7 @@ import { Field, FieldProps, ErrorMessage } from 'formik'
 type Props = {
   name: string
   title: string
-  type: string
+  type?: string
 }
 
 export const FormInput: React.FC<Props> = ({ name, title, type }) => {
