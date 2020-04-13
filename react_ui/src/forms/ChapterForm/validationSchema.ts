@@ -28,6 +28,7 @@ export const validationSchema = yup.object({
       'Chapter name can only contain letters, spaces, and dashes'
     )
     .required('Please enter a chapter name'),
+  lead: yup.string().required().min(2, 'Enter a name'),
   slug: yup
     .string()
     .matches(/^[a-zA-Z-]*$/, 'Chapter slug can only contain letters and dashes')
