@@ -1,6 +1,7 @@
-import { ErrorMessage, Field, FieldProps } from 'formik'
+import { Field, FieldProps } from 'formik'
 import React from 'react'
 
+import { FormErrorMessage } from './FormErrorMessage'
 import { Input } from './Input'
 
 type Props = {
@@ -16,11 +17,7 @@ export const FormInput: React.FC<Props> = ({ name, title, type }) => {
         return (
           <>
             <Input {...field} id={name} title={title} type={type} />
-            <ErrorMessage name={name}>
-              {(msg) => (
-                <span className="text-red-600 text-sm -mt-2">{msg}</span>
-              )}
-            </ErrorMessage>
+            <FormErrorMessage name={name} />
           </>
         )
       }}
