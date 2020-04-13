@@ -1,7 +1,16 @@
 import React from 'react'
 
-export const ContentContainer: React.FC = ({ children }) => (
-  <div className="container w-full max-w-6xl p-4 md:mx-auto bg-white overflow-hidden">
+import { classnames } from './classnames'
+
+export const ContentContainer: React.FC<{ className?: string }> = ({
+  children,
+  className,
+}) => (
+  <div
+    className={classnames(
+      'container w-full max-w-6xl p-4 md:mx-auto overflow-hidden',
+      className
+    )}>
     {children}
   </div>
 )

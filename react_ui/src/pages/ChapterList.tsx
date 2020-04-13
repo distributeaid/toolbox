@@ -2,29 +2,24 @@ import React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
+import { Background } from '../components/Background'
 import { ContentContainer } from '../components/ContentContainer'
-import { TextLink } from '../components/TextLink'
+import { FAQFooter } from '../components/FAQFooter'
+import { MainContent } from '../components/MainContent'
+import { MainHeader } from '../components/MainHeader'
+import { PreHeader } from '../components/PreHeader'
 import { Group, useGetChapterListQuery } from '../generated/graphql'
 
 export const ChapterItem: React.FC<{ chapter: Partial<Group> }> = ({
   chapter,
 }) => {
   return (
-    <li className="border-t border-gray-200">
-      <NavLink to={`/${chapter.slug}`}>
-        <div className="py-4 hover:bg-gray-200">
-          <div className="flex items-center justify-between">
-            <div className="text-sm leading-5 font-medium text-black">
-              {chapter.name}
-            </div>
-
-            <div className="ml-2 flex-shrink-0 flex">
-              <span className="px-2 inline-flex text-xs leading-5 font-semibold">
-                {/* {chapter.location.province}, {chapter.location.country.name} */}
-              </span>
-            </div>
-          </div>
-        </div>
+    <li className="border-t border-gray-200 bg-white font-heading">
+      <NavLink
+        to={`/${chapter.slug}`}
+        className="p-6 flex flex-row hover:bg-gray-200 text-black text-sm">
+        <div className="leading-5 font-semibold w-4/12">Province</div>
+        <div className="leading-5 font-medium w-6/12">{chapter.name}</div>
       </NavLink>
     </li>
   )
@@ -46,31 +41,37 @@ export const ChapterList: React.FC = () => {
   const { groups: chapters } = data
 
   return (
-    <ContentContainer>
-      <div className="p-4 md:p-8">
-        <div className="mb-4 md:mb-8">
-          <h1 className="font-bold text-xl">{t('chapterList.title')}</h1>
+    <MainContent>
+      <Background />
+      <ContentContainer>
+        <div className="md:w-7/12 pt-16 sm:pt-32">
+          <MainHeader>{t('chapterList.title')}</MainHeader>
 
-          <p className="py-4">{t('chapterList.subtitle')}</p>
-
-          <p>
-            <Trans i18nKey="chapterList.instructions">
-              If your area doesn't have a Masks For Docs Chapter yet, we are
-              looking for volunteers to start new ones. Get in touch on{' '}
-              <TextLink href="https://masksfordocs.slack.com">Slack</TextLink>
-              to start one [Need better copy here].
-            </Trans>
-          </p>
+          <PreHeader>
+            <Trans i18nKey="chapterList.subtitle" />
+          </PreHeader>
         </div>
+      </ContentContainer>
 
-        <div className="grid grid-cols-1 gap-4">
-          <ul>
-            {chapters.map(
-              (g) => g && g.id && <ChapterItem key={g.id} chapter={g} />
-            )}
-          </ul>
-        </div>
+      <div className="border-gray-400 border-t w-full bg-blue-50 mt-16 py-16">
+        <ContentContainer>
+          <div className="grid grid-cols-1 gap-4">
+            <h3 className="font-heading text-3xl font-semibold px-6 pb-6">
+              United States
+            </h3>
+            <div className="flex px-6 font-heading font-semibold text-lg text-blue-600">
+              <div className="w-4/12 pb-0">{t('chapterList.provinceTerm')}</div>
+              <div className="w-6/12 pb-0">{t('chapterList.coverageArea')}</div>
+            </div>
+            <ul>
+              {chapters.map(
+                (g) => g && g.id && <ChapterItem key={g.id} chapter={g} />
+              )}
+            </ul>
+          </div>
+        </ContentContainer>
+        <FAQFooter />
       </div>
-    </ContentContainer>
+    </MainContent>
   )
 }
