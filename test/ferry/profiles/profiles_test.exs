@@ -165,12 +165,12 @@ defmodule Ferry.ProfilesTest do
       assert project.address.label == attrs["address"]["label"]
       assert project.address.street == attrs["address"]["street"]
       assert project.address.city == attrs["address"]["city"]
-      assert project.address.state == attrs["address"]["state"]
-      assert project.address.country == attrs["address"]["country"]
-      assert project.address.zip_code == attrs["address"]["zip_code"]
-      assert project.address.geocode.lat == geocode.lat
-      assert project.address.geocode.lng == geocode.lng
-      assert project.address.geocode.data == geocode.data
+      assert project.address.province == attrs["address"]["province"]
+      assert project.address.country_code == attrs["address"]["country_code"]
+      assert project.address.postal_code == attrs["address"]["postal_code"]
+      # assert project.address.geocode.lat == geocode.lat
+      # assert project.address.geocode.lng == geocode.lng
+      # assert project.address.geocode.data == geocode.data
 
       # min
       attrs = string_params_for(:min_project, %{group_id: group.id})
@@ -181,12 +181,12 @@ defmodule Ferry.ProfilesTest do
       assert project.address.label == attrs["address"]["label"]
       assert project.address.street == attrs["address"]["street"]
       assert project.address.city == attrs["address"]["city"]
-      assert project.address.state == attrs["address"]["state"]
-      assert project.address.country == attrs["address"]["country"]
-      assert project.address.zip_code == attrs["address"]["zip_code"]
-      assert project.address.geocode.lat == geocode.lat
-      assert project.address.geocode.lng == geocode.lng
-      assert project.address.geocode.data == geocode.data
+      assert project.address.province == attrs["address"]["province"]
+      assert project.address.country_code == attrs["address"]["country_code"]
+      assert project.address.postal_code == attrs["address"]["postal_code"]
+      # assert project.address.geocode.lat == geocode.lat
+      # assert project.address.geocode.lng == geocode.lng
+      # assert project.address.geocode.data == geocode.data
     end
 
     test "create_project/2 with invalid data returns error changeset" do
@@ -212,12 +212,12 @@ defmodule Ferry.ProfilesTest do
       assert project.address.label == attrs["address"]["label"]
       assert project.address.street == attrs["address"]["street"]
       assert project.address.city == attrs["address"]["city"]
-      assert project.address.state == attrs["address"]["state"]
-      assert project.address.country == attrs["address"]["country"]
-      assert project.address.zip_code == attrs["address"]["zip_code"]
-      assert project.address.geocode.lat == geocode.lat
-      assert project.address.geocode.lng == geocode.lng
-      assert project.address.geocode.data == geocode.data
+      assert project.address.province == attrs["address"]["province"]
+      assert project.address.country_code == attrs["address"]["country_code"]
+      assert project.address.postal_code == attrs["address"]["postal_code"]
+      # assert project.address.geocode.lat == geocode.lat
+      # assert project.address.geocode.lng == geocode.lng
+      # assert project.address.geocode.data == geocode.data
     end
 
     test "update_project/2 with invalid data returns error changeset" do

@@ -41,8 +41,8 @@ defmodule Ferry.Locations do
   def list_addresses(%Group{} = group) do
     Repo.all(from a in Address,
       where: a.group_id == ^group.id,
-      join: g in assoc(a, :geocode),
-      preload: [geocode: g],
+#      join: g in assoc(a, :geocode),
+#      preload: [geocode: g],
       order_by: [a.id]
     )
   end
@@ -62,19 +62,11 @@ defmodule Ferry.Locations do
 
   """
   def get_address!(id) do
-    query = from a in Address,
-      join: g in assoc(a, :geocode),
-      preload: [geocode: g]
+    query = from a in Address#,
+#      join: g in assoc(a, :geocode),
+#      preload: [geocode: g]
 
     Repo.get!(query, id)
-  end
-
-  def get_hq(%Group{} = group) do
-    # TODO: will break as soon as there are multiple addresses for a group
-    query = from a in Address,
-      where: a.group_id == ^group.id
-
-    Repo.one(query)
   end
 
   @doc """
@@ -149,107 +141,107 @@ defmodule Ferry.Locations do
 
   # Map
   # ==============================================================================
-  alias Ferry.Locations.Map
+  # alias Ferry.Locations.Map
 
-  @doc """
-  Gets a map, which sets the search and filter fields and gets the matching
-  addresses from the database.  Groups are preloaded on each address.
+  # @doc """
+  # Gets a map, which sets the search and filter fields and gets the matching
+  # addresses from the database.  Groups are preloaded on each address.
 
-  ## Examples
+  # ## Examples
 
-      iex> get_map(%{search: "...", country_filter: "RS"})
-      {:ok, %Map{
-        search: "...",
-        country_filter: "RS",
-        results: [%Address{
-          label: "Collective Aid Processing Warehouse",
-          ...,
-          group: %Group{}
-        }, ...]
-      }}
+  #     iex> get_map(%{search: "...", country_filter: "RS"})
+  #     {:ok, %Map{
+  #       search: "...",
+  #       country_filter: "RS",
+  #       results: [%Address{
+  #         label: "Collective Aid Processing Warehouse",
+  #         ...,
+  #         group: %Group{}
+  #       }, ...]
+  #     }}
 
-  """
-  def get_map(attrs \\ %{}) do
-    map_changeset = %Map{}
-    |> set_control_labels()
-    |> set_controls(attrs)
-    |> apply_controls()
+  # """
+  # def get_map(attrs \\ %{}) do
+  #   map_changeset = %Map{}
+  #   |> set_control_labels()
+  #   |> set_controls(attrs)
+  #   |> apply_controls()
 
-    if map_changeset.valid? do
-      map = map_changeset |> Changeset.apply_changes()
-      {:ok, map}
-    else
-      {:error, map_changeset}
-    end
-  end
+  #   if map_changeset.valid? do
+  #     map = map_changeset |> Changeset.apply_changes()
+  #     {:ok, map}
+  #   else
+  #     {:error, map_changeset}
+  #   end
+  # end
 
-  defp set_control_labels(%Map{} = map) do
-    # TODO: move to Profiles context for better encapsulation?
-    group_labels = Repo.all(from g in Group,
-      select: {g.name, g.id},
-      order_by: g.name
-    )
+  # defp set_control_labels(%Map{} = map) do
+  #   # TODO: move to Profiles context for better encapsulation?
+  #   group_labels = Repo.all(from g in Group,
+  #     select: {g.name, g.id},
+  #     order_by: g.name
+  #   )
 
-    map
-    |> Map.changeset(%{
-      group_filter_labels: group_labels
-      # add other control_labels here
-    })
-  end
+  #   map
+  #   |> Map.changeset(%{
+  #     group_filter_labels: group_labels
+  #     # add other control_labels here
+  #   })
+  # end
 
-  defp set_controls(%Changeset{} = map_changeset, attrs) do
-    map_changeset |> Map.changeset(attrs)
-  end
+  # defp set_controls(%Changeset{} = map_changeset, attrs) do
+  #   map_changeset |> Map.changeset(attrs)
+  # end
 
-  defp apply_controls(%Changeset{valid?: false} = changeset) do
-    changeset
-  end
+  # defp apply_controls(%Changeset{valid?: false} = changeset) do
+  #   changeset
+  # end
 
-  defp apply_controls(%Changeset{valid?: true} = map_changeset) do
-    map = map_changeset |> Changeset.apply_changes()
+  # defp apply_controls(%Changeset{valid?: true} = map_changeset) do
+  #   map = map_changeset |> Changeset.apply_changes()
 
-    query = from a in Address,
-      left_join: g in assoc(a, :group),
-      left_join: p in assoc(a, :project),
-      left_join: pg in assoc(p, :group),
-      join: geo in assoc(a, :geocode),
-      order_by: a.id,
-      preload: [group: g, project: {p, group: pg}, geocode: geo]
+  #   query = from a in Address,
+  #     left_join: g in assoc(a, :group),
+  #     left_join: p in assoc(a, :project),
+  #     left_join: pg in assoc(p, :group),
+  #     join: geo in assoc(a, :geocode),
+  #     order_by: a.id,
+  #     preload: [group: g, project: {p, group: pg}, geocode: geo]
 
-    {_, query} = {map, query}
-    |> apply_group_filter() # returns {map, query}
-    # add other control applications here
+  #   {_, query} = {map, query}
+  #   |> apply_group_filter() # returns {map, query}
+  #   # add other control applications here
 
-    results = Repo.all(from a in query)
-    map_changeset |> Map.changeset(%{results: results})
-  end
+  #   results = Repo.all(from a in query)
+  #   map_changeset |> Map.changeset(%{results: results})
+  # end
 
-  defp apply_group_filter({%Map{group_filter: nil} = map, query}) do
-    {map, query}
-  end
+  # defp apply_group_filter({%Map{group_filter: nil} = map, query}) do
+  #   {map, query}
+  # end
 
-  defp apply_group_filter({%Map{group_filter: []} = map, query}) do
-    {map, query}
-  end
+  # defp apply_group_filter({%Map{group_filter: []} = map, query}) do
+  #   {map, query}
+  # end
 
-  defp apply_group_filter({%Map{} = map, query}) do
-    query = from [a, g, p, pg] in query,
-            where: g.id in ^map.group_filter
-                or pg.id in ^map.group_filter
+  # defp apply_group_filter({%Map{} = map, query}) do
+  #   query = from [a, g, p, pg] in query,
+  #           where: g.id in ^map.group_filter
+  #               or pg.id in ^map.group_filter
 
-    {map, query}
-  end
+  #   {map, query}
+  # end
 
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking map changes.
+  # @doc """
+  # Returns an `%Ecto.Changeset{}` for tracking map changes.
 
-  ## Examples
+  # ## Examples
 
-      iex> change_map(map)
-      %Ecto.Changeset{source: %Map{}}
+  #     iex> change_map(map)
+  #     %Ecto.Changeset{source: %Map{}}
 
-  """
-  def change_map(%Map{} = map) do
-    Map.changeset(map, %{})
-  end
+  # """
+  # def change_map(%Map{} = map) do
+  #   Map.changeset(map, %{})
+  # end
 end

@@ -50,7 +50,7 @@ defmodule Ferry.Locations.Address do
   @doc false
   def full_changeset(address, attrs) do
     address
-    |> cast(attrs, [:label, :street, :city, :province, :country_code, :zip_code])
+    |> cast(attrs, [:label, :street, :city, :province, :country_code, :postal_code])
     |> cast_assoc(:geocode, required: true)
     |> validate_required([:province, :country_code, :postal_code])
     |> validate_length(:label, min: 1, max: 255)
@@ -58,7 +58,7 @@ defmodule Ferry.Locations.Address do
     |> validate_length(:city, min: 1, max: 255)
     |> validate_length(:province, max: 255)
     |> validate_length(:country_code, min: 2, max: 255) # must be at least a 2 letter country code
-    |> validate_length(:zip_code, max: 255)
+    |> validate_length(:postal_code, max: 255)
     # TODO: add a changeset check constraint that matches the db one?
     #       https://hexdocs.pm/ecto/Ecto.Changeset.html#check_constraint/3
     #

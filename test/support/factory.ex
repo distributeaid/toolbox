@@ -120,8 +120,6 @@ defmodule Ferry.Factory do
       # add other group types here
       type: sequence(:group_type, ["M4D_CHAPTER"]),
 
-      location: build(:address),
-
       # TODO: logo
       description: "We show solidarity with our neighbors by using mutual aid to collect food and clothing from the community and distribute it to those in need.",
       donation_link: "https://liecheatstealkillwin.com/listentoit.html",
@@ -134,6 +132,22 @@ defmodule Ferry.Factory do
       donation_form: "https://donation.example.com",
       donation_form_results: "https://donation.example.com/results"
     }
+  end
+
+  def with_location(%Group{} = group) do
+    address = insert(:address, group: group)
+
+    %{group | location: address}
+  end
+
+  def with_location(groups) when is_list(groups) do
+    Enum.map(groups, &(with_location(&1)))
+  end
+
+  def with_location(group_attrs) when is_map(group_attrs) do
+    address = params_for(:address)
+
+    Map.put(group_attrs, :location, address)
   end
 
   def invalid_group_factory do
@@ -302,8 +316,8 @@ defmodule Ferry.Factory do
       address_factory(),
       %{
         province: "",
-        country_code: "",
-        postal_code: "1"
+        country_code: "1",
+        postal_code: ""
       }
     )
   end

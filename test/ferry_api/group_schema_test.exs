@@ -80,7 +80,7 @@ defmodule Ferry.GroupTest do
   end
 
   test "get all groups - one", %{conn: conn} do
-    group = insert(:group)
+    group = insert(:group) |> with_location()
 
     group_params = %{
       "id" => Integer.to_string(group.id),
@@ -117,7 +117,7 @@ defmodule Ferry.GroupTest do
   end
 
   test "get all groups - many", %{conn: conn} do
-    groups = insert_pair(:group)
+    groups = insert_pair(:group) |> with_location()
 
     groups_params =
       Enum.map(groups, fn group ->
@@ -159,7 +159,7 @@ defmodule Ferry.GroupTest do
   # Query - Get A Group
   # ------------------------------------------------------------
   test "get a group - found", %{conn: conn} do
-    group = insert(:group)
+    group = insert(:group) |> with_location()
 
     group_params = %{
       "id" => Integer.to_string(group.id),
@@ -221,7 +221,7 @@ defmodule Ferry.GroupTest do
   test "create a group - success", %{conn: conn} do
     sign_in_user()
 
-    group_attrs = params_with_assocs(:group)
+    group_attrs = params_for(:group) |> with_location()
 
     mutation = """
       mutation {
@@ -364,8 +364,8 @@ defmodule Ferry.GroupTest do
   test "update a group - success", %{conn: conn} do
     sign_in_user()
 
-    group = insert(:group)
-    updates = params_with_assocs(:group)
+    group = insert(:group) |> with_location()
+    updates = params_for(:group) |> with_location()
 
     mutation = """
       mutation {
@@ -418,7 +418,7 @@ defmodule Ferry.GroupTest do
   test "update a group - error", %{conn: conn} do
     sign_in_user()
 
-    group = insert(:group)
+    group = insert(:group) |> with_location()
     updates = params_for(:invalid_group)
 
     mutation = """
