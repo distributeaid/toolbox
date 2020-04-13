@@ -3,6 +3,7 @@ mutation updateChapter($id: ID!, $groupInput: GroupInput!) {
     successful
     result {
       id
+      __typename
       slug
     }
     messages {

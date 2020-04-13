@@ -1,6 +1,7 @@
 query getChapterBySlug($slug: String!) {
   groupBySlug(slug: $slug) {
     id
+    __typename
     name
     slug
     description
