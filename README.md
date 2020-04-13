@@ -90,12 +90,39 @@ containers have exited.
 
 See the _Common Docker Commands_ section below for a list of container names.
 
+Trouble shooting: If you see that a container has exited with code 127 (e.g.
+"toolbox_web exited with code 127"), in your terminal:
+
+- close that container with `ctrl-c`
+- run `$docker-compose build`
+- run `$docker-compose up`
+- in another terminal window, run `$docker ps -a`, and check that toolbox_web
+  image is running on port `0.0.0.0:1312->1312/tcp`. For example:
+  ```
+  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                    PORTS                           NAMES
+  086b5fc29e52        toolbox_web         "/bin/sh -c '/app/de…"   42 minutes ago      Up 32 minutes             0.0.0.0:1312->1312/tcp          toolbox_web
+  ```
+
 **Setup Up Our Site**
 
 If everything is running correctly, you should be able to visit
-http://localhost:1312 or http://0.0.0.0:1312 and see our site. The localhost
-address is used in the rest of this readme, but the 0.0.0.0 address should be
-the same thing.
+http://localhost:1312/health or http://0.0.0.0:1312/health and see our site:
+
+```
+[
+  {
+    db_access: {
+      status: "ok"
+    },
+    time: 1.66
+    }
+]
+```
+
+Alternatively, try visiting `http://0.0.0.0:1312/api/graphiql` to see a UI form.
+
+The `localhost` address is used in the rest of this readme, but the `0.0.0.0`
+address should be the same thing.
 
 We now need to seed a test group and some database constants:
 
