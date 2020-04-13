@@ -26,7 +26,7 @@ type Props = {
 }
 
 export const ChapterForm: React.FC<Props> = ({ editChapter }) => {
-  const chapter = editChapter || ({} as Group)
+  const chapter = editChapter || ({ location: {} } as Group)
   const isNewChapter = !chapter.id
   const { t } = useTranslation()
   const history = useHistory()
@@ -50,7 +50,7 @@ export const ChapterForm: React.FC<Props> = ({ editChapter }) => {
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={initialValues(chapter)}
       validationSchema={validationSchema}
       onSubmit={(values) => {
         const groupInput = {
@@ -61,7 +61,7 @@ export const ChapterForm: React.FC<Props> = ({ editChapter }) => {
           location: {
             countryCode: values.country,
             province: values.state,
-            postalCode: values.postalCode
+            postalCode: values.postalCode,
           },
           name: values.name,
           requestForm: values.requestForm,
