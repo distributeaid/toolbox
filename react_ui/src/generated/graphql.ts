@@ -14,6 +14,23 @@ export type Scalars = {
   Float: number;
 };
 
+export type Address = {
+  readonly __typename?: 'Address';
+  readonly city: Maybe<Scalars['String']>;
+  readonly countryCode: Scalars['String'];
+  readonly id: Scalars['ID'];
+  readonly label: Maybe<Scalars['String']>;
+  readonly postalCode: Scalars['String'];
+  readonly province: Scalars['String'];
+  readonly street: Maybe<Scalars['String']>;
+};
+
+export type AddressInput = {
+  readonly countryCode: Maybe<Scalars['String']>;
+  readonly postalCode: Maybe<Scalars['String']>;
+  readonly province: Maybe<Scalars['String']>;
+};
+
 export type Group = {
   readonly __typename?: 'Group';
   readonly description: Maybe<Scalars['String']>;
@@ -21,6 +38,7 @@ export type Group = {
   readonly donationFormResults: Maybe<Scalars['String']>;
   readonly donationLink: Maybe<Scalars['String']>;
   readonly id: Scalars['ID'];
+  readonly location: Address;
   readonly name: Scalars['String'];
   readonly requestForm: Maybe<Scalars['String']>;
   readonly requestFormResults: Maybe<Scalars['String']>;
@@ -36,6 +54,7 @@ export type GroupInput = {
   readonly donationForm: Maybe<Scalars['String']>;
   readonly donationFormResults: Maybe<Scalars['String']>;
   readonly donationLink: Maybe<Scalars['String']>;
+  readonly location: Maybe<AddressInput>;
   readonly name: Maybe<Scalars['String']>;
   readonly requestForm: Maybe<Scalars['String']>;
   readonly requestFormResults: Maybe<Scalars['String']>;
@@ -218,7 +237,7 @@ export const GetChapterDocument = gql`
  * __useGetChapterQuery__
  *
  * To run a query within a React component, call `useGetChapterQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetChapterQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -262,7 +281,7 @@ export const GetChapterBySlugDocument = gql`
  * __useGetChapterBySlugQuery__
  *
  * To run a query within a React component, call `useGetChapterBySlugQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetChapterBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -298,7 +317,7 @@ export const GetChapterListDocument = gql`
  * __useGetChapterListQuery__
  *
  * To run a query within a React component, call `useGetChapterListQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterListQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetChapterListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -359,5 +378,3 @@ export function useUpdateChapterMutation(baseOptions?: ApolloReactHooks.Mutation
 export type UpdateChapterMutationHookResult = ReturnType<typeof useUpdateChapterMutation>;
 export type UpdateChapterMutationResult = ApolloReactCommon.MutationResult<UpdateChapterMutation>;
 export type UpdateChapterMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateChapterMutation, UpdateChapterMutationVariables>;
-
-
