@@ -4,11 +4,10 @@ defmodule FerryApi.Schema.GroupType do
   import AbsintheErrorPayload.Payload
 
   enum :group_type do
-    value :m4d_chapter, as: "M4D_CHAPTER"
+    value(:m4d_chapter, as: "M4D_CHAPTER")
   end
 
   object :group do
-
     # Required Fields
     # ------------------------------------------------------------
     field :id, non_null(:id)
@@ -25,6 +24,7 @@ defmodule FerryApi.Schema.GroupType do
     # currently a constant set by the backend: "M4D_CHAPTER"
     field :type, non_null(:group_type)
 
+    field :leader, non_null(:string)
     field :location, non_null(:address)
 
     # Optional Fields
@@ -50,7 +50,6 @@ defmodule FerryApi.Schema.GroupType do
     # field :users, list_of(:user), resolve: dataloader(Group)
     # field :roles
     # field :projects
-
   end
 
   payload_object(:group_payload, :group)

@@ -38,6 +38,7 @@ export type Group = {
   readonly donationFormResults: Maybe<Scalars['String']>;
   readonly donationLink: Maybe<Scalars['String']>;
   readonly id: Scalars['ID'];
+  readonly leader: Scalars['String'];
   readonly location: Address;
   readonly name: Scalars['String'];
   readonly requestForm: Maybe<Scalars['String']>;
@@ -54,6 +55,7 @@ export type GroupInput = {
   readonly donationForm: Maybe<Scalars['String']>;
   readonly donationFormResults: Maybe<Scalars['String']>;
   readonly donationLink: Maybe<Scalars['String']>;
+  readonly leader: Maybe<Scalars['String']>;
   readonly location: Maybe<AddressInput>;
   readonly name: Maybe<Scalars['String']>;
   readonly requestForm: Maybe<Scalars['String']>;
@@ -146,19 +148,12 @@ export type CreateChapterMutationVariables = {
 
 export type CreateChapterMutation = { readonly __typename?: 'RootMutationType', readonly createGroup: Maybe<{ readonly __typename?: 'GroupPayload', readonly successful: boolean, readonly result: Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly slug: string }>, readonly messages: Maybe<ReadonlyArray<Maybe<{ readonly __typename?: 'ValidationMessage', readonly field: Maybe<string>, readonly message: Maybe<string> }>>> }> };
 
-export type GetChapterQueryVariables = {
-  id: Scalars['ID'];
-};
-
-
-export type GetChapterQuery = { readonly __typename?: 'RootQueryType', readonly group: Maybe<{ readonly __typename?: 'Group', readonly id: string, readonly name: string, readonly slug: string, readonly description: Maybe<string>, readonly donationForm: Maybe<string>, readonly donationLink: Maybe<string>, readonly donationFormResults: Maybe<string>, readonly slackChannelName: Maybe<string>, readonly volunteerForm: Maybe<string>, readonly volunteerFormResults: Maybe<string>, readonly requestForm: Maybe<string>, readonly requestFormResults: Maybe<string> }> };
-
 export type GetChapterBySlugQueryVariables = {
   slug: Scalars['String'];
 };
 
 
-export type GetChapterBySlugQuery = { readonly __typename?: 'RootQueryType', readonly groupBySlug: Maybe<{ readonly __typename: 'Group', readonly id: string, readonly name: string, readonly slug: string, readonly description: Maybe<string>, readonly donationForm: Maybe<string>, readonly donationLink: Maybe<string>, readonly donationFormResults: Maybe<string>, readonly slackChannelName: Maybe<string>, readonly volunteerForm: Maybe<string>, readonly volunteerFormResults: Maybe<string>, readonly requestForm: Maybe<string>, readonly requestFormResults: Maybe<string>, readonly location: { readonly __typename?: 'Address', readonly countryCode: string, readonly province: string, readonly postalCode: string } }> };
+export type GetChapterBySlugQuery = { readonly __typename?: 'RootQueryType', readonly groupBySlug: Maybe<{ readonly __typename: 'Group', readonly id: string, readonly name: string, readonly slug: string, readonly leader: string, readonly description: Maybe<string>, readonly donationForm: Maybe<string>, readonly donationLink: Maybe<string>, readonly donationFormResults: Maybe<string>, readonly slackChannelName: Maybe<string>, readonly volunteerForm: Maybe<string>, readonly volunteerFormResults: Maybe<string>, readonly requestForm: Maybe<string>, readonly requestFormResults: Maybe<string>, readonly location: { readonly __typename?: 'Address', readonly countryCode: string, readonly province: string, readonly postalCode: string } }> };
 
 export type GetChapterListQueryVariables = {};
 
@@ -214,50 +209,6 @@ export function useCreateChapterMutation(baseOptions?: ApolloReactHooks.Mutation
 export type CreateChapterMutationHookResult = ReturnType<typeof useCreateChapterMutation>;
 export type CreateChapterMutationResult = ApolloReactCommon.MutationResult<CreateChapterMutation>;
 export type CreateChapterMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateChapterMutation, CreateChapterMutationVariables>;
-export const GetChapterDocument = gql`
-    query getChapter($id: ID!) {
-  group(id: $id) {
-    id
-    name
-    slug
-    description
-    donationForm
-    donationLink
-    donationFormResults
-    slackChannelName
-    volunteerForm
-    volunteerFormResults
-    requestForm
-    requestFormResults
-  }
-}
-    `;
-
-/**
- * __useGetChapterQuery__
- *
- * To run a query within a React component, call `useGetChapterQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetChapterQuery` returns an object from Apollo Client that contains loading, error, and data properties 
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetChapterQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetChapterQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetChapterQuery, GetChapterQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetChapterQuery, GetChapterQueryVariables>(GetChapterDocument, baseOptions);
-      }
-export function useGetChapterLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetChapterQuery, GetChapterQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetChapterQuery, GetChapterQueryVariables>(GetChapterDocument, baseOptions);
-        }
-export type GetChapterQueryHookResult = ReturnType<typeof useGetChapterQuery>;
-export type GetChapterLazyQueryHookResult = ReturnType<typeof useGetChapterLazyQuery>;
-export type GetChapterQueryResult = ApolloReactCommon.QueryResult<GetChapterQuery, GetChapterQueryVariables>;
 export const GetChapterBySlugDocument = gql`
     query getChapterBySlug($slug: String!) {
   groupBySlug(slug: $slug) {
@@ -265,6 +216,7 @@ export const GetChapterBySlugDocument = gql`
     __typename
     name
     slug
+    leader
     description
     donationForm
     donationLink

@@ -18,6 +18,7 @@ defmodule Ferry.Profiles.Group do
 
     # profile
     field :logo, Logo.Type
+    field :leader, :string
     field :description, :string
     field :donation_link, Ferry.EctoType.URL
     field :slack_channel_name, :string
@@ -49,6 +50,7 @@ defmodule Ferry.Profiles.Group do
     |> cast(attrs, [
       :name,
       :slug,
+      :leader,
       :description,
       :donation_link,
       :slack_channel_name,
