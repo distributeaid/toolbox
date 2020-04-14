@@ -60,7 +60,7 @@ export const ChapterForm: React.FC<Props> = ({ editChapter }) => {
           donationLink: null,
           location: {
             countryCode: values.country,
-            province: values.state,
+            province: values.country === 'US' ? values.state : values.province,
             postalCode: values.postalCode,
           },
           name: values.name,
