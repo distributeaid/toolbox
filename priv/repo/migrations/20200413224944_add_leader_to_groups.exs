@@ -3,7 +3,7 @@ defmodule Ferry.Repo.Migrations.AddLeaderToGroups do
 
   def change do
     alter table("groups") do
-      add :leader, :text, null: false, default: ""
+      add :leader, :text, null: true
     end
   end
 end

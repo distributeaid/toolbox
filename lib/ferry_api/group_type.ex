@@ -24,13 +24,13 @@ defmodule FerryApi.Schema.GroupType do
     # currently a constant set by the backend: "M4D_CHAPTER"
     field :type, non_null(:group_type)
 
-    field :leader, non_null(:string)
     field :location, non_null(:address)
 
     # Optional Fields
     # ------------------------------------------------------------
 
     # TODO: field :logo, :file (?)
+    field :leader, :string
     field :description, :string
     field :donation_link, :string
     field :slack_channel_name, :string

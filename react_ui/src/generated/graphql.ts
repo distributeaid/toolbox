@@ -38,7 +38,7 @@ export type Group = {
   readonly donationFormResults: Maybe<Scalars['String']>;
   readonly donationLink: Maybe<Scalars['String']>;
   readonly id: Scalars['ID'];
-  readonly leader: Scalars['String'];
+  readonly leader: Maybe<Scalars['String']>;
   readonly location: Address;
   readonly name: Scalars['String'];
   readonly requestForm: Maybe<Scalars['String']>;
@@ -153,7 +153,7 @@ export type GetChapterBySlugQueryVariables = {
 };
 
 
-export type GetChapterBySlugQuery = { readonly __typename?: 'RootQueryType', readonly groupBySlug: Maybe<{ readonly __typename: 'Group', readonly id: string, readonly name: string, readonly slug: string, readonly leader: string, readonly description: Maybe<string>, readonly donationForm: Maybe<string>, readonly donationLink: Maybe<string>, readonly donationFormResults: Maybe<string>, readonly slackChannelName: Maybe<string>, readonly volunteerForm: Maybe<string>, readonly volunteerFormResults: Maybe<string>, readonly requestForm: Maybe<string>, readonly requestFormResults: Maybe<string>, readonly location: { readonly __typename?: 'Address', readonly countryCode: string, readonly province: string, readonly postalCode: string } }> };
+export type GetChapterBySlugQuery = { readonly __typename?: 'RootQueryType', readonly groupBySlug: Maybe<{ readonly __typename: 'Group', readonly id: string, readonly name: string, readonly slug: string, readonly leader: Maybe<string>, readonly description: Maybe<string>, readonly donationForm: Maybe<string>, readonly donationLink: Maybe<string>, readonly donationFormResults: Maybe<string>, readonly slackChannelName: Maybe<string>, readonly volunteerForm: Maybe<string>, readonly volunteerFormResults: Maybe<string>, readonly requestForm: Maybe<string>, readonly requestFormResults: Maybe<string>, readonly location: { readonly __typename?: 'Address', readonly countryCode: string, readonly province: string, readonly postalCode: string } }> };
 
 export type GetChapterListQueryVariables = {};
 

@@ -30,6 +30,7 @@
   },
   "chapter": {
     "backLink": "Back to Directory",
+    "leadHeader": "Chapter Lead",
     "requestSuppliesLink": "Request Supplies",
     "donateSuppliesLink": "Donate Supplies",
     "volunteerLink": "Volunteer",

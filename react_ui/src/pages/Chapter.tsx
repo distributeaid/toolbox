@@ -46,14 +46,16 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
             </PreHeader>
 
             <MainHeader>{chapter.name}</MainHeader>
-            <div className="mb-8">
-              <div className="font-body text-gray-500 text-xs">
-                Chapter Lead
+            {chapter.leader && (
+              <div className="mb-8">
+                <div className="font-body text-gray-500 text-xs">
+                  {t('chapter.leadHeader')}
+                </div>
+                <div className="font-body text-lg font-bold">
+                  {chapter.leader}
+                </div>
               </div>
-              <div className="font-body text-lg font-bold">
-                {chapter.leader}
-              </div>
-            </div>
+            )}
           </>
         )}
       </ContentContainer>

@@ -115,7 +115,7 @@ export const ChapterForm: React.FC<Props> = ({ editChapter }) => {
                 {sectionHeader(t('chapterForm.chapterLead'))}
                 <FormInput
                   name="leader"
-                  title={t('chapterForm.chapterLeadDescription') + '*'}
+                  title={t('chapterForm.chapterLeadDescription')}
                 />
 
                 {sectionHeader(t('chapterForm.chapterSlug'))}
