@@ -69,11 +69,13 @@ exports[`loads the chapter details and renders the page 1`] = `
         <div
           class="font-body text-gray-500 text-xs"
         >
-          Chapter Lead
+          chapter.leadHeader
         </div>
         <div
           class="font-body text-lg font-bold"
-        />
+        >
+          Oaky
+        </div>
       </div>
     </div>
     <div
