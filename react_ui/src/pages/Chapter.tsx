@@ -46,6 +46,14 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
             </PreHeader>
 
             <MainHeader>{chapter.name}</MainHeader>
+            <div className="mb-8">
+              <div className="font-body text-gray-500 text-xs">
+                Chapter Lead
+              </div>
+              <div className="font-body text-lg font-bold">
+                {chapter.leader}
+              </div>
+            </div>
           </>
         )}
       </ContentContainer>
