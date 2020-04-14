@@ -1,5 +1,7 @@
-import { ErrorMessage, Field, FieldProps } from 'formik'
+import { Field, FieldProps } from 'formik'
 import React from 'react'
+
+import { FormErrorMessage } from './FormErrorMessage'
 
 type Props = {
   name: string
@@ -22,11 +24,7 @@ export const FormTextarea: React.FC<Props> = ({ name, title }) => {
               id={name}
               className="w-full h-40 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm"
             />
-            <ErrorMessage name={name}>
-              {(msg) => (
-                <span className="text-red-600 text-sm -mt-2">{msg}</span>
-              )}
-            </ErrorMessage>
+            <FormErrorMessage name={name} />
           </div>
         )
       }}

@@ -21,13 +21,7 @@ const isValidGDocsUrl = (requiredBasePath: string, value: string) => {
 }
 
 export const validationSchema = yup.object({
-  name: yup
-    .string()
-    .matches(
-      /^[a-zA-Z -]*$/,
-      'Chapter name can only contain letters, spaces, and dashes'
-    )
-    .required('Please enter a chapter name'),
+  name: yup.string().required('Please enter a chapter name'),
   leader: yup.string(),
   slug: yup
     .string()

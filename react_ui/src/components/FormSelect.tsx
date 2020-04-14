@@ -1,6 +1,7 @@
-import { ErrorMessage, Field, FieldProps } from 'formik'
+import { Field, FieldProps } from 'formik'
 import React from 'react'
 
+import { FormErrorMessage } from './FormErrorMessage'
 import { Select } from './Select'
 
 type Props = {
@@ -32,11 +33,7 @@ export const FormSelect: React.FC<Props> = ({
               value={value}
               includeBlank={includeBlank}
             />
-            <ErrorMessage name={name}>
-              {(msg) => (
-                <span className="text-red-600 text-sm -mt-2">{msg}</span>
-              )}
-            </ErrorMessage>
+            <FormErrorMessage name={name} />
           </>
         )
       }}
