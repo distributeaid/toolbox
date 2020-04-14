@@ -121,6 +121,7 @@ defmodule Ferry.Factory do
       type: sequence(:group_type, ["M4D_CHAPTER"]),
 
       # TODO: logo
+      leader: "Cleo",
       description:
         "We show solidarity with our neighbors by using mutual aid to collect food and clothing from the community and distribute it to those in need.",
       donation_link: "https://liecheatstealkillwin.com/listentoit.html",
