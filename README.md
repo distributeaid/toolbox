@@ -99,6 +99,7 @@ Trouble shooting: If you see that a container has exited with code 127 (e.g.
 - run `$docker-compose up` to restart the container.
 - in another terminal window, run `$docker ps -a`, and check that toolbox_web
   image is running on port `0.0.0.0:1312->1312/tcp`. For example:
+
   ```
   CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                    PORTS                           NAMES
   086b5fc29e52        toolbox_web         "/bin/sh -c '/app/de…"   42 minutes ago      Up 32 minutes             0.0.0.0:1312->1312/tcp          toolbox_web
@@ -122,7 +123,7 @@ http://localhost:1312/health or http://0.0.0.0:1312/health and see our site:
 
 Alternatively, try visiting `http://0.0.0.0:1312/api/graphiql` to see a UI form.
 
-If you can also run the app with npm: `cd` into `toolbox/react_ui` folder, run
+You can also run the app with npm: `cd` into `toolbox/react_ui` folder, run
 `npm i` then `npm start`. Your browser will automatically open the app with JS
 and CSS assets.
 
