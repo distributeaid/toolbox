@@ -24,11 +24,13 @@ defmodule Ferry.Profiles do
 
   """
   def list_groups() do
-    Repo.all(Group)
+    query = group_query(preload: [])
+    Repo.all(query)
   end
 
-  def list_groups(preload: [:location]) do
-    Repo.all(Group) |> Repo.preload([:location])
+  def list_groups(preload: preload) do
+    query = group_query(preload: preload)
+    Repo.all(query)
   end
 
   @doc """
@@ -46,19 +48,23 @@ defmodule Ferry.Profiles do
 
   """
   def get_group!(id) do
-    Repo.get!(Group, id)
+    query = group_query(preload: [])
+    Repo.get!(query, id)
   end
 
   def get_group(id) do
-    Repo.get(Group, id)
+    query = group_query(preload: [])
+    Repo.get(query, id)
   end
 
-  def get_group(id, preload: [:location]) do
-    Repo.get(Group, id) |> Repo.preload([:location])
+  def get_group(id, preload: preload) do
+    query = group_query(preload: preload)
+    Repo.get(query, id)
   end
 
   def get_group_by_slug(slug) do
-    Repo.get_by(Group, slug: slug) |> Repo.preload([:location])
+    query = group_query(preload: [])
+    Repo.get_by(query, slug: slug)
   end
 
   @doc """
@@ -127,6 +133,29 @@ defmodule Ferry.Profiles do
     Group.changeset(group, %{})
   end
 
+
+  # Helpers
+  # ------------------------------------------------------------
+
+  defp group_query(preload: preloads) do
+    query =
+      from group in Group,
+        order_by: group.id
+
+    query =
+      if Enum.member?(preloads, :location) do
+        from group in query,
+          left_join: address in assoc(group, :location),
+          preload: [location: address]
+      else
+        query
+      end
+
+    query
+  end
+
+
+
   # Project
   # ==============================================================================
 
@@ -166,7 +195,8 @@ defmodule Ferry.Profiles do
       from p in Project,
         left_join: g in assoc(p, :group),
         left_join: a in assoc(p, :address),
-        preload: [group: g, address: a]
+        preload: [group: g, address: a],
+        order_by: p.id
     )
   end
 
