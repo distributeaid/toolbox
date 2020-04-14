@@ -24,6 +24,7 @@ it('loads the chapter details and renders the page', () => {
         id: '1',
         slug: 'oakland',
         name: 'Oakland',
+        leader: 'Oaky',
         description: 'the Oakland group',
         donationForm: 'donation form link',
         donationFormResults: 'donation form results link',

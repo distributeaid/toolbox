@@ -55,6 +55,7 @@ export const ChapterForm: React.FC<Props> = ({ editChapter }) => {
       onSubmit={(values) => {
         const groupInput = {
           description: values.description,
+          leader: values.leader,
           donationForm: values.donationForm,
           donationFormResults: values.donationFormResults,
           donationLink: null,
@@ -109,6 +110,12 @@ export const ChapterForm: React.FC<Props> = ({ editChapter }) => {
                 <FormInput
                   name="name"
                   title={t('chapterForm.chapterName') + '*'}
+                />
+
+                {sectionHeader(t('chapterForm.chapterLead'))}
+                <FormInput
+                  name="leader"
+                  title={t('chapterForm.chapterLeadDescription')}
                 />
 
                 {sectionHeader(t('chapterForm.chapterSlug'))}

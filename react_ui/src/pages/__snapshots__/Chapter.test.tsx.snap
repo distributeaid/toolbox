@@ -63,6 +63,20 @@ exports[`loads the chapter details and renders the page 1`] = `
       >
         Oakland
       </h1>
+      <div
+        class="mb-8"
+      >
+        <div
+          class="font-body text-gray-500 text-xs"
+        >
+          chapter.leadHeader
+        </div>
+        <div
+          class="font-body text-lg font-bold"
+        >
+          Oaky
+        </div>
+      </div>
     </div>
     <div
       class="border-gray-400 border-t border-b w-full"

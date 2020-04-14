@@ -3,6 +3,7 @@ import { Group } from '../../generated/graphql'
 export const initialValues = (chapter: Group) => ({
   name: chapter.name || '',
   slug: chapter.slug || '',
+  leader: chapter.leader || '',
   country: chapter.location.countryCode || '',
   state:
     chapter.location.countryCode === 'US'

@@ -4,6 +4,7 @@ query getChapterBySlug($slug: String!) {
     __typename
     name
     slug
+    leader
     description
     donationForm
     donationLink

@@ -7,7 +7,6 @@ defmodule FerryApi.Schema.Group do
   alias Ferry.Locations
   alias FerryApi.Middleware
 
-
   # Query
   # ------------------------------------------------------------
   object :group_queries do
@@ -42,6 +41,7 @@ defmodule FerryApi.Schema.Group do
     # currently a constant on the backend "M4D_CHAPTER"
     field :type
 
+    field :leader, :string
     field :description, :string
     field :donation_link, :string
     field :slack_channel_name, :string
@@ -115,12 +115,14 @@ defmodule FerryApi.Schema.Group do
           {:error, changeset} -> {:error, changeset}
         end
 
-      {:error, changeset} -> {:error, changeset}
+      {:error, changeset} ->
+        {:error, changeset}
     end
   end
 
   def update_group(_parent, %{id: id, group_input: group_attrs}, _resolution) do
     group = Profiles.get_group(id, preload: [:location])
+
     case Profiles.update_group(group, group_attrs) do
       {:ok, group} ->
         case Locations.update_address(group.location, group_attrs.location) do
@@ -128,7 +130,8 @@ defmodule FerryApi.Schema.Group do
           {:error, changeset} -> {:error, changeset}
         end
 
-      {:error, changeset} -> {:error, changeset}
+      {:error, changeset} ->
+        {:error, changeset}
     end
   end
 
