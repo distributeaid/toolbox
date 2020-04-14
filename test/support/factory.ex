@@ -55,18 +55,19 @@ defmodule Ferry.Factory do
   def without_assoc(list, path, cardinality) when is_list(list) and is_list(path) do
     field = List.last(path)
 
-    path = Enum.map(path, fn step ->
-      Access.key(step)
-    end)
+    path =
+      Enum.map(path, fn step ->
+        Access.key(step)
+      end)
 
     # assumes all structs in the list are the same type
-    owner = case length(path) do
-      # owner is just an entry in the list
-      1 -> hd(list)
-
-      # follow the path to the n-1 step to find the field's owner
-      _ -> get_in(hd(list), List.pop_at(path, -1) |> elem(1))
-    end
+    owner =
+      case length(path) do
+        # owner is just an entry in the list
+        1 -> hd(list)
+        # follow the path to the n-1 step to find the field's owner
+        _ -> get_in(hd(list), List.pop_at(path, -1) |> elem(1))
+      end
 
     not_loaded = %Ecto.Association.NotLoaded{
       __field__: field,
@@ -93,16 +94,15 @@ defmodule Ferry.Factory do
 
   def string_keys_to_atoms(string_key_map) when is_map(string_key_map) do
     for {key, val} <- string_key_map,
-      into: %{},
-      do: {String.to_atom(key), val}
+        into: %{},
+        do: {String.to_atom(key), val}
   end
 
   def atom_keys_to_strings(atom_key_map) when is_map(atom_key_map) do
     for {key, val} <- Map.to_list(atom_key_map),
-      into: %{},
-      do: {Atom.to_string(key), val}
+        into: %{},
+        do: {Atom.to_string(key), val}
   end
-
 
   # ExMachina Factories
   # ==============================================================================
@@ -121,10 +121,10 @@ defmodule Ferry.Factory do
       type: sequence(:group_type, ["M4D_CHAPTER"]),
 
       # TODO: logo
-      description: "We show solidarity with our neighbors by using mutual aid to collect food and clothing from the community and distribute it to those in need.",
+      description:
+        "We show solidarity with our neighbors by using mutual aid to collect food and clothing from the community and distribute it to those in need.",
       donation_link: "https://liecheatstealkillwin.com/listentoit.html",
       slack_channel_name: "FCRC is on IRC Baby #cool",
-
       request_form: "https://request.example.com",
       request_form_results: "https://request.example.com/results",
       volunteer_form: "https://volunteer.example.com",
@@ -141,7 +141,7 @@ defmodule Ferry.Factory do
   end
 
   def with_location(groups) when is_list(groups) do
-    Enum.map(groups, &(with_location(&1)))
+    Enum.map(groups, &with_location(&1))
   end
 
   def with_location(group_attrs) when is_map(group_attrs) do
@@ -228,8 +228,8 @@ defmodule Ferry.Factory do
   def project_factory do
     %Project{
       name: sequence("Klimb"),
-      description: "Up and over their walls!  Snip-snip the barbed wire with some handy dandy bolt cutters.",
-
+      description:
+        "Up and over their walls!  Snip-snip the barbed wire with some handy dandy bolt cutters.",
       group: build(:group),
       address: build(:address, geocode: build(:geocode))
     }
@@ -347,7 +347,8 @@ defmodule Ferry.Factory do
     %Geocode{
       lat: "44.7287901",
       lng: "20.3751818051888",
-      data: %{ # Couch Bar! ;)
+      # Couch Bar! ;)
+      data: %{
         "address" => %{
           "city" => "Cukarica Urban Municipality",
           "country" => "Serbia",
@@ -362,16 +363,17 @@ defmodule Ferry.Factory do
         },
         "boundingbox" => ["44.7287052", "44.7288606", "20.375084", "20.3752775"],
         "class" => "building",
-        "display_name" => "69, Радних акција, Тараиш, Zeleznik, Cukarica Urban Municipality, City of Belgrade, Central Serbia, 11250, Serbia",
+        "display_name" =>
+          "69, Радних акција, Тараиш, Zeleznik, Cukarica Urban Municipality, City of Belgrade, Central Serbia, 11250, Serbia",
         "importance" => 0.22100000000000003,
         "lat" => "44.7287901",
         "licence" => "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
         "lon" => "20.3751818051888",
         # credo:disable-for-next-line Credo.Check.Readability.LargeNumbers
-        "osm_id" => 413883199,
+        "osm_id" => 413_883_199,
         "osm_type" => "way",
         # credo:disable-for-next-line Credo.Check.Readability.LargeNumbers
-        "place_id" => 167558366,
+        "place_id" => 167_558_366,
         "type" => "yes"
       }
     }
@@ -385,24 +387,21 @@ defmodule Ferry.Factory do
       target_date: sequence(:target_date, &"1/1/#{2020 + &1}"),
       status: Enum.random(["planning", "ready", "underway", "received"]),
       description: sequence("I am a shipment description with stuff about shipments yeah!"),
-
       sender_address: "an address",
       receiver_address: "another address",
-
-      transport_size: Enum.random([
-        nil,
-        "Full Truck (13m / 40ft)",
-        "Half Truck (13m / 40ft)",
-        "Individual Pallets",
-        "Van",
-        "Car",
-        "Shipping Container",
-        "Other"
-      ]),
-
+      transport_size:
+        Enum.random([
+          nil,
+          "Full Truck (13m / 40ft)",
+          "Half Truck (13m / 40ft)",
+          "Individual Pallets",
+          "Van",
+          "Car",
+          "Shipping Container",
+          "Other"
+        ]),
       items: "some stuff",
       funding: "$nothing",
-
       roles: [],
       routes: []
     }
@@ -418,10 +417,12 @@ defmodule Ferry.Factory do
   end
 
   def with_role(shipment, group \\ %{}) do
-    group = case group do
-      %Group{} -> group
-      _ -> insert(:group, group) # `group` is attrs for :group factory
-    end
+    group =
+      case group do
+        %Group{} -> group
+        # `group` is attrs for :group factory
+        _ -> insert(:group, group)
+      end
 
     role = insert(:shipment_role, %{shipment_id: shipment.id, group: group})
 
@@ -431,10 +432,11 @@ defmodule Ferry.Factory do
   end
 
   def with_route(shipment, route \\ %{}) do
-    route = case route do
-      %Route{} -> route
-      _ -> insert(:route, Map.merge(route, %{shipment_id: shipment.id}))
-    end
+    route =
+      case route do
+        %Route{} -> route
+        _ -> insert(:route, Map.merge(route, %{shipment_id: shipment.id}))
+      end
 
     # append the route to shipment.routes and return the shipment
     # credo:disable-for-next-line Credo.Check.Refactor.AppendSingleItem
@@ -539,7 +541,7 @@ defmodule Ferry.Factory do
   def with_item(%Ferry.AidTaxonomy.Category{} = category, %Ferry.AidTaxonomy.Item{} = item) do
     items =
       [item | category.items]
-      |> Enum.sort_by(&(&1.name))
+      |> Enum.sort_by(& &1.name)
 
     %{category | items: items}
   end
@@ -586,17 +588,19 @@ defmodule Ferry.Factory do
   # Mod
   # ------------------------------------------------------------
   def aid_mod_factory(attrs \\ %{}) do
-    type = if attrs[:type] do
-      attrs.type
-    else
-      Enum.random(["integer", "select", "multi-select"])
-    end
+    type =
+      if attrs[:type] do
+        attrs.type
+      else
+        Enum.random(["integer", "select", "multi-select"])
+      end
 
-    values = case type do
-      "integer" -> nil
-      "select" -> ["small", "large"]
-      "multi-select" -> ["summer", "winter"]
-    end
+    values =
+      case type do
+        "integer" -> nil
+        "select" -> ["small", "large"]
+        "multi-select" -> ["summer", "winter"]
+      end
 
     mod = %Ferry.AidTaxonomy.Mod{
       name: sequence("Size"),
@@ -643,7 +647,6 @@ defmodule Ferry.Factory do
     )
   end
 
-
   # Aid
   # ================================================================================
 
@@ -652,12 +655,14 @@ defmodule Ferry.Factory do
 
   def aid_list_factory(attrs \\ %{}) do
     attrs =
-      if attrs[:available_list] == nil and attrs[:manifest_list] == nil and attrs[:needs_list] == nil do
+      if attrs[:available_list] == nil and attrs[:manifest_list] == nil and
+           attrs[:needs_list] == nil do
         owner_options = [
           %{available_list: build(:available_list)},
           %{manifest_list: build(:manifest_list)},
-          %{needs_list: build(:needs_list)},
+          %{needs_list: build(:needs_list)}
         ]
+
         Map.merge(attrs, Enum.random(owner_options))
       else
         attrs
@@ -671,15 +676,12 @@ defmodule Ferry.Factory do
   end
 
   def invalid_aid_list_factory do
-
   end
 
   def invalid_owner_aid_list_factory do
     struct!(
       aid_list_factory(),
-      %{
-
-      }
+      %{}
     )
   end
 
@@ -705,7 +707,6 @@ defmodule Ferry.Factory do
 
     %ManifestList{
       packaging: sequence(:packaging, &"#{&1} pallets"),
-
       shipment: shipment,
       from: sender,
       to: receiver,
@@ -728,7 +729,6 @@ defmodule Ferry.Factory do
     needs_list = %NeedsList{
       from: from,
       to: to,
-
       project: build(:project) |> without_assoc(:address)
     }
 
@@ -744,35 +744,45 @@ defmodule Ferry.Factory do
 
   def needs_list_before_factory(%{from: from} = attrs) do
     before = from |> Timex.shift(days: -1)
-    attrs = Map.merge(attrs, %{
-      from: before |> Timex.shift(months: -1),
-      to: before
-    })
+
+    attrs =
+      Map.merge(attrs, %{
+        from: before |> Timex.shift(months: -1),
+        to: before
+      })
+
     struct!(needs_list_factory(), attrs)
   end
 
   def needs_list_start_overlap_factory(%{from: from} = attrs) do
-    attrs = Map.merge(attrs, %{
-      from: from |> Timex.shift(months: -1),
-      to: from
-    })
+    attrs =
+      Map.merge(attrs, %{
+        from: from |> Timex.shift(months: -1),
+        to: from
+      })
+
     struct!(needs_list_factory(), attrs)
   end
 
   def needs_list_end_overlap_factory(%{to: to} = attrs) do
-    attrs = Map.merge(attrs, %{
-      from: to,
-      to: to |> Timex.shift(months: 1)
-    })
+    attrs =
+      Map.merge(attrs, %{
+        from: to,
+        to: to |> Timex.shift(months: 1)
+      })
+
     struct!(needs_list_factory(), attrs)
   end
 
   def needs_list_after_factory(%{to: to} = attrs) do
     after_end = to |> Timex.shift(days: 1)
-    attrs = Map.merge(attrs, %{
-      from: after_end,
-      to: after_end |> Timex.shift(months: 1)
-    })
+
+    attrs =
+      Map.merge(attrs, %{
+        from: after_end,
+        to: after_end |> Timex.shift(months: 1)
+      })
+
     struct!(needs_list_factory(), attrs)
   end
 
@@ -797,8 +807,8 @@ defmodule Ferry.Factory do
 
   def entry_factory do
     %Entry{
-      amount: sequence(:amount, &(&1 + 1000)), # 1000, 1001, ...
-
+      # 1000, 1001, ...
+      amount: sequence(:amount, &(&1 + 1000)),
       list: build(:aid_list),
       item: build(:aid_item),
       mod_values: []
@@ -810,13 +820,19 @@ defmodule Ferry.Factory do
   def mod_value_factory(attrs) do
     mod = if attrs[:mod], do: attrs.mod, else: build(:aid_mod)
 
-    value = case mod.type do
-      "integer" -> sequence(:value, &(&1 + 1000)) # 1000, 1001, ...
-      "select" -> Enum.random(mod.values)
-      "multi-select" ->
-        [Enum.random(mod.values), Enum.random(mod.values)]
-        |> Enum.uniq()
-    end
+    value =
+      case mod.type do
+        # 1000, 1001, ...
+        "integer" ->
+          sequence(:value, &(&1 + 1000))
+
+        "select" ->
+          Enum.random(mod.values)
+
+        "multi-select" ->
+          [Enum.random(mod.values), Enum.random(mod.values)]
+          |> Enum.uniq()
+      end
 
     %ModValue{
       value: value,
@@ -824,5 +840,4 @@ defmodule Ferry.Factory do
       entry: build(:entry)
     }
   end
-
 end
