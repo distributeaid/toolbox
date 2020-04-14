@@ -3,3 +3,13 @@
 @tailwind components;
 
 @tailwind utilities;
+
+@variants hover, focus {
+  .z-10 {
+    z-index: 10;
+  }
+
+  .relative {
+    position: relative;
+  }
+}

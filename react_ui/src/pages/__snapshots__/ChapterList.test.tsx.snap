@@ -44,7 +44,7 @@ exports[`loads the chapter list 1`] = `
       class="border-gray-400 border-t w-full bg-blue-50 mt-16 py-16"
     >
       <div
-        class="container w-full max-w-6xl p-4 md:mx-auto overflow-hidden"
+        class="container p-4 md:mx-auto w-full max-w-4xl"
       >
         <div
           class="grid grid-cols-1 gap-4"
@@ -65,7 +65,7 @@ exports[`loads the chapter list 1`] = `
             <div
               class="w-6/12 pb-0"
             >
-              chapterList.coverageArea
+              chapterList.chapterName
             </div>
           </div>
           <ul>
@@ -73,7 +73,7 @@ exports[`loads the chapter list 1`] = `
               class="border-t border-gray-200 bg-white font-heading"
             >
               <a
-                class="p-6 flex flex-row hover:bg-gray-200 text-black text-sm"
+                class="p-6 flex flex-row text-black text-sm hover:shadow-xl hover:relative hover:z-10"
                 href="/wa-sea"
               >
                 <div
@@ -92,7 +92,7 @@ exports[`loads the chapter list 1`] = `
               class="border-t border-gray-200 bg-white font-heading"
             >
               <a
-                class="p-6 flex flex-row hover:bg-gray-200 text-black text-sm"
+                class="p-6 flex flex-row text-black text-sm hover:shadow-xl hover:relative hover:z-10"
                 href="/ca-oak"
               >
                 <div
@@ -109,6 +109,9 @@ exports[`loads the chapter list 1`] = `
             </li>
           </ul>
         </div>
+        <p
+          class="pb-4 font-body text-sm sm:text-lg text-center mt-8 mx-auto w-1/2"
+        />
       </div>
       <div
         class="flex flex-col justify-center py-10 sm:py-20"
