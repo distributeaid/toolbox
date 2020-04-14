@@ -3,10 +3,10 @@
 exports[`shows the footer 1`] = `
 <div>
   <footer
-    class="mt-5 pb-14 pl-3 pl-2 md:px-8 md:px-14 bg-gray-900 text-gray-100"
+    class="pb-14 pl-3 pl-2 md:px-8 md:px-14 bg-gray-900 text-gray-100"
   >
     <div
-      class="mx-auto max-w-7xl"
+      class="mx-auto max-w-7xl overflow-hidden"
     >
       <div
         class="-mt-5"

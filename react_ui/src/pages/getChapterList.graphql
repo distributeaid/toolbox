@@ -5,5 +5,9 @@ query getChapterList {
     slug
     description
     name
+    location {
+      id
+      province
+    }
   }
 }

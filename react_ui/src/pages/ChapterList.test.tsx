@@ -24,11 +24,17 @@ it('loads the chapter list', async () => {
           id: '1',
           name: 'Seattle',
           slug: 'wa-sea',
+          location: {
+            province: 'WA',
+          },
         },
         {
           id: '2',
           name: 'Oakland',
           slug: 'ca-oak',
+          location: {
+            province: 'CA',
+          },
         },
       ],
     } as FetchResult<GetChapterListQuery>,

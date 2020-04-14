@@ -8,17 +8,19 @@ import { FAQFooter } from '../components/FAQFooter'
 import { MainContent } from '../components/MainContent'
 import { MainHeader } from '../components/MainHeader'
 import { PreHeader } from '../components/PreHeader'
-import { Group, useGetChapterListQuery } from '../generated/graphql'
+import { useGetChapterListQuery } from '../generated/graphql'
 
-export const ChapterItem: React.FC<{ chapter: Partial<Group> }> = ({
-  chapter,
-}) => {
+export const ChapterItem: React.FC<{
+  chapter: { name: string; slug: string; location: { province: string } }
+}> = ({ chapter }) => {
   return (
     <li className="border-t border-gray-200 bg-white font-heading">
       <NavLink
         to={`/${chapter.slug}`}
         className="p-6 flex flex-row hover:bg-gray-200 text-black text-sm">
-        <div className="leading-5 font-semibold w-4/12">Province</div>
+        <div className="leading-5 font-semibold w-4/12">
+          {chapter.location.province}
+        </div>
         <div className="leading-5 font-medium w-6/12">{chapter.name}</div>
       </NavLink>
     </li>

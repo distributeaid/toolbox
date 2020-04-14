@@ -3,98 +3,127 @@
 exports[`loads the chapter list 1`] = `
 <div>
   <div
-    class="container w-full max-w-6xl p-4 md:mx-auto bg-white overflow-hidden"
+    class="w-full mx-auto bg-white overflow-hidden"
   >
     <div
-      class="p-4 md:p-8"
+      class="absolute top-0 right-0 hidden sm:block z-0"
+    >
+      <svg
+        class="z-0"
+        fill="none"
+        height="698"
+        viewBox="0 0 593 698"
+        width="593"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          class="z-0"
+          d="M760 -96.0684H40.8515C18.7238 -96.0684 0 -79.57 0 -58.3579V344.673C0 538.724 179.574 697.422 400 697.422C620.426 697.422 800 539.51 800 344.673V-58.3579C800 -78.7844 782.128 -96.0684 760 -96.0684Z"
+          fill="#3968DA"
+          fill-opacity="0.06"
+        />
+      </svg>
+    </div>
+    <div
+      class="container w-full max-w-6xl p-4 md:mx-auto overflow-hidden"
     >
       <div
-        class="mb-4 md:mb-8"
+        class="md:w-7/12 pt-16 sm:pt-32"
       >
         <h1
-          class="font-bold text-xl"
+          class="font-heading font-semibold text-3xl sm:text-6xl leading-2 mb-8"
         >
           chapterList.title
         </h1>
-        <p
-          class="py-4"
+        <h3
+          class="font-heading font-normal text-xl sm:text-2xl leading-normal"
+        />
+      </div>
+    </div>
+    <div
+      class="border-gray-400 border-t w-full bg-blue-50 mt-16 py-16"
+    >
+      <div
+        class="container w-full max-w-6xl p-4 md:mx-auto overflow-hidden"
+      >
+        <div
+          class="grid grid-cols-1 gap-4"
         >
-          chapterList.subtitle
-        </p>
-        <p>
-          If your area doesn't have a Masks For Docs Chapter yet, we are looking for volunteers to start new ones. Get in touch on
-           
-          <a
-            class="underline text-blue-600 visited:text-purple-600"
-            href="https://masksfordocs.slack.com"
-            target=""
+          <h3
+            class="font-heading text-3xl font-semibold px-6 pb-6"
           >
-            Slack
-          </a>
-          to start one [Need better copy here].
-        </p>
+            United States
+          </h3>
+          <div
+            class="flex px-6 font-heading font-semibold text-lg text-blue-600"
+          >
+            <div
+              class="w-4/12 pb-0"
+            >
+              chapterList.provinceTerm
+            </div>
+            <div
+              class="w-6/12 pb-0"
+            >
+              chapterList.coverageArea
+            </div>
+          </div>
+          <ul>
+            <li
+              class="border-t border-gray-200 bg-white font-heading"
+            >
+              <a
+                class="p-6 flex flex-row hover:bg-gray-200 text-black text-sm"
+                href="/wa-sea"
+              >
+                <div
+                  class="leading-5 font-semibold w-4/12"
+                >
+                  WA
+                </div>
+                <div
+                  class="leading-5 font-medium w-6/12"
+                >
+                  Seattle
+                </div>
+              </a>
+            </li>
+            <li
+              class="border-t border-gray-200 bg-white font-heading"
+            >
+              <a
+                class="p-6 flex flex-row hover:bg-gray-200 text-black text-sm"
+                href="/ca-oak"
+              >
+                <div
+                  class="leading-5 font-semibold w-4/12"
+                >
+                  CA
+                </div>
+                <div
+                  class="leading-5 font-medium w-6/12"
+                >
+                  Oakland
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
       <div
-        class="grid grid-cols-1 gap-4"
+        class="flex flex-col justify-center py-10 sm:py-20"
       >
-        <ul>
-          <li
-            class="border-t border-gray-200"
-          >
-            <a
-              href="/wa-sea"
-            >
-              <div
-                class="py-4 hover:bg-gray-200"
-              >
-                <div
-                  class="flex items-center justify-between"
-                >
-                  <div
-                    class="text-sm leading-5 font-medium text-black"
-                  >
-                    Seattle
-                  </div>
-                  <div
-                    class="ml-2 flex-shrink-0 flex"
-                  >
-                    <span
-                      class="px-2 inline-flex text-xs leading-5 font-semibold"
-                    />
-                  </div>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li
-            class="border-t border-gray-200"
-          >
-            <a
-              href="/ca-oak"
-            >
-              <div
-                class="py-4 hover:bg-gray-200"
-              >
-                <div
-                  class="flex items-center justify-between"
-                >
-                  <div
-                    class="text-sm leading-5 font-medium text-black"
-                  >
-                    Oakland
-                  </div>
-                  <div
-                    class="ml-2 flex-shrink-0 flex"
-                  >
-                    <span
-                      class="px-2 inline-flex text-xs leading-5 font-semibold"
-                    />
-                  </div>
-                </div>
-              </div>
-            </a>
-          </li>
-        </ul>
+        <h2
+          class="text-center font-heading font-semibold text-2xl sm:text-5xl leading-loose mb-4"
+        >
+          chapter.faqHeader
+        </h2>
+        <a
+          class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-blue-600 sm:w-auto"
+          href="/faq"
+        >
+          chapter.faqLink
+        </a>
       </div>
     </div>
   </div>
