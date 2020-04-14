@@ -24,8 +24,6 @@ import { ChapterList } from './pages/ChapterList'
 import { ChapterNew } from './pages/ChapterNew'
 import StyleGuide from './pages/StyleGuide'
 
-const SecretComponent = () => <p>Secret!</p>
-
 const App: React.FunctionComponent = () => {
   const { authState, setAuthState } = useAuthState()
 
@@ -44,13 +42,6 @@ const App: React.FunctionComponent = () => {
                 <AuthenticatorWrapper setAuthState={setAuthState} />
               </Route>
 
-              <PrivateRoute
-                exact
-                path="/secret"
-                isSignedIn={authState === 'authenticated'}
-                component={SecretComponent}
-              />
-
               <Route exact path="/chapters">
                 <ChapterList />
               </Route>
@@ -59,9 +50,12 @@ const App: React.FunctionComponent = () => {
                 <StyleGuide />
               </Route>
 
-              <Route exact path="/chapters/new">
-                <ChapterNew />
-              </Route>
+              <PrivateRoute
+                authState={authState}
+                exact
+                path="/chapters/new"
+                render={() => <ChapterNew />}
+              />
 
               <Route
                 exact
@@ -69,7 +63,8 @@ const App: React.FunctionComponent = () => {
                 render={({ match }) => <Chapter slug={match.params.slug} />}
               />
 
-              <Route
+              <PrivateRoute
+                authState={authState}
                 exact
                 path="/:slug/edit"
                 render={({ match }) => <ChapterEdit slug={match.params.slug} />}
