@@ -51,9 +51,7 @@ exports[`loads the chapter list 1`] = `
         >
           <h3
             class="font-heading text-3xl font-semibold px-6 pb-6"
-          >
-            United States
-          </h3>
+          />
           <div
             class="flex px-6 font-heading font-semibold text-lg text-blue-600"
           >
