@@ -51,7 +51,7 @@ exports[`loads the chapter details and renders the page 1`] = `
         </a>
       </div>
       <h3
-        class="font-heading font-normal text-xl sm:text-2xl leading-normal"
+        class="font-heading font-normal text-xl sm:text-2xl leading-relaxed"
       >
         California
          
@@ -59,7 +59,7 @@ exports[`loads the chapter details and renders the page 1`] = `
         USA
       </h3>
       <h1
-        class="font-heading font-semibold text-3xl sm:text-6xl leading-2 mb-8"
+        class="font-heading font-semibold text-3xl sm:text-6xl leading-tight mb-8"
       >
         Oakland
       </h1>
@@ -275,7 +275,7 @@ exports[`shows an error message when chapter not found 1`] = `
         </a>
       </div>
       <h3
-        class="font-heading font-normal text-xl sm:text-2xl leading-normal"
+        class="font-heading font-normal text-xl sm:text-2xl leading-relaxed"
       >
         Chapter "
         1
