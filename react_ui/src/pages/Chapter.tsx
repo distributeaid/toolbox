@@ -35,7 +35,6 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
 
   return (
     <MainContent>
-      <Helmet></Helmet>
       <Background />
 
       <ContentContainer>
