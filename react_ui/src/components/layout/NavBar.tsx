@@ -4,8 +4,6 @@ import { NavLink } from 'react-router-dom'
 
 import { M4DLogo } from './M4DLogo'
 
-const showStyleguide = process.env.NODE_ENV === 'development'
-
 export const NavBar: React.FC = () => {
   const { t } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -78,12 +76,6 @@ export const NavBar: React.FC = () => {
             <HeaderNavLink onClick={hideMenu} to="/faq">
               {t('navBar.faqLink')}
             </HeaderNavLink>
-
-            {showStyleguide && (
-              <HeaderNavLink onClick={hideMenu} to="/style-guide">
-                {t('navBar.styleGuideLink')}
-              </HeaderNavLink>
-            )}
           </div>
         </div>
 

@@ -16,7 +16,6 @@ import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
 import { useAuthState } from './auth/useAuthState'
 import { Footer } from './components/layout/Footer'
 import { NavBar } from './components/layout/NavBar'
-import { SubNav } from './components/layout/SubNav'
 import AuthenticatorWrapper from './pages/Authenticator'
 import { Chapter } from './pages/Chapter'
 import { ChapterEdit } from './pages/ChapterEdit'
@@ -34,7 +33,6 @@ const App: React.FunctionComponent = () => {
         <Router>
           <ScrollToTop />
           <NavBar />
-          <SubNav />
 
           <main className="flex-grow">
             {authState === 'authenticated' && <RedirectAfterAuth />}
