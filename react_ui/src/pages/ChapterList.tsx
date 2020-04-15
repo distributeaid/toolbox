@@ -95,16 +95,34 @@ const groupChaptersByCountry = (
   const result: Array<CountryWithChapters> = []
 
   for (const countryCode in chaptersByCountry) {
+    const sortedChapters = chaptersByCountry[countryCode]
+
+    sortedChapters.sort((a: Group, b: Group) => {
+      const provinceA = a.location.province.toLowerCase()
+      const provinceB = b.location.province.toLowerCase()
+
+      if (provinceA > provinceB) {
+        return 1
+      } else if (provinceA < provinceB) {
+        return -1
+      } else {
+        return 0
+      }
+    })
+
     result.push({
       countryCode,
-      chapters: chaptersByCountry[countryCode],
+      chapters: sortedChapters,
     })
   }
 
   result.sort((a: CountryWithChapters, b: CountryWithChapters) => {
-    if (a.countryCode[0] > b.countryCode[0]) {
+    const countryA = a.countryCode.toLowerCase()
+    const countryB = b.countryCode.toLowerCase()
+
+    if (countryA > countryB) {
       return 1
-    } else if (a.countryCode[0] < b.countryCode[0]) {
+    } else if (countryA < countryB) {
       return -1
     } else {
       return 0

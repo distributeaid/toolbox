@@ -72,25 +72,6 @@ exports[`loads the chapter list 1`] = `
             >
               <a
                 class="p-6 flex flex-row text-black text-sm"
-                href="/wa-sea"
-              >
-                <div
-                  class="leading-5 font-semibold w-4/12"
-                >
-                  WA
-                </div>
-                <div
-                  class="leading-5 font-medium w-6/12"
-                >
-                  Seattle
-                </div>
-              </a>
-            </li>
-            <li
-              class="border border-collapse border-gray-200 bg-white font-heading hover:border-blue-500 hover:shadow-xl hover:relative hover:z-10 hover:border"
-            >
-              <a
-                class="p-6 flex flex-row text-black text-sm"
                 href="/ca-oak"
               >
                 <div
@@ -102,6 +83,25 @@ exports[`loads the chapter list 1`] = `
                   class="leading-5 font-medium w-6/12"
                 >
                   Oakland
+                </div>
+              </a>
+            </li>
+            <li
+              class="border border-collapse border-gray-200 bg-white font-heading hover:border-blue-500 hover:shadow-xl hover:relative hover:z-10 hover:border"
+            >
+              <a
+                class="p-6 flex flex-row text-black text-sm"
+                href="/wa-sea"
+              >
+                <div
+                  class="leading-5 font-semibold w-4/12"
+                >
+                  WA
+                </div>
+                <div
+                  class="leading-5 font-medium w-6/12"
+                >
+                  Seattle
                 </div>
               </a>
             </li>
