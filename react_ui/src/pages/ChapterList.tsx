@@ -15,10 +15,10 @@ export const ChapterItem: React.FC<{
   chapter: { name: string; slug: string; location: { province: string } }
 }> = ({ chapter }) => {
   return (
-    <li className="border-t border-gray-200 bg-white font-heading">
+    <li className="border border-collapse border-gray-200 bg-white font-heading hover:border-blue-500 hover:shadow-xl hover:relative hover:z-10 hover:border">
       <NavLink
         to={`/${chapter.slug}`}
-        className="p-6 flex flex-row text-black text-sm hover:shadow-xl hover:relative hover:z-10">
+        className="p-6 flex flex-row text-black text-sm">
         <div className="leading-5 font-semibold w-4/12">
           {chapter.location.province}
         </div>
@@ -91,7 +91,9 @@ export const ChapterList: React.FC = () => {
             </Trans>
           </P>
         </div>
-        <FAQFooter />
+        <ContentContainer>
+          <FAQFooter />
+        </ContentContainer>
       </div>
     </MainContent>
   )
