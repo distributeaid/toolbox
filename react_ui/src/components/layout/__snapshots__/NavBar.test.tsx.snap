@@ -102,25 +102,25 @@ exports[`shows the nav bar 1`] = `
         >
           <a
             class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
-            href="/about"
+            href="https://masksfordocs.com/about-us"
           >
             navBar.aboutLink
           </a>
           <a
             class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
-            href="/news"
+            href="https://masksfordocs.com/news"
           >
             navBar.newsLink
           </a>
           <a
             class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
-            href="/involved"
+            href="https://masksfordocs.com/get-involved"
           >
             navBar.getInvolvedLink
           </a>
           <a
             class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
-            href="/supplies"
+            href="https://masksfordocs.com/get-supplies"
           >
             navBar.suppliesLink
           </a>
@@ -132,13 +132,13 @@ exports[`shows the nav bar 1`] = `
           </a>
           <a
             class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
-            href="/resources"
+            href="https://masksfordocs.com/resources"
           >
             navBar.resourcesLink
           </a>
           <a
             class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
-            href="/faq"
+            href="https://masksfordocs.com/faq"
           >
             navBar.faqLink
           </a>
@@ -146,7 +146,7 @@ exports[`shows the nav bar 1`] = `
       </div>
       <a
         class="bg-mfd-pink-1 block text-lg font-bold lg:mr-2 px-6 py-3 self-end leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white lg:mt-0"
-        href="/donate"
+        href="/https://masksfordocs.com/donate"
       >
         navBar.donateLink
       </a>
