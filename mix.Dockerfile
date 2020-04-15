@@ -19,14 +19,6 @@ RUN apt-get update && \
 
 RUN mkdir -p /app
 WORKDIR /app
-COPY ./config /app/config
-COPY ./lib /app/lib
-COPY ./priv /app/priv
-COPY ./rel /app/rel
-COPY ./test /app/test
-COPY ./*.* /app/
 
 RUN mix local.hex --force && \
-    mix local.rebar --force && \
-    mix deps.get && \
-    mix compile
+    mix local.rebar --force
