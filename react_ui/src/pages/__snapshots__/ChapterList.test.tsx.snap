@@ -37,7 +37,29 @@ exports[`loads the chapter list 1`] = `
         </h1>
         <h3
           class="font-heading font-normal text-xl sm:text-2xl leading-relaxed"
-        />
+        >
+          Connect locally to get what you need and give what you can. Find your local chapter below to
+           
+          <strong
+            class="font-semibold"
+          >
+            request supplies
+          </strong>
+          ,
+           
+          <strong
+            class="font-semibold"
+          >
+            donate supplies
+          </strong>
+          , or
+           
+          <strong
+            class="font-semibold"
+          >
+            volunteer
+          </strong>
+        </h3>
       </div>
     </div>
     <div

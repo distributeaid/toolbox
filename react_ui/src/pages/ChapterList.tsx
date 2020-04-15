@@ -195,7 +195,13 @@ export const ChapterList: React.FC = () => {
           <MainHeader>{t('chapterList.title')}</MainHeader>
 
           <PreHeader>
-            <Trans i18nKey="chapterList.subtitle" />
+            <Trans i18nKey="chapterList.subtitle">
+              Connect locally to get what you need and give what you can. Find
+              your local chapter below to{' '}
+              <strong className="font-semibold">request supplies</strong>,{' '}
+              <strong className="font-semibold">donate supplies</strong>, or{' '}
+              <strong className="font-semibold">volunteer</strong>
+            </Trans>
           </PreHeader>
         </div>
       </ContentContainer>
