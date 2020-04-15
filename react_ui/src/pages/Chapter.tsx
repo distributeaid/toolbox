@@ -27,17 +27,15 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
 
   const chapter = loading || error ? undefined : data?.groupBySlug
 
+  const chapterName = chapter ? chapter.name : '[Local Chapter Name]'
+  const titleTagContent = `Donate Masks & PPE for Coronavirus in ${chapterName} | Masks For Docs`
+  const metaTagContent = `At Masks For Docs ${chapterName}, we have one goal: Get protective equipment into the hands of healthcare workers as quickly as possible.`
+
   return (
     <MainContent>
       <Helmet>
-        <title>
-          Donate Masks & PPE for Coronavirus in [Local Chapter Name] | Masks For
-          Docs
-        </title>
-        <meta
-          name="description"
-          content="At Masks For Docs [local chapter name], we have one goal: Get protective equipment into the hands of healthcare workers as quickly as possible."
-        />
+        <title>{titleTagContent}</title>
+        <meta name="description" content={metaTagContent} />
       </Helmet>
       <Background />
 
