@@ -20,7 +20,7 @@ export const NavBar: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-50">
-      <nav className="flex flex-row items-center justify-between flex-wrap flex-shrink-0 w-full max-w-7xl mx-auto rounded-b bg-gray-900 font-heading text-gray-100 p-2 lg:py-3 lg:px-4">
+      <nav className="flex flex-row items-center justify-between flex-wrap flex-shrink-0 w-full max-w-7xl mx-auto rounded-b bg-black font-heading text-gray-100 p-2 lg:py-3 lg:px-4">
         <button
           onClick={toggleMenu}
           data-cy="toggle-menu"
@@ -79,7 +79,7 @@ export const NavBar: React.FC = () => {
         <NavLink
           to="/donate"
           onClick={hideMenu}
-          className="bg-pink-500 block text-sm px-4 py-2 self-end leading-none rounded hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0">
+          className="bg-mfd-pink-1 block text-sm px-4 py-2 self-end leading-none rounded hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0">
           {t('navBar.donateLink')}
         </NavLink>
       </nav>
