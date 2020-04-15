@@ -9,11 +9,30 @@ import { MainContent } from '../components/MainContent'
 import { MainHeader } from '../components/MainHeader'
 import { P } from '../components/P'
 import { PreHeader } from '../components/PreHeader'
+import US_STATES from '../data/us_states.json'
 import { Group, Maybe, useGetChapterListQuery } from '../generated/graphql'
 import { countryCodeToName } from '../util/placeCodeToName'
 
+const provinceLongName = ({
+  province,
+  countryCode,
+}: {
+  province: string
+  countryCode: string
+}) => {
+  if (countryCode === 'US') {
+    return US_STATES.find(({ code }) => code === province)?.name ?? province
+  }
+
+  return province
+}
+
 export const ChapterItem: React.FC<{
-  chapter: { name: string; slug: string; location: { province: string } }
+  chapter: {
+    name: string
+    slug: string
+    location: { province: string; countryCode: string }
+  }
 }> = ({ chapter }) => {
   return (
     <li className="border border-collapse border-gray-200 bg-white font-heading fill-black hover:border-blue-500 hover:shadow-xl hover:relative hover:z-10 hover:border hover:fill-pink">
@@ -21,7 +40,7 @@ export const ChapterItem: React.FC<{
         to={`/${chapter.slug}`}
         className="p-6 flex flex-row text-black text-sm">
         <div className="leading-5 font-semibold w-4/12">
-          {chapter.location.province}
+          {provinceLongName(chapter.location)}
         </div>
         <div className="leading-5 font-medium w-4/12">{chapter.name}</div>
         <div className="leading-5 w-4/12 flex justify-end">
