@@ -210,7 +210,7 @@ export const Footer: React.FC = () => {
 }
 
 const SocialIcon: React.FC<{ href: string }> = ({ children, href }) => (
-  <div className="w-8 h-8 flex items-center justify-center m-2 mx-5">
+  <div className="w-8 h-8 flex items-center justify-center mb-8 sm:mb-2 mx-5">
     <a
       target="_blank"
       rel="noopener noreferrer"
