@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { Helmet } from 'react-helmet'
 
 import { Background } from '../components/Background'
 import { BackLink } from '../components/BackLink'
@@ -28,6 +29,16 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
 
   return (
     <MainContent>
+      <Helmet>
+        <title>
+          Donate Masks & PPE for Coronavirus in [Local Chapter Name] | Masks For
+          Docs
+        </title>
+        <meta
+          name="description"
+          content="At Masks For Docs [local chapter name], we have one goal: Get protective equipment into the hands of healthcare workers as quickly as possible."
+        />
+      </Helmet>
       <Background />
 
       <ContentContainer>
