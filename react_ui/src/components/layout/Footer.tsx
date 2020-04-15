@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { NavLink } from 'react-router-dom'
 
 import { classnames } from '../classnames'
 
@@ -14,7 +15,11 @@ const LinkList: React.FC<{
     </div>
     {links.map(({ title, href }) => (
       <div key={title} className="text-xs font-mono mb-3">
-        <a href={href}>{title}</a>
+        {href.startsWith('http') ? (
+          <a href={href}>{title}</a>
+        ) : (
+          <NavLink to={href}>{title}</NavLink>
+        )}
       </div>
     ))}
     {children}
@@ -52,11 +57,17 @@ export const Footer: React.FC = () => {
                 <LinkList
                   title={t('footer.about.title')}
                   links={[
-                    { title: t('footer.about.mission'), href: '/mission' },
-                    { title: t('footer.about.whoWeAre'), href: '/whoweare' },
+                    {
+                      title: t('footer.about.mission'),
+                      href: 'https://masksfordocs.com/about-us/#mission',
+                    },
+                    {
+                      title: t('footer.about.whoWeAre'),
+                      href: 'https://masksfordocs.com/about-us/#leadership',
+                    },
                     {
                       title: t('footer.about.successStories'),
-                      href: '/success-stories',
+                      href: 'https://masksfordocs.com/#',
                     },
                   ]}
                 />
@@ -66,15 +77,15 @@ export const Footer: React.FC = () => {
                   links={[
                     {
                       title: t('footer.resources.covidUpdates'),
-                      href: '/covid19-updates',
+                      href: 'https://masksfordocs.com/news/#covid19updates',
                     },
                     {
                       title: t('footer.resources.fieldGuides'),
-                      href: '/field-guides',
+                      href: 'https://masksfordocs.com/resources/#fieldguides',
                     },
                     {
                       title: t('footer.resources.localChapters'),
-                      href: '/local-chapters',
+                      href: '/chapters',
                     },
                     {
                       title: t('footer.resources.localLeadLogin'),
@@ -88,24 +99,26 @@ export const Footer: React.FC = () => {
                   links={[
                     {
                       title: t('footer.more.termsOfUse'),
-                      href: '/tos',
+                      href:
+                        'https://masksfordocs.com/legal/terms-and-conditions',
                     },
                     {
                       title: t('footer.more.privacyPolicy'),
-                      href: '/privacy',
+                      href: 'https://masksfordocs.com/legal/privacy-policy',
                     },
                     {
                       title: t('footer.more.codeOfConduct'),
-                      href: '/code-of-conduct',
+                      href:
+                        'https://masksfordocs.atlassian.net/wiki/spaces/HOME/pages/49905756/Code+of+Conduct',
                     },
                     {
                       title: t('footer.more.contactUs'),
-                      href: '/contact',
+                      href: 'https://masksfordocs.com/contact',
                     },
                   ]}>
                   <div className="text-gray-200 mt-10 text-lg">
                     <a
-                      href="/donate"
+                      href="https://masksfordocs.com/donate"
                       className="bg-mfd-pink-1 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 md:mt-0">
                       {t('footer.donateLink')}
                     </a>

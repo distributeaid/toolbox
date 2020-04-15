@@ -49,19 +49,25 @@ export const NavBar: React.FC = () => {
             menuOpen ? 'block' : 'hidden'
           } lg:ml-8 flex-grow lg:flex lg:items-center lg:w-auto flex-shrink-0`}>
           <div className="text-sm pb-4 lg:pb-0 lg:flex-grow flex-shrink-0">
-            <HeaderNavLink onClick={hideMenu} to="/about">
+            <HeaderNavLink
+              onClick={hideMenu}
+              to="https://masksfordocs.com/about-us">
               {t('navBar.aboutLink')}
             </HeaderNavLink>
 
-            <HeaderNavLink onClick={hideMenu} to="/news">
+            <HeaderNavLink onClick={hideMenu} to="https://masksfordocs.com/news">
               {t('navBar.newsLink')}
             </HeaderNavLink>
 
-            <HeaderNavLink onClick={hideMenu} to="/involved">
+            <HeaderNavLink
+              onClick={hideMenu}
+              to="https://masksfordocs.com/get-involved">
               {t('navBar.getInvolvedLink')}
             </HeaderNavLink>
 
-            <HeaderNavLink onClick={hideMenu} to="/supplies">
+            <HeaderNavLink
+              onClick={hideMenu}
+              to="https://masksfordocs.com/get-supplies">
               {t('navBar.suppliesLink')}
             </HeaderNavLink>
 
@@ -69,18 +75,20 @@ export const NavBar: React.FC = () => {
               {t('navBar.chaptersLink')}
             </HeaderNavLink>
 
-            <HeaderNavLink onClick={hideMenu} to="/resources">
+            <HeaderNavLink
+              onClick={hideMenu}
+              to="https://masksfordocs.com/resources">
               {t('navBar.resourcesLink')}
             </HeaderNavLink>
 
-            <HeaderNavLink onClick={hideMenu} to="/faq">
+            <HeaderNavLink onClick={hideMenu} to="https://masksfordocs.com/faq">
               {t('navBar.faqLink')}
             </HeaderNavLink>
           </div>
         </div>
 
         <NavLink
-          to="/donate"
+          to="https://masksfordocs.com/donate"
           onClick={hideMenu}
           className="bg-mfd-pink-1 block text-lg font-bold lg:mr-2 px-6 py-3 self-end leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white lg:mt-0">
           {t('navBar.donateLink')}
@@ -93,13 +101,25 @@ export const NavBar: React.FC = () => {
 const HeaderNavLink: React.FC<{
   onClick?: () => void
   to: string
-}> = ({ to, children, onClick, ...rest }) => (
-  <NavLink
-    onClick={onClick}
-    to={to}
-    activeClassName="text-mfd-pink-1"
-    className="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
-    {...rest}>
-    {children}
-  </NavLink>
-)
+}> = ({ to, children, onClick, ...rest }) => {
+  const className =
+    'block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1'
+  if (to.startsWith('http')) {
+    return (
+      <a href={to} className={className} onClick={onClick} {...rest}>
+        {children}
+      </a>
+    )
+  }
+
+  return (
+    <NavLink
+      onClick={onClick}
+      to={to}
+      activeClassName="text-mfd-pink-1"
+      className={className}
+      {...rest}>
+      {children}
+    </NavLink>
+  )
+}

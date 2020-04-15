@@ -65,7 +65,7 @@ exports[`shows the footer 1`] = `
                   class="text-xs font-mono mb-3"
                 >
                   <a
-                    href="/mission"
+                    href="https://masksfordocs.com/about-us/#mission"
                   >
                     footer.about.mission
                   </a>
@@ -74,7 +74,7 @@ exports[`shows the footer 1`] = `
                   class="text-xs font-mono mb-3"
                 >
                   <a
-                    href="/whoweare"
+                    href="https://masksfordocs.com/about-us/#leadership"
                   >
                     footer.about.whoWeAre
                   </a>
@@ -83,7 +83,7 @@ exports[`shows the footer 1`] = `
                   class="text-xs font-mono mb-3"
                 >
                   <a
-                    href="/success-stories"
+                    href="https://masksfordocs.com/#"
                   >
                     footer.about.successStories
                   </a>
@@ -101,7 +101,7 @@ exports[`shows the footer 1`] = `
                   class="text-xs font-mono mb-3"
                 >
                   <a
-                    href="/covid19-updates"
+                    href="https://masksfordocs.com/news/#covid19updates"
                   >
                     footer.resources.covidUpdates
                   </a>
@@ -110,7 +110,7 @@ exports[`shows the footer 1`] = `
                   class="text-xs font-mono mb-3"
                 >
                   <a
-                    href="/field-guides"
+                    href="https://masksfordocs.com/resources/#fieldguides"
                   >
                     footer.resources.fieldGuides
                   </a>
@@ -119,7 +119,7 @@ exports[`shows the footer 1`] = `
                   class="text-xs font-mono mb-3"
                 >
                   <a
-                    href="/local-chapters"
+                    href="/chapters"
                   >
                     footer.resources.localChapters
                   </a>
@@ -146,7 +146,7 @@ exports[`shows the footer 1`] = `
                   class="text-xs font-mono mb-3"
                 >
                   <a
-                    href="/tos"
+                    href="https://masksfordocs.com/legal/terms-and-conditions"
                   >
                     footer.more.termsOfUse
                   </a>
@@ -155,7 +155,7 @@ exports[`shows the footer 1`] = `
                   class="text-xs font-mono mb-3"
                 >
                   <a
-                    href="/privacy"
+                    href="https://masksfordocs.com/legal/privacy-policy"
                   >
                     footer.more.privacyPolicy
                   </a>
@@ -164,7 +164,7 @@ exports[`shows the footer 1`] = `
                   class="text-xs font-mono mb-3"
                 >
                   <a
-                    href="/code-of-conduct"
+                    href="https://masksfordocs.atlassian.net/wiki/spaces/HOME/pages/49905756/Code+of+Conduct"
                   >
                     footer.more.codeOfConduct
                   </a>
@@ -173,7 +173,7 @@ exports[`shows the footer 1`] = `
                   class="text-xs font-mono mb-3"
                 >
                   <a
-                    href="/contact"
+                    href="https://masksfordocs.com/contact"
                   >
                     footer.more.contactUs
                   </a>
@@ -183,7 +183,7 @@ exports[`shows the footer 1`] = `
                 >
                   <a
                     class="bg-mfd-pink-1 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 md:mt-0"
-                    href="/donate"
+                    href="https://masksfordocs.com/donate"
                   >
                     footer.donateLink
                   </a>
