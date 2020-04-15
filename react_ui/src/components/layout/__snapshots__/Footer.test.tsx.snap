@@ -182,10 +182,12 @@ exports[`shows the footer 1`] = `
                   class="text-gray-200 mt-10 text-lg"
                 >
                   <a
-                    class="bg-mfd-pink-1 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 md:mt-0"
+                    class="font-mono bg-mfd-pink-1 block text-lg font-bold leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white px-6 py-3 inline-block mt-4 md:mt-0"
                     href="https://masksfordocs.com/donate"
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
-                    footer.donateLink
+                    navBar.donateLink
                   </a>
                 </div>
               </div>

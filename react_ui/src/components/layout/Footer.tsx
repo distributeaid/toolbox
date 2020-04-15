@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
 import { classnames } from '../classnames'
+import { DonateButton } from '../DonateButton'
 
 const LinkList: React.FC<{
   title: string
@@ -117,11 +118,7 @@ export const Footer: React.FC = () => {
                     },
                   ]}>
                   <div className="text-gray-200 mt-10 text-lg">
-                    <a
-                      href="https://masksfordocs.com/donate"
-                      className="bg-mfd-pink-1 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 md:mt-0">
-                      {t('footer.donateLink')}
-                    </a>
+                    <DonateButton className="inline-block mt-4 md:mt-0" />
                   </div>
                 </LinkList>
               </div>

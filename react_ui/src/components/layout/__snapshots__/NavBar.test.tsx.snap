@@ -145,8 +145,10 @@ exports[`shows the nav bar 1`] = `
         </div>
       </div>
       <a
-        class="bg-mfd-pink-1 block text-lg font-bold lg:mr-2 px-6 py-3 self-end leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white lg:mt-0"
-        href="/https://masksfordocs.com/donate"
+        class="font-mono bg-mfd-pink-1 block text-lg font-bold leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white px-6 py-3 lg:mr-2 self-end lg:mt-0"
+        href="https://masksfordocs.com/donate"
+        rel="noopener noreferrer"
+        target="_blank"
       >
         navBar.donateLink
       </a>
