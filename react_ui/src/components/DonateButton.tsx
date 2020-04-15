@@ -18,7 +18,7 @@ export const DonateButton: React.FC<Props> = ({ onClick, className }) => {
       target="_blank"
       onClick={onClick}
       className={classnames(
-        'font-mono bg-mfd-pink-1 block text-lg font-bold leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white px-6 py-3',
+        'font-mono bg-mfd-pink-1 block text-base sm:text-lg font-bold leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white px-4 py-2 sm:px-6 sm:py-3',
         className
       )}>
       {t('navBar.donateLink')}

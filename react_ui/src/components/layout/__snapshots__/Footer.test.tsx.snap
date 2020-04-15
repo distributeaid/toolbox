@@ -182,7 +182,7 @@ exports[`shows the footer 1`] = `
                   class="text-gray-200 mt-10 text-lg"
                 >
                   <a
-                    class="font-mono bg-mfd-pink-1 block text-lg font-bold leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white px-6 py-3 inline-block mt-4 md:mt-0"
+                    class="font-mono bg-mfd-pink-1 block text-base sm:text-lg font-bold leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white px-4 py-2 sm:px-6 sm:py-3 inline-block mt-4 md:mt-0"
                     href="https://masksfordocs.com/donate"
                     rel="noopener noreferrer"
                     target="_blank"

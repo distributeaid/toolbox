@@ -94,8 +94,16 @@ exports[`shows the nav bar 1`] = `
           />
         </svg>
       </a>
+      <a
+        class="font-mono bg-mfd-pink-1 block text-base sm:text-lg font-bold leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white px-4 py-2 sm:px-6 sm:py-3 sm:hidden lg:mr-2 self-end lg:mt-0"
+        href="https://masksfordocs.com/donate"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        navBar.donateLink
+      </a>
       <div
-        class="w-full hidden lg:ml-8 flex-grow lg:flex lg:items-center lg:w-auto flex-shrink-0"
+        class="w-full hidden ml-3 lg:ml-8 flex-grow lg:flex lg:items-center lg:w-auto flex-shrink-0"
       >
         <div
           class="text-sm pb-4 lg:pb-0 lg:flex-grow flex-shrink-0"
@@ -145,7 +153,7 @@ exports[`shows the nav bar 1`] = `
         </div>
       </div>
       <a
-        class="font-mono bg-mfd-pink-1 block text-lg font-bold leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white px-6 py-3 lg:mr-2 self-end lg:mt-0"
+        class="font-mono bg-mfd-pink-1 block text-base sm:text-lg font-bold leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white px-4 py-2 sm:px-6 sm:py-3 hidden sm:block lg:mr-2 self-end lg:mt-0"
         href="https://masksfordocs.com/donate"
         rel="noopener noreferrer"
         target="_blank"
