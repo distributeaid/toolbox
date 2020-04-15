@@ -16,7 +16,7 @@ export const ShadowButtonLink: React.FC<ShadowButtonLinkProps> = ({
   to,
 }) => {
   const classes = classnames(
-    'inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button',
+    'inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button',
     className
   )
 

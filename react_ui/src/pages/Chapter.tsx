@@ -66,12 +66,12 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
           <ContentContainer>
             <div className="sm:flex py-6 sm:py-12">
               <P
-                className="sm:w-7/12 pb-6 whitespace-pre-line"
+                className="sm:w-7/12 pb-12 sm:pr-20 whitespace-pre-line"
                 data-testid="description">
                 {chapter.description}
               </P>
 
-              <div className="sm:w-5/12 sm:pr-2 z-30">
+              <div className="sm:w-5/12 sm:px-12 z-30">
                 {chapter.requestForm && (
                   <ShadowButtonLink
                     external={true}

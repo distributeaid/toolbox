@@ -25,7 +25,7 @@ exports[`loads the chapter list 1`] = `
       </svg>
     </div>
     <div
-      class="container w-full max-w-6xl p-4 md:mx-auto overflow-hidden"
+      class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
     >
       <div
         class="md:w-7/12 pt-16 sm:pt-32"
@@ -291,18 +291,18 @@ exports[`loads the chapter list 1`] = `
         </p>
       </div>
       <div
-        class="container w-full max-w-6xl p-4 md:mx-auto overflow-hidden"
+        class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
       >
         <div
-          class="flex flex-col justify-center py-10 sm:py-20"
+          class="flex flex-col justify-center py-6 pb-12 sm:py-12"
         >
           <h2
-            class="text-center font-heading font-semibold text-2xl sm:text-5xl leading-loose mb-4"
+            class="text-center font-heading font-semibold text-2xl sm:text-5xl mb-6"
           >
             chapter.faqHeader
           </h2>
           <a
-            class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
+            class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
             href="/faq"
           >
             chapter.faqLink
