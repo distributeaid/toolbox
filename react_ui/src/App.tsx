@@ -37,7 +37,11 @@ const App: React.FunctionComponent = () => {
         <meta property="og:title" content="Masks For Docs"></meta>
         <meta
           property="og:image"
-          content={[process.env.PUBLIC_URL, ogImage].join('')}
+          content={[
+            'https://local.masksfordocs.com',
+            process.env.PUBLIC_URL,
+            ogImage,
+          ].join('')}
         />
       </Helmet>
       <Suspense fallback="Loading...">
