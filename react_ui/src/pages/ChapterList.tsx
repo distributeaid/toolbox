@@ -9,9 +9,8 @@ import { MainContent } from '../components/MainContent'
 import { MainHeader } from '../components/MainHeader'
 import { P } from '../components/P'
 import { PreHeader } from '../components/PreHeader'
-import US_STATES from '../data/us_states.json'
 import { Group, Maybe, useGetChapterListQuery } from '../generated/graphql'
-import { countryCodeToName } from '../util/placeCodeToName'
+import { countryCodeToName, usStateCodeToName } from '../util/placeCodeToName'
 
 const provinceLongName = ({
   province,
@@ -21,7 +20,7 @@ const provinceLongName = ({
   countryCode: string
 }) => {
   if (countryCode === 'US') {
-    return US_STATES.find(({ code }) => code === province)?.name ?? province
+    return usStateCodeToName(province)
   }
 
   return province
