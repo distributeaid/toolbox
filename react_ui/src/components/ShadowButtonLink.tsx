@@ -21,7 +21,7 @@ export const ShadowButtonLink: React.FC<ShadowButtonLinkProps> = ({
   )
 
   return external ? (
-    <a className={classes} href={to}>
+    <a className={classes} href={to} target="_blank" rel="noopener noreferrer">
       {children}
     </a>
   ) : (
