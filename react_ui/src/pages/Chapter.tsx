@@ -1,7 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
-import { Helmet } from 'react-helmet'
 
 import { Background } from '../components/Background'
 import { BackLink } from '../components/BackLink'
@@ -20,6 +19,12 @@ type Props = {
   slug: string
 }
 
+const metaTitle = ({ name }: { name: string }) =>
+  `Donate Masks & PPE for Coronavirus in ${name} | Masks For Docs`
+
+const metaDescription = ({ name }: { name: string }) =>
+  `At Masks For Docs ${name}, we have one goal: Get protective equipment into the hands of healthcare workers as quickly as possible.`
+
 export const Chapter: React.FC<Props> = ({ slug }) => {
   const { t } = useTranslation()
   const { loading, error, data } = useGetChapterBySlugQuery({
@@ -28,16 +33,9 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
 
   const chapter = loading || error ? undefined : data?.groupBySlug
 
-  const chapterName = chapter ? chapter.name : '[Local Chapter Name]'
-  const titleTagContent = `Donate Masks & PPE for Coronavirus in ${chapterName} | Masks For Docs`
-  const metaTagContent = `At Masks For Docs ${chapterName}, we have one goal: Get protective equipment into the hands of healthcare workers as quickly as possible.`
-
   return (
     <MainContent>
-      <Helmet>
-        <title>{titleTagContent}</title>
-        <meta name="description" content={metaTagContent} />
-      </Helmet>
+      <Helmet></Helmet>
       <Background />
 
       <ContentContainer>
@@ -50,9 +48,9 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
         {chapter && (
           <>
             <Helmet>
-              <meta
-                property="og:title"
-                content={`Masks For Docs – ${chapter.name}`}></meta>
+              <title>{metaTitle(chapter)}</title>
+              <meta name="description" content={metaDescription(chapter)} />
+              <meta property="og:title" content={metaTitle(chapter)} />
             </Helmet>
             <PreHeader>
               {chapter.location.countryCode === 'US'
