@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 
 import { Background } from '../components/Background'
@@ -39,6 +40,11 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
         {error && <PreHeader>Chapter "{slug}" not found</PreHeader>}
         {chapter && (
           <>
+            <Helmet>
+              <meta
+                property="og:title"
+                content={`Masks For Docs – ${chapter.name}`}></meta>
+            </Helmet>
             <PreHeader>
               {chapter.location.countryCode === 'US'
                 ? usStateCodeToName(chapter.location.province)
