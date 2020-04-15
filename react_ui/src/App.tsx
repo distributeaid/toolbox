@@ -23,6 +23,7 @@ import { ChapterEdit } from './pages/ChapterEdit'
 import { ChapterList } from './pages/ChapterList'
 import { ChapterNew } from './pages/ChapterNew'
 import StyleGuide from './pages/StyleGuide'
+import ScrollToTop from './util/scrollToTop'
 
 const App: React.FunctionComponent = () => {
   const { authState, setAuthState } = useAuthState()
@@ -31,6 +32,7 @@ const App: React.FunctionComponent = () => {
     <ApolloProvider client={client}>
       <Suspense fallback="Loading...">
         <Router>
+          <ScrollToTop />
           <NavBar />
           <SubNav />
 
