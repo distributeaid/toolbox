@@ -206,7 +206,7 @@ export const ChapterList: React.FC = () => {
         </div>
       </ContentContainer>
 
-      <div className="border-gray-400 border-t w-full bg-lightBlue mt-16 py-16">
+      <div className="border-gray-400 border-t w-full bg-lightBlue mt-20 py-20">
         {chaptersByCountry.map((cwc) => (
           <ChaptersInCountry
             key={cwc.countryCode}
