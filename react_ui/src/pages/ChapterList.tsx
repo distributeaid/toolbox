@@ -76,9 +76,9 @@ const ChaptersInCountry: React.FC<{
   countryWithChapters: CountryWithChapters
 }> = ({ countryWithChapters, t }) => {
   return (
-    <div className="container p-4 md:mx-auto w-full max-w-4xl">
-      <div className="grid grid-cols-1 gap-4">
-        <h3 className="font-heading text-3xl font-semibold px-6 pb-6">
+    <div className="container p-6 pb-12 last:pb-6 md:mx-auto w-full max-w-4xl">
+      <div className="grid grid-cols-1 gap-2">
+        <h3 className="font-heading text-3xl font-semibold px-6">
           {countryCodeToName(countryWithChapters.countryCode)}
         </h3>
 
@@ -95,7 +95,7 @@ const ChaptersInCountry: React.FC<{
         </ul>
       </div>
 
-      <P className="text-center mt-8 mx-auto w-1/2">
+      <P className="text-center mx-auto pt-6 w-2/3 sm:w-1/2">
         <Trans i18nKey="chapterList.cta">
           Don’t see your local chapter? Reach out to{' '}
           <a
