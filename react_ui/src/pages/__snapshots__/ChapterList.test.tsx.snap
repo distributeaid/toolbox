@@ -60,7 +60,7 @@ exports[`loads the chapter list 1`] = `
             <div
               class="w-4/12 pb-0"
             >
-              chapterList.provinceTerm
+              Province
             </div>
             <div
               class="w-6/12 pb-0"
@@ -173,7 +173,7 @@ exports[`loads the chapter list 1`] = `
             <div
               class="w-4/12 pb-0"
             >
-              chapterList.provinceTerm
+              State
             </div>
             <div
               class="w-6/12 pb-0"
@@ -288,7 +288,7 @@ exports[`loads the chapter list 1`] = `
             <div
               class="w-4/12 pb-0"
             >
-              chapterList.provinceTerm
+              State
             </div>
             <div
               class="w-6/12 pb-0"
