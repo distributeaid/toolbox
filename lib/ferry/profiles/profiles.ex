@@ -63,7 +63,7 @@ defmodule Ferry.Profiles do
   end
 
   def get_group_by_slug(slug) do
-    query = group_query(preload: [])
+    query = group_query(preload: [:location])
     Repo.get_by(query, slug: slug)
   end
 
