@@ -44,7 +44,6 @@ const App: React.FunctionComponent = () => {
         <Router>
           <ScrollToTop />
           <NavBar />
-          <SubNav />
 
           <main className="flex-grow">
             {authState === 'authenticated' && <RedirectAfterAuth />}

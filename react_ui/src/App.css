@@ -36,3 +36,23 @@
     transform: rotate(360deg);
   }
 }
+
+.bg-mfd-cobalt-0 {
+  background-color: #3968DA;
+}
+
+.bg-mfd-purple-2 {
+  background-color: #9D7AFF;
+}
+
+.bg-mfd-pink-1 {
+  background-color: #ED2E69;
+}
+
+.text-mfd-pink-1 {
+  color: #ED2E69;
+}
+
+.hover\:text-mfd-pink-1:hover {
+  color: #ED2E69;
+}

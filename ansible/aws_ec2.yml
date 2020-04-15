@@ -9,5 +9,8 @@ hostnames:
 filters:
   tag:Role:
     - toolbox
+keyed_groups:
+  - key: tags.Environment
+    separator: ""
 compose:
   ansible_ssh_user: "ec2-user"

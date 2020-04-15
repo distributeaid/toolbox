@@ -1,7 +1,7 @@
 ---
 
 - name: Deploy Docker containers
-  hosts: all
+  hosts: "{{ env }}"
   vars:
     datadog_api_key: "f087be8381ff342f364dba31a23b31b5"
   roles:

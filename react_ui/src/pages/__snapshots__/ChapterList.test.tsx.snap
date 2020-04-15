@@ -52,7 +52,171 @@ exports[`loads the chapter list 1`] = `
           <h3
             class="font-heading text-3xl font-semibold px-6 pb-6"
           >
-            United States
+            Canada
+          </h3>
+          <div
+            class="flex px-6 font-heading font-semibold text-lg text-blue-600"
+          >
+            <div
+              class="w-4/12 pb-0"
+            >
+              chapterList.provinceTerm
+            </div>
+            <div
+              class="w-6/12 pb-0"
+            >
+              chapterList.chapterName
+            </div>
+          </div>
+          <ul>
+            <li
+              class="border border-collapse border-gray-200 bg-white font-heading hover:border-blue-500 hover:shadow-xl hover:relative hover:z-10 hover:border"
+            >
+              <a
+                class="p-6 flex flex-row text-black text-sm"
+                href="/on-toronto"
+              >
+                <div
+                  class="leading-5 font-semibold w-4/12"
+                >
+                  ON
+                </div>
+                <div
+                  class="leading-5 font-medium w-6/12"
+                >
+                  Toronto
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <p
+          class="pb-4 font-body text-sm sm:text-lg text-center mt-8 mx-auto w-1/2"
+        >
+          Don’t see your local chapter? Reach out to
+           
+          <a
+            class="underline text-blue-600"
+            href="https://share.hsforms.com/1ZEAK2ikxSFKqR_XR7J-x5Q4dh7j"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            request supplies
+          </a>
+          ,
+           
+          <a
+            class="underline text-blue-600"
+            href="https://share.hsforms.com/19adMT7wKRNSvxJSYJHOdGw4dh7j"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            donate supplies
+          </a>
+          , or
+           
+          <a
+            class="underline text-blue-600"
+            href="https://share.hsforms.com/1wEiqrs4DTQGBBQ9z2wBg8Q4dh7j"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            volunteer
+          </a>
+          .
+        </p>
+      </div>
+      <div
+        class="container p-4 md:mx-auto w-full max-w-4xl"
+      >
+        <div
+          class="grid grid-cols-1 gap-4"
+        >
+          <h3
+            class="font-heading text-3xl font-semibold px-6 pb-6"
+          />
+          <div
+            class="flex px-6 font-heading font-semibold text-lg text-blue-600"
+          >
+            <div
+              class="w-4/12 pb-0"
+            >
+              chapterList.provinceTerm
+            </div>
+            <div
+              class="w-6/12 pb-0"
+            >
+              chapterList.chapterName
+            </div>
+          </div>
+          <ul>
+            <li
+              class="border border-collapse border-gray-200 bg-white font-heading hover:border-blue-500 hover:shadow-xl hover:relative hover:z-10 hover:border"
+            >
+              <a
+                class="p-6 flex flex-row text-black text-sm"
+                href="/ca-oak"
+              >
+                <div
+                  class="leading-5 font-semibold w-4/12"
+                >
+                  CA
+                </div>
+                <div
+                  class="leading-5 font-medium w-6/12"
+                >
+                  Oakland
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <p
+          class="pb-4 font-body text-sm sm:text-lg text-center mt-8 mx-auto w-1/2"
+        >
+          Don’t see your local chapter? Reach out to
+           
+          <a
+            class="underline text-blue-600"
+            href="https://share.hsforms.com/1ZEAK2ikxSFKqR_XR7J-x5Q4dh7j"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            request supplies
+          </a>
+          ,
+           
+          <a
+            class="underline text-blue-600"
+            href="https://share.hsforms.com/19adMT7wKRNSvxJSYJHOdGw4dh7j"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            donate supplies
+          </a>
+          , or
+           
+          <a
+            class="underline text-blue-600"
+            href="https://share.hsforms.com/1wEiqrs4DTQGBBQ9z2wBg8Q4dh7j"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            volunteer
+          </a>
+          .
+        </p>
+      </div>
+      <div
+        class="container p-4 md:mx-auto w-full max-w-4xl"
+      >
+        <div
+          class="grid grid-cols-1 gap-4"
+        >
+          <h3
+            class="font-heading text-3xl font-semibold px-6 pb-6"
+          >
+            USA
           </h3>
           <div
             class="flex px-6 font-heading font-semibold text-lg text-blue-600"
@@ -88,25 +252,6 @@ exports[`loads the chapter list 1`] = `
                 </div>
               </a>
             </li>
-            <li
-              class="border border-collapse border-gray-200 bg-white font-heading hover:border-blue-500 hover:shadow-xl hover:relative hover:z-10 hover:border"
-            >
-              <a
-                class="p-6 flex flex-row text-black text-sm"
-                href="/ca-oak"
-              >
-                <div
-                  class="leading-5 font-semibold w-4/12"
-                >
-                  CA
-                </div>
-                <div
-                  class="leading-5 font-medium w-6/12"
-                >
-                  Oakland
-                </div>
-              </a>
-            </li>
           </ul>
         </div>
         <p
@@ -116,7 +261,9 @@ exports[`loads the chapter list 1`] = `
            
           <a
             class="underline text-blue-600"
-            href="/request"
+            href="https://share.hsforms.com/1ZEAK2ikxSFKqR_XR7J-x5Q4dh7j"
+            rel="noopener noreferrer"
+            target="_blank"
           >
             request supplies
           </a>
@@ -124,7 +271,9 @@ exports[`loads the chapter list 1`] = `
            
           <a
             class="underline text-blue-600"
-            href="/donate"
+            href="https://share.hsforms.com/19adMT7wKRNSvxJSYJHOdGw4dh7j"
+            rel="noopener noreferrer"
+            target="_blank"
           >
             donate supplies
           </a>
@@ -132,7 +281,9 @@ exports[`loads the chapter list 1`] = `
            
           <a
             class="underline text-blue-600"
-            href="/volunteer"
+            href="https://share.hsforms.com/1wEiqrs4DTQGBBQ9z2wBg8Q4dh7j"
+            rel="noopener noreferrer"
+            target="_blank"
           >
             volunteer
           </a>
@@ -151,7 +302,7 @@ exports[`loads the chapter list 1`] = `
             chapter.faqHeader
           </h2>
           <a
-            class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-blue-600 sm:w-auto"
+            class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
             href="/faq"
           >
             chapter.faqLink
