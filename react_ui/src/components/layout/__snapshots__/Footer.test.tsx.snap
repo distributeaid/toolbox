@@ -223,7 +223,7 @@ exports[`shows the footer 1`] = `
               class="flex flex-col md:flex-row justify-start md:justify-end flex-1 pr-3 md:pr-14"
             >
               <div
-                class="w-8 h-8 flex items-center justify-center m-2 mx-5"
+                class="w-8 h-8 flex items-center justify-center mb-8 sm:mb-2 mx-5"
               >
                 <a
                   class="block w-6 h-6"
@@ -249,7 +249,7 @@ exports[`shows the footer 1`] = `
                 </a>
               </div>
               <div
-                class="w-8 h-8 flex items-center justify-center m-2 mx-5"
+                class="w-8 h-8 flex items-center justify-center mb-8 sm:mb-2 mx-5"
               >
                 <a
                   class="block w-6 h-6"
@@ -275,7 +275,7 @@ exports[`shows the footer 1`] = `
                 </a>
               </div>
               <div
-                class="w-8 h-8 flex items-center justify-center m-2 mx-5"
+                class="w-8 h-8 flex items-center justify-center mb-8 sm:mb-2 mx-5"
               >
                 <a
                   class="block w-6 h-6"
@@ -309,7 +309,7 @@ exports[`shows the footer 1`] = `
                 </a>
               </div>
               <div
-                class="w-8 h-8 flex items-center justify-center m-2 mx-5"
+                class="w-8 h-8 flex items-center justify-center mb-8 sm:mb-2 mx-5"
               >
                 <a
                   class="block w-6 h-6"
