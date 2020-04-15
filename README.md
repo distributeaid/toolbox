@@ -90,48 +90,45 @@ containers have exited.
 
 See the _Common Docker Commands_ section below for a list of container names.
 
-**Setup Up Our Site**
+Trouble shooting: If you see that a container has exited with code 127 (e.g.
+"toolbox_web exited with code 127"), in your terminal:
+
+- close that container with `ctrl-c`
+- run `$docker-compose build` to ensure you rebuild the service in case its
+  Dockerfile or contents of its build directory has changed.
+- run `$docker-compose up` to restart the container.
+- in another terminal window, run `$docker ps -a`, and check that toolbox_web
+  image is running on port `0.0.0.0:1312->1312/tcp`. For example:
+
+  ```
+  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                    PORTS                           NAMES
+  086b5fc29e52        toolbox_web         "/bin/sh -c '/app/de…"   42 minutes ago      Up 32 minutes             0.0.0.0:1312->1312/tcp          toolbox_web
+  ```
+
+**Set Up Our Site**
 
 If everything is running correctly, you should be able to visit
-http://localhost:1312 or http://0.0.0.0:1312 and see our site. The localhost
-address is used in the rest of this readme, but the 0.0.0.0 address should be
-the same thing.
-
-We now need to seed a test group and some database constants:
+http://localhost:1312/health or http://0.0.0.0:1312/health and see our site:
 
 ```
-docker exec toolbox_web mix ecto.migrate
-docker exec toolbox_db /bin/bash seed-test-group.sh
+[
+  {
+    db_access: {
+      status: "ok"
+    },
+    time: 1.66
+    }
+]
 ```
 
-Make sure you only run the following two lines once.
+Alternatively, try visiting `http://0.0.0.0:1312/api/graphiql` to see a UI form.
 
-```
-docker exec toolbox_web mix ecto.setup
-docker exec --env MIX_ENV=test toolbox_web mix ecto.setup
-```
+You can also run the app with npm: `cd` into `toolbox/react_ui` folder, run
+`npm i` then `npm start`. Your browser will automatically open the app with JS
+and CSS assets.
 
-You can now visit http://localhost:1312/public/groups/1/users/new to create a
-user associated with that group. Finally, visit
-http://localhost:1312/public/session/new to log in.
-
-Unfortunately there's no easy way of creating more groups at the moment. You can
-use PG Admin to manually add groups, or the command line to insert them. See the
-_Managing Dev Databases_ section below for how to connect via the commandline,
-then use the following INSERT statement:
-
-```
-INSERT INTO groups (name, description, inserted_at, updated_at) VALUES ('group name', 'about this group', NOW(), NOW());
-```
-
-To create more users, visit
-http://localhost:1312/public/groups/$GROUP_ID/users/new (replace \$GROUP_ID with
-the id of the group you want to add the user to). You can add multiple users to
-a single group.
-
-For adding more data (like groups, shipments, items), register as an aid group.
-[Here is a screencast](https://www.loom.com/share/78a7cc512bbe4885ac3d8671372437a1)
-explaining this process in detail.
+The `localhost` address is used in the rest of this readme, but the `0.0.0.0`
+address should be the same thing.
 
 **Dev Environment**
 
