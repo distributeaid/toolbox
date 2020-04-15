@@ -6,7 +6,7 @@ exports[`shows the nav bar 1`] = `
     class="sticky top-0 z-50"
   >
     <nav
-      class="flex flex-row items-center justify-between flex-wrap flex-shrink-0 w-full max-w-7xl mx-auto rounded-b bg-black font-heading text-gray-100 p-2 lg:py-3 lg:px-4"
+      class="flex flex-row items-center justify-between flex-wrap flex-shrink-0 w-full max-w-7xl mx-auto rounded-b bg-black font-heading text-gray-100 p-2 lg:py-4 lg:px-2"
     >
       <button
         class="lg:hidden flex items-center px-3 py-2 focus:outline-none"
@@ -30,7 +30,7 @@ exports[`shows the nav bar 1`] = `
       </button>
       <a
         aria-current="page"
-        class="flex items-center flex-shrink-0 lg:mr-9 flex-grow lg:flex-grow-0 active"
+        class="flex items-center flex-shrink-0 lg:ml-4 lg:mr-9 flex-grow lg:flex-grow-0 active"
         href="/"
       >
         <svg
@@ -95,49 +95,49 @@ exports[`shows the nav bar 1`] = `
         </svg>
       </a>
       <div
-        class="w-full hidden flex-grow lg:flex lg:items-center lg:w-auto flex-shrink-0"
+        class="w-full hidden lg:ml-8 flex-grow lg:flex lg:items-center lg:w-auto flex-shrink-0"
       >
         <div
           class="text-sm pb-4 lg:pb-0 lg:flex-grow flex-shrink-0"
         >
           <a
-            class="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 active:text-pink-400 cursor-pointer mr-9"
+            class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
             href="/about"
           >
             navBar.aboutLink
           </a>
           <a
-            class="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 active:text-pink-400 cursor-pointer mr-9"
+            class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
             href="/news"
           >
             navBar.newsLink
           </a>
           <a
-            class="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 active:text-pink-400 cursor-pointer mr-9"
+            class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
             href="/involved"
           >
             navBar.getInvolvedLink
           </a>
           <a
-            class="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 active:text-pink-400 cursor-pointer mr-9"
+            class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
             href="/supplies"
           >
             navBar.suppliesLink
           </a>
           <a
-            class="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 active:text-pink-400 cursor-pointer mr-9"
+            class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
             href="/chapters"
           >
             navBar.chaptersLink
           </a>
           <a
-            class="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 active:text-pink-400 cursor-pointer mr-9"
+            class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
             href="/resources"
           >
             navBar.resourcesLink
           </a>
           <a
-            class="block mt-4 lg:inline-block lg:mt-0 hover:text-pink-300 active:text-pink-400 cursor-pointer mr-9"
+            class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
             href="/faq"
           >
             navBar.faqLink
@@ -145,7 +145,7 @@ exports[`shows the nav bar 1`] = `
         </div>
       </div>
       <a
-        class="bg-mfd-pink-1 block text-sm px-4 py-2 self-end leading-none rounded hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0"
+        class="bg-mfd-pink-1 block text-lg font-bold lg:mr-2 px-6 py-3 self-end leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white lg:mt-0"
         href="/donate"
       >
         navBar.donateLink
