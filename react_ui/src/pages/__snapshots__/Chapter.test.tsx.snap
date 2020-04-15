@@ -97,7 +97,7 @@ exports[`loads the chapter details and renders the page 1`] = `
             class="sm:w-5/12 sm:pr-2 z-30"
           >
             <a
-              class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-blue-600 w-full mb-8"
+              class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 w-full mb-8"
               href="request form link"
               rel="noopener noreferrer"
               target="_blank"
@@ -105,7 +105,7 @@ exports[`loads the chapter details and renders the page 1`] = `
               chapter.requestSuppliesLink
             </a>
             <a
-              class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-red-600 w-full mb-8"
+              class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-pink-1 w-full mb-8"
               href="donation form link"
               rel="noopener noreferrer"
               target="_blank"
@@ -113,7 +113,7 @@ exports[`loads the chapter details and renders the page 1`] = `
               chapter.donateSuppliesLink
             </a>
             <a
-              class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-purple-600 w-full"
+              class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-purple-2 w-full"
               href="volunteer form link"
               rel="noopener noreferrer"
               target="_blank"
@@ -136,7 +136,7 @@ exports[`loads the chapter details and renders the page 1`] = `
           chapter.faqHeader
         </h2>
         <a
-          class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-blue-600 sm:w-auto"
+          class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
           href="/faq"
         >
           chapter.faqLink
@@ -213,7 +213,7 @@ exports[`shows a loading message when loading 1`] = `
           chapter.faqHeader
         </h2>
         <a
-          class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-blue-600 sm:w-auto"
+          class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
           href="/faq"
         >
           chapter.faqLink
@@ -294,7 +294,7 @@ exports[`shows an error message when chapter not found 1`] = `
           chapter.faqHeader
         </h2>
         <a
-          class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-blue-600 sm:w-auto"
+          class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
           href="/faq"
         >
           chapter.faqLink

@@ -155,7 +155,7 @@ exports[`loads the chapter list 1`] = `
             chapter.faqHeader
           </h2>
           <a
-            class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-blue-600 sm:w-auto"
+            class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
             href="/faq"
           >
             chapter.faqLink

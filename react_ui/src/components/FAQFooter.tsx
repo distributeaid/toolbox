@@ -12,7 +12,7 @@ export const FAQFooter = () => {
         {t('chapter.faqHeader')}
       </h2>
 
-      <ShadowButtonLink className="bg-blue-600 sm:w-auto" to="/faq">
+      <ShadowButtonLink className="bg-mfd-cobalt-0 sm:w-auto" to="/faq">
         {t('chapter.faqLink')}
       </ShadowButtonLink>
     </div>

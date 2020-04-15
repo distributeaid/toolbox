@@ -35,7 +35,7 @@ export const Footer: React.FC = () => {
   const { t } = useTranslation()
 
   return (
-    <footer className="pb-14 pl-3 pl-2 md:px-8 md:px-14 bg-gray-900 text-gray-100">
+    <footer className="pb-14 pl-3 pl-2 md:px-8 md:px-14 bg-black text-gray-100">
       <div className="mx-auto max-w-7xl overflow-hidden">
         <div className="-mt-5">
           <FooterIcon />
@@ -106,7 +106,7 @@ export const Footer: React.FC = () => {
                   <div className="text-gray-200 mt-10 text-lg">
                     <a
                       href="/donate"
-                      className="bg-pink-500 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 md:mt-0">
+                      className="bg-mfd-pink-1 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 md:mt-0">
                       {t('footer.donateLink')}
                     </a>
                   </div>

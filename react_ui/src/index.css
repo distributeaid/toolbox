@@ -1230,6 +1230,10 @@ video {
   background-color: #014451;
 }
 
+.bg-mfd-cobalt-0 {
+  background-color: #3968DA;
+}
+
 .bg-blue-50 {
   background-color: #ebf5ff;
 }
@@ -1314,6 +1318,10 @@ video {
   background-color: #f6f5ff;
 }
 
+.bg-mfd-purple-2 {
+  background-color: #9D7AFF;
+}
+
 .bg-purple-100 {
   background-color: #edebfe;
 }
@@ -1348,6 +1356,10 @@ video {
 
 .bg-purple-900 {
   background-color: #4a1d96;
+}
+
+.bg-mfd-pink-1 {
+  background-color: #ED2E69;
 }
 
 .bg-pink-50 {
@@ -19714,6 +19726,14 @@ video {
 
 .text-pink-200 {
   color: #fad1e8;
+}
+
+.text-mfd-pink-1 {
+  color: #ED2E69;
+}
+
+.hover\:text-mfd-pink-1:hover {
+  color: #ED2E69;
 }
 
 .text-pink-300 {

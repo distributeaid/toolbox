@@ -75,7 +75,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
                 {chapter.requestForm && (
                   <ShadowButtonLink
                     external={true}
-                    className="bg-blue-600 w-full mb-8"
+                    className="bg-mfd-cobalt-0 w-full mb-8"
                     to={chapter.requestForm}>
                     {t('chapter.requestSuppliesLink')}
                   </ShadowButtonLink>
@@ -84,7 +84,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
                 {chapter.donationForm && (
                   <ShadowButtonLink
                     external={true}
-                    className="bg-red-600 w-full mb-8"
+                    className="bg-mfd-pink-1 w-full mb-8"
                     to={chapter.donationForm}>
                     {t('chapter.donateSuppliesLink')}
                   </ShadowButtonLink>
@@ -93,7 +93,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
                 {chapter.volunteerForm && (
                   <ShadowButtonLink
                     external={true}
-                    className="bg-purple-600 w-full"
+                    className="bg-mfd-purple-2 w-full"
                     to={chapter.volunteerForm}>
                     {t('chapter.volunteerLink')}
                   </ShadowButtonLink>

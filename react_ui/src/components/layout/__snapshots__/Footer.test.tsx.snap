@@ -3,7 +3,7 @@
 exports[`shows the footer 1`] = `
 <div>
   <footer
-    class="pb-14 pl-3 pl-2 md:px-8 md:px-14 bg-gray-900 text-gray-100"
+    class="pb-14 pl-3 pl-2 md:px-8 md:px-14 bg-black text-gray-100"
   >
     <div
       class="mx-auto max-w-7xl overflow-hidden"
@@ -182,7 +182,7 @@ exports[`shows the footer 1`] = `
                   class="text-gray-200 mt-10 text-lg"
                 >
                   <a
-                    class="bg-pink-500 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 md:mt-0"
+                    class="bg-mfd-pink-1 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 md:mt-0"
                     href="/donate"
                   >
                     footer.donateLink
