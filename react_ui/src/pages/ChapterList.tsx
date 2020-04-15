@@ -9,7 +9,7 @@ import { MainContent } from '../components/MainContent'
 import { MainHeader } from '../components/MainHeader'
 import { P } from '../components/P'
 import { PreHeader } from '../components/PreHeader'
-import { Group, useGetChapterListQuery } from '../generated/graphql'
+import { Group, Maybe, useGetChapterListQuery } from '../generated/graphql'
 import { countryCodeToName } from '../util/placeCodeToName'
 
 export const ChapterItem: React.FC<{
@@ -47,9 +47,9 @@ const ChaptersInCountry: React.FC<{
         </div>
 
         <ul>
-          {countryWithChapters.chapters.map(
-            (g) => g && g.id && <ChapterItem key={g.id} chapter={g} />
-          )}
+          {countryWithChapters.chapters.map((g) => (
+            <ChapterItem key={g.id} chapter={g} />
+          ))}
         </ul>
       </div>
 
@@ -88,60 +88,33 @@ const ChaptersInCountry: React.FC<{
 
 type CountryWithChapters = {
   countryCode: string
-  chapters: Array<Group>
+  chapters: Group[]
 }
 
-const groupChaptersByCountry = (
-  chapters: Array<Group>
-): Array<CountryWithChapters> => {
-  const chaptersByCountry: { [country: string]: Array<Group> } = {}
+const groupChaptersByCountry = (chapters: Group[]): CountryWithChapters[] => {
+  const chaptersByCountry: { [country: string]: Group[] } = {}
 
-  chapters.forEach((chapter: Group) => {
-    if (chaptersByCountry[chapter.location.countryCode] == null) {
-      chaptersByCountry[chapter.location.countryCode] = []
+  for (const chapter of chapters) {
+    const { countryCode } = chapter.location
+    if (!chaptersByCountry[countryCode]) {
+      chaptersByCountry[countryCode] = []
     }
 
-    chaptersByCountry[chapter.location.countryCode].push(chapter)
-  })
-
-  const result: Array<CountryWithChapters> = []
-
-  for (const countryCode in chaptersByCountry) {
-    const sortedChapters = chaptersByCountry[countryCode]
-
-    sortedChapters.sort((a: Group, b: Group) => {
-      const provinceA = a.location.province.toLowerCase()
-      const provinceB = b.location.province.toLowerCase()
-
-      if (provinceA > provinceB) {
-        return 1
-      } else if (provinceA < provinceB) {
-        return -1
-      } else {
-        return 0
-      }
-    })
-
-    result.push({
-      countryCode,
-      chapters: sortedChapters,
-    })
+    chaptersByCountry[countryCode].push(chapter)
   }
 
-  result.sort((a: CountryWithChapters, b: CountryWithChapters) => {
-    const countryA = a.countryCode.toLowerCase()
-    const countryB = b.countryCode.toLowerCase()
-
-    if (countryA > countryB) {
-      return 1
-    } else if (countryA < countryB) {
-      return -1
-    } else {
-      return 0
-    }
-  })
-
-  return result
+  return Object.keys(chaptersByCountry)
+    .map((countryCode) => ({
+      countryCode,
+      chapters: chaptersByCountry[countryCode].sort((a, b) =>
+        a.location.province
+          .toLowerCase()
+          .localeCompare(b.location.province.toLowerCase())
+      ),
+    }))
+    .sort((a, b) =>
+      a.countryCode.toLowerCase().localeCompare(b.countryCode.toLowerCase())
+    )
 }
 
 export const ChapterList: React.FC = () => {
@@ -159,7 +132,11 @@ export const ChapterList: React.FC = () => {
 
   const { groups: chapters } = data
 
-  const chaptersByCountry = groupChaptersByCountry(chapters as Array<Group>)
+  const chaptersByCountry = groupChaptersByCountry(
+    (chapters as Maybe<Group>[]).filter(
+      (chapter): chapter is Group => !!chapter
+    )
+  )
 
   return (
     <MainContent>

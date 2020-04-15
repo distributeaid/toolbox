@@ -26,6 +26,7 @@ it('loads the chapter list', async () => {
           slug: 'wa-sea',
           location: {
             province: 'WA',
+            countryCode: 'US',
           },
         },
         {
@@ -34,6 +35,16 @@ it('loads the chapter list', async () => {
           slug: 'ca-oak',
           location: {
             province: 'CA',
+            conutryCode: 'US',
+          },
+        },
+        {
+          id: '3',
+          name: 'Toronto',
+          slug: 'on-toronto',
+          location: {
+            province: 'ON',
+            countryCode: 'CA',
           },
         },
       ],
