@@ -55,7 +55,9 @@ export const NavBar: React.FC = () => {
               {t('navBar.aboutLink')}
             </HeaderNavLink>
 
-            <HeaderNavLink onClick={hideMenu} to="https://masksfordocs.com/news">
+            <HeaderNavLink
+              onClick={hideMenu}
+              to="https://masksfordocs.com/news">
               {t('navBar.newsLink')}
             </HeaderNavLink>
 
