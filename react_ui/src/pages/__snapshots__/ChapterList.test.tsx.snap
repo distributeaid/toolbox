@@ -41,7 +41,7 @@ exports[`loads the chapter list 1`] = `
       </div>
     </div>
     <div
-      class="border-gray-400 border-t w-full bg-blue-50 mt-16 py-16"
+      class="border-gray-400 border-t w-full bg-lightBlue mt-16 py-16"
     >
       <div
         class="container p-4 md:mx-auto w-full max-w-4xl"

@@ -15,6 +15,7 @@ module.exports = {
         mono: ['PT Mono', ...defaultTheme.fontFamily.mono],
       },
       colors: {
+        lightBlue: '#F5F6FD',
         pink: '#ed2e69',
       },
     },
