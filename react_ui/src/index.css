@@ -28118,6 +28118,30 @@ video {
   transition-duration: 1000ms;
 }
 
+.z-10 {
+  z-index: 10;
+}
+
+.relative {
+  position: relative;
+}
+
+.hover\:z-10:hover {
+  z-index: 10;
+}
+
+.hover\:relative:hover {
+  position: relative;
+}
+
+.focus\:z-10:focus {
+  z-index: 10;
+}
+
+.focus\:relative:focus {
+  position: relative;
+}
+
 @media (min-width: 640px) {
   .sm\:sr-only {
     position: absolute;

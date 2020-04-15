@@ -35,8 +35,8 @@ export const Footer: React.FC = () => {
   const { t } = useTranslation()
 
   return (
-    <footer className="mt-5 pb-14 pl-3 pl-2 md:px-8 md:px-14 bg-gray-900 text-gray-100">
-      <div className="mx-auto max-w-7xl">
+    <footer className="pb-14 pl-3 pl-2 md:px-8 md:px-14 bg-gray-900 text-gray-100">
+      <div className="mx-auto max-w-7xl overflow-hidden">
         <div className="-mt-5">
           <FooterIcon />
         </div>

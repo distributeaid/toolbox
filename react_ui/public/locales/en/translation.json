@@ -1,8 +1,10 @@
 {
   "chapterList": {
-    "title": "Chapter Directory",
-    "subtitle": "Find the chapter nearest you in the list below to get involved.",
-    "instructions": "If your area doesn't have a Masks For Docs Chapter yet, we are looking for volunteers to start new ones. Get in touch on <2>Slack</2> to start one [Need better copy here]."
+    "title": "Everything Starts With Your Local Chapter",
+    "subtitle": "Connect locally to get what you need and give what you can. Find your local chapter below to <strong>request supplies</strong>, <strong>donate supplies</strong>, or <strong>volunteer</strong>.",
+    "provinceTerm": "State",
+    "chapterName": "Chapter Name",
+    "cta": "Don’t see your local chapter? Reach out to <2>request supplies</2>, <5>donate supplies</5>, or <8>volunteer</8>."
   },
   "chapterForm": {
     "chapterName": "Chapter Name",

@@ -158,7 +158,7 @@ export type GetChapterBySlugQuery = { readonly __typename?: 'RootQueryType', rea
 export type GetChapterListQueryVariables = {};
 
 
-export type GetChapterListQuery = { readonly __typename?: 'RootQueryType', readonly groups: Maybe<ReadonlyArray<Maybe<{ readonly __typename: 'Group', readonly id: string, readonly slug: string, readonly description: Maybe<string>, readonly name: string }>>> };
+export type GetChapterListQuery = { readonly __typename?: 'RootQueryType', readonly groups: Maybe<ReadonlyArray<Maybe<{ readonly __typename: 'Group', readonly id: string, readonly slug: string, readonly description: Maybe<string>, readonly name: string, readonly location: { readonly __typename?: 'Address', readonly id: string, readonly province: string } }>>> };
 
 export type UpdateChapterMutationVariables = {
   id: Scalars['ID'];
@@ -268,6 +268,10 @@ export const GetChapterListDocument = gql`
     slug
     description
     name
+    location {
+      id
+      province
+    }
   }
 }
     `;
