@@ -1,6 +1,7 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
+import { Helmet } from 'react-helmet'
 
 import { Background } from '../components/Background'
 import { BackLink } from '../components/BackLink'
@@ -27,8 +28,16 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
 
   const chapter = loading || error ? undefined : data?.groupBySlug
 
+  const chapterName = chapter ? chapter.name : '[Local Chapter Name]'
+  const titleTagContent = `Donate Masks & PPE for Coronavirus in ${chapterName} | Masks For Docs`
+  const metaTagContent = `At Masks For Docs ${chapterName}, we have one goal: Get protective equipment into the hands of healthcare workers as quickly as possible.`
+
   return (
     <MainContent>
+      <Helmet>
+        <title>{titleTagContent}</title>
+        <meta name="description" content={metaTagContent} />
+      </Helmet>
       <Background />
 
       <ContentContainer>
