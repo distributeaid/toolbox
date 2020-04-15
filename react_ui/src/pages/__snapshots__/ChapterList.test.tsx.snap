@@ -114,7 +114,9 @@ exports[`loads the chapter list 1`] = `
            
           <a
             class="underline text-blue-600"
-            href="/request"
+            href="https://share.hsforms.com/1ZEAK2ikxSFKqR_XR7J-x5Q4dh7j"
+            rel="noopener noreferrer"
+            target="_blank"
           >
             request supplies
           </a>
@@ -122,7 +124,9 @@ exports[`loads the chapter list 1`] = `
            
           <a
             class="underline text-blue-600"
-            href="/donate"
+            href="https://share.hsforms.com/19adMT7wKRNSvxJSYJHOdGw4dh7j"
+            rel="noopener noreferrer"
+            target="_blank"
           >
             donate supplies
           </a>
@@ -130,7 +134,9 @@ exports[`loads the chapter list 1`] = `
            
           <a
             class="underline text-blue-600"
-            href="/volunteer"
+            href="https://share.hsforms.com/1wEiqrs4DTQGBBQ9z2wBg8Q4dh7j"
+            rel="noopener noreferrer"
+            target="_blank"
           >
             volunteer
           </a>

@@ -56,15 +56,27 @@ const ChaptersInCountry: React.FC<{
       <P className="text-center mt-8 mx-auto w-1/2">
         <Trans i18nKey="chapterList.cta">
           Don’t see your local chapter? Reach out to{' '}
-          <a href="/request" className="underline text-blue-600">
+          <a
+            href="https://share.hsforms.com/1ZEAK2ikxSFKqR_XR7J-x5Q4dh7j"
+            className="underline text-blue-600"
+            target="_blank"
+            rel="noopener noreferrer">
             request supplies
           </a>
           ,{' '}
-          <a href="/donate" className="underline text-blue-600">
+          <a
+            href="https://share.hsforms.com/19adMT7wKRNSvxJSYJHOdGw4dh7j"
+            className="underline text-blue-600"
+            target="_blank"
+            rel="noopener noreferrer">
             donate supplies
           </a>
           , or{' '}
-          <a href="/volunteer" className="underline text-blue-600">
+          <a
+            href="https://share.hsforms.com/1wEiqrs4DTQGBBQ9z2wBg8Q4dh7j"
+            className="underline text-blue-600"
+            target="_blank"
+            rel="noopener noreferrer">
             volunteer
           </a>
           .
