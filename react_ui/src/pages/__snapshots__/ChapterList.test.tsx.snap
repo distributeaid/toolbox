@@ -111,7 +111,33 @@ exports[`loads the chapter list 1`] = `
         </div>
         <p
           class="pb-4 font-body text-sm sm:text-lg text-center mt-8 mx-auto w-1/2"
-        />
+        >
+          Don’t see your local chapter? Reach out to
+           
+          <a
+            class="underline text-blue-600"
+            href="/request"
+          >
+            request supplies
+          </a>
+          ,
+           
+          <a
+            class="underline text-blue-600"
+            href="/donate"
+          >
+            donate supplies
+          </a>
+          , or
+           
+          <a
+            class="underline text-blue-600"
+            href="/volunteer"
+          >
+            volunteer
+          </a>
+          .
+        </p>
       </div>
       <div
         class="flex flex-col justify-center py-10 sm:py-20"

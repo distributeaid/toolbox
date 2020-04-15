@@ -74,7 +74,21 @@ export const ChapterList: React.FC = () => {
           </div>
 
           <P className="text-center mt-8 mx-auto w-1/2">
-            <Trans i18nKey="chapterList.cta" />
+            <Trans i18nKey="chapterList.cta">
+              Don’t see your local chapter? Reach out to{' '}
+              <a href="/request" className="underline text-blue-600">
+                request supplies
+              </a>
+              ,{' '}
+              <a href="/donate" className="underline text-blue-600">
+                donate supplies
+              </a>
+              , or{' '}
+              <a href="/volunteer" className="underline text-blue-600">
+                volunteer
+              </a>
+              .
+            </Trans>
           </P>
         </div>
         <FAQFooter />
