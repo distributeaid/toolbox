@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
+import { DonateButton } from '../DonateButton'
 import { M4DLogo } from './M4DLogo'
 
 export const NavBar: React.FC = () => {
@@ -44,10 +45,15 @@ export const NavBar: React.FC = () => {
           <M4DLogo />
         </NavLink>
 
+        <DonateButton
+          onClick={hideMenu}
+          className="sm:hidden lg:mr-2 self-end lg:mt-0"
+        />
+
         <div
           className={`w-full ${
             menuOpen ? 'block' : 'hidden'
-          } lg:ml-8 flex-grow lg:flex lg:items-center lg:w-auto flex-shrink-0`}>
+          } ml-3 lg:ml-8 flex-grow lg:flex lg:items-center lg:w-auto flex-shrink-0`}>
           <div className="text-sm pb-4 lg:pb-0 lg:flex-grow flex-shrink-0">
             <HeaderNavLink
               onClick={hideMenu}
@@ -55,7 +61,9 @@ export const NavBar: React.FC = () => {
               {t('navBar.aboutLink')}
             </HeaderNavLink>
 
-            <HeaderNavLink onClick={hideMenu} to="https://masksfordocs.com/news">
+            <HeaderNavLink
+              onClick={hideMenu}
+              to="https://masksfordocs.com/news">
               {t('navBar.newsLink')}
             </HeaderNavLink>
 
@@ -87,12 +95,10 @@ export const NavBar: React.FC = () => {
           </div>
         </div>
 
-        <NavLink
-          to="https://masksfordocs.com/donate"
+        <DonateButton
           onClick={hideMenu}
-          className="bg-mfd-pink-1 block text-lg font-bold lg:mr-2 px-6 py-3 self-end leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white lg:mt-0">
-          {t('navBar.donateLink')}
-        </NavLink>
+          className="hidden sm:block lg:mr-2 self-end lg:mt-0"
+        />
       </nav>
     </header>
   )

@@ -7,8 +7,8 @@ export const FAQFooter = () => {
   const { t } = useTranslation()
 
   return (
-    <div className="flex flex-col justify-center py-10 sm:py-20">
-      <h2 className="text-center font-heading font-semibold text-2xl sm:text-5xl leading-loose mb-4">
+    <div className="flex flex-col justify-center py-6 pb-12 sm:py-12">
+      <h2 className="text-center font-heading font-semibold text-2xl sm:text-5xl mb-6">
         {t('chapter.faqHeader')}
       </h2>
 

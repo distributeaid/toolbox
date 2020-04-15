@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
 import { classnames } from '../classnames'
+import { DonateButton } from '../DonateButton'
 
 const LinkList: React.FC<{
   title: string
@@ -10,11 +11,11 @@ const LinkList: React.FC<{
   children?: React.ReactChild
 }> = ({ title, links, children }) => (
   <div className="flex-1 mb-7 md:mb-0 pr-5 md:pl-5 md:pr-0 text-right md:text-left">
-    <div className="text-gray-200 mb-2 md:mb-7 text-sm text-white font-heading font-semibold uppercase">
+    <div className="text-gray-200 mb-2 md:mb-7 text-base text-white font-heading font-semibold uppercase">
       {title}
     </div>
     {links.map(({ title, href }) => (
-      <div key={title} className="text-xs font-mono mb-3">
+      <div key={title} className="text-sm font-mono mb-3">
         {href.startsWith('http') ? (
           <a href={href}>{title}</a>
         ) : (
@@ -117,11 +118,7 @@ export const Footer: React.FC = () => {
                     },
                   ]}>
                   <div className="text-gray-200 mt-10 text-lg">
-                    <a
-                      href="https://masksfordocs.com/donate"
-                      className="bg-mfd-pink-1 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 md:mt-0">
-                      {t('footer.donateLink')}
-                    </a>
+                    <DonateButton className="inline-block mt-4 md:mt-0" />
                   </div>
                 </LinkList>
               </div>
