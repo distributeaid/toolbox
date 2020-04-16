@@ -3,7 +3,6 @@ import '@aws-amplify/ui/dist/style.css'
 
 import { ApolloProvider } from '@apollo/client'
 import React, { Suspense } from 'react'
-import { Helmet } from 'react-helmet'
 import {
   BrowserRouter as Router,
   Redirect,
@@ -17,7 +16,6 @@ import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
 import { useAuthState } from './auth/useAuthState'
 import { Footer } from './components/layout/Footer'
 import { NavBar } from './components/layout/NavBar'
-import ogImage from './og/image.png'
 import AuthenticatorWrapper from './pages/Authenticator'
 import { Chapter } from './pages/Chapter'
 import { ChapterEdit } from './pages/ChapterEdit'
