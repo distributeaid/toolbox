@@ -17,7 +17,9 @@ const LinkList: React.FC<{
     {links.map(({ title, href }) => (
       <div key={title} className="text-sm font-mono mb-3">
         {href.startsWith('http') ? (
-          <a href={href}>{title}</a>
+          <a rel="noopener noreferrer" target="_blank" href={href}>
+            {title}
+          </a>
         ) : (
           <NavLink to={href}>{title}</NavLink>
         )}
@@ -85,12 +87,12 @@ export const Footer: React.FC = () => {
                       href: 'https://masksfordocs.com/resources/#fieldguides',
                     },
                     {
-                      title: t('footer.resources.localChapters'),
-                      href: '/chapters',
+                      title: t('footer.resources.templates'),
+                      href: 'https://masksfordocs.com/resources#templates',
                     },
                     {
-                      title: t('footer.resources.localLeadLogin'),
-                      href: '/login',
+                      title: t('footer.resources.localChapters'),
+                      href: '/chapters',
                     },
                   ]}
                 />
@@ -205,8 +207,12 @@ export const Footer: React.FC = () => {
 }
 
 const SocialIcon: React.FC<{ href: string }> = ({ children, href }) => (
-  <div className="w-8 h-8 flex items-center justify-center m-2 mx-5">
-    <a href={href} className="block w-6 h-6">
+  <div className="w-8 h-8 flex items-center justify-center mb-8 sm:mb-2 mx-5">
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      href={href}
+      className="block w-6 h-6">
       {children}
     </a>
   </div>
