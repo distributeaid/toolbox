@@ -26,31 +26,11 @@ import { ChapterNew } from './pages/ChapterNew'
 import StyleGuide from './pages/StyleGuide'
 import ScrollToTop from './util/scrollToTop'
 
-const metaTitle = 'Donate Masks & PPE for Coronavirus | Masks For Docs'
-const metaDescription =
-  'At Masks For Docs, we have one goal: Get protective equipment into the hands of healthcare workers as quickly as possible.'
-
 const App: React.FunctionComponent = () => {
   const { authState, setAuthState } = useAuthState()
 
   return (
     <ApolloProvider client={client}>
-      <Helmet>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDescription} />
-        <meta property="og:site_name" content="Masks For Docs"></meta>
-        <meta property="og:title" content={metaTitle}></meta>
-        <meta property="og:type" content="website" />
-        <meta property="og:description" content={metaDescription} />
-        <meta
-          property="og:image"
-          content={[
-            'https://local.staging.masksfordocs.com',
-            process.env.PUBLIC_URL,
-            ogImage,
-          ].join('')}
-        />
-      </Helmet>
       <Suspense fallback="Loading...">
         <Router>
           <ScrollToTop />

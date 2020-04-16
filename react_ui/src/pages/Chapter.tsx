@@ -49,11 +49,6 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
             <Helmet>
               <title>{metaTitle(chapter)}</title>
               <meta name="description" content={metaDescription(chapter)} />
-              <meta property="og:title" content={metaTitle(chapter)} />
-              <meta
-                property="og:description"
-                content={metaDescription(chapter)}
-              />
             </Helmet>
             <PreHeader>
               {chapter.location.countryCode === 'US'
