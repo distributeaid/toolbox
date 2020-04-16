@@ -8,7 +8,7 @@ export const ContentContainer: React.FC<{ className?: string }> = ({
 }) => (
   <div
     className={classnames(
-      'container w-full max-w-6xl p-4 md:mx-auto overflow-hidden',
+      'container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden',
       className
     )}>
     {children}

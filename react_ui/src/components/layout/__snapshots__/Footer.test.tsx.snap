@@ -57,33 +57,39 @@ exports[`shows the footer 1`] = `
                 class="flex-1 mb-7 md:mb-0 pr-5 md:pl-5 md:pr-0 text-right md:text-left"
               >
                 <div
-                  class="text-gray-200 mb-2 md:mb-7 text-sm text-white font-heading font-semibold uppercase"
+                  class="text-gray-200 mb-2 md:mb-7 text-base text-white font-heading font-semibold uppercase"
                 >
                   footer.about.title
                 </div>
                 <div
-                  class="text-xs font-mono mb-3"
+                  class="text-sm font-mono mb-3"
                 >
                   <a
                     href="https://masksfordocs.com/about-us/#mission"
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
                     footer.about.mission
                   </a>
                 </div>
                 <div
-                  class="text-xs font-mono mb-3"
+                  class="text-sm font-mono mb-3"
                 >
                   <a
                     href="https://masksfordocs.com/about-us/#leadership"
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
                     footer.about.whoWeAre
                   </a>
                 </div>
                 <div
-                  class="text-xs font-mono mb-3"
+                  class="text-sm font-mono mb-3"
                 >
                   <a
                     href="https://masksfordocs.com/#"
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
                     footer.about.successStories
                   </a>
@@ -93,30 +99,45 @@ exports[`shows the footer 1`] = `
                 class="flex-1 mb-7 md:mb-0 pr-5 md:pl-5 md:pr-0 text-right md:text-left"
               >
                 <div
-                  class="text-gray-200 mb-2 md:mb-7 text-sm text-white font-heading font-semibold uppercase"
+                  class="text-gray-200 mb-2 md:mb-7 text-base text-white font-heading font-semibold uppercase"
                 >
                   footer.resources.title
                 </div>
                 <div
-                  class="text-xs font-mono mb-3"
+                  class="text-sm font-mono mb-3"
                 >
                   <a
                     href="https://masksfordocs.com/news/#covid19updates"
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
                     footer.resources.covidUpdates
                   </a>
                 </div>
                 <div
-                  class="text-xs font-mono mb-3"
+                  class="text-sm font-mono mb-3"
                 >
                   <a
                     href="https://masksfordocs.com/resources/#fieldguides"
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
                     footer.resources.fieldGuides
                   </a>
                 </div>
                 <div
-                  class="text-xs font-mono mb-3"
+                  class="text-sm font-mono mb-3"
+                >
+                  <a
+                    href="https://masksfordocs.com/resources#templates"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    footer.resources.templates
+                  </a>
+                </div>
+                <div
+                  class="text-sm font-mono mb-3"
                 >
                   <a
                     href="/chapters"
@@ -124,56 +145,55 @@ exports[`shows the footer 1`] = `
                     footer.resources.localChapters
                   </a>
                 </div>
-                <div
-                  class="text-xs font-mono mb-3"
-                >
-                  <a
-                    href="/login"
-                  >
-                    footer.resources.localLeadLogin
-                  </a>
-                </div>
               </div>
               <div
                 class="flex-1 mb-7 md:mb-0 pr-5 md:pl-5 md:pr-0 text-right md:text-left"
               >
                 <div
-                  class="text-gray-200 mb-2 md:mb-7 text-sm text-white font-heading font-semibold uppercase"
+                  class="text-gray-200 mb-2 md:mb-7 text-base text-white font-heading font-semibold uppercase"
                 >
                   footer.more.title
                 </div>
                 <div
-                  class="text-xs font-mono mb-3"
+                  class="text-sm font-mono mb-3"
                 >
                   <a
                     href="https://masksfordocs.com/legal/terms-and-conditions"
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
                     footer.more.termsOfUse
                   </a>
                 </div>
                 <div
-                  class="text-xs font-mono mb-3"
+                  class="text-sm font-mono mb-3"
                 >
                   <a
                     href="https://masksfordocs.com/legal/privacy-policy"
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
                     footer.more.privacyPolicy
                   </a>
                 </div>
                 <div
-                  class="text-xs font-mono mb-3"
+                  class="text-sm font-mono mb-3"
                 >
                   <a
                     href="https://masksfordocs.atlassian.net/wiki/spaces/HOME/pages/49905756/Code+of+Conduct"
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
                     footer.more.codeOfConduct
                   </a>
                 </div>
                 <div
-                  class="text-xs font-mono mb-3"
+                  class="text-sm font-mono mb-3"
                 >
                   <a
                     href="https://masksfordocs.com/contact"
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
                     footer.more.contactUs
                   </a>
@@ -182,10 +202,12 @@ exports[`shows the footer 1`] = `
                   class="text-gray-200 mt-10 text-lg"
                 >
                   <a
-                    class="bg-mfd-pink-1 inline-block text-sm px-4 py-2 leading-none rounded hover:border-transparent hover:text-pink-700 hover:bg-white mt-4 md:mt-0"
+                    class="font-mono bg-mfd-pink-1 block text-base sm:text-lg font-bold leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white px-4 py-2 sm:px-6 sm:py-3 inline-block mt-4 md:mt-0"
                     href="https://masksfordocs.com/donate"
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
-                    footer.donateLink
+                    navBar.donateLink
                   </a>
                 </div>
               </div>
@@ -203,11 +225,13 @@ exports[`shows the footer 1`] = `
               class="flex flex-col md:flex-row justify-start md:justify-end flex-1 pr-3 md:pr-14"
             >
               <div
-                class="w-8 h-8 flex items-center justify-center m-2 mx-5"
+                class="w-8 h-8 flex items-center justify-center mb-8 sm:mb-2 mx-5"
               >
                 <a
                   class="block w-6 h-6"
                   href="https://www.facebook.com/MasksForDocs/"
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <svg
                     fill="none"
@@ -227,11 +251,13 @@ exports[`shows the footer 1`] = `
                 </a>
               </div>
               <div
-                class="w-8 h-8 flex items-center justify-center m-2 mx-5"
+                class="w-8 h-8 flex items-center justify-center mb-8 sm:mb-2 mx-5"
               >
                 <a
                   class="block w-6 h-6"
                   href="https://twitter.com/MasksForDocs"
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <svg
                     fill="none"
@@ -251,11 +277,13 @@ exports[`shows the footer 1`] = `
                 </a>
               </div>
               <div
-                class="w-8 h-8 flex items-center justify-center m-2 mx-5"
+                class="w-8 h-8 flex items-center justify-center mb-8 sm:mb-2 mx-5"
               >
                 <a
                   class="block w-6 h-6"
                   href="https://www.instagram.com/masksfordocs/"
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <svg
                     fill="none"
@@ -283,11 +311,13 @@ exports[`shows the footer 1`] = `
                 </a>
               </div>
               <div
-                class="w-8 h-8 flex items-center justify-center m-2 mx-5"
+                class="w-8 h-8 flex items-center justify-center mb-8 sm:mb-2 mx-5"
               >
                 <a
                   class="block w-6 h-6"
                   href="https://www.linkedin.com/company/masks-for-docs/"
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <svg
                     fill="none"

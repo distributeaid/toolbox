@@ -12,4 +12,12 @@
   .relative {
     position: relative;
   }
+
+  .fill-pink svg path {
+    fill: theme('colors.pink');
+  }
+}
+
+.fill-black svg path {
+  fill: #000000;
 }

@@ -25,32 +25,54 @@ exports[`loads the chapter list 1`] = `
       </svg>
     </div>
     <div
-      class="container w-full max-w-6xl p-4 md:mx-auto overflow-hidden"
+      class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
     >
       <div
         class="md:w-7/12 pt-16 sm:pt-32"
       >
         <h1
-          class="font-heading font-semibold text-3xl sm:text-6xl leading-2 mb-8"
+          class="font-heading font-semibold text-3xl sm:text-6xl leading-tight mb-8"
         >
           chapterList.title
         </h1>
         <h3
-          class="font-heading font-normal text-xl sm:text-2xl leading-normal"
-        />
+          class="font-heading font-normal text-xl sm:text-2xl leading-relaxed"
+        >
+          Connect locally to get what you need and give what you can. Find your local chapter below to
+           
+          <strong
+            class="font-semibold"
+          >
+            request supplies
+          </strong>
+          ,
+           
+          <strong
+            class="font-semibold"
+          >
+            donate supplies
+          </strong>
+          , or
+           
+          <strong
+            class="font-semibold"
+          >
+            volunteer
+          </strong>
+        </h3>
       </div>
     </div>
     <div
-      class="border-gray-400 border-t w-full bg-blue-50 mt-16 py-16"
+      class="border-gray-400 border-t w-full bg-lightBlue mt-20 py-20"
     >
       <div
-        class="container p-4 md:mx-auto w-full max-w-4xl"
+        class="container p-6 pb-12 last:pb-6 md:mx-auto w-full max-w-4xl"
       >
         <div
-          class="grid grid-cols-1 gap-4"
+          class="grid grid-cols-1 gap-2"
         >
           <h3
-            class="font-heading text-3xl font-semibold px-6 pb-6"
+            class="font-heading text-3xl font-semibold px-6"
           >
             Canada
           </h3>
@@ -60,7 +82,7 @@ exports[`loads the chapter list 1`] = `
             <div
               class="w-4/12 pb-0"
             >
-              chapterList.provinceTerm
+              Province
             </div>
             <div
               class="w-6/12 pb-0"
@@ -70,7 +92,7 @@ exports[`loads the chapter list 1`] = `
           </div>
           <ul>
             <li
-              class="border border-collapse border-gray-200 bg-white font-heading hover:border-blue-500 hover:shadow-xl hover:relative hover:z-10 hover:border"
+              class="border border-collapse border-gray-200 bg-white font-heading fill-black hover:border-blue-500 hover:shadow-xl hover:relative hover:z-10 hover:border hover:fill-pink"
             >
               <a
                 class="p-6 flex flex-row text-black text-sm"
@@ -82,16 +104,48 @@ exports[`loads the chapter list 1`] = `
                   ON
                 </div>
                 <div
-                  class="leading-5 font-medium w-6/12"
+                  class="leading-5 font-medium w-4/12"
                 >
                   Toronto
+                </div>
+                <div
+                  class="leading-5 w-4/12 flex justify-end"
+                >
+                  <svg
+                    fill="none"
+                    height="17"
+                    viewBox="0 0 17 17"
+                    width="17"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g
+                      clip-path="url(#clip0)"
+                    >
+                      <path
+                        d="M1.82846 7.4855V9.4852L10.6065 9.4852L10.6065 13.4351L15.5562 8.48535L10.6065 3.5356L10.6065 7.4855L1.82846 7.4855Z"
+                      />
+                    </g>
+                    <defs>
+                      <clippath
+                        id="clip0"
+                      >
+                        <rect
+                          fill="white"
+                          height="12"
+                          transform="rotate(-45 0 8.48535)"
+                          width="12"
+                          y="8.48535"
+                        />
+                      </clippath>
+                    </defs>
+                  </svg>
                 </div>
               </a>
             </li>
           </ul>
         </div>
         <p
-          class="pb-4 font-body text-sm sm:text-lg text-center mt-8 mx-auto w-1/2"
+          class="pb-4 font-body text-sm sm:text-lg text-center mx-auto pt-6 w-2/3 sm:w-1/2"
         >
           Don’t see your local chapter? Reach out to
            
@@ -127,13 +181,13 @@ exports[`loads the chapter list 1`] = `
         </p>
       </div>
       <div
-        class="container p-4 md:mx-auto w-full max-w-4xl"
+        class="container p-6 pb-12 last:pb-6 md:mx-auto w-full max-w-4xl"
       >
         <div
-          class="grid grid-cols-1 gap-4"
+          class="grid grid-cols-1 gap-2"
         >
           <h3
-            class="font-heading text-3xl font-semibold px-6 pb-6"
+            class="font-heading text-3xl font-semibold px-6"
           />
           <div
             class="flex px-6 font-heading font-semibold text-lg text-blue-600"
@@ -141,7 +195,7 @@ exports[`loads the chapter list 1`] = `
             <div
               class="w-4/12 pb-0"
             >
-              chapterList.provinceTerm
+              State
             </div>
             <div
               class="w-6/12 pb-0"
@@ -151,7 +205,7 @@ exports[`loads the chapter list 1`] = `
           </div>
           <ul>
             <li
-              class="border border-collapse border-gray-200 bg-white font-heading hover:border-blue-500 hover:shadow-xl hover:relative hover:z-10 hover:border"
+              class="border border-collapse border-gray-200 bg-white font-heading fill-black hover:border-blue-500 hover:shadow-xl hover:relative hover:z-10 hover:border hover:fill-pink"
             >
               <a
                 class="p-6 flex flex-row text-black text-sm"
@@ -163,16 +217,48 @@ exports[`loads the chapter list 1`] = `
                   CA
                 </div>
                 <div
-                  class="leading-5 font-medium w-6/12"
+                  class="leading-5 font-medium w-4/12"
                 >
                   Oakland
+                </div>
+                <div
+                  class="leading-5 w-4/12 flex justify-end"
+                >
+                  <svg
+                    fill="none"
+                    height="17"
+                    viewBox="0 0 17 17"
+                    width="17"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g
+                      clip-path="url(#clip0)"
+                    >
+                      <path
+                        d="M1.82846 7.4855V9.4852L10.6065 9.4852L10.6065 13.4351L15.5562 8.48535L10.6065 3.5356L10.6065 7.4855L1.82846 7.4855Z"
+                      />
+                    </g>
+                    <defs>
+                      <clippath
+                        id="clip0"
+                      >
+                        <rect
+                          fill="white"
+                          height="12"
+                          transform="rotate(-45 0 8.48535)"
+                          width="12"
+                          y="8.48535"
+                        />
+                      </clippath>
+                    </defs>
+                  </svg>
                 </div>
               </a>
             </li>
           </ul>
         </div>
         <p
-          class="pb-4 font-body text-sm sm:text-lg text-center mt-8 mx-auto w-1/2"
+          class="pb-4 font-body text-sm sm:text-lg text-center mx-auto pt-6 w-2/3 sm:w-1/2"
         >
           Don’t see your local chapter? Reach out to
            
@@ -208,13 +294,13 @@ exports[`loads the chapter list 1`] = `
         </p>
       </div>
       <div
-        class="container p-4 md:mx-auto w-full max-w-4xl"
+        class="container p-6 pb-12 last:pb-6 md:mx-auto w-full max-w-4xl"
       >
         <div
-          class="grid grid-cols-1 gap-4"
+          class="grid grid-cols-1 gap-2"
         >
           <h3
-            class="font-heading text-3xl font-semibold px-6 pb-6"
+            class="font-heading text-3xl font-semibold px-6"
           >
             USA
           </h3>
@@ -224,7 +310,7 @@ exports[`loads the chapter list 1`] = `
             <div
               class="w-4/12 pb-0"
             >
-              chapterList.provinceTerm
+              State
             </div>
             <div
               class="w-6/12 pb-0"
@@ -234,7 +320,7 @@ exports[`loads the chapter list 1`] = `
           </div>
           <ul>
             <li
-              class="border border-collapse border-gray-200 bg-white font-heading hover:border-blue-500 hover:shadow-xl hover:relative hover:z-10 hover:border"
+              class="border border-collapse border-gray-200 bg-white font-heading fill-black hover:border-blue-500 hover:shadow-xl hover:relative hover:z-10 hover:border hover:fill-pink"
             >
               <a
                 class="p-6 flex flex-row text-black text-sm"
@@ -243,19 +329,51 @@ exports[`loads the chapter list 1`] = `
                 <div
                   class="leading-5 font-semibold w-4/12"
                 >
-                  WA
+                  Washington
                 </div>
                 <div
-                  class="leading-5 font-medium w-6/12"
+                  class="leading-5 font-medium w-4/12"
                 >
                   Seattle
+                </div>
+                <div
+                  class="leading-5 w-4/12 flex justify-end"
+                >
+                  <svg
+                    fill="none"
+                    height="17"
+                    viewBox="0 0 17 17"
+                    width="17"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g
+                      clip-path="url(#clip0)"
+                    >
+                      <path
+                        d="M1.82846 7.4855V9.4852L10.6065 9.4852L10.6065 13.4351L15.5562 8.48535L10.6065 3.5356L10.6065 7.4855L1.82846 7.4855Z"
+                      />
+                    </g>
+                    <defs>
+                      <clippath
+                        id="clip0"
+                      >
+                        <rect
+                          fill="white"
+                          height="12"
+                          transform="rotate(-45 0 8.48535)"
+                          width="12"
+                          y="8.48535"
+                        />
+                      </clippath>
+                    </defs>
+                  </svg>
                 </div>
               </a>
             </li>
           </ul>
         </div>
         <p
-          class="pb-4 font-body text-sm sm:text-lg text-center mt-8 mx-auto w-1/2"
+          class="pb-4 font-body text-sm sm:text-lg text-center mx-auto pt-6 w-2/3 sm:w-1/2"
         >
           Don’t see your local chapter? Reach out to
            
@@ -291,18 +409,18 @@ exports[`loads the chapter list 1`] = `
         </p>
       </div>
       <div
-        class="container w-full max-w-6xl p-4 md:mx-auto overflow-hidden"
+        class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
       >
         <div
-          class="flex flex-col justify-center py-10 sm:py-20"
+          class="flex flex-col justify-center py-6 pb-12 sm:py-12"
         >
           <h2
-            class="text-center font-heading font-semibold text-2xl sm:text-5xl leading-loose mb-4"
+            class="text-center font-heading font-semibold text-2xl sm:text-5xl mb-6"
           >
             chapter.faqHeader
           </h2>
           <a
-            class="inline-block mx-auto w-full px-8 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
+            class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
             href="/faq"
           >
             chapter.faqLink

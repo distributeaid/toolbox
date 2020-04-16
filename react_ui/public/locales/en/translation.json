@@ -1,7 +1,7 @@
 {
   "chapterList": {
     "title": "Everything Starts With Your Local Chapter",
-    "subtitle": "Connect locally to get what you need and give what you can. Find your local chapter below to <strong>request supplies</strong>, <strong>donate supplies</strong>, or <strong>volunteer</strong>.",
+    "subtitle": "Connect locally to get what you need and give what you can. Find your local chapter below to <2>request supplies</2>, <5>donate supplies</5>, or <8>volunteer</8>.",
     "provinceTerm": "State",
     "chapterName": "Chapter Name",
     "cta": "Don’t see your local chapter? Reach out to <2>request supplies</2>, <5>donate supplies</5>, or <8>volunteer</8>."
@@ -79,7 +79,7 @@
       "covidUpdates": "COVID-19 Updates",
       "fieldGuides": "Field Guides",
       "localChapters": "Local Chapters",
-      "localLeadLogin": "Local Lead Login"
+      "templates": "Templates"
     },
     "more": {
       "title": "More",
