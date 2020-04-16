@@ -54,8 +54,8 @@ exports[`loads the chapter details and renders the page 1`] = `
         class="font-heading font-normal text-xl sm:text-2xl leading-relaxed"
       >
         California
-
-        —
+         
+        — 
         USA
       </h3>
       <h1
