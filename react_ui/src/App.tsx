@@ -40,6 +40,8 @@ const App: React.FunctionComponent = () => {
         <meta name="description" content={metaDescription} />
         <meta property="og:site_name" content="Masks For Docs"></meta>
         <meta property="og:title" content={metaTitle}></meta>
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content={metaDescription} />
         <meta
           property="og:image"
           content={[
