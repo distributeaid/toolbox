@@ -45,7 +45,7 @@ const App: React.FunctionComponent = () => {
         <meta
           property="og:image"
           content={[
-            'https://local.masksfordocs.com',
+            'https://local.staging.masksfordocs.com',
             process.env.PUBLIC_URL,
             ogImage,
           ].join('')}
