@@ -157,16 +157,6 @@ exports[`renders the document head 1`] = `
     data-react-helmet="true"
     name="description"
   />
-  <meta
-    content="Donate Masks & PPE for Coronavirus in Oakland | Masks For Docs"
-    data-react-helmet="true"
-    property="og:title"
-  />
-  <meta
-    content="At Masks For Docs Oakland, we have one goal: Get protective equipment into the hands of healthcare workers as quickly as possible."
-    data-react-helmet="true"
-    property="og:description"
-  />
 </head>
 `;
 
