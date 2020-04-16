@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { render, waitForDomChange } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
@@ -16,7 +16,7 @@ const renderUI = (slug: string) =>
     </MemoryRouter>
   )
 
-it('loads the chapter details and renders the page', () => {
+const mockChapterQuery = () => {
   ;(useGetChapterBySlugQuery as jest.Mock).mockReturnValueOnce({
     loading: false,
     data: {
@@ -42,6 +42,10 @@ it('loads the chapter details and renders the page', () => {
       } as Group,
     },
   })
+}
+
+it('loads the chapter details and renders the page', () => {
+  mockChapterQuery()
 
   const { container, getByText } = renderUI('oakland')
   expect(getByText('Oakland')).toBeVisible()
@@ -51,6 +55,13 @@ it('loads the chapter details and renders the page', () => {
   })
 
   expect(container).toMatchSnapshot()
+})
+
+it('renders the document head', async () => {
+  mockChapterQuery()
+  renderUI('slugland')
+  await waitForDomChange()
+  expect(document.querySelector('head')).toMatchSnapshot()
 })
 
 it('shows an error message when chapter not found', () => {
