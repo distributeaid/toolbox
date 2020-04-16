@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { render, waitForDomChange } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
@@ -16,41 +16,51 @@ const renderUI = (slug: string) =>
     </MemoryRouter>
   )
 
-it('loads the chapter details and renders the page', () => {
-  ;(useGetChapterBySlugQuery as jest.Mock).mockReturnValueOnce({
-    loading: false,
-    data: {
-      groupBySlug: {
-        id: '1',
-        slug: 'oakland',
-        name: 'Oakland',
-        leader: 'Oaky',
-        description: 'the Oakland group',
-        donationForm: 'donation form link',
-        donationFormResults: 'donation form results link',
-        donationLink: 'donation link',
-        volunteerForm: 'volunteer form link',
-        volunteerFormResults: 'volunteer form results link',
-        slackChannelName: 'slack-channel-name',
-        requestForm: 'request form link',
-        requestFormResults: 'request form results link',
-        location: {
-          countryCode: 'US',
-          province: 'CA',
-          postalCode: '11111',
-        },
-      } as Group,
-    },
-  })
+const mockQueryResult = {
+  loading: false,
+  data: {
+    groupBySlug: {
+      id: '1',
+      slug: 'oakland',
+      name: 'Oakland',
+      leader: 'Oaky',
+      description: 'the Oakland group',
+      donationForm: 'donation form link',
+      donationFormResults: 'donation form results link',
+      donationLink: 'donation link',
+      volunteerForm: 'volunteer form link',
+      volunteerFormResults: 'volunteer form results link',
+      slackChannelName: 'slack-channel-name',
+      requestForm: 'request form link',
+      requestFormResults: 'request form results link',
+      location: {
+        countryCode: 'US',
+        province: 'CA',
+        postalCode: '11111',
+      },
+    } as Group,
+  },
+}
 
+it('loads the chapter details and renders the page', () => {
+  ;(useGetChapterBySlugQuery as jest.Mock).mockReturnValueOnce(mockQueryResult)
   const { container, getByText } = renderUI('oakland')
   expect(getByText('Oakland')).toBeVisible()
   expect(getByText('the Oakland group')).toBeVisible()
   expect(useGetChapterBySlugQuery).toHaveBeenCalledWith({
-    variables: { slug: 'oakland' },
+    variables: {
+      slug: 'oakland',
+    },
   })
 
   expect(container).toMatchSnapshot()
+})
+
+it('renders the document head', async () => {
+  ;(useGetChapterBySlugQuery as jest.Mock).mockReturnValueOnce(mockQueryResult)
+  renderUI('slugland')
+  await waitForDomChange()
+  expect(document.querySelector('head')).toMatchSnapshot()
 })
 
 it('shows an error message when chapter not found', () => {

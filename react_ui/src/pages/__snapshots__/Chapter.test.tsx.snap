@@ -147,6 +147,29 @@ exports[`loads the chapter details and renders the page 1`] = `
 </div>
 `;
 
+exports[`renders the document head 1`] = `
+<head>
+  <title>
+    Donate Masks & PPE for Coronavirus in Oakland | Masks For Docs
+  </title>
+  <meta
+    content="At Masks For Docs Oakland, we have one goal: Get protective equipment into the hands of healthcare workers as quickly as possible."
+    data-react-helmet="true"
+    name="description"
+  />
+  <meta
+    content="Donate Masks & PPE for Coronavirus in Oakland | Masks For Docs"
+    data-react-helmet="true"
+    property="og:title"
+  />
+  <meta
+    content="At Masks For Docs Oakland, we have one goal: Get protective equipment into the hands of healthcare workers as quickly as possible."
+    data-react-helmet="true"
+    property="og:description"
+  />
+</head>
+`;
+
 exports[`shows a loading message when loading 1`] = `
 <div>
   <div
