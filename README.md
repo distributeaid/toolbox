@@ -293,6 +293,31 @@ docker exec -it dbtest sh -c "psql -U toolbox -d toolbox_dev"
 TODO
 ```
 
+## Deployment
+
+You must have SSH access to the target environment to perform these steps. Reach out via Slack if you feel you need to deploy.
+
+Move to the Ansible directory:
+```
+cd ./ansible
+```
+
+Install the Datadog playbook:
+```
+ansible-galaxy install datadog.datadog
+```
+
+Deploy with the following playbook command:
+```
+ansible-playbook \
+  -i aws_ec2.yml \
+  -u ec2-user \
+  --extra-vars "version={:branch-name-dash-short-hash} env={:env}" \
+  --private-key ~/.ssh/{:your-deploy-key} \
+  deploy.yml
+```
+
+
 ## Copyright & Licensing
 
 Our source code is released under the AGPLv3 license. You can find the full
