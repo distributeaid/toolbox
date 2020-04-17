@@ -12,7 +12,10 @@ export const FAQFooter = () => {
         {t('chapter.faqHeader')}
       </h2>
 
-      <ShadowButtonLink className="bg-mfd-cobalt-0 sm:w-auto" to="/faq">
+      <ShadowButtonLink
+        className="bg-mfd-cobalt-0 sm:w-auto"
+        external={true}
+        to="https://masksfordocs.com/faq">
         {t('chapter.faqLink')}
       </ShadowButtonLink>
     </div>

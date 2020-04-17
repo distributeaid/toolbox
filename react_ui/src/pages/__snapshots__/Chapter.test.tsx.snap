@@ -137,7 +137,9 @@ exports[`loads the chapter details and renders the page 1`] = `
         </h2>
         <a
           class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
-          href="/faq"
+          href="https://masksfordocs.com/faq"
+          rel="noopener noreferrer"
+          target="_blank"
         >
           chapter.faqLink
         </a>
@@ -227,7 +229,9 @@ exports[`shows a loading message when loading 1`] = `
         </h2>
         <a
           class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
-          href="/faq"
+          href="https://masksfordocs.com/faq"
+          rel="noopener noreferrer"
+          target="_blank"
         >
           chapter.faqLink
         </a>
@@ -308,7 +312,9 @@ exports[`shows an error message when chapter not found 1`] = `
         </h2>
         <a
           class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
-          href="/faq"
+          href="https://masksfordocs.com/faq"
+          rel="noopener noreferrer"
+          target="_blank"
         >
           chapter.faqLink
         </a>
