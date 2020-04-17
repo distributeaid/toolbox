@@ -16,6 +16,7 @@ import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
 import { useAuthState } from './auth/useAuthState'
 import { Footer } from './components/layout/Footer'
 import { NavBar } from './components/layout/NavBar'
+import { datadogRum } from '@datadog/browser-rum'
 import AuthenticatorWrapper from './pages/Authenticator'
 import { Chapter } from './pages/Chapter'
 import { ChapterEdit } from './pages/ChapterEdit'
@@ -23,6 +24,14 @@ import { ChapterList } from './pages/ChapterList'
 import { ChapterNew } from './pages/ChapterNew'
 import StyleGuide from './pages/StyleGuide'
 import ScrollToTop from './util/scrollToTop'
+
+datadogRum.init({
+  applicationId: '85bcaace-9e73-4dd2-9fe0-a5849253c28a',
+  clientToken: 'pub863954e45679eb795819839b6093bd2c',
+  datacenter: 'us',
+  resourceSampleRate: 100,
+  sampleRate: 100
+})
 
 const App: React.FunctionComponent = () => {
   const { authState, setAuthState } = useAuthState()

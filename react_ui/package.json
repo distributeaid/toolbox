@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.0.0-beta.41",
+    "@datadog/browser-rum": "^1.10.0",
     "@tailwindcss/ui": "^0.1.3",
     "@types/react-helmet": "^5.0.15",
     "@types/yup": "^0.26.35",
