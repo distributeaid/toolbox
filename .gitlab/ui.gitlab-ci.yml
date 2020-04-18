@@ -14,10 +14,11 @@ build_ui:
     expire_in: 1 day
     expose_as: "npm-build"
     paths:
-      - ${REACT_DIR}/
+      - ${REACT_DIR}/build
       - etc/nginx/conf.d
   script:
     - cd ${REACT_DIR}
+    - npm config set registry https://gitlab.com/api/v4/packages/npm/
     - npm install
     - npm install react-scripts
     - npm run lint
@@ -28,17 +29,23 @@ unit_test_ui:
   stage: unit_test
   needs: ["build_ui"]
   image: node:13.12.0-alpine3.11
+  cache:
+    policy: pull
   script:
     - cd ${REACT_DIR}
+    - npm config set registry https://gitlab.com/api/v4/packages/npm/
     - npm test
 
 cypress_e2e:
   extends: .ui
   stage: e2e_test
-  needs: ["build_ui", "unit_test_ui"]
+  needs: ["build_ui"]
   image: cypress/base:10
+  cache:
+    policy: pull
   script:
     - cd ${REACT_DIR}
+    - npm config set registry https://gitlab.com/api/v4/packages/npm/
     - npm ci
     # show where the Cypress test runner binaries are cached
     - $(npm bin)/cypress cache path
@@ -50,8 +57,9 @@ cypress_e2e:
 image_ui:
   extends: .ui
   stage: image
-  needs: ["build_ui", "unit_test_ui", "cypress_e2e"]
+  needs: ["build_ui", "unit_test_ui"]
   image: docker:${DOCKER_VERSION}
+  cache: {}
   services:
     - docker:${DOCKER_VERSION}-dind
   before_script:

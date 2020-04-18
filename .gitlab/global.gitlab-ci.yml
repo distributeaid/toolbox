@@ -14,10 +14,9 @@ variables:
     ECR_CONTAINER_TEST_IMAGE: 299303747484.dkr.ecr.us-east-2.amazonaws.com/masksfordocs/toolbox/ci/elixir:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     GITLAB_CONTAINER_TEST_IMAGE: ${CI_REGISTRY_IMAGE}/ci/elixir:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
   cache:
-    key: "$CI_JOB_STAGE-$CI_COMMIT_REF_SLUG"
+    key: "elixir-$CI_PROJECT_ID"
     paths:
     - deps/
-    - .cache/rebar3
     - _build/
 
 .ui:
@@ -26,7 +25,6 @@ variables:
     ECR_CONTAINER_TEST_IMAGE: 299303747484.dkr.ecr.us-east-2.amazonaws.com/masksfordocs/toolbox/ci/ui:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     GITLAB_CONTAINER_TEST_IMAGE: ${CI_REGISTRY_IMAGE}/ci/ui:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
   cache:
-    key: "$CI_JOB_STAGE-$CI_COMMIT_REF_SLUG"
+    key: "ui-$CI_PROJECT_ID"
     paths:
-    - .npm/
-    - react_ui/node_modules/
+    - ${REACT_DIR}/node_modules/

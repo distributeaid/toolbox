@@ -12,6 +12,7 @@ build_elixir:
   stage: build
   needs: ["prepare_elixir"]
   image: docker:${DOCKER_VERSION}
+  cache: {} # disable cache for docker build
   services:
     - docker:${DOCKER_VERSION}-dind
   before_script:
