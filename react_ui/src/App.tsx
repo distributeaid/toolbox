@@ -2,6 +2,7 @@ import './App.css'
 import '@aws-amplify/ui/dist/style.css'
 
 import { ApolloProvider } from '@apollo/client'
+import { datadogRum } from '@datadog/browser-rum'
 import React, { Suspense } from 'react'
 import {
   BrowserRouter as Router,
@@ -16,7 +17,6 @@ import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
 import { useAuthState } from './auth/useAuthState'
 import { Footer } from './components/layout/Footer'
 import { NavBar } from './components/layout/NavBar'
-import { datadogRum } from '@datadog/browser-rum'
 import AuthenticatorWrapper from './pages/Authenticator'
 import { Chapter } from './pages/Chapter'
 import { ChapterEdit } from './pages/ChapterEdit'
@@ -30,7 +30,7 @@ datadogRum.init({
   clientToken: 'pub863954e45679eb795819839b6093bd2c',
   datacenter: 'us',
   resourceSampleRate: 100,
-  sampleRate: 100
+  sampleRate: 100,
 })
 
 const App: React.FunctionComponent = () => {

@@ -29,9 +29,8 @@ exports[`shows the nav bar 1`] = `
         </svg>
       </button>
       <a
-        aria-current="page"
-        class="flex items-center flex-shrink-0 lg:ml-4 lg:mr-9 flex-grow lg:flex-grow-0 active"
-        href="/"
+        class="flex items-center flex-shrink-0 lg:ml-4 lg:mr-9 flex-grow lg:flex-grow-0"
+        href="https://masksfordocs.com"
       >
         <svg
           fill="none"

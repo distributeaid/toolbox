@@ -39,11 +39,11 @@ export const NavBar: React.FC = () => {
           </svg>
         </button>
 
-        <NavLink
+        <a
           className="flex items-center flex-shrink-0 lg:ml-4 lg:mr-9 flex-grow lg:flex-grow-0"
-          to="/">
+          href="https://masksfordocs.com">
           <M4DLogo />
-        </NavLink>
+        </a>
 
         <DonateButton
           onClick={hideMenu}
