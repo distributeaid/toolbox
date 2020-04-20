@@ -70,7 +70,7 @@ export const Footer: React.FC = () => {
                     },
                     {
                       title: t('footer.about.successStories'),
-                      href: 'https://masksfordocs.com/#',
+                      href: 'https://masksfordocs.com/get-supplies/#leadership',
                     },
                   ]}
                 />
