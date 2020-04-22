@@ -25,10 +25,6 @@ defmodule FerryWeb.ConnCase do
 
       # The default endpoint for testing
       @endpoint FerryWeb.Endpoint
-
-      # Make authentication easy.
-      # NOTE: @password must be the same in `factory.ex`
-      @password "lasdjkf o827349081247SLKDJFSD87634784¡¨ˆ™˙´¨¥∂œ•ª¨∂"
     end
   end
 

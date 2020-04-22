@@ -208,13 +208,6 @@ defmodule Ferry.Factory do
     )
   end
 
-  def new_user_factory do
-    struct!(
-      user_factory(),
-      %{}
-    )
-  end
-
   # Project
   # ----------------------------------------------------------
 
