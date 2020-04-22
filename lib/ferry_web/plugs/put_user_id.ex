@@ -24,7 +24,20 @@ defmodule FerryWeb.Plugs.PutUserId do
     |> Ferry.Cognito.get_user()
     |> aws_client().request()
     |> case do
-      {:ok, %{"Username" => user_id}} -> user_id
+      {:ok, cognito_reponse} -> cognito_reponse
+      _ -> nil
+    end
+    |> parse_response
+  end
+
+  defp parse_response(nil), do: nil
+
+  defp parse_response(%{"Username" => cognito_id, "UserAttributes" => attributes}) do
+    attributes
+    |> Enum.map(fn %{"Name" => key, "Value" => value} -> {key, value} end)
+    |> Map.new()
+    |> case do
+      %{"email_verified" => "true", "email" => email} -> %{email: email, cognito_id: cognito_id}
       _ -> nil
     end
   end
