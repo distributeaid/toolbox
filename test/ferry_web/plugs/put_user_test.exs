@@ -46,19 +46,8 @@ defmodule FerryWeb.PutUserPlugTest do
 
   describe "valid user" do
     test "an existing user", %{conn: conn} do
-      user = insert(:user)
-
-      Ferry.Mocks.AwsClient
-      |> expect(:request, fn _args ->
-        {:ok,
-         %{
-           "Username" => user.cognito_id,
-           "UserAttributes" => [
-             %{"Name" => "email_verified", "Value" => "true"},
-             %{"Name" => "email", "Value" => user.email}
-           ]
-         }}
-      end)
+      insert(:user)
+      |> mock_sign_in()
 
       conn =
         conn
@@ -114,10 +103,9 @@ defmodule FerryWeb.PutUserPlugTest do
          }}
       end)
 
-      conn =
-        conn
-        |> put_req_header("authorization", "Bearer asdf")
-        |> PutUser.put_user(%{})
+      conn
+      |> put_req_header("authorization", "Bearer asdf")
+      |> PutUser.put_user(%{})
 
       user =
         Ferry.Accounts.User

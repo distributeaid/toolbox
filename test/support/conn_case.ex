@@ -25,6 +25,22 @@ defmodule FerryWeb.ConnCase do
 
       # The default endpoint for testing
       @endpoint FerryWeb.Endpoint
+
+      defp mock_sign_in(user) do
+        Ferry.Mocks.AwsClient
+        |> Mox.stub(:request, fn _args ->
+          {:ok,
+           %{
+             "Username" => user.cognito_id,
+             "UserAttributes" => [
+               %{"Name" => "email_verified", "Value" => "true"},
+               %{"Name" => "email", "Value" => user.email}
+             ]
+           }}
+        end)
+
+        user
+      end
     end
   end
 
