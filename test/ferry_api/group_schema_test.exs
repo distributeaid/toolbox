@@ -9,7 +9,14 @@ defmodule Ferry.GroupTest do
   def sign_in_user do
     Ferry.Mocks.AwsClient
     |> expect(:request, fn _args ->
-      {:ok, %{"Username" => "test_user"}}
+      {:ok,
+       %{
+         "Username" => "test_user",
+         "UserAttributes" => [
+           %{"Name" => "email_verified", "Value" => "true"},
+           %{"Name" => "email", "Value" => "user@example.com"}
+         ]
+       }}
     end)
   end
 
@@ -409,7 +416,15 @@ defmodule Ferry.GroupTest do
       |> post("/api", %{query: mutation})
       |> json_response(200)
 
-    %{"data" => %{"updateGroup" => %{"messages" => [], "result" => %{"description" => description, "id" => id, "name" => _name}, "successful" => true}}} = res
+    %{
+      "data" => %{
+        "updateGroup" => %{
+          "messages" => [],
+          "result" => %{"description" => description, "id" => id, "name" => _name},
+          "successful" => true
+        }
+      }
+    } = res
 
     assert id == Integer.to_string(group.id)
     assert description == updates.description

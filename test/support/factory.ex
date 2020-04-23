@@ -186,7 +186,8 @@ defmodule Ferry.Factory do
 
   def user_factory do
     %User{
-      email: sequence(:email, &"huey.p-#{&1}@example.org")
+      email: sequence(:email, &"huey.p-#{&1}@example.org"),
+      cognito_id: sequence(:cognito_id, &"fake.token.#{&1}")
     }
   end
 
