@@ -40,29 +40,32 @@ defmodule Ferry.AccountsTest do
     end
 
     test "get_user!/1 with a non-existent id throws an error" do
-      assert_raise Ecto.NoResultsError, ~r/^expected at least one result but got none in query/, fn ->
-        Accounts.get_user!(1312)
-      end
+      assert_raise(
+        Ecto.NoResultsError,
+        ~r/^expected at least one result but got none in query/,
+        fn ->
+          Accounts.get_user!(1312)
+        end
+      )
     end
 
     test "create_user/2 with valid data creates a user" do
       group = insert(:group)
-      user_params = params_for(:user, %{password: "super-secret"})
+      user_params = params_for(:user)
       assert {:ok, %User{} = user} = Accounts.create_user(group, user_params)
       assert user.email == user_params.email
-      assert user.password == user_params.password
     end
 
     test "create_user/2 with invalid data returns error changeset" do
       group = insert(:group)
 
       # generally invalid
-      invalid_params = params_for(:invalid_user, %{password: "super-secret"})
+      invalid_params = params_for(:invalid_user)
       assert {:error, %Ecto.Changeset{} = changeset} = Accounts.create_user(group, invalid_params)
       assert 1 == changeset.errors |> length
 
       # too long
-      invalid_params = params_for(:invalid_long_user, %{password: "super-secret"})
+      invalid_params = params_for(:invalid_long_user)
       assert {:error, %Ecto.Changeset{} = changeset} = Accounts.create_user(group, invalid_params)
       assert 1 == changeset.errors |> length
     end
@@ -72,7 +75,7 @@ defmodule Ferry.AccountsTest do
       user = insert(:user, %{group: group})
 
       # typical
-      updated_params = params_for(:user, %{password: "super-secret"})
+      updated_params = params_for(:user)
       assert {:ok, %User{} = updated_user} = Accounts.update_user(user, updated_params)
       assert updated_user.id == user.id
       assert updated_user.group_id == user.group_id
@@ -84,12 +87,12 @@ defmodule Ferry.AccountsTest do
       user = insert(:user, %{group: group})
 
       # generally invalid
-      invalid_params = params_for(:invalid_user, %{password: "super-secret"})
+      invalid_params = params_for(:invalid_user)
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, invalid_params)
       assert user = Accounts.get_user!(user.id)
 
       # too long
-      invalid_params = params_for(:invalid_user, %{password: "super-secret"})
+      invalid_params = params_for(:invalid_user)
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, invalid_params)
       assert user = Accounts.get_user!(user.id)
     end

@@ -42,10 +42,6 @@ defmodule Ferry.Factory do
   @long_text String.duplicate("x", 256)
   @long_email String.duplicate("x", 244) <> "@example.com"
 
-  # NOTE: @password must be the same in `conn_case.ex`
-  @password "lasdjkf o827349081247SLKDJFSD87634784¡¨ˆ™˙´¨¥∂œ•ª¨∂"
-  @password_hash User.encrypt_password(@password)
-
   # Helpers
   # ------------------------------------------------------------
 
@@ -190,8 +186,7 @@ defmodule Ferry.Factory do
 
   def user_factory do
     %User{
-      email: sequence(:email, &"huey.p-#{&1}@example.org"),
-      password_hash: @password_hash
+      email: sequence(:email, &"huey.p-#{&1}@example.org")
     }
   end
 
@@ -209,16 +204,6 @@ defmodule Ferry.Factory do
       user_factory(),
       %{
         email: @long_email
-      }
-    )
-  end
-
-  def new_user_factory do
-    struct!(
-      user_factory(),
-      %{
-        password_hash: nil,
-        password: @password
       }
     )
   end
