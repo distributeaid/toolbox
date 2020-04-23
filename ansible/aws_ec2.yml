@@ -6,7 +6,7 @@ regions:
   - us-east-2
   - us-west-2
 hostnames:
-  - ip-address
+  - private-ip-address
 filters:
   tag:Role:
     - toolbox

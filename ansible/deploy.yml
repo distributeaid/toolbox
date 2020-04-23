@@ -1,5 +1,4 @@
 ---
-
 - name: Deploy Docker containers
   hosts: "{{ env }}"
   vars:
@@ -31,13 +30,13 @@
           POSTGRES_USER: toolbox
           POSTGRES_PASSWORD: "13121312"
           POSTGRES_DB: "toolbox"
-          POSTGRES_HOST: "staging.csjgndowwhv4.us-east-2.rds.amazonaws.com"
+          POSTGRES_HOST: "{{ env }}.csjgndowwhv4.us-east-2.rds.amazonaws.com"
           POSTGRES_PORT: "5432"
           DB_PORT: "5432"
           HOSTNAME: "0.0.0.0"
           PORT: "1312"
           TRACE: "1"
-          ENV: "staging"
-          MIX_ENV: "staging"
+          ENV: "{{ env }}"
+          MIX_ENV: "{{ env }}"
           AWS_REGION: "us-east-2"
         state: started
