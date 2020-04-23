@@ -26,9 +26,7 @@ defmodule FerryWeb.Plugs.PutUser do
     |> insert_or_update_user
   end
 
-  defp insert_or_update_user(nil), do: nil
-
-  defp insert_or_update_user(attrs) do
+  defp insert_or_update_user({:ok, attrs}) do
     {:ok, user} =
       User
       |> Repo.get_by(cognito_id: attrs.cognito_id)
@@ -41,4 +39,6 @@ defmodule FerryWeb.Plugs.PutUser do
 
     user
   end
+
+  defp insert_or_update_user(_), do: nil
 end

@@ -3,23 +3,20 @@ defmodule Ferry.Cognito do
   AWS Cognito Identity Provider
   """
 
-  @doc """
-  Gets the specified user by token
-  Requires developer credentials.
-  """
-
   @namespace "AWSCognitoIdentityProviderService"
 
   def aws_client, do: Application.get_env(:ferry, :aws_client)
 
+  @doc """
+  Gets the specified user by token
+  Requires developer credentials.
+  """
+  @spec validate_user(String.t()) ::
+          {:error, String.t()} | {:ok, %{cognito_id: String.t(), email: String.t()}}
   def validate_user(token) do
     token
     |> build_request()
     |> aws_client().request()
-    |> case do
-      {:ok, cognito_reponse} -> cognito_reponse
-      _ -> nil
-    end
     |> parse_response
   end
 
@@ -36,15 +33,18 @@ defmodule Ferry.Cognito do
     ExAws.Operation.JSON.new(:"cognito-idp", data: data, headers: headers)
   end
 
-  defp parse_response(nil), do: nil
-
-  defp parse_response(%{"Username" => cognito_id, "UserAttributes" => attributes}) do
+  defp parse_response({:ok, %{"Username" => cognito_id, "UserAttributes" => attributes}}) do
     attributes
     |> Enum.map(fn %{"Name" => key, "Value" => value} -> {key, value} end)
     |> Map.new()
     |> case do
-      %{"email_verified" => "true", "email" => email} -> %{email: email, cognito_id: cognito_id}
-      _ -> nil
+      %{"email_verified" => "true", "email" => email} ->
+        {:ok, %{email: email, cognito_id: cognito_id}}
+
+      _ ->
+        {:error, "Unexpected cognito response format"}
     end
   end
+
+  defp parse_response(_), do: {:error, "Cognito did not return :ok"}
 end
