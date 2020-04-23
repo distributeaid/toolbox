@@ -1,44 +1,44 @@
 defmodule FerryWeb.Plugs.PutUserId do
   import Plug.Conn
 
-  def aws_client, do: Application.get_env(:ferry, :aws_client)
+  alias Ferry.Accounts.User
+  alias Ferry.Repo
 
   def put_user_id(conn, _opts) do
-    user_id =
+    user =
       conn
       |> get_req_header("authorization")
       |> case do
         ["Bearer " <> token] -> token
         _ -> nil
       end
-      |> validate_token
+      |> get_user
 
     conn
-    |> Absinthe.Plug.put_options(context: %{user_id: user_id})
+    |> Absinthe.Plug.put_options(context: %{user: user})
   end
 
-  defp validate_token(nil), do: nil
+  defp get_user(nil), do: nil
 
-  defp validate_token(token) do
+  defp get_user(token) do
     token
-    |> Ferry.Cognito.get_user()
-    |> aws_client().request()
-    |> case do
-      {:ok, cognito_reponse} -> cognito_reponse
-      _ -> nil
-    end
-    |> parse_response
+    |> Ferry.Cognito.validate_user()
+    |> insert_or_update_user
   end
 
-  defp parse_response(nil), do: nil
+  defp insert_or_update_user(nil), do: nil
 
-  defp parse_response(%{"Username" => cognito_id, "UserAttributes" => attributes}) do
-    attributes
-    |> Enum.map(fn %{"Name" => key, "Value" => value} -> {key, value} end)
-    |> Map.new()
-    |> case do
-      %{"email_verified" => "true", "email" => email} -> %{email: email, cognito_id: cognito_id}
-      _ -> nil
-    end
+  defp insert_or_update_user(attrs) do
+    {:ok, user} =
+      User
+      |> Repo.get_by(cognito_id: attrs.cognito_id)
+      |> case do
+        nil -> %User{}
+        user -> user
+      end
+      |> User.changeset(attrs)
+      |> Repo.insert_or_update()
+
+    user
   end
 end

@@ -2,6 +2,9 @@ defmodule :"Elixir.Ferry.Repo.Migrations.Remove-password" do
   use Ecto.Migration
 
   def up do
+    # Assert user list is empty
+    [] = Ferry.Accounts.list_users()
+
     alter table(:users) do
       remove(:password_hash)
       modify(:group_id, :integer, null: true)
