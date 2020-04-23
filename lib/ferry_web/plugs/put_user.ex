@@ -1,10 +1,10 @@
-defmodule FerryWeb.Plugs.PutUserId do
+defmodule FerryWeb.Plugs.PutUser do
   import Plug.Conn
 
   alias Ferry.Accounts.User
   alias Ferry.Repo
 
-  def put_user_id(conn, _opts) do
+  def put_user(conn, _opts) do
     user =
       conn
       |> get_req_header("authorization")
