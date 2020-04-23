@@ -98,5 +98,32 @@ defmodule FerryWeb.PutUserPlugTest do
 
       assert %{user: new_user} = context
     end
+
+    test "user is updated if cognito returns a different email address", %{conn: conn} do
+      user = insert(:user, email: "original@example.com")
+
+      Ferry.Mocks.AwsClient
+      |> expect(:request, fn _args ->
+        {:ok,
+         %{
+           "Username" => user.cognito_id,
+           "UserAttributes" => [
+             %{"Name" => "email_verified", "Value" => "true"},
+             %{"Name" => "email", "Value" => "something-different@example.com"}
+           ]
+         }}
+      end)
+
+      conn =
+        conn
+        |> put_req_header("authorization", "Bearer asdf")
+        |> PutUser.put_user(%{})
+
+      user =
+        Ferry.Accounts.User
+        |> Ferry.Repo.get_by(cognito_id: user.cognito_id)
+
+      assert %{email: "something-different@example.com"} = user
+    end
   end
 end
