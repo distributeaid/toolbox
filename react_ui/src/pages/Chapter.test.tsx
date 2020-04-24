@@ -27,7 +27,7 @@ const mockQueryResult = {
       description: 'the Oakland group',
       donationForm: 'donation form link',
       donationFormResults: 'donation form results link',
-      donationLink: 'donation link',
+      donationLink: 'https://www.example.com',
       volunteerForm: 'volunteer form link',
       volunteerFormResults: 'volunteer form results link',
       slackChannelName: 'slack-channel-name',

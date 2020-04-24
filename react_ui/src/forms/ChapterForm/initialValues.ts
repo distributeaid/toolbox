@@ -13,6 +13,7 @@ export const initialValues = (chapter: Group) => ({
     chapter.location.countryCode !== 'US'
       ? chapter.location.province || ''
       : '',
+  donationLink: chapter.donationLink || '',
   postalCode: chapter.location.postalCode || '',
   description: chapter.description || '',
   requestForm: chapter.requestForm || '',
