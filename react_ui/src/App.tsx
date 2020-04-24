@@ -25,13 +25,15 @@ import { ChapterNew } from './pages/ChapterNew'
 import StyleGuide from './pages/StyleGuide'
 import ScrollToTop from './util/scrollToTop'
 
-datadogRum.init({
-  applicationId: '85bcaace-9e73-4dd2-9fe0-a5849253c28a',
-  clientToken: 'pub863954e45679eb795819839b6093bd2c',
-  datacenter: 'us',
-  resourceSampleRate: 100,
-  sampleRate: 100,
-})
+if (window.location.hostname === 'local.masksfordocs.com') {
+  datadogRum.init({
+    applicationId: '85bcaace-9e73-4dd2-9fe0-a5849253c28a',
+    clientToken: 'pub863954e45679eb795819839b6093bd2c',
+    datacenter: 'us',
+    resourceSampleRate: 100,
+    sampleRate: 100,
+  })
+}
 
 const App: React.FunctionComponent = () => {
   const { authState, setAuthState } = useAuthState()
