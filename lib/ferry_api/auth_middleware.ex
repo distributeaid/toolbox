@@ -4,7 +4,7 @@ defmodule FerryApi.Middleware.RequireUser do
   alias FerryApi.Constants
 
   def call(resolution, _opts) do
-    case resolution.context.user_id do
+    case resolution.context.user do
       nil ->
         resolution
         |> Absinthe.Resolution.put_result(

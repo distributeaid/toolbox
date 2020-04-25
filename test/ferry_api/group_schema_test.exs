@@ -3,16 +3,6 @@ defmodule Ferry.GroupTest do
 
   alias Ferry.Profiles
 
-  import Mox
-
-  # TODO: extract me to a test helper
-  def sign_in_user do
-    Ferry.Mocks.AwsClient
-    |> expect(:request, fn _args ->
-      {:ok, %{"Username" => "test_user"}}
-    end)
-  end
-
   # GROUPS
   # ================================================================================
 
@@ -219,7 +209,8 @@ defmodule Ferry.GroupTest do
   # Mutation - Create A Group
   # ------------------------------------------------------------
   test "create a group - success", %{conn: conn} do
-    sign_in_user()
+    insert(:user)
+    |> mock_sign_in
 
     group_attrs = params_for(:group) |> with_location()
 
@@ -307,7 +298,8 @@ defmodule Ferry.GroupTest do
   end
 
   test "create a group - error", %{conn: conn} do
-    sign_in_user()
+    insert(:user)
+    |> mock_sign_in
 
     group_attrs = params_for(:invalid_group)
 
@@ -362,7 +354,8 @@ defmodule Ferry.GroupTest do
   # Mutation - Update A Group
   # ------------------------------------------------------------
   test "update a group - success", %{conn: conn} do
-    sign_in_user()
+    insert(:user)
+    |> mock_sign_in
 
     group = insert(:group) |> with_location()
     updates = params_for(:group) |> with_location()
@@ -409,14 +402,23 @@ defmodule Ferry.GroupTest do
       |> post("/api", %{query: mutation})
       |> json_response(200)
 
-    %{"data" => %{"updateGroup" => %{"messages" => [], "result" => %{"description" => description, "id" => id, "name" => _name}, "successful" => true}}} = res
+    %{
+      "data" => %{
+        "updateGroup" => %{
+          "messages" => [],
+          "result" => %{"description" => description, "id" => id, "name" => _name},
+          "successful" => true
+        }
+      }
+    } = res
 
     assert id == Integer.to_string(group.id)
     assert description == updates.description
   end
 
   test "update a group - error", %{conn: conn} do
-    sign_in_user()
+    insert(:user)
+    |> mock_sign_in
 
     group = insert(:group) |> with_location()
     updates = params_for(:invalid_group)
@@ -479,7 +481,8 @@ defmodule Ferry.GroupTest do
   # Delete A Group
   # ------------------------------------------------------------
   test "delete a group - success", %{conn: conn} do
-    sign_in_user()
+    insert(:user)
+    |> mock_sign_in
 
     group = insert(:group)
 
