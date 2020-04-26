@@ -56,3 +56,7 @@
 .hover\:text-mfd-pink-1:hover {
   color: #ED2E69;
 }
+
+.h-donation-frame {
+  height: 625px;
+}

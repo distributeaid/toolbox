@@ -120,11 +120,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
                 scrolling="no"
                 seamless={false}
                 id="iFrameResizer0"
-                style={{
-                  overflow: 'hidden',
-                  width: '100%',
-                  height: '655px',
-                }}></iframe>
+                className="h-donation-frame overflow-hidden w-full"></iframe>
             )}
           </ContentContainer>
         </BorderBlock>
