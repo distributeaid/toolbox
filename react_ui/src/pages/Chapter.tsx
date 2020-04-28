@@ -111,6 +111,17 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
                 )}
               </div>
             </div>
+
+            {chapter.donationLink && (
+              <iframe
+                src={chapter.donationLink}
+                title="Donate"
+                name="givebutter"
+                scrolling="no"
+                seamless={false}
+                id="iFrameResizer0"
+                className="h-donation-frame overflow-hidden w-full"></iframe>
+            )}
           </ContentContainer>
         </BorderBlock>
       )}

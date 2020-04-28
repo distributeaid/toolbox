@@ -58,7 +58,7 @@ export const ChapterForm: React.FC<Props> = ({ editChapter }) => {
           leader: values.leader,
           donationForm: values.donationForm,
           donationFormResults: values.donationFormResults,
-          donationLink: null,
+          donationLink: values.donationLink,
           location: {
             countryCode: values.country,
             province: values.country === 'US' ? values.state : values.province,
@@ -179,6 +179,12 @@ export const ChapterForm: React.FC<Props> = ({ editChapter }) => {
                 <FormTextarea
                   name="description"
                   title={t('terms.description') + '*'}
+                />
+
+                {sectionHeader(t('chapterForm.chapterDonationLinkHeader'))}
+                <FormInput
+                  name="donationLink"
+                  title={t('chapterForm.chapterDonationLinkTitle')}
                 />
 
                 {sectionHeader(t('chapterForm.chapterFormLinksHeader'))}

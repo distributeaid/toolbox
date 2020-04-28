@@ -14,6 +14,8 @@
     "chapterSlug": "Chapter URL Slug",
     "chapterSlugDescription": "The URL extension for the chapter. This should be easy to type and remember so that chapters can share the link to their page on phyiscal media like flyers and mailers. Some examples: 'western-montana', 'upper-manhattan', 'kowloon-city'",
     "chapterDescriptionHeader": "Chapter Note",
+    "chapterDonationLinkHeader": "Chapter Donation IFrame URL",
+    "chapterDonationLinkTitle": "Donation iframe URL",
     "chapterLocation": "Chapter Location",
     "chapterFormLinksHeader": "Chapter Form Links",
     "newTitle": "Create A New Local Chapter",
