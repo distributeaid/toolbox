@@ -38649,10 +38649,6 @@ video {
     padding-top: 4rem;
   }
   
-  .sm\:pb-16b {
-    padding-bottom: 4.05rem;
-  }
-
   .sm\:pr-16 {
     padding-right: 4rem;
   }
@@ -38661,6 +38657,10 @@ video {
     padding-bottom: 4rem;
   }
 
+  .sm\:pb-16b {
+    padding-bottom: 4.05rem;
+  }
+  
   .sm\:pl-16 {
     padding-left: 4rem;
   }
