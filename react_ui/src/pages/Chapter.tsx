@@ -33,6 +33,10 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
 
   const chapter = loading || error ? undefined : data?.groupBySlug
 
+  const donationForm = `<iframe src="${
+    chapter && chapter.donationLink
+  }" title="Donate" name="givebutter" scrolling="no" seamless allowpaymentrequest id="iFrameResizer0" class="h-donation-frame overflow-hidden w-full"></iframe><script src="https://givebutter.com/js/widget.js"></script>`
+
   return (
     <MainContent>
       <Background />
@@ -113,14 +117,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
             </div>
 
             {chapter.donationLink && (
-              <iframe
-                src={chapter.donationLink}
-                title="Donate"
-                name="givebutter"
-                scrolling="no"
-                seamless={false}
-                id="iFrameResizer0"
-                className="h-donation-frame overflow-hidden w-full"></iframe>
+              <div dangerouslySetInnerHTML={{ __html: donationForm }}></div>
             )}
           </ContentContainer>
         </BorderBlock>

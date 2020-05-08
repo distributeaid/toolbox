@@ -122,14 +122,21 @@ exports[`loads the chapter details and renders the page 1`] = `
             </a>
           </div>
         </div>
-        <iframe
-          class="h-donation-frame overflow-hidden w-full"
-          id="iFrameResizer0"
-          name="givebutter"
-          scrolling="no"
-          src="https://www.example.com/donation-link"
-          title="Donate"
-        />
+        <div>
+          <iframe
+            allowpaymentrequest=""
+            class="h-donation-frame overflow-hidden w-full"
+            id="iFrameResizer0"
+            name="givebutter"
+            scrolling="no"
+            seamless=""
+            src="https://www.example.com/donation-link"
+            title="Donate"
+          />
+          <script
+            src="https://givebutter.com/js/widget.js"
+          />
+        </div>
       </div>
     </div>
     <div
