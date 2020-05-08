@@ -58,5 +58,5 @@
 }
 
 .h-donation-frame {
-  height: 660px;
+  min-height: 660px;
 }

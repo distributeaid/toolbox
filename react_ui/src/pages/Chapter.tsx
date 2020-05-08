@@ -35,7 +35,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
 
   const donationForm = `<iframe src="${
     chapter && chapter.donationLink
-  }" title="Donate" name="givebutter" scrolling="no" seamless allowpaymentrequest id="iFrameResizer0" class="h-donation-frame overflow-hidden w-full"></iframe><script src="https://givebutter.com/js/widget.js"></script>`
+  }" title="Donate" name="givebutter" scrolling="yes" seamless allowpaymentrequest id="iFrameResizer0" class="h-donation-frame overflow-hidden w-full"></iframe><script src="https://givebutter.com/js/widget.js"></script>`
 
   return (
     <MainContent>
