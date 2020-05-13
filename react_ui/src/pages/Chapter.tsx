@@ -38,7 +38,7 @@ export const Chapter: React.FC<Props> = ({ slug }) => {
       <Background />
 
       <ContentContainer>
-        <div className="pb-2 sm:pb-16b">
+        <div className="pb-2 sm:pb-16">
           <BackLink to="/chapters">{t('chapter.backLink')}</BackLink>
         </div>
 
