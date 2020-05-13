@@ -8,6 +8,10 @@ Distribute Aid platform.
 
 ## Contributing
 
+Read our
+[Development workflow](https://www.notion.so/Development-workflow-63d2215fe9704bd5819563c573941f98)
+guide to get started
+
 1. Run through the installation steps (see _Up & Running_ below).
 2. Make a new branch off `master` and write some code. Test it. ;)
 3. Push the new branch and make a pull request through gitlab.

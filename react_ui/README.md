@@ -1,5 +1,11 @@
 # Logistics platform UI
 
+## Contributing
+
+Read our
+[Development workflow](https://www.notion.so/Development-workflow-63d2215fe9704bd5819563c573941f98)
+guide to get started
+
 ## Available Scripts
 
 ### `npm start`
@@ -72,3 +78,5 @@ to be running.
 - [Jest](https://jestjs.io/) _Unit test framework_
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
   _React/browser interaction test helpers_
+
+## Styleguide
