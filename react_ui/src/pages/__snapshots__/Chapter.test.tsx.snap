@@ -28,7 +28,7 @@ exports[`loads the chapter details and renders the page 1`] = `
       class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
     >
       <div
-        class="pb-16 sm:pb-32"
+        class="pb-2 sm:pb-16"
       >
         <a
           class="font-body text-xs sm:text-sm leading-3"
@@ -205,7 +205,7 @@ exports[`shows a loading message when loading 1`] = `
       class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
     >
       <div
-        class="pb-16 sm:pb-32"
+        class="pb-2 sm:pb-16"
       >
         <a
           class="font-body text-xs sm:text-sm leading-3"
@@ -284,7 +284,7 @@ exports[`shows an error message when chapter not found 1`] = `
       class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
     >
       <div
-        class="pb-16 sm:pb-32"
+        class="pb-2 sm:pb-16"
       >
         <a
           class="font-body text-xs sm:text-sm leading-3"
