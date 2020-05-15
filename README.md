@@ -119,10 +119,10 @@ If you see that a container has exited with code 127 (e.g. "toolbox_web exited
 with code 127"), in your terminal:
 
 - close that container with `ctrl-c`
-- run `$docker-compose build` to ensure you rebuild the service in case its
+- run `$ docker-compose build` to ensure you rebuild the service in case its
   Dockerfile or contents of its build directory has changed.
-- run `$docker-compose up` to restart the container.
-- in another terminal window, run `$docker ps -a`, and check that toolbox_web
+- run `$ docker-compose up` to restart the container.
+- in another terminal window, run `$ docker ps -a`, and check that toolbox_web
   image is running on port `0.0.0.0:1312->1312/tcp`. For example:
 
   ```
