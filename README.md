@@ -8,6 +8,10 @@ Distribute Aid platform.
 
 ## Contributing
 
+Read our
+[Development workflow](https://www.notion.so/Development-workflow-63d2215fe9704bd5819563c573941f98)
+guide to get started
+
 1. Run through the installation steps (see _Up & Running_ below).
 2. Make a new branch off `master` and write some code. Test it. ;)
 3. Push the new branch and make a pull request through gitlab.
@@ -58,20 +62,14 @@ Ecto (database framework & ORM):
      Especially "managing docker as non-root" and "configure docker to start on
      boot".
 
-See the _Common Docker Commands_ section below for more info about how we use
-Docker.
+See the [_Common Docker Commands_](#common-docker-commands) section below for
+more info about how we use Docker.
 
 **Clone The Project**
 
 ```
 git clone git@gitlab.com:masksfordocs/toolbox.git
 cd toolbox/
-
-# Create a 'db' directory.
-mkdir db && chmod -R +x db
-
-# Create local .env.secret
-cp .env.secret{.example,}
 ```
 
 **Run Containers**
@@ -83,52 +81,24 @@ When starting the containers, once you see this message it is ready:
 
 > [info] Running FerryWeb.Endpoint with Cowboy using http://0.0.0.0:1312
 
-If you see that a container has exited (ex: "toolbox_web_1 exited with code 1")
-then you can bring it up again from another terminal:
-`docker start $CONTAINER_NAME`. You can also run `docker ps -a` to see if any
-containers have exited.
+See the [_Common Docker Commands_](#common-docker-commands) section below for a
+list of container names.
 
-See the _Common Docker Commands_ section below for a list of container names.
-
-Trouble shooting: If you see that a container has exited with code 127 (e.g.
-"toolbox_web exited with code 127"), in your terminal:
-
-- close that container with `ctrl-c`
-- run `$docker-compose build` to ensure you rebuild the service in case its
-  Dockerfile or contents of its build directory has changed.
-- run `$docker-compose up` to restart the container.
-- in another terminal window, run `$docker ps -a`, and check that toolbox_web
-  image is running on port `0.0.0.0:1312->1312/tcp`. For example:
-
-  ```
-  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                    PORTS                           NAMES
-  086b5fc29e52        toolbox_web         "/bin/sh -c '/app/de…"   42 minutes ago      Up 32 minutes             0.0.0.0:1312->1312/tcp          toolbox_web
-  ```
-
-**Set Up Our Site**
-
-If everything is running correctly, you should be able to visit
-http://localhost:1312/health or http://0.0.0.0:1312/health and see our site:
+**Run the Front End**
 
 ```
-[
-  {
-    db_access: {
-      status: "ok"
-    },
-    time: 1.66
-    }
-]
+$ cd toolbox/react_ui
+$ npm i
+$ npm start
 ```
 
-Alternatively, try visiting `http://0.0.0.0:1312/api/graphiql` to see a UI form.
-
-You can also run the app with npm: `cd` into `toolbox/react_ui` folder, run
-`npm i` then `npm start`. Your browser will automatically open the app with JS
-and CSS assets.
+Your browser will automatically open the UI.
 
 The `localhost` address is used in the rest of this readme, but the `0.0.0.0`
 address should be the same thing.
+
+See the [front-end README](react_ui/README.md) for further info on contributing
+to the front end.
 
 **Dev Environment**
 
@@ -143,7 +113,24 @@ If you don't have AWS credentials yet, ask someone on the team. Still run the
 command above, the app will run without proper creds, but you will not be able
 to use authenticated features.
 
-**Trouble Shooting**
+**Troubleshooting**
+
+If you see that a container has exited with code 127 (e.g. "toolbox_web exited
+with code 127"), in your terminal:
+
+- close that container with `ctrl-c`
+- run `$ docker-compose build` to ensure you rebuild the service in case its
+  Dockerfile or contents of its build directory has changed.
+- run `$ docker-compose up` to restart the container.
+- in another terminal window, run `$ docker ps -a`, and check that toolbox_web
+  image is running on port `0.0.0.0:1312->1312/tcp`. For example:
+
+  ```
+  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                    PORTS                           NAMES
+  086b5fc29e52        toolbox_web         "/bin/sh -c '/app/de…"   42 minutes ago      Up 32 minutes             0.0.0.0:1312->1312/tcp          toolbox_web
+  ```
+
+**_Additional problems_**
 
 - Try not to have PostgreSQL running locally (potential conflict issues).
 - Fix incorrect development folder permissions with: `chmod -R +x development/`.
@@ -158,6 +145,21 @@ SELECT * FROM groups;
 ```
 
 ## API
+
+If everything is running correctly, you should be able to visit
+http://localhost:1312/health or http://0.0.0.0:1312/health and see the health
+check:
+
+```
+[
+  {
+    db_access: {
+      status: "ok"
+    },
+    time: 1.66
+  }
+]
+```
 
 A GraphQL API is provided at `/api`. The
 [Absinthe docs](https://hexdocs.pm/absinthe/overview.html) are a good starting
@@ -295,19 +297,23 @@ TODO
 
 ## Deployment
 
-You must have SSH access to the target environment to perform these steps. Reach out via Slack if you feel you need to deploy.
+You must have SSH access to the target environment to perform these steps. Reach
+out via Slack if you feel you need to deploy.
 
 Move to the Ansible directory:
+
 ```
 cd ./ansible
 ```
 
 Install the Datadog playbook:
+
 ```
 ansible-galaxy install datadog.datadog
 ```
 
 Deploy with the following playbook command:
+
 ```
 ansible-playbook \
   -i aws_ec2.yml \
@@ -316,7 +322,6 @@ ansible-playbook \
   --private-key ~/.ssh/{:your-deploy-key} \
   deploy.yml
 ```
-
 
 ## Copyright & Licensing
 
