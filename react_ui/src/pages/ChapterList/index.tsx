@@ -2,15 +2,18 @@ import React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
-import { Background } from '../components/Background'
-import { ContentContainer } from '../components/ContentContainer'
-import { FAQFooter } from '../components/FAQFooter'
-import { MainContent } from '../components/MainContent'
-import { MainHeader } from '../components/MainHeader'
-import { P } from '../components/P'
-import { PreHeader } from '../components/PreHeader'
-import { Group, Maybe, useGetChapterListQuery } from '../generated/graphql'
-import { countryCodeToName, usStateCodeToName } from '../util/placeCodeToName'
+import { Background } from '../../components/Background'
+import { ContentContainer } from '../../components/ContentContainer'
+import { FAQFooter } from '../../components/FAQFooter'
+import { MainContent } from '../../components/MainContent'
+import { MainHeader } from '../../components/MainHeader'
+import { P } from '../../components/P'
+import { PreHeader } from '../../components/PreHeader'
+import { Group, Maybe, useGetChapterListQuery } from '../../generated/graphql'
+import {
+  countryCodeToName,
+  usStateCodeToName,
+} from '../../util/placeCodeToName'
 
 const provinceLongName = ({
   province,
