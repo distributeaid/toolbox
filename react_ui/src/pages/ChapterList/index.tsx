@@ -32,6 +32,13 @@ export const ChapterList: React.FC = () => {
     )
   )
 
+  const alphabetizedChaptersByCountry = chaptersByCountry.map((country) => {
+    country.chapters.sort((a, b) =>
+      a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+    )
+    return country
+  })
+
   return (
     <MainContent>
       <Background />
@@ -52,7 +59,7 @@ export const ChapterList: React.FC = () => {
       </ContentContainer>
 
       <div className="border-gray-400 border-t w-full bg-lightBlue mt-20 py-20">
-        {chaptersByCountry.map((cwc) => (
+        {alphabetizedChaptersByCountry.map((cwc) => (
           <ChaptersInCountry
             key={cwc.countryCode}
             t={t}
