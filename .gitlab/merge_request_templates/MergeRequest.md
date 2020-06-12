@@ -1,5 +1,17 @@
 # Pull Request Template
 
+<!--
+The sections below provide with guidelines and suggestions that might
+help capture information when submitting a MR request, so that it makes
+it easier for others to review it.
+
+They are optional, so please feel free to fill them according to your
+need, or even remove those that might not apply.
+
+If you need to add new sections, please consider contributing to this
+template in the .gitlab folder of this repo.
+-->
+
 ## Description
 
 Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
@@ -49,7 +61,6 @@ Please describe the tests that you ran to verify your changes. Please also note 
 ## Code style:
 
 - [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] My changes generate no new warnings
 - [ ] Any dependent changes have been merged and published in downstream modules
