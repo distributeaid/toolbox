@@ -1,11 +1,18 @@
 # Feature Request Template 
 
+<!---
+Please feel free to add/remove sections as your consider necessary
+when filing new feature requests.
+
+If you add new items, please also consider contributing to this template
+by raising a MR in the .gitlab folder of this repo.
+
+Thanks!
+-->
+
 ## Type 
 
 Describe if this a one-off feature or a series of features
-
-- [ ] Feature 
-- [ ] Epic
 
 ## Who 
 
@@ -27,10 +34,10 @@ Describe the reach of this problem: requester will describe how many users will 
 
 Describe the problems that would occur if this need was not addressed. To ensure consistency add categories that matter to your business such as “increased support costs” or “risk of losing customers”
 
-## Business goals
+## Business value
 
-- [ ] Primary Goal
-- [ ] Secondary Goal
+Describe the business value that this change will add to the
+project/organisation
 
 ## Evidence
 

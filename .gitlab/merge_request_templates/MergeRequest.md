@@ -58,9 +58,17 @@ Please describe the tests that you ran to verify your changes. Please also note 
 - [ ] Frontend
 - [ ] Devops
 
-## Code style:
+## Other checks:
 
-- [ ] My code follows the style guidelines of this project
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] My changes generate no new warnings
+<!--
+Please feel free to comment/uncomment as you see fit
+If you wish to add new kinds of checks here, please do so, but 
+also please consider contributing to this template 
+ in the .gitlab folder of this repo.
+-->
+
+- [ ] Elixir modules and public functions are documented
+- [ ] Elixir public functions have typespecs defined
+- [ ] Elixir changes generate no new warnings after running `mix clean;
+  mix compile`. 
 - [ ] Any dependent changes have been merged and published in downstream modules
