@@ -12,27 +12,29 @@ defmodule Ferry.Locations do
   alias Ferry.Profiles.Group
   alias Ferry.Locations.Address
 
-  @geocoder Application.get_env(:ferry, :geocoder)
+  # @geocoder Application.get_env(:ferry, :geocoder)
 
-  defp geocode_address(%Changeset{valid?: true} = changeset) do
-    case @geocoder.geocode_address(changeset.params) do
-      {:ok, geocode} ->
-        attrs = %{"geocode" => geocode}
-        Address.geocode_changeset(changeset, attrs)
+  # TODO: This function is not used so I am commenting it out 
+  # so that it doesnt raise compile warnings
+  # defp geocode_address(%Changeset{valid?: true} = changeset) do
+  #  case @geocoder.geocode_address(changeset.params) do
+  #    {:ok, geocode} ->
+  #      attrs = %{"geocode" => geocode}
+  #      Address.geocode_changeset(changeset, attrs)
 
-      {:error, _error} ->
-        # TODO: proper error logging
-        Changeset.add_error(
-          changeset,
-          :geocoding,
-          "Our geocoding server sometimes can not locate a very specific address. Try removing your organization name, floor, or appartment # from the street line. If that continues to fail, try only city, country and postal code. If the problem persists, please reach out to us: help@distributeaid.org!"
-        )
-    end
-  end
+  #    {:error, _error} ->
+  #      # TODO: proper error logging
+  #      Changeset.add_error(
+  #        changeset,
+  #        :geocoding,
+  #        "Our geocoding server sometimes can not locate a very specific address. Try removing your organization name, floor, or appartment # from the street line. If that continues to fail, try only city, country and postal code. If the problem persists, please reach out to us: help@distributeaid.org!"
+  #      )
+  #  end
+  # end
 
-  defp geocode_address(%Changeset{valid?: false} = changeset) do
-    changeset
-  end
+  # defp geocode_address(%Changeset{valid?: false} = changeset) do
+  #  changeset
+  # end
 
   @doc """
   Returns the list of addresses.
