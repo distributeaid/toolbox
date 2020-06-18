@@ -6,7 +6,7 @@ prepare_elixir:
   script:
     - mix local.hex --force
     - mix local.rebar
-    - mix format --check--formatted
+    - mix format --check-formatted
     - mix deps.get
     - mix compile --warnings-as-errors
     - mix dialyzer
