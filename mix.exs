@@ -10,11 +10,10 @@ defmodule Ferry.Mixfile do
       # Who's gonna be the lucky one to bump it up next?!
       # <3 Distribute Aid
       version: "0.0.29",
-
       elixir: "~> 1.7",
-      elixirc_paths: elixirc_paths(Mix.env),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers,
-      start_permanent: Mix.env == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
       test_coverage: [tool: ExCoveralls],
@@ -34,7 +33,7 @@ defmodule Ferry.Mixfile do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_),     do: ["lib"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
   #
@@ -53,13 +52,20 @@ defmodule Ferry.Mixfile do
       {:plug_cowboy, "~> 2.0"},
 
       # utilities
-      {:arc_ecto, "~> 0.11"}, # file uploads
-      {:httpoison, "~> 1.4"}, # http
-      {:jason, "~> 1.1"}, # json
-      {:joken, "~> 2.2.0"}, # jwt
-      {:redirect, "~> 0.3.0"}, # router redirects
-      {:scrivener_ecto, "~> 2.0"}, # pagination
-      {:timex, "~> 3.0"}, # datetime
+      # file uploads
+      {:arc_ecto, "~> 0.11"},
+      # http
+      {:httpoison, "~> 1.4"},
+      # json
+      {:jason, "~> 1.1"},
+      # jwt
+      {:joken, "~> 2.2.0"},
+      # router redirects
+      {:redirect, "~> 0.3.0"},
+      # pagination
+      {:scrivener_ecto, "~> 2.0"},
+      # datetime
+      {:timex, "~> 3.0"},
 
       # file uploads
       {:ex_aws_s3, "~> 2.0"},
@@ -102,7 +108,10 @@ defmodule Ferry.Mixfile do
       {:spandex, "~> 2.4.3"},
       {:spandex_datadog, "~> 0.5.0"},
       {:spandex_ecto, "~> 0.6.1"},
-      {:spandex_phoenix, "~> 0.4.1"}
+      {:spandex_phoenix, "~> 0.4.1"},
+
+      # dialyzer
+      {:dialyxir, "~> 1.0.0"}
     ]
   end
 
