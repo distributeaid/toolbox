@@ -3,7 +3,6 @@ defmodule Ferry.CRM.Phone do
   import Ecto.Changeset
   alias Ferry.CRM.Contact
 
-
   schema "phones" do
     # TODO: add proper support for country_codes, see: http://country.io/data/
     field :country_code, :string

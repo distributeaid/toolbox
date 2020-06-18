@@ -24,28 +24,34 @@ defmodule Ferry.LocationsTest do
       assert Locations.list_addresses(group) == []
 
       # 1 address
-      address1 = insert(:address, group_id: group.id) # |> with_geocode()
+      # |> with_geocode()
+      address1 = insert(:address, group_id: group.id)
       assert Locations.list_addresses(group) == [address1]
 
       # n addresses
-      address2 = insert(:address, group_id: group.id) # |> with_geocode()
+      # |> with_geocode()
+      address2 = insert(:address, group_id: group.id)
       assert Locations.list_addresses(group) == [address1, address2]
 
       # only addresses for that group
-      _ = insert(:address, group_id: group2.id) # |> with_geocode()
+      # |> with_geocode()
+      _ = insert(:address, group_id: group2.id)
       assert Locations.list_addresses(group) == [address1, address2]
     end
 
     test "get_address!/1 returns the address with given id" do
       group = insert(:group)
-      address = insert(:address, group_id: group.id) # |> with_geocode()
+      # |> with_geocode()
+      address = insert(:address, group_id: group.id)
       assert Locations.get_address!(address.id) == address
     end
 
     test "get_address!/1 with a non-existent id throws an error" do
-      assert_raise Ecto.NoResultsError, ~r/^expected at least one result but got none in query/, fn ->
-        Locations.get_address!(1312)
-      end
+      assert_raise Ecto.NoResultsError,
+                   ~r/^expected at least one result but got none in query/,
+                   fn ->
+                     Locations.get_address!(1312)
+                   end
     end
 
     test "create_address/2 with valid data creates an address" do
@@ -54,6 +60,7 @@ defmodule Ferry.LocationsTest do
       # end)
 
       group = insert(:group)
+
       # geocode = params_for(:geocode)
 
       attrs = string_params_for(:address)
@@ -126,7 +133,8 @@ defmodule Ferry.LocationsTest do
 
     test "update_address/2 with invalid data returns error changeset" do
       group = insert(:group)
-      address = insert(:address, group_id: group.id) # |> with_geocode()
+      # |> with_geocode()
+      address = insert(:address, group_id: group.id)
 
       # too short
       attrs = params_for(:invalid_short_address)
@@ -155,90 +163,89 @@ defmodule Ferry.LocationsTest do
     end
   end
 
-
   # Maps
   # ==============================================================================
-#   describe "maps" do
+  #   describe "maps" do
 
-#     # Tests
-#     # ----------------------------------------------------------
+  #     # Tests
+  #     # ----------------------------------------------------------
 
-#     test "get_map/1 with no controls set returns a map with all addresses included as results" do
-#       group1 = insert(:group)
-#       group2 = insert(:group)
+  #     test "get_map/1 with no controls set returns a map with all addresses included as results" do
+  #       group1 = insert(:group)
+  #       group2 = insert(:group)
 
-#       # no addresses
-#       {:ok, map} = Locations.get_map()
-#       assert map.results == []
+  #       # no addresses
+  #       {:ok, map} = Locations.get_map()
+  #       assert map.results == []
 
-#       # 1 address, 1 group
-#       address1 = insert(:address, group: group1) |> Map.put(:project, nil) # |> with_geocode()
-#       {:ok, map} = Locations.get_map()
-#       assert map.results == [address1]
+  #       # 1 address, 1 group
+  #       address1 = insert(:address, group: group1) |> Map.put(:project, nil) # |> with_geocode()
+  #       {:ok, map} = Locations.get_map()
+  #       assert map.results == [address1]
 
-#       # n addresses, 1 group
-#       address2 = insert(:address, group: group1) |> Map.put(:project, nil) # |> with_geocode()
-#       {:ok, map} = Locations.get_map()
-#       assert map.results == [address1, address2]
+  #       # n addresses, 1 group
+  #       address2 = insert(:address, group: group1) |> Map.put(:project, nil) # |> with_geocode()
+  #       {:ok, map} = Locations.get_map()
+  #       assert map.results == [address1, address2]
 
-#       # n addresses, n groups
-#       address3 = insert(:address, group: group2) |> Map.put(:project, nil) # |> with_geocode()
-#       {:ok, map} = Locations.get_map()
-#       assert map.results == [address1, address2, address3]
+  #       # n addresses, n groups
+  #       address3 = insert(:address, group: group2) |> Map.put(:project, nil) # |> with_geocode()
+  #       {:ok, map} = Locations.get_map()
+  #       assert map.results == [address1, address2, address3]
 
-#       # project addresses are also included
-#       project1 = insert(:project, group: group1)
-#       address4 = project1.address
-#       |> Map.put(:group, nil)
-#       |> Map.put(:project, project1 |> without_assoc(:address))
+  #       # project addresses are also included
+  #       project1 = insert(:project, group: group1)
+  #       address4 = project1.address
+  #       |> Map.put(:group, nil)
+  #       |> Map.put(:project, project1 |> without_assoc(:address))
 
-#       {:ok, map} = Locations.get_map()
-#       assert map.results == [address1, address2, address3, address4]
-#     end
+  #       {:ok, map} = Locations.get_map()
+  #       assert map.results == [address1, address2, address3, address4]
+  #     end
 
-#     test "get_map/1 with the group_filter control set returns a map with all addresses of the selected groups" do
-#       group1 = insert(:group)
-#       address1 = insert(:address, group: group1)
-# #      |> with_geocode()
-#       |> Map.put(:project, nil)
+  #     test "get_map/1 with the group_filter control set returns a map with all addresses of the selected groups" do
+  #       group1 = insert(:group)
+  #       address1 = insert(:address, group: group1)
+  # #      |> with_geocode()
+  #       |> Map.put(:project, nil)
 
-#       group2 = insert(:group)
-#       address2 = insert(:address, group: group2)
-# #      |> with_geocode()
-#       |> Map.put(:project, nil)
+  #       group2 = insert(:group)
+  #       address2 = insert(:address, group: group2)
+  # #      |> with_geocode()
+  #       |> Map.put(:project, nil)
 
-#       group3 = insert(:group)
+  #       group3 = insert(:group)
 
-#       project1 = insert(:project, group: group2)
-#       address3 = project1.address
-#       |> Map.put(:group, nil)
-#       |> Map.put(:project, project1 |> without_assoc(:address))
+  #       project1 = insert(:project, group: group2)
+  #       address3 = project1.address
+  #       |> Map.put(:group, nil)
+  #       |> Map.put(:project, project1 |> without_assoc(:address))
 
-#       # no group selected
-#       {:ok, map} = Locations.get_map(%{group_filter: []})
-#       assert map.results == [address1, address2, address3]
+  #       # no group selected
+  #       {:ok, map} = Locations.get_map(%{group_filter: []})
+  #       assert map.results == [address1, address2, address3]
 
-#       # group1 selected
-#       {:ok, map} = Locations.get_map(%{group_filter: [group1.id]})
-#       assert map.results == [address1]
+  #       # group1 selected
+  #       {:ok, map} = Locations.get_map(%{group_filter: [group1.id]})
+  #       assert map.results == [address1]
 
-#       # group 2 selected- includes project address
-#       {:ok, map} = Locations.get_map(%{group_filter: [group2.id]})
-#       assert map.results == [address2, address3]
+  #       # group 2 selected- includes project address
+  #       {:ok, map} = Locations.get_map(%{group_filter: [group2.id]})
+  #       assert map.results == [address2, address3]
 
-#       # group1 & group2 selected
-#       {:ok, map} = Locations.get_map(%{group_filter: [group1.id, group2.id]})
-#       assert map.results == [address1, address2, address3]
+  #       # group1 & group2 selected
+  #       {:ok, map} = Locations.get_map(%{group_filter: [group1.id, group2.id]})
+  #       assert map.results == [address1, address2, address3]
 
-#       # all groups select
-#       {:ok, map} = Locations.get_map(%{group_filter: [group1.id, group2.id, group3.id]})
-#       assert map.results == [address1, address2, address3]
-#     end
+  #       # all groups select
+  #       {:ok, map} = Locations.get_map(%{group_filter: [group1.id, group2.id, group3.id]})
+  #       assert map.results == [address1, address2, address3]
+  #     end
 
-#     test "change_map/1 returns a map changeset" do
-#       {:ok, map} = Locations.get_map()
-#       assert %Ecto.Changeset{} = Locations.change_map(map)
-#     end
+  #     test "change_map/1 returns a map changeset" do
+  #       {:ok, map} = Locations.get_map()
+  #       assert %Ecto.Changeset{} = Locations.change_map(map)
+  #     end
 
-#   end
+  #   end
 end

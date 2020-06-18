@@ -18,5 +18,4 @@ defmodule FerryApi.Schema.Address do
   # Resolvers
   # ------------------------------------------------------------
   # TODO
-
 end

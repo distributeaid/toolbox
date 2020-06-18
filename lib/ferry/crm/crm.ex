@@ -148,5 +148,4 @@ defmodule Ferry.CRM do
   def change_contact(%Contact{} = contact) do
     Contact.changeset(contact, %{})
   end
-
 end

@@ -20,7 +20,6 @@ defmodule Ferry.Aid.Entry do
     entry
     |> cast(params, [:amount, :item_id])
     |> cast_assoc(:mod_values)
-
     |> validate_required([:amount])
     |> validate_number(:amount, greater_than_or_equal_to: 0)
 
@@ -34,14 +33,11 @@ defmodule Ferry.Aid.Entry do
     entry
     |> cast(params, [:amount])
     |> cast_assoc(:mod_values)
-
     |> validate_required([:amount])
     |> validate_number(:amount, greater_than_or_equal_to: 0)
-
     |> assoc_constraint(:list)
     |> assoc_constraint(:item)
   end
-
 
   # TODO: handle moving entries between lists in a separate changeset since that could get tricky, as the new list may have th same item w/ the same mod values already
 end

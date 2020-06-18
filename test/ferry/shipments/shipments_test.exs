@@ -5,7 +5,6 @@ defmodule Ferry.ShipmentsTest do
   alias Ferry.Shipments.Role
   alias Ferry.Shipments.Shipment
 
-
   # Shipments
   # ==============================================================================
   describe "shipments" do
@@ -27,14 +26,19 @@ defmodule Ferry.ShipmentsTest do
 
       # routes should also be included, chronologically, if they exist
       tomorrow = Date.utc_today() |> Date.add(1)
-      shipment4 = insert(:shipment) |> with_route(%{date: tomorrow}) |> with_route(%{date: Date.utc_today})
+
+      shipment4 =
+        insert(:shipment)
+        |> with_route(%{date: tomorrow})
+        |> with_route(%{date: Date.utc_today()})
+
       assert Shipments.list_shipments() == [
-        shipment1,
-        shipment2,
-        shipment3,
-        # reverse the routes list to put them in chronological order
-        %{shipment4 | routes: Enum.reverse(shipment4.routes) }
-      ]
+               shipment1,
+               shipment2,
+               shipment3,
+               # reverse the routes list to put them in chronological order
+               %{shipment4 | routes: Enum.reverse(shipment4.routes)}
+             ]
     end
 
     test "list_shipments/1 returns all shipments for a group" do
@@ -68,34 +72,42 @@ defmodule Ferry.ShipmentsTest do
       # routes should also be included, chronologically, if they exist
       tomorrow = Date.utc_today() |> Date.add(1)
       shipment4 = shipment4 |> with_role(group3)
-      shipment5 = insert(:shipment)
+
+      shipment5 =
+        insert(:shipment)
         |> with_role(group3)
         |> with_route(%{date: tomorrow})
-        |> with_route(%{date: Date.utc_today})
+        |> with_route(%{date: Date.utc_today()})
+
       assert Shipments.list_shipments(group3) == [
-        shipment4,
-        # reverse the routes list to put them in chronological order
-        %{shipment5 | routes: Enum.reverse(shipment5.routes)}
-      ]
+               shipment4,
+               # reverse the routes list to put them in chronological order
+               %{shipment5 | routes: Enum.reverse(shipment5.routes)}
+             ]
     end
 
     test "get_shipment!/1 returns the shipment with given id" do
       tomorrow = Date.utc_today() |> Date.add(1)
-      created_shipment = insert(:shipment)
-      |> with_role()
-      |> with_route(%{date: tomorrow})
-      |> with_route(%{date: Date.utc_today})
+
+      created_shipment =
+        insert(:shipment)
+        |> with_role()
+        |> with_route(%{date: tomorrow})
+        |> with_route(%{date: Date.utc_today()})
 
       shipment = Shipments.get_shipment!(created_shipment.id)
       # make sure it includes the routes- reverse them to test the chronological ordering
       assert shipment == %{created_shipment | routes: Enum.reverse(created_shipment.routes)}
-      assert %Role{} = Enum.at(shipment.roles, 0) # make sure it includes the role
+      # make sure it includes the role
+      assert %Role{} = Enum.at(shipment.roles, 0)
     end
 
     test "get_shipment!/1 with a non-existent id throws an error" do
-      assert_raise Ecto.NoResultsError, ~r/^expected at least one result but got none in query/, fn ->
-        Shipments.get_shipment!(1312)
-      end
+      assert_raise Ecto.NoResultsError,
+                   ~r/^expected at least one result but got none in query/,
+                   fn ->
+                     Shipments.get_shipment!(1312)
+                   end
     end
 
     # TODO: force at least 1 role to exist to prevent orphan shipments
@@ -110,6 +122,7 @@ defmodule Ferry.ShipmentsTest do
       assert shipment.receiver_address == attrs.receiver_address
       assert shipment.roles == []
       assert shipment.description == attrs.description
+
       if attrs["transport_size"] do
         assert shipment.transport_size == attrs.transport_size
       end
@@ -139,11 +152,12 @@ defmodule Ferry.ShipmentsTest do
     end
 
     test "update_shipment/2 with valid data updates the shipment" do
-      old_shipment = insert(:shipment)
-      |> with_role()
-      |> with_role()
-      |> with_route()
-      |> with_route()
+      old_shipment =
+        insert(:shipment)
+        |> with_role()
+        |> with_role()
+        |> with_route()
+        |> with_route()
 
       attrs = params_for(:shipment)
 
@@ -157,6 +171,7 @@ defmodule Ferry.ShipmentsTest do
       assert shipment.roles == old_shipment.roles
       assert shipment.routes == old_shipment.routes
       assert shipment.description == attrs.description
+
       if attrs["transport_size"] do
         assert shipment.transport_size == attrs.transport_size
       end
@@ -175,6 +190,7 @@ defmodule Ferry.ShipmentsTest do
       assert shipment.receiver_address == attrs.receiver_address
       assert shipment.roles == old_shipment.roles
       assert shipment.description == attrs.description
+
       if attrs["transport_size"] do
         assert shipment.transport_size == attrs.transport_size
       end
@@ -191,7 +207,10 @@ defmodule Ferry.ShipmentsTest do
       shipment = insert(:shipment) |> with_role()
       assert {:ok, %Shipment{}} = Shipments.delete_shipment(shipment)
       assert_raise Ecto.NoResultsError, fn -> Shipments.get_shipment!(shipment.id) end
-      assert_raise Ecto.NoResultsError, fn -> Shipments.get_role!(Enum.at(shipment.roles, 0).id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Shipments.get_role!(Enum.at(shipment.roles, 0).id)
+      end
     end
 
     test "change_shipment/1 returns a shipment changeset" do
@@ -203,7 +222,6 @@ defmodule Ferry.ShipmentsTest do
   # Roles
   # ==============================================================================
   describe "roles" do
-
     test "get_role!/1 returns the role with given id" do
       group = insert(:group)
       shipment = insert(:shipment)
@@ -212,9 +230,11 @@ defmodule Ferry.ShipmentsTest do
     end
 
     test "get_role!/1 with a non-existent id throws an error" do
-      assert_raise Ecto.NoResultsError, ~r/^expected at least one result but got none in query/, fn ->
-        Shipments.get_role!(1312)
-      end
+      assert_raise Ecto.NoResultsError,
+                   ~r/^expected at least one result but got none in query/,
+                   fn ->
+                     Shipments.get_role!(1312)
+                   end
     end
 
     test "create_role/1 with valid data creates a role" do
@@ -310,7 +330,7 @@ defmodule Ferry.ShipmentsTest do
       assert routes == [route1]
 
       # n routes, with chronological ordering
-      yesterday = Date.add(Date.utc_today, -1)
+      yesterday = Date.add(Date.utc_today(), -1)
       route2 = insert(:route, %{shipment: shipment, date: yesterday}) |> without_assoc(:shipment)
       routes = Shipments.list_routes(shipment)
       assert routes == [route2, route1]
@@ -338,9 +358,9 @@ defmodule Ferry.ShipmentsTest do
       assert route.address == route_params.address
       assert route.date == route_params.date
 
-# TODO: turned off in UI for now
-#      assert route.checklist == route_params.checklist
-#      assert route.groups == route_params.groups
+      # TODO: turned off in UI for now
+      #      assert route.checklist == route_params.checklist
+      #      assert route.groups == route_params.groups
     end
 
     test "create_route/1 with invalid data returns error changeset" do

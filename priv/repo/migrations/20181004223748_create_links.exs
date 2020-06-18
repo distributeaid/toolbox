@@ -18,6 +18,9 @@ defmodule Ferry.Repo.Migrations.CreateLinks do
     create index(:links, [:project_id])
     create index(:links, [:contact_id])
 
-    create constraint(:links, :has_exactly_one_owner, check: "(group_id IS NOT NULL AND project_id IS NULL AND contact_id IS NULL) OR (group_id IS NULL AND project_id IS NOT NULL AND contact_id IS NULL) OR (group_id IS NULL AND project_id IS NULL AND contact_id IS NOT NULL)")
+    create constraint(:links, :has_exactly_one_owner,
+             check:
+               "(group_id IS NOT NULL AND project_id IS NULL AND contact_id IS NULL) OR (group_id IS NULL AND project_id IS NOT NULL AND contact_id IS NULL) OR (group_id IS NULL AND project_id IS NULL AND contact_id IS NOT NULL)"
+           )
   end
 end

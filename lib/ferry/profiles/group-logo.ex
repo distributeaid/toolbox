@@ -4,7 +4,8 @@ defmodule Ferry.Profiles.Group.Logo do
 
   @extension_whitelist ~w(.jpg .jpeg .gif .png)
 
-  def __storage, do: Arc.Storage.Local # Add this
+  # Add this
+  def __storage, do: Arc.Storage.Local
 
   # Include ecto support (requires package arc_ecto installed):
   # use Arc.Ecto.Definition
@@ -25,7 +26,8 @@ defmodule Ferry.Profiles.Group.Logo do
   end
 
   def transform(:original, _) do
-    {:convert, ~s(-strip -resize 128x128^ -background white -gravity center -extent 128x128), :jpg}
+    {:convert, ~s(-strip -resize 128x128^ -background white -gravity center -extent 128x128),
+     :jpg}
   end
 
   def transform(:thumb, _) do

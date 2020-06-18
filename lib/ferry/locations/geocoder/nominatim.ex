@@ -18,9 +18,11 @@ defmodule Ferry.Locations.Geocoder.Nominatim do
   @impl Geocoder
   def geocode_address(address) do
     url = format_geocoding_url(address)
+
     headers = [
       {"Accept-Language", "en-US, en;q=0.5, *;q=0.1"},
-      {"User-Agent", "DistributeAid/0.8 (https://distributeaid.org)"} # TODO: make into a config param
+      # TODO: make into a config param
+      {"User-Agent", "DistributeAid/0.8 (https://distributeaid.org)"}
     ]
 
     case HTTPoison.get(url, headers) do
@@ -39,11 +41,11 @@ defmodule Ferry.Locations.Geocoder.Nominatim do
 
   defp format_geocoding_url(address) do
     params = %{
-      email: "tools@distributeaid.org", # TODO: make into a config param
+      # TODO: make into a config param
+      email: "tools@distributeaid.org",
       format: "json",
       limit: 1,
       addressdetails: 1,
-
       street: address["street"],
       city: address["city"],
       state: address["province"],
@@ -52,24 +54,24 @@ defmodule Ferry.Locations.Geocoder.Nominatim do
     }
 
     "https://nominatim.openstreetmap.org/search"
-      |> URI.parse()
-      |> Map.put(:query, URI.encode_query(params))
-      |> URI.to_string()
+    |> URI.parse()
+    |> Map.put(:query, URI.encode_query(params))
+    |> URI.to_string()
   end
 
   defp handle_successful_geocoding_response(body) do
     case Jason.decode(body) do
       {:ok, [%{} = geocode_data]} ->
-        {:ok, %{
-          lat: geocode_data["lat"],
-          lng: geocode_data["lon"],
-          data: geocode_data
-        }}
+        {:ok,
+         %{
+           lat: geocode_data["lat"],
+           lng: geocode_data["lon"],
+           data: geocode_data
+         }}
 
       # no results found
       {:ok, []} ->
         {:error, %{msg: "geocode error: no results found", response_body: body}}
-
 
       # other data error
       {:ok, _} ->

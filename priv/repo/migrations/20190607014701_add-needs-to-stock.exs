@@ -3,7 +3,8 @@ defmodule Ferry.Repo.Migrations.AddNeedsToStock do
 
   def up do
     alter table(:inventory_stocks) do
-      modify :count, :integer, from: :integer, null: false, default: 0 # misspelled `null` in previous migration
+      # misspelled `null` in previous migration
+      modify :count, :integer, from: :integer, null: false, default: 0
       add :need, :integer, null: false, default: 0
       add :unit, :string, null: false, default: "items"
     end

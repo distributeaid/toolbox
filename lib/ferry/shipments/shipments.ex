@@ -27,24 +27,24 @@ defmodule Ferry.Shipments do
   def list_shipments do
     Repo.all(
       from s in Shipment,
-      order_by: s.id,
-      preload: [
-        roles: ^roles_query(),
-        routes: ^routes_query()
-      ]
+        order_by: s.id,
+        preload: [
+          roles: ^roles_query(),
+          routes: ^routes_query()
+        ]
     )
   end
 
   def list_shipments(%Group{} = group) do
     Repo.all(
       from s in Shipment,
-      order_by: s.id,
-      left_join: r in assoc(s, :roles),
-      where: r.group_id == ^group.id,
-      preload: [
-        roles: ^roles_query(),
-        routes: ^routes_query()
-      ]
+        order_by: s.id,
+        left_join: r in assoc(s, :roles),
+        where: r.group_id == ^group.id,
+        preload: [
+          roles: ^roles_query(),
+          routes: ^routes_query()
+        ]
     )
   end
 
@@ -63,11 +63,12 @@ defmodule Ferry.Shipments do
 
   """
   def get_shipment!(id) do
-    query = from s in Shipment,
-      preload: [
-        roles: ^roles_query(),
-        routes: ^routes_query()
-      ]
+    query =
+      from s in Shipment,
+        preload: [
+          roles: ^roles_query(),
+          routes: ^routes_query()
+        ]
 
     Repo.get!(query, id)
   end
@@ -154,9 +155,10 @@ defmodule Ferry.Shipments do
   end
 
   def get_role!(id) do
-    query = from r in Role,
-      join: g in assoc(r, :group),
-      preload: [group: g]
+    query =
+      from r in Role,
+        join: g in assoc(r, :group),
+        preload: [group: g]
 
     Repo.get!(query, id)
   end
@@ -180,9 +182,13 @@ defmodule Ferry.Shipments do
     if length(shipment.roles) > 1 do
       Repo.delete(role)
     else
-      role # TODO: make into a delete changeset?
+      # TODO: make into a delete changeset?
+      role
       |> Changeset.change()
-      |> Changeset.add_error(:shipment, "There must be at least 1 group taking part in this shipment.")
+      |> Changeset.add_error(
+        :shipment,
+        "There must be at least 1 group taking part in this shipment."
+      )
       |> Changeset.apply_action(:delete)
     end
   end
@@ -196,7 +202,7 @@ defmodule Ferry.Shipments do
 
   defp routes_query do
     from r in Route,
-    order_by: r.date
+      order_by: r.date
   end
 
   @doc """
@@ -211,7 +217,7 @@ defmodule Ferry.Shipments do
   def list_routes(%Shipment{} = shipment) do
     Repo.all(
       from r in routes_query(),
-      where: r.shipment_id == ^shipment.id
+        where: r.shipment_id == ^shipment.id
     )
   end
 
@@ -295,5 +301,4 @@ defmodule Ferry.Shipments do
   def change_route(%Route{} = route) do
     Route.changeset(route, %{})
   end
-
 end

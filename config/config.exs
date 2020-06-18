@@ -74,7 +74,8 @@ config :spandex_ecto, SpandexEcto.EctoLogger,
   tracer: FerryWeb.Tracer
 
 # Configures the endpoint
-config :ferry, FerryWeb.Endpoint, instrumenters: [FerryWeb.PhoenixInstrumenter, SpandexPhoenix.Instrumenter]
+config :ferry, FerryWeb.Endpoint,
+  instrumenters: [FerryWeb.PhoenixInstrumenter, SpandexPhoenix.Instrumenter]
 
 config :prometheus, FerryWeb.PipelineInstrumenter,
   labels: [:status_class, :method, :host, :scheme, :request_path],

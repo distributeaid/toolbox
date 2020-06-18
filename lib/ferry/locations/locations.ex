@@ -19,9 +19,14 @@ defmodule Ferry.Locations do
       {:ok, geocode} ->
         attrs = %{"geocode" => geocode}
         Address.geocode_changeset(changeset, attrs)
+
       {:error, _error} ->
-          # TODO: proper error logging
-          Changeset.add_error(changeset, :geocoding, "Our geocoding server sometimes can not locate a very specific address. Try removing your organization name, floor, or appartment # from the street line. If that continues to fail, try only city, country and postal code. If the problem persists, please reach out to us: help@distributeaid.org!")
+        # TODO: proper error logging
+        Changeset.add_error(
+          changeset,
+          :geocoding,
+          "Our geocoding server sometimes can not locate a very specific address. Try removing your organization name, floor, or appartment # from the street line. If that continues to fail, try only city, country and postal code. If the problem persists, please reach out to us: help@distributeaid.org!"
+        )
     end
   end
 
@@ -39,11 +44,12 @@ defmodule Ferry.Locations do
 
   """
   def list_addresses(%Group{} = group) do
-    Repo.all(from a in Address,
-      where: a.group_id == ^group.id,
-#      join: g in assoc(a, :geocode),
-#      preload: [geocode: g],
-      order_by: [a.id]
+    Repo.all(
+      from a in Address,
+        where: a.group_id == ^group.id,
+        #      join: g in assoc(a, :geocode),
+        #      preload: [geocode: g],
+        order_by: [a.id]
     )
   end
 
@@ -62,9 +68,11 @@ defmodule Ferry.Locations do
 
   """
   def get_address!(id) do
-    query = from a in Address#,
-#      join: g in assoc(a, :geocode),
-#      preload: [geocode: g]
+    # ,
+    query = from(a in Address)
+
+    #      join: g in assoc(a, :geocode),
+    #      preload: [geocode: g]
 
     Repo.get!(query, id)
   end
@@ -85,7 +93,7 @@ defmodule Ferry.Locations do
     %Address{}
     |> Address.changeset(attrs)
     |> Changeset.put_change(:group_id, group.id)
-#    |> geocode_address()
+    #    |> geocode_address()
     |> Repo.insert()
   end
 
@@ -103,9 +111,9 @@ defmodule Ferry.Locations do
   """
   def update_address(%Address{} = address, attrs) do
     address
-#    |> Repo.preload([:geocode])
+    #    |> Repo.preload([:geocode])
     |> Address.changeset(attrs)
-#    |> geocode_address()
+    #    |> geocode_address()
     |> Repo.update()
   end
 
@@ -137,7 +145,6 @@ defmodule Ferry.Locations do
   def change_address(%Address{} = address) do
     Address.changeset(address, %{})
   end
-
 
   # Map
   # ==============================================================================

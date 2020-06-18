@@ -29,7 +29,7 @@ defmodule Ferry.AidTaxonomy.ModValueEctoType do
   # Type
   # ------------------------------------------------------------
   # The underlying schema type.
-  
+
   def type, do: :map
 
   # Cast
@@ -58,11 +58,9 @@ defmodule Ferry.AidTaxonomy.ModValueEctoType do
       # check if any list values aren't strings
       # TODO: try to cast list entries to strings before failing?
       Enum.any?(list, &(!is_bitstring(&1))) -> {:error, message: "each values must be a string"}
-
       # check that there are no duplicates
       # TODO: remove duplicates instead of failing?
       Enum.uniq(list) != list -> {:error, message: "values must be unique"}
-
       # good 2 go
       true -> {:ok, list}
     end
@@ -94,7 +92,6 @@ defmodule Ferry.AidTaxonomy.ModValueEctoType do
       # The database has corrupted data or dump(list) has an error. Yikes!
       Enum.any?(list, &(!is_bitstring(&1))) -> :error
       Enum.uniq(list) != list -> :error
-
       # good 2 go
       true -> {:ok, list}
     end
@@ -127,16 +124,14 @@ defmodule Ferry.AidTaxonomy.ModValueEctoType do
       # check if any list values aren't strings
       # TODO: try to cast list entries to strings before failing?
       Enum.any?(list, &(!is_bitstring(&1))) -> :error
-
       # check that there are no duplicates
       # TODO: remove duplicates instead of failing?
       Enum.uniq(list) != list -> :error
-
       # good 2 go
       true -> {:ok, %{"value" => list}}
     end
   end
-  
+
   # We don't know how to dump anything else.
   def dump(_), do: :error
 end

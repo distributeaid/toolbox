@@ -18,8 +18,10 @@ defmodule Ferry.Shipments.Shipment do
     field :items, :string
     field :funding, :string
 
-    has_many :roles, Role # on_delete set in database via migration
-    has_many :routes, Route # on_delete set in database via migration
+    # on_delete set in database via migration
+    has_many :roles, Role
+    # on_delete set in database via migration
+    has_many :routes, Route
 
     timestamps()
   end
@@ -31,24 +33,19 @@ defmodule Ferry.Shipments.Shipment do
       :status,
       :description,
       :target_date,
-
       :sender_address,
       :receiver_address,
-
       :transport_size,
-
       :items,
       :funding
     ])
     |> validate_required([:status, :target_date, :sender_address, :receiver_address])
-
     |> validate_inclusion(:status, [
       "planning",
       "ready",
       "underway",
       "received"
     ])
-
     |> validate_inclusion(:transport_size, [
       "",
       "Full Truck (13m / 40ft)",

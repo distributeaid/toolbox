@@ -13,8 +13,10 @@ defmodule Ferry.Shipments.Role do
     field :other?, :boolean, default: false, source: :is_other
     field :description, :string
 
-    belongs_to :group, Group # on_delete set in database via migration
-    belongs_to :shipment, Shipment # on_delete set in database via migration
+    # on_delete set in database via migration
+    belongs_to :group, Group
+    # on_delete set in database via migration
+    belongs_to :shipment, Shipment
 
     timestamps()
   end
@@ -22,7 +24,16 @@ defmodule Ferry.Shipments.Role do
   @doc false
   def changeset(role, attrs) do
     role
-    |> cast(attrs, [:supplier?, :receiver?, :organizer?, :funder?, :other?, :description, :group_id, :shipment_id])
+    |> cast(attrs, [
+      :supplier?,
+      :receiver?,
+      :organizer?,
+      :funder?,
+      :other?,
+      :description,
+      :group_id,
+      :shipment_id
+    ])
     |> validate_required([:supplier?, :receiver?, :organizer?, :funder?, :other?, :group_id])
     # TODO: :shipment_id not validated to allow shipment creation to also create
     #       an initial role.  However this leaves direct role creation vulnerable
@@ -30,7 +41,6 @@ defmodule Ferry.Shipments.Role do
     #       the id's unnecessary since the assoc_constraints are there?
 
     |> validate_one_accepted([:supplier?, :receiver?, :organizer?, :funder?, :other?])
-    
     |> assoc_constraint(:group)
     |> assoc_constraint(:shipment)
     |> unique_constraint(:group, name: :one_role_per_group_in_a_shipment)

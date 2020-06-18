@@ -3,13 +3,13 @@ defmodule Ferry.Locations.Geocode do
   import Ecto.Changeset
   alias Ferry.Locations.Address
 
-
   schema "geocodes" do
     field :lat, :string
     field :lng, :string
     field :data, :map
 
-    belongs_to :address, Address # on_delete set in database via migration
+    # on_delete set in database via migration
+    belongs_to :address, Address
 
     timestamps()
   end

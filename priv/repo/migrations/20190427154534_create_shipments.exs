@@ -3,7 +3,7 @@ defmodule Ferry.Repo.Migrations.CreateShipments do
 
   def change do
     create table(:shipments) do
-      add :label, :string,  null: false
+      add :label, :string, null: false
       add :target_date_to_be_shipped, :string
       add :status, :string
       add :group_id, :integer

@@ -33,7 +33,13 @@ defmodule Ferry.Aid.ManifestList do
 
   def create_changeset(manifest_list, params \\ %{}) do
     manifest_list
-    |> cast(params, [:packaging, :from_role_id, :to_role_id, :origin_route_id, :destination_route_id])
+    |> cast(params, [
+      :packaging,
+      :from_role_id,
+      :to_role_id,
+      :origin_route_id,
+      :destination_route_id
+    ])
 
     # NOTE: No assoc_constraints on :to or :destination, so that we can model
     #       an aid group on a shipment looking for someone to send aid to.
@@ -50,9 +56,7 @@ defmodule Ferry.Aid.ManifestList do
   def update_changeset(manifest_list, params \\ %{}) do
     manifest_list
     |> cast(params, [:packaging, :origin_route_id, :to_role_id, :destination_route_id])
-
     |> assoc_constraint(:from)
     |> assoc_constraint(:origin)
   end
-
 end

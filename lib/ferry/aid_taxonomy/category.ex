@@ -15,11 +15,9 @@ defmodule Ferry.AidTaxonomy.Category do
   def changeset(category, params \\ %{}) do
     category
     |> cast(params, [:name])
-
     |> validate_required([:name])
     # TODO test error message and possibly add our own "should be %{count} character(s)"
     |> validate_length(:name, min: 2, max: 32)
-
     |> foreign_key_constraint(:entries, name: "aid__list_entries_item_id_fkey")
     |> unique_constraint(:name, message: "already exists")
   end

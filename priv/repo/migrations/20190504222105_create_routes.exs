@@ -13,6 +13,5 @@ defmodule Ferry.Repo.Migrations.CreateRoutes do
 
       timestamps()
     end
-
   end
 end

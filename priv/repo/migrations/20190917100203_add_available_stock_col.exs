@@ -12,5 +12,4 @@ defmodule Ferry.Repo.Migrations.AddAvailableStockCol do
       remove :available
     end
   end
-
 end

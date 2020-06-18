@@ -17,7 +17,10 @@ defmodule Ferry.Repo.Migrations.CreateShipmentsGroupsRoles do
 
     create index(:shipments_groups_roles, [:group_id])
     create index(:shipments_groups_roles, [:shipment_id])
-    create unique_index(:shipments_groups_roles, [:group_id, :shipment_id], name: :one_role_per_group_in_a_shipment)
+
+    create unique_index(:shipments_groups_roles, [:group_id, :shipment_id],
+             name: :one_role_per_group_in_a_shipment
+           )
 
     alter table(:shipments) do
       remove :group_id

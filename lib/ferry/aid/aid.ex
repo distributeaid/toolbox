@@ -34,10 +34,11 @@ defmodule Ferry.Aid do
   def list_needs_lists(%Project{} = project, %Date{} = from, %Date{} = to) do
     query =
       from [needs_list, proj] in needs_list_query(),
-        where: proj.id == ^project.id and
-               needs_list.from <= ^to and
-               needs_list.to >= ^from
-    
+        where:
+          proj.id == ^project.id and
+            needs_list.from <= ^to and
+            needs_list.to >= ^from
+
     Repo.all(query)
   end
 
@@ -70,16 +71,17 @@ defmodule Ferry.Aid do
   def get_needs_list(%Project{} = project, %Date{} = on) do
     query =
       from [needs_list, proj] in needs_list_query(),
-        where: proj.id == ^project.id and
-               needs_list.from <= ^on and
-               needs_list.to >= ^on
+        where:
+          proj.id == ^project.id and
+            needs_list.from <= ^on and
+            needs_list.to >= ^on
 
     Repo.one(query)
   end
 
   def get_current_needs_list(%Project{} = project) do
     # TODO: probably want to choose 'today' in the user's local timezone instead of utc
-    get_needs_list(project, Timex.today)
+    get_needs_list(project, Timex.today())
   end
 
   # ------------------------------------------------------------
@@ -118,11 +120,8 @@ defmodule Ferry.Aid do
     from needs_list in NeedsList,
       join: project in assoc(needs_list, :project),
       join: group in assoc(project, :group),
-
       left_join: entries in assoc(needs_list, :entries),
-
       order_by: needs_list.from,
-
       preload: [
         project: {project, group: group},
         entries: entries
@@ -132,9 +131,10 @@ defmodule Ferry.Aid do
   defp has_overlap?(%NeedsList{} = needs) do
     query =
       from needs_list in NeedsList,
-        where: needs_list.project_id == ^needs.project_id and
-               needs_list.from <= ^needs.to and
-               needs_list.to >= ^needs.from
+        where:
+          needs_list.project_id == ^needs.project_id and
+            needs_list.from <= ^needs.to and
+            needs_list.to >= ^needs.from
 
     # if the needs list has an id (exists in the DB), then don't check it
     # against itself for an overlap
@@ -148,5 +148,4 @@ defmodule Ferry.Aid do
 
     Repo.exists?(query)
   end
-
 end
