@@ -2,8 +2,14 @@
 prepare_elixir:
   extends: .elixir
   stage: prepare
+  image: elixir:1.7
   script:
-    - "true"
+    - mix local.hex --force
+    - mix local.rebar
+    - mix format --check--formatted
+    - mix deps.get
+    - mix compile --warnings-as-errors
+    - mix dialyzer
 
 build_elixir:
   extends: .elixir
@@ -45,16 +51,3 @@ unit_test_elixir:
     - mix ecto.reset
     - mix test
     - mix coveralls
-
-lint_elixir:
-  extends: .elixir
-  stage: lint 
-  needs: ["prepare_elixir"]
-  image: elixir:1.7
-  script:
-    - mix local.hex --force
-    - mix local.rebar
-    - mix format --check--formatted
-    - mix deps.get
-    - mix compile --warnings-as-errors
-    - mix dialyzer
