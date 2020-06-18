@@ -1,4 +1,4 @@
-# Pull Request Template
+# Merge Request Template
 
 <!--
 The sections below provide with guidelines and suggestions that might
@@ -61,14 +61,9 @@ Please describe the tests that you ran to verify your changes. Please also note 
 ## Other checks:
 
 <!--
-Please feel free to comment/uncomment as you see fit
-If you wish to add new kinds of checks here, please do so, but 
-also please consider contributing to this template 
- in the .gitlab folder of this repo.
+Please feel free to comment/uncomment/add items as you see fit
 -->
 
 - [ ] Elixir modules and public functions are documented
 - [ ] Elixir public functions have typespecs defined
-- [ ] Elixir changes generate no new warnings after running `mix clean;
-  mix compile`. 
 - [ ] Any dependent changes have been merged and published in downstream modules
