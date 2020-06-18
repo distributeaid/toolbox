@@ -2,7 +2,7 @@
 prepare_elixir:
   extends: .elixir
   stage: prepare
-  image: elixir:1.7
+  image: elixir:1.10.1
   script:
     - mix local.hex --force
     - mix local.rebar
@@ -39,7 +39,7 @@ unit_test_elixir:
     MIX_ENV: "test"
   stage: unit_test
   needs: ["prepare_elixir"]
-  image: elixir:1.7
+  image: elixir:1.10.1
   services:
     - name: postgres:11.2
       alias: dbtest
