@@ -16,6 +16,7 @@ RUN mix local.hex --force && \
     MIX_ENV=prod mix release
 
 FROM elixir:1.10.3-slim
+RUN apt-get update && apt-get -y -q install locales imagemagick
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
