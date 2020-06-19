@@ -109,7 +109,7 @@ defmodule Ferry.Aid do
   # ------------------------------------------------------------
 
   def change_needs_list(%NeedsList{} = list) do
-    NeedsList.changeset(list, %{})
+    NeedsList.changeset(list, %{}, fn _ -> false end)
   end
 
   # Helpers
