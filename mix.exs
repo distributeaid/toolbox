@@ -10,7 +10,7 @@ defmodule Ferry.Mixfile do
       # Who's gonna be the lucky one to bump it up next?!
       # <3 Distribute Aid
       version: "0.0.29",
-      elixir: "~> 1.7",
+      elixir: "~> 1.10.3",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -86,8 +86,9 @@ defmodule Ferry.Mixfile do
       {:hackney, "~> 1.9"},
 
       # authentication
-      {:bcrypt_elixir, "~> 1.0"},
-      {:comeonin, "~> 4.0"},
+      {:bcrypt_elixir, "~> 2.2.0"},
+      {:comeonin, "~> 5.3"},
+      {:elixir_make, "~> 0.6"},
       {:guardian, "~> 1.0"},
 
       # testing
@@ -114,7 +115,7 @@ defmodule Ferry.Mixfile do
       {:spandex_phoenix, "~> 0.4.1"},
 
       # dialyzer
-      {:dialyxir, "~> 1.0.0"}
+      {:dialyxir, "~> 1.0.0", only: [:dev], runtime: false}
     ]
   end
 
