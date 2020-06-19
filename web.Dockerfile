@@ -8,6 +8,7 @@ RUN locale-gen en_US.UTF-8
 
 RUN mkdir -p /app
 WORKDIR /app
+COPY . .
 
 RUN mix local.hex --force && \
     mix local.rebar && \
