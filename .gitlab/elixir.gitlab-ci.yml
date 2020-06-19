@@ -11,6 +11,7 @@ prepare_elixir:
     - mix format --check-formatted
     - mix dialyzer
   cache:
+    key: "elixir-$CI_PROJECT_ID-plts"
     paths:
       - priv/plts
 
@@ -21,7 +22,7 @@ build_elixir:
   stage: build
   needs: ["prepare_elixir"]
   image: docker:${DOCKER_VERSION}
-  cache: {} # disable cache for docker build
+  #cache: {} # disable cache for docker build
   services:
     - docker:${DOCKER_VERSION}-dind
   before_script:
