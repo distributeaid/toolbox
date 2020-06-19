@@ -26,6 +26,6 @@ RUN locale-gen en_US.UTF-8
 RUN mkdir -p /app
 WORKDIR /app
 
-COPY --from=build /app/_build/prod /app
+COPY --from=builder /app/_build/prod /app
 
 CMD [ "/app/rel/ferry/bin/ferry", "start" ]
