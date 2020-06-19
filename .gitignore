@@ -35,3 +35,7 @@ npm-debug.log
 
 # secret keys for local development
 .env.secret
+
+# dialyzer PLTs
+priv/plts/*.plt
+priv/plts/*.plt.hash
