@@ -2,7 +2,7 @@ defmodule Ferry.Profiles.Group.Logo do
   use Arc.Definition
   use Arc.Ecto.Definition
 
-  @extension_whitelist ~w(.jpg .jpeg .gif .png)
+  @allowed_extensions ~w(.jpg .jpeg .gif .png)
 
   def __storage, do: Arc.Storage.Local # Add this
 
@@ -21,7 +21,7 @@ defmodule Ferry.Profiles.Group.Logo do
 
   # Whitelist file extensions:
   def validate({file, _}) do
-    @extension_whitelist |> Enum.member?(Path.extname(file.file_name))
+    @allowed_extensions |> Enum.member?(Path.extname(file.file_name))
   end
 
   def transform(:original, _) do
