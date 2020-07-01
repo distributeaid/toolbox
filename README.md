@@ -262,6 +262,13 @@ environment variable `MIX_ENV=test`. There are three ways to do this:
 
 **Code Quality**
 
+Format your code before committing. In order to do that, please setup a pre commit hook
+by doing:
+
+```
+$ ln -s -f ../../hooks/pre-commit ./git/hooks/pre-commit
+```
+
 ```
 # credo performs static code analysis
 docker exec toolbox_web mix credo list
