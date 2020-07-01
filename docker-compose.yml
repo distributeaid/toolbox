@@ -45,6 +45,7 @@ services:
       - ./test:/app/test
       - ./mix.exs:/app/mix.exs
       - ./mix.lock:/app/mix.lock
+      - ./.formatter.exs:/app/.formatter.exs
       - ./development/wait-for-it.sh:/app/development/wait-for-it.sh
       - build_cache:/app/_build
       - deps_cache:/app/deps
