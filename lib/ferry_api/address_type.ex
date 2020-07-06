@@ -1,10 +1,7 @@
 defmodule FerryApi.Schema.AddressType do
   use Absinthe.Schema.Notation
 
-  import AbsintheErrorPayload.Payload
-
   object :address do
-
     # Required Fields
     # ------------------------------------------------------------
     field :id, non_null(:id)
@@ -25,8 +22,7 @@ defmodule FerryApi.Schema.AddressType do
 
     # TODO
     # field :group
-
   end
 
-#  payload_object(:address_payload, :address)
+  #  payload_object(:address_payload, :address)
 end

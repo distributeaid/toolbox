@@ -10,10 +10,10 @@ defmodule Ferry.ProfilesTest do
   describe "groups" do
     alias Ferry.Profiles.Group
 
-     test "list_groups/0 returns all groups" do
+    test "list_groups/0 returns all groups" do
       # no groups
       assert Profiles.list_groups() == [],
-      "returns an empty list if no groups have been created"
+             "returns an empty list if no groups have been created"
 
       # 1 group
       group1 = insert(:group)
@@ -30,9 +30,11 @@ defmodule Ferry.ProfilesTest do
     end
 
     test "get_group!/1 with a non-existent id throws an error" do
-      assert_raise Ecto.NoResultsError, ~r/^expected at least one result but got none in query/, fn ->
-        Profiles.get_group!(1312)
-      end
+      assert_raise Ecto.NoResultsError,
+                   ~r/^expected at least one result but got none in query/,
+                   fn ->
+                     Profiles.get_group!(1312)
+                   end
     end
 
     test "create_group/1 with valid data creates a group" do
@@ -70,7 +72,10 @@ defmodule Ferry.ProfilesTest do
       assert group == Profiles.get_group!(group.id)
 
       invalid_params = params_for(:invalid_url_group)
-      assert {:error, %Ecto.Changeset{} = changeset} = Profiles.update_group(group, invalid_params)
+
+      assert {:error, %Ecto.Changeset{} = changeset} =
+               Profiles.update_group(group, invalid_params)
+
       assert length(changeset.errors) == 7
       assert group == Profiles.get_group!(group.id)
     end
@@ -86,7 +91,6 @@ defmodule Ferry.ProfilesTest do
       assert %Ecto.Changeset{} = Profiles.change_group(group)
     end
   end
-
 
   # Projects
   # ==============================================================================
@@ -132,8 +136,16 @@ defmodule Ferry.ProfilesTest do
       assert Profiles.list_projects(group1) == []
 
       # multiple projects for group
-      project2 = insert(:project, %{group: group1}) |> without_assoc([:address, :geocode]) |> without_assoc(:group)
-      project3 = insert(:project, %{group: group1}) |> without_assoc([:address, :geocode]) |> without_assoc(:group)
+      project2 =
+        insert(:project, %{group: group1})
+        |> without_assoc([:address, :geocode])
+        |> without_assoc(:group)
+
+      project3 =
+        insert(:project, %{group: group1})
+        |> without_assoc([:address, :geocode])
+        |> without_assoc(:group)
+
       assert Profiles.list_projects(group1) == [project2, project3]
     end
 
@@ -143,13 +155,16 @@ defmodule Ferry.ProfilesTest do
     end
 
     test "get_project!/1 with a non-existent id throws an error" do
-      assert_raise Ecto.NoResultsError, ~r/^expected at least one result but got none in query/, fn ->
-        Profiles.get_project!(1312)
-      end
+      assert_raise Ecto.NoResultsError,
+                   ~r/^expected at least one result but got none in query/,
+                   fn ->
+                     Profiles.get_project!(1312)
+                   end
     end
 
     test "create_project/2 with valid data creates a project" do
-      GeocoderMock |> expect(:geocode_address, 2, fn _address ->
+      GeocoderMock
+      |> expect(:geocode_address, 2, fn _address ->
         {:ok, params_for(:geocode)}
       end)
 
@@ -196,7 +211,8 @@ defmodule Ferry.ProfilesTest do
     end
 
     test "update_project/2 with valid data updates the project" do
-      GeocoderMock |> expect(:geocode_address, fn _address ->
+      GeocoderMock
+      |> expect(:geocode_address, fn _address ->
         {:ok, params_for(:geocode)}
       end)
 

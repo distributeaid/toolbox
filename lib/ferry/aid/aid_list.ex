@@ -22,6 +22,10 @@ defmodule Ferry.Aid.AidList do
     # NOTE: use Ecto.build_assoc to set the correct list implementation field
     aid_list
     |> cast(params, [])
-    |> check_constraint(:owner, name: :has_exactly_one_owner, message: "An aid list may only be associated with one list implementation (available / needs / manifest).")
+    |> check_constraint(:owner,
+      name: :has_exactly_one_owner,
+      message:
+        "An aid list may only be associated with one list implementation (available / needs / manifest)."
+    )
   end
 end

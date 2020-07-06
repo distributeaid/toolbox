@@ -2,7 +2,6 @@ defmodule Ferry.Repo.Migrations.AddAidLists do
   use Ecto.Migration
 
   def change do
-    
     # Item Category
     # ------------------------------------------------------------
     create table("aid__item_categories") do
@@ -89,6 +88,5 @@ defmodule Ferry.Repo.Migrations.AddAidLists do
 
       timestamps()
     end
-
   end
 end

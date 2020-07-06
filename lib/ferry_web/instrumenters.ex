@@ -8,7 +8,7 @@ defmodule FerryWeb.PipelineInstrumenter do
   @moduledoc "Prometheus instrmenter for Phoenix"
 
   use Prometheus.PlugPipelineInstrumenter
-  
+
   def label_value(:request_path, conn) do
     case Phoenix.Router.route_info(
            FerryWeb.Router,

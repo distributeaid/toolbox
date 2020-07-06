@@ -5,5 +5,4 @@ defmodule Ferry.Repo.Migrations.FixUniqueItemIndex do
     drop index(:inventory_items, [:name])
     create unique_index(:inventory_items, [:category_id, :name])
   end
-
 end

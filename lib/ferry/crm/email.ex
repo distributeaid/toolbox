@@ -3,11 +3,11 @@ defmodule Ferry.CRM.Email do
   import Ecto.Changeset
   alias Ferry.CRM.Contact
 
-
   schema "emails" do
     field :email, :string
 
-    belongs_to :contact, Contact # on_replace set in Contact schema, on_delete set in database via migration
+    # on_replace set in Contact schema, on_delete set in database via migration
+    belongs_to :contact, Contact
 
     timestamps()
   end

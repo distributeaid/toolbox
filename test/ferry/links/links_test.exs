@@ -26,7 +26,8 @@ defmodule Ferry.LinksTest do
       bad_format: %{url: "there_is_no_dot"},
       too_short: %{url: "h.i"},
       too_long: %{
-        label: "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        label:
+          "This is really way too long. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         url: "this-does-not-have-a-length-limit.org"
       },
       with_extra_text: %{url: "https://example.com FOO BAR"}
@@ -127,9 +128,11 @@ defmodule Ferry.LinksTest do
     end
 
     test "get_link!/1 with a non-existent id throws and error" do
-      assert_raise Ecto.NoResultsError, ~r/^expected at least one result but got none in query/, fn ->
-        CRM.get_contact!(1312)
-      end
+      assert_raise Ecto.NoResultsError,
+                   ~r/^expected at least one result but got none in query/,
+                   fn ->
+                     CRM.get_contact!(1312)
+                   end
     end
 
     test "create_link/2 with valid data creates a link for a group" do
@@ -140,7 +143,7 @@ defmodule Ferry.LinksTest do
       assert link.label == @valid_attrs.typical.label
       assert link.url == @valid_attrs.typical.url
 
-      #min
+      # min
       assert {:ok, %Link{} = link} = Links.create_link(group, @valid_attrs.min)
       assert link.label == nil
       assert link.url == @valid_attrs.min.url
@@ -154,7 +157,7 @@ defmodule Ferry.LinksTest do
       assert link.label == @valid_attrs.typical.label
       assert link.url == @valid_attrs.typical.url
 
-      #min
+      # min
       assert {:ok, %Link{} = link} = Links.create_link(project, @valid_attrs.min)
       assert link.label == nil
       assert link.url == @valid_attrs.min.url
@@ -168,7 +171,7 @@ defmodule Ferry.LinksTest do
       assert link.label == @valid_attrs.typical.label
       assert link.url == @valid_attrs.typical.url
 
-      #min
+      # min
       assert {:ok, %Link{} = link} = Links.create_link(contact, @valid_attrs.min)
       assert link.label == nil
       assert link.url == @valid_attrs.min.url
@@ -198,9 +201,14 @@ defmodule Ferry.LinksTest do
       assert {:error, %Ecto.Changeset{}} = Links.create_link(contact, @invalid_attrs.too_long)
 
       # with extra text
-      assert {:error, %Ecto.Changeset{}} = Links.create_link(group, @invalid_attrs.with_extra_text)
-      assert {:error, %Ecto.Changeset{}} = Links.create_link(project, @invalid_attrs.with_extra_text)
-      assert {:error, %Ecto.Changeset{}} = Links.create_link(contact, @invalid_attrs.with_extra_text)
+      assert {:error, %Ecto.Changeset{}} =
+               Links.create_link(group, @invalid_attrs.with_extra_text)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Links.create_link(project, @invalid_attrs.with_extra_text)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Links.create_link(contact, @invalid_attrs.with_extra_text)
     end
 
     test "update_link/2 with valid data updates the link" do

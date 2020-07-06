@@ -34,6 +34,7 @@ defmodule FerryApi.Schema.GroupType do
     field :description, :string
     field :donation_link, :string
     field :slack_channel_name, :string
+
     # TODO: field :social_media_links, :link_type
 
     field :request_form, :string

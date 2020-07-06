@@ -113,6 +113,13 @@ If you don't have AWS credentials yet, ask someone on the team. Still run the
 command above, the app will run without proper creds, but you will not be able
 to use authenticated features.
 
+Format your code before committing. In order to do that, please setup a pre commit hook
+by doing:
+
+```
+$ ln -s -f ../../hooks/pre-commit ./.git/hooks/pre-commit
+```
+
 **Troubleshooting**
 
 If you see that a container has exited with code 127 (e.g. "toolbox_web exited
@@ -261,6 +268,13 @@ environment variable `MIX_ENV=test`. There are three ways to do this:
    `MIX_ENV=test mix ecto.reset` in the shell.
 
 **Code Quality**
+
+Format your code before committing. In order to do that, please setup a pre commit hook
+by doing:
+
+```
+$ ln -s -f ../../hooks/pre-commit ./.git/hooks/pre-commit
+```
 
 ```
 # credo performs static code analysis

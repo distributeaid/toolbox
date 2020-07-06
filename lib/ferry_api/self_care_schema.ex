@@ -9,5 +9,4 @@ defmodule FerryApi.Schema.SelfCare do
       end)
     end
   end
-
 end

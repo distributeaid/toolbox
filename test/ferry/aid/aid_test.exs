@@ -7,10 +7,10 @@ defmodule Ferry.AidTest do
 
   alias Ferry.Aid
   alias Ferry.Aid.AidList
-#  alias Ferry.Aid.AvailableList
+  #  alias Ferry.Aid.AvailableList
   alias Ferry.Aid.Entry
-#  alias Ferry.Aid.ManifestList
-#  alias Ferry.Aid.ModValue
+  #  alias Ferry.Aid.ManifestList
+  #  alias Ferry.Aid.ModValue
   alias Ferry.Aid.NeedsList
 
   # Needs List
@@ -37,12 +37,13 @@ defmodule Ferry.AidTest do
       # ordered by from date
       last_list = insert(:needs_list_after, %{project: project, to: list2.to})
       first_list = insert(:needs_list_before, %{project: project, from: list2.from})
+
       assert Aid.list_needs_lists(project, from, to) == [
-        first_list,
-        list1,
-        list2,
-        last_list
-      ]
+               first_list,
+               list1,
+               list2,
+               last_list
+             ]
 
       # includes lists that overlap with the duration (inclusive)
       start_overlap_list = insert(:needs_list_start_overlap, %{project: project, from: from})
@@ -71,41 +72,47 @@ defmodule Ferry.AidTest do
 
       _before_list = insert(:needs_list_before, %{project: project, from: from})
       start_overlap_list = insert(:needs_list_start_overlap, %{project: project, from: from})
-      within_list = insert(:needs_list, %{
-        project: project,
-        from: from |> Timex.shift(months: 1),
-        to: to |> Timex.shift(months: 2)
-      })
+
+      within_list =
+        insert(:needs_list, %{
+          project: project,
+          from: from |> Timex.shift(months: 1),
+          to: to |> Timex.shift(months: 2)
+        })
+
       end_overlap_list = insert(:needs_list_end_overlap, %{project: project, to: to})
       _after_list = insert(:needs_list_after, %{project: project, to: to})
 
       assert Aid.list_needs_lists(project, from) == [
-        start_overlap_list,
-        within_list,
-        end_overlap_list
-      ]
+               start_overlap_list,
+               within_list,
+               end_overlap_list
+             ]
     end
 
     test "list_needs_lists/2 returns all needs lists for a project that overlap within 6 months of today" do
       project = insert(:project) |> without_assoc(:address)
-      from = Timex.today
+      from = Timex.today()
       to = from |> Timex.shift(months: 6)
 
       _before_list = insert(:needs_list_before, %{project: project, from: from})
       start_overlap_list = insert(:needs_list_start_overlap, %{project: project, from: from})
-      within_list = insert(:needs_list, %{
-        project: project,
-        from: from |> Timex.shift(months: 1),
-        to: from |> Timex.shift(months: 2)
-      })
+
+      within_list =
+        insert(:needs_list, %{
+          project: project,
+          from: from |> Timex.shift(months: 1),
+          to: from |> Timex.shift(months: 2)
+        })
+
       end_overlap_list = insert(:needs_list_end_overlap, %{project: project, to: to})
       _after_list = insert(:needs_list_after, %{project: project, to: to})
 
       assert Aid.list_needs_lists(project, from) == [
-        start_overlap_list,
-        within_list,
-        end_overlap_list
-      ]
+               start_overlap_list,
+               within_list,
+               end_overlap_list
+             ]
     end
 
     test "get_needs_list!/1 returns the requested needs list" do
@@ -114,9 +121,11 @@ defmodule Ferry.AidTest do
     end
 
     test "get_needs_list!/1 with a non-existent id throws an error" do
-      assert_raise Ecto.NoResultsError, ~r/^expected at least one result but got none in query/, fn ->
-        Aid.get_needs_list!(1312)
-      end      
+      assert_raise Ecto.NoResultsError,
+                   ~r/^expected at least one result but got none in query/,
+                   fn ->
+                     Aid.get_needs_list!(1312)
+                   end
     end
 
     test "get_needs_list/2 returns the project's needs list for the specified date" do
@@ -160,6 +169,7 @@ defmodule Ferry.AidTest do
       assert needs.from == attrs.from
       assert needs.to == attrs.to
       assert %AidList{} = needs.list
+
       # TODO: inject normal get preloads on successful insert? and include .list in those normal preloads?
       # assert needs.entries == []
       # assert needs.project == project
@@ -186,7 +196,7 @@ defmodule Ferry.AidTest do
     test "update_needs_list/2 with valid data updates a needs list" do
       old_needs = insert(:needs_list)
       attrs = params_for(:needs_list_end_overlap, Map.from_struct(old_needs))
-      
+
       assert {:ok, %NeedsList{} = needs} = Aid.update_needs_list(old_needs, attrs)
       assert needs.from == attrs.from
       assert needs.to == attrs.to
@@ -224,14 +234,15 @@ defmodule Ferry.AidTest do
 
       # also deletes the referenced aid list & entries
       refute Repo.exists?(
-        from list in AidList,
-          where: list.needs_list_id == ^needs.id
-      )
+               from list in AidList,
+                 where: list.needs_list_id == ^needs.id
+             )
+
       refute Repo.exists?(
-        from entry in Entry,
-          join: list in assoc(entry, :list),
-          where: list.needs_list_id == ^needs.id
-      )
+               from entry in Entry,
+                 join: list in assoc(entry, :list),
+                 where: list.needs_list_id == ^needs.id
+             )
     end
   end
 end

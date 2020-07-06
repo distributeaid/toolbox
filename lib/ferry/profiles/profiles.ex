@@ -133,7 +133,6 @@ defmodule Ferry.Profiles do
     Group.changeset(group, %{})
   end
 
-
   # Helpers
   # ------------------------------------------------------------
 
@@ -153,8 +152,6 @@ defmodule Ferry.Profiles do
 
     query
   end
-
-
 
   # Project
   # ==============================================================================

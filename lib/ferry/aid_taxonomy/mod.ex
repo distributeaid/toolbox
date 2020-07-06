@@ -30,20 +30,17 @@ defmodule Ferry.AidTaxonomy.Mod do
   def create_changeset(mod, params \\ %{}) do
     mod
     |> cast(params, [:name, :description, :type, :values])
-
     |> validate_required([:name, :type])
     # TODO test error message and possibly add our own "should be %{count} character(s)"
     |> validate_length(:name, min: 2, max: 32)
     |> validate_inclusion(:type, ["integer", "select", "multi-select"])
     |> validate_values()
-
     |> unique_constraint(:name, message: "already exists")
   end
 
   def update_changeset(mod, params \\ %{}) do
     mod
     |> cast(params, [:name, :description, :type, :values])
-
     |> validate_required([:name, :type])
     # TODO test error message and possibly add our own "should be %{count} character(s)"
     |> validate_length(:name, min: 2, max: 32)
@@ -53,9 +50,8 @@ defmodule Ferry.AidTaxonomy.Mod do
     # additional validation on how the Mod is being changed
     |> validate_type_change()
     |> validate_values_change()
-
     |> foreign_key_constraint(:mod_values, name: "aid__mod_values_mod_id_fkey")
-    |> unique_constraint(:name, message: "already exists")    
+    |> unique_constraint(:name, message: "already exists")
   end
 
   # TODO: force values to be unique
@@ -64,7 +60,9 @@ defmodule Ferry.AidTaxonomy.Mod do
     {_, type} = fetch_field(changeset, :type)
 
     case type do
-      "integer" -> changeset |> put_change(:values, nil)
+      "integer" ->
+        changeset |> put_change(:values, nil)
+
       _ ->
         changeset
         |> validate_required([:values])
@@ -75,7 +73,9 @@ defmodule Ferry.AidTaxonomy.Mod do
   # can only change type from "select" to "multi-select"
   defp validate_type_change(changeset) do
     case get_change(changeset, :type) do
-      nil -> changeset
+      nil ->
+        changeset
+
       updated_type ->
         if changeset.data.type == "select" && updated_type == "multi-select" do
           changeset
@@ -90,10 +90,12 @@ defmodule Ferry.AidTaxonomy.Mod do
     cond do
       # Don't bother checking values if there's a type error, since the values
       # may be too screwed up to be understandable.
-      Keyword.has_key?(changeset.errors, :type) -> changeset
+      Keyword.has_key?(changeset.errors, :type) ->
+        changeset
 
       # Don't check values for integer mods, since they don't have values.
-      get_field(changeset, :type) == "integer" -> changeset
+      get_field(changeset, :type) == "integer" ->
+        changeset
 
       # Don't add an error if all the old values are included.
       # This handles cases where there is no change, since each old value will
@@ -103,7 +105,8 @@ defmodule Ferry.AidTaxonomy.Mod do
 
       # Otherwise, we can conclude that at least 1 old value isn't included in
       # the list of new values.  Add an error.
-      true -> add_error(changeset, :values, "can't remove values")
+      true ->
+        add_error(changeset, :values, "can't remove values")
     end
   end
 end

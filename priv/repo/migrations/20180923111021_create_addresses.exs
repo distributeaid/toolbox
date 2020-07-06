@@ -12,6 +12,5 @@ defmodule Ferry.Repo.Migrations.CreateAddresses do
 
       timestamps()
     end
-
   end
 end

@@ -2,8 +2,18 @@
 prepare_elixir:
   extends: .elixir
   stage: prepare
+  image: elixir:1.10.3
   script:
-    - "true"
+    - mix local.hex --force
+    - mix local.rebar
+    - mix deps.get
+    - mix compile --warnings-as-errors
+    - mix format --check-formatted
+    - mix dialyzer
+  cache:
+    key: "elixir-$CI_PROJECT_ID-plts"
+    paths:
+      - priv/plts
 
 build_elixir:
   extends: .elixir
@@ -12,7 +22,7 @@ build_elixir:
   stage: build
   needs: ["prepare_elixir"]
   image: docker:${DOCKER_VERSION}
-  cache: {} # disable cache for docker build
+  #cache: {} # disable cache for docker build
   services:
     - docker:${DOCKER_VERSION}-dind
   before_script:
@@ -33,7 +43,7 @@ unit_test_elixir:
     MIX_ENV: "test"
   stage: unit_test
   needs: ["prepare_elixir"]
-  image: elixir:1.7
+  image: elixir:1.10.3
   services:
     - name: postgres:11.2
       alias: dbtest

@@ -15,6 +15,9 @@ defmodule Ferry.Repo.Migrations.CreateContacts do
     create index(:contacts, [:group_id])
     create index(:contacts, [:project_id])
 
-    create constraint(:contacts, :has_exactly_one_owner, check: "(group_id IS NOT NULL AND project_id IS NULL) OR (group_id IS NULL AND project_id IS NOT NULL)")
+    create constraint(:contacts, :has_exactly_one_owner,
+             check:
+               "(group_id IS NOT NULL AND project_id IS NULL) OR (group_id IS NULL AND project_id IS NOT NULL)"
+           )
   end
 end

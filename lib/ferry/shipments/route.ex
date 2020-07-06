@@ -11,11 +11,11 @@ defmodule Ferry.Shipments.Route do
     field :groups, :string
     field :checklist, {:array, :string}
 
-    belongs_to :shipment, Shipment # on_delete set in database via migration
+    # on_delete set in database via migration
+    belongs_to :shipment, Shipment
 
     timestamps()
   end
-
 
   @doc false
   def changeset(route, attrs) do

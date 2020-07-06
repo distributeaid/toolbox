@@ -20,6 +20,7 @@ defmodule Ferry.Locations.Map do
     map
     |> cast(attrs, [:group_filter_labels, :search, :country_filter, :group_filter, :results])
     |> validate_required([:group_filter_labels])
+
     # TODO: validate controls, results
   end
 end

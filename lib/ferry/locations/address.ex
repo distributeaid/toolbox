@@ -4,7 +4,6 @@ defmodule Ferry.Locations.Address do
   alias Ferry.Locations.Geocode
   alias Ferry.Profiles.{Group, Project}
 
-
   schema "addresses" do
     field :label, :string
     field :street, :string
@@ -13,10 +12,13 @@ defmodule Ferry.Locations.Address do
     field :country_code, :string
     field :postal_code, :string
 
-    has_one :geocode, Geocode, on_replace: :update # on_delete set in database via migration
+    # on_delete set in database via migration
+    has_one :geocode, Geocode, on_replace: :update
 
-    belongs_to :group, Group # on_delete set in database via migration
-    belongs_to :project, Project # on_delete set in database via migration
+    # on_delete set in database via migration
+    belongs_to :group, Group
+    # on_delete set in database via migration
+    belongs_to :project, Project
 
     timestamps()
   end
@@ -30,8 +32,10 @@ defmodule Ferry.Locations.Address do
     |> validate_length(:street, max: 255)
     |> validate_length(:city, min: 1, max: 255)
     |> validate_length(:province, max: 255)
-    |> validate_length(:country_code, min: 2, max: 255) # must be at least a 2 letter country code
+    # must be at least a 2 letter country code
+    |> validate_length(:country_code, min: 2, max: 255)
     |> validate_length(:postal_code, max: 255)
+
     # TODO: add a changeset check constraint that matches the db one?
     #       https://hexdocs.pm/ecto/Ecto.Changeset.html#check_constraint/3
     #
@@ -57,12 +61,13 @@ defmodule Ferry.Locations.Address do
     |> validate_length(:street, max: 255)
     |> validate_length(:city, min: 1, max: 255)
     |> validate_length(:province, max: 255)
-    |> validate_length(:country_code, min: 2, max: 255) # must be at least a 2 letter country code
+    # must be at least a 2 letter country code
+    |> validate_length(:country_code, min: 2, max: 255)
     |> validate_length(:postal_code, max: 255)
+
     # TODO: add a changeset check constraint that matches the db one?
     #       https://hexdocs.pm/ecto/Ecto.Changeset.html#check_constraint/3
     #
     # TODO: test format for some fields (letters / whitespace only?)
   end
-
 end

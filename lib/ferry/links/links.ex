@@ -27,23 +27,26 @@ defmodule Ferry.Links do
       [%Link{}, ...]
   """
   def list_links(%Group{} = group) do
-    Repo.all(from l in Link,
-      where: l.group_id == ^group.id,
-      order_by: [l.id]
+    Repo.all(
+      from l in Link,
+        where: l.group_id == ^group.id,
+        order_by: [l.id]
     )
   end
 
   def list_links(%Project{} = project) do
-    Repo.all(from l in Link,
-      where: l.project_id == ^project.id,
-      order_by: [l.id]
-    )    
+    Repo.all(
+      from l in Link,
+        where: l.project_id == ^project.id,
+        order_by: [l.id]
+    )
   end
 
   def list_links(%Contact{} = contact) do
-    Repo.all(from l in Link,
-      where: l.contact_id == ^contact.id,
-      order_by: [l.id]
+    Repo.all(
+      from l in Link,
+        where: l.contact_id == ^contact.id,
+        order_by: [l.id]
     )
   end
 
@@ -91,23 +94,23 @@ defmodule Ferry.Links do
 
   def create_link(%Group{} = group, attrs) do
     %Link{}
-      |> Link.changeset(attrs)
-      |> Ecto.Changeset.put_change(:group_id, group.id)
-      |> Repo.insert()
+    |> Link.changeset(attrs)
+    |> Ecto.Changeset.put_change(:group_id, group.id)
+    |> Repo.insert()
   end
 
   def create_link(%Project{} = project, attrs) do
     %Link{}
-      |> Link.changeset(attrs)
-      |> Ecto.Changeset.put_change(:project_id, project.id)
-      |> Repo.insert()
+    |> Link.changeset(attrs)
+    |> Ecto.Changeset.put_change(:project_id, project.id)
+    |> Repo.insert()
   end
 
   def create_link(%Contact{} = contact, attrs) do
     %Link{}
-      |> Link.changeset(attrs)
-      |> Ecto.Changeset.put_change(:contact_id, contact.id)
-      |> Repo.insert()
+    |> Link.changeset(attrs)
+    |> Ecto.Changeset.put_change(:contact_id, contact.id)
+    |> Repo.insert()
   end
 
   @doc """

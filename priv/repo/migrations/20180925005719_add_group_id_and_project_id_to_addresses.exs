@@ -10,6 +10,9 @@ defmodule Ferry.Repo.Migrations.AddGroupIdToAddresses do
     create index(:addresses, [:group_id])
     create index(:addresses, [:project_id])
 
-    create constraint(:addresses, :has_exactly_one_owner, check: "(group_id IS NOT NULL AND project_id IS NULL) OR (group_id IS NULL AND project_id IS NOT NULL)")
+    create constraint(:addresses, :has_exactly_one_owner,
+             check:
+               "(group_id IS NOT NULL AND project_id IS NULL) OR (group_id IS NULL AND project_id IS NOT NULL)"
+           )
   end
 end

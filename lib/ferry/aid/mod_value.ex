@@ -35,6 +35,9 @@ defmodule Ferry.Aid.ModValue do
     |> validate_required([:value])
     |> assoc_constraint(:mod)
     |> assoc_constraint(:entry)
-    |> unique_constraint(:value, name: "aid__mod_values_entry_id_mod_id_index", message: "already set")
+    |> unique_constraint(:value,
+      name: "aid__mod_values_entry_id_mod_id_index",
+      message: "already set"
+    )
   end
 end

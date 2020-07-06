@@ -2,7 +2,6 @@ defmodule Ferry.Repo.Migrations.V0AddressUpdate do
   use Ecto.Migration
 
   def change do
-
     rename table(:addresses), :country, to: :country_code
     rename table(:addresses), :state, to: :province
     rename table(:addresses), :zip_code, to: :postal_code
@@ -16,6 +15,5 @@ defmodule Ferry.Repo.Migrations.V0AddressUpdate do
       modify :country_code, :text, from: :string, null: false
       modify :postal_code, :text, from: :string, null: false
     end
-
   end
 end

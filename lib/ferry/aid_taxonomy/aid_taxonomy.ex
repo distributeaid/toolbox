@@ -68,7 +68,8 @@ defmodule Ferry.AidTaxonomy do
   def delete_category(%Category{} = category) do
     category
     # TODO: Category.delete_changeset that only checks fkey constraints?
-    |> Category.changeset() # handle db constraint errors as changeset errors
+    # handle db constraint errors as changeset errors
+    |> Category.changeset()
     |> Repo.delete()
   end
 
@@ -150,7 +151,8 @@ defmodule Ferry.AidTaxonomy do
   def delete_item(%Item{} = item) do
     item
     # TODO: Item.delete_changeset that only checks fkey constraints?
-    |> Item.changeset() # handle db constraint errors as changeset errors
+    # handle db constraint errors as changeset errors
+    |> Item.changeset()
     |> Repo.delete()
   end
 
@@ -179,7 +181,7 @@ defmodule Ferry.AidTaxonomy do
   #       directly instead of looking them up again?
   defp get_item_mods(%{mods: mods}) do
     mods
-    |> Enum.map(&(&1.id))
+    |> Enum.map(& &1.id)
     |> get_item_mods()
   end
 
@@ -271,7 +273,8 @@ defmodule Ferry.AidTaxonomy do
   def delete_mod(%Mod{} = mod) do
     mod
     # TODO: Mod.delete_changeset that only checks fkey constraints?
-    |> Mod.update_changeset() # handle db constraint errors as changeset errors
+    # handle db constraint errors as changeset errors
+    |> Mod.update_changeset()
     |> Repo.delete()
   end
 
@@ -296,7 +299,7 @@ defmodule Ferry.AidTaxonomy do
   #       directly instead of looking them up again?
   defp get_mod_items(%{items: items}) do
     items
-    |> Enum.map(&(&1.id))
+    |> Enum.map(& &1.id)
     |> get_mod_items()
   end
 
@@ -322,5 +325,4 @@ defmodule Ferry.AidTaxonomy do
 
     Repo.all(query)
   end
-
 end

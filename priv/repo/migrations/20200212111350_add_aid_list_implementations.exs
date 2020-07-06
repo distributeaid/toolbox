@@ -2,7 +2,6 @@ defmodule Ferry.Repo.Migrations.AddAidListImplementations do
   use Ecto.Migration
 
   def change do
-
     # Available List
     # ------------------------------------------------------------
     create table("aid__available_lists") do
@@ -13,7 +12,7 @@ defmodule Ferry.Repo.Migrations.AddAidListImplementations do
 
       timestamps()
     end
-    
+
     # Needs List
     # ------------------------------------------------------------
     create table("aid__needs_lists") do
@@ -58,16 +57,17 @@ defmodule Ferry.Repo.Migrations.AddAidListImplementations do
       add :manifest_list_id, references("aid__manifest_lists", on_delete: :delete_all)
     end
 
-    create constraint("aid__lists", :has_exactly_one_owner, check: """
-         (available_list_id IS NOT NULL AND needs_list_id IS NULL     AND manifest_list_id IS NULL    )
-      OR (available_list_id IS NULL     AND needs_list_id IS NOT NULL AND manifest_list_id IS NULL    )
-      OR (available_list_id IS NULL     AND needs_list_id IS NULL     AND manifest_list_id IS NOT NULL)
-    """)
+    create constraint("aid__lists", :has_exactly_one_owner,
+             check: """
+                  (available_list_id IS NOT NULL AND needs_list_id IS NULL     AND manifest_list_id IS NULL    )
+               OR (available_list_id IS NULL     AND needs_list_id IS NOT NULL AND manifest_list_id IS NULL    )
+               OR (available_list_id IS NULL     AND needs_list_id IS NULL     AND manifest_list_id IS NOT NULL)
+             """
+           )
 
     # Mod Value
     # ------------------------------------------------------------
     # Each entry should only have 1 value for a related mod.
     create unique_index("aid__mod_values", [:entry_id, :mod_id])
-
   end
 end

@@ -2,7 +2,6 @@ defmodule Ferry.Repo.Migrations.MakeGroupsNotSoStrict do
   use Ecto.Migration
 
   def change do
-
     alter table("groups") do
       modify :slack_channel_name, :text
       modify :description, :text
@@ -15,6 +14,5 @@ defmodule Ferry.Repo.Migrations.MakeGroupsNotSoStrict do
       modify :volunteer_form_results, :text
       modify :donation_form_results, :text
     end
-
   end
 end

@@ -2,7 +2,6 @@ defmodule Ferry.Repo.Migrations.AdaptGroups do
   use Ecto.Migration
 
   def change do
-
     alter table("groups") do
       add :slug, :text, null: false
       add :type, :text, null: false
@@ -16,6 +15,5 @@ defmodule Ferry.Repo.Migrations.AdaptGroups do
     end
 
     create unique_index("groups", [:slug])
-
   end
 end

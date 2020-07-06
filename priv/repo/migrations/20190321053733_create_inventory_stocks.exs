@@ -2,7 +2,6 @@ defmodule Ferry.Repo.Migrations.CreateInventoryStocks do
   use Ecto.Migration
 
   def change do
-
     # Categories
     # ------------------------------------------------------------
     create table(:inventory_categories) do
@@ -29,10 +28,14 @@ defmodule Ferry.Repo.Migrations.CreateInventoryStocks do
     # Mods
     # ------------------------------------------------------------
     create table(:inventory_mods) do
-      add :gender, :string # ex: masc, fem
-      add :age, :string    # ex: adult, child
-      add :size, :string   # ex: small, medium, large, x-large
-      add :season, :string # ex: summer, winter
+      # ex: masc, fem
+      add :gender, :string
+      # ex: adult, child
+      add :age, :string
+      # ex: small, medium, large, x-large
+      add :size, :string
+      # ex: summer, winter
+      add :season, :string
 
       timestamps()
     end
@@ -79,6 +82,5 @@ defmodule Ferry.Repo.Migrations.CreateInventoryStocks do
     #       duplicate entries.
     #
     # TODO
-
   end
 end

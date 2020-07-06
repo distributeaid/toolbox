@@ -15,7 +15,8 @@ import Config
 # which you typically run after static files are built.
 config :ferry, FerryWeb.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: {:system, "HOSTNAME"}, port: {:system, "PORT"}], # This is critical for ensuring web-sockets properly authorize.
+  # This is critical for ensuring web-sockets properly authorize.
+  url: [host: {:system, "HOSTNAME"}, port: {:system, "PORT"}],
   cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
   root: ".",
@@ -33,9 +34,7 @@ config :ferry, Ferry.Repo,
 
 # Generate a new secret: https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Secret.html#content
 
-config :ferry, FerryWeb.Endpoint,
-  secret_key_base: {:system, "SECRET_KEY_BASE"}
-
+config :ferry, FerryWeb.Endpoint, secret_key_base: {:system, "SECRET_KEY_BASE"}
 
 # Twilio Integrations
 # ------------------------------------------------------------
