@@ -39,3 +39,6 @@ npm-debug.log
 # dialyzer PLTs
 priv/plts/*.plt
 priv/plts/*.plt.hash
+
+# macOS specific
+**/*.DS_Store

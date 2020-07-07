@@ -53,15 +53,33 @@ defmodule Ferry.ProfilesTest do
       assert length(changeset.errors) == 7
     end
 
+    defp with_logo(params, path) do
+      Map.put(params, :logo, %{
+        __struct__: Plug.Upload,
+        path: path,
+        filename: Path.basename(path)
+      })
+    end
+
     test "update_group/2 with valid data updates the group" do
       group = insert(:group)
-      update_params = params_for(:group)
+
+      update_params =
+        params_for(:group)
+        # add a logo upload
+        |> with_logo(Path.join(File.cwd!(), "test/fixtures/sample.png"))
 
       # typical
       assert {:ok, group} = Profiles.update_group(group, update_params)
       assert %Group{} = group
       assert group.name == update_params.name
       assert group.description == update_params.description
+
+      # check that the logo was propertly uploaded
+      %{file_name: "sample.png", updated_at: _} = group.logo
+      # check that a thumbnail was created too
+      stat = File.stat!(Path.join(File.cwd!(), "uploads/groups/#{group.id}/logo/logo_thumb.jpg"))
+      assert :regular == stat.type
     end
 
     test "update_group/2 with invalid data returns error changeset" do
@@ -169,7 +187,7 @@ defmodule Ferry.ProfilesTest do
       end)
 
       group = insert(:group)
-      geocode = params_for(:geocode)
+      _geocode = params_for(:geocode)
 
       # typical
       attrs = string_params_for(:project, %{group_id: group.id})
@@ -217,7 +235,7 @@ defmodule Ferry.ProfilesTest do
       end)
 
       project = insert(:project)
-      geocode = params_for(:geocode)
+      _geocode = params_for(:geocode)
 
       # typical
       attrs = string_params_for(:project)

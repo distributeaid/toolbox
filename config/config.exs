@@ -14,7 +14,8 @@ config :ferry, FerryWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "LZq0A0L5e94eTPVfqLXxmWjEG2LN4/RaoBZacm7X4t1a81wbHbj95pXZNU+rzEjH",
   render_errors: [view: FerryWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Ferry.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub_server: Ferry.PubSub,
+  live_view: [signing_salt: "w5u8sooV1GpBhBDnW/kFF8Hvd3cYnEP6+Alc9BjC1o3mAymHFwJSoiRCjZbFBnS8"]
 
 # Configures Guardian
 # NOTE: The `secret_key` is a default value for dev / testing environments.  It
@@ -72,10 +73,6 @@ config :spandex_phoenix,
 config :spandex_ecto, SpandexEcto.EctoLogger,
   service: :ferry,
   tracer: FerryWeb.Tracer
-
-# Configures the endpoint
-config :ferry, FerryWeb.Endpoint,
-  instrumenters: [FerryWeb.PhoenixInstrumenter, SpandexPhoenix.Instrumenter]
 
 config :prometheus, FerryWeb.PipelineInstrumenter,
   labels: [:status_class, :method, :host, :scheme, :request_path],

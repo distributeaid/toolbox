@@ -1,6 +1,6 @@
 # FROM: https://github.com/jerel/ecto_fields
 defmodule Ferry.EctoType.URL do
-  @behaviour Ecto.Type
+  use Ecto.Type
   def type, do: :string
 
   @doc """

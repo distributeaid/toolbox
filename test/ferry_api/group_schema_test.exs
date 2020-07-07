@@ -197,7 +197,7 @@ defmodule Ferry.GroupTest do
         "errors" => [
           %{
             "id" => "161",
-            "locations" => [%{"column" => 0, "line" => 2}],
+            "locations" => [%{"column" => 3, "line" => 2}],
             "message" => "Group not found.",
             "path" => ["group"]
           }
