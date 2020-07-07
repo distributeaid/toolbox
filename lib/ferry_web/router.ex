@@ -1,6 +1,6 @@
 defmodule FerryWeb.Router do
   use FerryWeb, :router
-
+  import Phoenix.LiveDashboard.Router
   import FerryWeb.Plugs.PutUser
 
   pipeline :browser do
@@ -41,5 +41,12 @@ defmodule FerryWeb.Router do
       Absinthe.Plug,
       schema: FerryApi.Schema
     )
+  end
+
+  if Mix.env() == :dev do
+    scope "/" do
+      pipe_through :browser
+      live_dashboard "/dashboard", metrics: FerryWeb.Telemetry
+    end
   end
 end

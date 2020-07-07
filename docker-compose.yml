@@ -69,7 +69,7 @@ services:
     depends_on:
       - db
       - dbtest
-
+      
 volumes:
   db:
     name: ${DA_DB_VOLUME_NAME:-db}

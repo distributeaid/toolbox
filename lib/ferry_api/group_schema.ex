@@ -39,7 +39,7 @@ defmodule FerryApi.Schema.Group do
     field :name, :string
     field :slug, :string
     # currently a constant on the backend "M4D_CHAPTER"
-    field :type
+    field :type, :string
 
     field :leader, :string
     field :description, :string

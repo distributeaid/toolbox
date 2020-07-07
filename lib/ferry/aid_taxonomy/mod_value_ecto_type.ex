@@ -24,7 +24,7 @@ defmodule Ferry.AidTaxonomy.ModValueEctoType do
   which uses this type also includes strong validations at the schema level to
   enforce application behavior, such as tying ModValues to their related Mods.
   """
-  @behaviour Ecto.Type
+  use Ecto.Type
 
   # Type
   # ------------------------------------------------------------

@@ -9,7 +9,6 @@ defmodule Ferry.LocationsTest do
   # ==============================================================================
   describe "addresses" do
     alias Ferry.Locations.Address
-    alias Ferry.Locations.Geocoder.GeocoderMock
 
     setup :verify_on_exit!
 

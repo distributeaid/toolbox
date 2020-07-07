@@ -12,22 +12,22 @@ defmodule Ferry.Application do
     FerryWeb.RepoInstrumenter.setup()
     FerryWeb.PrometheusExporter.setup()
 
-    :telemetry.attach(
-      "spandex-query-tracer",
-      [:ferry, :repo, :query],
-      &SpandexEcto.TelemetryAdapter.handle_event/4,
-      nil
-    )
-
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
-      supervisor(Ferry.Repo, []),
+      Ferry.Repo,
+      FerryWeb.Telemetry,
+
+      # Start the PubSub system
+      {Phoenix.PubSub, name: Ferry.PubSub},
+
       # Start the endpoint when the application starts
-      supervisor(FerryWeb.Endpoint, []),
+      FerryWeb.Endpoint,
+
       # Start your own worker by calling: Ferry.Worker.start_link(arg1, arg2, arg3)
-      if System.get_env("MIX_ENV") not in ["dev", "test"] do
-        worker(SpandexDatadog.ApiServer, [
+      worker(
+        SpandexDatadog.ApiServer,
+        [
           [
             host: System.get_env("DATADOG_HOST") || "localhost",
             port: System.get_env("DATADOG_PORT") || 8126,
@@ -35,14 +35,14 @@ defmodule Ferry.Application do
             sync_threshold: System.get_env("SPANDEX_SYNC_THRESHOLD") || 100,
             http: HTTPoison
           ]
-        ])
-      end
+        ]
+      )
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Ferry.Supervisor]
-    supervisor = Supervisor.start_link(Enum.filter(children, &(!is_nil(&1))), opts)
+    {:ok, _} = supervisor = Supervisor.start_link(Enum.filter(children, &(!is_nil(&1))), opts)
 
     Ferry.StartupTasks.migrate()
     supervisor
