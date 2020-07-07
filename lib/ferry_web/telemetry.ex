@@ -12,7 +12,6 @@ defmodule FerryWeb.Telemetry do
 
     children = [
       {:telemetry_poller, measurements: periodic_measurements(), period: 10_000},
-      {TelemetryMetricsPrometheus, [metrics: []]},
       {FerryWeb.Telemetry.Absinthe, []}
     ]
 
