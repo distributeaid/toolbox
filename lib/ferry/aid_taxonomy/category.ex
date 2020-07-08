@@ -2,6 +2,8 @@ defmodule Ferry.AidTaxonomy.Category do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{}
+
   alias Ferry.AidTaxonomy.Item
 
   schema "aid__item_categories" do

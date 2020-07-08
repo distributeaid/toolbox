@@ -119,6 +119,14 @@ defmodule Ferry.AidTaxonomyTest do
       assert category == AidTaxonomy.get_category!(category.id)
     end
 
+    test "update_category/2 on unknown category raises an error" do
+      attrs = params_for(:aid_category)
+
+      assert_raise(Ecto.StaleEntryError, fn ->
+        AidTaxonomy.update_category(%Category{id: 123}, attrs)
+      end)
+    end
+
     test "delete_category/1 deletes a category that isn't referenced by any list entries" do
       # not referenced by items
       category = insert(:aid_category)
