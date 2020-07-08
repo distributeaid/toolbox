@@ -32,6 +32,16 @@ defmodule Ferry.AidTaxonomy do
     |> Repo.get!(id)
   end
 
+  def get_category(id, with_mods? \\ false) do
+    category_query(with_mods?)
+    |> Repo.get(id)
+  end
+
+  def get_category_by_name(name, with_mods? \\ false) do
+    category_query(with_mods?)
+    |> Repo.get_by(name: name)
+  end
+
   # TODO: create_or_get?
   def create_category(attrs \\ %{}) do
     %Category{}
@@ -252,7 +262,7 @@ defmodule Ferry.AidTaxonomy do
   end
 
   # Items referenced by the Mod will be left as is.
-  # 
+  #
   # Mods can ONLY be deleted when:
   #
   #   - The Mod isn't referenced by any ModValues.
