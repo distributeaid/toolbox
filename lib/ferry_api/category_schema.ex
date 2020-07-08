@@ -67,7 +67,7 @@ defmodule FerryApi.Schema.Category do
   end
 
   def list_categories(_parent, _args, _resolution) do
-    {:ok, AidTaxonomy.list_categories(preload: [:location])}
+    {:ok, AidTaxonomy.list_categories()}
   end
 
   def get_category(_parent, %{id: id}, _resolution) do
