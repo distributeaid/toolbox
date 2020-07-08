@@ -27,9 +27,15 @@ defmodule FerryWeb.ConnCase do
       # The default endpoint for testing
       @endpoint FerryWeb.Endpoint
 
-      defp graphql_query(conn, query) do
+      defp graphql_query(conn, doc) do
         conn
-        |> post("/api", %{query: query})
+        |> post("/api", %{query: doc})
+        |> json_response(200)
+      end
+
+      defp graphql_mutation(conn, doc) do
+        conn
+        |> post("/api", %{query: doc})
         |> json_response(200)
       end
 

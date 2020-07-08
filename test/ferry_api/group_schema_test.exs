@@ -259,10 +259,7 @@ defmodule Ferry.GroupTest do
       }
     """
 
-    res =
-      conn
-      |> post("/api", %{query: mutation})
-      |> json_response(200)
+    res = graphql_mutation(conn, mutation)
 
     %{
       "data" => %{
@@ -322,10 +319,7 @@ defmodule Ferry.GroupTest do
       }
     """
 
-    res =
-      conn
-      |> post("/api", %{query: mutation})
-      |> json_response(200)
+    res = graphql_mutation(conn, mutation)
 
     %{
       "data" => %{
@@ -397,10 +391,7 @@ defmodule Ferry.GroupTest do
       }
     """
 
-    res =
-      conn
-      |> post("/api", %{query: mutation})
-      |> json_response(200)
+    res = graphql_mutation(conn, mutation)
 
     %{
       "data" => %{
@@ -453,10 +444,7 @@ defmodule Ferry.GroupTest do
       }
     """
 
-    res =
-      conn
-      |> post("/api", %{query: mutation})
-      |> json_response(200)
+    res = graphql_mutation(conn, mutation)
 
     %{
       "data" => %{
@@ -494,10 +482,7 @@ defmodule Ferry.GroupTest do
       }
     """
 
-    _res =
-      conn
-      |> post("/api", %{query: mutation})
-      |> json_response(200)
+    _res = graphql_mutation(conn, mutation)
 
     assert Profiles.get_group(group.id) == nil
   end
