@@ -18,6 +18,9 @@ defmodule FerryApi.Schema do
 
   import_types(FerryApi.Schema.SelfCare)
 
+  import_types(FerryApi.Schema.CategoryType)
+  import_types(FerryApi.Schema.Category)
+
   # Queries
   # ------------------------------------------------------------
 
@@ -25,6 +28,7 @@ defmodule FerryApi.Schema do
     import_fields(:group_queries)
     import_fields(:self_care_queries)
     import_fields(:session_queries)
+    import_fields(:category_queries)
   end
 
   # Mutuations
@@ -32,5 +36,6 @@ defmodule FerryApi.Schema do
 
   mutation do
     import_fields(:group_mutations)
+    import_fields(:category_mutations)
   end
 end
