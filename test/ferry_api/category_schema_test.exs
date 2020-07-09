@@ -38,6 +38,33 @@ defmodule Ferry.CategoryTest do
     assert "test" == cat["name"]
   end
 
+  test "create category with invalid data", %{conn: conn} do
+    insert(:user)
+    |> mock_sign_in
+
+    %{
+      "data" => %{
+        "createCategory" => %{
+          "successful" => false,
+          "messages" => [
+            %{"field" => "name", "message" => "can't be blank"}
+          ]
+        }
+      }
+    } = create_category(conn, "")
+  end
+
+  test "fetch a category that does not exist", %{conn: conn} do
+    %{
+      "data" => %{
+        "categoryByName" => nil
+      },
+      "errors" => [error]
+    } = get_category_by_name(conn, "test")
+
+    assert "category not found." == error["message"]
+  end
+
   defp count_categories(conn) do
     graphql_query(conn, "{ countCategories }")
   end
@@ -46,6 +73,17 @@ defmodule Ferry.CategoryTest do
     graphql_query(conn, """
     {
       categories {
+        id,
+        name
+      }
+    }
+    """)
+  end
+
+  defp get_category_by_name(conn, name) do
+    graphql_query(conn, """
+    {
+      categoryByName(name: "#{name}") {
         id,
         name
       }
