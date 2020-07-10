@@ -298,15 +298,15 @@ defmodule Ferry.CategoryTest do
     graphql_query(conn, """
     mutation {
       deleteCategory(id: "#{id}") {
-          successful,
-          messages {
-            field,
-            message
-          },
-          result {
-            id,
-            name
-          }
+        successful,
+        messages {
+          field,
+          message
+        },
+        result {
+          id,
+          name
+        }
       }
     }
     """)
