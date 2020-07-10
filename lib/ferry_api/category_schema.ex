@@ -1,8 +1,8 @@
 defmodule FerryApi.Schema.Category do
   use Absinthe.Schema.Notation
 
+  # alias AbsintheErrorPayload.ValidationMessage
   import AbsintheErrorPayload.Payload
-
   alias Ferry.AidTaxonomy
   alias FerryApi.Middleware
 
@@ -53,10 +53,11 @@ defmodule FerryApi.Schema.Category do
     end
 
     @desc "Delete a category"
-    field :delete_category, type: :category do
+    field :delete_category, type: :category_payload do
       arg(:id, non_null(:id))
       middleware(Middleware.RequireUser)
       resolve(&delete_category/3)
+      middleware(&build_payload/2)
     end
   end
 
@@ -72,15 +73,21 @@ defmodule FerryApi.Schema.Category do
 
   def get_category(_parent, %{id: id}, _resolution) do
     case AidTaxonomy.get_category(id) do
-      nil -> {:error, message: "category not found.", id: id}
-      category -> {:ok, category}
+      nil ->
+        {:error, "category not found"}
+
+      category ->
+        {:ok, category}
     end
   end
 
   def get_category_by_name(_parent, %{name: name}, _resolution) do
     case AidTaxonomy.get_category_by_name(name) do
-      nil -> {:error, message: "category not found.", name: name}
-      category -> {:ok, category}
+      nil ->
+        {:error, "category not found"}
+
+      category ->
+        {:ok, category}
     end
   end
 
@@ -89,14 +96,23 @@ defmodule FerryApi.Schema.Category do
   end
 
   def update_category(_parent, %{id: id, category_input: category_attrs}, _resolution) do
-    id
-    |> AidTaxonomy.get_category()
-    |> AidTaxonomy.update_category(category_attrs)
+    case AidTaxonomy.get_category(id) do
+      nil ->
+        {:error, "category not found"}
+
+      category ->
+        AidTaxonomy.update_category(category, category_attrs)
+    end
   end
 
   def delete_category(_parent, %{id: id}, _resolution) do
-    id
-    |> AidTaxonomy.get_category()
-    |> AidTaxonomy.delete_category()
+    case AidTaxonomy.get_category(id) do
+      nil -> {:error, "category not found"}
+      category -> AidTaxonomy.delete_category(category)
+    end
   end
+
+  ## defp category_not_found(field) do
+  ##  %ValidationMessage{field: field, message: "category not found.", code: "not_found"}
+  ## end
 end
