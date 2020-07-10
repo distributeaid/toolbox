@@ -47,7 +47,7 @@ defmodule Ferry.AidTaxonomy do
   end
 
   # TODO: create_or_get?
-  @spec create_category(Map.t()) :: {:ok, Category.t()} | {:error, Ecto.Changeset.t()}
+  @spec create_category(map()) :: {:ok, Category.t()} | {:error, Ecto.Changeset.t()}
   def create_category(attrs \\ %{}) do
     %Category{}
     |> Category.changeset(attrs)
@@ -56,7 +56,7 @@ defmodule Ferry.AidTaxonomy do
 
   @spec update_category(
           Ferry.AidTaxonomy.Category.t(),
-          Map.t()
+          map()
         ) :: {:ok, Category.t()} | {:error, Ecto.Changeset.t()}
   def update_category(%Category{} = category, attrs \\ %{}) do
     category
