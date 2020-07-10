@@ -21,34 +21,43 @@ defmodule Ferry.AidTaxonomy do
 
   # TODO: test that items are ordered by name
   # TODO: test with_mods? == true
+  @spec list_categories(boolean) :: [Category.t()]
   def list_categories(with_mods? \\ false) do
     category_query(with_mods?)
     |> Repo.all()
   end
 
   # TODO: test with_mods? == true
+  @spec get_category!(integer(), boolean) :: Category.t()
   def get_category!(id, with_mods? \\ false) do
     category_query(with_mods?)
     |> Repo.get!(id)
   end
 
+  @spec get_category(integer(), boolean) :: Category.t() | nil
   def get_category(id, with_mods? \\ false) do
     category_query(with_mods?)
     |> Repo.get(id)
   end
 
+  @spec get_category_by_name(String.t(), boolean) :: Category.t() | nil
   def get_category_by_name(name, with_mods? \\ false) do
     category_query(with_mods?)
     |> Repo.get_by(name: name)
   end
 
   # TODO: create_or_get?
+  @spec create_category(Map.t()) :: {:ok, Category.t()} | {:error, Ecto.Changeset.t()}
   def create_category(attrs \\ %{}) do
     %Category{}
     |> Category.changeset(attrs)
     |> Repo.insert()
   end
 
+  @spec update_category(
+          Ferry.AidTaxonomy.Category.t(),
+          Map.t()
+        ) :: {:ok, Category.t()} | {:error, Ecto.Changeset.t()}
   def update_category(%Category{} = category, attrs \\ %{}) do
     category
     |> Category.changeset(attrs)
@@ -75,6 +84,7 @@ defmodule Ferry.AidTaxonomy do
   #
   # TODO: Add ability to archive Categories & Items, so existing Entries are
   #       unaffected but the Category / Items can't be selected for new Entries.
+  @spec delete_category(Category.t()) :: {:ok, Category.t()} | {:error, Ecto.Changeset.t()}
   def delete_category(%Category{} = category) do
     category
     # TODO: Category.delete_changeset that only checks fkey constraints?
@@ -84,6 +94,7 @@ defmodule Ferry.AidTaxonomy do
   end
 
   # TODO: test
+  @spec change_category(Category.t()) :: Ecto.Changeset.t()
   def change_category(%Category{} = category) do
     Category.changeset(category, %{})
   end
