@@ -1,5 +1,6 @@
 defmodule Ferry.CategoryTest do
   use FerryWeb.ConnCase, async: true
+  import Ferry.ApiClient.Categories
 
   test "count categories where there are none", %{conn: conn} do
     assert count_categories(conn) ==
@@ -25,7 +26,7 @@ defmodule Ferry.CategoryTest do
           }
         }
       }
-    } = create_category(conn, "test")
+    } = create_category(conn, %{name: "test"})
 
     assert id
 
@@ -60,7 +61,7 @@ defmodule Ferry.CategoryTest do
           ]
         }
       }
-    } = create_category(conn, "")
+    } = create_category(conn, %{name: ""})
   end
 
   test "fetch a category that does not exist", %{conn: conn} do
@@ -109,7 +110,7 @@ defmodule Ferry.CategoryTest do
           }
         }
       }
-    } = create_category(conn, "test")
+    } = create_category(conn, %{name: "test"})
 
     %{
       "data" => %{
@@ -138,7 +139,7 @@ defmodule Ferry.CategoryTest do
           "successful" => true
         }
       }
-    } = create_category(conn, "test")
+    } = create_category(conn, %{name: "test"})
 
     %{
       "data" => %{
@@ -149,7 +150,7 @@ defmodule Ferry.CategoryTest do
           }
         }
       }
-    } = create_category(conn, "testi2")
+    } = create_category(conn, %{name: "test2"})
 
     %{
       "data" => %{
@@ -195,7 +196,7 @@ defmodule Ferry.CategoryTest do
           }
         }
       }
-    } = create_category(conn, "test")
+    } = create_category(conn, %{name: "test"})
 
     assert count_categories(conn) ==
              %{"data" => %{"countCategories" => 1}}
@@ -210,105 +211,5 @@ defmodule Ferry.CategoryTest do
 
     assert count_categories(conn) ==
              %{"data" => %{"countCategories" => 0}}
-  end
-
-  defp count_categories(conn) do
-    graphql_query(conn, "{ countCategories }")
-  end
-
-  defp get_categories(conn) do
-    graphql_query(conn, """
-    {
-      categories {
-        id,
-        name
-      }
-    }
-    """)
-  end
-
-  defp get_category(conn, id) do
-    graphql_query(conn, """
-    {
-      category(id: "#{id}") {
-        id,
-        name
-      }
-    }
-    """)
-  end
-
-  defp get_category_by_name(conn, name) do
-    graphql_query(conn, """
-    {
-      categoryByName(name: "#{name}") {
-        id,
-        name
-      }
-    }
-    """)
-  end
-
-  defp create_category(conn, name) do
-    graphql_query(conn, """
-      mutation {
-        createCategory (
-          categoryInput: {
-            name: "#{name}"
-          }
-        ) {
-          successful,
-          messages {
-            field,
-            message
-          },
-          result {
-            id,
-            name
-          }
-        }
-      }
-    """)
-  end
-
-  defp update_category(conn, attrs) do
-    graphql_query(conn, """
-      mutation {
-        updateCategory (
-          categoryInput: {
-            name: "#{attrs.name}"
-          },
-          id: "#{attrs.id}"
-        ) {
-          successful,
-          messages {
-            field,
-            message
-          },
-          result {
-            id,
-            name
-          }
-        }
-      }
-    """)
-  end
-
-  defp delete_category(conn, id) do
-    graphql_query(conn, """
-    mutation {
-      deleteCategory(id: "#{id}") {
-        successful,
-        messages {
-          field,
-          message
-        },
-        result {
-          id,
-          name
-        }
-      }
-    }
-    """)
   end
 end

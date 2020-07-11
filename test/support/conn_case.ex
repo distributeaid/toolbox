@@ -27,18 +27,6 @@ defmodule FerryWeb.ConnCase do
       # The default endpoint for testing
       @endpoint FerryWeb.Endpoint
 
-      defp graphql_query(conn, doc) do
-        conn
-        |> post("/api", %{query: doc})
-        |> json_response(200)
-      end
-
-      defp graphql_mutation(conn, doc) do
-        conn
-        |> post("/api", %{query: doc})
-        |> json_response(200)
-      end
-
       defp mock_sign_in(user) do
         Ferry.Mocks.AwsClient
         |> Mox.stub(:request, fn _args ->

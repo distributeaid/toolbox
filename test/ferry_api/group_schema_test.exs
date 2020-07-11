@@ -1,6 +1,6 @@
 defmodule Ferry.GroupTest do
   use FerryWeb.ConnCase, async: true
-
+  import Ferry.ApiClient.Groups
   alias Ferry.Profiles
 
   # GROUPS
@@ -10,63 +10,20 @@ defmodule Ferry.GroupTest do
   # ------------------------------------------------------------
 
   test "count groups - none", %{conn: conn} do
-    query = """
-    {
-      countGroups
-    }
-    """
-
-    res =
-      conn
-      |> post("/api", %{query: query})
-      |> json_response(200)
-
-    %{"data" => %{"countGroups" => count}} = res
+    %{"data" => %{"countGroups" => count}} = count_groups(conn)
     assert count == 0
   end
 
   test "count groups - many", %{conn: conn} do
     insert_list(3, :group)
-
-    query = """
-    {
-      countGroups
-    }
-    """
-
-    res =
-      conn
-      |> post("/api", %{query: query})
-      |> json_response(200)
-
-    %{"data" => %{"countGroups" => count}} = res
+    %{"data" => %{"countGroups" => count}} = count_groups(conn)
     assert count == 3
   end
 
   # Query - Get All Groups
   # ------------------------------------------------------------
   test "get all groups - none", %{conn: conn} do
-    query = """
-    {
-      groups {
-        id,
-        name,
-        description,
-        location {
-          province,
-          country_code,
-          postal_code
-        }
-      }
-    }
-    """
-
-    res =
-      conn
-      |> post("/api", %{query: query})
-      |> json_response(200)
-
-    assert res == %{"data" => %{"groups" => []}}
+    assert get_groups(conn) == %{"data" => %{"groups" => []}}
   end
 
   test "get all groups - one", %{conn: conn} do
@@ -83,27 +40,7 @@ defmodule Ferry.GroupTest do
       }
     }
 
-    query = """
-    {
-      groups {
-        id,
-        name,
-        description,
-        location {
-          province,
-          country_code,
-          postal_code
-        }
-      }
-    }
-    """
-
-    res =
-      conn
-      |> post("/api", %{query: query})
-      |> json_response(200)
-
-    assert res == %{"data" => %{"groups" => [group_params]}}
+    assert get_groups(conn) == %{"data" => %{"groups" => [group_params]}}
   end
 
   test "get all groups - many", %{conn: conn} do
@@ -123,27 +60,7 @@ defmodule Ferry.GroupTest do
         }
       end)
 
-    query = """
-    {
-      groups {
-        id,
-        name,
-        description,
-        location {
-          province,
-          country_code,
-          postal_code
-        }
-      }
-    }
-    """
-
-    res =
-      conn
-      |> post("/api", %{query: query})
-      |> json_response(200)
-
-    assert res == %{"data" => %{"groups" => groups_params}}
+    assert get_groups(conn) == %{"data" => %{"groups" => groups_params}}
   end
 
   # Query - Get A Group
@@ -157,42 +74,12 @@ defmodule Ferry.GroupTest do
       "description" => group.description
     }
 
-    query = """
-    {
-      group(id: #{group.id}) {
-        id,
-        name,
-        description
-      }
-    }
-    """
-
-    res =
-      conn
-      |> post("/api", %{query: query})
-      |> json_response(200)
-
-    assert res == %{"data" => %{"group" => group_params}}
+    assert get_group(conn, group.id) == %{"data" => %{"group" => group_params}}
   end
 
   test "get a group - no group", %{conn: conn} do
-    query = """
-    {
-      group(id: 161) {
-        id,
-        name,
-        description
-      }
-    }
-    """
-
-    res =
-      conn
-      |> post("/api", %{query: query})
-      |> json_response(200)
-
     assert(
-      res == %{
+      get_group(conn, 161) == %{
         "data" => %{"group" => nil},
         "errors" => [
           %{
@@ -214,53 +101,6 @@ defmodule Ferry.GroupTest do
 
     group_attrs = params_for(:group) |> with_location()
 
-    mutation = """
-      mutation {
-        createGroup(
-          groupInput: {
-            name: "#{group_attrs.name}",
-            slug: "#{group_attrs.slug}",
-
-            description: "#{group_attrs.description}",
-            slackChannelName: "#{group_attrs.slack_channel_name}",
-
-            requestForm: "#{group_attrs.request_form}",
-            requestFormResults: "#{group_attrs.request_form_results}",
-            volunteerForm: "#{group_attrs.volunteer_form}",
-            volunteerFormResults: "#{group_attrs.volunteer_form_results}",
-            donationForm: "#{group_attrs.donation_form}",
-            donationFormResults: "#{group_attrs.donation_form_results}",
-
-            location: {
-              province: "#{group_attrs.location.province}",
-              country_code: "#{group_attrs.location.country_code}",
-              postal_code: "#{group_attrs.location.postal_code}",
-            }
-          }
-        ) {
-          successful
-          messages {
-            field
-            message
-          }
-          result {
-            id,
-            name,
-            type,
-            slug,
-            slackChannelName,
-            location {
-              province,
-              country_code,
-              postal_code
-            }
-          }
-        }
-      }
-    """
-
-    res = graphql_mutation(conn, mutation)
-
     %{
       "data" => %{
         "createGroup" => %{
@@ -280,7 +120,7 @@ defmodule Ferry.GroupTest do
           }
         }
       }
-    } = res
+    } = create_group(conn, group_attrs)
 
     assert successful
     assert messages == []
@@ -300,27 +140,6 @@ defmodule Ferry.GroupTest do
 
     group_attrs = params_for(:invalid_group)
 
-    mutation = """
-      mutation {
-        createGroup(
-          groupInput: {
-            name: "#{group_attrs.name}"
-          }
-        ) {
-          successful
-          messages {
-            field
-            message
-          }
-          result {
-            id
-          }
-        }
-      }
-    """
-
-    res = graphql_mutation(conn, mutation)
-
     %{
       "data" => %{
         "createGroup" => %{
@@ -338,7 +157,7 @@ defmodule Ferry.GroupTest do
           "result" => result
         }
       }
-    } = res
+    } = create_invalid_group(conn, group_attrs)
 
     refute successful
     assert field == "name"
@@ -353,45 +172,7 @@ defmodule Ferry.GroupTest do
 
     group = insert(:group) |> with_location()
     updates = params_for(:group) |> with_location()
-
-    mutation = """
-      mutation {
-        updateGroup(
-          id: #{group.id},
-          groupInput: {
-            name: "#{updates.name}",
-            slug: "#{updates.slug}",
-            description: "#{updates.description}",
-            slackChannelName: "#{updates.slack_channel_name}",
-            requestForm: "#{updates.request_form}",
-            requestFormResults: "#{updates.request_form_results}",
-            volunteerForm: "#{updates.volunteer_form}",
-            volunteerFormResults: "#{updates.volunteer_form_results}",
-            donationForm: "#{updates.donation_form}",
-            donationFormResults: "#{updates.donation_form_results}"
-
-            location: {
-              province: "#{updates.location.province}",
-              country_code: "#{updates.location.country_code}",
-              postal_code: "#{updates.location.postal_code}",
-            }
-          }
-        ) {
-          successful
-          messages {
-            field
-            message
-          }
-          result {
-            id
-            name
-            description
-          }
-        }
-      }
-    """
-
-    res = graphql_mutation(conn, mutation)
+    updates = Map.put(updates, :id, group.id)
 
     %{
       "data" => %{
@@ -401,7 +182,7 @@ defmodule Ferry.GroupTest do
           "successful" => true
         }
       }
-    } = res
+    } = update_group(conn, updates)
 
     assert id == Integer.to_string(group.id)
     assert description == updates.description
@@ -412,39 +193,8 @@ defmodule Ferry.GroupTest do
     |> mock_sign_in
 
     group = insert(:group) |> with_location()
-    updates = params_for(:invalid_group)
-
-    mutation = """
-      mutation {
-        updateGroup(
-          id: #{group.id},
-          groupInput: {
-            name: "#{updates.name}",
-            description: "#{updates.description}",
-            slackChannelName: "#{updates.slack_channel_name}",
-            requestForm: "#{updates.request_form}",
-            requestFormResults: "#{updates.request_form_results}",
-            volunteerForm: "#{updates.volunteer_form}",
-            volunteerFormResults: "#{updates.volunteer_form_results}",
-            donationForm: "#{updates.donation_form}",
-            donationFormResults: "#{updates.donation_form_results}"
-          }
-        ) {
-          successful
-          messages {
-            field
-            message
-          }
-          result {
-            id
-            name
-            description
-          }
-        }
-      }
-    """
-
-    res = graphql_mutation(conn, mutation)
+    updates = params_for(:group) |> with_location()
+    updates = Map.merge(updates, %{name: "", id: group.id})
 
     %{
       "data" => %{
@@ -459,7 +209,7 @@ defmodule Ferry.GroupTest do
           "result" => result
         }
       }
-    } = res
+    } = update_group(conn, updates)
 
     refute successful
     assert field == "name"
@@ -473,16 +223,7 @@ defmodule Ferry.GroupTest do
     |> mock_sign_in
 
     group = insert(:group)
-
-    mutation = """
-      mutation {
-        deleteGroup(id: #{group.id}) {
-          id
-        }
-      }
-    """
-
-    _res = graphql_mutation(conn, mutation)
+    delete_group(conn, group.id)
 
     assert Profiles.get_group(group.id) == nil
   end
