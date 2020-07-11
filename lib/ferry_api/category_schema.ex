@@ -111,8 +111,4 @@ defmodule FerryApi.Schema.Category do
       category -> AidTaxonomy.delete_category(category)
     end
   end
-
-  ## defp category_not_found(field) do
-  ##  %ValidationMessage{field: field, message: "category not found.", code: "not_found"}
-  ## end
 end
