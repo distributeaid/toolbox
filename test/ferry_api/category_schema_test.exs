@@ -1,6 +1,6 @@
-defmodule Ferry.CategoryTest do
+defmodule Ferry.CategorySchemaTest do
   use FerryWeb.ConnCase, async: true
-  import Ferry.ApiClient.Categories
+  import Ferry.ApiClient.Category
 
   test "count categories where there are none", %{conn: conn} do
     assert count_categories(conn) ==

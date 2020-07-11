@@ -1,4 +1,4 @@
-defmodule Ferry.ApiClient.Categories do
+defmodule Ferry.ApiClient.Category do
   @moduledoc """
   Helper module that provides with a convenience GraphQL client api
   for dealing with Categories in tests.

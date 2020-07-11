@@ -1,4 +1,4 @@
-defmodule Ferry.ApiClient.Groups do
+defmodule Ferry.ApiClient.Group do
   @moduledoc """
   Helper module that provides with a convenience GraphQL client api
   for dealing with Groups in tests.

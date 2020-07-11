@@ -1,6 +1,6 @@
 defmodule Ferry.GroupTest do
   use FerryWeb.ConnCase, async: true
-  import Ferry.ApiClient.Groups
+  import Ferry.ApiClient.Group
   alias Ferry.Profiles
 
   # GROUPS
