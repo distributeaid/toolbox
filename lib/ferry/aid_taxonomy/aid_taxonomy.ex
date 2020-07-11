@@ -16,37 +16,64 @@ defmodule Ferry.AidTaxonomy do
   alias Ferry.AidTaxonomy.Item
   alias Ferry.AidTaxonomy.Mod
 
-  # Category
-  # ================================================================================
+  @doc """
+  Returns all categories
 
-  # TODO: test that items are ordered by name
-  # TODO: test with_mods? == true
+  Categories are sorted by name. By default, categories are returned without mods.
+  Passing `true` to this function will traverse items on each category
+  and return their mods.
+
+  TODO: test with_mods? == true
+  """
   @spec list_categories(boolean) :: [Category.t()]
   def list_categories(with_mods? \\ false) do
     category_query(with_mods?)
     |> Repo.all()
   end
 
-  # TODO: test with_mods? == true
+  @doc """
+  Given its id, return the associated category.
+
+  If no category matches the given id, then an error will be raised
+
+  TODO: test with_mods? == true
+  """
   @spec get_category!(integer(), boolean) :: Category.t()
   def get_category!(id, with_mods? \\ false) do
     category_query(with_mods?)
     |> Repo.get!(id)
   end
 
+  @doc """
+  Given its id, return the associated category.
+
+  If no category matches, then this function returns nil
+  TODO: test with_mods? == true
+  """
   @spec get_category(integer(), boolean) :: Category.t() | nil
   def get_category(id, with_mods? \\ false) do
     category_query(with_mods?)
     |> Repo.get(id)
   end
 
+  @doc """
+  Given its name, return the associated category
+
+  If no category was found, then this function returns nil
+  TODO: test with_mods? == true
+  """
   @spec get_category_by_name(String.t(), boolean) :: Category.t() | nil
   def get_category_by_name(name, with_mods? \\ false) do
     category_query(with_mods?)
     |> Repo.get_by(name: name)
   end
 
+  @doc """
+  Create a new category for the given attributes.
+
+  The name for the category must be unique.
   # TODO: create_or_get?
+  """
   @spec create_category(map()) :: {:ok, Category.t()} | {:error, Ecto.Changeset.t()}
   def create_category(attrs \\ %{}) do
     %Category{}
@@ -54,6 +81,11 @@ defmodule Ferry.AidTaxonomy do
     |> Repo.insert()
   end
 
+  @doc """
+  Given a category, update it with the given new attributes.
+
+  If the category does not exist, then an error will be raised
+  """
   @spec update_category(
           Ferry.AidTaxonomy.Category.t(),
           map()
@@ -64,26 +96,30 @@ defmodule Ferry.AidTaxonomy do
     |> Repo.update()
   end
 
-  # Categories can ONLY be deleted when:
-  #
-  #   - The Category doesn't reference any Items.
-  #   - The Category references Items, but they aren't referenced by Entries.
-  #     In this case all the Items will be deleted, but Mods referenced by the
-  #     Item will be left as is (even if that's the only Item referencing them).
-  #
-  # Categories CANNOT be deleted when:
-  #
-  #   - The Category references Items which are referenced by Entries.
-  #     Categories are controlled by site admins, and an admin action should not
-  #     affect user data in such a sweeping way.  It'd be too easy to
-  #     unintentionally wipe a lot of Entries off of lists, and usage is a good
-  #     indication that the Category is needed.
-  #
-  # This policy is enforced at the database level, by setting appropriate values
-  # for the reference's :on_delete option in a migration.
-  #
-  # TODO: Add ability to archive Categories & Items, so existing Entries are
-  #       unaffected but the Category / Items can't be selected for new Entries.
+  @doc """
+  Given a category, delete it.
+
+  Categories can ONLY be deleted when:
+
+     - The Category doesn't reference any Items.
+     - The Category references Items, but they aren't referenced by Entries.
+       In this case all the Items will be deleted, but Mods referenced by the
+       Item will be left as is (even if that's the only Item referencing them).
+
+   Categories CANNOT be deleted when:
+
+     - The Category references Items which are referenced by Entries.
+       Categories are controlled by site admins, and an admin action should not
+       affect user data in such a sweeping way.  It'd be too easy to
+       unintentionally wipe a lot of Entries off of lists, and usage is a good
+       indication that the Category is needed.
+
+   This policy is enforced at the database level, by setting appropriate values
+   for the reference's :on_delete option in a migration.
+
+   TODO: Add ability to archive Categories & Items, so existing Entries are
+         unaffected but the Category / Items can't be selected for new Entries.
+  """
   @spec delete_category(Category.t()) :: {:ok, Category.t()} | {:error, Ecto.Changeset.t()}
   def delete_category(%Category{} = category) do
     category
@@ -93,12 +129,7 @@ defmodule Ferry.AidTaxonomy do
     |> Repo.delete()
   end
 
-  # TODO: test
-  @spec change_category(Category.t()) :: Ecto.Changeset.t()
-  def change_category(%Category{} = category) do
-    Category.changeset(category, %{})
-  end
-
+  #
   # Helpers
   # ------------------------------------------------------------
 
