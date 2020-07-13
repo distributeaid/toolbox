@@ -10,6 +10,9 @@ defmodule FerryApi.Schema do
   import_types(FerryApi.Schema.GroupType)
   import_types(FerryApi.Schema.Group)
 
+  import_types(FerryApi.Schema.ProjectType)
+  import_types(FerryApi.Schema.Project)
+
   import_types(FerryApi.Schema.AddressType)
   import_types(FerryApi.Schema.Address)
 
@@ -26,6 +29,7 @@ defmodule FerryApi.Schema do
 
   query do
     import_fields(:group_queries)
+    import_fields(:project_queries)
     import_fields(:self_care_queries)
     import_fields(:session_queries)
     import_fields(:category_queries)
@@ -36,6 +40,7 @@ defmodule FerryApi.Schema do
 
   mutation do
     import_fields(:group_mutations)
+    import_fields(:project_mutations)
     import_fields(:category_mutations)
   end
 end

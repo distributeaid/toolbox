@@ -19,7 +19,7 @@ defmodule Ferry.AidTest do
 
   describe "needs list" do
     test "list_needs_lists/3 returns all needs lists for a project that overlap a duration" do
-      project = insert(:project) |> without_assoc(:address)
+      project = insert(:project)
       from = Timex.today() |> Timex.shift(years: -2)
       to = Timex.today() |> Timex.shift(years: 2)
 
@@ -66,7 +66,8 @@ defmodule Ferry.AidTest do
     end
 
     test "list_needs_lists/2 returns all needs lists for a project that overlap within 6 months of the given date" do
-      project = insert(:project) |> without_assoc(:address)
+      project = insert(:project)
+      # |> without_assoc(:address)
       from = Timex.today() |> Timex.shift(months: 1)
       to = from |> Timex.shift(months: 6)
 
@@ -91,7 +92,7 @@ defmodule Ferry.AidTest do
     end
 
     test "list_needs_lists/2 returns all needs lists for a project that overlap within 6 months of today" do
-      project = insert(:project) |> without_assoc(:address)
+      project = insert(:project)
       from = Timex.today()
       to = from |> Timex.shift(months: 6)
 
@@ -117,6 +118,7 @@ defmodule Ferry.AidTest do
 
     test "get_needs_list!/1 returns the requested needs list" do
       list = insert(:needs_list)
+
       assert Aid.get_needs_list!(list.id) == list
     end
 
@@ -129,7 +131,7 @@ defmodule Ferry.AidTest do
     end
 
     test "get_needs_list/2 returns the project's needs list for the specified date" do
-      project = insert(:project) |> without_assoc(:address)
+      project = insert(:project)
       from = ~D[1999-12-31]
       to = ~D[2000-01-01]
       list = insert(:needs_list, %{project: project, from: from, to: to})
@@ -146,7 +148,7 @@ defmodule Ferry.AidTest do
     end
 
     test "get_current_needs_list/1 returns the project's needs list for today" do
-      project = insert(:project) |> without_assoc(:address)
+      project = insert(:project)
 
       # returns nil if there isn't a list covering today
       assert Aid.get_current_needs_list(project) == nil
@@ -163,7 +165,7 @@ defmodule Ferry.AidTest do
     end
 
     test "create_needs_list/2 with valid data creates a needs list & related aid list" do
-      project = insert(:project) |> without_assoc(:address)
+      project = insert(:project)
       attrs = params_for(:needs_list)
       assert {:ok, %NeedsList{} = needs} = Aid.create_needs_list(project, attrs)
       assert needs.from == attrs.from
@@ -177,7 +179,7 @@ defmodule Ferry.AidTest do
 
     # TODO: ensure each changeset has the right errors
     test "create_needs_list/2 with invalid data returns an error changeset" do
-      project = insert(:project) |> without_assoc(:address)
+      project = insert(:project)
 
       # duration
       attrs = params_for(:invalid_duration_needs_list)
@@ -209,7 +211,7 @@ defmodule Ferry.AidTest do
 
     # TODO: ensure each changeset has the right errors
     test "update_needs_list/2 with invalid data returns error changeset" do
-      project = insert(:project) |> without_assoc(:address)
+      project = insert(:project)
       needs = insert(:needs_list, %{project: project})
 
       # duration
