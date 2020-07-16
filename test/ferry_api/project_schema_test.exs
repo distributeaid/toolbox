@@ -35,12 +35,17 @@ defmodule Ferry.ProjectSchemaTest do
           "messages" => [],
           "result" => %{
             "id" => id,
-            "name" => "test",
-            "description" => "test description"
+            "name" => "test project",
+            "description" => "test description for test project"
           }
         }
       }
-    } = create_project(conn, %{group: group, name: "test", description: "test description"})
+    } =
+      create_project(conn, %{
+        group: group,
+        name: "test project",
+        description: "test description for test project"
+      })
 
     assert id
 
@@ -49,17 +54,18 @@ defmodule Ferry.ProjectSchemaTest do
     assert count_projects(conn) ==
              %{"data" => %{"countProjects" => 1}}
 
-    %{"data" => %{"projects" => [cat]}} = get_projects(conn)
+    %{"data" => %{"projects" => [project]}} = get_projects(conn)
 
-    assert cat["id"]
-    assert "test" == cat["name"]
+    project_id = project["id"]
+    assert project_id
+    assert "test project" == project["name"]
 
     # verify we can fetch that project given its id
     %{
       "data" => %{
-        "project" => ^cat
+        "project" => ^project
       }
-    } = get_project(conn, cat["id"])
+    } = get_project(conn, project["id"])
   end
 
   test "create project with invalid data", %{conn: conn} do

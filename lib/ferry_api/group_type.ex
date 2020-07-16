@@ -1,7 +1,8 @@
 defmodule FerryApi.Schema.GroupType do
   use Absinthe.Schema.Notation
-
+  alias FerryApi.Schema.Dataloader.Repo
   import AbsintheErrorPayload.Payload
+  import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
   enum :group_type do
     value(:m4d_chapter, as: "M4D_CHAPTER")
@@ -50,7 +51,7 @@ defmodule FerryApi.Schema.GroupType do
     # TODO
     # field :users, list_of(:user), resolve: dataloader(Group)
     # field :roles
-    # field :projects
+    field :projects, list_of(:project), resolve: dataloader(Repo)
   end
 
   payload_object(:group_payload, :group)
