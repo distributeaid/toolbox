@@ -84,7 +84,7 @@ defmodule FerryApi.Schema.Project do
   @doc """
   Graphql resolver that returns a single project, given its id
   """
-  @spec get_project(any, %{id: integer}, any) ::
+  @spec get_project(any(), %{id: String.t()}, any()) ::
           {:error, String.t()} | {:ok, Ferry.Profiles.Project.t()}
   def get_project(_parent, %{id: id}, _resolution) do
     case Ferry.Profiles.get_project(id) do
@@ -134,7 +134,7 @@ defmodule FerryApi.Schema.Project do
   @doc """
   Graphql resolver that updates an existing project
   """
-  @spec update_project(any, %{project_input: any, id: integer}, any) ::
+  @spec update_project(any(), %{project_input: any, id: String.t()}, any()) ::
           {:error, String.t() | Ecto.Changeset.t()} | {:ok, Ferry.Profiles.Project.t()}
   def update_project(_parent, %{id: id, project_input: project_attrs}, _resolution) do
     case Ferry.Profiles.get_project(id) do
@@ -149,7 +149,7 @@ defmodule FerryApi.Schema.Project do
   @doc """
   Graphql resolver that deletes an existing project
   """
-  @spec delete_project(any, %{id: integer}, any) ::
+  @spec delete_project(any, %{id: String.t()}, any) ::
           {:error, String.t() | Ecto.Changeset.t()} | {:ok, Ferry.Profiles.Project.t()}
   def delete_project(_parent, %{id: id}, _resolution) do
     case Ferry.Profiles.get_project(id) do

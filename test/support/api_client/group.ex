@@ -80,6 +80,27 @@ defmodule Ferry.ApiClient.Group do
   end
 
   @doc """
+  Run a GraphQL query that returns all groups, and their projects
+  """
+  @spec get_groups_with_projects(Plug.Conn.t()) :: map()
+  def get_groups_with_projects(conn) do
+    graphql(conn, """
+     {
+      groups {
+        id,
+        name,
+        description,
+        projects {
+          id,
+          name,
+          description
+        }
+      }
+    }
+    """)
+  end
+
+  @doc """
   Run a GraphQL mutation that creates a group
   """
   @spec create_group(Plug.Conn.t(), map) :: map

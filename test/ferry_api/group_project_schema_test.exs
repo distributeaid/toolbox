@@ -8,6 +8,7 @@ defmodule Ferry.GroupProjectTest do
 
     # create a group
     group_attrs = params_for(:group) |> with_location()
+    group_attrs = %{group_attrs | name: "first group"}
 
     %{
       "data" => %{
@@ -71,5 +72,25 @@ defmodule Ferry.GroupProjectTest do
         }
       }
     } = get_group_with_projects(conn, group)
+
+    # verify we can get both groups and their associated
+    # projects
+
+    %{
+      "data" => %{
+        "groups" => [
+          %{
+            "name" => "first group",
+            "projects" => [
+              %{"name" => "test project"}
+            ]
+          },
+          %{
+            "name" => "second group",
+            "projects" => []
+          }
+        ]
+      }
+    } = get_groups_with_projects(conn)
   end
 end

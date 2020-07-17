@@ -57,7 +57,7 @@ defmodule FerryApi.Schema do
   itself an opportunity to set some values in the context
   that it may need in order to run.
   """
-  @spec context(any()) :: any()
+  @spec context(any()) :: map()
   def context(ctx) do
     # Add all sources to the dataloader and put
     # it in the context
@@ -75,7 +75,7 @@ defmodule FerryApi.Schema do
 
   See the documentation for more.
   """
-  @spec plugins() :: [any()]
+  @spec plugins() :: [atom()]
   def plugins() do
     [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
   end
