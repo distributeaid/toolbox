@@ -8,6 +8,8 @@ defmodule Ferry.Profiles.Group do
   alias Ferry.Profiles.Project
   alias Ferry.Locations.Address
 
+  @type t :: %__MODULE__{}
+
   @group_types ["M4D_CHAPTER"]
 
   schema "groups" do

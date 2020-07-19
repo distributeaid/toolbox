@@ -5,6 +5,8 @@ defmodule Ferry.Profiles.Project do
 
   # alias Ferry.Locations.Address
 
+  @type t :: %__MODULE__{}
+
   schema "projects" do
     field :name, :string
     field :description, :string
