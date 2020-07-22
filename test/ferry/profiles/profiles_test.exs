@@ -153,7 +153,7 @@ defmodule Ferry.ProfilesTest do
       assert Profiles.list_projects() == [project1, project2, project3, project4]
     end
 
-    test "list_projects/1 retGggurns all projects for the specified group" do
+    test "list_projects/1 returns all projects for the specified group" do
       group1 = insert(:group)
       group2 = insert(:group)
 
