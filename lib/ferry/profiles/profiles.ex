@@ -6,9 +6,6 @@ defmodule Ferry.Profiles do
   import Ecto
   import Ecto.Query, warn: false
   alias Ferry.Repo
-  alias Ecto.Changeset
-
-  @geocoder Application.get_env(:ferry, :geocoder)
 
   # Group
   # ==============================================================================
@@ -158,26 +155,6 @@ defmodule Ferry.Profiles do
 
   alias Ferry.Profiles.Project
 
-  defp geocode_project_address(%Changeset{valid?: true} = changeset, address_attrs) do
-    case @geocoder.geocode_address(changeset.params["address"]) do
-      {:ok, geocode} ->
-        attrs = %{"address" => Map.put(address_attrs, "geocode", geocode)}
-        Project.address_changeset(changeset, attrs)
-
-      {:error, _error} ->
-        # TODO: proper error logging
-        Changeset.add_error(
-          changeset,
-          :geocoding,
-          "Our geocoding server sometimes can not locate a very specific address. Try removing your organization name, floor, or appartment # from the street line. If that continues to fail, try only city, country and postal code. If the problem persists, please reach out to us: help@distributeaid.org!"
-        )
-    end
-  end
-
-  defp geocode_project_address(%Changeset{valid?: false} = changeset, _address_attrs) do
-    changeset
-  end
-
   @doc """
   Returns the list of projects.
 
@@ -187,12 +164,11 @@ defmodule Ferry.Profiles do
       [%Project{}, ...]
 
   """
+  @spec list_projects() :: [Project.t()]
   def list_projects do
     Repo.all(
       from p in Project,
         left_join: g in assoc(p, :group),
-        left_join: a in assoc(p, :address),
-        preload: [group: g, address: a],
         order_by: p.id
     )
   end
@@ -210,9 +186,7 @@ defmodule Ferry.Profiles do
     Repo.all(
       from p in Project,
         where: p.group_id == ^group.id,
-        left_join: a in assoc(p, :address),
-        order_by: p.id,
-        preload: [address: a]
+        order_by: p.id
     )
   end
 
@@ -230,13 +204,47 @@ defmodule Ferry.Profiles do
       ** (Ecto.NoResultsError)
 
   """
+  @spec get_project!(String.t()) :: Project.t()
   def get_project!(id) do
-    query =
-      from p in Project,
-        left_join: a in assoc(p, :address),
-        preload: [address: a]
+    Repo.get!(Project, id)
+  end
 
-    Repo.get!(query, id)
+  @doc """
+  Gets a single project.
+
+  Returns nil, if the project does not exist
+
+  ## Examples
+
+      iex> get_project(123)
+      %Project{}
+
+      iex> get_project(456)
+      nil
+
+  """
+  @spec get_project(String.t()) :: Project.t() | nil
+  def get_project(id) do
+    Repo.get(Project, id)
+  end
+
+  @doc """
+  Gets a single project by its name
+
+  Returns nil, if the project does not exist
+
+  ## Examples
+
+      iex> get_project_by_name("test")
+      %Project{}
+
+      iex> get_project_by_name("unknown")
+      nil
+
+  """
+  @spec get_project_by_name(String.t()) :: Project.t() | nil
+  def get_project_by_name(name) do
+    Repo.get_by(Project, name: name)
   end
 
   @doc """
@@ -251,10 +259,11 @@ defmodule Ferry.Profiles do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec create_project(Ferry.Profiles.Group.t(), map()) ::
+          {:ok, Project.t()} | {:error, %Ecto.Changeset{}}
   def create_project(%Group{} = group, attrs \\ %{}) do
     build_assoc(group, :projects)
     |> Project.changeset(attrs)
-    |> geocode_project_address(attrs["address"])
     |> Repo.insert()
   end
 
@@ -270,11 +279,11 @@ defmodule Ferry.Profiles do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec update_project(Project.t(), map()) ::
+          {:ok, Project.t()} | {:error, %Ecto.Changeset{}}
   def update_project(%Project{} = project, attrs) do
     project
-    |> Repo.preload(address: [:geocode])
     |> Project.changeset(attrs)
-    |> geocode_project_address(attrs["address"])
     |> Repo.update()
   end
 
@@ -290,20 +299,8 @@ defmodule Ferry.Profiles do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec delete_project(Ferry.Profiles.Project.t()) :: Project.t()
   def delete_project(%Project{} = project) do
     Repo.delete(project)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking project changes.
-
-  ## Examples
-
-      iex> change_project(project)
-      %Ecto.Changeset{source: %Project{}}
-
-  """
-  def change_project(%Project{} = project) do
-    Project.changeset(project, %{})
   end
 end

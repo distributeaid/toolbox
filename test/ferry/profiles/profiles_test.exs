@@ -114,7 +114,6 @@ defmodule Ferry.ProfilesTest do
   # ==============================================================================
   describe "projects" do
     alias Ferry.Profiles.{Group, Project}
-    alias Ferry.Locations.Geocoder.GeocoderMock
 
     setup :verify_on_exit!
 
@@ -129,16 +128,28 @@ defmodule Ferry.ProfilesTest do
       assert Profiles.list_projects() == []
 
       # 1 project, 1 group
-      project1 = insert(:project, %{group: group1}) |> without_assoc([:address, :geocode])
+      project1 =
+        insert(:project, %{group: group1})
+        |> without_assoc(:group)
+
       assert Profiles.list_projects() == [project1]
 
       # multiple projects, 1 group
-      project2 = insert(:project, %{group: group1}) |> without_assoc([:address, :geocode])
+      project2 =
+        insert(:project, %{group: group1})
+        |> without_assoc(:group)
+
       assert Profiles.list_projects() == [project1, project2]
 
       # multiple project, multiple groups
-      project3 = insert(:project, %{group: group2}) |> without_assoc([:address, :geocode])
-      project4 = insert(:project, %{group: group2}) |> without_assoc([:address, :geocode])
+      project3 =
+        insert(:project, %{group: group2})
+        |> without_assoc(:group)
+
+      project4 =
+        insert(:project, %{group: group2})
+        |> without_assoc(:group)
+
       assert Profiles.list_projects() == [project1, project2, project3, project4]
     end
 
@@ -156,19 +167,20 @@ defmodule Ferry.ProfilesTest do
       # multiple projects for group
       project2 =
         insert(:project, %{group: group1})
-        |> without_assoc([:address, :geocode])
         |> without_assoc(:group)
 
       project3 =
         insert(:project, %{group: group1})
-        |> without_assoc([:address, :geocode])
         |> without_assoc(:group)
 
       assert Profiles.list_projects(group1) == [project2, project3]
     end
 
     test "get_project!/1 returns the project with given id" do
-      project = insert(:project) |> without_assoc([:address, :geocode]) |> without_assoc(:group)
+      project =
+        insert(:project)
+        |> without_assoc(:group)
+
       assert Profiles.get_project!(project.id) == project
     end
 
@@ -181,13 +193,7 @@ defmodule Ferry.ProfilesTest do
     end
 
     test "create_project/2 with valid data creates a project" do
-      GeocoderMock
-      |> expect(:geocode_address, 2, fn _address ->
-        {:ok, params_for(:geocode)}
-      end)
-
       group = insert(:group)
-      _geocode = params_for(:geocode)
 
       # typical
       attrs = string_params_for(:project, %{group_id: group.id})
@@ -195,15 +201,6 @@ defmodule Ferry.ProfilesTest do
       assert project.group_id == group.id
       assert project.name == attrs["name"]
       assert project.description == attrs["description"]
-      assert project.address.label == attrs["address"]["label"]
-      assert project.address.street == attrs["address"]["street"]
-      assert project.address.city == attrs["address"]["city"]
-      assert project.address.province == attrs["address"]["province"]
-      assert project.address.country_code == attrs["address"]["country_code"]
-      assert project.address.postal_code == attrs["address"]["postal_code"]
-      # assert project.address.geocode.lat == geocode.lat
-      # assert project.address.geocode.lng == geocode.lng
-      # assert project.address.geocode.data == geocode.data
 
       # min
       attrs = string_params_for(:min_project, %{group_id: group.id})
@@ -211,15 +208,6 @@ defmodule Ferry.ProfilesTest do
       assert project.group_id == group.id
       assert project.name == attrs["name"]
       assert project.description == nil
-      assert project.address.label == attrs["address"]["label"]
-      assert project.address.street == attrs["address"]["street"]
-      assert project.address.city == attrs["address"]["city"]
-      assert project.address.province == attrs["address"]["province"]
-      assert project.address.country_code == attrs["address"]["country_code"]
-      assert project.address.postal_code == attrs["address"]["postal_code"]
-      # assert project.address.geocode.lat == geocode.lat
-      # assert project.address.geocode.lng == geocode.lng
-      # assert project.address.geocode.data == geocode.data
     end
 
     test "create_project/2 with invalid data returns error changeset" do
@@ -229,13 +217,7 @@ defmodule Ferry.ProfilesTest do
     end
 
     test "update_project/2 with valid data updates the project" do
-      GeocoderMock
-      |> expect(:geocode_address, fn _address ->
-        {:ok, params_for(:geocode)}
-      end)
-
       project = insert(:project)
-      _geocode = params_for(:geocode)
 
       # typical
       attrs = string_params_for(:project)
@@ -243,19 +225,13 @@ defmodule Ferry.ProfilesTest do
       assert %Project{} = project
       assert project.name == attrs["name"]
       assert project.description == attrs["description"]
-      assert project.address.label == attrs["address"]["label"]
-      assert project.address.street == attrs["address"]["street"]
-      assert project.address.city == attrs["address"]["city"]
-      assert project.address.province == attrs["address"]["province"]
-      assert project.address.country_code == attrs["address"]["country_code"]
-      assert project.address.postal_code == attrs["address"]["postal_code"]
-      # assert project.address.geocode.lat == geocode.lat
-      # assert project.address.geocode.lng == geocode.lng
-      # assert project.address.geocode.data == geocode.data
     end
 
     test "update_project/2 with invalid data returns error changeset" do
-      project = insert(:project) |> without_assoc([:address, :geocode]) |> without_assoc(:group)
+      project =
+        insert(:project)
+        |> without_assoc(:group)
+
       attrs = params_for(:invalid_project)
       assert {:error, %Ecto.Changeset{}} = Profiles.update_project(project, attrs)
       assert project == Profiles.get_project!(project.id)
@@ -265,11 +241,6 @@ defmodule Ferry.ProfilesTest do
       project = insert(:project)
       assert {:ok, %Project{}} = Profiles.delete_project(project)
       assert_raise Ecto.NoResultsError, fn -> Profiles.get_project!(project.id) end
-    end
-
-    test "change_project/1 returns a project changeset" do
-      project = insert(:project)
-      assert %Ecto.Changeset{} = Profiles.change_project(project)
     end
   end
 end

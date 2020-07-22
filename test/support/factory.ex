@@ -217,8 +217,7 @@ defmodule Ferry.Factory do
       name: sequence("Klimb"),
       description:
         "Up and over their walls!  Snip-snip the barbed wire with some handy dandy bolt cutters.",
-      group: build(:group),
-      address: build(:address, geocode: build(:geocode))
+      group: build(:group)
     }
   end
 
@@ -716,7 +715,7 @@ defmodule Ferry.Factory do
     needs_list = %NeedsList{
       from: from,
       to: to,
-      project: build(:project) |> without_assoc(:address)
+      project: build(:project)
     }
 
     aid_list = build(:aid_list, %{needs_list: needs_list})
