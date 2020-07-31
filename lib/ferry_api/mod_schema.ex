@@ -1,9 +1,10 @@
 defmodule FerryApi.Schema.Mod do
   use Absinthe.Schema.Notation
 
-  import AbsintheErrorPayload.Payload
+  # import AbsintheErrorPayload.Payload
   alias Ferry.AidTaxonomy
-  alias FerryApi.Middleware
+
+  # alias FerryApi.Middleware
 
   object :mod_queries do
     @desc "Get the # of mods"
