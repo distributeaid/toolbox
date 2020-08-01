@@ -266,9 +266,26 @@ defmodule Ferry.AidTaxonomy do
     |> Repo.all()
   end
 
+  @spec get_mod(any) :: Mod
+  def get_mod(id) do
+    mod_query()
+    |> Repo.get(id)
+  end
+
   def get_mod!(id) do
     mod_query()
     |> Repo.get!(id)
+  end
+
+  @doc """
+  Given its name, return the associated mod
+
+  If no mod was found, then this function returns nil
+  """
+  @spec get_mod_by_name(String.t()) :: Mod.t() | nil
+  def get_mod_by_name(name) do
+    mod_query()
+    |> Repo.get_by(name: name)
   end
 
   def create_mod(attrs \\ %{}) do
