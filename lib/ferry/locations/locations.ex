@@ -14,7 +14,7 @@ defmodule Ferry.Locations do
 
   # @geocoder Application.get_env(:ferry, :geocoder)
 
-  # TODO: This function is not used so I am commenting it out 
+  # TODO: This function is not used so I am commenting it out
   # so that it doesnt raise compile warnings
   # defp geocode_address(%Changeset{valid?: true} = changeset) do
   #  case @geocoder.geocode_address(changeset.params) do
@@ -37,7 +37,20 @@ defmodule Ferry.Locations do
   # end
 
   @doc """
-  Returns the list of addresses.
+  Returns all addresses
+
+  ## Examples
+
+      iex> list_addresses(})
+      [%Address{}, ...]
+
+  """
+  def list_addresses() do
+    Address |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of addresses for a given group
 
   ## Examples
 
@@ -53,6 +66,22 @@ defmodule Ferry.Locations do
         #      preload: [geocode: g],
         order_by: [a.id]
     )
+  end
+
+  @doc """
+  Gets a single address.
+
+  ## Examples
+
+      iex> get_address(123)
+      %Address{}
+
+      iex> get_address(999)
+      nil
+  """
+  @spec get_address(String.t()) :: Address.t() | nil
+  def get_address(id) do
+    Repo.get(Address, id)
   end
 
   @doc """
