@@ -27,46 +27,67 @@ defmodule Ferry.GroupTest do
   end
 
   test "get all groups - one", %{conn: conn} do
-    group = insert(:group) |> with_location()
+    group = insert(:group) |> with_address()
 
-    group_params = %{
-      "id" => Integer.to_string(group.id),
-      "name" => group.name,
-      "description" => group.description,
-      "location" => %{
-        "province" => group.location.province,
-        "country_code" => group.location.country_code,
-        "postal_code" => group.location.postal_code
-      }
-    }
-
-    assert get_groups(conn) == %{"data" => %{"groups" => [group_params]}}
-  end
-
-  test "get all groups - many", %{conn: conn} do
-    groups = insert_pair(:group) |> with_location()
-
-    groups_params =
-      Enum.map(groups, fn group ->
+    expected_groups =
+      Enum.map([group], fn group ->
         %{
-          "id" => Integer.to_string(group.id),
-          "name" => group.name,
+          "id" => "#{group.id}",
           "description" => group.description,
-          "location" => %{
-            "province" => group.location.province,
-            "country_code" => group.location.country_code,
-            "postal_code" => group.location.postal_code
-          }
+          "name" => group.name,
+          "addresses" =>
+            Enum.map(group.addresses, fn address ->
+              %{
+                "id" => "#{address.id}",
+                "label" => address.label,
+                "postal_code" => address.postal_code,
+                "province" => address.province,
+                "country_code" => address.country_code
+              }
+            end)
         }
       end)
 
-    assert get_groups(conn) == %{"data" => %{"groups" => groups_params}}
+    %{
+      "data" => %{
+        "groups" => ^expected_groups
+      }
+    } = get_groups(conn)
+  end
+
+  test "get all groups - many", %{conn: conn} do
+    groups = insert_pair(:group) |> with_address()
+
+    expected_groups =
+      Enum.map(groups, fn group ->
+        %{
+          "id" => "#{group.id}",
+          "description" => group.description,
+          "name" => group.name,
+          "addresses" =>
+            Enum.map(group.addresses, fn address ->
+              %{
+                "id" => "#{address.id}",
+                "label" => address.label,
+                "postal_code" => address.postal_code,
+                "province" => address.province,
+                "country_code" => address.country_code
+              }
+            end)
+        }
+      end)
+
+    %{
+      "data" => %{
+        "groups" => ^expected_groups
+      }
+    } = get_groups(conn)
   end
 
   # Query - Get A Group
   # ------------------------------------------------------------
   test "get a group - found", %{conn: conn} do
-    group = insert(:group) |> with_location()
+    group = insert(:group) |> with_address()
 
     group_params = %{
       "id" => Integer.to_string(group.id),
@@ -99,7 +120,9 @@ defmodule Ferry.GroupTest do
     insert(:user)
     |> mock_sign_in
 
-    group_attrs = params_for(:group) |> with_location()
+    group_attrs = params_for(:group) |> with_address()
+
+    [address] = group_attrs.addresses
 
     %{
       "data" => %{
@@ -112,11 +135,13 @@ defmodule Ferry.GroupTest do
             "slackChannelName" => slack_channel_name,
             "slug" => slug,
             "type" => type,
-            "location" => %{
-              "province" => province,
-              "country_code" => country_code,
-              "postal_code" => postal_code
-            }
+            "addresses" => [
+              %{
+                "province" => province,
+                "country_code" => country_code,
+                "postal_code" => postal_code
+              }
+            ]
           }
         }
       }
@@ -129,9 +154,9 @@ defmodule Ferry.GroupTest do
     assert name == group_attrs.name
     assert type == group_attrs.type
     assert slack_channel_name == group_attrs.slack_channel_name
-    assert province == group_attrs.location.province
-    assert country_code == group_attrs.location.country_code
-    assert postal_code == group_attrs.location.postal_code
+    assert province == address.province
+    assert country_code == address.country_code
+    assert postal_code == address.postal_code
   end
 
   test "create a group - error", %{conn: conn} do
@@ -170,8 +195,8 @@ defmodule Ferry.GroupTest do
     insert(:user)
     |> mock_sign_in
 
-    group = insert(:group) |> with_location()
-    updates = params_for(:group) |> with_location()
+    group = insert(:group) |> with_address()
+    updates = params_for(:group) |> with_address()
     updates = Map.put(updates, :id, group.id)
 
     %{
@@ -192,8 +217,8 @@ defmodule Ferry.GroupTest do
     insert(:user)
     |> mock_sign_in
 
-    group = insert(:group) |> with_location()
-    updates = params_for(:group) |> with_location()
+    group = insert(:group) |> with_address()
+    updates = params_for(:group) |> with_address()
     updates = Map.merge(updates, %{name: "", id: group.id})
 
     %{

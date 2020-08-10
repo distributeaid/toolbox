@@ -129,6 +129,31 @@ defmodule Ferry.Locations do
   end
 
   @doc """
+  Creates a list of addresses for the given group
+
+  ## Examples
+
+      iex> create_addresses(%Group{}, %{field: value})
+      {:ok, %Address{}}
+
+      iex> create_addresses(%Group{}, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_addresses(%Group{} = group, addresses) do
+    addresses
+    |> Enum.reduce(Ecto.Multi.new(), fn attrs, multi ->
+      changeset =
+        %Address{}
+        |> Address.changeset(attrs)
+        |> Changeset.put_change(:group_id, group.id)
+
+      Ecto.Multi.insert(multi, attrs.label, changeset)
+    end)
+    |> Repo.transaction()
+  end
+
+  @doc """
   Updates a address.
 
   ## Examples

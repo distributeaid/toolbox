@@ -30,7 +30,9 @@ defmodule Ferry.ApiClient.Group do
         id,
         name,
         description,
-        location {
+        addresses {
+          id,
+          label,
           province,
           country_code,
           postal_code
@@ -101,10 +103,53 @@ defmodule Ferry.ApiClient.Group do
   end
 
   @doc """
+  Run a GraphQL query that returns a group and all
+  the addresses associated to that group
+  """
+  @spec get_group_with_addresses(Plug.Conn.t(), String.t()) :: map()
+  def get_group_with_addresses(conn, id) do
+    graphql(conn, """
+     {
+      group(id: "#{id}") {
+        id,
+        name,
+        description,
+        addresses {
+          id,
+          label
+        }
+      }
+    }
+    """)
+  end
+
+  @doc """
+  Run a GraphQL query that returns all groups, and their addresses
+  """
+  @spec get_groups_with_addresses(Plug.Conn.t()) :: map()
+  def get_groups_with_addresses(conn) do
+    graphql(conn, """
+     {
+      groups {
+        id,
+        name,
+        description,
+        addresses {
+          id,
+          label
+        }
+      }
+    }
+    """)
+  end
+
+  @doc """
   Run a GraphQL mutation that creates a group
   """
   @spec create_group(Plug.Conn.t(), map) :: map
   def create_group(conn, group_attrs) do
+    [address] = group_attrs.addresses
+
     graphql(conn, """
     mutation {
       createGroup(
@@ -122,12 +167,12 @@ defmodule Ferry.ApiClient.Group do
           donationForm: "#{group_attrs.donation_form}",
           donationFormResults: "#{group_attrs.donation_form_results}",
 
-          location: {
-            label: "#{group_attrs.location.label || "default"}",
-            province: "#{group_attrs.location.province}",
-            country_code: "#{group_attrs.location.country_code}",
-            postal_code: "#{group_attrs.location.postal_code}",
-          }
+          addresses:[{
+            label: "#{address.label || "default"}",
+            province: "#{address.province}",
+            country_code: "#{address.country_code}",
+            postal_code: "#{address.postal_code}",
+          }]
         }
       ) {
         successful
@@ -141,7 +186,9 @@ defmodule Ferry.ApiClient.Group do
           type,
           slug,
           slackChannelName,
-          location {
+          addresses {
+            id,
+            label,
             province,
             country_code,
             postal_code
@@ -199,12 +246,6 @@ defmodule Ferry.ApiClient.Group do
             volunteerFormResults: "#{updates.volunteer_form_results}",
             donationForm: "#{updates.donation_form}",
             donationFormResults: "#{updates.donation_form_results}"
-
-            location: {
-              province: "#{updates.location.province}",
-              country_code: "#{updates.location.country_code}",
-              postal_code: "#{updates.location.postal_code}",
-            }
           }
         ) {
           successful

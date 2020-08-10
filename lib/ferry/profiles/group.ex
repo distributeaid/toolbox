@@ -41,7 +41,7 @@ defmodule Ferry.Profiles.Group do
     # on_delete set in database via migration
     has_many :projects, Project
 
-    has_one :location, Address
+    has_many :addresses, Address
 
     timestamps()
   end

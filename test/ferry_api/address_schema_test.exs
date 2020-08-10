@@ -18,7 +18,7 @@ defmodule Ferry.AddressSchemaTest do
     assert count_addresses(conn) ==
              %{"data" => %{"countAddresses" => 0}}
 
-    group_attrs = params_for(:group) |> with_location()
+    group_attrs = params_for(:group) |> with_address()
 
     %{
       "data" => %{
@@ -74,7 +74,7 @@ defmodule Ferry.AddressSchemaTest do
     insert(:user)
     |> mock_sign_in
 
-    group_attrs = params_for(:group) |> with_location()
+    group_attrs = params_for(:group) |> with_address()
 
     %{
       "data" => %{
@@ -103,7 +103,7 @@ defmodule Ferry.AddressSchemaTest do
     insert(:user)
     |> mock_sign_in
 
-    group_attrs = params_for(:group) |> with_location()
+    group_attrs = params_for(:group) |> with_address()
 
     %{
       "data" => %{
@@ -177,7 +177,7 @@ defmodule Ferry.AddressSchemaTest do
     insert(:user)
     |> mock_sign_in
 
-    group_attrs = params_for(:group) |> with_location()
+    group_attrs = params_for(:group) |> with_address()
 
     %{
       "data" => %{
@@ -222,7 +222,7 @@ defmodule Ferry.AddressSchemaTest do
     insert(:user)
     |> mock_sign_in
 
-    group_attrs = params_for(:group) |> with_location()
+    group_attrs = params_for(:group) |> with_address()
 
     %{
       "data" => %{
@@ -281,7 +281,7 @@ defmodule Ferry.AddressSchemaTest do
     insert(:user)
     |> mock_sign_in
 
-    group_attrs = params_for(:group) |> with_location()
+    group_attrs = params_for(:group) |> with_address()
 
     %{
       "data" => %{
