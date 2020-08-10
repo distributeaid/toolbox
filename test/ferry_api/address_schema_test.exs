@@ -99,6 +99,47 @@ defmodule Ferry.AddressSchemaTest do
     } = create_address(conn, %{group: group, label: ""})
   end
 
+  test "try to create an address with a label already in use", %{conn: conn} do
+    insert(:user)
+    |> mock_sign_in
+
+    group_attrs = params_for(:group) |> with_location()
+
+    %{
+      "data" => %{
+        "createGroup" => %{
+          "successful" => true,
+          "result" => %{
+            "id" => group
+          }
+        }
+      }
+    } = create_group(conn, group_attrs)
+
+    # The create group migration already creates an address
+    # with label 'default'. So this second attempt should
+    # fail
+
+    %{
+      "data" => %{
+        "createAddress" => %{
+          "successful" => true
+        }
+      }
+    } = create_address(conn, %{group: group, label: "test"})
+
+    %{
+      "data" => %{
+        "createAddress" => %{
+          "successful" => false,
+          "messages" => [
+            %{"field" => "label", "message" => "has already been taken"}
+          ]
+        }
+      }
+    } = create_address(conn, %{group: group, label: "test"})
+  end
+
   test "fetch a address that does not exist", %{conn: conn} do
     %{
       "data" => %{
