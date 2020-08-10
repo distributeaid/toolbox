@@ -123,6 +123,7 @@ defmodule Ferry.ApiClient.Group do
           donationFormResults: "#{group_attrs.donation_form_results}",
 
           location: {
+            label: "#{group_attrs.location.label || "default"}",
             province: "#{group_attrs.location.province}",
             country_code: "#{group_attrs.location.country_code}",
             postal_code: "#{group_attrs.location.postal_code}",

@@ -97,7 +97,7 @@ defmodule Ferry.ApiClient.Address do
       mutation {
         updateAddress (
           addressInput: {
-            name: "#{attrs.name}"
+            label: "#{attrs.label}"
           },
           id: "#{attrs.id}"
         ) {
@@ -108,7 +108,7 @@ defmodule Ferry.ApiClient.Address do
           },
           result {
             id,
-            name
+            label
           }
         }
       }
@@ -130,7 +130,7 @@ defmodule Ferry.ApiClient.Address do
         },
         result {
           id,
-          name
+          label
         }
       }
     }

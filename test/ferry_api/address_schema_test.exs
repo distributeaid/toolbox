@@ -74,16 +74,29 @@ defmodule Ferry.AddressSchemaTest do
     insert(:user)
     |> mock_sign_in
 
+    group_attrs = params_for(:group) |> with_location()
+
+    %{
+      "data" => %{
+        "createGroup" => %{
+          "successful" => true,
+          "result" => %{
+            "id" => group
+          }
+        }
+      }
+    } = create_group(conn, group_attrs)
+
     %{
       "data" => %{
         "createAddress" => %{
           "successful" => false,
           "messages" => [
-            %{"field" => "name", "message" => "can't be blank"}
+            %{"field" => "label", "message" => "can't be blank"}
           ]
         }
       }
-    } = create_address(conn, %{label: ""})
+    } = create_address(conn, %{group: group, label: ""})
   end
 
   test "fetch a address that does not exist", %{conn: conn} do
@@ -123,6 +136,19 @@ defmodule Ferry.AddressSchemaTest do
     insert(:user)
     |> mock_sign_in
 
+    group_attrs = params_for(:group) |> with_location()
+
+    %{
+      "data" => %{
+        "createGroup" => %{
+          "successful" => true,
+          "result" => %{
+            "id" => group
+          }
+        }
+      }
+    } = create_group(conn, group_attrs)
+
     %{
       "data" => %{
         "createAddress" => %{
@@ -132,7 +158,7 @@ defmodule Ferry.AddressSchemaTest do
           }
         }
       }
-    } = create_address(conn, %{name: "test"})
+    } = create_address(conn, %{group: group, label: "test"})
 
     %{
       "data" => %{
@@ -140,14 +166,14 @@ defmodule Ferry.AddressSchemaTest do
           "successful" => true,
           "result" => %{
             "id" => ^id,
-            "name" => "new name"
+            "label" => "new label"
           }
         }
       }
     } =
       update_address(conn, %{
         id: id,
-        name: "new name"
+        label: "new label"
       })
   end
 
@@ -155,24 +181,29 @@ defmodule Ferry.AddressSchemaTest do
     insert(:user)
     |> mock_sign_in
 
+    group_attrs = params_for(:group) |> with_location()
+
     %{
       "data" => %{
-        "createAddress" => %{
-          "successful" => true
+        "createGroup" => %{
+          "successful" => true,
+          "result" => %{
+            "id" => group
+          }
         }
       }
-    } = create_address(conn, %{name: "test"})
+    } = create_group(conn, group_attrs)
 
     %{
       "data" => %{
         "createAddress" => %{
           "successful" => true,
           "result" => %{
-            "id" => id2
+            "id" => id
           }
         }
       }
-    } = create_address(conn, %{name: "test2"})
+    } = create_address(conn, %{group: group, label: "test"})
 
     %{
       "data" => %{
@@ -182,8 +213,8 @@ defmodule Ferry.AddressSchemaTest do
       }
     } =
       update_address(conn, %{
-        id: id2,
-        name: "test"
+        id: id,
+        label: ""
       })
   end
 
@@ -209,6 +240,19 @@ defmodule Ferry.AddressSchemaTest do
     insert(:user)
     |> mock_sign_in
 
+    group_attrs = params_for(:group) |> with_location()
+
+    %{
+      "data" => %{
+        "createGroup" => %{
+          "successful" => true,
+          "result" => %{
+            "id" => group
+          }
+        }
+      }
+    } = create_group(conn, group_attrs)
+
     %{
       "data" => %{
         "createAddress" => %{
@@ -218,10 +262,10 @@ defmodule Ferry.AddressSchemaTest do
           }
         }
       }
-    } = create_address(conn, %{name: "test"})
+    } = create_address(conn, %{group: group, label: "test"})
 
     assert count_addresses(conn) ==
-             %{"data" => %{"countAddresses" => 1}}
+             %{"data" => %{"countAddresses" => 2}}
 
     %{
       "data" => %{
@@ -232,6 +276,10 @@ defmodule Ferry.AddressSchemaTest do
     } = delete_address(conn, id)
 
     assert count_addresses(conn) ==
-             %{"data" => %{"countAddresses" => 0}}
+             %{"data" => %{"countAddresses" => 1}}
+
+    %{"data" => %{"addresses" => [address]}} = get_addresses(conn)
+
+    refute id == address["id"]
   end
 end

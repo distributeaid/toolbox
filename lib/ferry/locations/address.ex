@@ -4,6 +4,8 @@ defmodule Ferry.Locations.Address do
   alias Ferry.Locations.Geocode
   alias Ferry.Profiles.{Group, Project}
 
+  @type t :: %__MODULE__{}
+
   schema "addresses" do
     field :label, :string
     field :street, :string
@@ -27,7 +29,7 @@ defmodule Ferry.Locations.Address do
   def changeset(address, attrs) do
     address
     |> cast(attrs, [:label, :street, :city, :province, :country_code, :postal_code])
-    |> validate_required([:province, :country_code, :postal_code])
+    |> validate_required([:province, :country_code, :postal_code, :label])
     |> validate_length(:label, min: 1, max: 255)
     |> validate_length(:street, max: 255)
     |> validate_length(:city, min: 1, max: 255)

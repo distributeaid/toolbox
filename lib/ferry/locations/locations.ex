@@ -142,9 +142,7 @@ defmodule Ferry.Locations do
   """
   def update_address(%Address{} = address, attrs) do
     address
-    #    |> Repo.preload([:geocode])
     |> Address.changeset(attrs)
-    #    |> geocode_address()
     |> Repo.update()
   end
 

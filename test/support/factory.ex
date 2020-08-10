@@ -275,7 +275,6 @@ defmodule Ferry.Factory do
     struct!(
       address_factory(),
       %{
-        label: nil,
         street: nil,
         city: nil
       }
