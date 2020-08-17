@@ -136,4 +136,23 @@ defmodule Ferry.ApiClient.Category do
     }
     """)
   end
+
+  @doc """
+  Run a GraphQL query that returns all categories and their items
+  """
+  @spec get_categories_with_items(Plug.Conn.t()) :: map()
+  def get_categories_with_items(conn) do
+    graphql(conn, """
+     {
+      categories {
+        id,
+        name,
+        items {
+          id,
+          name
+        }
+      }
+    }
+    """)
+  end
 end
