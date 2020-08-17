@@ -154,9 +154,49 @@ defmodule Ferry.AidTaxonomy do
   # NOTE: No `list_items()` because we always want them to be organized by
   #       category.  Use `list_categories()` instead.
 
-  def get_item!(id) do
-    item_query()
+  @doc """
+  Count the total number of items in the database
+  """
+  @spec count_items() :: Integer.t()
+  def count_items() do
+    Item
+    |> Repo.aggregate(:count, :id)
+  end
+
+  @doc """
+  Given its id, return the associated item.
+
+  If no item matches, then this function returns nil
+  TODO: test with_mods? == true
+  """
+  @spec get_item(integer(), boolean) :: Item.t() | nil
+  def get_item(id, _with_mods? \\ false) do
+    Item
+    |> Repo.get(id)
+  end
+
+  @doc """
+  Given its id, return the associated item.
+
+  If no item matches, then this function returns an error
+  TODO: test with_mods? == true
+  """
+  @spec get_item(integer(), boolean) :: Item.t()
+  def get_item!(id, _with_mods \\ false) do
+    Item
     |> Repo.get!(id)
+  end
+
+  @doc """
+  Given its category and name, return the associated item
+
+  If no item was found, then this function returns nil
+  TODO: test with_mods? == true
+  """
+  @spec get_item_by_name(Category.t(), String.t(), boolean) :: Item.t() | nil
+  def get_item_by_name(category, name, _with_mods? \\ false) do
+    Item
+    |> Repo.get_by(category: category.id, name: name)
   end
 
   def create_item(%Category{} = category, attrs \\ %{}) do
@@ -216,16 +256,16 @@ defmodule Ferry.AidTaxonomy do
   # Helpers
   # ------------------------------------------------------------
 
-  defp item_query() do
-    from item in Item,
-      join: category in assoc(item, :category),
-      left_join: mod in assoc(item, :mods),
-      order_by: [category.name, item.name, mod.name],
-      preload: [
-        category: category,
-        mods: mod
-      ]
-  end
+  # defp item_query() do
+  #   from item in Item,
+  #     join: category in assoc(item, :category),
+  #     left_join: mod in assoc(item, :mods),
+  #     order_by: [category.name, item.name, mod.name],
+  #     preload: [
+  #       category: category,
+  #       mods: mod
+  #     ]
+  # end
 
   # from server data: mods = [%{id: 4}, ...]
   #                   mods = [%Mod{id: 4}, ...]

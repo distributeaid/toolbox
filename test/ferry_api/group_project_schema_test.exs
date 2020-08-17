@@ -1,4 +1,4 @@
-defmodule Ferry.GroupProjectTest do
+defmodule Ferry.GroupProjectSchemaTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Group, Project}
 

@@ -5,6 +5,8 @@ defmodule Ferry.AidTaxonomy.Item do
   alias Ferry.AidTaxonomy.Category
   alias Ferry.AidTaxonomy.Mod
 
+  @type t :: %__MODULE__{}
+
   schema "aid__items" do
     field :name, :string
 

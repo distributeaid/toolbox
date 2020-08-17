@@ -15,24 +15,8 @@ defmodule Ferry.ApiClient.Item do
   end
 
   @doc """
-  Run a GraphQL query that retuns a collection
-  of items
-  """
-  @spec get_items(Plug.Conn.t()) :: map()
-  def get_items(conn) do
-    graphql(conn, """
-    {
-      items {
-        id,
-        name
-      }
-    }
-    """)
-  end
-
-  @doc """
   Run a GraphQL query that retuns a single
-  item, given its name.
+  item, given its id.
   """
   @spec get_item(Plug.Conn.t(), String.t()) :: map()
   def get_item(conn, id) do
@@ -48,13 +32,15 @@ defmodule Ferry.ApiClient.Item do
 
   @doc """
   Run a GraphQL query that retuns a single
-  item, given its name.
+  item, given its name. Since the name of an item is not unique across
+  all categories, we also need to specify the category.
+
   """
-  @spec get_item_by_name(Plug.Conn.t(), String.t()) :: map()
-  def get_item_by_name(conn, name) do
+  @spec get_item_by_name(Plug.Conn.t(), String.t(), String.t()) :: map()
+  def get_item_by_name(conn, category, name) do
     graphql(conn, """
     {
-      itemByName(name: "#{name}") {
+      itemByName(category: "#{category}", name: "#{name}") {
         id,
         name
       }

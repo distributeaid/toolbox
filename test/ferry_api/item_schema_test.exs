@@ -7,10 +7,6 @@ defmodule Ferry.ItemSchemaTest do
              %{"data" => %{"countItems" => 0}}
   end
 
-  test "get all items where there are none", %{conn: conn} do
-    assert get_items(conn) == %{"data" => %{"items" => []}}
-  end
-
   test "create one item", %{conn: conn} do
     insert(:user)
     |> mock_sign_in
@@ -21,11 +17,11 @@ defmodule Ferry.ItemSchemaTest do
           "successful" => true,
           "messages" => [],
           "result" => %{
-            "id" => category
+            "id" => clothing
           }
         }
       }
-    } = create_category(conn, %{name: "test"})
+    } = create_category(conn, %{name: "clothing"})
 
     %{
       "data" => %{
@@ -34,35 +30,43 @@ defmodule Ferry.ItemSchemaTest do
           "messages" => [],
           "result" => %{
             "id" => id,
-            "name" => "mask"
+            "name" => "t-shirts"
           }
         }
       }
     } =
       create_item(conn, %{
-        category: category,
-        name: "mask"
+        category: clothing,
+        name: "t-shirts"
       })
 
     assert id
 
-    # verify that item is returned in the collection
-    # of all items
+    # Verify the item was created
     assert count_items(conn) ==
              %{"data" => %{"countItems" => 1}}
-
-    %{"data" => %{"items" => [item]}} = get_items(conn)
-
-    item_id = item["id"]
-    assert item_id
-    assert "mask" == item["name"]
 
     # verify we can fetch that item given its id
     %{
       "data" => %{
-        "item" => ^item
+        "item" => %{
+          "id" => ^id,
+          "name" => "t-shirts"
+        }
       }
-    } = get_item(conn, item["id"])
+    } = get_item(conn, id)
+
+    # verify we can fetch that item, given its category
+    # and its name
+
+    %{
+      "data" => %{
+        "itemByName" => %{
+          "id" => ^id,
+          "name" => "t-shirts"
+        }
+      }
+    } = get_item_by_name(conn, clothing, "t-shirts")
   end
 
   test "create item with invalid data", %{conn: conn} do
@@ -75,11 +79,11 @@ defmodule Ferry.ItemSchemaTest do
           "successful" => true,
           "messages" => [],
           "result" => %{
-            "id" => category
+            "id" => clothing
           }
         }
       }
-    } = create_category(conn, %{name: "test"})
+    } = create_category(conn, %{name: "clothing"})
 
     %{
       "data" => %{
@@ -90,16 +94,28 @@ defmodule Ferry.ItemSchemaTest do
           ]
         }
       }
-    } = create_item(conn, %{category: category, name: ""})
+    } = create_item(conn, %{category: clothing, name: ""})
   end
 
   test "fetch a item that does not exist", %{conn: conn} do
     %{
       "data" => %{
+        "createCategory" => %{
+          "successful" => true,
+          "messages" => [],
+          "result" => %{
+            "id" => clothing
+          }
+        }
+      }
+    } = create_category(conn, %{name: "clothing"})
+
+    %{
+      "data" => %{
         "itemByName" => nil
       },
       "errors" => [error]
-    } = get_item_by_name(conn, "test")
+    } = get_item_by_name(conn, clothing, "t-shirts")
 
     assert "item not found" == error["message"]
   end
@@ -120,7 +136,7 @@ defmodule Ferry.ItemSchemaTest do
     } =
       update_item(conn, %{
         id: 123,
-        name: "some name"
+        name: "trousers"
       })
 
     assert "item not found" == error["message"]
@@ -136,11 +152,11 @@ defmodule Ferry.ItemSchemaTest do
           "successful" => true,
           "messages" => [],
           "result" => %{
-            "id" => category
+            "id" => clothing
           }
         }
       }
-    } = create_category(conn, %{name: "test"})
+    } = create_category(conn, %{name: "clothing"})
 
     %{
       "data" => %{
@@ -151,7 +167,7 @@ defmodule Ferry.ItemSchemaTest do
           }
         }
       }
-    } = create_item(conn, %{category: category, name: "mask"})
+    } = create_item(conn, %{category: clothing, name: "t-shirts"})
 
     %{
       "data" => %{
@@ -159,14 +175,14 @@ defmodule Ferry.ItemSchemaTest do
           "successful" => true,
           "result" => %{
             "id" => ^id,
-            "name" => "new name"
+            "name" => "trousers"
           }
         }
       }
     } =
       update_item(conn, %{
         id: id,
-        name: "Mask"
+        name: "trousers"
       })
   end
 
@@ -180,11 +196,11 @@ defmodule Ferry.ItemSchemaTest do
           "successful" => true,
           "messages" => [],
           "result" => %{
-            "id" => category
+            "id" => clothing
           }
         }
       }
-    } = create_category(conn, %{name: "test"})
+    } = create_category(conn, %{name: "clothing"})
 
     %{
       "data" => %{
@@ -192,18 +208,18 @@ defmodule Ferry.ItemSchemaTest do
           "successful" => true
         }
       }
-    } = create_item(conn, %{category: category, name: "mask"})
+    } = create_item(conn, %{category: clothing, name: "t-shirts"})
 
     %{
       "data" => %{
         "createItem" => %{
           "successful" => true,
           "result" => %{
-            "id" => id2
+            "id" => trousers
           }
         }
       }
-    } = create_item(conn, %{category: category, name: "other"})
+    } = create_item(conn, %{category: clothing, name: "trousers"})
 
     %{
       "data" => %{
@@ -213,8 +229,8 @@ defmodule Ferry.ItemSchemaTest do
       }
     } =
       update_item(conn, %{
-        id: id2,
-        name: "mask"
+        id: trousers,
+        name: "t-shirts"
       })
   end
 
@@ -246,11 +262,11 @@ defmodule Ferry.ItemSchemaTest do
           "successful" => true,
           "messages" => [],
           "result" => %{
-            "id" => category
+            "id" => clothing
           }
         }
       }
-    } = create_category(conn, %{name: "test"})
+    } = create_category(conn, %{name: "clothing"})
 
     %{
       "data" => %{
@@ -261,7 +277,7 @@ defmodule Ferry.ItemSchemaTest do
           }
         }
       }
-    } = create_item(conn, %{category: category, name: "mask"})
+    } = create_item(conn, %{category: clothing, name: "t-shirts"})
 
     assert count_items(conn) ==
              %{"data" => %{"countItems" => 1}}
