@@ -74,7 +74,7 @@ defmodule FerryApi.Schema.Item do
   @spec get_item(any(), %{id: String.t()}, any()) ::
           {:error, String.t()} | {:ok, Ferry.AidTaxonomy.Item.t()}
   def get_item(_parent, %{id: id}, _resolution) do
-    case Ferry.AidTaxonomy.get_item(id) do
+    case id |> String.to_integer() |> Ferry.AidTaxonomy.get_item() do
       nil ->
         {:error, @item_not_found}
 
@@ -92,7 +92,7 @@ defmodule FerryApi.Schema.Item do
   @spec get_item_by_name(any, %{category: String.t(), name: String.t()}, any) ::
           {:error, String.t()} | {:ok, Ferry.AidTaxonomy.Item.t()}
   def get_item_by_name(_parent, %{category: category, name: name}, _resolution) do
-    case Ferry.AidTaxonomy.get_category(category) do
+    case category |> String.to_integer() |> Ferry.AidTaxonomy.get_category() do
       nil ->
         {:error, @category_not_found}
 
@@ -133,7 +133,7 @@ defmodule FerryApi.Schema.Item do
   @spec update_item(any(), %{item_input: any, id: String.t()}, any()) ::
           {:error, String.t() | Ecto.Changeset.t()} | {:ok, Ferry.AidTaxonomy.Item.t()}
   def update_item(_parent, %{id: id, item_input: item_attrs}, _resolution) do
-    case Ferry.AidTaxonomy.get_item(id) do
+    case id |> String.to_integer() |> Ferry.AidTaxonomy.get_item() do
       nil ->
         {:error, @item_not_found}
 
@@ -148,7 +148,7 @@ defmodule FerryApi.Schema.Item do
   @spec delete_item(any, %{id: String.t()}, any) ::
           {:error, String.t() | Ecto.Changeset.t()} | {:ok, Ferry.AidTaxonomy.Item.t()}
   def delete_item(_parent, %{id: id}, _resolution) do
-    case Ferry.AidTaxonomy.get_item(id) do
+    case id |> String.to_integer() |> Ferry.AidTaxonomy.get_item() do
       nil -> {:error, @item_not_found}
       item -> Ferry.AidTaxonomy.delete_item(item)
     end

@@ -141,7 +141,7 @@ defmodule Ferry.ApiClient.Category do
   Run a GraphQL query that retuns a single
   category, given its id. It also returns its associated items.
   """
-  @spec get_category(Plug.Conn.t(), String.t()) :: map()
+  @spec get_category_with_items(Plug.Conn.t(), String.t()) :: map()
   def get_category_with_items(conn, id) do
     graphql(conn, """
     {
