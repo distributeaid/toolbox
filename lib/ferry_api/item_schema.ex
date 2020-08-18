@@ -3,6 +3,8 @@ defmodule FerryApi.Schema.Item do
 
   import AbsintheErrorPayload.Payload
   alias FerryApi.Middleware
+  alias Ferry.AidTaxonomy
+  alias Ferry.AidTaxonomy.Item
 
   object :item_queries do
     @desc "Get the # of items"
@@ -47,6 +49,15 @@ defmodule FerryApi.Schema.Item do
       middleware(&build_payload/2)
     end
 
+    @desc "Move an item to a new category"
+    field :update_item_category, type: :item_payload do
+      arg(:id, non_null(:id))
+      arg(:category, non_null(:id))
+      middleware(Middleware.RequireUser)
+      resolve(&update_item_category/3)
+      middleware(&build_payload/2)
+    end
+
     @desc "Delete a item"
     field :delete_item, type: :item_payload do
       arg(:id, non_null(:id))
@@ -65,16 +76,16 @@ defmodule FerryApi.Schema.Item do
   """
   @spec count_items(map(), map(), Absinthe.Resolution.t()) :: {:ok, non_neg_integer()}
   def count_items(_parent, _args, _resolution) do
-    {:ok, Ferry.AidTaxonomy.count_items()}
+    {:ok, AidTaxonomy.count_items()}
   end
 
   @doc """
   Graphql resolver that returns a single item, given its id
   """
   @spec get_item(any(), %{id: String.t()}, any()) ::
-          {:error, String.t()} | {:ok, Ferry.AidTaxonomy.Item.t()}
+          {:error, String.t()} | {:ok, Item.t()}
   def get_item(_parent, %{id: id}, _resolution) do
-    case id |> String.to_integer() |> Ferry.AidTaxonomy.get_item() do
+    case id |> String.to_integer() |> AidTaxonomy.get_item() do
       nil ->
         {:error, @item_not_found}
 
@@ -90,14 +101,14 @@ defmodule FerryApi.Schema.Item do
   name is not unique across categories.
   """
   @spec get_item_by_name(any, %{category: String.t(), name: String.t()}, any) ::
-          {:error, String.t()} | {:ok, Ferry.AidTaxonomy.Item.t()}
+          {:error, String.t()} | {:ok, Item.t()}
   def get_item_by_name(_parent, %{category: category, name: name}, _resolution) do
-    case category |> String.to_integer() |> Ferry.AidTaxonomy.get_category() do
+    case category |> String.to_integer() |> AidTaxonomy.get_category() do
       nil ->
         {:error, @category_not_found}
 
       category ->
-        case Ferry.AidTaxonomy.get_item_by_name(category, name) do
+        case AidTaxonomy.get_item_by_name(category, name) do
           nil ->
             {:error, @item_not_found}
 
@@ -116,14 +127,14 @@ defmodule FerryApi.Schema.Item do
           any,
           %{item_input: map()},
           any
-        ) :: {:error, Ecto.Changeset.t()} | {:ok, Ferry.AidTaxonomy.Item.t()}
+        ) :: {:error, Ecto.Changeset.t()} | {:ok, Item.t()}
   def create_item(_parent, %{item_input: item_attrs}, _resolution) do
-    case Ferry.AidTaxonomy.get_category(item_attrs.category) do
+    case AidTaxonomy.get_category(item_attrs.category) do
       nil ->
         {:error, @category_not_found}
 
       category ->
-        Ferry.AidTaxonomy.create_item(category, item_attrs)
+        AidTaxonomy.create_item(category, item_attrs)
     end
   end
 
@@ -131,14 +142,35 @@ defmodule FerryApi.Schema.Item do
   Graphql resolver that updates an existing item
   """
   @spec update_item(any(), %{item_input: any, id: String.t()}, any()) ::
-          {:error, String.t() | Ecto.Changeset.t()} | {:ok, Ferry.AidTaxonomy.Item.t()}
+          {:error, String.t() | Ecto.Changeset.t()} | {:ok, Item.t()}
   def update_item(_parent, %{id: id, item_input: item_attrs}, _resolution) do
-    case id |> String.to_integer() |> Ferry.AidTaxonomy.get_item() do
+    case id |> String.to_integer() |> AidTaxonomy.get_item() do
       nil ->
         {:error, @item_not_found}
 
       item ->
-        Ferry.AidTaxonomy.update_item(item, item_attrs)
+        AidTaxonomy.update_item(item, item_attrs)
+    end
+  end
+
+  @doc """
+  Graphql resolver that updates an existing item
+  """
+  @spec update_item_category(any(), %{category: String.t(), id: String.t()}, any()) ::
+          {:error, String.t() | Ecto.Changeset.t()} | {:ok, Item.t()}
+  def update_item_category(_parent, %{id: id, category: category}, _resolution) do
+    case id |> String.to_integer() |> AidTaxonomy.get_item() do
+      nil ->
+        {:error, @item_not_found}
+
+      item ->
+        case category |> String.to_integer() |> AidTaxonomy.get_category() do
+          nil ->
+            {:error, @category_not_found}
+
+          category ->
+            AidTaxonomy.update_item_category(item, category)
+        end
     end
   end
 
@@ -146,11 +178,11 @@ defmodule FerryApi.Schema.Item do
   Graphql resolver that deletes an existing item
   """
   @spec delete_item(any, %{id: String.t()}, any) ::
-          {:error, String.t() | Ecto.Changeset.t()} | {:ok, Ferry.AidTaxonomy.Item.t()}
+          {:error, String.t() | Ecto.Changeset.t()} | {:ok, Item.t()}
   def delete_item(_parent, %{id: id}, _resolution) do
-    case id |> String.to_integer() |> Ferry.AidTaxonomy.get_item() do
+    case id |> String.to_integer() |> AidTaxonomy.get_item() do
       nil -> {:error, @item_not_found}
-      item -> Ferry.AidTaxonomy.delete_item(item)
+      item -> AidTaxonomy.delete_item(item)
     end
   end
 end

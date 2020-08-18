@@ -10,7 +10,7 @@ defmodule Ferry.AidTaxonomy.Item do
   schema "aid__items" do
     field :name, :string
 
-    belongs_to :category, Category, foreign_key: :category_id
+    belongs_to :category, Category, foreign_key: :category_id, on_replace: :update
 
     # TODO: probably want to setup a schema for the join table with
     # has_many / belongs_to on each side, to provide flexibility if we ever need

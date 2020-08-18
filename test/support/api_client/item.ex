@@ -111,6 +111,32 @@ defmodule Ferry.ApiClient.Item do
   end
 
   @doc """
+  Run a GraphQL mutation that moves the given item to the given category
+  """
+  @spec update_item_category(Plug.Conn.t(), String.t(), String.t()) :: map()
+  def update_item_category(conn, id, category) do
+    graphql(conn, """
+    mutation {
+      updateItemCategory(id: "#{id}", category: "#{category}") {
+        successful,
+        messages {
+          field,
+          message
+        },
+        result {
+          id,
+          name,
+          category {
+            id,
+            name
+          }
+        }
+      }
+    }
+    """)
+  end
+
+  @doc """
   Run a GraphQL mutation that deletes a item, given its id
   """
   @spec delete_item(Plug.Conn.t(), String.t()) :: map()

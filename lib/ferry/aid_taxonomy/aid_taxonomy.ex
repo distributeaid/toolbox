@@ -157,7 +157,7 @@ defmodule Ferry.AidTaxonomy do
   @doc """
   Count the total number of items in the database
   """
-  @spec count_items() :: Integer.t()
+  @spec count_items() :: integer()
   def count_items() do
     Item
     |> Repo.aggregate(:count, :id)
@@ -210,6 +210,8 @@ defmodule Ferry.AidTaxonomy do
       ]
   end
 
+  @spec create_item(Ferry.AidTaxonomy.Category.t(), map()) ::
+          {:ok, Item.t()} | {:error, Ecto.Changeset.t()}
   def create_item(%Category{} = category, attrs \\ %{}) do
     mods = get_item_mods(attrs)
 
@@ -221,6 +223,8 @@ defmodule Ferry.AidTaxonomy do
 
   # NOTE: Can't change the Category (Item.changeset doesn't cast `:category_id`).
   # TODO: Do we want this?  Here or explicitly in a "move_category" function?
+  @spec update_item(Ferry.AidTaxonomy.Item.t(), map()) ::
+          {:ok, Item.t()} | {:error, Ecto.Changeset.t()}
   def update_item(%Item{} = item, attrs \\ %{}) do
     mods = get_item_mods(attrs)
 
@@ -229,6 +233,18 @@ defmodule Ferry.AidTaxonomy do
     |> Item.changeset(attrs)
     |> Changeset.put_assoc(:mods, mods)
     |> Repo.update()
+  end
+
+  @spec update_item_category(Item.t(), Category.t()) ::
+          {:ok, Item.t()} | {:error, Ecto.Changeset.t()}
+  def update_item_category(%Item{} = item, %Category{} = category) do
+    with {:ok, item} <-
+           item
+           |> Item.changeset(%{})
+           |> Changeset.put_change(:category_id, category.id)
+           |> Repo.update() do
+      {:ok, Repo.preload(item, :category, force: true)}
+    end
   end
 
   # Mods referenced by the Item will be left as is (even if that's the only Item
@@ -251,17 +267,13 @@ defmodule Ferry.AidTaxonomy do
   #
   # TODO: Add ability to archive Categories & Items, so existing Entries are
   #       unaffected but the Category / Items can't be selected for new Entries.
+  @spec delete_item(Ferry.AidTaxonomy.Item.t()) :: {:ok, Item.t()} | {:error, Ecto.Changeset.t()}
   def delete_item(%Item{} = item) do
     item
     # TODO: Item.delete_changeset that only checks fkey constraints?
     # handle db constraint errors as changeset errors
     |> Item.changeset()
     |> Repo.delete()
-  end
-
-  # TODO: test
-  def change_item(%Item{} = item) do
-    Item.changeset(item, %{})
   end
 
   # Helpers

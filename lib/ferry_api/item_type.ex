@@ -9,5 +9,5 @@ defmodule FerryApi.Schema.ItemType do
     field :category, non_null(:category)
   end
 
-  payload_object(:item_payload, :project)
+  payload_object(:item_payload, :item)
 end
