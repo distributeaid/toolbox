@@ -171,7 +171,7 @@ defmodule Ferry.AidTaxonomy do
   """
   @spec get_item(integer(), boolean) :: Item.t() | nil
   def get_item(id, _with_mods? \\ false) do
-    Item
+    item_query()
     |> Repo.get(id)
   end
 
@@ -181,9 +181,9 @@ defmodule Ferry.AidTaxonomy do
   If no item matches, then this function returns an error
   TODO: test with_mods? == true
   """
-  @spec get_item(integer(), boolean) :: Item.t()
+  @spec get_item!(integer(), boolean) :: Item.t()
   def get_item!(id, _with_mods \\ false) do
-    Item
+    item_query()
     |> Repo.get!(id)
   end
 
@@ -195,8 +195,19 @@ defmodule Ferry.AidTaxonomy do
   """
   @spec get_item_by_name(Category.t(), String.t(), boolean) :: Item.t() | nil
   def get_item_by_name(category, name, _with_mods? \\ false) do
-    Item
-    |> Repo.get_by(category: category.id, name: name)
+    item_query()
+    |> Repo.get_by(category_id: category.id, name: name)
+  end
+
+  defp item_query() do
+    from item in Item,
+      join: category in assoc(item, :category),
+      left_join: mod in assoc(item, :mods),
+      order_by: [category.name, item.name, mod.name],
+      preload: [
+        category: category,
+        mods: mod
+      ]
   end
 
   def create_item(%Category{} = category, attrs \\ %{}) do

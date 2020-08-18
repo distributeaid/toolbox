@@ -1,7 +1,8 @@
 defmodule FerryApi.Schema.CategoryType do
   use Absinthe.Schema.Notation
-
+  alias FerryApi.Schema.Dataloader.Repo
   import AbsintheErrorPayload.Payload
+  import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
   object :category do
     # Required Fields
@@ -13,8 +14,7 @@ defmodule FerryApi.Schema.CategoryType do
     # for now, collisions resolved manually E.g. "Manhatten (MT)"
     field :name, non_null(:string)
 
-    # TODO
-    # field :items, list_of(:item), resolve: dataloader(Category)
+    field :items, list_of(:item), resolve: dataloader(Repo)
   end
 
   payload_object(:category_payload, :category)

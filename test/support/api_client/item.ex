@@ -11,7 +11,7 @@ defmodule Ferry.ApiClient.Item do
   """
   @spec count_items(Plug.Conn.t()) :: map()
   def count_items(conn) do
-    graphql(conn, "{ countitems }")
+    graphql(conn, "{ countItems }")
   end
 
   @doc """

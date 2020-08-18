@@ -3,7 +3,7 @@ defmodule FerryApi.Schema.ItemType do
 
   import AbsintheErrorPayload.Payload
 
-  object :project do
+  object :item do
     field :id, non_null(:id)
     field :name, non_null(:string)
     field :category, non_null(:category)

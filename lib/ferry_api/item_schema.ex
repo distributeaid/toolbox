@@ -89,7 +89,7 @@ defmodule FerryApi.Schema.Item do
   This resolver first needs to lookup the category, since the
   name is not unique across categories.
   """
-  @spec get_item_by_name(any, %{name: binary}, any) ::
+  @spec get_item_by_name(any, %{category: String.t(), name: String.t()}, any) ::
           {:error, String.t()} | {:ok, Ferry.AidTaxonomy.Item.t()}
   def get_item_by_name(_parent, %{category: category, name: name}, _resolution) do
     case Ferry.AidTaxonomy.get_category(category) do

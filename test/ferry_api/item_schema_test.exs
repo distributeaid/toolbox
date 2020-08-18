@@ -98,6 +98,9 @@ defmodule Ferry.ItemSchemaTest do
   end
 
   test "fetch a item that does not exist", %{conn: conn} do
+    insert(:user)
+    |> mock_sign_in
+
     %{
       "data" => %{
         "createCategory" => %{

@@ -13,7 +13,7 @@ defmodule Ferry.CategoryItemSchemaTest do
           "messages" => [],
           "result" => %{
             "id" => clothing,
-            "name" => "test"
+            "name" => "clothing"
           }
         }
       }
@@ -55,7 +55,7 @@ defmodule Ferry.CategoryItemSchemaTest do
           "messages" => [],
           "result" => %{
             "id" => food,
-            "name" => "test"
+            "name" => "food"
           }
         }
       }
