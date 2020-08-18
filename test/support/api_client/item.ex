@@ -24,7 +24,11 @@ defmodule Ferry.ApiClient.Item do
     {
       item(id: "#{id}") {
         id,
-        name
+        name,
+        category {
+          id,
+          name
+        }
       }
     }
     """)
@@ -42,7 +46,11 @@ defmodule Ferry.ApiClient.Item do
     {
       itemByName(category: "#{category}", name: "#{name}") {
         id,
-        name
+        name,
+        category {
+          id,
+          name
+        }
       }
     }
     """)

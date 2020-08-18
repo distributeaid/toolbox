@@ -51,7 +51,11 @@ defmodule Ferry.ItemSchemaTest do
       "data" => %{
         "item" => %{
           "id" => ^id,
-          "name" => "t-shirts"
+          "name" => "t-shirts",
+          "category" => %{
+            "name" => "clothing",
+            "id" => ^clothing
+          }
         }
       }
     } = get_item(conn, id)
@@ -63,7 +67,11 @@ defmodule Ferry.ItemSchemaTest do
       "data" => %{
         "itemByName" => %{
           "id" => ^id,
-          "name" => "t-shirts"
+          "name" => "t-shirts",
+          "category" => %{
+            "name" => "clothing",
+            "id" => ^clothing
+          }
         }
       }
     } = get_item_by_name(conn, clothing, "t-shirts")
