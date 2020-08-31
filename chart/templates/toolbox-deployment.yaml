@@ -28,6 +28,8 @@ spec:
               value: toolbox
             - name: POSTGRES_PASSWORD
               value: toolbox
+            - name: POSTGRES_PORT
+              value: "5432"
             - name: PORT
               value: "1312"
             - name: MIX_ENV

@@ -17,7 +17,7 @@ config :ferry, FerryWeb.Endpoint,
   http: [port: {:system, "PORT"}],
   # This is critical for ensuring web-sockets properly authorize.
   url: [host: {:system, "HOSTNAME"}, port: {:system, "PORT"}],
-  cache_static_manifest: "priv/static/cache_manifest.json",
+  # cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
   root: ".",
   version: Application.spec(:phoenix_distillery, :vsn)

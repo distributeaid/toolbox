@@ -28,13 +28,11 @@ defmodule FerryWeb.Router do
   scope "/api" do
     pipe_through([:api])
 
-    if Mix.env() == :dev do
-      forward(
-        "/graphiql",
-        Absinthe.Plug.GraphiQL,
-        schema: FerryApi.Schema
-      )
-    end
+    forward(
+      "/graphiql",
+      Absinthe.Plug.GraphiQL,
+      schema: FerryApi.Schema
+    )
 
     forward(
       "/",
@@ -43,10 +41,8 @@ defmodule FerryWeb.Router do
     )
   end
 
-  if Mix.env() == :dev do
-    scope "/" do
-      pipe_through :browser
-      live_dashboard "/dashboard", metrics: FerryWeb.Telemetry
-    end
+  scope "/" do
+    pipe_through :browser
+    live_dashboard "/dashboard", metrics: FerryWeb.Telemetry
   end
 end
