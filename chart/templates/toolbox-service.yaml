@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: toolbox
+  annotations:
+    dev.okteto.com/auto-ingress: "true"
+spec:
+  type: ClusterIP  
+  ports:
+  - name: toolbox
+    port: 1312
+  selector:
+    app: toolbox
