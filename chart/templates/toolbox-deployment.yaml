@@ -30,6 +30,8 @@ spec:
               value: toolbox
             - name: PORT
               value: "1312"
+            - name: MIX_ENV
+              value: dev
           livenessProbe:
             httpGet:
               path: /health
