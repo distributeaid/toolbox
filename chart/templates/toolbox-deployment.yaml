@@ -34,7 +34,3 @@ spec:
               value: "1312"
             - name: ENV
               value: dev
-            - name: GRAPHIQL
-              value: enable
-            - name: AUTH 
-              value: disable

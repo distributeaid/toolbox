@@ -2,6 +2,7 @@ defmodule FerryWeb.Router do
   use FerryWeb, :router
   import Phoenix.LiveDashboard.Router
   import FerryWeb.Plugs.PutUser
+  require Logger
 
   pipeline :browser do
     plug(:accepts, ["html"])
@@ -20,6 +21,8 @@ defmodule FerryWeb.Router do
 
     if Application.get_env(:ferry, :auth, "enable") == "enable" do
       plug(:put_user)
+    else
+      Logger.warn("User authentication is disabled!")
     end
   end
 
@@ -36,6 +39,8 @@ defmodule FerryWeb.Router do
         Absinthe.Plug.GraphiQL,
         schema: FerryApi.Schema
       )
+
+      Logger.warn("GraphiQL development UI is enabled")
     end
 
     forward(
@@ -45,8 +50,12 @@ defmodule FerryWeb.Router do
     )
   end
 
-  scope "/" do
-    pipe_through :browser
-    live_dashboard "/dashboard", metrics: FerryWeb.Telemetry
+  if Application.get_env(:ferry, :dashboard, "disable") do
+    scope "/" do
+      pipe_through :browser
+      live_dashboard "/dashboard", metrics: FerryWeb.Telemetry
+    end
+
+    Logger.warn("Phoenix Live Dashboard is enabled")
   end
 end

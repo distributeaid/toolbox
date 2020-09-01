@@ -93,6 +93,7 @@ config :ex_aws,
 
 config :ferry, :graphiql, System.get_env("GRAPHIQL", "enable")
 config :ferry, :auth, System.get_env("AUTH", "enable")
+config :ferry, :dashboard, System.get_env("DASHBOARD", "disable")
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
