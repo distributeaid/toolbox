@@ -16,7 +16,7 @@ spec:
         - name: toolbox
           image: pedrogutierrez/toolbox:latest
           ports:
-            - name: http
+            - name: toolbox
               containerPort: 1312
               protocol: TCP
           env:
@@ -32,14 +32,12 @@ spec:
               value: "5432"
             - name: PORT
               value: "1312"
-            - name: MIX_ENV
-              value: dev
             - name: ENV
               value: dev
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 1312
+          #livenessProbe:
+          #  httpGet:
+          #    path: /health
+          #    port: 1312
           #readinessProbe:
           #  httpGet:
           #    path: /health
