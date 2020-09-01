@@ -4,7 +4,8 @@ RUN apt-get update && apt-get -y -q install apt-utils debconf make build-essenti
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
-RUN locale-gen en_US.UTF-8
+ENV LC_CTYPE en_US.UTF-8
+#RUN locale-gen en_US.UTF-8
 
 RUN mkdir -p /app
 WORKDIR /app
@@ -21,11 +22,14 @@ RUN apt-get update && apt-get -y -q install locales imagemagick
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
-RUN locale-gen en_US.UTF-8
+ENV LC_CTYPE en_US.UTF-8
+#RUN locale-gen en_US.UTF-8
 
 RUN mkdir -p /app
 WORKDIR /app
 
 COPY --from=builder /app/_build/prod /app
+
+RUN locale
 
 CMD [ "/app/rel/ferry/bin/ferry", "start" ]
