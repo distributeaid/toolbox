@@ -3,16 +3,24 @@ defmodule FerryApi.Middleware.RequireUser do
 
   alias FerryApi.Constants
 
-  def call(resolution, _opts) do
-    case resolution.context.user do
-      nil ->
-        resolution
-        |> Absinthe.Resolution.put_result(
-          {:error, message: "Not authorized", code: Constants.unauthorized()}
-        )
+  @auth_enabled? Application.get_env(:ferry, :auth) == "enable"
 
-      _ ->
+  def call(resolution, _opts) do
+    case @auth_enabled? do
+      false ->
         resolution
+
+      true ->
+        case resolution.context.user do
+          nil ->
+            resolution
+            |> Absinthe.Resolution.put_result(
+              {:error, message: "Not authorized", code: Constants.unauthorized()}
+            )
+
+          _ ->
+            resolution
+        end
     end
   end
 end
