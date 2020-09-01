@@ -34,6 +34,8 @@ spec:
               value: "1312"
             - name: MIX_ENV
               value: dev
+            - name: ENV
+              value: dev
           livenessProbe:
             httpGet:
               path: /health
