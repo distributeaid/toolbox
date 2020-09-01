@@ -18,7 +18,7 @@ defmodule FerryWeb.Router do
       json_decoder: Jason
     )
 
-    if Mix.env() != "dev" do
+    if Application.get_env(:ferry, :auth, "enable") == "enable" do
       plug(:put_user)
     end
   end
@@ -30,7 +30,7 @@ defmodule FerryWeb.Router do
   scope "/api" do
     pipe_through([:api])
 
-    if Mix.env() == "dev" do
+    if Application.get_env(:ferry, :graphiql, "enable") == "enable" do
       forward(
         "/graphiql",
         Absinthe.Plug.GraphiQL,
