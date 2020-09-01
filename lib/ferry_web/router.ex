@@ -18,7 +18,9 @@ defmodule FerryWeb.Router do
       json_decoder: Jason
     )
 
-    plug(:put_user)
+    if Mix.env() != "dev" do
+      plug(:put_user)
+    end
   end
 
   scope "/" do
@@ -28,11 +30,13 @@ defmodule FerryWeb.Router do
   scope "/api" do
     pipe_through([:api])
 
-    forward(
-      "/graphiql",
-      Absinthe.Plug.GraphiQL,
-      schema: FerryApi.Schema
-    )
+    if Mix.env() == "dev" do
+      forward(
+        "/graphiql",
+        Absinthe.Plug.GraphiQL,
+        schema: FerryApi.Schema
+      )
+    end
 
     forward(
       "/",
