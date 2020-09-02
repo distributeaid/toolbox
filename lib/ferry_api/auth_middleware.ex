@@ -3,14 +3,9 @@ defmodule FerryApi.Middleware.RequireUser do
 
   alias FerryApi.Constants
 
-  @auth_enabled? Application.get_env(:ferry, :auth) == "enable"
-
   def call(resolution, _opts) do
-    case @auth_enabled? do
-      false ->
-        resolution
-
-      true ->
+    case Application.get_env(:ferry, :auth) do
+      "enable" ->
         case resolution.context.user do
           nil ->
             resolution
@@ -21,6 +16,9 @@ defmodule FerryApi.Middleware.RequireUser do
           _ ->
             resolution
         end
+
+      _ ->
+        resolution
     end
   end
 end
