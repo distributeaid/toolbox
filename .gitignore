@@ -42,3 +42,6 @@ priv/plts/*.plt.hash
 
 # macOS specific
 **/*.DS_Store
+
+# schemaspy work dir
+schemaspy
