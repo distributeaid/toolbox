@@ -32,7 +32,9 @@ defmodule Mix.Tasks.Db.Diagram do
       Application.get_env(:ferry, Ferry.Repo)
       |> with_defaults()
 
-    IO.puts("Generating diagram for database #{db[:database]}...")
+    IO.puts(
+      "Generating diagram for database #{db[:database]} at #{db[:hostname]}:#{db[:port]}..."
+    )
 
     System.cmd("java", [
       "-jar",
