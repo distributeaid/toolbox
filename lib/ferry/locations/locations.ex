@@ -109,17 +109,21 @@ defmodule Ferry.Locations do
   end
 
   @doc """
-  Creates a address.
+  Creates an address for the given group
 
   ## Examples
 
-      iex> create_address(%Group{}, %{field: value})
+      iex> create_address(%Group{}, %{label: "default", province: "Andalusia", country_code: "ES", postal_code: "29620"})
       {:ok, %Address{}}
 
-      iex> create_address(%Group{}, %{field: bad_value})
+      iex> create_address(%Group{}, %{label: "default"})
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec create_address(
+          Ferry.Profiles.Group.t(),
+          map()
+        ) :: {:ok, Address.t()} | {:error, Changeset.t()}
   def create_address(%Group{} = group, attrs) do
     %Address{}
     |> Address.changeset(attrs)
@@ -129,17 +133,24 @@ defmodule Ferry.Locations do
   end
 
   @doc """
-  Creates a list of addresses for the given group
+  Creates a list of addresses for the given group.
+
+  If successful this function returns the list of addresses indexed in a map
+  by label.
 
   ## Examples
 
-      iex> create_addresses(%Group{}, %{field: value})
-      {:ok, %Address{}}
+      iex> create_addresses(%Group{}, [%{label: "main", province: "Andalusia", country_code: "ES", postal_code: "29620"}, %{label: "old", province: "Andalusia", country_code: "ES", postal_code: "29620"}])
+      {:ok, %{ "main" => %Address{}, "old" => %Address{}}}
 
-      iex> create_addresses(%Group{}, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+      iex> create_addresses(%Group{}, [%{field: bad_value}])
+      {:error, label, %Ecto.Changeset{}}
 
   """
+  @spec create_addresses(
+          Ferry.Profiles.Group.t(),
+          list(Address.t())
+        ) :: {:ok, map()} | {:error, String.t(), Changeset.t()}
   def create_addresses(%Group{} = group, addresses) do
     addresses
     |> Enum.reduce(Ecto.Multi.new(), fn attrs, multi ->

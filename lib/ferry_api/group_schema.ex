@@ -111,7 +111,7 @@ defmodule FerryApi.Schema.Group do
       {:ok, group} ->
         case Locations.create_addresses(group, group_attrs.addresses) do
           {:ok, addresses} -> {:ok, %{group | addresses: addresses}}
-          {:error, changeset} -> {:error, changeset}
+          {:error, _, changeset} -> {:error, changeset}
         end
 
       {:error, changeset} ->
