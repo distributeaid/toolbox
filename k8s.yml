@@ -1,0 +1,92 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: toolbox
+  annotations:
+    dev.okteto.com/auto-ingress: "true"
+spec:
+  type: ClusterIP  
+  ports:
+  - name: toolbox
+    port: 1312
+  selector:
+    app: toolbox
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+spec:
+  type: ClusterIP
+  ports:
+  - name: db 
+    port: 5432
+  selector:
+    app: db
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: toolbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: toolbox
+  template:
+    metadata:
+      labels:
+        app: toolbox
+    spec:
+      containers:
+        - name: toolbox
+          image: pedrogutierrez/toolbox:latest
+          ports:
+            - name: toolbox
+              containerPort: 1312
+              protocol: TCP
+          env:
+            - name: POSTGRES_HOST
+              value: db
+            - name: POSTGRES_DB
+              value: toolbox
+            - name: POSTGRES_USER
+              value: toolbox
+            - name: POSTGRES_PASSWORD
+              value: toolbox
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: PORT
+              value: "1312"
+            - name: ENV
+              value: dev
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db 
+  template:
+    metadata:
+      labels:
+        app: db 
+    spec:
+      containers:
+        - name: db 
+          image: postgres:11.2
+          ports:
+            - name: http
+              containerPort: 5432
+              protocol: TCP
+          env:
+            - name: POSTGRES_DB
+              value: toolbox
+            - name: POSTGRES_USER
+              value: toolbox
+            - name: POSTGRES_PASSWORD
+              value: toolbox

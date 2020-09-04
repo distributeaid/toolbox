@@ -1,7 +1,0 @@
-apiVersion: v2
-name: toolbox
-description: Distribute Aid Toolbox
-type: application
-version: 0.1.0
-appVersion: 1.0.0
-icon: https://distributeaid.org/img/DA_wordmark_white_vertical.png
