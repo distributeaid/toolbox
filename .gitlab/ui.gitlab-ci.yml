@@ -18,7 +18,6 @@ build_ui:
       - etc/nginx/conf.d
   script:
     - cd ${REACT_DIR}
-    - npm config set registry https://gitlab.com/api/v4/packages/npm/
     - npm install
     - npm install react-scripts
     - npm run lint
@@ -33,7 +32,6 @@ unit_test_ui:
     policy: pull
   script:
     - cd ${REACT_DIR}
-    - npm config set registry https://gitlab.com/api/v4/packages/npm/
     - npm test
 
 cypress_e2e:
@@ -45,7 +43,6 @@ cypress_e2e:
     policy: pull
   script:
     - cd ${REACT_DIR}
-    #- npm config set registry https://gitlab.com/api/v4/packages/npm/
     - npm ci
     # show where the Cypress test runner binaries are cached
     - $(npm bin)/cypress cache path
