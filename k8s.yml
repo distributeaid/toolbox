@@ -41,6 +41,7 @@ spec:
     spec:
       containers:
         - name: toolbox
+          imagePullPolicy: Always
           image: pedrogutierrez/toolbox:latest
           ports:
             - name: toolbox
