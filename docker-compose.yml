@@ -24,7 +24,7 @@ services:
     build:
       context: .
       dockerfile: mix.Dockerfile
-    container_name: toolbox_web
+    container_name: toolbox
     volumes:
       - ./config:/app/config
       - ./lib:/app/lib
