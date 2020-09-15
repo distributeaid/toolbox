@@ -6,12 +6,29 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:11
+        env:
+          POSTGRES_USER: toolbox
+          POSTGRES_PASSWORD: toolbox 
+          POSTGRES_DB: toolbox 
+        ports:
+        - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      MIX_ENV: test
+      POSTGRES_USER: toolbox
+      POSTGRES_PASSWORD: toolbox
+      POSTGRES_DB: toolbox
+      DB_HOSTNAME_TEST: toolbox
+      POSTGRES_PORT: 5432
     steps:
       - uses: actions/checkout@v2
-      - name: Build the stack
-        run: docker-compose up -d
-      - name: Test
-        run: docker exec toolbox mix test
+      - run: mix local.rebar --force
+      - run:  mix local.hex --force
+      - run: mix deps.get
+      - run: mix test
   package:
     runs-on: ubuntu-latest
     needs: test
