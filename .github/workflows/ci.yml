@@ -24,30 +24,27 @@ jobs:
       DB_HOSTNAME_TEST: localhost
       POSTGRES_PORT: 5432
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-elixir@v1.0.0
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Elixir
+        uses: actions/setup-elixir@v1.0.0
         with:
           otp-version: 22.2.6
           elixir-version: 1.10.1
-      - uses: actions/cache@v1
-        with:
-          path: deps
-          key: ${{ runner.os }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
-          restore-keys: |
-            ${{ runner.os }}-mix-
-      - run: mix local.rebar --force
-      - run: mix local.hex --force
-      - run: mix deps.get
-      - run: mix test
-      - name: Notify error via Slack 
+      - name: Setup rebar
+        run: mix local.rebar --force
+      - name: Setup Hex
+        run: mix local.hex --force
+      - name: Fetch dependencies
+        run: mix deps.get
+      - name: Compile and test
+        run: mix text
+      - name: If errors, notify 
         if: failure()
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
-        uses: voxmedia/github-action-slack-notify-build@v1
+        uses: craftech-io/slack-action@v1
         with:
-          channel: toolbox
-          status: Tests failed
-          color: danger
+          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          status: failure
   package:
     runs-on: ubuntu-latest
     needs: test
@@ -61,15 +58,12 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: pedrogutierrez/toolbox
         tags: latest
-    - name: Notify error
+    - name: If errors, notify 
       if: failure()
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
-      uses: voxmedia/github-action-slack-notify-build@v1
+      uses: craftech-io/slack-action@v1
       with:
-        channel: toolbox
-        status: Docker image failed 
-        color: danger
+        slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        status: failure
   deploy:
     runs-on: ubuntu-latest
     needs: package
@@ -80,21 +74,15 @@ jobs:
       uses: pedro-gutierrez/elementary-action@v5
       with:
         kubeconfig: ${{ secrets.KUBE_CONFIG }}
-    - name: Notify error
+    - name: If errors, notify 
       if: failure()
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
-      uses: voxmedia/github-action-slack-notify-build@v1
+      uses: craftech-io/slack-action@v1
       with:
-        channel: toolbox
-        status: Deploy failed 
-        color: danger
-    - name: Notify success
-      if: success()
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
-      uses: voxmedia/github-action-slack-notify-build@v1
+        slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        status: failure
+    - name: If success, notify 
+      if: failure()
+      uses: craftech-io/slack-action@v1
       with:
-        channel: toolbox
-        status: Succesfully deployed
-        color: good
+        slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        status: success
