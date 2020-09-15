@@ -21,7 +21,7 @@ jobs:
       POSTGRES_USER: toolbox
       POSTGRES_PASSWORD: toolbox
       POSTGRES_DB: toolbox
-      DB_HOSTNAME_TEST: toolbox
+      DB_HOSTNAME_TEST: localhost
       POSTGRES_PORT: 5432
     steps:
       - uses: actions/checkout@v2
