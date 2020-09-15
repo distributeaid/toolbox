@@ -11,7 +11,7 @@ jobs:
       - name: Build the stack
         run: docker-compose up -d
       - name: Test
-        run: docker exec toolbox mix test
+        run: docker exec toolbox mix deps.get compile test
   package:
     runs-on: ubuntu-latest
     needs: test
