@@ -1,5 +1,6 @@
 # App artifacts
 /_build
+/build
 /db
 /deps
 /*.ez
@@ -45,3 +46,5 @@ priv/plts/*.plt.hash
 
 # schemaspy work dir
 schemaspy
+
+.vscode
