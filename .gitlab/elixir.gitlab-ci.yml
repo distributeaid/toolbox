@@ -31,7 +31,7 @@ build_elixir:
     - docker info
     - echo ${CI_REGISTRY_PASSWORD} | docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} --password-stdin
   script:
-    - docker build -t $GITLAB_CONTAINER_TEST_IMAGE -f web.Dockerfile .
+    - docker build -t $GITLAB_CONTAINER_TEST_IMAGE -f Dockerfile .
     - docker push $GITLAB_CONTAINER_TEST_IMAGE
     - echo $(aws ecr get-login-password) | docker login --username AWS --password-stdin 299303747484.dkr.ecr.us-east-2.amazonaws.com
     - docker tag $GITLAB_CONTAINER_TEST_IMAGE $ECR_CONTAINER_TEST_IMAGE 

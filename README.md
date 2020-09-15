@@ -309,6 +309,25 @@ docker exec -it dbtest sh -c "psql -U toolbox -d toolbox_dev"
 TODO
 ```
 
+## Generating a database diagram
+
+
+Ensure that:
+
+* You have Java installed (`brew install openjdk`) 
+* A running Postgres
+* The following env variables are set: `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_HOST`
+
+Then:
+
+* update your schema: `mix ecto.migrate`
+* generate the diagram: `mix db.diagram`
+
+This task will run `Schemaspy` and generate a diagram in PNG format at `docs/db/diagram.png`.
+
+Please don't forget to commit this file to source control.
+
+
 ## Deployment
 
 You must have SSH access to the target environment to perform these steps. Reach
