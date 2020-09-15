@@ -38,7 +38,7 @@ jobs:
       - name: Fetch dependencies
         run: mix deps.get
       - name: Compile and test
-        run: mix text
+        run: mix test
       - name: If errors, notify 
         if: failure()
         uses: craftech-io/slack-action@v1
