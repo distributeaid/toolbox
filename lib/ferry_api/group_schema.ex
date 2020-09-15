@@ -53,8 +53,7 @@ defmodule FerryApi.Schema.Group do
     field :donation_form, :string
     field :donation_form_results, :string
 
-    # location fields
-    field :location, :address_input
+    field :addresses, list_of(:address_input)
   end
 
   object :group_mutations do
@@ -90,11 +89,11 @@ defmodule FerryApi.Schema.Group do
   end
 
   def list_groups(_parent, _args, _resolution) do
-    {:ok, Profiles.list_groups(preload: [:location])}
+    {:ok, Profiles.list_groups(preload: [:addresses])}
   end
 
   def get_group(_parent, %{id: id}, _resolution) do
-    case Profiles.get_group(id, preload: [:location]) do
+    case Profiles.get_group(id, preload: [:addresses]) do
       nil -> {:error, message: "Group not found.", id: id}
       group -> {:ok, group}
     end
@@ -110,9 +109,9 @@ defmodule FerryApi.Schema.Group do
   def create_group(_parent, %{group_input: group_attrs}, _resolution) do
     case Profiles.create_group(group_attrs) do
       {:ok, group} ->
-        case Locations.create_address(group, group_attrs.location) do
-          {:ok, location} -> {:ok, %{group | location: location}}
-          {:error, changeset} -> {:error, changeset}
+        case Locations.create_addresses(group, group_attrs.addresses) do
+          {:ok, addresses} -> {:ok, %{group | addresses: addresses}}
+          {:error, _, changeset} -> {:error, changeset}
         end
 
       {:error, changeset} ->
@@ -121,18 +120,9 @@ defmodule FerryApi.Schema.Group do
   end
 
   def update_group(_parent, %{id: id, group_input: group_attrs}, _resolution) do
-    group = Profiles.get_group(id, preload: [:location])
-
-    case Profiles.update_group(group, group_attrs) do
-      {:ok, group} ->
-        case Locations.update_address(group.location, group_attrs.location) do
-          {:ok, location} -> {:ok, %{group | location: location}}
-          {:error, changeset} -> {:error, changeset}
-        end
-
-      {:error, changeset} ->
-        {:error, changeset}
-    end
+    id
+    |> Profiles.get_group()
+    |> Profiles.update_group(group_attrs)
   end
 
   def delete_group(_parent, %{id: id}, _resolution) do

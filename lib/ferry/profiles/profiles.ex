@@ -60,7 +60,7 @@ defmodule Ferry.Profiles do
   end
 
   def get_group_by_slug(slug) do
-    query = group_query(preload: [:location])
+    query = group_query(preload: [:addresses])
     Repo.get_by(query, slug: slug)
   end
 
@@ -139,10 +139,10 @@ defmodule Ferry.Profiles do
         order_by: group.id
 
     query =
-      if Enum.member?(preloads, :location) do
+      if Enum.member?(preloads, :addresses) do
         from group in query,
-          left_join: address in assoc(group, :location),
-          preload: [location: address]
+          left_join: addresses in assoc(group, :addresses),
+          preload: [addresses: addresses]
       else
         query
       end

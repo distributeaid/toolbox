@@ -77,7 +77,7 @@ defmodule Ferry.LocationsTest do
       # min
       attrs = string_params_for(:min_address)
       assert {:ok, %Address{} = address} = Locations.create_address(group, attrs)
-      assert address.label == nil
+      refute address.label == nil
       assert address.street == nil
       assert address.city == nil
       assert address.province == attrs["province"]

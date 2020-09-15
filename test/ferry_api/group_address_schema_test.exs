@@ -1,8 +1,8 @@
-defmodule Ferry.GroupProjectTest do
+defmodule Ferry.GroupAddressTest do
   use FerryWeb.ConnCase, async: true
-  import Ferry.ApiClient.{Group, Project}
+  import Ferry.ApiClient.{Group, Address}
 
-  test "fetch a group and its projects", %{conn: conn} do
+  test "fetch a group and its addresses", %{conn: conn} do
     insert(:user)
     |> mock_sign_in
 
@@ -21,33 +21,32 @@ defmodule Ferry.GroupProjectTest do
       }
     } = create_group(conn, group_attrs)
 
-    # create a project for that group
+    # add an address to that group
     %{
       "data" => %{
-        "createProject" => %{
+        "createAddress" => %{
           "successful" => true,
+          "messages" => [],
           "result" => %{
-            "id" => id
+            "id" => id,
+            "label" => "test"
           }
         }
       }
-    } =
-      create_project(conn, %{
-        group: group,
-        name: "test project",
-        description: "test description for test project"
-      })
+    } = create_address(conn, %{group: group, label: "test"})
 
-    # verify we can get that group and its projects
+    # verify we can get that group and its addresses
     %{
       "data" => %{
         "group" => %{
-          "projects" => [
+          "addresses" => [
+            # default address
+            _,
             %{"id" => ^id}
           ]
         }
       }
-    } = get_group_with_projects(conn, group)
+    } = get_group_with_addresses(conn, group)
 
     # create a second group with no projects
     group_attrs = params_for(:group) |> with_address()
@@ -64,14 +63,16 @@ defmodule Ferry.GroupProjectTest do
       }
     } = create_group(conn, group_attrs)
 
-    # verify that group has no projects
+    # verify that group has a single address
     %{
       "data" => %{
         "group" => %{
-          "projects" => []
+          "addresses" => [
+            _
+          ]
         }
       }
-    } = get_group_with_projects(conn, group)
+    } = get_group_with_addresses(conn, group)
 
     # verify we can get both groups and their associated
     # projects
@@ -81,16 +82,19 @@ defmodule Ferry.GroupProjectTest do
         "groups" => [
           %{
             "name" => "first group",
-            "projects" => [
-              %{"name" => "test project"}
+            "addresses" => [
+              _,
+              %{"label" => "test"}
             ]
           },
           %{
             "name" => "second group",
-            "projects" => []
+            "addresses" => [
+              _
+            ]
           }
         ]
       }
-    } = get_groups_with_projects(conn)
+    } = get_groups_with_addresses(conn)
   end
 end
