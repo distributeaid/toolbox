@@ -45,3 +45,5 @@ priv/plts/*.plt.hash
 
 # schemaspy work dir
 schemaspy
+
+.vscode

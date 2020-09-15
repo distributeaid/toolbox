@@ -1,0 +1,13 @@
+{application,heartcheck,
+             [{applications,[kernel,stdlib,elixir,logger]},
+              {description,"Web based monitoring/health checks"},
+              {modules,['Elixir.HeartCheck','Elixir.HeartCheck.CachingPlug',
+                        'Elixir.HeartCheck.CachingPlug.Server',
+                        'Elixir.HeartCheck.Check',
+                        'Elixir.HeartCheck.Checks.Firewall',
+                        'Elixir.HeartCheck.Environment',
+                        'Elixir.HeartCheck.Executor',
+                        'Elixir.HeartCheck.Formatter',
+                        'Elixir.HeartCheck.Plug']},
+              {registered,[]},
+              {vsn,"0.4.1"}]}.
