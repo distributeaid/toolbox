@@ -32,7 +32,7 @@ defmodule Ferry.ApiClient.Category do
 
   @doc """
   Run a GraphQL query that retuns a single
-  category, given its name.
+  category, given its id.
   """
   @spec get_category(Plug.Conn.t(), String.t()) :: map()
   def get_category(conn, id) do
@@ -129,6 +129,45 @@ defmodule Ferry.ApiClient.Category do
           message
         },
         result {
+          id,
+          name
+        }
+      }
+    }
+    """)
+  end
+
+  @doc """
+  Run a GraphQL query that retuns a single
+  category, given its id. It also returns its associated items.
+  """
+  @spec get_category_with_items(Plug.Conn.t(), String.t()) :: map()
+  def get_category_with_items(conn, id) do
+    graphql(conn, """
+    {
+      category(id: "#{id}") {
+        id,
+        name,
+        items {
+          id,
+          name
+        }
+      }
+    }
+    """)
+  end
+
+  @doc """
+  Run a GraphQL query that returns all categories and their items
+  """
+  @spec get_categories_with_items(Plug.Conn.t()) :: map()
+  def get_categories_with_items(conn) do
+    graphql(conn, """
+     {
+      categories {
+        id,
+        name,
+        items {
           id,
           name
         }

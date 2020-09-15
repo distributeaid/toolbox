@@ -154,11 +154,64 @@ defmodule Ferry.AidTaxonomy do
   # NOTE: No `list_items()` because we always want them to be organized by
   #       category.  Use `list_categories()` instead.
 
-  def get_item!(id) do
+  @doc """
+  Count the total number of items in the database
+  """
+  @spec count_items() :: integer()
+  def count_items() do
+    Item
+    |> Repo.aggregate(:count, :id)
+  end
+
+  @doc """
+  Given its id, return the associated item.
+
+  If no item matches, then this function returns nil
+  TODO: test with_mods? == true
+  """
+  @spec get_item(integer(), boolean) :: Item.t() | nil
+  def get_item(id, _with_mods? \\ false) do
+    item_query()
+    |> Repo.get(id)
+  end
+
+  @doc """
+  Given its id, return the associated item.
+
+  If no item matches, then this function returns an error
+  TODO: test with_mods? == true
+  """
+  @spec get_item!(integer(), boolean) :: Item.t()
+  def get_item!(id, _with_mods \\ false) do
     item_query()
     |> Repo.get!(id)
   end
 
+  @doc """
+  Given its category and name, return the associated item
+
+  If no item was found, then this function returns nil
+  TODO: test with_mods? == true
+  """
+  @spec get_item_by_name(Category.t(), String.t(), boolean) :: Item.t() | nil
+  def get_item_by_name(category, name, _with_mods? \\ false) do
+    item_query()
+    |> Repo.get_by(category_id: category.id, name: name)
+  end
+
+  defp item_query() do
+    from item in Item,
+      join: category in assoc(item, :category),
+      left_join: mod in assoc(item, :mods),
+      order_by: [category.name, item.name, mod.name],
+      preload: [
+        category: category,
+        mods: mod
+      ]
+  end
+
+  @spec create_item(Ferry.AidTaxonomy.Category.t(), map()) ::
+          {:ok, Item.t()} | {:error, Ecto.Changeset.t()}
   def create_item(%Category{} = category, attrs \\ %{}) do
     mods = get_item_mods(attrs)
 
@@ -170,6 +223,8 @@ defmodule Ferry.AidTaxonomy do
 
   # NOTE: Can't change the Category (Item.changeset doesn't cast `:category_id`).
   # TODO: Do we want this?  Here or explicitly in a "move_category" function?
+  @spec update_item(Ferry.AidTaxonomy.Item.t(), map()) ::
+          {:ok, Item.t()} | {:error, Ecto.Changeset.t()}
   def update_item(%Item{} = item, attrs \\ %{}) do
     mods = get_item_mods(attrs)
 
@@ -178,6 +233,18 @@ defmodule Ferry.AidTaxonomy do
     |> Item.changeset(attrs)
     |> Changeset.put_assoc(:mods, mods)
     |> Repo.update()
+  end
+
+  @spec update_item_category(Item.t(), Category.t()) ::
+          {:ok, Item.t()} | {:error, Ecto.Changeset.t()}
+  def update_item_category(%Item{} = item, %Category{} = category) do
+    with {:ok, item} <-
+           item
+           |> Item.changeset(%{})
+           |> Changeset.put_change(:category_id, category.id)
+           |> Repo.update() do
+      {:ok, Repo.preload(item, :category, force: true)}
+    end
   end
 
   # Mods referenced by the Item will be left as is (even if that's the only Item
@@ -200,6 +267,7 @@ defmodule Ferry.AidTaxonomy do
   #
   # TODO: Add ability to archive Categories & Items, so existing Entries are
   #       unaffected but the Category / Items can't be selected for new Entries.
+  @spec delete_item(Ferry.AidTaxonomy.Item.t()) :: {:ok, Item.t()} | {:error, Ecto.Changeset.t()}
   def delete_item(%Item{} = item) do
     item
     # TODO: Item.delete_changeset that only checks fkey constraints?
@@ -208,24 +276,19 @@ defmodule Ferry.AidTaxonomy do
     |> Repo.delete()
   end
 
-  # TODO: test
-  def change_item(%Item{} = item) do
-    Item.changeset(item, %{})
-  end
-
   # Helpers
   # ------------------------------------------------------------
 
-  defp item_query() do
-    from item in Item,
-      join: category in assoc(item, :category),
-      left_join: mod in assoc(item, :mods),
-      order_by: [category.name, item.name, mod.name],
-      preload: [
-        category: category,
-        mods: mod
-      ]
-  end
+  # defp item_query() do
+  #   from item in Item,
+  #     join: category in assoc(item, :category),
+  #     left_join: mod in assoc(item, :mods),
+  #     order_by: [category.name, item.name, mod.name],
+  #     preload: [
+  #       category: category,
+  #       mods: mod
+  #     ]
+  # end
 
   # from server data: mods = [%{id: 4}, ...]
   #                   mods = [%Mod{id: 4}, ...]
