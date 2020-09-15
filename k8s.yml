@@ -62,6 +62,8 @@ spec:
               value: "1312"
             - name: ENV
               value: dev
+            - name: TOOLBOX_VERSION
+              value: "{{VERSION}}"
 ---
 apiVersion: apps/v1
 kind: Deployment
