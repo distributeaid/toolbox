@@ -63,7 +63,6 @@ jobs:
         tags: latest
     - name: Notify error
       if: failure()
-      id: slack
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
       uses: voxmedia/github-action-slack-notify-build@v1
@@ -83,7 +82,6 @@ jobs:
         kubeconfig: ${{ secrets.KUBE_CONFIG }}
     - name: Notify error
       if: failure()
-      id: slack
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
       uses: voxmedia/github-action-slack-notify-build@v1
@@ -93,7 +91,6 @@ jobs:
         color: danger
     - name: Notify success
       if: success()
-      id: slack
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
       uses: voxmedia/github-action-slack-notify-build@v1
