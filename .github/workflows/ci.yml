@@ -39,6 +39,15 @@ jobs:
       - run: mix local.hex --force
       - run: mix deps.get
       - run: mix test
+      - name: Notify error via Slack 
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: toolbox
+          status: Tests failed
+          color: danger
   package:
     runs-on: ubuntu-latest
     needs: test
@@ -52,6 +61,16 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: pedrogutierrez/toolbox
         tags: latest
+    - name: Notify error
+      if: failure()
+      id: slack
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        channel: toolbox
+        status: Docker image failed 
+        color: danger
   deploy:
     runs-on: ubuntu-latest
     needs: package
@@ -62,3 +81,23 @@ jobs:
       uses: pedro-gutierrez/elementary-action@v5
       with:
         kubeconfig: ${{ secrets.KUBE_CONFIG }}
+    - name: Notify error
+      if: failure()
+      id: slack
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        channel: toolbox
+        status: Deploy failed 
+        color: danger
+    - name: Notify success
+      if: success()
+      id: slack
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        channel: toolbox
+        status: Succesfully deployed
+        color: good
