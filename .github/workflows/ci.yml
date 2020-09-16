@@ -54,7 +54,7 @@ jobs:
     - name: Push to GitHub Packages
       uses: docker/build-push-action@v1
       with:
-        username: ${{ github.wactor }}
+        username: ${{ github.actor }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         registry: docker.pkg.github.com
         repository: distributeaid/toolbox/toolbox
