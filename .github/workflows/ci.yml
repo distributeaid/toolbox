@@ -52,7 +52,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
     - name: Build and push Docker image
-      uses: pedro-gutierrez/docker-action@v3
+      uses: pedro-gutierrez/docker-action@v4
       with:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
