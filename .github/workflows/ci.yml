@@ -52,7 +52,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
     - name: Build and push Docker image
-      uses: pedro-gutierrez/docker-action@v5
+      uses: pedro-gutierrez/docker-action@v6
       with:
         password: ${{ secrets.DOCKER_PASSWORD }}
         tag: latest
