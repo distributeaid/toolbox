@@ -43,6 +43,8 @@ spec:
         - name: toolbox
           imagePullPolicy: Always
           image: docker.pkg.github.com/distributeaid/toolbox/toolbox:latest
+          imagePullSecrets:
+            - name: docker
           ports:
             - name: toolbox
               containerPort: 1312
