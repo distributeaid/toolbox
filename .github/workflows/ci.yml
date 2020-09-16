@@ -52,13 +52,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
     - name: Docker image
-      uses: docker/build-push-action@v1
+      uses: pedro-gutierrez/docker-action@v1
       with:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: distributeaid/toolbox
-        tags: latest
+        image: distributeaid/toolbox:latest
     - name: If errors, notify 
       if: failure()
       uses: craftech-io/slack-action@v1
