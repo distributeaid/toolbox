@@ -51,11 +51,13 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@master
-    - name: Build and push Docker image
-      uses: pedro-gutierrez/docker-action@v10
+    - name: Push to GitHub Packages
+      uses: docker/build-push-action@v1
       with:
+        username: ${{ github.wactor }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        tag: latest
+        registry: docker.pkg.github.com
+        repository: distributeaid/toolbox/toolbox
     - name: If errors, notify 
       if: failure()
       uses: craftech-io/slack-action@v1
@@ -69,7 +71,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
     - name: Deploy
-      uses: pedro-gutierrez/elementary-action@v6
+      uses: pedro-gutierrez/apply-action@v6
       with:
         kubeconfig: ${{ secrets.KUBE_CONFIG }}
     - name: If errors, notify 
