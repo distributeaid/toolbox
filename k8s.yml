@@ -42,7 +42,7 @@ spec:
       containers:
         - name: toolbox
           imagePullPolicy: Always
-          image: ghcr.io/distributeaid/toolbox:latest
+          image: docker.pkg.github.com/distributeaid/toolbox/toolbox:latest
           ports:
             - name: toolbox
               containerPort: 1312
