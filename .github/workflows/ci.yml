@@ -54,7 +54,8 @@ jobs:
     - name: Docker image
       uses: docker/build-push-action@v1
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: pedrogutierrez/toolbox
         tags: latest
