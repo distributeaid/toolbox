@@ -57,7 +57,7 @@ jobs:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: pedrogutierrez/toolbox
+        repository: distributeaid/toolbox
         tags: latest
     - name: If errors, notify 
       if: failure()
