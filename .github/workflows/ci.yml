@@ -51,13 +51,14 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@master
-    - name: Docker image
-      uses: pedro-gutierrez/docker-action@v2
+    - name: Build and push Docker image
+      uses: pedro-gutierrez/docker-action@v3
       with:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        image: distributeaid/toolbox:latest
+        image: toolbox
+        tag: latest
     - name: If errors, notify 
       if: failure()
       uses: craftech-io/slack-action@v1
