@@ -52,12 +52,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
     - name: Build and push Docker image
-      uses: pedro-gutierrez/docker-action@v4
+      uses: pedro-gutierrez/docker-action@v5
       with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        image: toolbox
         tag: latest
     - name: If errors, notify 
       if: failure()
