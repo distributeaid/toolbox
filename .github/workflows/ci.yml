@@ -71,7 +71,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
     - name: Deploy
-      uses: pedro-gutierrez/apply-action@v4
+      uses: pedro-gutierrez/apply-action@v5
       with:
         kubeconfig: ${{ secrets.KUBE_CONFIG }}
         password: ${{ secrets.DOCKER_PASSWORD }}
