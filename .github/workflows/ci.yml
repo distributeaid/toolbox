@@ -31,9 +31,8 @@ jobs:
          with:
            otp-version: 22.2.6
            elixir-version: 1.10.1
-       - name: Setup Mix
-         run: |
-           mix local.rebar --force; mix local.hex --force; mix deps.get
+       - name: Get dependencies 
+         run: mix deps.get
        - name: Compile and test
          run: mix test
        - name: Publish Docker
