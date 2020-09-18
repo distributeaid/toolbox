@@ -12,7 +12,7 @@ jobs:
         uses: pedro-gutierrez/slack-action@v5
         with:
           slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          status: success
+          status: failed
   # test:
   #   runs-on: ubuntu-latest
   #   services:
