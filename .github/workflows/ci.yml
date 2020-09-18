@@ -9,7 +9,7 @@ jobs:
     steps: 
       - name: If success, notify 
         if: success()
-        uses: pedro-gutierrez/slack-action@v4
+        uses: pedro-gutierrez/slack-action@v5
         with:
           slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
           status: success
