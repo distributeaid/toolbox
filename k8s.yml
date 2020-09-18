@@ -52,12 +52,6 @@ spec:
           env:
             - name: POSTGRES_HOST
               value: db
-            - name: POSTGRES_DB
-              value: toolbox
-            - name: POSTGRES_USER
-              value: toolbox
-            - name: POSTGRES_PASSWORD
-              value: toolbox
             - name: POSTGRES_PORT
               value: "5432"
             - name: PORT
@@ -88,10 +82,3 @@ spec:
             - name: http
               containerPort: 5432
               protocol: TCP
-          env:
-            - name: POSTGRES_DB
-              value: toolbox
-            - name: POSTGRES_USER
-              value: toolbox
-            - name: POSTGRES_PASSWORD
-              value: toolbox

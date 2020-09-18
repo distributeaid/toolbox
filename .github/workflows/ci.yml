@@ -4,95 +4,86 @@ on:
   schedule: 
     - cron:  '0 2 * * *'
 jobs:
-  test:
+   test:
+     runs-on: ubuntu-latest
+     services:
+       postgres:
+         image: postgres:11
+         env:
+           POSTGRES_USER: toolbox
+           POSTGRES_PASSWORD: toolbox 
+           POSTGRES_DB: toolbox 
+         ports:
+         - 5432:5432
+         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+     env:
+       MIX_ENV: test
+       POSTGRES_USER: toolbox
+       POSTGRES_PASSWORD: toolbox
+       POSTGRES_DB: toolbox
+       DB_HOSTNAME_TEST: localhost
+       POSTGRES_PORT: 5432
+     steps:
+       - name: Checkout
+         uses: actions/checkout@v2
+       - name: Setup Elixir
+         uses: actions/setup-elixir@v1.0.0
+         with:
+           otp-version: 22.2.6
+           elixir-version: 1.10.1
+       - name: Setup rebar
+         run: mix local.rebar --force
+       - name: Setup Hex
+         run: mix local.hex --force
+       - name: Fetch dependencies
+         run: mix deps.get
+       - name: Compile and test
+         run: mix test
+       - name: If errors, notify 
+         if: failure()
+         uses: pedro-gutierrez/slack-action@v5
+         with:
+           slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+           status: failed
+   package:
     runs-on: ubuntu-latest
-    steps: 
-      - name: If success, notify 
-        if: success()
-        uses: pedro-gutierrez/slack-action@v5
-        with:
-          slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          status: failed
-  # test:
-  #   runs-on: ubuntu-latest
-  #   services:
-  #     postgres:
-  #       image: postgres:11
-  #       env:
-  #         POSTGRES_USER: toolbox
-  #         POSTGRES_PASSWORD: toolbox 
-  #         POSTGRES_DB: toolbox 
-  #       ports:
-  #       - 5432:5432
-  #       options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-  #   env:
-  #     MIX_ENV: test
-  #     POSTGRES_USER: toolbox
-  #     POSTGRES_PASSWORD: toolbox
-  #     POSTGRES_DB: toolbox
-  #     DB_HOSTNAME_TEST: localhost
-  #     POSTGRES_PORT: 5432
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #     - name: Setup Elixir
-  #       uses: actions/setup-elixir@v1.0.0
-  #       with:
-  #         otp-version: 22.2.6
-  #         elixir-version: 1.10.1
-  #     - name: Setup rebar
-  #       run: mix local.rebar --force
-  #     - name: Setup Hex
-  #       run: mix local.hex --force
-  #     - name: Fetch dependencies
-  #       run: mix deps.get
-  #     - name: Compile and test
-  #       run: mix test
-  #     - name: If errors, notify 
-  #       if: failure()
-  #       uses: craftech-io/slack-action@v1
-  #       with:
-  #         slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-  #         status: failure
-  # package:
-  #  runs-on: ubuntu-latest
-  #  needs: test
-  #  steps:
-  #  - name: Checkout
-  #    uses: actions/checkout@master
-  #  - name: Push to GitHub Packages
-  #    uses: docker/build-push-action@v1
-  #    with:
-  #      username: ${{ github.actor }}
-  #      password: ${{ secrets.DOCKER_PASSWORD }}
-  #      registry: docker.pkg.github.com
-  #      repository: distributeaid/toolbox/toolbox
-  #  - name: If errors, notify 
-  #    if: failure()
-  #    uses: craftech-io/slack-action@v1
-  #    with:
-  #      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-  #      status: failure
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   needs: package
-  #   steps: 
-  #   - name: Checkout
-  #     uses: actions/checkout@master
-  #   - name: Deploy
-  #     uses: pedro-gutierrez/apply-action@v7
-  #     with:
-  #       kubeconfig: ${{ secrets.KUBE_CONFIG }}
-  #       password: ${{ secrets.DOCKER_PASSWORD }}
-  #   - name: If errors, notify 
-  #     if: failure()
-  #     uses: craftech-io/slack-action@v1
-  #     with:
-  #       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-  #       status: failure
-  #   - name: If success, notify 
-  #     if: success()
-  #     uses: craftech-io/slack-action@v1
-  #     with:
-  #       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-  #       status: success
+    needs: test
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Push to GitHub Packages
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ github.actor }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        registry: docker.pkg.github.com
+        repository: distributeaid/toolbox/toolbox
+    - name: If errors, notify 
+      if: failure()
+      uses: pedro-gutierrez/slack-action@v5
+      with:
+        slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        status: failed
+   deploy:
+     runs-on: ubuntu-latest
+     needs: package
+     steps: 
+     - name: Checkout
+       uses: actions/checkout@master
+     - name: Deploy
+       uses: pedro-gutierrez/apply-action@v7
+       with:
+         kubeconfig: ${{ secrets.KUBE_CONFIG }}
+         password: ${{ secrets.DOCKER_PASSWORD }}
+     - name: If errors, notify 
+       if: failure()
+       uses: pedro-gutierrez/slack-action@v5
+       with:
+         slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+         status: failed
+     - name: If success, notify 
+       if: success()
+       uses: pedro-gutierrez/slack-action@v5
+       with:
+         slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+         status: success
