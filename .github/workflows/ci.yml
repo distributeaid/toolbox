@@ -4,12 +4,15 @@ on:
   schedule: 
     - cron:  '0 2 * * *'
 jobs:
-  - name: If success, notify 
-    if: success()
-    uses: pedro-gutierrez/slack-action@v1
-    with:
-      slack_webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-      status: success
+  test:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: If success, notify 
+        if: success()
+        uses: pedro-gutierrez/slack-action@v1
+        with:
+          slack_webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          status: success
   # test:
   #   runs-on: ubuntu-latest
   #   services:
