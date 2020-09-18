@@ -2,7 +2,7 @@ name: test
 on:
   push:
     branches-ignore:
-      - master
+      - saga
 jobs:
    test:
      runs-on: ubuntu-latest
