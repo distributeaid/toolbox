@@ -2,7 +2,7 @@ name: test
 on:
   push:
     branches-ignore:
-      - saga
+      - master
 jobs:
    test:
      runs-on: ubuntu-latest
@@ -41,10 +41,10 @@ jobs:
          with:
            slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
            status: failed
-       - name: If success, notify
-         if: success()
-         uses: pedro-gutierrez/slack-action@v6
-         with:
-           slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-           status: success
+      # - name: If success, notify
+      #   if: success()
+      #   uses: pedro-gutierrez/slack-action@v6
+      #   with:
+      #     slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     status: success
 

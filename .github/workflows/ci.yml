@@ -55,10 +55,10 @@ jobs:
          with:
            slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
            status: failed
-       - name: If success, notify
-         if: success()
-         uses: pedro-gutierrez/slack-action@v6
-         with:
-           slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-           status: success
+       #- name: If success, notify
+       #  if: success()
+       #  uses: pedro-gutierrez/slack-action@v6
+       #  with:
+       #    slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+       #    status: success
 
