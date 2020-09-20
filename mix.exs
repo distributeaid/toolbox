@@ -120,12 +120,6 @@ defmodule Ferry.Mixfile do
       {:telemetry_metrics_prometheus, "~> 0.6"},
       {:phoenix_live_dashboard, "~> 0.1"},
 
-      # tracing
-      {:spandex, "~> 3.0"},
-      {:spandex_datadog, "~> 1.0"},
-      {:spandex_ecto, "~> 0.6.1"},
-      {:spandex_phoenix, "~> 1.0.0"},
-
       # dialyzer
       {:dialyxir, "~> 1.0.0", only: [:dev], runtime: false}
     ]
