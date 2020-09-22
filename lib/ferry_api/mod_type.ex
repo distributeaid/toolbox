@@ -11,7 +11,6 @@ defmodule FerryApi.Schema.ModType do
     field :name, non_null(:string)
     field :description, non_null(:string)
     field :type, non_null(:string)
-    field :values, list_of(:string)
   end
 
   payload_object(:mod_payload, :mod)

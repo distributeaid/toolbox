@@ -32,6 +32,8 @@ defmodule FerryApi.Schema.Mod do
   # TODO: what is this?
   input_object :mod_input do
     field :name, :string
+    field :description, :string
+    field :type, :string
   end
 
   object :mod_mutations do

@@ -289,11 +289,8 @@ defmodule Ferry.AidTaxonomy do
   end
 
   def create_mod(attrs \\ %{}) do
-    items = get_mod_items(attrs)
-
     %Mod{}
     |> Mod.create_changeset(attrs)
-    |> Changeset.put_assoc(:items, items)
     |> Repo.insert()
   end
 
@@ -311,12 +308,8 @@ defmodule Ferry.AidTaxonomy do
   #   - allow renaming / merging values (probably in another function)
   #   - allow removing values that aren't used in any ModValue
   def update_mod(%Mod{} = mod, attrs \\ %{}) do
-    items = get_mod_items(attrs)
-
     mod
-    |> Repo.preload(:items)
     |> Mod.update_changeset(attrs)
-    |> Changeset.put_assoc(:items, items)
     |> Repo.update()
   end
 
@@ -343,7 +336,7 @@ defmodule Ferry.AidTaxonomy do
     mod
     # TODO: Mod.delete_changeset that only checks fkey constraints?
     # handle db constraint errors as changeset errors
-    |> Mod.update_changeset()
+    |> Mod.delete_changeset()
     |> Repo.delete()
   end
 
@@ -356,10 +349,7 @@ defmodule Ferry.AidTaxonomy do
   # ------------------------------------------------------------
   defp mod_query() do
     from mod in Mod,
-      left_join: item in assoc(mod, :items),
-      left_join: category in assoc(item, :category),
-      order_by: [mod.name, category.name, item.name],
-      preload: [items: {item, category: category}]
+      order_by: [mod.name]
   end
 
   # from server data: items = [%{id: 4}, ...]

@@ -87,7 +87,9 @@ defmodule Ferry.ApiClient.Mod do
       mutation {
         createMod (
           modInput: {
-            name: "#{attrs.name}"
+            name: "#{attrs.name}",
+            description: "#{attrs.description}",
+            type: "#{attrs.type}"
           }
         ) {
           successful,

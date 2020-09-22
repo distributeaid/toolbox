@@ -581,19 +581,17 @@ defmodule Ferry.Factory do
         Enum.random(["integer", "select", "multi-select"])
       end
 
-    values =
-      case type do
-        "integer" -> nil
-        "select" -> ["small", "large"]
-        "multi-select" -> ["summer", "winter"]
-      end
+    # values =
+    #   case type do
+    #     "integer" -> nil
+    #     "select" -> ["small", "large"]
+    #     "multi-select" -> ["summer", "winter"]
+    #   end
 
     mod = %Ferry.AidTaxonomy.Mod{
       name: sequence("Size"),
       description: sequence("I let you specify the sizes of things."),
-      type: type,
-      values: values,
-      items: []
+      type: type
     }
 
     merge_attributes(mod, attrs)
@@ -608,8 +606,7 @@ defmodule Ferry.Factory do
       aid_mod_factory(),
       %{
         name: "Y",
-        type: "select",
-        values: ["only 1 choice"]
+        type: "select"
       }
     )
   end
@@ -796,8 +793,7 @@ defmodule Ferry.Factory do
       # 1000, 1001, ...
       amount: sequence(:amount, &(&1 + 1000)),
       list: build(:aid_list),
-      item: build(:aid_item),
-      mod_values: []
+      item: build(:aid_item)
     }
   end
 
@@ -813,11 +809,10 @@ defmodule Ferry.Factory do
           sequence(:value, &(&1 + 1000))
 
         "select" ->
-          Enum.random(mod.values)
+          "test"
 
         "multi-select" ->
-          [Enum.random(mod.values), Enum.random(mod.values)]
-          |> Enum.uniq()
+          ["test1", "test2"]
       end
 
     %ModValue{
