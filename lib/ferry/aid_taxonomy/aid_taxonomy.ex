@@ -351,37 +351,4 @@ defmodule Ferry.AidTaxonomy do
     from mod in Mod,
       order_by: [mod.name]
   end
-
-  # from server data: items = [%{id: 4}, ...]
-  #                   items = [%Item{id: 4}, ...]
-  # NOTE: Should we check if items is a list of %Item{} structs and return that
-  #       directly instead of looking them up again?
-  defp get_mod_items(%{items: items}) do
-    items
-    |> Enum.map(& &1.id)
-    |> get_mod_items()
-  end
-
-  # from client data: items = [%{"id" => "4"}, ...]
-  defp get_mod_items(%{"items" => items}) do
-    items
-    |> Enum.map(&(&1["id"] |> String.to_integer()))
-    |> get_mod_items()
-  end
-
-  # no items passed in
-  defp get_mod_items(attrs) when is_map(attrs) do
-    []
-  end
-
-  # item_ids = [4, ...]
-  defp get_mod_items(item_ids) when is_list(item_ids) do
-    query =
-      from item in Item,
-        where: item.id in ^item_ids,
-        left_join: category in assoc(item, :category),
-        preload: [category: category]
-
-    Repo.all(query)
-  end
 end
