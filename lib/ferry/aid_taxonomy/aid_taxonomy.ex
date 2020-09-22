@@ -266,7 +266,7 @@ defmodule Ferry.AidTaxonomy do
     |> Repo.all()
   end
 
-  @spec get_mod(any) :: Mod
+  @spec get_mod(any) :: Mod.t() | nil
   def get_mod(id) do
     mod_query()
     |> Repo.get(id)

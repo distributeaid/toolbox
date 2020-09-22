@@ -4,6 +4,8 @@ defmodule Ferry.AidTaxonomy.Mod do
 
   alias Ferry.AidTaxonomy.Item
 
+  @type t :: %__MODULE__{}
+
   # TODO: add boolean mods
   schema "aid__mods" do
     field :name, :string
