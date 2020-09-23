@@ -351,4 +351,12 @@ defmodule Ferry.AidTaxonomy do
     from mod in Mod,
       order_by: [mod.name]
   end
+
+  @doc """
+  Return the total number of mod values in the system
+  """
+  @spec count_mod_values() :: non_neg_integer()
+  def count_mod_values() do
+    1
+  end
 end
