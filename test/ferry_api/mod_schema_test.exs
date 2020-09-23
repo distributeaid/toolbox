@@ -61,6 +61,17 @@ defmodule Ferry.ModSchemaTest do
         }
       }
     } = create_mod(conn, %{name: "", description: "some description", type: "select"})
+
+    %{
+      "data" => %{
+        "createMod" => %{
+          "successful" => false,
+          "messages" => [
+            %{"field" => "type", "message" => "is invalid"}
+          ]
+        }
+      }
+    } = create_mod(conn, %{name: "test", description: "some description", type: "unknown"})
   end
 
   test "fetch a mod that does not exist", %{conn: conn} do

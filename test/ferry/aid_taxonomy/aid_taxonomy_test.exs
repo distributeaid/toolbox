@@ -482,13 +482,6 @@ defmodule Ferry.AidTaxonomyTest do
       attrs = params_for(:aid_mod, %{name: "the same", type: old_mod.type})
 
       assert {:error, %Ecto.Changeset{} = _changeset} = AidTaxonomy.create_mod(attrs)
-
-      # invalid type change
-      # TODO: test all change combos except select => multi-select?
-      mod = insert(:aid_mod, %{type: "integer"})
-      attrs = params_for(:aid_mod, %{type: "select"})
-      assert {:error, %Ecto.Changeset{}} = AidTaxonomy.update_mod(mod, attrs)
-      assert mod == AidTaxonomy.get_mod!(mod.id)
     end
 
     test "delete_mod/1 deletes a mod that isn't referenced by any mod values" do

@@ -47,6 +47,27 @@ defmodule Ferry.ApiClient.Mod do
   end
 
   @doc """
+  Run a GraphQL query that retuns a collection
+  of mods and their values
+
+  """
+  @spec get_mods_with_values(Plug.Conn.t()) :: map()
+  def get_mods_with_values(conn) do
+    graphql(conn, """
+    {
+      mods {
+        id,
+        name,
+        values {
+          id,
+          value
+        }
+      }
+    }
+    """)
+  end
+
+  @doc """
   Run a GraphQL query that retuns a single
   mod, given its name.
   """
