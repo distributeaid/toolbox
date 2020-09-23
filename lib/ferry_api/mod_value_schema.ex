@@ -40,7 +40,7 @@ defmodule FerryApi.Schema.ModValue do
     @desc "Update a mod value"
     field :update_mod_value, type: :mod_value_payload do
       arg(:id, non_null(:id))
-      arg(:mod_value_input, non_null(:mod_input))
+      arg(:mod_value_input, non_null(:mod_value_input))
       middleware(Middleware.RequireUser)
       resolve(&update_mod_value/3)
       middleware(&build_payload/2)

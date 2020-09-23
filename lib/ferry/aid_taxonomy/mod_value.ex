@@ -19,7 +19,7 @@ defmodule Ferry.AidTaxonomy.ModValue do
     mod_value
     |> cast(params, [:value])
     |> validate_required([:value])
-    |> unique_constraint(:name,
+    |> unique_constraint(:value,
       name: "aid__mod_values_mod_id_value_index",
       message: "already exists"
     )

@@ -57,168 +57,305 @@ defmodule Ferry.ModValueSchemaTest do
     } = get_mod_value(conn, id)
   end
 
-  # test "create mod with invalid data", %{conn: conn} do
-  #   insert(:user)
-  #   |> mock_sign_in
+  test "create mod value with invalid data", %{conn: conn} do
+    insert(:user)
+    |> mock_sign_in
 
-  #   %{
-  #     "data" => %{
-  #       "createMod" => %{
-  #         "successful" => false,
-  #         "messages" => [
-  #           %{"field" => "name", "message" => "can't be blank"}
-  #         ]
-  #       }
-  #     }
-  #   } = create_mod(conn, %{name: "", description: "some description", type: "select"})
-  # end
+    %{
+      "data" => %{
+        "createMod" => %{
+          "successful" => true,
+          "messages" => [],
+          "result" => %{
+            "id" => mod,
+            "name" => "tshirt-size"
+          }
+        }
+      }
+    } = create_mod(conn, %{name: "tshirt-size", description: "T-Shirt sizes", type: "select"})
 
-  # test "fetch a mod that does not exist", %{conn: conn} do
-  #   %{
-  #     "data" => %{
-  #       "modByName" => nil
-  #     },
-  #     "errors" => [error]
-  #   } = get_mod_by_name(conn, "test")
+    %{
+      "data" => %{
+        "createModValue" => %{
+          "successful" => false,
+          "messages" => [
+            %{"field" => "value", "message" => "can't be blank"}
+          ]
+        }
+      }
+    } = create_mod_value(conn, %{value: "", mod: mod})
 
-  #   assert "mod not found" == error["message"]
-  # end
+    assert count_mod_values(conn) ==
+             %{"data" => %{"countModValues" => 0}}
+  end
 
-  # test "update a mod that does not exist", %{conn: conn} do
-  #   insert(:user)
-  #   |> mock_sign_in
+  test "fetch a mod value that does not exist", %{conn: conn} do
+    %{
+      "data" => %{
+        "modValue" => nil
+      },
+      "errors" => [error]
+    } = get_mod_value(conn, "1")
 
-  #   %{
-  #     "data" => %{
-  #       "updateMod" => %{
-  #         "successful" => false,
-  #         "messages" => [
-  #           error
-  #         ]
-  #       }
-  #     }
-  #   } =
-  #     update_mod(conn, %{
-  #       id: 123,
-  #       name: "some name"
-  #     })
+    assert "mod value not found" == error["message"]
+  end
 
-  #   assert "mod not found" == error["message"]
-  # end
+  test "update a mod value that does not exist", %{conn: conn} do
+    insert(:user)
+    |> mock_sign_in
 
-  # test "update existing mod", %{conn: conn} do
-  #   insert(:user)
-  #   |> mock_sign_in
+    %{
+      "data" => %{
+        "createMod" => %{
+          "successful" => true,
+          "messages" => [],
+          "result" => %{
+            "id" => mod,
+            "name" => "tshirt-size"
+          }
+        }
+      }
+    } = create_mod(conn, %{name: "tshirt-size", description: "T-Shirt sizes", type: "select"})
 
-  #   %{
-  #     "data" => %{
-  #       "createMod" => %{
-  #         "successful" => true,
-  #         "result" => %{
-  #           "id" => id
-  #         }
-  #       }
-  #     }
-  #   } = create_mod(conn, %{name: "size", description: "sizes", type: "select"})
+    %{
+      "data" => %{
+        "updateModValue" => %{
+          "successful" => false,
+          "messages" => [
+            error
+          ]
+        }
+      }
+    } =
+      update_mod_value(conn, %{
+        id: "123",
+        mod: mod,
+        value: "test"
+      })
 
-  #   %{
-  #     "data" => %{
-  #       "updateMod" => %{
-  #         "successful" => true,
-  #         "result" => %{
-  #           "id" => ^id,
-  #           "name" => "sizes"
-  #         }
-  #       }
-  #     }
-  #   } =
-  #     update_mod(conn, %{
-  #       id: id,
-  #       name: "sizes"
-  #     })
-  # end
+    assert "mod value not found" == error["message"]
+  end
 
-  # test "update mod with invalid data", %{conn: conn} do
-  #   insert(:user)
-  #   |> mock_sign_in
+  test "update existing mod value", %{conn: conn} do
+    insert(:user)
+    |> mock_sign_in
 
-  #   %{
-  #     "data" => %{
-  #       "createMod" => %{
-  #         "successful" => true
-  #       }
-  #     }
-  #   } = create_mod(conn, %{name: "sizes", description: "sizes", type: "select"})
+    %{
+      "data" => %{
+        "createMod" => %{
+          "successful" => true,
+          "messages" => [],
+          "result" => %{
+            "id" => mod,
+            "name" => "tshirt-size"
+          }
+        }
+      }
+    } = create_mod(conn, %{name: "tshirt-size", description: "T-Shirt sizes", type: "select"})
 
-  #   %{
-  #     "data" => %{
-  #       "createMod" => %{
-  #         "successful" => true,
-  #         "result" => %{
-  #           "id" => id2
-  #         }
-  #       }
-  #     }
-  #   } = create_mod(conn, %{name: "size", description: "size", type: "select"})
+    %{
+      "data" => %{
+        "createModValue" => %{
+          "successful" => true,
+          "result" => %{
+            "id" => id
+          }
+        }
+      }
+    } = create_mod_value(conn, %{value: "small", mod: mod})
 
-  #   %{
-  #     "data" => %{
-  #       "updateMod" => %{
-  #         "successful" => false
-  #       }
-  #     }
-  #   } =
-  #     update_mod(conn, %{
-  #       id: id2,
-  #       name: "sizes"
-  #     })
-  # end
+    %{
+      "data" => %{
+        "updateModValue" => %{
+          "successful" => true,
+          "result" => %{
+            "id" => ^id,
+            "value" => "medium"
+          }
+        }
+      }
+    } =
+      update_mod_value(conn, %{
+        id: id,
+        mod: mod,
+        value: "medium"
+      })
 
-  # test "delete a mod that does not exist", %{conn: conn} do
-  #   insert(:user)
-  #   |> mock_sign_in
+    %{
+      "data" => %{
+        "modValue" => modValue
+      }
+    } = get_mod_value(conn, id)
 
-  #   %{
-  #     "data" => %{
-  #       "deleteMod" => %{
-  #         "successful" => false,
-  #         "messages" => [
-  #           error
-  #         ]
-  #       }
-  #     }
-  #   } = delete_mod(conn, 123)
+    assert "medium" == modValue["value"]
+    assert id == modValue["id"]
+  end
 
-  #   assert "mod not found" == error["message"]
-  # end
+  test "update mod value with invalid data", %{conn: conn} do
+    insert(:user)
+    |> mock_sign_in
 
-  # test "delete a mod", %{conn: conn} do
-  #   insert(:user)
-  #   |> mock_sign_in
+    %{
+      "data" => %{
+        "createMod" => %{
+          "successful" => true,
+          "messages" => [],
+          "result" => %{
+            "id" => mod,
+            "name" => "tshirt-size"
+          }
+        }
+      }
+    } = create_mod(conn, %{name: "tshirt-size", description: "T-Shirt sizes", type: "select"})
 
-  #   %{
-  #     "data" => %{
-  #       "createMod" => %{
-  #         "successful" => true,
-  #         "result" => %{
-  #           "id" => id
-  #         }
-  #       }
-  #     }
-  #   } = create_mod(conn, %{name: "sizes", description: "sizes", type: "select"})
+    %{
+      "data" => %{
+        "createModValue" => %{
+          "successful" => true,
+          "result" => %{
+            "id" => id
+          }
+        }
+      }
+    } = create_mod_value(conn, %{value: "small", mod: mod})
 
-  #   assert count_mods(conn) ==
-  #            %{"data" => %{"countMods" => 1}}
+    %{
+      "data" => %{
+        "updateModValue" => %{
+          "successful" => false,
+          "messages" => [
+            error
+          ]
+        }
+      }
+    } =
+      update_mod_value(conn, %{
+        id: id,
+        mod: mod,
+        value: ""
+      })
 
-  #   %{
-  #     "data" => %{
-  #       "deleteMod" => %{
-  #         "successful" => true
-  #       }
-  #     }
-  #   } = delete_mod(conn, id)
+    assert "value" == error["field"]
+    assert "can't be blank" == error["message"]
+  end
 
-  #   assert count_mods(conn) ==
-  #            %{"data" => %{"countMods" => 0}}
-  # end
+  test "mod value is unique within a mod", %{conn: conn} do
+    insert(:user)
+    |> mock_sign_in
+
+    %{
+      "data" => %{
+        "createMod" => %{
+          "successful" => true,
+          "messages" => [],
+          "result" => %{
+            "id" => mod,
+            "name" => "tshirt-size"
+          }
+        }
+      }
+    } = create_mod(conn, %{name: "tshirt-size", description: "T-Shirt sizes", type: "select"})
+
+    %{
+      "data" => %{
+        "createModValue" => %{
+          "successful" => true,
+          "result" => %{
+            "id" => _
+          }
+        }
+      }
+    } = create_mod_value(conn, %{value: "small", mod: mod})
+
+    %{
+      "data" => %{
+        "createModValue" => %{
+          "successful" => true,
+          "result" => %{
+            "id" => medium
+          }
+        }
+      }
+    } = create_mod_value(conn, %{value: "medium", mod: mod})
+
+    %{
+      "data" => %{
+        "updateModValue" => %{
+          "successful" => false,
+          "messages" => [
+            error
+          ]
+        }
+      }
+    } =
+      update_mod_value(conn, %{
+        id: medium,
+        mod: mod,
+        value: "small"
+      })
+
+    assert "value" == error["field"]
+    assert "already exists" == error["message"]
+  end
+
+  test "delete a mod value that does not exist", %{conn: conn} do
+    insert(:user)
+    |> mock_sign_in
+
+    %{
+      "data" => %{
+        "deleteModValue" => %{
+          "successful" => false,
+          "messages" => [
+            error
+          ]
+        }
+      }
+    } = delete_mod_value(conn, "1")
+
+    assert "mod value not found" == error["message"]
+  end
+
+  test "delete a mod value", %{conn: conn} do
+    insert(:user)
+    |> mock_sign_in
+
+    %{
+      "data" => %{
+        "createMod" => %{
+          "successful" => true,
+          "messages" => [],
+          "result" => %{
+            "id" => mod,
+            "name" => "tshirt-size"
+          }
+        }
+      }
+    } = create_mod(conn, %{name: "tshirt-size", description: "T-Shirt sizes", type: "select"})
+
+    %{
+      "data" => %{
+        "createModValue" => %{
+          "successful" => true,
+          "result" => %{
+            "id" => id
+          }
+        }
+      }
+    } = create_mod_value(conn, %{value: "small", mod: mod})
+
+    assert count_mod_values(conn) ==
+             %{"data" => %{"countModValues" => 1}}
+
+    %{
+      "data" => %{
+        "deleteModValue" => %{
+          "successful" => true
+        }
+      }
+    } = delete_mod_value(conn, id)
+
+    assert count_mod_values(conn) ==
+             %{"data" => %{"countModValues" => 0}}
+  end
 end
