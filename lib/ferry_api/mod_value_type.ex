@@ -9,5 +9,5 @@ defmodule FerryApi.Schema.ModValueType do
     field :value, non_null(:string)
   end
 
-  payload_object(:mod_value_payload, :mod)
+  payload_object(:mod_value_payload, :mod_value)
 end

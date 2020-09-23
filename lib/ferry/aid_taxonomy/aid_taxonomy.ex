@@ -15,6 +15,7 @@ defmodule Ferry.AidTaxonomy do
   alias Ferry.AidTaxonomy.Category
   alias Ferry.AidTaxonomy.Item
   alias Ferry.AidTaxonomy.Mod
+  alias Ferry.AidTaxonomy.ModValue
 
   @doc """
   Returns all categories
@@ -420,6 +421,83 @@ defmodule Ferry.AidTaxonomy do
   """
   @spec count_mod_values() :: non_neg_integer()
   def count_mod_values() do
-    1
+    ModValue
+    |> Repo.aggregate(:count, :id)
+  end
+
+  @doc """
+  Returns the collection of all mod values in the system.
+
+  Please note this function could return a potentially
+  big result set. Use with caution.
+
+  """
+  @spec list_mod_values() :: [ModValue.t()]
+  def list_mod_values() do
+    ModValue
+    |> Repo.all()
+    |> Repo.preload(:mod)
+  end
+
+  @doc """
+  Given its id, return the associated mod value.
+
+  If no record matches, then this function returns nil
+  """
+  @spec get_mod_value(integer()) :: ModValue.t() | nil
+  def get_mod_value(id) do
+    ModValue
+    |> Repo.get(id)
+    |> Repo.preload(:mod)
+  end
+
+  @doc """
+  Given its id, return the associated mod value
+
+  If no item matches, then this function returns an error
+  """
+  @spec get_mod_value!(integer()) :: ModValue.t()
+  def get_mod_value!(id) do
+    Repo.get!(ModValue, id)
+  end
+
+  @doc """
+  Creates a new value, for the specified Mod.
+
+  """
+  @spec create_mod_value(Mod.t(), map()) ::
+          {:ok, ModValue.t()} | {:error, Ecto.Changeset.t()}
+  def create_mod_value(%Mod{} = mod, attrs \\ %{}) do
+    with {:ok, mod_value} <-
+           mod
+           |> Ecto.build_assoc(:values)
+           |> ModValue.changeset(attrs)
+           |> Repo.insert() do
+      {:ok, %{mod_value | mod: mod}}
+    end
+  end
+
+  @doc """
+  Updates a mod value
+
+  """
+  @spec update_mod_value(ModValue.t(), map()) ::
+          {:ok, ModValue.t()} | {:error, Ecto.Changeset.t()}
+  def update_mod_value(%ModValue{} = mod_value, attrs \\ %{}) do
+    mod_value
+    |> ModValue.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Delete the specified mod value
+
+  """
+  @spec delete_mod_value(ModValue.t()) ::
+          {:ok, ModValue.t()} | {:error, Ecto.Changeset.t()}
+  def delete_mod_value(%ModValue{} = mod_value) do
+    mod_value
+    |> ModValue.changeset()
+    |> Repo.delete()
   end
 end

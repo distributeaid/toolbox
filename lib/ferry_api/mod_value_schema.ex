@@ -95,11 +95,17 @@ defmodule FerryApi.Schema.ModValue do
   """
   @spec create_mod_value(
           any,
-          %{mod_input: map()},
+          %{mod_value_input: map()},
           any
-        ) :: {:error, Ecto.Changeset.t()} | {:ok, Ferry.AidTaxonomy.ModValue.t()}
+        ) :: {:error, Ecto.Changeset.t()} | {:ok, ModValue.t()}
   def create_mod_value(_parent, %{mod_value_input: mod_value_attrs}, _resolution) do
-    AidTaxonomy.create_mod_value(mod_value_attrs)
+    case AidTaxonomy.get_mod(mod_value_attrs.mod) do
+      nil ->
+        {:error, @mod_not_found}
+
+      mod ->
+        AidTaxonomy.create_mod_value(mod, mod_value_attrs)
+    end
   end
 
   @doc """

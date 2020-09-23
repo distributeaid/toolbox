@@ -23,7 +23,7 @@ defmodule Ferry.Factory do
     Aid.AvailableList,
     Aid.Entry,
     Aid.ManifestList,
-    Aid.ModValue,
+    AidTaxonomy.ModValue,
     Aid.NeedsList,
     # See note above the alias statement.
     # AidTaxonomy.Category,
@@ -801,23 +801,9 @@ defmodule Ferry.Factory do
   def mod_value_factory(attrs) do
     mod = if attrs[:mod], do: attrs.mod, else: build(:aid_mod)
 
-    value =
-      case mod.type do
-        # 1000, 1001, ...
-        "integer" ->
-          sequence(:value, &(&1 + 1000))
-
-        "select" ->
-          "test"
-
-        "multi-select" ->
-          ["test1", "test2"]
-      end
-
     %ModValue{
-      value: value,
-      mod: mod,
-      entry: build(:entry)
+      value: "test",
+      mod: mod
     }
   end
 end

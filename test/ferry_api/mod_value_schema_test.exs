@@ -30,12 +30,12 @@ defmodule Ferry.ModValueSchemaTest do
 
     %{
       "data" => %{
-        "createMod" => %{
+        "createModValue" => %{
           "successful" => true,
           "messages" => [],
           "result" => %{
-            "id" => mod,
-            "value" => "short"
+            "id" => id,
+            "value" => "small"
           }
         }
       }
@@ -46,7 +46,7 @@ defmodule Ferry.ModValueSchemaTest do
 
     %{"data" => %{"modValues" => [mod_value]}} = get_mod_values(conn)
 
-    assert mod_value["id"]
+    assert id == mod_value["id"]
     assert "small" == mod_value["value"]
 
     # verify we can fetch that mod given its id
@@ -54,7 +54,7 @@ defmodule Ferry.ModValueSchemaTest do
       "data" => %{
         "modValue" => ^mod_value
       }
-    } = get_mod_value(conn, mod_value["id"])
+    } = get_mod_value(conn, id)
   end
 
   # test "create mod with invalid data", %{conn: conn} do

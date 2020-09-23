@@ -2,7 +2,7 @@ defmodule Ferry.AidTaxonomy.Mod do
   use Ecto.Schema
   import Ecto.Changeset
 
-  # alias Ferry.AidTaxonomy.Item
+  alias Ferry.AidTaxonomy.ModValue
 
   @type t :: %__MODULE__{}
 
@@ -12,16 +12,7 @@ defmodule Ferry.AidTaxonomy.Mod do
     field :description, :string
     field :type, :string
 
-    # used for 'select' and 'multi-select' types
-    # field :values, {:array, :string}
-
-    # TODO: probably want to setup a schema for the join table with
-    # has_many / belongs_to on each side, to provide flexibility if we ever need
-    # metadata on the relationship
-    # many_to_many :items, Item, join_through: "aid__items__mods", on_replace: :delete
-
-    # NOTE: Mods shouldn't care about ModValues, so leave out the has_many
-    #       relationship to them.
+    has_many :values, ModValue, foreign_key: :mod_id
 
     timestamps()
   end
