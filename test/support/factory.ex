@@ -131,20 +131,20 @@ defmodule Ferry.Factory do
     }
   end
 
-  def with_location(%Group{} = group) do
+  def with_address(%Group{} = group) do
     address = insert(:address, group: group)
 
-    %{group | location: address}
+    %{group | addresses: [address]}
   end
 
-  def with_location(groups) when is_list(groups) do
-    Enum.map(groups, &with_location(&1))
+  def with_address(groups) when is_list(groups) do
+    Enum.map(groups, &with_address(&1))
   end
 
-  def with_location(group_attrs) when is_map(group_attrs) do
+  def with_address(group_attrs) when is_map(group_attrs) do
     address = params_for(:address)
 
-    Map.put(group_attrs, :location, address)
+    Map.put(group_attrs, :addresses, [address])
   end
 
   def invalid_group_factory do
@@ -275,7 +275,6 @@ defmodule Ferry.Factory do
     struct!(
       address_factory(),
       %{
-        label: nil,
         street: nil,
         city: nil
       }

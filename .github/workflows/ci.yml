@@ -1,0 +1,64 @@
+name: ci 
+on:
+  push:
+    branches:
+      - saga
+  schedule: 
+    - cron:  '0 2 * * *'
+jobs:
+   ci:
+     runs-on: ubuntu-latest
+     services:
+       postgres:
+         image: postgres:11
+         env:
+           POSTGRES_USER: toolbox
+           POSTGRES_PASSWORD: toolbox 
+           POSTGRES_DB: toolbox 
+         ports:
+         - 5432:5432
+         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+     env:
+       MIX_ENV: test
+       POSTGRES_USER: toolbox
+       POSTGRES_PASSWORD: toolbox
+       POSTGRES_DB: toolbox
+       DB_HOSTNAME_TEST: localhost
+       POSTGRES_PORT: 5432
+     steps:
+       - name: Checkout
+         uses: actions/checkout@v2
+       - name: Setup Elixir
+         uses: actions/setup-elixir@v1.0.0
+         with:
+           otp-version: 22.2.6
+           elixir-version: 1.10.1
+       - name: Get dependencies 
+         run: mix deps.get
+       - name: Compile and test
+         run: mix test
+       - name: Publish Docker
+         uses: docker/build-push-action@v1
+         with:
+           username: ${{ github.actor }}
+           password: ${{ secrets.DOCKER_PASSWORD }}
+           registry: docker.pkg.github.com
+           repository: distributeaid/toolbox/toolbox
+       - name: Deploy
+         uses: pedro-gutierrez/apply-action@v7
+         with:
+           kubeconfig: ${{ secrets.KUBE_CONFIG }}
+           password: ${{ secrets.DOCKER_PASSWORD }}
+       - name: If errors, notify 
+         if: failure()
+         uses: pedro-gutierrez/slack-action@v6
+         with:
+           slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+           status: failed
+       #- name: If success, notify
+       #  if: success()
+       #  uses: pedro-gutierrez/slack-action@v6
+       #  with:
+       #    slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+       #    status: success
+

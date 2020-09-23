@@ -15,7 +15,7 @@ defmodule Ferry.ProjectSchemaTest do
     insert(:user)
     |> mock_sign_in
 
-    group_attrs = params_for(:group) |> with_location()
+    group_attrs = params_for(:group) |> with_address()
 
     %{
       "data" => %{
@@ -72,7 +72,7 @@ defmodule Ferry.ProjectSchemaTest do
     insert(:user)
     |> mock_sign_in
 
-    group_attrs = params_for(:group) |> with_location()
+    group_attrs = params_for(:group) |> with_address()
 
     %{
       "data" => %{
@@ -135,7 +135,7 @@ defmodule Ferry.ProjectSchemaTest do
     insert(:user)
     |> mock_sign_in
 
-    group_attrs = params_for(:group) |> with_location()
+    group_attrs = params_for(:group) |> with_address()
 
     %{
       "data" => %{
@@ -181,7 +181,7 @@ defmodule Ferry.ProjectSchemaTest do
     insert(:user)
     |> mock_sign_in
 
-    group_attrs = params_for(:group) |> with_location()
+    group_attrs = params_for(:group) |> with_address()
 
     %{
       "data" => %{
@@ -249,7 +249,7 @@ defmodule Ferry.ProjectSchemaTest do
     insert(:user)
     |> mock_sign_in
 
-    group_attrs = params_for(:group) |> with_location()
+    group_attrs = params_for(:group) |> with_address()
 
     %{
       "data" => %{

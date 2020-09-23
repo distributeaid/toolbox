@@ -1,4 +1,4 @@
-defmodule Ferry.GroupProjectTest do
+defmodule Ferry.GroupProjectSchemaTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Group, Project}
 
@@ -7,7 +7,7 @@ defmodule Ferry.GroupProjectTest do
     |> mock_sign_in
 
     # create a group
-    group_attrs = params_for(:group) |> with_location()
+    group_attrs = params_for(:group) |> with_address()
     group_attrs = %{group_attrs | name: "first group"}
 
     %{
@@ -50,7 +50,7 @@ defmodule Ferry.GroupProjectTest do
     } = get_group_with_projects(conn, group)
 
     # create a second group with no projects
-    group_attrs = params_for(:group) |> with_location()
+    group_attrs = params_for(:group) |> with_address()
     group_attrs = %{group_attrs | name: "second group"}
 
     %{

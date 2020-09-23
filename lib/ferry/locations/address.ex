@@ -4,6 +4,8 @@ defmodule Ferry.Locations.Address do
   alias Ferry.Locations.Geocode
   alias Ferry.Profiles.{Group, Project}
 
+  @type t :: %__MODULE__{}
+
   schema "addresses" do
     field :label, :string
     field :street, :string
@@ -27,7 +29,7 @@ defmodule Ferry.Locations.Address do
   def changeset(address, attrs) do
     address
     |> cast(attrs, [:label, :street, :city, :province, :country_code, :postal_code])
-    |> validate_required([:province, :country_code, :postal_code])
+    |> validate_required([:province, :country_code, :postal_code, :label])
     |> validate_length(:label, min: 1, max: 255)
     |> validate_length(:street, max: 255)
     |> validate_length(:city, min: 1, max: 255)
@@ -35,6 +37,7 @@ defmodule Ferry.Locations.Address do
     # must be at least a 2 letter country code
     |> validate_length(:country_code, min: 2, max: 255)
     |> validate_length(:postal_code, max: 255)
+    |> unique_constraint(:label, name: :unique_address_label_per_group)
 
     # TODO: add a changeset check constraint that matches the db one?
     #       https://hexdocs.pm/ecto/Ecto.Changeset.html#check_constraint/3
@@ -56,7 +59,7 @@ defmodule Ferry.Locations.Address do
     address
     |> cast(attrs, [:label, :street, :city, :province, :country_code, :postal_code])
     |> cast_assoc(:geocode, required: true)
-    |> validate_required([:province, :country_code, :postal_code])
+    |> validate_required([:province, :country_code, :postal_code, :label])
     |> validate_length(:label, min: 1, max: 255)
     |> validate_length(:street, max: 255)
     |> validate_length(:city, min: 1, max: 255)
@@ -64,6 +67,7 @@ defmodule Ferry.Locations.Address do
     # must be at least a 2 letter country code
     |> validate_length(:country_code, min: 2, max: 255)
     |> validate_length(:postal_code, max: 255)
+    |> unique_constraint(:label, name: :unique_address_label_per_group)
 
     # TODO: add a changeset check constraint that matches the db one?
     #       https://hexdocs.pm/ecto/Ecto.Changeset.html#check_constraint/3

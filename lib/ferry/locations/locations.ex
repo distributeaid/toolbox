@@ -14,7 +14,7 @@ defmodule Ferry.Locations do
 
   # @geocoder Application.get_env(:ferry, :geocoder)
 
-  # TODO: This function is not used so I am commenting it out 
+  # TODO: This function is not used so I am commenting it out
   # so that it doesnt raise compile warnings
   # defp geocode_address(%Changeset{valid?: true} = changeset) do
   #  case @geocoder.geocode_address(changeset.params) do
@@ -37,7 +37,20 @@ defmodule Ferry.Locations do
   # end
 
   @doc """
-  Returns the list of addresses.
+  Returns all addresses
+
+  ## Examples
+
+      iex> list_addresses(})
+      [%Address{}, ...]
+
+  """
+  def list_addresses() do
+    Address |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of addresses for a given group
 
   ## Examples
 
@@ -53,6 +66,22 @@ defmodule Ferry.Locations do
         #      preload: [geocode: g],
         order_by: [a.id]
     )
+  end
+
+  @doc """
+  Gets a single address.
+
+  ## Examples
+
+      iex> get_address(123)
+      %Address{}
+
+      iex> get_address(999)
+      nil
+  """
+  @spec get_address(String.t()) :: Address.t() | nil
+  def get_address(id) do
+    Repo.get(Address, id)
   end
 
   @doc """
@@ -80,23 +109,59 @@ defmodule Ferry.Locations do
   end
 
   @doc """
-  Creates a address.
+  Creates an address for the given group
 
   ## Examples
 
-      iex> create_address(%Group{}, %{field: value})
+      iex> create_address(%Group{}, %{label: "default", province: "Andalusia", country_code: "ES", postal_code: "29620"})
       {:ok, %Address{}}
 
-      iex> create_address(%Group{}, %{field: bad_value})
+      iex> create_address(%Group{}, %{label: "default"})
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec create_address(
+          Ferry.Profiles.Group.t(),
+          map()
+        ) :: {:ok, Address.t()} | {:error, Changeset.t()}
   def create_address(%Group{} = group, attrs) do
     %Address{}
     |> Address.changeset(attrs)
     |> Changeset.put_change(:group_id, group.id)
     #    |> geocode_address()
     |> Repo.insert()
+  end
+
+  @doc """
+  Creates a list of addresses for the given group.
+
+  If successful this function returns the list of addresses indexed in a map
+  by label.
+
+  ## Examples
+
+      iex> create_addresses(%Group{}, [%{label: "main", province: "Andalusia", country_code: "ES", postal_code: "29620"}, %{label: "old", province: "Andalusia", country_code: "ES", postal_code: "29620"}])
+      {:ok, %{ "main" => %Address{}, "old" => %Address{}}}
+
+      iex> create_addresses(%Group{}, [%{field: bad_value}])
+      {:error, label, %Ecto.Changeset{}}
+
+  """
+  @spec create_addresses(
+          Ferry.Profiles.Group.t(),
+          list(Address.t())
+        ) :: {:ok, map()} | {:error, String.t(), Changeset.t()}
+  def create_addresses(%Group{} = group, addresses) do
+    addresses
+    |> Enum.reduce(Ecto.Multi.new(), fn attrs, multi ->
+      changeset =
+        %Address{}
+        |> Address.changeset(attrs)
+        |> Changeset.put_change(:group_id, group.id)
+
+      Ecto.Multi.insert(multi, attrs.label, changeset)
+    end)
+    |> Repo.transaction()
   end
 
   @doc """
@@ -113,9 +178,7 @@ defmodule Ferry.Locations do
   """
   def update_address(%Address{} = address, attrs) do
     address
-    #    |> Repo.preload([:geocode])
     |> Address.changeset(attrs)
-    #    |> geocode_address()
     |> Repo.update()
   end
 
