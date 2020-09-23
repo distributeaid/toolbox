@@ -61,19 +61,6 @@ config :ferry, :chat,
   apiKey: "da2-mex4f66y3rd6pd7zhocoyaallm",
   endpoint: "https://iqvxvl3zzfeuxm622y5fcwpfjq.appsync-api.eu-central-1.amazonaws.com/graphql"
 
-# Configures the tracer
-config :ferry, FerryWeb.Tracer,
-  service: :ferry,
-  adapter: SpandexDatadog.Adapter,
-  env: {:system, "ENV"}
-
-config :spandex_phoenix,
-  tracer: FerryWeb.Tracer
-
-config :spandex_ecto, SpandexEcto.EctoLogger,
-  service: :ferry,
-  tracer: FerryWeb.Tracer
-
 config :prometheus, FerryWeb.PipelineInstrumenter,
   labels: [:status_class, :method, :host, :scheme, :request_path],
   duration_buckets: [

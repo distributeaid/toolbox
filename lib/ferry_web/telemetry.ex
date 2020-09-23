@@ -8,8 +8,6 @@ defmodule FerryWeb.Telemetry do
 
   @impl true
   def init(_arg) do
-    SpandexPhoenix.Telemetry.install()
-
     children = [
       {:telemetry_poller, measurements: periodic_measurements(), period: 10_000},
       {FerryWeb.Telemetry.Absinthe, []}

@@ -48,9 +48,3 @@ config :ferry, :chat,
 config :arc,
   storage: Arc.Storage.S3,
   bucket: {:system, "AWS_S3_BUCKET"}
-
-config :ferry, FerryWeb.Tracer,
-  service: :ferry,
-  adapter: SpandexDatadog.Adapter,
-  disabled?: false,
-  env: System.get_env("ENV")
