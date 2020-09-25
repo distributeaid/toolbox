@@ -50,5 +50,9 @@ defmodule Ferry.AidTaxonomy.Mod do
       name: :aid__mod_values_mod_id_fkey,
       message: "has mod values"
     )
+    |> foreign_key_constraint(:id,
+      name: :aid__items__mods_mod_id_fkey,
+      message: "has items"
+    )
   end
 end
