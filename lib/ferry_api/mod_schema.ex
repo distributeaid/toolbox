@@ -61,9 +61,19 @@ defmodule FerryApi.Schema.Mod do
       resolve(&delete_mod/3)
       middleware(&build_payload/2)
     end
+
+    @desc "Add a mod to an existing item"
+    field :add_mod_to_item, type: :mod_payload do
+      arg(:mod, non_null(:id))
+      arg(:item, non_null(:id))
+      middleware(Middleware.RequireUser)
+      resolve(&add_mod_to_item/3)
+      middleware(&build_payload/2)
+    end
   end
 
   @mod_not_found "mod not found"
+  @item_not_found "item not found"
 
   @doc """
   Graphql resolver that returns the total number of mods
@@ -148,6 +158,27 @@ defmodule FerryApi.Schema.Mod do
     case AidTaxonomy.get_mod(id) do
       nil -> {:error, @mod_not_found}
       mod -> AidTaxonomy.delete_mod(mod)
+    end
+  end
+
+  @doc """
+  GraphQL resolver that adds an existing mod to an item
+  """
+  @spec add_mod_to_item(any, %{mod: integer(), item: integer()}, any) ::
+          {:error, String.t() | Ecto.Changeset.t()} | {:ok, Ferry.AidTaxonomy.Mod.t()}
+  def add_mod_to_item(_parent, %{mod: mod, item: item}, _resolution) do
+    case AidTaxonomy.get_mod(mod) do
+      nil ->
+        {:error, @mod_not_found}
+
+      mod ->
+        case AidTaxonomy.get_item(item) do
+          nil ->
+            {:error, @item_not_found}
+
+          item ->
+            AidTaxonomy.add_mod_to_item(mod, item)
+        end
     end
   end
 end

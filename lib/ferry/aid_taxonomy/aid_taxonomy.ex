@@ -16,6 +16,7 @@ defmodule Ferry.AidTaxonomy do
   alias Ferry.AidTaxonomy.Item
   alias Ferry.AidTaxonomy.Mod
   alias Ferry.AidTaxonomy.ModValue
+  alias Ferry.AidTaxonomy.ItemMod
 
   @doc """
   Returns all categories
@@ -402,6 +403,19 @@ defmodule Ferry.AidTaxonomy do
     # handle db constraint errors as changeset errors
     |> Mod.delete_changeset()
     |> Repo.delete()
+  end
+
+  @doc """
+  Adds the given mod to the given item.
+
+  If the item has already that mod, then this function
+  will return an error
+  """
+  @spec add_mod_to_item(Mod.t(), Item.t()) :: {:ok, Mod.t()} | {:error, Ecto.ChangeSet.t()}
+  def add_mod_to_item(%{id: mod_id}, %{id: item_id}) do
+    %ItemMod{}
+    |> ItemMod.changeset(%{item_id: item_id, mod_id: mod_id})
+    |> Repo.insert()
   end
 
   # TODO: test

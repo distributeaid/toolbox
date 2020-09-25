@@ -175,4 +175,25 @@ defmodule Ferry.ApiClient.Mod do
     }
     """)
   end
+
+  @doc """
+  GraphQL mutation that adds a mod to an item
+  """
+  @spec add_mod_to_item(Plug.Conn.t(), map()) :: map()
+  def add_mod_to_item(conn, attrs) do
+    graphql(conn, """
+    mutation {
+      addModToItem(item: "#{attrs.item}", mod: "#{attrs.mod}") {
+        successful,
+        messages {
+          field,
+          message
+        },
+        result {
+          id
+        }
+      }
+    }
+    """)
+  end
 end
