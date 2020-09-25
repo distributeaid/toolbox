@@ -580,13 +580,6 @@ defmodule Ferry.Factory do
         Enum.random(["integer", "select", "multi-select"])
       end
 
-    # values =
-    #   case type do
-    #     "integer" -> nil
-    #     "select" -> ["small", "large"]
-    #     "multi-select" -> ["summer", "winter"]
-    #   end
-
     mod = %Ferry.AidTaxonomy.Mod{
       name: sequence("Size"),
       description: sequence("I let you specify the sizes of things."),
