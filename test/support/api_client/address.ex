@@ -4,7 +4,7 @@ defmodule Ferry.ApiClient.Address do
   for dealing with Addresses in tests.
   """
 
-  import Ferry.ApiClient.Graphql
+  import Ferry.ApiClient.GraphCase
 
   @doc """
   Run a GraphQL query that counts addresses

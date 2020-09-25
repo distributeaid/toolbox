@@ -4,7 +4,7 @@ defmodule Ferry.ApiClient.Project do
   for dealing with Projects in tests.
   """
 
-  import Ferry.ApiClient.Graphql
+  import Ferry.ApiClient.GraphCase
 
   @doc """
   Run a GraphQL query that counts projects

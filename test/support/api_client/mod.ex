@@ -4,7 +4,7 @@ defmodule Ferry.ApiClient.Mod do
   for dealing with Mods in tests.
   """
 
-  import Ferry.ApiClient.Graphql
+  import Ferry.ApiClient.GraphCase
 
   @doc """
   Run a GraphQL query that counts mods

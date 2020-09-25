@@ -4,7 +4,7 @@ defmodule Ferry.ApiClient.Group do
   for dealing with Groups in tests.
   """
 
-  import Ferry.ApiClient.Graphql
+  import Ferry.ApiClient.GraphCase
 
   @doc """
   Run a GraphQL query that counts groups
