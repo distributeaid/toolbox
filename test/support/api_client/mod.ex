@@ -196,4 +196,25 @@ defmodule Ferry.ApiClient.Mod do
     }
     """)
   end
+
+  @doc """
+  GraphQL mutation that removes a mod from an item
+  """
+  @spec remove_mod_from_item(Plug.Conn.t(), map()) :: map()
+  def remove_mod_from_item(conn, attrs) do
+    graphql(conn, """
+    mutation {
+      removeModFromItem(item: "#{attrs.item}", mod: "#{attrs.mod}") {
+        successful,
+        messages {
+          field,
+          message
+        },
+        result {
+          id
+        }
+      }
+    }
+    """)
+  end
 end

@@ -70,6 +70,15 @@ defmodule FerryApi.Schema.Mod do
       resolve(&add_mod_to_item/3)
       middleware(&build_payload/2)
     end
+
+    @desc "Remove a mod from an existing item"
+    field :remove_mod_from_item, type: :mod_payload do
+      arg(:mod, non_null(:id))
+      arg(:item, non_null(:id))
+      middleware(Middleware.RequireUser)
+      resolve(&remove_mod_from_item/3)
+      middleware(&build_payload/2)
+    end
   end
 
   @mod_not_found "mod not found"
@@ -177,7 +186,32 @@ defmodule FerryApi.Schema.Mod do
             {:error, @item_not_found}
 
           item ->
-            AidTaxonomy.add_mod_to_item(mod, item)
+            with :ok <- AidTaxonomy.add_mod_to_item(mod, item) do
+              {:ok, mod}
+            end
+        end
+    end
+  end
+
+  @doc """
+  GraphQL resolver that removes an existing mod from an item
+  """
+  @spec remove_mod_from_item(any, %{mod: integer(), item: integer()}, any) ::
+          {:error, String.t() | Ecto.Changeset.t()} | {:ok, Ferry.AidTaxonomy.Mod.t()}
+  def remove_mod_from_item(_parent, %{mod: mod, item: item}, _resolution) do
+    case AidTaxonomy.get_mod(mod) do
+      nil ->
+        {:error, @mod_not_found}
+
+      mod ->
+        case AidTaxonomy.get_item(item) do
+          nil ->
+            {:error, @item_not_found}
+
+          item ->
+            with :ok <- AidTaxonomy.remove_mod_from_item(mod, item) do
+              {:ok, mod}
+            end
         end
     end
   end

@@ -2,7 +2,7 @@ defmodule Ferry.ItemModSchemaTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Category, Item, Mod}
 
-  test "add a mod to an existing item", %{conn: conn} do
+  test "add/remove a mod to/from an existing item", %{conn: conn} do
     insert(:user)
     |> mock_sign_in
 
@@ -74,5 +74,46 @@ defmodule Ferry.ItemModSchemaTest do
     } = get_item_with_mods(conn, t_shirt_id)
 
     assert sizes_id == mod["id"]
+
+    # Try to add the same mod again
+    %{
+      "data" => %{
+        "addModToItem" => %{
+          "successful" => false,
+          "messages" => [
+            error
+          ]
+        }
+      }
+    } =
+      add_mod_to_item(conn, %{
+        item: t_shirt_id,
+        mod: sizes_id
+      })
+
+    assert "already exists" == error["message"]
+
+    # unlink the mod from the item
+    %{
+      "data" => %{
+        "removeModFromItem" => %{
+          "successful" => true
+        }
+      }
+    } =
+      remove_mod_from_item(conn, %{
+        item: t_shirt_id,
+        mod: sizes_id
+      })
+
+    # Get the item and all its mods
+    %{
+      "data" => %{
+        "item" => %{
+          "id" => ^t_shirt_id,
+          "mods" => []
+        }
+      }
+    } = get_item_with_mods(conn, t_shirt_id)
   end
 end
