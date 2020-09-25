@@ -375,43 +375,6 @@ defmodule Ferry.AidTaxonomyTest do
       assert mod.name == attrs.name
       assert mod.description == attrs.description
       assert mod.type == attrs.type
-
-      # # integer mods should never have the "values" field set
-      # attrs = params_for(:aid_mod, %{type: "integer", values: ["not", "set"]})
-      # assert {:ok, %Mod{} = mod} = AidTaxonomy.create_mod(attrs)
-      # assert mod.values == nil
-
-      # # select mod
-      # attrs = params_for(:aid_mod, %{type: "select"})
-      # assert {:ok, %Mod{} = mod} = AidTaxonomy.create_mod(attrs)
-      # assert mod.name == attrs.name
-      # assert mod.description == attrs.description
-      # assert mod.type == attrs.type
-      # assert mod.values == attrs.values
-
-      # # multi-select mod
-      # attrs = params_for(:aid_mod, %{type: "multi-select"})
-      # assert {:ok, %Mod{} = mod} = AidTaxonomy.create_mod(attrs)
-      # assert mod.name == attrs.name
-      # assert mod.description == attrs.description
-      # assert mod.type == attrs.type
-      # assert mod.values == attrs.values
-
-      # # doesn't need items...
-      # attrs = params_for(:aid_mod, %{items: nil})
-      # assert {:ok, %Mod{} = mod} = AidTaxonomy.create_mod(attrs)
-
-      # # ...but also creates association with items
-      # items =
-      #   [insert(:aid_item), insert(:aid_item)]
-      #   |> without_assoc(:mods, :many)
-      #   |> without_assoc([:category, :items], :many)
-
-      # attrs = params_for(:aid_mod)
-      # # TODO: handle this in the factory?
-      # attrs = %{attrs | items: items}
-      # assert {:ok, %Mod{} = mod} = AidTaxonomy.create_mod(attrs)
-      # assert mod.items == items
     end
 
     # TODO: ensure each changeset has the right errors
