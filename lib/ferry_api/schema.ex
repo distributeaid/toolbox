@@ -23,6 +23,11 @@ defmodule FerryApi.Schema do
 
   import_types(FerryApi.Schema.CategoryType)
   import_types(FerryApi.Schema.Category)
+  import_types(FerryApi.Schema.ModType)
+  import_types(FerryApi.Schema.Mod)
+
+  import_types(FerryApi.Schema.ModValueType)
+  import_types(FerryApi.Schema.ModValue)
 
   import_types(FerryApi.Schema.ItemType)
   import_types(FerryApi.Schema.Item)
@@ -37,6 +42,8 @@ defmodule FerryApi.Schema do
     import_fields(:self_care_queries)
     import_fields(:session_queries)
     import_fields(:category_queries)
+    import_fields(:mod_queries)
+    import_fields(:mod_value_queries)
     import_fields(:item_queries)
   end
 
@@ -48,6 +55,8 @@ defmodule FerryApi.Schema do
     import_fields(:project_mutations)
     import_fields(:address_mutations)
     import_fields(:category_mutations)
+    import_fields(:mod_mutations)
+    import_fields(:mod_value_mutations)
     import_fields(:item_mutations)
   end
 

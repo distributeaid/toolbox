@@ -23,7 +23,7 @@ defmodule Ferry.Factory do
     Aid.AvailableList,
     Aid.Entry,
     Aid.ManifestList,
-    Aid.ModValue,
+    AidTaxonomy.ModValue,
     Aid.NeedsList,
     # See note above the alias statement.
     # AidTaxonomy.Category,
@@ -580,19 +580,10 @@ defmodule Ferry.Factory do
         Enum.random(["integer", "select", "multi-select"])
       end
 
-    values =
-      case type do
-        "integer" -> nil
-        "select" -> ["small", "large"]
-        "multi-select" -> ["summer", "winter"]
-      end
-
     mod = %Ferry.AidTaxonomy.Mod{
       name: sequence("Size"),
       description: sequence("I let you specify the sizes of things."),
-      type: type,
-      values: values,
-      items: []
+      type: type
     }
 
     merge_attributes(mod, attrs)
@@ -607,8 +598,7 @@ defmodule Ferry.Factory do
       aid_mod_factory(),
       %{
         name: "Y",
-        type: "select",
-        values: ["only 1 choice"]
+        type: "select"
       }
     )
   end
@@ -795,8 +785,7 @@ defmodule Ferry.Factory do
       # 1000, 1001, ...
       amount: sequence(:amount, &(&1 + 1000)),
       list: build(:aid_list),
-      item: build(:aid_item),
-      mod_values: []
+      item: build(:aid_item)
     }
   end
 
@@ -805,24 +794,9 @@ defmodule Ferry.Factory do
   def mod_value_factory(attrs) do
     mod = if attrs[:mod], do: attrs.mod, else: build(:aid_mod)
 
-    value =
-      case mod.type do
-        # 1000, 1001, ...
-        "integer" ->
-          sequence(:value, &(&1 + 1000))
-
-        "select" ->
-          Enum.random(mod.values)
-
-        "multi-select" ->
-          [Enum.random(mod.values), Enum.random(mod.values)]
-          |> Enum.uniq()
-      end
-
     %ModValue{
-      value: value,
-      mod: mod,
-      entry: build(:entry)
+      value: "test",
+      mod: mod
     }
   end
 end

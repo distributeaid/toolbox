@@ -15,6 +15,8 @@ defmodule Ferry.AidTaxonomy do
   alias Ferry.AidTaxonomy.Category
   alias Ferry.AidTaxonomy.Item
   alias Ferry.AidTaxonomy.Mod
+  alias Ferry.AidTaxonomy.ModValue
+  alias Ferry.AidTaxonomy.ItemMod
 
   @doc """
   Returns all categories
@@ -329,17 +331,31 @@ defmodule Ferry.AidTaxonomy do
     |> Repo.all()
   end
 
+  @spec get_mod(any) :: Mod.t() | nil
+  def get_mod(id) do
+    mod_query()
+    |> Repo.get(id)
+  end
+
   def get_mod!(id) do
     mod_query()
     |> Repo.get!(id)
   end
 
-  def create_mod(attrs \\ %{}) do
-    items = get_mod_items(attrs)
+  @doc """
+  Given its name, return the associated mod
 
+  If no mod was found, then this function returns nil
+  """
+  @spec get_mod_by_name(String.t()) :: Mod.t() | nil
+  def get_mod_by_name(name) do
+    mod_query()
+    |> Repo.get_by(name: name)
+  end
+
+  def create_mod(attrs \\ %{}) do
     %Mod{}
     |> Mod.create_changeset(attrs)
-    |> Changeset.put_assoc(:items, items)
     |> Repo.insert()
   end
 
@@ -357,12 +373,8 @@ defmodule Ferry.AidTaxonomy do
   #   - allow renaming / merging values (probably in another function)
   #   - allow removing values that aren't used in any ModValue
   def update_mod(%Mod{} = mod, attrs \\ %{}) do
-    items = get_mod_items(attrs)
-
     mod
-    |> Repo.preload(:items)
     |> Mod.update_changeset(attrs)
-    |> Changeset.put_assoc(:items, items)
     |> Repo.update()
   end
 
@@ -389,8 +401,37 @@ defmodule Ferry.AidTaxonomy do
     mod
     # TODO: Mod.delete_changeset that only checks fkey constraints?
     # handle db constraint errors as changeset errors
-    |> Mod.update_changeset()
+    |> Mod.delete_changeset()
     |> Repo.delete()
+  end
+
+  @doc """
+  Adds the given mod to the given item.
+
+  If the item has already that mod, then this function
+  will return an error
+  """
+  @spec add_mod_to_item(Mod.t(), Item.t()) :: :ok | {:error, Ecto.ChangeSet.t()}
+  def add_mod_to_item(%{id: mod_id}, %{id: item_id}) do
+    with {:ok, _} <-
+           %ItemMod{}
+           |> ItemMod.changeset(%{item_id: item_id, mod_id: mod_id})
+           |> Repo.insert() do
+      :ok
+    end
+  end
+
+  @doc """
+  Removes the given mod from the given item.
+
+  """
+  @spec remove_mod_from_item(Mod.t(), Item.t()) :: :ok | {:error, Ecto.ChangeSet.t()}
+  def remove_mod_from_item(%{id: mod_id}, %{id: item_id}) do
+    with {1, nil} <-
+           from(im in ItemMod, where: im.mod_id == ^mod_id and im.item_id == ^item_id)
+           |> Repo.delete_all() do
+      :ok
+    end
   end
 
   # TODO: test
@@ -402,42 +443,91 @@ defmodule Ferry.AidTaxonomy do
   # ------------------------------------------------------------
   defp mod_query() do
     from mod in Mod,
-      left_join: item in assoc(mod, :items),
-      left_join: category in assoc(item, :category),
-      order_by: [mod.name, category.name, item.name],
-      preload: [items: {item, category: category}]
+      order_by: [mod.name]
   end
 
-  # from server data: items = [%{id: 4}, ...]
-  #                   items = [%Item{id: 4}, ...]
-  # NOTE: Should we check if items is a list of %Item{} structs and return that
-  #       directly instead of looking them up again?
-  defp get_mod_items(%{items: items}) do
-    items
-    |> Enum.map(& &1.id)
-    |> get_mod_items()
+  @doc """
+  Return the total number of mod values in the system
+  """
+  @spec count_mod_values() :: non_neg_integer()
+  def count_mod_values() do
+    ModValue
+    |> Repo.aggregate(:count, :id)
   end
 
-  # from client data: items = [%{"id" => "4"}, ...]
-  defp get_mod_items(%{"items" => items}) do
-    items
-    |> Enum.map(&(&1["id"] |> String.to_integer()))
-    |> get_mod_items()
+  @doc """
+  Returns the collection of all mod values in the system.
+
+  Please note this function could return a potentially
+  big result set. Use with caution.
+
+  """
+  @spec list_mod_values() :: [ModValue.t()]
+  def list_mod_values() do
+    ModValue
+    |> Repo.all()
+    |> Repo.preload(:mod)
   end
 
-  # no items passed in
-  defp get_mod_items(attrs) when is_map(attrs) do
-    []
+  @doc """
+  Given its id, return the associated mod value.
+
+  If no record matches, then this function returns nil
+  """
+  @spec get_mod_value(integer()) :: ModValue.t() | nil
+  def get_mod_value(id) do
+    ModValue
+    |> Repo.get(id)
+    |> Repo.preload(:mod)
   end
 
-  # item_ids = [4, ...]
-  defp get_mod_items(item_ids) when is_list(item_ids) do
-    query =
-      from item in Item,
-        where: item.id in ^item_ids,
-        left_join: category in assoc(item, :category),
-        preload: [category: category]
+  @doc """
+  Given its id, return the associated mod value
 
-    Repo.all(query)
+  If no item matches, then this function returns an error
+  """
+  @spec get_mod_value!(integer()) :: ModValue.t()
+  def get_mod_value!(id) do
+    Repo.get!(ModValue, id)
+  end
+
+  @doc """
+  Creates a new value, for the specified Mod.
+
+  """
+  @spec create_mod_value(Mod.t(), map()) ::
+          {:ok, ModValue.t()} | {:error, Ecto.Changeset.t()}
+  def create_mod_value(%Mod{} = mod, attrs \\ %{}) do
+    with {:ok, mod_value} <-
+           mod
+           |> Ecto.build_assoc(:values)
+           |> ModValue.changeset(attrs)
+           |> Repo.insert() do
+      {:ok, %{mod_value | mod: mod}}
+    end
+  end
+
+  @doc """
+  Updates a mod value
+
+  """
+  @spec update_mod_value(ModValue.t(), map()) ::
+          {:ok, ModValue.t()} | {:error, Ecto.Changeset.t()}
+  def update_mod_value(%ModValue{} = mod_value, attrs \\ %{}) do
+    mod_value
+    |> ModValue.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Delete the specified mod value
+
+  """
+  @spec delete_mod_value(ModValue.t()) ::
+          {:ok, ModValue.t()} | {:error, Ecto.Changeset.t()}
+  def delete_mod_value(%ModValue{} = mod_value) do
+    mod_value
+    |> ModValue.changeset()
+    |> Repo.delete()
   end
 end
