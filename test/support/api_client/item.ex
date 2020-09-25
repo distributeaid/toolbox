@@ -36,6 +36,26 @@ defmodule Ferry.ApiClient.Item do
 
   @doc """
   Run a GraphQL query that retuns a single
+  item, given its id. It also returns mods associated to that item.
+  """
+  @spec get_item_with_mods(Plug.Conn.t(), String.t()) :: map()
+  def get_item_with_mods(conn, id) do
+    graphql(conn, """
+    {
+      item(id: "#{id}") {
+        id,
+        name,
+        mods {
+          id,
+          name
+        }
+      }
+    }
+    """)
+  end
+
+  @doc """
+  Run a GraphQL query that retuns a single
   item, given its name. Since the name of an item is not unique across
   all categories, we also need to specify the category.
 
