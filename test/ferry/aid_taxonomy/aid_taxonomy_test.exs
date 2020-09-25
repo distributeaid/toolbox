@@ -173,9 +173,9 @@ defmodule Ferry.AidTaxonomyTest do
       assert retrieved_item.mods == []
 
       # with mods preloaded in order
-      mod1 = insert(:aid_mod, %{name: "Z"}) |> without_assoc(:items, :many)
-      mod2 = insert(:aid_mod, %{name: "A"}) |> without_assoc(:items, :many)
-      mod3 = insert(:aid_mod, %{name: "M"}) |> without_assoc(:items, :many)
+      mod1 = insert(:aid_mod, %{name: "Z"})
+      mod2 = insert(:aid_mod, %{name: "A"})
+      mod3 = insert(:aid_mod, %{name: "M"})
       item = insert(:aid_item, %{mods: [mod1, mod2, mod3]})
       retrieved_item = AidTaxonomy.get_item!(item.id)
       assert retrieved_item.mods == [mod2, mod3, mod1]
@@ -213,8 +213,8 @@ defmodule Ferry.AidTaxonomyTest do
       assert {:ok, %Item{} = item} = AidTaxonomy.create_item(category, attrs)
 
       # ... but also creates associations with mods
-      mod1 = insert(:aid_mod) |> without_assoc(:items, :many)
-      mod2 = insert(:aid_mod) |> without_assoc(:items, :many)
+      mod1 = insert(:aid_mod)
+      mod2 = insert(:aid_mod)
       attrs = params_for(:aid_item)
       attrs = %{attrs | mods: [mod1, mod2]}
       assert {:ok, %Item{} = item} = AidTaxonomy.create_item(category, attrs)
@@ -264,9 +264,9 @@ defmodule Ferry.AidTaxonomyTest do
       assert {:ok, %Item{} = mod} = AidTaxonomy.update_item(old_item, attrs)
 
       # ... but also creates / deletes associations with mods
-      mod1 = insert(:aid_mod) |> without_assoc(:items, :many)
-      mod2 = insert(:aid_mod) |> without_assoc(:items, :many)
-      mod3 = insert(:aid_mod) |> without_assoc(:items, :many)
+      mod1 = insert(:aid_mod)
+      mod2 = insert(:aid_mod)
+      mod3 = insert(:aid_mod)
       old_item = insert(:aid_item, %{mods: [mod1, mod2]})
 
       attrs = params_for(:aid_item)
@@ -355,18 +355,6 @@ defmodule Ferry.AidTaxonomyTest do
     test "get_mod!/1 returns the requested mod" do
       mod = insert(:aid_mod)
       assert AidTaxonomy.get_mod!(mod.id) == mod
-
-      # with items and categories preloaded
-      items =
-        [insert(:aid_item), insert(:aid_item)]
-        |> without_assoc(:mods, :many)
-        |> without_assoc([:category, :items], :many)
-
-      mod = insert(:aid_mod, %{items: items})
-
-      retrieved_mod = AidTaxonomy.get_mod!(mod.id)
-      assert retrieved_mod == mod
-      assert length(retrieved_mod.items) == 2
     end
 
     test "get_mod!/1 with a non-existent id throws an error" do
@@ -381,48 +369,12 @@ defmodule Ferry.AidTaxonomyTest do
 
     test "create_mod/1 with valid data creates a mod" do
       # integer mod
-      attrs = params_for(:aid_mod, %{type: "integer"})
+      attrs = params_for(:aid_mod, %{type: "integer", description: "test"})
+
       assert {:ok, %Mod{} = mod} = AidTaxonomy.create_mod(attrs)
       assert mod.name == attrs.name
       assert mod.description == attrs.description
       assert mod.type == attrs.type
-
-      # integer mods should never have the "values" field set
-      attrs = params_for(:aid_mod, %{type: "integer", values: ["not", "set"]})
-      assert {:ok, %Mod{} = mod} = AidTaxonomy.create_mod(attrs)
-      assert mod.values == nil
-
-      # select mod
-      attrs = params_for(:aid_mod, %{type: "select"})
-      assert {:ok, %Mod{} = mod} = AidTaxonomy.create_mod(attrs)
-      assert mod.name == attrs.name
-      assert mod.description == attrs.description
-      assert mod.type == attrs.type
-      assert mod.values == attrs.values
-
-      # multi-select mod
-      attrs = params_for(:aid_mod, %{type: "multi-select"})
-      assert {:ok, %Mod{} = mod} = AidTaxonomy.create_mod(attrs)
-      assert mod.name == attrs.name
-      assert mod.description == attrs.description
-      assert mod.type == attrs.type
-      assert mod.values == attrs.values
-
-      # doesn't need items...
-      attrs = params_for(:aid_mod, %{items: nil})
-      assert {:ok, %Mod{} = mod} = AidTaxonomy.create_mod(attrs)
-
-      # ...but also creates association with items
-      items =
-        [insert(:aid_item), insert(:aid_item)]
-        |> without_assoc(:mods, :many)
-        |> without_assoc([:category, :items], :many)
-
-      attrs = params_for(:aid_mod)
-      # TODO: handle this in the factory?
-      attrs = %{attrs | items: items}
-      assert {:ok, %Mod{} = mod} = AidTaxonomy.create_mod(attrs)
-      assert mod.items == items
     end
 
     # TODO: ensure each changeset has the right errors
@@ -449,7 +401,7 @@ defmodule Ferry.AidTaxonomyTest do
     test "update_mod/2 with valid data updates a mod" do
       # basic fields
       old_mod = insert(:aid_mod)
-      attrs = params_for(:aid_mod, %{type: old_mod.type, values: old_mod.values})
+      attrs = params_for(:aid_mod, %{type: old_mod.type})
 
       assert {:ok, %Mod{} = mod} = AidTaxonomy.update_mod(old_mod, attrs)
       assert mod.name != old_mod.name
@@ -457,42 +409,14 @@ defmodule Ferry.AidTaxonomyTest do
       assert mod.description != old_mod.description
       assert mod.description == attrs.description
       assert mod.type == old_mod.type
-      assert mod.values == old_mod.values
 
       # type change
-      old_mod = insert(:aid_mod, %{type: "select", values: ["a", "b"]})
-      attrs = params_for(:aid_mod, %{type: "multi-select", values: old_mod.values})
+      old_mod = insert(:aid_mod, %{type: "select"})
+      attrs = params_for(:aid_mod, %{type: "multi-select"})
 
       assert {:ok, %Mod{} = mod} = AidTaxonomy.update_mod(old_mod, attrs)
       assert mod.type != old_mod.type
       assert mod.type == attrs.type
-
-      # values change
-      old_mod = insert(:aid_mod, %{type: "select", values: ["a", "b"]})
-      attrs = params_for(:aid_mod, %{type: old_mod.type, values: ["c" | old_mod.values]})
-
-      assert {:ok, %Mod{} = mod} = AidTaxonomy.update_mod(old_mod, attrs)
-      assert mod.values != old_mod.values
-      assert mod.values == attrs.values
-      assert Enum.all?(old_mod.values, &(&1 in mod.values))
-
-      # doesn't need items...
-      old_mod = insert(:aid_mod, %{items: []})
-      attrs = params_for(:aid_mod, %{type: old_mod.type, values: old_mod.values, items: nil})
-      assert {:ok, %Mod{} = mod} = AidTaxonomy.update_mod(old_mod, attrs)
-
-      # ... but also creates / deletes associations with items
-      [item1, item2, item3] =
-        [insert(:aid_item), insert(:aid_item), insert(:aid_item)]
-        |> without_assoc(:mods, :many)
-        |> without_assoc([:category, :items], :many)
-
-      old_mod = insert(:aid_mod, %{items: [item1, item2]})
-      attrs = params_for(:aid_mod, %{type: old_mod.type, values: old_mod.values})
-      attrs = %{attrs | items: [item2, item3]}
-
-      assert {:ok, %Mod{} = mod} = AidTaxonomy.update_mod(old_mod, attrs)
-      assert mod.items == [item2, item3]
     end
 
     # TODO: ensure each changeset has the right errors
@@ -518,23 +442,9 @@ defmodule Ferry.AidTaxonomyTest do
       insert(:aid_mod, %{name: "the same"})
       old_mod = insert(:aid_mod, %{name: "different"})
 
-      attrs =
-        params_for(:aid_mod, %{name: "the same", type: old_mod.type, values: old_mod.values})
+      attrs = params_for(:aid_mod, %{name: "the same", type: old_mod.type})
 
       assert {:error, %Ecto.Changeset{} = _changeset} = AidTaxonomy.create_mod(attrs)
-
-      # invalid type change
-      # TODO: test all change combos except select => multi-select?
-      mod = insert(:aid_mod, %{type: "integer"})
-      attrs = params_for(:aid_mod, %{type: "select"})
-      assert {:error, %Ecto.Changeset{}} = AidTaxonomy.update_mod(mod, attrs)
-      assert mod == AidTaxonomy.get_mod!(mod.id)
-
-      # invalid values change
-      mod = insert(:aid_mod, %{type: "select", values: ["a", "b", "c"]})
-      attrs = params_for(:aid_mod, %{type: "select", values: ["a", "b"]})
-      assert {:error, %Ecto.Changeset{}} = AidTaxonomy.update_mod(mod, attrs)
-      assert mod == AidTaxonomy.get_mod!(mod.id)
     end
 
     test "delete_mod/1 deletes a mod that isn't referenced by any mod values" do

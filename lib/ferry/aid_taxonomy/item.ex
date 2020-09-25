@@ -4,6 +4,7 @@ defmodule Ferry.AidTaxonomy.Item do
 
   alias Ferry.AidTaxonomy.Category
   alias Ferry.AidTaxonomy.Mod
+  alias Ferry.AidTaxonomy.ItemMod
 
   @type t :: %__MODULE__{}
 
@@ -15,7 +16,7 @@ defmodule Ferry.AidTaxonomy.Item do
     # TODO: probably want to setup a schema for the join table with
     # has_many / belongs_to on each side, to provide flexibility if we ever need
     # metadata on the relationship
-    many_to_many :mods, Mod, unique: true, join_through: "aid__items__mods", on_replace: :delete
+    many_to_many :mods, Mod, unique: true, join_through: ItemMod, on_replace: :delete
 
     timestamps()
   end

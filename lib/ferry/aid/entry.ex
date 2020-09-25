@@ -3,7 +3,6 @@ defmodule Ferry.Aid.Entry do
   import Ecto.Changeset
 
   alias Ferry.Aid.AidList
-  alias Ferry.Aid.ModValue
   alias Ferry.AidTaxonomy.Item
 
   schema "aid__list_entries" do
@@ -11,7 +10,6 @@ defmodule Ferry.Aid.Entry do
 
     belongs_to :list, AidList, foreign_key: :list_id
     belongs_to :item, Item
-    has_many :mod_values, ModValue, foreign_key: :entry_id
 
     timestamps()
   end
