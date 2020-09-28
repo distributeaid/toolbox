@@ -16,6 +16,15 @@ defmodule Ferry.Shipments do
   # ==============================================================================
 
   @doc """
+  Return the total number of shipments in the system
+  """
+  @spec count_shipments() :: non_neg_integer()
+  def count_shipments() do
+    Shipment
+    |> Repo.aggregate(:count, :id)
+  end
+
+  @doc """
   Returns the list of shipments.
 
   ## Examples
@@ -51,18 +60,10 @@ defmodule Ferry.Shipments do
   @doc """
   Gets a single shipment.
 
-  Raises `Ecto.NoResultsError` if the Shipment does not exist.
-
-  ## Examples
-
-      iex> get_shipment!(123)
-      %Shipment{}
-
-      iex> get_shipment!(456)
-      ** (Ecto.NoResultsError)
-
+  Returns nil if the shipment does not exist
   """
-  def get_shipment!(id) do
+  @spec get_shipment(integer()) :: {:ok, Shipment.t()} | nil
+  def get_shipment(id) do
     query =
       from s in Shipment,
         preload: [
@@ -70,24 +71,19 @@ defmodule Ferry.Shipments do
           routes: ^routes_query()
         ]
 
-    Repo.get!(query, id)
+    Repo.get(query, id)
   end
 
   @doc """
-  Creates a shipment.
-
-  ## Examples
-
-      iex> create_shipment(%{field: value})
-      {:ok, %Shipment{}}
-
-      iex> create_shipment(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+  Creates a new shipment, for the given pickup and delivery addresses.
 
   """
-  def create_shipment(attrs \\ %{}) do
-    # TODO: validate that at least 1 role exists to prevent orphan shipments
-    #       currently enforced through the UI
+  @spec create_shipment(map()) ::
+          {:ok, Shipment.t()} | {:error, Ecto.ChangeError}
+  def create_shipment(attrs) do
+    # default status upon creation
+    attrs = Map.put(attrs, :status, "planning")
+
     %Shipment{}
     |> Shipment.changeset(attrs)
     |> Changeset.cast_assoc(:roles)
@@ -127,6 +123,17 @@ defmodule Ferry.Shipments do
   """
   def delete_shipment(%Shipment{} = shipment) do
     Repo.delete(shipment)
+  end
+
+  @doc """
+  Deletes all shipments
+  """
+  @spec delete_shipments() :: boolean()
+  def delete_shipments() do
+    Shipment
+    |> Repo.delete_all()
+
+    true
   end
 
   @doc """
@@ -177,19 +184,21 @@ defmodule Ferry.Shipments do
   end
 
   def delete_role(%Role{} = role) do
-    shipment = get_shipment!(role.shipment_id)
+    shipment = get_shipment(role.shipment_id)
 
-    if length(shipment.roles) > 1 do
-      Repo.delete(role)
-    else
-      # TODO: make into a delete changeset?
-      role
-      |> Changeset.change()
-      |> Changeset.add_error(
-        :shipment,
-        "There must be at least 1 group taking part in this shipment."
-      )
-      |> Changeset.apply_action(:delete)
+    if shipment != nil do
+      if length(shipment.roles) > 1 do
+        Repo.delete(role)
+      else
+        # TODO: make into a delete changeset?
+        role
+        |> Changeset.change()
+        |> Changeset.add_error(
+          :shipment,
+          "There must be at least 1 group taking part in this shipment."
+        )
+        |> Changeset.apply_action(:delete)
+      end
     end
   end
 

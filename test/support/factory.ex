@@ -369,34 +369,25 @@ defmodule Ferry.Factory do
 
   def shipment_factory do
     %Shipment{
-      target_date: sequence(:target_date, &"1/1/#{2020 + &1}"),
-      status: Enum.random(["planning", "ready", "underway", "received"]),
-      description: sequence("I am a shipment description with stuff about shipments yeah!"),
-      sender_address: "an address",
-      receiver_address: "another address",
-      transport_size:
-        Enum.random([
-          nil,
-          "Full Truck (13m / 40ft)",
-          "Half Truck (13m / 40ft)",
-          "Individual Pallets",
-          "Van",
-          "Car",
-          "Shipping Container",
-          "Other"
-        ]),
-      items: "some stuff",
-      funding: "$nothing",
+      status: "planning",
+      description: "I am a shipment description with stuff about shipments yeah!",
+      pickup_address: "an address",
+      delivery_address: "another address",
+      transport_type: "pallets",
+      available_from: DateTime.utc_now() |> DateTime.truncate(:second),
+      target_delivery:
+        DateTime.utc_now() |> DateTime.add(2 * 24 * 3600, :second) |> DateTime.truncate(:second),
       roles: [],
       routes: []
     }
   end
 
+  @spec invalid_shipment_factory :: %{:__struct__ => atom, optional(atom) => any}
   def invalid_shipment_factory do
     struct!(
       shipment_factory(),
       %{
-        status: "hello"
+        pickup_address: nil
       }
     )
   end

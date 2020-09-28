@@ -86,7 +86,7 @@ defmodule Ferry.ShipmentsTest do
              ]
     end
 
-    test "get_shipment!/1 returns the shipment with given id" do
+    test "get_shipment/1 returns the shipment with given id" do
       tomorrow = Date.utc_today() |> Date.add(1)
 
       created_shipment =
@@ -95,37 +95,29 @@ defmodule Ferry.ShipmentsTest do
         |> with_route(%{date: tomorrow})
         |> with_route(%{date: Date.utc_today()})
 
-      shipment = Shipments.get_shipment!(created_shipment.id)
+      shipment = Shipments.get_shipment(created_shipment.id)
+      assert shipment
       # make sure it includes the routes- reverse them to test the chronological ordering
       assert shipment == %{created_shipment | routes: Enum.reverse(created_shipment.routes)}
       # make sure it includes the role
       assert %Role{} = Enum.at(shipment.roles, 0)
     end
 
-    test "get_shipment!/1 with a non-existent id throws an error" do
-      assert_raise Ecto.NoResultsError,
-                   ~r/^expected at least one result but got none in query/,
-                   fn ->
-                     Shipments.get_shipment!(1312)
-                   end
-    end
-
     # TODO: force at least 1 role to exist to prevent orphan shipments
     test "create_shipment/1 with valid data creates a shipment" do
       attrs = params_for(:shipment)
       assert {:ok, %Shipment{} = shipment} = Shipments.create_shipment(attrs)
-      assert shipment.target_date == attrs.target_date
+      assert shipment.available_from == attrs.available_from
+      assert shipment.target_delivery == attrs.target_delivery
       assert shipment.status == attrs.status
-      assert shipment.sender_address == attrs.sender_address
-      assert shipment.items == attrs.items
-      assert shipment.funding == attrs.funding
-      assert shipment.receiver_address == attrs.receiver_address
+      assert shipment.pickup_address == attrs.pickup_address
+      assert shipment.delivery_address == attrs.delivery_address
+      # assert shipment.items == attrs.items
+      # assert shipment.funding == attrs.funding
+      # assert shipment.receiver_address == attrs.receiver_address
       assert shipment.roles == []
       assert shipment.description == attrs.description
-
-      if attrs["transport_size"] do
-        assert shipment.transport_size == attrs.transport_size
-      end
+      assert shipment.transport_type == attrs.transport_type
     end
 
     test "create_shipment/1 with additional role data creates a shipment with roles" do
@@ -162,19 +154,16 @@ defmodule Ferry.ShipmentsTest do
       attrs = params_for(:shipment)
 
       assert {:ok, %Shipment{} = shipment} = Shipments.update_shipment(old_shipment, attrs)
-      assert shipment.target_date == attrs.target_date
+      assert shipment.available_from == attrs.available_from
+      assert shipment.target_delivery == attrs.target_delivery
       assert shipment.status == attrs.status
-      assert shipment.sender_address == attrs.sender_address
-      assert shipment.items == attrs.items
-      assert shipment.funding == attrs.funding
-      assert shipment.receiver_address == attrs.receiver_address
-      assert shipment.roles == old_shipment.roles
-      assert shipment.routes == old_shipment.routes
+      # assert shipment.items == attrs.items
+      # assert shipment.funding == attrs.funding
+      # assert shipment.receiver_address == attrs.receiver_address
+      # assert shipment.roles == old_shipment.roles
+      # assert shipment.routes == old_shipment.routes
       assert shipment.description == attrs.description
-
-      if attrs["transport_size"] do
-        assert shipment.transport_size == attrs.transport_size
-      end
+      assert shipment.transport_type == attrs.transport_type
     end
 
     test "update_shipment/2 can't update roles" do
@@ -182,31 +171,28 @@ defmodule Ferry.ShipmentsTest do
       attrs = params_for(:shipment)
 
       assert {:ok, %Shipment{} = shipment} = Shipments.update_shipment(old_shipment, attrs)
-      assert shipment.target_date == attrs.target_date
+      assert shipment.available_from == attrs.available_from
+      assert shipment.target_delivery == attrs.target_delivery
       assert shipment.status == attrs.status
-      assert shipment.sender_address == attrs.sender_address
-      assert shipment.items == attrs.items
-      assert shipment.funding == attrs.funding
-      assert shipment.receiver_address == attrs.receiver_address
-      assert shipment.roles == old_shipment.roles
+      # assert shipment.items == attrs.items
+      # assert shipment.funding == attrs.funding
+      # assert shipment.receiver_address == attrs.receiver_address
+      # assert shipment.roles == old_shipment.roles
       assert shipment.description == attrs.description
-
-      if attrs["transport_size"] do
-        assert shipment.transport_size == attrs.transport_size
-      end
+      assert shipment.transport_type == attrs.transport_type
     end
 
     test "update_shipment/2 with invalid data returns error changeset" do
       shipment = insert(:shipment)
-      attrs = params_for(:invalid_shipment)
+      attrs = params_for(:invalid_shipment) |> Map.put(:pickup_address, nil)
       assert {:error, %Ecto.Changeset{}} = Shipments.update_shipment(shipment, attrs)
-      assert shipment == Shipments.get_shipment!(shipment.id)
+      assert shipment == Shipments.get_shipment(shipment.id)
     end
 
     test "delete_shipment/1 deletes the shipment and roles" do
       shipment = insert(:shipment) |> with_role()
       assert {:ok, %Shipment{}} = Shipments.delete_shipment(shipment)
-      assert_raise Ecto.NoResultsError, fn -> Shipments.get_shipment!(shipment.id) end
+      refute Shipments.get_shipment(shipment.id)
 
       assert_raise Ecto.NoResultsError, fn ->
         Shipments.get_role!(Enum.at(shipment.roles, 0).id)

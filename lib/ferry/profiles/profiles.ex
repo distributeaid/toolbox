@@ -118,6 +118,17 @@ defmodule Ferry.Profiles do
   end
 
   @doc """
+  Deletes all groups
+  """
+  @spec delete_groups() :: boolean()
+  def delete_groups() do
+    Group
+    |> Repo.delete_all()
+
+    true
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking group changes.
 
   ## Examples

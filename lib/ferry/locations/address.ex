@@ -74,4 +74,13 @@ defmodule Ferry.Locations.Address do
     #
     # TODO: test format for some fields (letters / whitespace only?)
   end
+
+  def full_address(%__MODULE__{
+        street: street,
+        city: city,
+        postal_code: zip,
+        country_code: country
+      }) do
+    Enum.join([street, city, zip, country], " ")
+  end
 end

@@ -32,6 +32,9 @@ defmodule FerryApi.Schema do
   import_types(FerryApi.Schema.ItemType)
   import_types(FerryApi.Schema.Item)
 
+  import_types(FerryApi.Schema.ShipmentType)
+  import_types(FerryApi.Schema.Shipment)
+
   # Queries
   # ------------------------------------------------------------
 
@@ -45,6 +48,7 @@ defmodule FerryApi.Schema do
     import_fields(:mod_queries)
     import_fields(:mod_value_queries)
     import_fields(:item_queries)
+    import_fields(:shipment_queries)
   end
 
   # Mutuations
@@ -58,6 +62,7 @@ defmodule FerryApi.Schema do
     import_fields(:mod_mutations)
     import_fields(:mod_value_mutations)
     import_fields(:item_mutations)
+    import_fields(:shipment_mutations)
   end
 
   @sources [

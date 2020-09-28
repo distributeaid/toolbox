@@ -56,6 +56,12 @@ defmodule FerryApi.Schema.Address do
       resolve(&delete_address/3)
       middleware(&build_payload/2)
     end
+
+    @desc "Delete all addresses"
+    field :delete_addresses, type: :boolean do
+      middleware(Middleware.RequireUser)
+      resolve(&delete_addresses/3)
+    end
   end
 
   @group_not_found "group not found"
@@ -138,5 +144,13 @@ defmodule FerryApi.Schema.Address do
       nil -> {:error, @address_not_found}
       address -> Ferry.Locations.delete_address(address)
     end
+  end
+
+  @doc """
+  Graphql resolver that deletes all addresses
+  """
+  @spec delete_addresses(any, map(), any) :: {:ok, boolean()}
+  def delete_addresses(_parent, _, _resolution) do
+    {:ok, Ferry.Locations.delete_addresses()}
   end
 end
