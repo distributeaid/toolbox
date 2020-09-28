@@ -60,6 +60,7 @@ defmodule Ferry.FeatureCase do
           debug: tags[:debug] || false,
           token: nil,
           result: nil,
+          errors: [],
           messages: [],
           successful: nil,
           other: %{}
@@ -109,19 +110,20 @@ defmodule Ferry.FeatureCase do
                "messages" => messages,
                "result" => result
              },
+             errors,
              opts
            ) do
         state
-        |> Map.merge(%{successful: successful, messages: messages, result: result})
+        |> Map.merge(%{successful: successful, errors: errors, messages: messages, result: result})
         |> with_alias(opts)
       end
 
       # Puts the given result in the state. In this case, we don't have a
       # mutation payload, but we take some defaults and turn into a consistent
       # data structure for the rest of steps
-      defp with_payload(state, result, opts) do
+      defp with_payload(state, result, errors, opts) do
         state
-        |> Map.merge(%{successful: true, messages: [], result: result})
+        |> Map.merge(%{successful: true, errors: errors, messages: [], result: result})
         |> with_alias(opts)
       end
 
@@ -137,7 +139,8 @@ defmodule Ferry.FeatureCase do
 
         %{"data" => doc} = response
         payload = doc[name]
-        state |> with_payload(payload, opts)
+        errors = response["errors"] || []
+        state |> with_payload(payload, errors, opts)
       end
 
       defp mutation(state, name) do
@@ -172,7 +175,8 @@ defmodule Ferry.FeatureCase do
 
         %{"data" => doc} = response
         payload = doc[name]
-        state |> with_payload(payload, opts)
+        errors = response["errors"] || []
+        state |> with_payload(payload, errors, opts)
       end
 
       defp query(state, name), do: query(state, name, name)

@@ -81,7 +81,9 @@ defmodule Ferry.Locations do
   """
   @spec get_address(String.t()) :: Address.t() | nil
   def get_address(id) do
-    Repo.get(Address, id)
+    Address
+    |> preload(:group)
+    |> Repo.get(id)
   end
 
   @doc """

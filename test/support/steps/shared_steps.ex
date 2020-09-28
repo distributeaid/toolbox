@@ -11,6 +11,8 @@ defmodule Ferry.SharedSteps do
 
   defthen ~r/^it should be successful$/, _vars, state do
     assert state.successful, debug("Expected to be successful", state)
+    assert [] == state.errors, debug("Expected no errors", state)
+    assert [] == state.messages, debug("Expected no messages", state)
   end
 
   defthen ~r/^I should have a list$/, _vars, state do
@@ -22,5 +24,12 @@ defmodule Ferry.SharedSteps do
 
     assert String.to_integer(length) == length(state.result),
            debug("Expected a list with length #{length}", state)
+  end
+
+  defthen ~r/^it should have a (?<field>\w+)$/, %{field: field}, state do
+    has_value = state.result[field] != nil
+
+    assert has_value,
+           debug("Expected field \"#{field}\" to have a value", state)
   end
 end

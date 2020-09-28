@@ -11,6 +11,12 @@ defmodule FerryApi.Schema.Address do
     field :province, :string
     field :country_code, :string
     field :postal_code, :string
+    field :opening_hour, :string
+    field :closing_hour, :string
+    field :type, :string
+    field :has_loading_equipment, :boolean
+    field :has_unloading_equipment, :boolean
+    field :needs_appointment, :boolean
   end
 
   object :address_queries do

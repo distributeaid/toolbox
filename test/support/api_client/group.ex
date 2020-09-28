@@ -148,8 +148,6 @@ defmodule Ferry.ApiClient.Group do
   """
   @spec create_group(Plug.Conn.t(), map) :: map
   def create_group(conn, group_attrs) do
-    [address] = group_attrs.addresses
-
     graphql(conn, """
     mutation {
       createGroup(
@@ -167,12 +165,7 @@ defmodule Ferry.ApiClient.Group do
           donationForm: "#{group_attrs.donation_form}",
           donationFormResults: "#{group_attrs.donation_form_results}",
 
-          addresses:[{
-            label: "#{address.label || "default"}",
-            province: "#{address.province}",
-            country_code: "#{address.country_code}",
-            postal_code: "#{address.postal_code}",
-          }]
+          addresses:[]
         }
       ) {
         successful

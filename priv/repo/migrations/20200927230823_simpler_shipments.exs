@@ -13,5 +13,14 @@ defmodule Ferry.Repo.Migrations.SimplerShipments do
       add :delivery_address, :text, null: false
       add :transport_type, :string, null: false
     end
+
+    alter table(:addresses) do
+      add :opening_hour, :string, null: false
+      add :closing_hour, :string, null: false
+      add :type, :string, null: false
+      add :has_loading_equipment, :boolean
+      add :has_unloading_equipment, :boolean
+      add :needs_appointment, :boolean
+    end
   end
 end

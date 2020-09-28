@@ -71,7 +71,13 @@ defmodule Ferry.ApiClient.Address do
             city: "#{attrs.city}",
             province: "#{attrs.province}",
             country_code: "#{attrs.country_code}",
-            postal_code: "#{attrs.postal_code}"
+            postal_code: "#{attrs.postal_code}",
+            opening_hour: "9:00",
+            closing_hour: "8:00",
+            type: "industrial",
+            has_loading_equipment: false,
+            has_unloading_equipment: true,
+            needs_appointment: true
           }
         ) {
           successful,

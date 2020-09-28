@@ -267,7 +267,13 @@ defmodule Ferry.Factory do
       city: "Athens",
       province: "Attica",
       country_code: "GR",
-      postal_code: "106 81"
+      postal_code: "106 81",
+      opening_hour: "08:00",
+      closing_hour: "20:00",
+      type: "residential",
+      has_loading_equipment: false,
+      has_unloading_equipment: false,
+      needs_appointment: true
     }
   end
 

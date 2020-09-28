@@ -13,6 +13,12 @@ defmodule Ferry.Locations.Address do
     field :province, :string
     field :country_code, :string
     field :postal_code, :string
+    field :opening_hour, :string
+    field :closing_hour, :string
+    field :type, :string
+    field :has_loading_equipment, :boolean
+    field :has_unloading_equipment, :boolean
+    field :needs_appointment, :boolean
 
     # on_delete set in database via migration
     has_one :geocode, Geocode, on_replace: :update
@@ -25,11 +31,32 @@ defmodule Ferry.Locations.Address do
     timestamps()
   end
 
+  @required_fields [
+    :label,
+    :street,
+    :city,
+    :province,
+    :country_code,
+    :postal_code,
+    :opening_hour,
+    :closing_hour,
+    :type,
+    :has_loading_equipment,
+    :has_unloading_equipment,
+    :needs_appointment
+  ]
+
+  @address_types [
+    "industrial",
+    "residential"
+  ]
+
   @doc false
   def changeset(address, attrs) do
     address
-    |> cast(attrs, [:label, :street, :city, :province, :country_code, :postal_code])
-    |> validate_required([:province, :country_code, :postal_code, :label])
+    |> cast(attrs, @required_fields)
+    |> validate_required(@required_fields)
+    |> validate_inclusion(:type, @address_types)
     |> validate_length(:label, min: 1, max: 255)
     |> validate_length(:street, max: 255)
     |> validate_length(:city, min: 1, max: 255)
@@ -57,9 +84,9 @@ defmodule Ferry.Locations.Address do
   @doc false
   def full_changeset(address, attrs) do
     address
-    |> cast(attrs, [:label, :street, :city, :province, :country_code, :postal_code])
+    |> cast(attrs, @required_fields)
+    |> validate_required(@required_fields)
     |> cast_assoc(:geocode, required: true)
-    |> validate_required([:province, :country_code, :postal_code, :label])
     |> validate_length(:label, min: 1, max: 255)
     |> validate_length(:street, max: 255)
     |> validate_length(:city, min: 1, max: 255)
