@@ -104,7 +104,8 @@ defmodule Ferry.Mixfile do
       {:ex_machina, "~> 2.4", only: :test},
       {:excoveralls, "~> 0.13", only: :test},
       {:mox, "~> 0.5", only: :test},
-      {:cabbage, git: "https://github.com/lukeledet/cabbage.git", tag: "master"},
+      # {:cabbage, git: "https://github.com/lukeledet/cabbage.git", tag: "master"},
+      {:cabbage, git: "https://github.com/distributeaid/cabbage.git", tag: "master"},
 
       # deployment
       {:distillery, "~> 2.1"},

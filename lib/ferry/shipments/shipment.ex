@@ -4,17 +4,17 @@ defmodule Ferry.Shipments.Shipment do
 
   alias Ferry.Shipments.Route
   alias Ferry.Shipments.Role
+  alias Ferry.Locations.Address
 
   schema "shipments" do
     field :status, :string
     field :description, :string
     field :transport_type, :string
-    field :pickup_address, :string
-    field :delivery_address, :string
     field :available_from, :utc_datetime
     field :target_delivery, :utc_datetime
 
-    # field :target_date, :string
+    belongs_to :pickup_address, Address
+    belongs_to :delivery_address, Address
 
     # field :items, :string
     # field :funding, :string
@@ -51,10 +51,10 @@ defmodule Ferry.Shipments.Shipment do
     :status,
     :description,
     :transport_type,
-    :pickup_address,
-    :delivery_address,
     :available_from,
-    :target_delivery
+    :target_delivery,
+    :pickup_address_id,
+    :delivery_address_id
   ]
 
   @doc false
@@ -64,5 +64,7 @@ defmodule Ferry.Shipments.Shipment do
     |> validate_required(@required_fields)
     |> validate_inclusion(:status, @statuses)
     |> validate_inclusion(:transport_type, @transport_types)
+    |> cast_assoc(:roles)
+    |> cast_assoc(:routes)
   end
 end

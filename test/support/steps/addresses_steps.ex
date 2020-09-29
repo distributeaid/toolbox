@@ -2,11 +2,11 @@ defmodule Ferry.AddressesSteps do
   use Cabbage.Feature
 
   defgiven ~r/^there are no addresses$/, _vars, state do
-    mutation(state, "deleteAddresses")
+    mutation!(state, "deleteAddresses")
   end
 
-  defgiven ~r/^a (?<name>\w+) address$/, %{name: name}, state do
-    group = state_at!(state, "#{name}_group.id")
+  defgiven ~r/^a "(?<name>[^"]+)" address$/, %{name: name}, state do
+    group = context_at!(state, "#{name}_group.id")
 
     mutation!(
       state,

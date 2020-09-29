@@ -4,8 +4,8 @@ Feature: Addresses
     Given I am root
     And there are no groups
     And there are no addresses
-    And a sender group
-    And a sender address
+    And a "pickup" group
+    And a "pickup" address
     When I get that address
     Then it should be successful
     And it should have a opening_hour

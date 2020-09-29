@@ -5,7 +5,7 @@ defmodule Ferry.GroupsSteps do
     mutation(state, "deleteGroups")
   end
 
-  defgiven ~r/^a (?<name>\w+) group$/, %{name: name}, state do
+  defgiven ~r/^a "(?<name>[^"]+)" group$/, %{name: name}, state do
     mutation!(
       state,
       "createGroup",

@@ -377,8 +377,6 @@ defmodule Ferry.Factory do
     %Shipment{
       status: "planning",
       description: "I am a shipment description with stuff about shipments yeah!",
-      pickup_address: "an address",
-      delivery_address: "another address",
       transport_type: "pallets",
       available_from: DateTime.utc_now() |> DateTime.truncate(:second),
       target_delivery:
@@ -393,7 +391,7 @@ defmodule Ferry.Factory do
     struct!(
       shipment_factory(),
       %{
-        pickup_address: nil
+        transport_type: "none"
       }
     )
   end

@@ -30,6 +30,7 @@ defmodule FerryApi.Schema.Shipment do
   input_object :shipment_input do
     field :pickup_address, non_null(:id)
     field :delivery_address, non_null(:id)
+    field :status, non_null(:string)
     field :description, non_null(:string)
     field :transport_type, non_null(:string)
     field :available_from, non_null(:datetime)
@@ -42,6 +43,15 @@ defmodule FerryApi.Schema.Shipment do
       arg(:shipment_input, non_null(:shipment_input))
       middleware(Middleware.RequireUser)
       resolve(&create_shipment/3)
+      middleware(&build_payload/2)
+    end
+
+    @desc "Update a shipment"
+    field :update_shipment, type: :shipment_payload do
+      arg(:id, non_null(:id))
+      arg(:shipment_input, non_null(:shipment_input))
+      middleware(Middleware.RequireUser)
+      resolve(&update_shipment/3)
       middleware(&build_payload/2)
     end
 
@@ -112,10 +122,53 @@ defmodule FerryApi.Schema.Shipment do
             {:error, "delivery address not found"}
 
           delivery ->
-            attrs
-            |> Map.put(:pickup_address, Locations.full_address(pickup))
-            |> Map.put(:delivery_address, Locations.full_address(delivery))
-            |> Shipments.create_shipment()
+            Shipments.create_shipment(
+              pickup,
+              delivery,
+              Map.drop(attrs, [:pickup_address, :delivery_address])
+            )
+        end
+    end
+  end
+
+  @doc """
+  Graphql resolver that updates a shipment.
+
+  We check that both the pickup and delivery addresses do exit,
+  before trying to create the shipment
+  """
+  @spec update_shipment(
+          any,
+          %{id: String.t(), shipment_input: map()},
+          any
+        ) :: {:error, Ecto.Changeset.t()} | {:ok, Shipment.t()}
+  def update_shipment(
+        _parent,
+        %{id: id, shipment_input: %{pickup_address: pickup, delivery_address: delivery} = attrs},
+        _resolution
+      ) do
+    case Shipments.get_shipment(id) do
+      nil ->
+        {:error, "shipment not found"}
+
+      shipment ->
+        case Locations.get_address(pickup) do
+          nil ->
+            {:error, "pickup address not found"}
+
+          pickup ->
+            case Locations.get_address(delivery) do
+              nil ->
+                {:error, "delivery address not found"}
+
+              delivery ->
+                Shipments.update_shipment(
+                  shipment,
+                  pickup,
+                  delivery,
+                  Map.drop(attrs, [:pickup_address, :delivery_address])
+                )
+            end
         end
     end
   end

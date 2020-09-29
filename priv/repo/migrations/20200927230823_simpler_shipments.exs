@@ -9,9 +9,9 @@ defmodule Ferry.Repo.Migrations.SimplerShipments do
       remove :transport_size
       add :available_from, :timestamp, null: false
       add :target_delivery, :timestamp, null: false
-      add :pickup_address, :text, null: false
-      add :delivery_address, :text, null: false
       add :transport_type, :string, null: false
+      add :pickup_address_id, references(:addresses, on_delete: :nothing, null: false)
+      add :delivery_address_id, references(:addresses, on_delete: :nothing, null: false)
     end
 
     alter table(:addresses) do

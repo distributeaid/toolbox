@@ -15,6 +15,10 @@ defmodule Ferry.SharedSteps do
     assert [] == state.messages, debug("Expected no messages", state)
   end
 
+  defthen ~r/^it should not be successful$/, _vars, state do
+    refute state.successful, debug("Expected not to be successful", state)
+  end
+
   defthen ~r/^I should have a list$/, _vars, state do
     assert is_list(state.result), debug("Expected a list", state)
   end
@@ -31,5 +35,13 @@ defmodule Ferry.SharedSteps do
 
     assert has_value,
            debug("Expected field \"#{field}\" to have a value", state)
+  end
+
+  defthen ~r/^it should have user message "(?<message>[^"]+)"$/, %{message: message}, state do
+    assert 1 ==
+             state.messages
+             |> Enum.filter(fn msg -> msg["message"] == message end)
+             |> Enum.count(),
+           debug("Expected user message \"#{message}\"", state)
   end
 end

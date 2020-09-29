@@ -24,7 +24,7 @@ defmodule Ferry.FeatureCase do
 
       # Import step definitions. We import the shared
       # steps and the steps for the feature. Then we also import
-      # any other steps defined the :include key
+      # any context steps defined the :include key
       import_feature(Ferry.SharedSteps)
       import_feature(unquote(steps_module))
       Enum.each(unquote(included_step_modules), &import_feature(&1))
@@ -63,28 +63,35 @@ defmodule Ferry.FeatureCase do
           errors: [],
           messages: [],
           successful: nil,
-          other: %{}
+          context: %{}
         }
       end
 
       # Returns the value at the given state path
       # The value is assumed to exist. Otherwise a meaningful error
       # is raised, so that it can be easily debugged
-      defp state_at!(state, path) do
+      defp context_at!(state, path) do
         with nil <-
                path
                |> String.split(".")
-               |> Enum.reduce_while(state.other, fn
+               |> Enum.reduce_while(state.context, fn
                  key, data when is_map(data) ->
                    {:cont, data[key]}
 
                  _, _ ->
                    {:halt, nil}
                end) do
-          "No value found at \"other.#{path}\""
+          "No value found at \"context.#{path}\""
           |> debug(state)
           |> flunk
         end
+      end
+
+      # Writes the given context data at the given
+      # key
+      #
+      defp with_context(%{context: context} = state, key, data) do
+        {:ok, %{state | context: Map.put(context, key, data)}}
       end
 
       # Copies the last result into a named key so that it can
@@ -95,8 +102,8 @@ defmodule Ferry.FeatureCase do
             {:ok, state}
 
           as ->
-            other = Map.put(state.other, as, state.result)
-            {:ok, Map.put(state, :other, other)}
+            context = Map.put(state.context, as, state.result)
+            {:ok, Map.put(state, :context, context)}
         end
       end
 
@@ -134,7 +141,7 @@ defmodule Ferry.FeatureCase do
         response = graphql(conn, request)
 
         if debug do
-          IO.inspect(state: state |> Map.drop([:conn]), request: request, response: response)
+          IO.inspect(state: state |> Map.drop([:conn]), mutation: request, response: response)
         end
 
         %{"data" => doc} = response
@@ -170,7 +177,7 @@ defmodule Ferry.FeatureCase do
         response = graphql(conn, request)
 
         if debug do
-          IO.inspect(state: state |> Map.drop([:conn]), request: request, response: response)
+          IO.inspect(state: state |> Map.drop([:conn]), query: request, response: response)
         end
 
         %{"data" => doc} = response
