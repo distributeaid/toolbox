@@ -40,6 +40,7 @@ jobs:
        - name: Publish Docker
          uses: docker/build-push-action@v1
          with:
+           no-cache: true
            username: ${{ github.actor }}
            password: ${{ secrets.DOCKER_PASSWORD }}
            registry: docker.pkg.github.com
