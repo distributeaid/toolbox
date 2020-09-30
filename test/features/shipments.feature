@@ -50,9 +50,47 @@ Feature: Shipments
     Then it should be successful
 
   Scenario: Add a package
-    Given a package of type "pallet"
+    Given a package
+    And that "package" has "type" set to "pallet"
     When I create that package
     Then it should be successful
     When I get that shipment
     Then field "packages" should have length 1
+
+  Scenario: Remove a package
+    Given a package
+    And that package is in that shipment
+    When I get that shipment
+    Then field "packages" should have length 1
+    When I delete that package
+    Then it should be successful
+    When I get that shipment
+    Then field "packages" should have length 0
+
+  Scenario: Second package
+    Given a package
+    And that package is in that shipment
+    Given that "package" has "type" set to "box"
+    Given that "package" has "number" set to "2"
+    When I create that package
+    Then it should be successful
+    When I get that shipment
+    Then field "packages" should have length 2
+
+  Scenario: Package conflict
+    Given a package
+    And that package is in that shipment
+    When I create that package
+    Then it should not be successful
+    And it should have user message "already taken"
+
+
+  Scenario: Delete non-empty shipment
+    Given a package
+    And that package is in that shipment
+    When I delete that shipment
+    Then it should not be successful
+    And it should have user message "has packages"
+
+
 

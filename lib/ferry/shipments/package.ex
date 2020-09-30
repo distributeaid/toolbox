@@ -15,7 +15,7 @@ defmodule Ferry.Shipments.Package do
     field :height, :integer
     field :length, :integer
     field :stackable, :boolean
-    field :dangerous_goods, :boolean
+    field :dangerous, :boolean
 
     belongs_to :shipment, Shipment
     timestamps()
@@ -36,7 +36,7 @@ defmodule Ferry.Shipments.Package do
     :height,
     :length,
     :stackable,
-    :dangerous_goods,
+    :dangerous,
     :shipment_id
   ]
 
@@ -46,5 +46,9 @@ defmodule Ferry.Shipments.Package do
     |> cast(attrs, @required_fields)
     |> validate_required(@required_fields)
     |> validate_inclusion(:type, @types)
+    |> unique_constraint(:number,
+      message: "already taken",
+      name: :unique_package_number_per_shipment
+    )
   end
 end

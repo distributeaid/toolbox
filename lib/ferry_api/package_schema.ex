@@ -25,7 +25,7 @@ defmodule FerryApi.Schema.Package do
     field :height, :integer
     field :length, :integer
     field :stackable, :boolean
-    field :dangerous_goods, :boolean
+    field :dangerous, :boolean
   end
 
   object :package_mutations do
@@ -49,7 +49,6 @@ defmodule FerryApi.Schema.Package do
     @desc "Delete a package from a shipment"
     field :delete_package, type: :package_payload do
       arg(:id, non_null(:id))
-      arg(:package_input, non_null(:package_input))
       middleware(Middleware.RequireUser)
       resolve(&delete_package/3)
       middleware(&build_payload/2)

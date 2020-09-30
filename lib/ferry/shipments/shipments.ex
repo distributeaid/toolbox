@@ -131,7 +131,9 @@ defmodule Ferry.Shipments do
 
   """
   def delete_shipment(%Shipment{} = shipment) do
-    Repo.delete(shipment)
+    shipment
+    |> Shipment.delete_changeset()
+    |> Repo.delete()
   end
 
   @doc """

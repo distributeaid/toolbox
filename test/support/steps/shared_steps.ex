@@ -59,4 +59,36 @@ defmodule Ferry.SharedSteps do
              |> Enum.count(),
            debug("Expected user message \"#{message}\"", state)
   end
+
+  # This step modifies the existing package context,
+  # and sets the given field to the given value. It does some introspection
+  # in order to set the right value type. In order to achieve this,
+  # we require that the field already exists in the given map
+  # and has a non nil value
+  defgiven ~r/^that "(?<context>[^"]+)" has "(?<field>[^"]+)" set to "(?<value>[^"]+)"$/,
+           %{context: context, field: field, value: value},
+           state do
+    value_path = "#{context}.#{field}"
+    existing_value = context_at!(state, value_path)
+
+    # Typecast the given value to the type
+    # defined by the existing value
+    new_value =
+      cond do
+        is_integer(existing_value) ->
+          String.to_integer(value)
+
+        is_boolean(existing_value) ->
+          value == "true"
+
+        true ->
+          value
+      end
+
+    existing_context = state.context[context]
+    new_context = Map.put(existing_context, field, new_value)
+
+    state
+    |> with_context(context, new_context)
+  end
 end

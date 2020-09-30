@@ -1,5 +1,5 @@
 defmodule Ferry.Features.Shipments do
   use Ferry.FeatureCase,
     feature: :shipments,
-    include: [:addresses, :groups]
+    include: [:addresses, :groups, :packages]
 end

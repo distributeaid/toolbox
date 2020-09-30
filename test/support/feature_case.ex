@@ -102,7 +102,7 @@ defmodule Ferry.FeatureCase do
             {:ok, state}
 
           as ->
-            context = Map.put(state.context, as, state.result)
+            context = Map.put(state.context, "#{as}", state.result)
             {:ok, Map.put(state, :context, context)}
         end
       end
@@ -138,10 +138,15 @@ defmodule Ferry.FeatureCase do
       # finally populates the scenarion step with the obtained payload
       defp mutation(%{debug: debug, conn: conn} = state, name, body, opts \\ []) do
         request = "mutation { #{body} }"
+
+        if debug do
+          IO.inspect(request)
+        end
+
         response = graphql(conn, request)
 
         if debug do
-          IO.inspect(state: state |> Map.drop([:conn]), mutation: request, response: response)
+          IO.inspect(response)
         end
 
         %{"data" => doc} = response
@@ -174,11 +179,18 @@ defmodule Ferry.FeatureCase do
       # state with the obtained payload
       defp query(%{debug: debug, conn: conn} = state, name, body, opts \\ []) do
         request = "query { #{body} }"
+
+        if debug do
+          IO.inspect(request)
+        end
+
         response = graphql(conn, request)
 
         if debug do
-          IO.inspect(state: state |> Map.drop([:conn]), query: request, response: response)
+          IO.inspect(response)
         end
+
+        response = graphql(conn, request)
 
         %{"data" => doc} = response
         payload = doc[name]

@@ -14,7 +14,7 @@ defmodule FerryApi.Schema.PackageType do
     field :height, :integer
     field :length, :integer
     field :stackable, :boolean
-    field :dangerous_goods, :boolean
+    field :dangerous, :boolean
   end
 
   payload_object(:package_payload, :package)

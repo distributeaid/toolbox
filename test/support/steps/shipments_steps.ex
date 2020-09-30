@@ -170,48 +170,19 @@ defmodule Ferry.ShipmentsSteps do
     |> with_context("shipment", shipment)
   end
 
-  defgiven ~r/^a package of type "(?<type>[^"]+)"$/, %{type: type}, state do
-    state
-    |> with_context("package", %{
-      "type" => type,
-      "number" => 1,
-      "width" => 600,
-      "height" => 166,
-      "length" => 800,
-      "contents" => "something",
-      "amount" => 1,
-      "stackable" => true,
-      "dangerous_goods" => false
-    })
-  end
-
-  defwhen ~r/^I create that package$/, _vars, state do
+  defwhen ~r/^I delete that shipment$/, _vars, state do
     shipment = context_at!(state, "shipment")
-    package = context_at!(state, "package")
 
-    mutation(state, "createPackage", """
-    createPackage(
-      packageInput: {
-        shipment: "#{shipment["id"]}",
-        number: #{package["number"]},
-        type: "#{package["type"]}",
-        contents: "#{package["contents"]}",
-        amount: #{package["amount"]},
-        width: #{package["width"]},
-        height: #{package["height"]},
-        length: #{package["length"]},
-        stackable: #{package["stackable"]},
-        dangerousGoods: #{package["dangerous_goods"]}
-      }
-    ){
+    mutation(state, "deleteShipment", """
+    deleteShipment(id: "#{shipment["id"]}") {
       successful,
-        messages { field, message },
-        result {
-          id,
-          shipment {
-            id
-          }
-        }
+      messages {
+        field,
+        message
+      },
+      result {
+        id
+      }
     }
     """)
   end

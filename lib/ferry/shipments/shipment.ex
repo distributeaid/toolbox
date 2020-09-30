@@ -72,4 +72,10 @@ defmodule Ferry.Shipments.Shipment do
     |> cast_assoc(:roles)
     |> cast_assoc(:routes)
   end
+
+  def delete_changeset(shipment) do
+    shipment
+    |> cast(%{}, [])
+    |> foreign_key_constraint(:packages, message: "has packages", name: :packages_shipment_id_fkey)
+  end
 end

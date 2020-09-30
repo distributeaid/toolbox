@@ -55,6 +55,14 @@ defmodule FerryApi.Schema.Shipment do
       middleware(&build_payload/2)
     end
 
+    @desc "Delete a shipment"
+    field :delete_shipment, type: :shipment_payload do
+      arg(:id, non_null(:id))
+      middleware(Middleware.RequireUser)
+      resolve(&delete_shipment/3)
+      middleware(&build_payload/2)
+    end
+
     @desc "Delete all shipments"
     field :delete_shipments, type: :boolean do
       middleware(Middleware.RequireUser)
@@ -170,6 +178,22 @@ defmodule FerryApi.Schema.Shipment do
                 )
             end
         end
+    end
+  end
+
+  @doc """
+  Graphql resolver that deletes a shipment
+
+  """
+  @spec delete_shipment(any, %{id: integer()}, any) ::
+          {:error, String.t() | Ecto.Changeset.t()} | {:ok, map()}
+  def delete_shipment(_parent, %{id: id}, _resolution) do
+    case Shipments.get_shipment(id) do
+      nil ->
+        {:error, @shipment_not_found}
+
+      shipment ->
+        Shipments.delete_shipment(shipment)
     end
   end
 

@@ -32,7 +32,7 @@ defmodule Ferry.Repo.Migrations.SimplerShipments do
       add :height, :integer
       add :length, :integer
       add :stackable, :boolean
-      add :dangerous_goods, :boolean
+      add :dangerous, :boolean
 
       add :shipment_id, references(:shipments, on_delete: :nothing)
 
