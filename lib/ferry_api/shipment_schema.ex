@@ -76,7 +76,7 @@ defmodule FerryApi.Schema.Shipment do
   Graphql resolver that returns a collection of shipments
   """
   @spec list_shipments(map(), map(), Absinthe.Resolution.t()) ::
-          {:ok, [AidTaxonomy.ModValue.t()]}
+          {:ok, [map()]}
   def list_shipments(_parent, _args, _resolution) do
     {:ok, Shipments.list_shipments()}
   end
@@ -85,7 +85,7 @@ defmodule FerryApi.Schema.Shipment do
   Graphql resolver that returns a single mod value, given its id
   """
   @spec get_shipment(any, %{id: integer}, any) ::
-          {:error, String.t()} | {:ok, Ferry.AidTaxonomy.ModValue.t()}
+          {:error, String.t()} | {:ok, map()}
   def get_shipment(_parent, %{id: id}, _resolution) do
     case Shipments.get_shipment(id) do
       nil ->
@@ -106,7 +106,7 @@ defmodule FerryApi.Schema.Shipment do
           any,
           %{shipment_input: map()},
           any
-        ) :: {:error, Ecto.Changeset.t()} | {:ok, Shipment.t()}
+        ) :: {:error, Ecto.Changeset.t()} | {:ok, map()}
   def create_shipment(
         _parent,
         %{shipment_input: %{pickup_address: pickup, delivery_address: delivery} = attrs},
@@ -139,9 +139,9 @@ defmodule FerryApi.Schema.Shipment do
   """
   @spec update_shipment(
           any,
-          %{id: String.t(), shipment_input: map()},
+          %{id: integer(), shipment_input: map()},
           any
-        ) :: {:error, Ecto.Changeset.t()} | {:ok, Shipment.t()}
+        ) :: {:error, String.t()} | {:error, Ecto.Changeset.t()} | {:ok, map()}
   def update_shipment(
         _parent,
         %{id: id, shipment_input: %{pickup_address: pickup, delivery_address: delivery} = attrs},
@@ -149,7 +149,7 @@ defmodule FerryApi.Schema.Shipment do
       ) do
     case Shipments.get_shipment(id) do
       nil ->
-        {:error, "shipment not found"}
+        {:error, @shipment_not_found}
 
       shipment ->
         case Locations.get_address(pickup) do

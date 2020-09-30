@@ -411,7 +411,7 @@ defmodule Ferry.AidTaxonomy do
   If the item has already that mod, then this function
   will return an error
   """
-  @spec add_mod_to_item(Mod.t(), Item.t()) :: :ok | {:error, Ecto.ChangeSet.t()}
+  @spec add_mod_to_item(Mod.t(), Item.t()) :: :ok | {:error, Ecto.Changeset.t()}
   def add_mod_to_item(%{id: mod_id}, %{id: item_id}) do
     with {:ok, _} <-
            %ItemMod{}
@@ -425,7 +425,7 @@ defmodule Ferry.AidTaxonomy do
   Removes the given mod from the given item.
 
   """
-  @spec remove_mod_from_item(Mod.t(), Item.t()) :: :ok | {:error, Ecto.ChangeSet.t()}
+  @spec remove_mod_from_item(Mod.t(), Item.t()) :: :ok | {:error, Ecto.Changeset.t()}
   def remove_mod_from_item(%{id: mod_id}, %{id: item_id}) do
     with {1, nil} <-
            from(im in ItemMod, where: im.mod_id == ^mod_id and im.item_id == ^item_id)

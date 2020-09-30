@@ -2,9 +2,12 @@ defmodule Ferry.Shipments.Shipment do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Ferry.Shipments.Route
-  alias Ferry.Shipments.Role
+  @type t() :: %__MODULE__{}
+
   alias Ferry.Locations.Address
+  alias Ferry.Shipments.Package
+  alias Ferry.Shipments.Role
+  alias Ferry.Shipments.Route
 
   schema "shipments" do
     field :status, :string
@@ -23,6 +26,8 @@ defmodule Ferry.Shipments.Shipment do
     has_many :roles, Role
     # on_delete set in database via migration
     has_many :routes, Route
+
+    has_many :packages, Package
 
     timestamps()
   end

@@ -37,6 +37,21 @@ defmodule Ferry.SharedSteps do
            debug("Expected field \"#{field}\" to have a value", state)
   end
 
+  defthen ~r/^field "(?<field>[^"]+)" should have length (?<length>\d+)$/,
+          %{field: field, length: length},
+          state do
+    value = state.result[field]
+
+    assert value != nil,
+           debug("Expected field \"#{field}\" to have a value", state)
+
+    assert is_list(value),
+           debug("Expected field \"#{field}\" to be a list", state)
+
+    assert String.to_integer(length) == length(value),
+           debug("Expected a list with length #{length} at \"#{field}\"", state)
+  end
+
   defthen ~r/^it should have user message "(?<message>[^"]+)"$/, %{message: message}, state do
     assert 1 ==
              state.messages

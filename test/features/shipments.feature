@@ -49,3 +49,10 @@ Feature: Shipments
     When I update that shipment
     Then it should be successful
 
+  Scenario: Add a package
+    Given a package of type "pallet"
+    When I create that package
+    Then it should be successful
+    When I get that shipment
+    Then field "packages" should have length 1
+

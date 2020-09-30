@@ -22,5 +22,25 @@ defmodule Ferry.Repo.Migrations.SimplerShipments do
       add :has_unloading_equipment, :boolean
       add :needs_appointment, :boolean
     end
+
+    create table(:packages) do
+      add :number, :integer
+      add :type, :string, null: false
+      add :contents, :string, null: false
+      add :amount, :integer
+      add :width, :integer
+      add :height, :integer
+      add :length, :integer
+      add :stackable, :boolean
+      add :dangerous_goods, :boolean
+
+      add :shipment_id, references(:shipments, on_delete: :nothing)
+
+      timestamps()
+    end
+
+    create unique_index(:packages, [:shipment_id, :number],
+             name: :unique_package_number_per_shipment
+           )
   end
 end

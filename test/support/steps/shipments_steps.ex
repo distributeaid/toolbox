@@ -103,8 +103,39 @@ defmodule Ferry.ShipmentsSteps do
           description,
           transport_type,
           available_from,
-          target_delivery
+          target_delivery,
+          packages {
+            id,
+            number,
+            amount,
+            contents,
+            type
+          }
         }
+    }
+    """)
+  end
+
+  defwhen ~r/^I get that shipment$/, _vars, state do
+    shipment = context_at!(state, "shipment")
+
+    query(state, "shipment", """
+    shipment(id: "#{shipment["id"]}") {
+      id,
+      pickup_address { id },
+      delivery_address { id },
+      status,
+      description,
+      transport_type,
+      available_from,
+      target_delivery,
+      packages {
+        id,
+        number,
+        amount,
+        contents,
+        type
+      }
     }
     """)
   end
@@ -137,5 +168,51 @@ defmodule Ferry.ShipmentsSteps do
 
     state
     |> with_context("shipment", shipment)
+  end
+
+  defgiven ~r/^a package of type "(?<type>[^"]+)"$/, %{type: type}, state do
+    state
+    |> with_context("package", %{
+      "type" => type,
+      "number" => 1,
+      "width" => 600,
+      "height" => 166,
+      "length" => 800,
+      "contents" => "something",
+      "amount" => 1,
+      "stackable" => true,
+      "dangerous_goods" => false
+    })
+  end
+
+  defwhen ~r/^I create that package$/, _vars, state do
+    shipment = context_at!(state, "shipment")
+    package = context_at!(state, "package")
+
+    mutation(state, "createPackage", """
+    createPackage(
+      packageInput: {
+        shipment: "#{shipment["id"]}",
+        number: #{package["number"]},
+        type: "#{package["type"]}",
+        contents: "#{package["contents"]}",
+        amount: #{package["amount"]},
+        width: #{package["width"]},
+        height: #{package["height"]},
+        length: #{package["length"]},
+        stackable: #{package["stackable"]},
+        dangerousGoods: #{package["dangerous_goods"]}
+      }
+    ){
+      successful,
+        messages { field, message },
+        result {
+          id,
+          shipment {
+            id
+          }
+        }
+    }
+    """)
   end
 end

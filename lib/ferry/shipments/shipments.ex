@@ -11,6 +11,7 @@ defmodule Ferry.Shipments do
   alias Ferry.Shipments.Role
   alias Ferry.Shipments.Shipment
   alias Ferry.Shipments.Route
+  alias Ferry.Shipments.Package
   alias Ferry.Locations.Address
 
   # Shipment
@@ -36,7 +37,7 @@ defmodule Ferry.Shipments do
   """
   def list_shipments do
     from(s in Shipment,
-      preload: [:pickup_address, :delivery_address, :roles, :routes]
+      preload: [:pickup_address, :delivery_address, :packages, :roles, :routes]
     )
     |> Repo.all()
   end
@@ -68,6 +69,8 @@ defmodule Ferry.Shipments do
     |> Repo.get(id)
     |> Repo.preload(:pickup_address)
     |> Repo.preload(:delivery_address)
+    |> Repo.preload(:delivery_address)
+    |> Repo.preload(:packages)
     |> Repo.preload(roles: roles_query(), routes: routes_query())
   end
 
@@ -153,6 +156,64 @@ defmodule Ferry.Shipments do
   """
   def change_shipment(%Shipment{} = shipment) do
     Shipment.changeset(shipment, %{})
+  end
+
+  @doc """
+  Returns a package, given its id
+  """
+  @spec get_package(integer()) :: Package.t() | nil
+  def get_package(id) do
+    Package
+    |> Repo.get(id)
+    |> Repo.preload(:shipment)
+  end
+
+  @doc """
+  Creates a package for the given shipment
+  """
+  @spec create_package(Shipment.t(), map()) :: {:ok, Package.t()} | {:error, Ecto.Changeset.t()}
+  def create_package(shipment, attrs) do
+    attrs =
+      attrs
+      |> Map.put(:shipment_id, shipment.id)
+
+    with {:ok, p} <-
+           %Package{}
+           |> Package.changeset(attrs)
+           |> Repo.insert() do
+      {:ok, get_package(p.id)}
+    end
+  end
+
+  @doc """
+  Updates the given package.
+
+  This function also accepts a shipment, which will be the new shipment
+  for the package. This can be used to move packages
+  between shipments.
+
+  """
+  @spec update_package(Package.t(), Shipment.t(), map()) ::
+          {:ok, Package.t()} | {:error, Ecto.Changeset.t()}
+  def update_package(package, shipment, attrs) do
+    attrs =
+      attrs
+      |> Map.put(:shipment_id, shipment.id)
+
+    with {:ok, p} <-
+           package
+           |> Package.changeset(attrs)
+           |> Repo.update() do
+      get_package(p.id)
+    end
+  end
+
+  @doc """
+  Deletes a package
+  """
+  @spec delete_package(Package.t()) :: {:ok, Package.t()} | {:error, Ecto.Changeset.t()}
+  def delete_package(package) do
+    Repo.delete(package)
   end
 
   # Roles

@@ -117,6 +117,7 @@ defmodule Ferry.ShipmentsTest do
                created_shipment
                | pickup_address: pickup,
                  delivery_address: delivery,
+                 packages: [],
                  routes: Enum.reverse(created_shipment.routes)
              }
 

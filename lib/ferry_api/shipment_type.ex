@@ -12,6 +12,8 @@ defmodule FerryApi.Schema.ShipmentType do
     field :transport_type, non_null(:string)
     field :available_from, non_null(:datetime)
     field :target_delivery, non_null(:datetime)
+
+    field :packages, list_of(:package)
   end
 
   payload_object(:shipment_payload, :shipment)

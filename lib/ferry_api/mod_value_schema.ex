@@ -70,7 +70,7 @@ defmodule FerryApi.Schema.ModValue do
   Graphql resolver that returns a collection of mod values
   """
   @spec list_mod_values(map(), map(), Absinthe.Resolution.t()) ::
-          {:ok, [AidTaxonomy.ModValue.t()]}
+          {:ok, [map()]}
   def list_mod_values(_parent, _args, _resolution) do
     {:ok, AidTaxonomy.list_mod_values()}
   end
@@ -79,7 +79,7 @@ defmodule FerryApi.Schema.ModValue do
   Graphql resolver that returns a single mod value, given its id
   """
   @spec get_mod_value(any, %{id: integer}, any) ::
-          {:error, String.t()} | {:ok, Ferry.AidTaxonomy.ModValue.t()}
+          {:error, String.t()} | {:ok, map()}
   def get_mod_value(_parent, %{id: id}, _resolution) do
     case AidTaxonomy.get_mod_value(id) do
       nil ->
@@ -97,7 +97,7 @@ defmodule FerryApi.Schema.ModValue do
           any,
           %{mod_value_input: map()},
           any
-        ) :: {:error, Ecto.Changeset.t()} | {:ok, ModValue.t()}
+        ) :: {:error, Ecto.Changeset.t()} | {:ok, map()}
   def create_mod_value(_parent, %{mod_value_input: mod_value_attrs}, _resolution) do
     case AidTaxonomy.get_mod(mod_value_attrs.mod) do
       nil ->
@@ -112,7 +112,7 @@ defmodule FerryApi.Schema.ModValue do
   Graphql resolver that updates an existing mod
   """
   @spec update_mod_value(any, %{mod_value_input: any, id: integer}, any) ::
-          {:error, String.t() | Ecto.Changeset.t()} | {:ok, Ferry.AidTaxonomy.ModValue.t()}
+          {:error, String.t() | Ecto.Changeset.t()} | {:ok, map()}
   def update_mod_value(_parent, %{id: id, mod_value_input: mod_value_attrs}, _resolution) do
     case AidTaxonomy.get_mod_value(id) do
       nil ->
@@ -127,7 +127,7 @@ defmodule FerryApi.Schema.ModValue do
   Graphql resolver that deletes an existing mod value
   """
   @spec delete_mod_value(any, %{id: integer}, any) ::
-          {:error, String.t() | Ecto.Changeset.t()} | {:ok, Ferry.AidTaxonomy.ModValue.t()}
+          {:error, String.t() | Ecto.Changeset.t()} | {:ok, map()}
   def delete_mod_value(_parent, %{id: id}, _resolution) do
     case AidTaxonomy.get_mod_value(id) do
       nil -> {:error, @mod_value_not_found}
