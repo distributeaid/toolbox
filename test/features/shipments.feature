@@ -84,13 +84,9 @@ Feature: Shipments
     Then it should not be successful
     And it should have user message "already taken"
 
-
   Scenario: Delete non-empty shipment
     Given a package
     And that package is in that shipment
     When I delete that shipment
     Then it should not be successful
     And it should have user message "has packages"
-
-
-
