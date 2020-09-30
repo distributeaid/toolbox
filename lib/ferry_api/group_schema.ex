@@ -80,6 +80,12 @@ defmodule FerryApi.Schema.Group do
       middleware(Middleware.RequireUser)
       resolve(&delete_group/3)
     end
+
+    @desc "Delete all groups"
+    field :delete_groups, type: :boolean do
+      middleware(Middleware.RequireUser)
+      resolve(&delete_groups/3)
+    end
   end
 
   # Resolvers
@@ -130,5 +136,13 @@ defmodule FerryApi.Schema.Group do
     Profiles.delete_group(group)
 
     # TODO: should also delete `group.location` address in a transaction
+  end
+
+  @doc """
+  Graphql resolver that deletes all groups
+  """
+  @spec delete_groups(any, map(), any) :: {:ok, boolean()}
+  def delete_groups(_parent, _, _resolution) do
+    {:ok, Ferry.Profiles.delete_groups()}
   end
 end

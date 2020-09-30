@@ -4,7 +4,7 @@ defmodule Ferry.ApiClient.Category do
   for dealing with Categories in tests.
   """
 
-  import Ferry.ApiClient.Graphql
+  import Ferry.ApiClient.GraphCase
 
   @doc """
   Run a GraphQL query that counts categories

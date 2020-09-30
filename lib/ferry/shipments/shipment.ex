@@ -1,60 +1,81 @@
 defmodule Ferry.Shipments.Shipment do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Ferry.Shipments.Route
 
+  @type t() :: %__MODULE__{}
+
+  alias Ferry.Locations.Address
+  alias Ferry.Shipments.Package
   alias Ferry.Shipments.Role
+  alias Ferry.Shipments.Route
 
   schema "shipments" do
     field :status, :string
     field :description, :string
-    field :target_date, :string
+    field :transport_type, :string
+    field :available_from, :utc_datetime
+    field :target_delivery, :utc_datetime
 
-    field :sender_address, :string
-    field :receiver_address, :string
+    belongs_to :pickup_address, Address
+    belongs_to :delivery_address, Address
 
-    field :transport_size, :string
-
-    field :items, :string
-    field :funding, :string
+    # field :items, :string
+    # field :funding, :string
 
     # on_delete set in database via migration
     has_many :roles, Role
     # on_delete set in database via migration
     has_many :routes, Route
 
+    has_many :packages, Package
+
     timestamps()
   end
+
+  @transport_types [
+    "full_truck",
+    "half_truck",
+    "pallets",
+    "van",
+    "car",
+    "container",
+    "other",
+    "air",
+    "sea",
+    "truck"
+  ]
+
+  @statuses [
+    "planning",
+    "ready",
+    "underway",
+    "received"
+  ]
+
+  @required_fields [
+    :status,
+    :description,
+    :transport_type,
+    :available_from,
+    :target_delivery,
+    :pickup_address_id,
+    :delivery_address_id
+  ]
 
   @doc false
   def changeset(shipment, attrs) do
     shipment
-    |> cast(attrs, [
-      :status,
-      :description,
-      :target_date,
-      :sender_address,
-      :receiver_address,
-      :transport_size,
-      :items,
-      :funding
-    ])
-    |> validate_required([:status, :target_date, :sender_address, :receiver_address])
-    |> validate_inclusion(:status, [
-      "planning",
-      "ready",
-      "underway",
-      "received"
-    ])
-    |> validate_inclusion(:transport_size, [
-      "",
-      "Full Truck (13m / 40ft)",
-      "Half Truck (13m / 40ft)",
-      "Individual Pallets",
-      "Van",
-      "Car",
-      "Shipping Container",
-      "Other"
-    ])
+    |> cast(attrs, @required_fields)
+    |> validate_required(@required_fields)
+    |> validate_inclusion(:status, @statuses)
+    |> validate_inclusion(:transport_type, @transport_types)
+    |> cast_assoc(:roles)
+    |> cast_assoc(:routes)
+  end
+
+  def delete_changeset(shipment) do
+    shipment
+    |> cast(%{}, [])
+    |> foreign_key_constraint(:packages, message: "has packages", name: :packages_shipment_id_fkey)
   end
 end

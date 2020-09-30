@@ -40,8 +40,6 @@ defmodule Ferry.GroupAddressTest do
       "data" => %{
         "group" => %{
           "addresses" => [
-            # default address
-            _,
             %{"id" => ^id}
           ]
         }
@@ -67,9 +65,7 @@ defmodule Ferry.GroupAddressTest do
     %{
       "data" => %{
         "group" => %{
-          "addresses" => [
-            _
-          ]
+          "addresses" => []
         }
       }
     } = get_group_with_addresses(conn, group)
@@ -83,15 +79,12 @@ defmodule Ferry.GroupAddressTest do
           %{
             "name" => "first group",
             "addresses" => [
-              _,
               %{"label" => "test"}
             ]
           },
           %{
             "name" => "second group",
-            "addresses" => [
-              _
-            ]
+            "addresses" => []
           }
         ]
       }

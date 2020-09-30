@@ -73,19 +73,6 @@ defmodule Ferry.LocationsTest do
       # assert address.geocode.lat == geocode.lat
       # assert address.geocode.lng == geocode.lng
       # assert address.geocode.data == geocode.data
-
-      # min
-      attrs = string_params_for(:min_address)
-      assert {:ok, %Address{} = address} = Locations.create_address(group, attrs)
-      refute address.label == nil
-      assert address.street == nil
-      assert address.city == nil
-      assert address.province == attrs["province"]
-      assert address.country_code == attrs["country_code"]
-      assert address.postal_code == attrs["postal_code"]
-      # assert address.geocode.lat == geocode.lat
-      # assert address.geocode.lng == geocode.lng
-      # assert address.geocode.data == geocode.data
     end
 
     test "create_address/2 with invalid data returns error changeset" do

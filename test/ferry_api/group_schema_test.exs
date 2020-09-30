@@ -122,8 +122,6 @@ defmodule Ferry.GroupTest do
 
     group_attrs = params_for(:group) |> with_address()
 
-    [address] = group_attrs.addresses
-
     %{
       "data" => %{
         "createGroup" => %{
@@ -135,13 +133,7 @@ defmodule Ferry.GroupTest do
             "slackChannelName" => slack_channel_name,
             "slug" => slug,
             "type" => type,
-            "addresses" => [
-              %{
-                "province" => province,
-                "country_code" => country_code,
-                "postal_code" => postal_code
-              }
-            ]
+            "addresses" => []
           }
         }
       }
@@ -154,9 +146,6 @@ defmodule Ferry.GroupTest do
     assert name == group_attrs.name
     assert type == group_attrs.type
     assert slack_channel_name == group_attrs.slack_channel_name
-    assert province == address.province
-    assert country_code == address.country_code
-    assert postal_code == address.postal_code
   end
 
   test "create a group - error", %{conn: conn} do

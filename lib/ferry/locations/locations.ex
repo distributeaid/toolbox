@@ -81,7 +81,9 @@ defmodule Ferry.Locations do
   """
   @spec get_address(String.t()) :: Address.t() | nil
   def get_address(id) do
-    Repo.get(Address, id)
+    Address
+    |> preload(:group)
+    |> Repo.get(id)
   end
 
   @doc """
@@ -199,6 +201,17 @@ defmodule Ferry.Locations do
   end
 
   @doc """
+  Deletes all addresses
+  """
+  @spec delete_addresses() :: boolean()
+  def delete_addresses() do
+    Address
+    |> Repo.delete_all()
+
+    true
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking address changes.
 
   ## Examples
@@ -209,6 +222,15 @@ defmodule Ferry.Locations do
   """
   def change_address(%Address{} = address) do
     Address.changeset(address, %{})
+  end
+
+  @doc """
+  Returns a text representation from the given address struct
+
+  """
+  @spec full_address(Address.t()) :: String.t()
+  def full_address(address) do
+    Address.full_address(address)
   end
 
   # Map

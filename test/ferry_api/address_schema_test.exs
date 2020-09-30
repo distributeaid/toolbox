@@ -34,7 +34,7 @@ defmodule Ferry.AddressSchemaTest do
     # Verify the group was created, but also
     # an address was created for the group
     assert count_addresses(conn) ==
-             %{"data" => %{"countAddresses" => 1}}
+             %{"data" => %{"countAddresses" => 0}}
 
     %{
       "data" => %{
@@ -54,9 +54,9 @@ defmodule Ferry.AddressSchemaTest do
     # verify that address is returned in the collection
     # of all addresses
     assert count_addresses(conn) ==
-             %{"data" => %{"countAddresses" => 2}}
+             %{"data" => %{"countAddresses" => 1}}
 
-    %{"data" => %{"addresses" => [_, address]}} = get_addresses(conn)
+    %{"data" => %{"addresses" => [address]}} = get_addresses(conn)
 
     assert address["id"]
     assert id == address["id"]
@@ -306,7 +306,7 @@ defmodule Ferry.AddressSchemaTest do
     } = create_address(conn, %{group: group, label: "test"})
 
     assert count_addresses(conn) ==
-             %{"data" => %{"countAddresses" => 2}}
+             %{"data" => %{"countAddresses" => 1}}
 
     %{
       "data" => %{
@@ -317,10 +317,8 @@ defmodule Ferry.AddressSchemaTest do
     } = delete_address(conn, id)
 
     assert count_addresses(conn) ==
-             %{"data" => %{"countAddresses" => 1}}
+             %{"data" => %{"countAddresses" => 0}}
 
-    %{"data" => %{"addresses" => [address]}} = get_addresses(conn)
-
-    refute id == address["id"]
+    %{"data" => %{"addresses" => []}} = get_addresses(conn)
   end
 end

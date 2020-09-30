@@ -1,4 +1,4 @@
-defmodule Ferry.ApiClient.Graphql do
+defmodule Ferry.ApiClient.GraphCase do
   import Phoenix.ConnTest
   @endpoint FerryWeb.Endpoint
 

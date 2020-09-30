@@ -7,13 +7,24 @@ defmodule Ferry.Shipments do
   alias Ecto.Changeset
   alias Ferry.Repo
 
-  alias Ferry.Profiles.Group
+  # alias Ferry.Profiles.Group
   alias Ferry.Shipments.Role
   alias Ferry.Shipments.Shipment
   alias Ferry.Shipments.Route
+  alias Ferry.Shipments.Package
+  alias Ferry.Locations.Address
 
   # Shipment
   # ==============================================================================
+
+  @doc """
+  Return the total number of shipments in the system
+  """
+  @spec count_shipments() :: non_neg_integer()
+  def count_shipments() do
+    Shipment
+    |> Repo.aggregate(:count, :id)
+  end
 
   @doc """
   Returns the list of shipments.
@@ -25,92 +36,86 @@ defmodule Ferry.Shipments do
 
   """
   def list_shipments do
-    Repo.all(
-      from s in Shipment,
-        order_by: s.id,
-        preload: [
-          roles: ^roles_query(),
-          routes: ^routes_query()
-        ]
+    from(s in Shipment,
+      preload: [:pickup_address, :delivery_address, :packages, :roles, :routes]
     )
+    |> Repo.all()
   end
 
-  def list_shipments(%Group{} = group) do
-    Repo.all(
-      from s in Shipment,
-        order_by: s.id,
-        left_join: r in assoc(s, :roles),
-        where: r.group_id == ^group.id,
-        preload: [
-          roles: ^roles_query(),
-          routes: ^routes_query()
-        ]
-    )
-  end
+  # def list_shipments(%Group{} = group) do
+  #   # from(s in Shipment,
+  #   #  order_by: s.id,
+  #   #  left_join: r in assoc(s, :roles),
+  #   #  where: r.group_id == ^group.id,
+  #   #  preload: [
+  #   #    roles: ^roles_query(),
+  #   #    routes: ^routes_query()
+  #   #  ]
+  #   # )
+  #   Shipment
+  #   |> Repo.preload(:pickup_address)
+  #   |> Repo.preload(:delivery_address)
+  #   |> Repo.all()
+  # end
 
   @doc """
   Gets a single shipment.
 
-  Raises `Ecto.NoResultsError` if the Shipment does not exist.
-
-  ## Examples
-
-      iex> get_shipment!(123)
-      %Shipment{}
-
-      iex> get_shipment!(456)
-      ** (Ecto.NoResultsError)
-
+  Returns nil if the shipment does not exist
   """
-  def get_shipment!(id) do
-    query =
-      from s in Shipment,
-        preload: [
-          roles: ^roles_query(),
-          routes: ^routes_query()
-        ]
-
-    Repo.get!(query, id)
+  @spec get_shipment(integer()) :: Shipment.t() | nil
+  def get_shipment(id) do
+    Shipment
+    |> Repo.get(id)
+    |> Repo.preload(:pickup_address)
+    |> Repo.preload(:delivery_address)
+    |> Repo.preload(:delivery_address)
+    |> Repo.preload(:packages)
+    |> Repo.preload(roles: roles_query(), routes: routes_query())
   end
 
   @doc """
-  Creates a shipment.
-
-  ## Examples
-
-      iex> create_shipment(%{field: value})
-      {:ok, %Shipment{}}
-
-      iex> create_shipment(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+  Creates a new shipment, for the given pickup and delivery addresses.
 
   """
-  def create_shipment(attrs \\ %{}) do
-    # TODO: validate that at least 1 role exists to prevent orphan shipments
-    #       currently enforced through the UI
-    %Shipment{}
-    |> Shipment.changeset(attrs)
-    |> Changeset.cast_assoc(:roles)
-    |> Changeset.cast_assoc(:routes)
-    |> Repo.insert()
+  @spec create_shipment(Address.t(), Address.t(), map()) ::
+          {:ok, Shipment.t()} | {:error, Ecto.ChangeError}
+  def create_shipment(%Address{} = pickup, %Address{} = delivery, attrs) do
+    attrs =
+      attrs
+      |> Map.put(:pickup_address_id, pickup.id)
+      |> Map.put(:delivery_address_id, delivery.id)
+
+    with {:ok, s} <-
+           %Shipment{}
+           |> Shipment.changeset(attrs)
+           |> Repo.insert() do
+      {:ok, get_shipment(s.id)}
+    end
   end
 
   @doc """
-  Updates a shipment.
-
-  ## Examples
-
-      iex> update_shipment(shipment, %{field: new_value})
-      {:ok, %Shipment{}}
-
-      iex> update_shipment(shipment, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
+  Updates a shipment. Both the pickup and delivery address can be updated, as well as
+  the attributes of this shipment
   """
-  def update_shipment(%Shipment{} = shipment, attrs) do
-    shipment
-    |> Shipment.changeset(attrs)
-    |> Repo.update()
+  @spec update_shipment(
+          Shipment.t(),
+          Address.t(),
+          Address.t(),
+          map()
+        ) :: {:ok, Shipment.t()} | {:error, Ecto.ChangeError}
+  def update_shipment(%Shipment{} = shipment, %Address{} = pickup, %Address{} = delivery, attrs) do
+    attrs =
+      attrs
+      |> Map.put(:pickup_address_id, pickup.id)
+      |> Map.put(:delivery_address_id, delivery.id)
+
+    with {:ok, s} <-
+           shipment
+           |> Shipment.changeset(attrs)
+           |> Repo.update() do
+      {:ok, get_shipment(s.id)}
+    end
   end
 
   @doc """
@@ -126,7 +131,20 @@ defmodule Ferry.Shipments do
 
   """
   def delete_shipment(%Shipment{} = shipment) do
-    Repo.delete(shipment)
+    shipment
+    |> Shipment.delete_changeset()
+    |> Repo.delete()
+  end
+
+  @doc """
+  Deletes all shipments
+  """
+  @spec delete_shipments() :: boolean()
+  def delete_shipments() do
+    Shipment
+    |> Repo.delete_all()
+
+    true
   end
 
   @doc """
@@ -140,6 +158,64 @@ defmodule Ferry.Shipments do
   """
   def change_shipment(%Shipment{} = shipment) do
     Shipment.changeset(shipment, %{})
+  end
+
+  @doc """
+  Returns a package, given its id
+  """
+  @spec get_package(integer()) :: Package.t() | nil
+  def get_package(id) do
+    Package
+    |> Repo.get(id)
+    |> Repo.preload(:shipment)
+  end
+
+  @doc """
+  Creates a package for the given shipment
+  """
+  @spec create_package(Shipment.t(), map()) :: {:ok, Package.t()} | {:error, Ecto.Changeset.t()}
+  def create_package(shipment, attrs) do
+    attrs =
+      attrs
+      |> Map.put(:shipment_id, shipment.id)
+
+    with {:ok, p} <-
+           %Package{}
+           |> Package.changeset(attrs)
+           |> Repo.insert() do
+      {:ok, get_package(p.id)}
+    end
+  end
+
+  @doc """
+  Updates the given package.
+
+  This function also accepts a shipment, which will be the new shipment
+  for the package. This can be used to move packages
+  between shipments.
+
+  """
+  @spec update_package(Package.t(), Shipment.t(), map()) ::
+          {:ok, Package.t()} | {:error, Ecto.Changeset.t()}
+  def update_package(package, shipment, attrs) do
+    attrs =
+      attrs
+      |> Map.put(:shipment_id, shipment.id)
+
+    with {:ok, p} <-
+           package
+           |> Package.changeset(attrs)
+           |> Repo.update() do
+      get_package(p.id)
+    end
+  end
+
+  @doc """
+  Deletes a package
+  """
+  @spec delete_package(Package.t()) :: {:ok, Package.t()} | {:error, Ecto.Changeset.t()}
+  def delete_package(package) do
+    Repo.delete(package)
   end
 
   # Roles
@@ -177,19 +253,21 @@ defmodule Ferry.Shipments do
   end
 
   def delete_role(%Role{} = role) do
-    shipment = get_shipment!(role.shipment_id)
+    shipment = get_shipment(role.shipment_id)
 
-    if length(shipment.roles) > 1 do
-      Repo.delete(role)
-    else
-      # TODO: make into a delete changeset?
-      role
-      |> Changeset.change()
-      |> Changeset.add_error(
-        :shipment,
-        "There must be at least 1 group taking part in this shipment."
-      )
-      |> Changeset.apply_action(:delete)
+    if shipment != nil do
+      if length(shipment.roles) > 1 do
+        Repo.delete(role)
+      else
+        # TODO: make into a delete changeset?
+        role
+        |> Changeset.change()
+        |> Changeset.add_error(
+          :shipment,
+          "There must be at least 1 group taking part in this shipment."
+        )
+        |> Changeset.apply_action(:delete)
+      end
     end
   end
 

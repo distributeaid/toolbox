@@ -1,7 +1,7 @@
 defmodule FerryWeb.Router do
   use FerryWeb, :router
   import Phoenix.LiveDashboard.Router
-  import FerryWeb.Plugs.PutUser
+  # import FerryWeb.Plugs.PutUser
   require Logger
 
   pipeline :browser do
@@ -19,11 +19,11 @@ defmodule FerryWeb.Router do
       json_decoder: Jason
     )
 
-    if Application.get_env(:ferry, :auth, "enable") == "enable" do
-      plug(:put_user)
-    else
-      Logger.warn("User authentication is disabled!")
-    end
+    # if Application.get_env(:ferry, :auth, "enable") == "enable" do
+    #   plug(:put_user)
+    # else
+    #   Logger.warn("User authentication is disabled!")
+    # end
   end
 
   scope "/" do
