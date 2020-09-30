@@ -1,0 +1,14 @@
+query getChapterList {
+  groups {
+    id
+    __typename
+    slug
+    description
+    name
+    location {
+      id
+      province
+      countryCode
+    }
+  }
+}
