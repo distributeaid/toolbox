@@ -38,13 +38,10 @@ jobs:
        - name: Compile and test
          run: mix test
        - name: Publish Docker
-         uses: docker/build-push-action@v2
+         uses: pedro-gutierrez/docker-action@v10
          with:
-           no-cache: true
-           username: ${{ github.actor }}
            password: ${{ secrets.DOCKER_PASSWORD }}
-           registry: docker.pkg.github.com
-           repository: distributeaid/toolbox/toolbox
+           tag: latest
        - name: Deploy
          uses: pedro-gutierrez/apply-action@v7
          with:
