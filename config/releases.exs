@@ -34,7 +34,7 @@ config :ferry, Ferry.Repo,
 
 # Generate a new secret: https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Secret.html#content
 
-config :ferry, FerryWeb.Endpoint, secret_key_base: {:system, "SECRET_KEY_BASE"}
+config :ferry, FerryWeb.Endpoint, secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 # Twilio Integrations
 # ------------------------------------------------------------
