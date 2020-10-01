@@ -35,7 +35,7 @@ const Copyright: React.FC<{ className?: string }> = ({ className }) => (
       'flex items-center mr-3 font-mono text-xs',
       className
     )}>
-    &copy; 2020 Masks For Docs Foundation
+    &copy; 2020 Distribute Aid
   </div>
 )
 
@@ -45,9 +45,6 @@ export const Footer: React.FC = () => {
   return (
     <footer className="pb-14 pl-3 pl-2 md:px-8 md:px-14 bg-black text-gray-100">
       <div className="mx-auto max-w-7xl overflow-hidden">
-        <div className="-mt-5">
-          <FooterIcon />
-        </div>
         <div className="pt-10 md:pt-20">
           <div className="flex flex-row-reverse md:flex-col justify-evenly md:justify-start">
             <div className="flex-1 md:mt-10 md:mt-0 flex">
@@ -62,15 +59,15 @@ export const Footer: React.FC = () => {
                   links={[
                     {
                       title: t('footer.about.mission'),
-                      href: 'https://masksfordocs.com/about-us/#mission',
+                      href: 'https://example.com',
                     },
                     {
                       title: t('footer.about.whoWeAre'),
-                      href: 'https://masksfordocs.com/about-us/#leadership',
+                      href: 'https://example.com',
                     },
                     {
                       title: t('footer.about.successStories'),
-                      href: 'https://masksfordocs.com/get-supplies/#leadership',
+                      href: 'https://example.com',
                     },
                   ]}
                 />
@@ -80,15 +77,15 @@ export const Footer: React.FC = () => {
                   links={[
                     {
                       title: t('footer.resources.covidUpdates'),
-                      href: 'https://masksfordocs.com/news/#covid19updates',
+                      href: 'https://example.com',
                     },
                     {
                       title: t('footer.resources.fieldGuides'),
-                      href: 'https://masksfordocs.com/resources/#fieldguides',
+                      href: 'https://example.com',
                     },
                     {
                       title: t('footer.resources.templates'),
-                      href: 'https://masksfordocs.com/resources#templates',
+                      href: 'https://example.com',
                     },
                     {
                       title: t('footer.resources.localChapters'),
@@ -102,21 +99,19 @@ export const Footer: React.FC = () => {
                   links={[
                     {
                       title: t('footer.more.termsOfUse'),
-                      href:
-                        'https://masksfordocs.com/legal/terms-and-conditions',
+                      href: 'https://example.com',
                     },
                     {
                       title: t('footer.more.privacyPolicy'),
-                      href: 'https://masksfordocs.com/legal/privacy-policy',
+                      href: 'https://example.com',
                     },
                     {
                       title: t('footer.more.codeOfConduct'),
-                      href:
-                        'https://masksfordocs.atlassian.net/wiki/spaces/HOME/pages/49905756/Code+of+Conduct',
+                      href: 'https://example.com',
                     },
                     {
                       title: t('footer.more.contactUs'),
-                      href: 'https://masksfordocs.com/contact',
+                      href: 'https://example.com',
                     },
                   ]}>
                   <div className="text-gray-200 mt-10 text-lg">
@@ -125,11 +120,12 @@ export const Footer: React.FC = () => {
                 </LinkList>
               </div>
             </div>
+
             <div className="md:mt-20 text-xs flex flex-col md:flex-row">
               <Copyright className="hidden md:block" />
 
               <div className="flex flex-col md:flex-row justify-start md:justify-end flex-1 pr-3 md:pr-14">
-                <SocialIcon href="https://www.facebook.com/MasksForDocs/">
+                <SocialIcon href="https://www.facebook.com/DistributeAidDotOrg/">
                   <svg
                     width="30"
                     height="30"
@@ -144,7 +140,7 @@ export const Footer: React.FC = () => {
                   </svg>
                 </SocialIcon>
 
-                <SocialIcon href="https://twitter.com/MasksForDocs">
+                <SocialIcon href="https://twitter.com/DistributeAid">
                   <svg
                     width="30"
                     height="30"
@@ -159,7 +155,7 @@ export const Footer: React.FC = () => {
                   </svg>
                 </SocialIcon>
 
-                <SocialIcon href="https://www.instagram.com/masksfordocs/">
+                <SocialIcon href="https://www.instagram.com/distributeaid/">
                   <svg
                     width="30"
                     height="30"
@@ -182,7 +178,7 @@ export const Footer: React.FC = () => {
                   </svg>
                 </SocialIcon>
 
-                <SocialIcon href="https://www.linkedin.com/company/masks-for-docs/">
+                <SocialIcon href="https://www.linkedin.com/company/distribute-aid/">
                   <svg
                     width="30"
                     height="30"
@@ -216,26 +212,4 @@ const SocialIcon: React.FC<{ href: string }> = ({ children, href }) => (
       {children}
     </a>
   </div>
-)
-
-const FooterIcon: React.FC = () => (
-  <svg
-    width="82"
-    height="110"
-    viewBox="0 0 82 110"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M77.9 0H4.1672C1.88195 0 0 1.88197 0 4.16722V69.9312C0 91.5066 18.4164 109.049 41 109.049C63.5836 109.049 82 91.5066 82 69.9312V4.16722C82 1.88197 80.1852 0 77.9 0Z"
-      fill="white"
-    />
-    <path
-      d="M38.5805 72.351V49.969C38.5805 49.028 38.5805 48.1542 38.5133 47.2805C38.4461 46.4067 38.3117 45.6001 38.0428 44.928C37.774 44.2559 37.4379 43.7182 37.0346 43.3149C36.5641 42.9116 35.9592 42.71 35.2871 42.71C33.8084 42.71 32.5986 43.3149 31.5904 44.5919C30.5822 45.869 29.8428 47.4149 29.3051 49.2969V72.351H24.3986V38.8116H27.7592L28.7002 42.9116H28.969C29.3723 42.2395 29.8428 41.6346 30.2461 41.0297C30.6494 40.4247 31.1199 39.887 31.6576 39.4837C32.1953 39.0133 32.8002 38.6772 33.5395 38.4755C34.2789 38.2067 35.2199 38.1395 36.2953 38.1395C36.9674 38.1395 37.6396 38.2067 38.3117 38.4083C38.9838 38.61 39.6559 38.9461 40.1936 39.3493C40.7986 39.7526 41.269 40.3575 41.7395 41.0297C42.1428 41.769 42.4789 42.6427 42.6133 43.6509C43.6215 41.9034 44.6969 40.5592 45.974 39.551C47.1838 38.5428 48.8641 38.0723 51.015 38.0723C52.4264 38.0723 53.5691 38.3411 54.4428 38.8116C55.3166 39.2821 55.9887 40.0215 56.5264 40.8952C56.9969 41.8362 57.4002 42.9116 57.5346 44.1887C57.7363 45.4657 57.8035 46.8772 57.8035 48.4231V72.351H52.8969V49.5657C52.8969 48.6247 52.8297 47.751 52.7625 46.9444C52.6953 46.1378 52.4936 45.3985 52.292 44.7936C52.0231 44.1887 51.7543 43.6509 51.351 43.3149C50.9477 42.9788 50.41 42.7772 49.6707 42.7772C48.192 42.7772 46.9149 43.3821 45.8395 44.6591C44.8313 45.9362 44.0248 47.6837 43.4871 50.0362V72.4182H38.5805V72.351Z"
-      fill="black"
-    />
-    <path
-      d="M58.5423 81.1553H23.5243C22.7849 81.1553 22.1128 81.9618 22.1128 82.97C22.1128 83.9782 22.7177 84.7848 23.5243 84.7848H58.5423C59.2816 84.7848 59.9538 83.9782 59.9538 82.97C59.9538 81.9618 59.2816 81.1553 58.5423 81.1553Z"
-      fill="#ED2E69"
-    />
-  </svg>
 )

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
 import { DonateButton } from '../DonateButton'
-import { M4DLogo } from './M4DLogo'
 
 export const NavBar: React.FC = () => {
   const { t } = useTranslation()
@@ -41,8 +40,11 @@ export const NavBar: React.FC = () => {
 
         <a
           className="flex items-center flex-shrink-0 lg:ml-4 lg:mr-9 flex-grow lg:flex-grow-0"
-          href="https://masksfordocs.com">
-          <M4DLogo />
+          href="https://example.com">
+          <img
+            src="http://www.fillmurray.com/136/40"
+            alt="Distribute Aid logo"
+          />
         </a>
 
         <DonateButton
@@ -55,41 +57,31 @@ export const NavBar: React.FC = () => {
             menuOpen ? 'block' : 'hidden'
           } ml-3 lg:ml-8 flex-grow lg:flex lg:items-center lg:w-auto flex-shrink-0`}>
           <div className="text-sm pb-4 lg:pb-0 lg:flex-grow flex-shrink-0">
-            <HeaderNavLink
-              onClick={hideMenu}
-              to="https://masksfordocs.com/about-us">
+            <HeaderNavLink onClick={hideMenu} to="http://example.com">
               {t('navBar.aboutLink')}
             </HeaderNavLink>
 
-            <HeaderNavLink
-              onClick={hideMenu}
-              to="https://masksfordocs.com/news">
-              {t('navBar.newsLink')}
+            <HeaderNavLink onClick={hideMenu} to="http://example.com">
+              Placeholder
             </HeaderNavLink>
 
-            <HeaderNavLink
-              onClick={hideMenu}
-              to="https://masksfordocs.com/get-involved">
-              {t('navBar.getInvolvedLink')}
+            <HeaderNavLink onClick={hideMenu} to="http://example.com">
+              Placeholder
             </HeaderNavLink>
 
-            <HeaderNavLink
-              onClick={hideMenu}
-              to="https://masksfordocs.com/get-supplies">
-              {t('navBar.suppliesLink')}
+            <HeaderNavLink onClick={hideMenu} to="http://example.com">
+              Placeholder
             </HeaderNavLink>
 
-            <HeaderNavLink onClick={hideMenu} to="/chapters">
-              {t('navBar.chaptersLink')}
+            <HeaderNavLink onClick={hideMenu} to="http://example.com">
+              Placeholder
             </HeaderNavLink>
 
-            <HeaderNavLink
-              onClick={hideMenu}
-              to="https://masksfordocs.com/resources">
+            <HeaderNavLink onClick={hideMenu} to="http://example.com">
               {t('navBar.resourcesLink')}
             </HeaderNavLink>
 
-            <HeaderNavLink onClick={hideMenu} to="https://masksfordocs.com/faq">
+            <HeaderNavLink onClick={hideMenu} to="http://example.com">
               {t('navBar.faqLink')}
             </HeaderNavLink>
           </div>
