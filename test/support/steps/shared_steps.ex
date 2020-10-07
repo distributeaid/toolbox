@@ -91,4 +91,30 @@ defmodule Ferry.SharedSteps do
     state
     |> with_context(context, new_context)
   end
+
+  # A convenience step that sets today's with a given value
+  # in the given context key
+  defgiven ~r/^a "(?<name>[^"]+)" date$/,
+           %{name: name},
+           state do
+    date = DateTime.utc_now()
+
+    state
+    |> with_context("#{name}_date", date)
+  end
+
+  # A convenience step that navigates a date in the future
+  # and sets it in the context
+  defgiven ~r/^a "(?<name>[^"]+)" date in (?<days>\d+) days$/,
+           %{name: name, days: days},
+           state do
+    days = String.to_integer(days)
+
+    date =
+      DateTime.utc_now()
+      |> DateTime.add(days * 24 * 3600, :second)
+
+    state
+    |> with_context("#{name}_date", date)
+  end
 end
