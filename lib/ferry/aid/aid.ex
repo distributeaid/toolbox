@@ -121,7 +121,24 @@ defmodule Ferry.Aid do
     end
   end
 
-  def update_needs_list(%NeedsList{} = list, attrs \\ %{}) do
+  @doc """
+  Updates the given needs list, by setting it in the
+  given project with the given attributes
+  """
+  @spec update_needs_list(NeedsList.t(), Project.t(), map()) ::
+          {:ok, NeedsList.t()} | {:error, Ecto.Changeset}
+  def update_needs_list(%NeedsList{} = list, %Project{} = project, attrs) do
+    attrs = Map.put(attrs, :project_id, project.id)
+
+    with {:ok, needs_list} <-
+           list
+           |> NeedsList.changeset(attrs, &has_overlap?/1)
+           |> Repo.update() do
+      get_needs_list(needs_list.id)
+    end
+  end
+
+  def update_needs_list(%NeedsList{} = list, attrs) do
     list
     |> NeedsList.changeset(attrs, &has_overlap?/1)
     |> Repo.update()

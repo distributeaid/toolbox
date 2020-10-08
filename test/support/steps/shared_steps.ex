@@ -37,6 +37,27 @@ defmodule Ferry.SharedSteps do
            debug("Expected field \"#{field}\" to have a value", state)
   end
 
+  # Convenience step that asserts the current result
+  # as a field with that name, and its value is a date in the future
+  # This step assumes the field exists and is not nil
+  defthen ~r/^field "(?<field>[^"]+)" should be in (?<days>\d+) days$/,
+          %{field: field, days: days},
+          state do
+    actual = state.result[field]
+
+    case Date.from_iso8601(actual) do
+      {:error, _} ->
+        debug("Expected #{actual} in field #{field} to be a date", state)
+        |> flunk()
+
+      {:ok, date} ->
+        expected = String.to_integer(days)
+
+        assert expected == Date.diff(date, Date.utc_today()),
+               debug("Expected #{actual} in field #{field} to be a date in #{days} days", state)
+    end
+  end
+
   defthen ~r/^field "(?<field>[^"]+)" should have length (?<length>\d+)$/,
           %{field: field, length: length},
           state do
