@@ -1,4 +1,4 @@
-defmodule Ferry.HealthCheckTest do
+defmodule Ferry.HealthCheckApiTest do
   use FerryWeb.ConnCase, async: true
 
   test "health check query", %{conn: conn} do

@@ -1,8 +1,8 @@
-defmodule Ferry.GroupAddressTest do
+defmodule Ferry.GroupProjectApiTest do
   use FerryWeb.ConnCase, async: true
-  import Ferry.ApiClient.{Group, Address}
+  import Ferry.ApiClient.{Group, Project}
 
-  test "fetch a group and its addresses", %{conn: conn} do
+  test "fetch a group and its projects", %{conn: conn} do
     insert(:user)
     |> mock_sign_in
 
@@ -21,30 +21,33 @@ defmodule Ferry.GroupAddressTest do
       }
     } = create_group(conn, group_attrs)
 
-    # add an address to that group
+    # create a project for that group
     %{
       "data" => %{
-        "createAddress" => %{
+        "createProject" => %{
           "successful" => true,
-          "messages" => [],
           "result" => %{
-            "id" => id,
-            "label" => "test"
+            "id" => id
           }
         }
       }
-    } = create_address(conn, %{group: group, label: "test"})
+    } =
+      create_project(conn, %{
+        group: group,
+        name: "test project",
+        description: "test description for test project"
+      })
 
-    # verify we can get that group and its addresses
+    # verify we can get that group and its projects
     %{
       "data" => %{
         "group" => %{
-          "addresses" => [
+          "projects" => [
             %{"id" => ^id}
           ]
         }
       }
-    } = get_group_with_addresses(conn, group)
+    } = get_group_with_projects(conn, group)
 
     # create a second group with no projects
     group_attrs = params_for(:group) |> with_address()
@@ -61,14 +64,14 @@ defmodule Ferry.GroupAddressTest do
       }
     } = create_group(conn, group_attrs)
 
-    # verify that group has a single address
+    # verify that group has no projects
     %{
       "data" => %{
         "group" => %{
-          "addresses" => []
+          "projects" => []
         }
       }
-    } = get_group_with_addresses(conn, group)
+    } = get_group_with_projects(conn, group)
 
     # verify we can get both groups and their associated
     # projects
@@ -78,16 +81,16 @@ defmodule Ferry.GroupAddressTest do
         "groups" => [
           %{
             "name" => "first group",
-            "addresses" => [
-              %{"label" => "test"}
+            "projects" => [
+              %{"name" => "test project"}
             ]
           },
           %{
             "name" => "second group",
-            "addresses" => []
+            "projects" => []
           }
         ]
       }
-    } = get_groups_with_addresses(conn)
+    } = get_groups_with_projects(conn)
   end
 end

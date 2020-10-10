@@ -1,4 +1,4 @@
-defmodule Ferry.CategoryItemSchemaTest do
+defmodule Ferry.CategoryItemApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Category, Item}
 

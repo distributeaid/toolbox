@@ -1,4 +1,4 @@
-defmodule Ferry.NeedsListSchemaTest do
+defmodule Ferry.NeedsListApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Group, Project, NeedsList}
 

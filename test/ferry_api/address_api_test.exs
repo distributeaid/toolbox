@@ -1,4 +1,4 @@
-defmodule Ferry.AddressSchemaTest do
+defmodule Ferry.AddressApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Group, Address}
 
