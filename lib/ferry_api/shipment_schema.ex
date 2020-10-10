@@ -7,8 +7,6 @@ defmodule FerryApi.Schema.Shipment do
   alias FerryApi.Middleware
   alias Ferry.{Locations, Shipments}
 
-  import_types(Absinthe.Type.Custom)
-
   object :shipment_queries do
     @desc "Get the total number of shipments in the system"
     field :count_shipments, :integer do

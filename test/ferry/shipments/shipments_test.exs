@@ -21,7 +21,10 @@ defmodule Ferry.ShipmentsTest do
       {:ok, shipment1} = Shipments.create_shipment(pickup, delivery, attrs)
       {:ok, shipment2} = Shipments.create_shipment(pickup, delivery, attrs)
 
-      assert Shipments.list_shipments() == [shipment1, shipment2]
+      shipments = Shipments.list_shipments()
+
+      assert Enum.member?(shipments, shipment1)
+      assert Enum.member?(shipments, shipment2)
 
       # # roles should also be included if they exist
       # shipment3 =

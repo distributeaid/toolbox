@@ -333,16 +333,16 @@ defmodule Ferry.AidTaxonomyTest do
       assert AidTaxonomy.list_mods() == []
 
       # 1
-      mod1 = insert(:aid_mod)
+      mod1 = insert(:aid_mod, name: "mod1")
       assert AidTaxonomy.list_mods() == [mod1]
 
       # many
-      mod2 = insert(:aid_mod)
+      mod2 = insert(:aid_mod, name: "mod2")
       assert AidTaxonomy.list_mods() == [mod1, mod2]
 
       # ordered by name
-      last_mod = insert(:aid_mod, %{name: "Z"})
-      first_mod = insert(:aid_mod, %{name: "A"})
+      last_mod = insert(:aid_mod, %{name: "z"})
+      first_mod = insert(:aid_mod, %{name: "a"})
 
       assert AidTaxonomy.list_mods() == [
                first_mod,

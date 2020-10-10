@@ -144,6 +144,26 @@ defmodule Ferry.ApiClient.Group do
   end
 
   @doc """
+  Convenience function that creates a group using simple
+  defaults
+  """
+  @spec create_simple_group(Plug.Conn.t(), map) :: map
+  def create_simple_group(conn, attrs) do
+    create_group(conn, %{
+      name: attrs.name,
+      slug: attrs.name,
+      description: attrs.name,
+      slack_channel_name: attrs.name,
+      request_form: "https://nodomain.com/forms",
+      request_form_results: "https://nodomain.com/forms",
+      volunteer_form: "https://nodomain.com/forms",
+      volunteer_form_results: "https://nodomain.com/forms",
+      donation_form: "https://nodomain.com/forms",
+      donation_form_results: "https://nodomain.com/forms"
+    })
+  end
+
+  @doc """
   Run a GraphQL mutation that creates a group
   """
   @spec create_group(Plug.Conn.t(), map) :: map

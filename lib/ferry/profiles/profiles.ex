@@ -236,7 +236,9 @@ defmodule Ferry.Profiles do
   """
   @spec get_project(String.t()) :: Project.t() | nil
   def get_project(id) do
-    Repo.get(Project, id)
+    Project
+    |> Repo.get(id)
+    |> Repo.preload(:group)
   end
 
   @doc """
@@ -273,9 +275,13 @@ defmodule Ferry.Profiles do
   @spec create_project(Ferry.Profiles.Group.t(), map()) ::
           {:ok, Project.t()} | {:error, %Ecto.Changeset{}}
   def create_project(%Group{} = group, attrs \\ %{}) do
-    build_assoc(group, :projects)
-    |> Project.changeset(attrs)
-    |> Repo.insert()
+    with {:ok, project} <-
+           build_assoc(group, :projects)
+           |> Project.changeset(attrs)
+           |> Repo.insert(),
+         project when project != nil <- get_project(project.id) do
+      {:ok, project}
+    end
   end
 
   @doc """

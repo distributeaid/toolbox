@@ -5,7 +5,12 @@ defmodule Ferry.FeatureCase do
 
   """
   defp steps_module(feature) do
-    Module.concat(Ferry, "#{String.capitalize(Atom.to_string(feature))}Steps")
+    module_name =
+      ((feature |> Atom.to_string() |> String.split("_") |> Enum.map(&String.capitalize(&1))) ++
+         ["Steps"])
+      |> Enum.join("")
+
+    Module.concat(Ferry, module_name)
   end
 
   @spec __using__(Keyword.t()) :: any()
@@ -140,13 +145,16 @@ defmodule Ferry.FeatureCase do
         request = "mutation { #{body} }"
 
         if debug do
-          IO.inspect(request)
+          request
+          |> IO.puts()
         end
 
         response = graphql(conn, request)
 
         if debug do
-          IO.inspect(response)
+          response
+          |> Jason.encode!()
+          |> IO.puts()
         end
 
         %{"data" => doc} = response

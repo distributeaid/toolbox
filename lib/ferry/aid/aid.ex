@@ -68,6 +68,23 @@ defmodule Ferry.Aid do
     |> Repo.get!(id)
   end
 
+  @doc """
+  Return a needs list, given its id
+  """
+  @spec get_needs_list!(integer()) :: {:ok, NeedsList.t()} | :not_found
+  def get_needs_list(id) do
+    case NeedsList
+         |> Repo.get(id)
+         |> Repo.preload(project: :group)
+         |> Repo.preload(:entries) do
+      nil ->
+        :not_found
+
+      needs_list ->
+        {:ok, needs_list}
+    end
+  end
+
   def get_needs_list(%Project{} = project, %Date{} = on) do
     query =
       from [needs_list, proj] in needs_list_query(),
@@ -86,15 +103,42 @@ defmodule Ferry.Aid do
 
   # ------------------------------------------------------------
 
-  # TODO: inject normal preloads after successful insert- entries & project?
+  @doc """
+  Creates a new needs lists for the given project
+
+  """
+  @spec create_needs_list(
+          Ferry.Profiles.Project.t(),
+          map()
+        ) :: {:ok, NeedsList.t()} | {:error, Ecto.Changeset}
   def create_needs_list(%Project{} = project, attrs \\ %{}) do
-    %NeedsList{project_id: project.id}
-    |> NeedsList.changeset(attrs, &has_overlap?/1)
-    |> Changeset.put_assoc(:list, %AidList{entries: []})
-    |> Repo.insert()
+    with {:ok, needs_list} <-
+           %NeedsList{project_id: project.id}
+           |> NeedsList.changeset(attrs, &has_overlap?/1)
+           |> Changeset.put_assoc(:list, %AidList{entries: []})
+           |> Repo.insert() do
+      get_needs_list(needs_list.id)
+    end
   end
 
-  def update_needs_list(%NeedsList{} = list, attrs \\ %{}) do
+  @doc """
+  Updates the given needs list, by setting it in the
+  given project with the given attributes
+  """
+  @spec update_needs_list(NeedsList.t(), Project.t(), map()) ::
+          {:ok, NeedsList.t()} | {:error, Ecto.Changeset}
+  def update_needs_list(%NeedsList{} = list, %Project{} = project, attrs) do
+    attrs = Map.put(attrs, :project_id, project.id)
+
+    with {:ok, needs_list} <-
+           list
+           |> NeedsList.changeset(attrs, &has_overlap?/1)
+           |> Repo.update() do
+      get_needs_list(needs_list.id)
+    end
+  end
+
+  def update_needs_list(%NeedsList{} = list, attrs) do
     list
     |> NeedsList.changeset(attrs, &has_overlap?/1)
     |> Repo.update()

@@ -5,6 +5,7 @@ defmodule FerryApi.Schema do
   # ------------------------------------------------------------
 
   import_types(Absinthe.Plug.Types)
+  import_types(Absinthe.Type.Custom)
   import_types(AbsintheErrorPayload.ValidationMessageTypes)
 
   import_types(FerryApi.Schema.GroupType)
@@ -38,6 +39,9 @@ defmodule FerryApi.Schema do
   import_types(FerryApi.Schema.PackageType)
   import_types(FerryApi.Schema.Package)
 
+  import_types(FerryApi.Schema.NeedsListType)
+  import_types(FerryApi.Schema.NeedsList)
+
   # Queries
   # ------------------------------------------------------------
 
@@ -53,6 +57,7 @@ defmodule FerryApi.Schema do
     import_fields(:item_queries)
     import_fields(:shipment_queries)
     import_fields(:package_queries)
+    import_fields(:needs_lists_queries)
   end
 
   # Mutuations
@@ -68,6 +73,7 @@ defmodule FerryApi.Schema do
     import_fields(:item_mutations)
     import_fields(:shipment_mutations)
     import_fields(:package_mutations)
+    import_fields(:needs_lists_mutations)
   end
 
   @sources [

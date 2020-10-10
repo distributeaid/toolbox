@@ -37,6 +37,27 @@ defmodule Ferry.SharedSteps do
            debug("Expected field \"#{field}\" to have a value", state)
   end
 
+  # Convenience step that asserts the current result
+  # as a field with that name, and its value is a date in the future
+  # This step assumes the field exists and is not nil
+  defthen ~r/^field "(?<field>[^"]+)" should be in (?<days>\d+) days$/,
+          %{field: field, days: days},
+          state do
+    actual = state.result[field]
+
+    case Date.from_iso8601(actual) do
+      {:error, _} ->
+        debug("Expected #{actual} in field #{field} to be a date", state)
+        |> flunk()
+
+      {:ok, date} ->
+        expected = String.to_integer(days)
+
+        assert expected == Date.diff(date, Date.utc_today()),
+               debug("Expected #{actual} in field #{field} to be a date in #{days} days", state)
+    end
+  end
+
   defthen ~r/^field "(?<field>[^"]+)" should have length (?<length>\d+)$/,
           %{field: field, length: length},
           state do
@@ -90,5 +111,31 @@ defmodule Ferry.SharedSteps do
 
     state
     |> with_context(context, new_context)
+  end
+
+  # A convenience step that sets today's with a given value
+  # in the given context key
+  defgiven ~r/^a "(?<name>[^"]+)" date$/,
+           %{name: name},
+           state do
+    date = DateTime.utc_now()
+
+    state
+    |> with_context("#{name}_date", date)
+  end
+
+  # A convenience step that navigates a date in the future
+  # and sets it in the context
+  defgiven ~r/^a "(?<name>[^"]+)" date in (?<days>\d+) days$/,
+           %{name: name, days: days},
+           state do
+    days = String.to_integer(days)
+
+    date =
+      DateTime.utc_now()
+      |> DateTime.add(days * 24 * 3600, :second)
+
+    state
+    |> with_context("#{name}_date", date)
   end
 end
