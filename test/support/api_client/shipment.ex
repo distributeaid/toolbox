@@ -25,7 +25,14 @@ defmodule Ferry.ApiClient.Shipment do
         description,
         transportType,
         availableFrom,
-        targetDelivery
+        targetDelivery,
+        packages {
+          id,
+          number,
+          type,
+          contents,
+          dangerous
+        }
       }
     }
     """)
@@ -51,7 +58,14 @@ defmodule Ferry.ApiClient.Shipment do
         description,
         transportType,
         availableFrom,
-        targetDelivery
+        targetDelivery,
+        packages {
+          id,
+          number,
+          type,
+          contents,
+          dangerous
+        }
       }
     }
     """)
