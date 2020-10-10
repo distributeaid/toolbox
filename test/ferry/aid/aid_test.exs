@@ -247,4 +247,41 @@ defmodule Ferry.AidTest do
              )
     end
   end
+
+  describe "list entries" do
+    setup context do
+      project = insert(:project)
+      item = insert(:aid_item)
+
+      from = DateTime.utc_now()
+      to = DateTime.utc_now() |> DateTime.add(24 * 3600, :second)
+
+      {:ok, needs} = Aid.create_needs_list(project, %{from: from, to: to})
+
+      {:ok,
+       Map.merge(context, %{
+         item: item,
+         needs: needs
+       })}
+    end
+
+    test "an item can be added to a needs list as a entry", %{item: item, needs: needs} do
+      {:ok, entry} = Aid.create_entry(needs, item, %{amount: 1})
+
+      assert entry.list
+      assert entry.item
+
+      assert item.id == entry.item.id
+      assert needs.id == entry.list.needs_list.id
+
+      assert [entry] == Aid.get_entries(needs)
+    end
+
+    test "an entry can be removed from a list", %{item: item, needs: needs} do
+      assert {:ok, entry} = Aid.create_entry(needs, item, %{amount: 1})
+
+      {:ok, _} = Aid.delete_entry(entry)
+      assert [] == Aid.get_entries(needs)
+    end
+  end
 end
