@@ -1,4 +1,4 @@
-defmodule Ferry.GroupTest do
+defmodule Ferry.GroupApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.Group
   alias Ferry.Profiles

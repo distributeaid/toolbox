@@ -1,4 +1,4 @@
-defmodule Ferry.ModValueSchemaTest do
+defmodule Ferry.ModValueApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Mod, ModValue}
 
