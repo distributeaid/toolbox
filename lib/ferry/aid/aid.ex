@@ -78,7 +78,7 @@ defmodule Ferry.Aid do
     case NeedsList
          |> Repo.get(id)
          |> Repo.preload(project: :group)
-         |> Repo.preload(:entries)
+         |> Repo.preload(entries: [:item, list: [:needs_list, :available_list, :manifest_list]])
          |> Repo.preload(:list) do
       nil ->
         :not_found

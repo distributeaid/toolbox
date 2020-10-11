@@ -283,5 +283,15 @@ defmodule Ferry.AidTest do
       {:ok, _} = Aid.delete_entry(entry)
       assert [] == Aid.get_entries(needs)
     end
+
+    test "a list returns its entries too", %{item: item, needs: needs} do
+      {:ok, needs} = Aid.get_needs_list(needs.id)
+      assert [] == needs.entries
+
+      {:ok, entry} = Aid.create_entry(needs, item, %{amount: 1})
+      {:ok, needs} = Aid.get_needs_list(needs.id)
+
+      assert [entry] == needs.entries
+    end
   end
 end
