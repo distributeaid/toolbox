@@ -22,6 +22,22 @@ defmodule Ferry.Aid do
   alias Ferry.AidTaxonomy.Item
   alias Ferry.Profiles.Project
 
+  @doc """
+  Return the aid list for the given id
+
+  """
+  @spec get_aid_list(String.t()) :: {:ok, AidList.t()} | :not_found
+  def get_aid_list(id) do
+    case AidList
+         |> Repo.get(id) do
+      nil ->
+        :not_found
+
+      list ->
+        {:ok, list}
+    end
+  end
+
   # Needs List
   # ================================================================================
   # NOTE: The needs lists for a project shouldn't overlap.  In other words,
@@ -93,6 +109,7 @@ defmodule Ferry.Aid do
     end
   end
 
+  @spec get_needs_list(Ferry.Profiles.Project.t(), Date.t()) :: any
   def get_needs_list(%Project{} = project, %Date{} = on) do
     query =
       from [needs_list, proj] in needs_list_query(),
