@@ -6,6 +6,7 @@ defmodule Ferry.AidTest do
   alias Timex
 
   alias Ferry.Aid
+  alias Ferry.AidTaxonomy
   alias Ferry.Aid.AidList
   #  alias Ferry.Aid.AvailableList
   alias Ferry.Aid.Entry
@@ -251,7 +252,17 @@ defmodule Ferry.AidTest do
   describe "list entries" do
     setup context do
       project = insert(:project)
-      item = insert(:aid_item)
+
+      {:ok, category} =
+        AidTaxonomy.create_category(%{
+          name: "test category",
+          description: "test category"
+        })
+
+      {:ok, item} =
+        AidTaxonomy.create_item(category, %{
+          name: "test item"
+        })
 
       from = DateTime.utc_now()
       to = DateTime.utc_now() |> DateTime.add(24 * 3600, :second)
@@ -292,6 +303,36 @@ defmodule Ferry.AidTest do
       {:ok, needs} = Aid.get_needs_list(needs.id)
 
       assert [entry] == needs.entries
+    end
+
+    test "deleting a needs lists also deletes entries", %{item: item, needs: needs} do
+      {:ok, _} = Aid.create_entry(needs, item, %{amount: 1})
+
+      assert 1 == Aid.count_entries()
+
+      {:ok, _} = Aid.delete_needs_list(needs)
+
+      assert 0 == Aid.count_entries()
+    end
+
+    test "can update the amount of an entry", %{needs: needs, item: item} do
+      {:ok, entry} = Aid.create_entry(needs, item, %{amount: 1})
+
+      assert 1 == entry.amount
+
+      {:ok, entry} = Aid.update_entry(entry, %{amount: 2})
+      assert 2 == entry.amount
+    end
+
+    test "cannot update the item of an entry", %{needs: needs, item: item} do
+      {:ok, entry} = Aid.create_entry(needs, item, %{amount: 1})
+
+      item2 = insert(:aid_item)
+
+      {:ok, _} = Aid.update_entry(entry, %{item_id: item2.id})
+
+      {:ok, entry} = Aid.get_entry(entry.id)
+      assert item == entry.item
     end
   end
 end

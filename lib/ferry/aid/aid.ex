@@ -78,7 +78,12 @@ defmodule Ferry.Aid do
     case NeedsList
          |> Repo.get(id)
          |> Repo.preload(project: :group)
-         |> Repo.preload(entries: [:item, list: [:needs_list, :available_list, :manifest_list]])
+         |> Repo.preload(
+           entries: [
+             item: [:mods, :category],
+             list: [:needs_list, :available_list, :manifest_list]
+           ]
+         )
          |> Repo.preload(:list) do
       nil ->
         :not_found
@@ -197,6 +202,15 @@ defmodule Ferry.Aid do
   end
 
   @doc """
+  Counts all entries in the database
+  """
+  @spec count_entries() :: integer()
+  def count_entries() do
+    Entry
+    |> Repo.aggregate(:count, :id)
+  end
+
+  @doc """
   Returns all entries for a list. A list can be either
   a needs list, available list or a manifest list
   """
@@ -213,7 +227,7 @@ defmodule Ferry.Aid do
     Entry
     |> where(list_id: ^list_id)
     |> Repo.all()
-    |> Repo.preload(:item)
+    |> Repo.preload(item: [:mods, :category])
     |> Repo.preload(list: [:needs_list, :available_list, :manifest_list])
   end
 
@@ -225,7 +239,7 @@ defmodule Ferry.Aid do
   def get_entry(id) do
     case Entry
          |> Repo.get(id)
-         |> Repo.preload(:item)
+         |> Repo.preload(item: [:mods, :category])
          |> Repo.preload(list: [:needs_list, :available_list, :manifest_list]) do
       nil ->
         :not_found
@@ -259,6 +273,20 @@ defmodule Ferry.Aid do
   def create_entry(%NeedsList{} = list, %Item{} = item, attrs) do
     with {:ok, list} <- aid_list_for(list) do
       create_entry(list, item, attrs)
+    end
+  end
+
+  @doc """
+  Updates a list entry.
+
+  """
+  @spec update_entry(Entry.t(), map()) :: {:ok, Entry.t()} | {:error, Ecto.Changeset.t()}
+  def update_entry(entry, attrs) do
+    with {:ok, entry} <-
+           entry
+           |> Entry.update_changeset(attrs)
+           |> Repo.update() do
+      get_entry(entry.id)
     end
   end
 

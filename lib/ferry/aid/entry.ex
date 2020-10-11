@@ -30,7 +30,7 @@ defmodule Ferry.Aid.Entry do
   def update_changeset(entry, params \\ %{}) do
     entry
     |> cast(params, [:amount])
-    |> cast_assoc(:mod_values)
+    # |> cast_assoc(:mod_values)
     |> validate_required([:amount])
     |> validate_number(:amount, greater_than_or_equal_to: 0)
     |> assoc_constraint(:list)
