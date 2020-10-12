@@ -9,6 +9,7 @@ defmodule FerryApi.Schema.NeedsListType do
     field :to, non_null(:date)
 
     field :project, non_null(:project)
+    field :entries, list_of(:needs_list_entry)
   end
 
   payload_object(:needs_list_payload, :needs_list)

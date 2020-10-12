@@ -18,7 +18,25 @@ defmodule Ferry.Aid do
 
   alias Ferry.Aid.AidList
   alias Ferry.Aid.NeedsList
+  alias Ferry.Aid.Entry
+  alias Ferry.AidTaxonomy.Item
   alias Ferry.Profiles.Project
+
+  @doc """
+  Return the aid list for the given id
+
+  """
+  @spec get_aid_list(String.t()) :: {:ok, AidList.t()} | :not_found
+  def get_aid_list(id) do
+    case AidList
+         |> Repo.get(id) do
+      nil ->
+        :not_found
+
+      list ->
+        {:ok, list}
+    end
+  end
 
   # Needs List
   # ================================================================================
@@ -76,7 +94,13 @@ defmodule Ferry.Aid do
     case NeedsList
          |> Repo.get(id)
          |> Repo.preload(project: :group)
-         |> Repo.preload(:entries) do
+         |> Repo.preload(
+           entries: [
+             item: [:mods, :category],
+             list: [:needs_list, :available_list, :manifest_list]
+           ]
+         )
+         |> Repo.preload(:list) do
       nil ->
         :not_found
 
@@ -85,6 +109,7 @@ defmodule Ferry.Aid do
     end
   end
 
+  @spec get_needs_list(Ferry.Profiles.Project.t(), Date.t()) :: any
   def get_needs_list(%Project{} = project, %Date{} = on) do
     query =
       from [needs_list, proj] in needs_list_query(),
@@ -191,5 +216,116 @@ defmodule Ferry.Aid do
       end
 
     Repo.exists?(query)
+  end
+
+  @doc """
+  Counts all entries in the database
+  """
+  @spec count_entries() :: integer()
+  def count_entries() do
+    Entry
+    |> Repo.aggregate(:count, :id)
+  end
+
+  @doc """
+  Returns all entries for a list. A list can be either
+  a needs list, available list or a manifest list
+  """
+  @spec get_entries(NeedsList.t()) :: [Entry.t()]
+  def get_entries(%NeedsList{} = needs) do
+    with {:ok, list} <- aid_list_for(needs) do
+      get_entries(list)
+    end
+  end
+
+  def get_entries(%AidList{} = list) do
+    list_id = list.id
+
+    Entry
+    |> where(list_id: ^list_id)
+    |> Repo.all()
+    |> Repo.preload(item: [:mods, :category])
+    |> Repo.preload(list: [:needs_list, :available_list, :manifest_list])
+  end
+
+  @doc """
+  Fetch a list entry given its id
+
+  """
+  @spec get_entry(String.t()) :: {:ok, Entry.t()} | :not_found
+  def get_entry(id) do
+    case Entry
+         |> Repo.get(id)
+         |> Repo.preload(item: [:mods, :category])
+         |> Repo.preload(list: [:needs_list, :available_list, :manifest_list]) do
+      nil ->
+        :not_found
+
+      entry ->
+        {:ok, entry}
+    end
+  end
+
+  @doc """
+  Creates a new entry for the given item and the given
+  list. A list can be either a needs list, an availability list
+  or a manifest list
+  """
+  @spec create_entry(AidList.t(), Item.t(), map()) ::
+          {:ok, Entry.t()} | {:error, Ecto.Changeset.t()}
+  def create_entry(%AidList{} = list, %Item{} = item, attrs) do
+    attrs =
+      attrs
+      |> Map.put(:item_id, item.id)
+      |> Map.put(:list_id, list.id)
+
+    with {:ok, entry} <-
+           %Entry{}
+           |> Entry.create_changeset(attrs)
+           |> Repo.insert() do
+      get_entry(entry.id)
+    end
+  end
+
+  def create_entry(%NeedsList{} = list, %Item{} = item, attrs) do
+    with {:ok, list} <- aid_list_for(list) do
+      create_entry(list, item, attrs)
+    end
+  end
+
+  @doc """
+  Updates a list entry.
+
+  """
+  @spec update_entry(Entry.t(), map()) :: {:ok, Entry.t()} | {:error, Ecto.Changeset.t()}
+  def update_entry(entry, attrs) do
+    with {:ok, entry} <-
+           entry
+           |> Entry.update_changeset(attrs)
+           |> Repo.update() do
+      get_entry(entry.id)
+    end
+  end
+
+  # Find the aid list for the given concrete list
+  defp aid_list_for(%NeedsList{id: id}) do
+    case Repo.get_by(AidList, needs_list_id: id) do
+      nil ->
+        IO.inspect(Repo.all(AidList))
+        :not_found
+
+      list ->
+        {:ok, list}
+    end
+  end
+
+  @doc """
+  Delete a list entry
+  """
+  @spec delete_entry(Entry.t()) :: {:ok, Entry.t()} | {:error, Ecto.Changeset}
+  def delete_entry(entry) do
+    entry
+    |> Entry.delete_changeset()
+    |> Repo.delete()
   end
 end

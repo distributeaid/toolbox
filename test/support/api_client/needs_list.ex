@@ -20,7 +20,14 @@ defmodule Ferry.ApiClient.NeedsList do
       needsLists(project: "#{attrs.id}", from: "#{from}", to: "#{to}") {
         id,
         from,
-        to
+        to,
+        entries {
+          id,
+          item {
+            id
+          },
+          amount
+        }
       }
     }
     """)
@@ -37,7 +44,14 @@ defmodule Ferry.ApiClient.NeedsList do
       currentNeedsList(project: "#{attrs.id}") {
         id,
         from,
-        to
+        to,
+        entries {
+          id,
+          item {
+            id
+          },
+          amount
+        }
       }
     }
     """)
@@ -56,7 +70,14 @@ defmodule Ferry.ApiClient.NeedsList do
           id
         },
         from,
-        to
+        to,
+        entries {
+          id,
+          item {
+            id
+          },
+          amount
+        }
       }
     }
     """)
@@ -90,7 +111,14 @@ defmodule Ferry.ApiClient.NeedsList do
               id
             }
             from,
-            to
+            to,
+            entries {
+              id,
+              item {
+                id
+              },
+              amount
+            }
           }
         }
       }
@@ -126,7 +154,14 @@ defmodule Ferry.ApiClient.NeedsList do
                 id
               }
               from,
-              to
+              to,
+              entries {
+                id,
+                item {
+                  id
+                },
+                amount
+              }
             }
           }
         }
