@@ -13,9 +13,9 @@ export const FAQFooter = () => {
       </h2>
 
       <ShadowButtonLink
-        className="bg-mfd-cobalt-0 sm:w-auto"
+        className="sm:w-auto"
         external={true}
-        to="https://masksfordocs.com/faq">
+        to="https://example.com/faq">
         {t('chapter.faqLink')}
       </ShadowButtonLink>
     </div>
