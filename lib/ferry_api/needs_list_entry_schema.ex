@@ -15,7 +15,7 @@ defmodule FerryApi.Schema.NeedsListEntry do
   end
 
   object :needs_list_entry_mutations do
-    @desc "Create an entry"
+    @desc "Create an needs list entry"
     field :create_needs_list_entry, type: :needs_list_entry_payload do
       arg(:entry_input, non_null(:entry_input))
       middleware(Middleware.RequireUser)
@@ -23,7 +23,7 @@ defmodule FerryApi.Schema.NeedsListEntry do
       middleware(&build_payload/2)
     end
 
-    @desc "Update a needs list"
+    @desc "Update a needs list entry"
     field :update_needs_list_entry, type: :needs_list_entry_payload do
       arg(:id, non_null(:id))
       arg(:entry_input, non_null(:entry_input))
@@ -32,7 +32,7 @@ defmodule FerryApi.Schema.NeedsListEntry do
       middleware(&build_payload/2)
     end
 
-    @desc "Delete a needs list"
+    @desc "Delete a needs list entry"
     field :delete_needs_list_entry, type: :needs_list_entry_payload do
       arg(:id, non_null(:id))
       middleware(Middleware.RequireUser)
@@ -52,8 +52,15 @@ defmodule FerryApi.Schema.NeedsListEntry do
   @spec entry(any(), %{id: String.t()}, any()) ::
           {:ok, [map()]} | {:error, term()}
   def entry(_, %{id: id}, _) do
-    with :not_found <- Aid.get_entry(id) do
-      {:error, @entry_not_found}
+    case Aid.get_entry(id) do
+      :not_found ->
+        {:error, @entry_not_found}
+
+      {:ok, entry} ->
+        # The entry is linked to the aid_list, which is an implementation detail we do not
+        # want to expose. Instead, we return the needs list so that the caller
+        # does not need to know how things are implemented at the database level.
+        {:ok, %{entry | list: entry.list.needs_list}}
     end
   end
 
@@ -82,7 +89,12 @@ defmodule FerryApi.Schema.NeedsListEntry do
             {:error, @item_not_found}
 
           item ->
-            Aid.create_entry(list, item, Map.drop(attrs, [:list, :item]))
+            # The entry is linked to the aid_list, which is an implementation detail we do not
+            # want to expose. Instead, we return the needs list so that the caller
+            # does not need to know how things are implemented at the database level.
+            with {:ok, entry} <- Aid.create_entry(list, item, Map.drop(attrs, [:list, :item])) do
+              {:ok, %{entry | list: list}}
+            end
         end
     end
   end

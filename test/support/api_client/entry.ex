@@ -10,11 +10,11 @@ defmodule Ferry.ApiClient.Entry do
   Run a GraphQL query that retuns an entry given its
   id
   """
-  @spec get_entry(Plug.Conn.t(), String.t()) :: map()
-  def get_entry(conn, id) do
+  @spec get_needs_list_entry(Plug.Conn.t(), String.t()) :: map()
+  def get_needs_list_entry(conn, id) do
     graphql(conn, """
     {
-      entry(id: "#{id}") {
+      needsListEntry(id: "#{id}") {
         id,
         list {
           id
@@ -76,11 +76,11 @@ defmodule Ferry.ApiClient.Entry do
   We are using an entryInput type for consistency, however,
   in reality only the amount can be changed at the moment.
   """
-  @spec update_entry(Plug.Conn.t(), map()) :: map()
-  def update_entry(conn, attrs) do
+  @spec update_needs_list_entry(Plug.Conn.t(), map()) :: map()
+  def update_needs_list_entry(conn, attrs) do
     graphql(conn, """
       mutation {
-        updateEntry(
+        updateNeedsListEntry(
           id: "#{attrs.id}",
           entryInput: {
             list: "#{attrs.list}",
@@ -111,13 +111,13 @@ defmodule Ferry.ApiClient.Entry do
   end
 
   @doc """
-  Run a GraphQL mutation that deletes a entry, given its id
+  Run a GraphQL mutation that deletes a needs list entry, given its id
   """
-  @spec delete_entry(Plug.Conn.t(), String.t()) :: map()
-  def delete_entry(conn, id) do
+  @spec delete_needs_list_entry(Plug.Conn.t(), String.t()) :: map()
+  def delete_needs_list_entry(conn, id) do
     graphql(conn, """
       mutation {
-        deleteEntry(id: "#{id}") {
+        deleteNeedsListEntry(id: "#{id}") {
           successful,
           messages {
             field
