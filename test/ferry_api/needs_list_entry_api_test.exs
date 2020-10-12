@@ -1,6 +1,6 @@
 defmodule Ferry.EntryApiTest do
   use FerryWeb.ConnCase, async: true
-  import Ferry.ApiClient.{NeedsList, Entry}
+  import Ferry.ApiClient.{NeedsList, NeedsListEntry}
 
   setup context do
     insert(:user)

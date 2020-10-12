@@ -1,4 +1,4 @@
-defmodule Ferry.ApiClient.Entry do
+defmodule Ferry.ApiClient.NeedsListEntry do
   @moduledoc """
   Helper module that provides with a convenience GraphQL client api
   for dealing with Entries in tests.
