@@ -7,6 +7,62 @@ defmodule Ferry.ApiClient.AvailableList do
   import Ferry.ApiClient.GraphCase
 
   @doc """
+  GraphQL query that returns all available lists for a given address
+  """
+  @spec get_available_lists(Plug.Conn.t(), map()) :: map()
+  def get_available_lists(conn, attrs) do
+    graphql(conn, """
+    {
+      availableLists(at: "#{attrs.address}") {
+        id,
+        at {
+          id,
+          group {
+            id,
+            name
+          }
+        }
+        entries {
+          id,
+          item {
+            id
+          },
+          amount
+        }
+      }
+    }
+    """)
+  end
+
+  @doc """
+  GraphQL query that returns an available list given its id
+  """
+  @spec get_available_list(Plug.Conn.t(), String.t()) :: map()
+  def get_available_list(conn, id) do
+    graphql(conn, """
+    {
+      availableList(id: "#{id}") {
+        id,
+        at {
+          id,
+          group {
+            id,
+            name
+          }
+        }
+        entries {
+          id,
+          item {
+            id
+          },
+          amount
+        }
+      }
+    }
+    """)
+  end
+
+  @doc """
   Run a GraphQL mutation that creates an available list
   """
   @spec create_available_list(Plug.Conn.t(), map()) :: map()
@@ -15,7 +71,7 @@ defmodule Ferry.ApiClient.AvailableList do
       mutation {
         createAvailableList(
           availableListInput: {
-            address: "#{attrs.project}",
+            at: "#{attrs.address}",
           }
         ) {
           successful,
@@ -25,7 +81,7 @@ defmodule Ferry.ApiClient.AvailableList do
           },
           result {
             id,
-            address {
+            at {
               id,
               group {
                 id,
@@ -55,7 +111,7 @@ defmodule Ferry.ApiClient.AvailableList do
         updateAvailableList(
             id: "#{attrs.id}",
             availableListInput: {
-              address: "#{attrs.address}"
+              at: "#{attrs.address}"
             }
           ) {
             successful,
@@ -65,7 +121,7 @@ defmodule Ferry.ApiClient.AvailableList do
             },
             result {
               id,
-              address {
+              at {
                 id,
                 group {
                   id,

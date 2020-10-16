@@ -1,61 +1,61 @@
-defmodule Ferry.NeedsListEntryApiTest do
+defmodule Ferry.AvailableListEntryApiTest do
   use FerryWeb.ConnCase, async: true
-  import Ferry.ApiClient.{NeedsList, NeedsListEntry}
+  import Ferry.ApiClient.{AvailableList, AvailableListEntry}
 
   setup context do
     insert(:user)
     |> mock_sign_in
 
-    Ferry.Fixture.NeedsWithEntry.setup(context)
+    Ferry.Fixture.AvailableListWithEntry.setup(context)
   end
 
-  describe "needs list entry graphql api" do
-    test "needs list also returns its entries", %{conn: conn, needs: needs, entry: entry} do
+  describe "available list entry graphql api" do
+    test "available list also returns its entries", %{conn: conn, available: id, entry: entry} do
       %{
         "data" => %{
-          "needsList" => %{
-            "id" => ^needs,
+          "availableList" => %{
+            "id" => ^id,
             "entries" => [%{"id" => ^entry}]
           }
         }
-      } = get_needs_list(conn, needs)
+      } = get_available_list(conn, id)
     end
 
-    test "creates need list entries", %{conn: conn, needs: needs, item: item} do
+    test "creates available list entries", %{conn: conn, available: id, item: item} do
       %{
         "data" => %{
-          "createNeedsListEntry" => %{
+          "createAvailableListEntry" => %{
             "successful" => true,
             "messages" => [],
             "result" => %{
               "id" => _,
               "amount" => 1,
               "item" => %{"id" => ^item},
-              "list" => %{"id" => ^needs}
+              "list" => %{"id" => ^id}
             }
           }
         }
       } =
-        create_needs_list_entry(conn, %{
-          list: needs,
+        create_available_list_entry(conn, %{
+          list: id,
           item: item,
           amount: 1
         })
 
       %{
         "data" => %{
-          "needsList" => %{
-            "id" => ^needs,
+          "availableList" => %{
+            "id" => ^id,
             "entries" => [_, _]
           }
         }
-      } = get_needs_list(conn, needs)
+      } = get_available_list(conn, id)
     end
 
-    test "deletes needs list entries", %{conn: conn, needs: needs, entry: entry} do
+    test "deletes available list entries", %{conn: conn, available: id, entry: entry} do
       %{
         "data" => %{
-          "deleteNeedsListEntry" => %{
+          "deleteAvailableListEntry" => %{
             "successful" => true,
             "messages" => [],
             "result" => %{
@@ -63,27 +63,27 @@ defmodule Ferry.NeedsListEntryApiTest do
             }
           }
         }
-      } = delete_needs_list_entry(conn, entry)
+      } = delete_available_list_entry(conn, entry)
 
       %{
         "data" => %{
-          "needsList" => %{
-            "id" => ^needs,
+          "availableList" => %{
+            "id" => ^id,
             "entries" => []
           }
         }
-      } = get_needs_list(conn, needs)
+      } = get_available_list(conn, id)
     end
 
-    test "updates an needs list entry amount", %{
+    test "updates an available list entry amount", %{
       conn: conn,
-      needs: needs,
+      available: id,
       item: item,
       entry: entry
     } do
       %{
         "data" => %{
-          "updateNeedsListEntry" => %{
+          "updateAvailableListEntry" => %{
             "successful" => true,
             "messages" => [],
             "result" => %{
@@ -92,33 +92,33 @@ defmodule Ferry.NeedsListEntryApiTest do
           }
         }
       } =
-        update_needs_list_entry(conn, %{
+        update_available_list_entry(conn, %{
           id: entry,
-          list: needs,
+          list: id,
           item: item,
           amount: 2
         })
 
       %{
         "data" => %{
-          "needsList" => %{
-            "id" => ^needs,
+          "availableList" => %{
+            "id" => ^id,
             "entries" => [%{"amount" => 2}]
           }
         }
-      } = get_needs_list(conn, needs)
+      } = get_available_list(conn, id)
 
       %{
         "data" => %{
-          "needsListEntry" => %{
+          "availableListEntry" => %{
             "id" => ^entry,
             "list" => %{
-              "id" => ^needs
+              "id" => ^id
             },
             "amount" => 2
           }
         }
-      } = get_needs_list_entry(conn, entry)
+      } = get_available_list_entry(conn, entry)
     end
   end
 end

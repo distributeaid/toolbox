@@ -22,6 +22,7 @@ defmodule Ferry.Aid do
   alias Ferry.Aid.Entry
   alias Ferry.AidTaxonomy.Item
   alias Ferry.Profiles.Project
+  alias Ferry.Locations.Address
 
   @doc """
   Return the aid list for the given id
@@ -245,7 +246,7 @@ defmodule Ferry.Aid do
   @doc """
   Returns all available lists for a given address
   """
-  @spec get_available_list(Address.t()) :: [AvailableList.t()]
+  @spec get_available_lists(Address.t()) :: [AvailableList.t()]
   def get_available_lists(address) do
     address_id = address.id
 
@@ -353,7 +354,7 @@ defmodule Ferry.Aid do
   list. A list can be either a needs list, an availability list
   or a manifest list
   """
-  @spec create_entry(AidList.t(), Item.t(), map()) ::
+  @spec create_entry(AidList.t() | NeedsList.t() | AvailableList.t(), Item.t(), map()) ::
           {:ok, Entry.t()} | {:error, Ecto.Changeset.t()}
   def create_entry(%AidList{} = list, %Item{} = item, attrs) do
     attrs =
