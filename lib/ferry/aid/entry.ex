@@ -5,6 +5,8 @@ defmodule Ferry.Aid.Entry do
   alias Ferry.Aid.AidList
   alias Ferry.AidTaxonomy.Item
 
+  @type t() :: %__MODULE__{}
+
   schema "aid__list_entries" do
     field :amount, :integer, default: 0
 

@@ -18,9 +18,11 @@ defmodule Ferry.Aid do
 
   alias Ferry.Aid.AidList
   alias Ferry.Aid.NeedsList
+  alias Ferry.Aid.AvailableList
   alias Ferry.Aid.Entry
   alias Ferry.AidTaxonomy.Item
   alias Ferry.Profiles.Project
+  alias Ferry.Locations.Address
 
   @doc """
   Return the aid list for the given id
@@ -219,6 +221,81 @@ defmodule Ferry.Aid do
   end
 
   @doc """
+  Returns an available list given its id
+  """
+  @spec get_available_list(integer()) :: {:ok, AvailableList.t()} | :not_found
+  def get_available_list(id) do
+    case AvailableList
+         |> Repo.get(id)
+         |> Repo.preload(at: [:project, :group])
+         |> Repo.preload(
+           entries: [
+             item: [:mods, :category],
+             list: [:needs_list, :available_list, :manifest_list]
+           ]
+         )
+         |> Repo.preload(:list) do
+      nil ->
+        :not_found
+
+      available_list ->
+        {:ok, available_list}
+    end
+  end
+
+  @doc """
+  Returns all available lists for a given address
+  """
+  @spec get_available_lists(Address.t()) :: [AvailableList.t()]
+  def get_available_lists(address) do
+    address_id = address.id
+
+    from(available_list in AvailableList,
+      where: available_list.address_id == ^address_id
+    )
+    |> Repo.all()
+    |> Repo.preload(at: [:project, :group])
+    |> Repo.preload(
+      entries: [
+        item: [:mods, :category],
+        list: [:needs_list, :available_list, :manifest_list]
+      ]
+    )
+    |> Repo.preload(:list)
+  end
+
+  @doc """
+  Creates a new available list for the given address
+  """
+  @spec create_available_list(Address.t(), map()) ::
+          {:ok, AvailableList.t()} | {:error, Ecto.Changeset.t()}
+  def create_available_list(address, attrs \\ %{}) do
+    attrs =
+      attrs
+      |> Map.put(:address_id, address.id)
+
+    with {:ok, available_list} <-
+           %AvailableList{}
+           |> AvailableList.create_changeset(attrs)
+           |> Changeset.put_assoc(:list, %AidList{entries: []})
+           |> Repo.insert() do
+      get_available_list(available_list.id)
+    end
+  end
+
+  @doc """
+  Deletes an available list.
+
+  If the list has entries, they will also be deleted
+  """
+  @spec delete_available_list(AvailableList.t()) ::
+          {:ok, AvailableList.t()} | {:error, Ecto.Changeset.t()}
+  def delete_available_list(%AvailableList{} = list) do
+    list
+    |> Repo.delete()
+  end
+
+  @doc """
   Counts all entries in the database
   """
   @spec count_entries() :: integer()
@@ -231,9 +308,15 @@ defmodule Ferry.Aid do
   Returns all entries for a list. A list can be either
   a needs list, available list or a manifest list
   """
-  @spec get_entries(NeedsList.t()) :: [Entry.t()]
+  @spec get_entries(NeedsList.t() | AvailableList.t()) :: [Entry.t()]
   def get_entries(%NeedsList{} = needs) do
     with {:ok, list} <- aid_list_for(needs) do
+      get_entries(list)
+    end
+  end
+
+  def get_entries(%AvailableList{} = available) do
+    with {:ok, list} <- aid_list_for(available) do
       get_entries(list)
     end
   end
@@ -271,7 +354,7 @@ defmodule Ferry.Aid do
   list. A list can be either a needs list, an availability list
   or a manifest list
   """
-  @spec create_entry(AidList.t(), Item.t(), map()) ::
+  @spec create_entry(AidList.t() | NeedsList.t() | AvailableList.t(), Item.t(), map()) ::
           {:ok, Entry.t()} | {:error, Ecto.Changeset.t()}
   def create_entry(%AidList{} = list, %Item{} = item, attrs) do
     attrs =
@@ -288,6 +371,12 @@ defmodule Ferry.Aid do
   end
 
   def create_entry(%NeedsList{} = list, %Item{} = item, attrs) do
+    with {:ok, list} <- aid_list_for(list) do
+      create_entry(list, item, attrs)
+    end
+  end
+
+  def create_entry(%AvailableList{} = list, %Item{} = item, attrs) do
     with {:ok, list} <- aid_list_for(list) do
       create_entry(list, item, attrs)
     end
@@ -311,7 +400,16 @@ defmodule Ferry.Aid do
   defp aid_list_for(%NeedsList{id: id}) do
     case Repo.get_by(AidList, needs_list_id: id) do
       nil ->
-        IO.inspect(Repo.all(AidList))
+        :not_found
+
+      list ->
+        {:ok, list}
+    end
+  end
+
+  defp aid_list_for(%AvailableList{id: id}) do
+    case Repo.get_by(AidList, available_list_id: id) do
+      nil ->
         :not_found
 
       list ->

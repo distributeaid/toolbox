@@ -5,10 +5,11 @@ defmodule Ferry.AidTest do
   alias Ferry.Repo
   alias Timex
 
+  alias Ferry.Locations
   alias Ferry.Aid
   alias Ferry.AidTaxonomy
   alias Ferry.Aid.AidList
-  #  alias Ferry.Aid.AvailableList
+  # alias Ferry.Aid.AvailableList
   alias Ferry.Aid.Entry
   #  alias Ferry.Aid.ManifestList
   #  alias Ferry.Aid.ModValue
@@ -246,6 +247,90 @@ defmodule Ferry.AidTest do
                  join: list in assoc(entry, :list),
                  where: list.needs_list_id == ^needs.id
              )
+    end
+  end
+
+  describe "available list" do
+    setup context do
+      project = insert(:project)
+      group = project.group
+
+      {:ok, category} =
+        AidTaxonomy.create_category(%{
+          name: "test category",
+          description: "test category"
+        })
+
+      {:ok, item} =
+        AidTaxonomy.create_item(category, %{
+          name: "test item"
+        })
+
+      {:ok, address} =
+        Locations.create_address(group, %{
+          label: "default",
+          province: "Andalusia",
+          country_code: "ES",
+          postal_code: "29620",
+          street: "Surinam",
+          city: "Torremolinos",
+          opening_hour: "08:00",
+          closing_hour: "20:00",
+          type: "residential",
+          has_loading_equipment: false,
+          has_unloading_equipment: false,
+          needs_appointment: false
+        })
+
+      {:ok, available_list} = Aid.create_available_list(address)
+
+      {:ok,
+       Map.merge(context, %{
+         address: address,
+         item: item,
+         category: category,
+         group: group,
+         available: available_list
+       })}
+    end
+
+    test "lists available lists", %{address: address, available: available_list} do
+      assert [^available_list] = Aid.get_available_lists(address)
+    end
+
+    test "deletes an available list", %{address: address, available: available_list} do
+      {:ok, _} = Aid.delete_available_list(available_list)
+      assert [] = Aid.get_available_lists(address)
+      assert :not_found = Aid.get_available_list(available_list.id)
+    end
+
+    test "adds an entry to an available list", %{item: item, available: available_list} do
+      {:ok, entry} = Aid.create_entry(available_list, item, %{amount: 1})
+
+      assert entry.list
+      assert entry.item
+
+      assert item.id == entry.item.id
+      assert available_list.id == entry.list.available_list.id
+
+      assert [entry] == Aid.get_entries(available_list)
+    end
+
+    test "removes an entry from an available list", %{item: item, available: available_list} do
+      assert {:ok, entry} = Aid.create_entry(available_list, item, %{amount: 1})
+
+      {:ok, _} = Aid.delete_entry(entry)
+      assert [] == Aid.get_entries(available_list)
+    end
+
+    test "deletes available lists event if they are not empty", %{
+      item: item,
+      available: available_list
+    } do
+      {:ok, _} = Aid.create_entry(available_list, item, %{amount: 1})
+      assert 1 == Aid.count_entries()
+      {:ok, _} = Aid.delete_available_list(available_list)
+      assert 0 == Aid.count_entries()
     end
   end
 

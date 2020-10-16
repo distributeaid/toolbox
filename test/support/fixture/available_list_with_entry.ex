@@ -1,5 +1,5 @@
-defmodule Ferry.Fixture.NeedsWithEntry do
-  import Ferry.ApiClient.{Group, Project, NeedsList, Category, Item, NeedsListEntry}
+defmodule Ferry.Fixture.AvailableListWithEntry do
+  import Ferry.ApiClient.{Address, Group, AvailableList, Category, Item, AvailableListEntry}
 
   def setup(%{conn: conn} = context) do
     %{
@@ -15,34 +15,28 @@ defmodule Ferry.Fixture.NeedsWithEntry do
 
     %{
       "data" => %{
-        "createProject" => %{
+        "createAddress" => %{
           "successful" => true,
+          "messages" => [],
           "result" => %{
-            "id" => project
+            "id" => address
           }
         }
       }
-    } =
-      create_project(conn, %{
-        group: group,
-        name: "a project",
-        description: "a project"
-      })
+    } = create_address(conn, %{group: group, label: "test"})
 
     %{
       "data" => %{
-        "createNeedsList" => %{
+        "createAvailableList" => %{
           "successful" => true,
           "result" => %{
-            "id" => needs_list
+            "id" => available_list
           }
         }
       }
     } =
-      create_needs_list(conn, %{
-        project: project,
-        from: DateTime.utc_now() |> DateTime.add(-1 * 24 * 3600, :second),
-        to: DateTime.utc_now() |> DateTime.add(2 * 24 * 3600, :second)
+      create_available_list(conn, %{
+        address: address
       })
 
     %{
@@ -73,7 +67,7 @@ defmodule Ferry.Fixture.NeedsWithEntry do
 
     %{
       "data" => %{
-        "createNeedsListEntry" => %{
+        "createAvailableListEntry" => %{
           "successful" => true,
           "result" => %{
             "id" => entry
@@ -81,16 +75,16 @@ defmodule Ferry.Fixture.NeedsWithEntry do
         }
       }
     } =
-      create_needs_list_entry(conn, %{
-        list: needs_list,
+      create_available_list_entry(conn, %{
+        list: available_list,
         item: item,
         amount: 1
       })
 
     {:ok,
      Map.merge(context, %{
-       needs: needs_list,
-       project: project,
+       address: address,
+       available: available_list,
        item: item,
        entry: entry
      })}

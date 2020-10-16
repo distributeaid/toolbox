@@ -4,6 +4,8 @@ defmodule Ferry.Aid.AvailableList do
 
   alias Ferry.Aid.AidList
 
+  @type t() :: %__MODULE__{}
+
   schema "aid__available_lists" do
     belongs_to :at, Ferry.Locations.Address, foreign_key: :address_id
 

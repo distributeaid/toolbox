@@ -173,7 +173,7 @@ defmodule FerryApi.Schema.NeedsList do
 
   """
   @spec delete_needs_list(any(), %{id: String.t()}, any()) ::
-          {:ok, [map()]} | {:error, term()}
+          {:ok, map()} | {:error, term()}
   def delete_needs_list(_, %{id: id}, _) do
     case Aid.get_needs_list(id) do
       :not_found ->
