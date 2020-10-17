@@ -20,7 +20,9 @@ defmodule Ferry.Aid do
   alias Ferry.Aid.NeedsList
   alias Ferry.Aid.AvailableList
   alias Ferry.Aid.Entry
+  alias Ferry.Aid.EntryModValue
   alias Ferry.AidTaxonomy.Item
+  alias Ferry.AidTaxonomy.ModValue
   alias Ferry.Profiles.Project
   alias Ferry.Locations.Address
 
@@ -99,6 +101,7 @@ defmodule Ferry.Aid do
          |> Repo.preload(
            entries: [
              item: [:mods, :category],
+             mod_values: [mod_value: [:mod]],
              list: [:needs_list, :available_list, :manifest_list]
            ]
          )
@@ -231,6 +234,7 @@ defmodule Ferry.Aid do
          |> Repo.preload(
            entries: [
              item: [:mods, :category],
+             mod_values: [mod_value: [:mod]],
              list: [:needs_list, :available_list, :manifest_list]
            ]
          )
@@ -258,6 +262,7 @@ defmodule Ferry.Aid do
     |> Repo.preload(
       entries: [
         item: [:mods, :category],
+        mod_values: [mod_value: [:mod]],
         list: [:needs_list, :available_list, :manifest_list]
       ]
     )
@@ -328,6 +333,7 @@ defmodule Ferry.Aid do
     |> where(list_id: ^list_id)
     |> Repo.all()
     |> Repo.preload(item: [:mods, :category])
+    |> Repo.preload(mod_values: [mod_value: [:mod]])
     |> Repo.preload(list: [:needs_list, :available_list, :manifest_list])
   end
 
@@ -340,6 +346,7 @@ defmodule Ferry.Aid do
     case Entry
          |> Repo.get(id)
          |> Repo.preload(item: [:mods, :category])
+         |> Repo.preload(mod_values: [mod_value: [:mod]])
          |> Repo.preload(list: [:needs_list, :available_list, :manifest_list]) do
       nil ->
         :not_found
@@ -425,5 +432,35 @@ defmodule Ferry.Aid do
     entry
     |> Entry.delete_changeset()
     |> Repo.delete()
+  end
+
+  @doc """
+  Adds the given mod value to the given list entry
+  """
+  @spec add_mod_value_to_entry(ModValue.t(), Entry.t()) :: :ok | {:error, Ecto.Changeset.t()}
+  def add_mod_value_to_entry(%ModValue{} = mod_value, %Entry{} = entry) do
+    with {:ok, _} <-
+           %EntryModValue{}
+           |> EntryModValue.changeset(%{entry_id: entry.id, mod_value_id: mod_value.id})
+           |> Repo.insert() do
+      :ok
+    end
+  end
+
+  @doc """
+  Removes the given mod_value from the given list entry
+  """
+  @spec remove_mod_value_from_entry(ModValue.t(), Entry.t()) :: :ok | {:error, Ecto.Changeset.t()}
+  def remove_mod_value_from_entry(%ModValue{} = mod_value, %Entry{} = entry) do
+    mod_value_id = mod_value.id
+    entry_id = entry.id
+
+    with {_, nil} <-
+           from(v in EntryModValue,
+             where: v.mod_value_id == ^mod_value_id and v.entry_id == ^entry_id
+           )
+           |> Repo.delete_all() do
+      :ok
+    end
   end
 end
