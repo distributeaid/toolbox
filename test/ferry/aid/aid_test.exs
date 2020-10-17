@@ -497,7 +497,7 @@ defmodule Ferry.AidTest do
       :ok = Aid.add_mod_value_to_entry(red, entry)
       {:error, e} = Aid.add_mod_value_to_entry(red, entry)
       assert e.errors
-      [entry: {"already exists", _}] = e.errors
+      [mod_value: {"has too many values", _}] = e.errors
 
       {:ok, entry} = Aid.get_entry(entry.id)
 
@@ -524,13 +524,34 @@ defmodule Ferry.AidTest do
       assert 0 == length(entry.mod_values)
     end
 
-    test "checks for allowed mod values" do
+    test "checks for allowed mod values", %{large: large, entry: entry} do
+      # size is not a mod in the original shirt item so it should
+      # not be allowed to add a large mod value to the entry
+      {:error, e} = Aid.add_mod_value_to_entry(large, entry)
+      assert e.errors
+      assert [mod_value: {"must be within the entry's item mod values", _}] = e.errors
     end
 
-    test "does not allow too many mod values" do
+    test "does not allow too many mod values", %{red: red, yellow: yellow, entry: entry} do
+      :ok = Aid.add_mod_value_to_entry(red, entry)
+
+      # If the shirt is red, since the color is a simple select, then
+      # it cannot be also yellow.
+      {:error, e} = Aid.add_mod_value_to_entry(yellow, entry)
+      assert e.errors
+      assert [mod_value: {"has too many values", _}] = e.errors
     end
 
-    test "are deleted when the entry is deleted" do
+    test "are deleted when the entry is deleted", %{red: red, entry: entry} do
+      assert 0 == Aid.count_entry_mod_values()
+      :ok = Aid.add_mod_value_to_entry(red, entry)
+      assert 1 == Aid.count_entries()
+      assert 1 == Aid.count_entry_mod_values()
+
+      {:ok, _} = Aid.delete_entry(entry)
+      assert 0 == Aid.count_entries()
+      assert 0 == Aid.count_entry_mod_values()
+      assert 4 == AidTaxonomy.count_mod_values()
     end
   end
 end

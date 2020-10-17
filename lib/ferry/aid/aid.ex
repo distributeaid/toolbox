@@ -338,16 +338,32 @@ defmodule Ferry.Aid do
   end
 
   @doc """
-  Fetch a list entry given its id
+  Fetch a list entry given its id.any()
+
+  This function offers some flexibility in the way mod_values are preloaded, via opts:
+
+  *  setting `item_preload` to `with_mod_values` will preload the entry's item mods, and for
+     each mod, it will also preload all mod_values. Otherwise, only the mod is pre-loaded.
 
   """
-  @spec get_entry(String.t()) :: {:ok, Entry.t()} | :not_found
-  def get_entry(id) do
+  @spec get_entry(String.t(), Keyword.t()) :: {:ok, Entry.t()} | :not_found
+  def get_entry(id, opts \\ []) do
+    # Choose whether we want to preload all mod_values for each
+    # mod associated to the entry via its item mod_values
+    item_preload =
+      case opts[:item_preload] do
+        :with_mod_values ->
+          [mods: [:values], category: []]
+
+        _ ->
+          [:mods, :category]
+      end
+
     case Entry
          |> Repo.get(id)
-         |> Repo.preload(item: [:mods, :category])
-         |> Repo.preload(mod_values: [mod_value: [:mod]])
-         |> Repo.preload(list: [:needs_list, :available_list, :manifest_list]) do
+         |> Repo.preload(item: item_preload)
+         |> Repo.preload(list: [:needs_list, :available_list, :manifest_list])
+         |> Repo.preload(mod_values: [mod_value: [:mod]]) do
       nil ->
         :not_found
 
@@ -432,6 +448,16 @@ defmodule Ferry.Aid do
     entry
     |> Entry.delete_changeset()
     |> Repo.delete()
+  end
+
+  @doc """
+  Counts all mod values associated to existing list entries
+
+  """
+  @spec count_entry_mod_values() :: integer()
+  def count_entry_mod_values() do
+    EntryModValue
+    |> Repo.aggregate(:count, :id)
   end
 
   @doc """
