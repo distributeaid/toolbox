@@ -183,9 +183,7 @@ defmodule Ferry.ApiClient.Group do
           volunteerForm: "#{group_attrs.volunteer_form}",
           volunteerFormResults: "#{group_attrs.volunteer_form_results}",
           donationForm: "#{group_attrs.donation_form}",
-          donationFormResults: "#{group_attrs.donation_form_results}",
-
-          addresses:[]
+          donationFormResults: "#{group_attrs.donation_form_results}"
         }
       ) {
         successful

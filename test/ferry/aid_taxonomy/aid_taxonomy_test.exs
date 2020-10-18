@@ -218,7 +218,9 @@ defmodule Ferry.AidTaxonomyTest do
       attrs = params_for(:aid_item)
       attrs = %{attrs | mods: [mod1, mod2]}
       assert {:ok, %Item{} = item} = AidTaxonomy.create_item(category, attrs)
-      assert item.mods == [mod1, mod2]
+      assert 2 == length(item.mods)
+      assert Enum.member?(item.mods, mod1)
+      assert Enum.member?(item.mods, mod2)
     end
 
     # TODO: ensure each changeset has the right errors
