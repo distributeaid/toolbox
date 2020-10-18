@@ -4,7 +4,6 @@ defmodule FerryApi.Schema.Group do
   import AbsintheErrorPayload.Payload
 
   alias Ferry.Profiles
-  alias Ferry.Locations
   alias FerryApi.Middleware
 
   # Query
@@ -52,8 +51,6 @@ defmodule FerryApi.Schema.Group do
     field :volunteer_form_results, :string
     field :donation_form, :string
     field :donation_form_results, :string
-
-    field :addresses, list_of(:address_input)
   end
 
   object :group_mutations do
@@ -115,10 +112,7 @@ defmodule FerryApi.Schema.Group do
   def create_group(_parent, %{group_input: group_attrs}, _resolution) do
     case Profiles.create_group(group_attrs) do
       {:ok, group} ->
-        case Locations.create_addresses(group, group_attrs.addresses) do
-          {:ok, addresses} -> {:ok, %{group | addresses: addresses}}
-          {:error, _, changeset} -> {:error, changeset}
-        end
+        {:ok, %{group | addresses: []}}
 
       {:error, changeset} ->
         {:error, changeset}
