@@ -9,6 +9,7 @@ defmodule FerryApi.Schema.NeedsListEntryType do
 
     field :list, non_null(:needs_list)
     field :item, non_null(:item)
+    field :mod_values, list_of(:list_entry_mod_value)
   end
 
   payload_object(:needs_list_entry_payload, :needs_list_entry)

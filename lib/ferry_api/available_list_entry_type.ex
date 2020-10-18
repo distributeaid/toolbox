@@ -9,6 +9,7 @@ defmodule FerryApi.Schema.AvailableListEntryType do
 
     field :list, non_null(:available_list)
     field :item, non_null(:item)
+    field :mod_values, list_of(:list_entry_mod_value)
   end
 
   payload_object(:available_list_entry_payload, :available_list_entry)

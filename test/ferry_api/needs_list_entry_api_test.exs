@@ -6,7 +6,7 @@ defmodule Ferry.NeedsListEntryApiTest do
     insert(:user)
     |> mock_sign_in
 
-    Ferry.Fixture.NeedsWithEntry.setup(context)
+    Ferry.Fixture.NeedsListWithEntry.setup(context)
   end
 
   describe "needs list entry graphql api" do
