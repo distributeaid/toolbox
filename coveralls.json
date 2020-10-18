@@ -1,0 +1,7 @@
+{
+    "skip_files": [
+        "test",
+        "lib/ferry_web/router.ex",
+        "lib/ferry_web/endpoint.ex"
+    ]
+}

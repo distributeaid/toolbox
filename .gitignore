@@ -48,3 +48,4 @@ priv/plts/*.plt.hash
 schemaspy
 
 .vscode
+.elixir_ls
