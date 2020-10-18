@@ -1,5 +1,5 @@
-defmodule Ferry.Fixture.NeedsWithEntry do
-  import Ferry.ApiClient.{Group, Project, NeedsList, Category, Item, Entry}
+defmodule Ferry.Fixture.NeedsListWithEntry do
+  import Ferry.ApiClient.{Group, Project, NeedsList, Category, Item, NeedsListEntry}
 
   def setup(%{conn: conn} = context) do
     %{

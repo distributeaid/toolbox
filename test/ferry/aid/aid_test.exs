@@ -5,10 +5,11 @@ defmodule Ferry.AidTest do
   alias Ferry.Repo
   alias Timex
 
+  alias Ferry.Locations
   alias Ferry.Aid
   alias Ferry.AidTaxonomy
   alias Ferry.Aid.AidList
-  #  alias Ferry.Aid.AvailableList
+  # alias Ferry.Aid.AvailableList
   alias Ferry.Aid.Entry
   #  alias Ferry.Aid.ManifestList
   #  alias Ferry.Aid.ModValue
@@ -249,6 +250,90 @@ defmodule Ferry.AidTest do
     end
   end
 
+  describe "available list" do
+    setup context do
+      project = insert(:project)
+      group = project.group
+
+      {:ok, category} =
+        AidTaxonomy.create_category(%{
+          name: "test category",
+          description: "test category"
+        })
+
+      {:ok, item} =
+        AidTaxonomy.create_item(category, %{
+          name: "test item"
+        })
+
+      {:ok, address} =
+        Locations.create_address(group, %{
+          label: "default",
+          province: "Andalusia",
+          country_code: "ES",
+          postal_code: "29620",
+          street: "Surinam",
+          city: "Torremolinos",
+          opening_hour: "08:00",
+          closing_hour: "20:00",
+          type: "residential",
+          has_loading_equipment: false,
+          has_unloading_equipment: false,
+          needs_appointment: false
+        })
+
+      {:ok, available_list} = Aid.create_available_list(address)
+
+      {:ok,
+       Map.merge(context, %{
+         address: address,
+         item: item,
+         category: category,
+         group: group,
+         available: available_list
+       })}
+    end
+
+    test "lists available lists", %{address: address, available: available_list} do
+      assert [^available_list] = Aid.get_available_lists(address)
+    end
+
+    test "deletes an available list", %{address: address, available: available_list} do
+      {:ok, _} = Aid.delete_available_list(available_list)
+      assert [] = Aid.get_available_lists(address)
+      assert :not_found = Aid.get_available_list(available_list.id)
+    end
+
+    test "adds an entry to an available list", %{item: item, available: available_list} do
+      {:ok, entry} = Aid.create_entry(available_list, item, %{amount: 1})
+
+      assert entry.list
+      assert entry.item
+
+      assert item.id == entry.item.id
+      assert available_list.id == entry.list.available_list.id
+
+      assert [entry] == Aid.get_entries(available_list)
+    end
+
+    test "removes an entry from an available list", %{item: item, available: available_list} do
+      assert {:ok, entry} = Aid.create_entry(available_list, item, %{amount: 1})
+
+      {:ok, _} = Aid.delete_entry(entry)
+      assert [] == Aid.get_entries(available_list)
+    end
+
+    test "deletes available lists event if they are not empty", %{
+      item: item,
+      available: available_list
+    } do
+      {:ok, _} = Aid.create_entry(available_list, item, %{amount: 1})
+      assert 1 == Aid.count_entries()
+      {:ok, _} = Aid.delete_available_list(available_list)
+      assert 0 == Aid.count_entries()
+    end
+  end
+
   describe "list entries" do
     setup context do
       project = insert(:project)
@@ -333,6 +418,140 @@ defmodule Ferry.AidTest do
 
       {:ok, entry} = Aid.get_entry(entry.id)
       assert item == entry.item
+    end
+  end
+
+  describe "list entry mod value" do
+    setup context do
+      project = insert(:project)
+
+      {:ok, clothes} =
+        AidTaxonomy.create_category(%{
+          name: "clothes",
+          description: "clothes"
+        })
+
+      {:ok, shirt} =
+        AidTaxonomy.create_item(clothes, %{
+          name: "shirt"
+        })
+
+      {:ok, color} =
+        AidTaxonomy.create_mod(%{
+          name: "color",
+          type: "select",
+          description: "color"
+        })
+
+      {:ok, size} =
+        AidTaxonomy.create_mod(%{
+          name: "size",
+          type: "select",
+          description: "size"
+        })
+
+      :ok = AidTaxonomy.add_mod_to_item(color, shirt)
+
+      {:ok, red} =
+        AidTaxonomy.create_mod_value(color, %{
+          value: "red"
+        })
+
+      {:ok, yellow} =
+        AidTaxonomy.create_mod_value(color, %{
+          value: "yellow"
+        })
+
+      {:ok, regular} =
+        AidTaxonomy.create_mod_value(size, %{
+          value: "regular"
+        })
+
+      {:ok, large} =
+        AidTaxonomy.create_mod_value(size, %{
+          value: "large"
+        })
+
+      from = DateTime.utc_now()
+      to = DateTime.utc_now() |> DateTime.add(24 * 3600, :second)
+
+      {:ok, needs} = Aid.create_needs_list(project, %{from: from, to: to})
+
+      {:ok, entry} = Aid.create_entry(needs, shirt, %{amount: 1})
+
+      {:ok,
+       Map.merge(context, %{
+         shirt: shirt,
+         color: color,
+         clothes: clothes,
+         red: red,
+         yellow: yellow,
+         regular: regular,
+         large: large,
+         needs: needs,
+         entry: entry
+       })}
+    end
+
+    test "can be added to an existing list entry", %{color: color, red: red, entry: entry} do
+      :ok = Aid.add_mod_value_to_entry(red, entry)
+      {:error, e} = Aid.add_mod_value_to_entry(red, entry)
+      assert e.errors
+      [mod_value: {"has too many values", _}] = e.errors
+
+      {:ok, entry} = Aid.get_entry(entry.id)
+
+      # Verify we can find the right mod value (red) and the right mod (color)
+      # associated to the entry
+      assert [mod_value] = entry.mod_values
+      assert red.value == mod_value.mod_value.value
+      assert color.name == mod_value.mod_value.mod.name
+    end
+
+    test "can be removed from an existing list entry", %{red: red, entry: entry} do
+      {:ok, entry} = Aid.get_entry(entry.id)
+      assert 0 == length(entry.mod_values)
+
+      :ok = Aid.remove_mod_value_from_entry(red, entry)
+      :ok = Aid.add_mod_value_to_entry(red, entry)
+
+      {:ok, entry} = Aid.get_entry(entry.id)
+      assert 1 == length(entry.mod_values)
+
+      :ok = Aid.remove_mod_value_from_entry(red, entry)
+
+      {:ok, entry} = Aid.get_entry(entry.id)
+      assert 0 == length(entry.mod_values)
+    end
+
+    test "checks for allowed mod values", %{large: large, entry: entry} do
+      # size is not a mod in the original shirt item so it should
+      # not be allowed to add a large mod value to the entry
+      {:error, e} = Aid.add_mod_value_to_entry(large, entry)
+      assert e.errors
+      assert [mod_value: {"must be within the entry's item mod values", _}] = e.errors
+    end
+
+    test "does not allow too many mod values", %{red: red, yellow: yellow, entry: entry} do
+      :ok = Aid.add_mod_value_to_entry(red, entry)
+
+      # If the shirt is red, since the color is a simple select, then
+      # it cannot be also yellow.
+      {:error, e} = Aid.add_mod_value_to_entry(yellow, entry)
+      assert e.errors
+      assert [mod_value: {"has too many values", _}] = e.errors
+    end
+
+    test "are deleted when the entry is deleted", %{red: red, entry: entry} do
+      assert 0 == Aid.count_entry_mod_values()
+      :ok = Aid.add_mod_value_to_entry(red, entry)
+      assert 1 == Aid.count_entries()
+      assert 1 == Aid.count_entry_mod_values()
+
+      {:ok, _} = Aid.delete_entry(entry)
+      assert 0 == Aid.count_entries()
+      assert 0 == Aid.count_entry_mod_values()
+      assert 4 == AidTaxonomy.count_mod_values()
     end
   end
 end

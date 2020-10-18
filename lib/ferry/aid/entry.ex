@@ -3,13 +3,18 @@ defmodule Ferry.Aid.Entry do
   import Ecto.Changeset
 
   alias Ferry.Aid.AidList
+  alias Ferry.Aid.EntryModValue
   alias Ferry.AidTaxonomy.Item
+
+  @type t() :: %__MODULE__{}
 
   schema "aid__list_entries" do
     field :amount, :integer, default: 0
 
     belongs_to :list, AidList, foreign_key: :list_id
     belongs_to :item, Item
+
+    has_many :mod_values, EntryModValue, foreign_key: :entry_id
 
     timestamps()
   end
