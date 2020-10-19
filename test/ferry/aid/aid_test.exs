@@ -554,4 +554,127 @@ defmodule Ferry.AidTest do
       assert 4 == AidTaxonomy.count_mod_values()
     end
   end
+
+  describe "needs list by addresses" do
+    setup context do
+      project_london = insert(:project)
+      project_leeds = insert(:project)
+
+      {:ok, london_address} =
+        Locations.create_address(project_london.group, %{
+          label: "default",
+          street: "Harp Lane",
+          city: "London",
+          province: "London",
+          country_code: "GB",
+          postal_code: "EC3R",
+          opening_hour: "08:00",
+          closing_hour: "20:00",
+          type: "residential",
+          has_loading_equipment: false,
+          has_unloading_equipment: false,
+          needs_appointment: false
+        })
+
+      {:ok, leeds_address} =
+        Locations.create_address(project_leeds.group, %{
+          label: "default",
+          street: "Vicar Lane",
+          city: "Leeds",
+          province: "Leeds",
+          country_code: "GB",
+          postal_code: "LS17JH",
+          opening_hour: "08:00",
+          closing_hour: "20:00",
+          type: "residential",
+          has_loading_equipment: false,
+          has_unloading_equipment: false,
+          needs_appointment: false
+        })
+
+      # TODO associate addresses to projects
+
+      {:ok, clothes} =
+        AidTaxonomy.create_category(%{
+          name: "clothes",
+          description: "clothes"
+        })
+
+      {:ok, shirt} =
+        AidTaxonomy.create_item(clothes, %{
+          name: "shirt"
+        })
+
+      {:ok, color} =
+        AidTaxonomy.create_mod(%{
+          name: "color",
+          type: "select",
+          description: "color"
+        })
+
+      {:ok, size} =
+        AidTaxonomy.create_mod(%{
+          name: "size",
+          type: "select",
+          description: "size"
+        })
+
+      :ok = AidTaxonomy.add_mod_to_item(color, shirt)
+      :ok = AidTaxonomy.add_mod_to_item(size, shirt)
+
+      {:ok, red} =
+        AidTaxonomy.create_mod_value(color, %{
+          value: "red"
+        })
+
+      {:ok, yellow} =
+        AidTaxonomy.create_mod_value(color, %{
+          value: "yellow"
+        })
+
+      {:ok, small} =
+        AidTaxonomy.create_mod_value(size, %{
+          value: "small"
+        })
+
+      {:ok, large} =
+        AidTaxonomy.create_mod_value(size, %{
+          value: "large"
+        })
+
+      from = DateTime.utc_now()
+      to = DateTime.utc_now() |> DateTime.add(24 * 3600, :second)
+
+      {:ok, needs_london} = Aid.create_needs_list(project_london, %{from: from, to: to})
+      {:ok, needs_leeds} = Aid.create_needs_list(project_leeds, %{from: from, to: to})
+
+      {:ok, red_shirts_london} = Aid.create_entry(needs_london, shirt, %{amount: 1})
+      :ok = Aid.add_mod_value_to_entry(red, red_shirts_london)
+
+      {:ok, small_shirts_london} = Aid.create_entry(needs_london, shirt, %{amount: 2})
+      :ok = Aid.add_mod_value_to_entry(small, small_shirts_london)
+
+      {:ok, yellow_shirts_leeds} = Aid.create_entry(needs_leeds, shirt, %{amount: 3})
+      :ok = Aid.add_mod_value_to_entry(yellow, yellow_shirts_leeds)
+
+      {:ok, large_shirts_leeds} = Aid.create_entry(needs_london, shirt, %{amount: 4})
+      :ok = Aid.add_mod_value_to_entry(large, large_shirts_leeds)
+
+      {:ok, large_red_shirts_leeds} = Aid.create_entry(needs_london, shirt, %{amount: 4})
+      :ok = Aid.add_mod_value_to_entry(large, large_red_shirts_leeds)
+      :ok = Aid.add_mod_value_to_entry(red, large_red_shirts_leeds)
+
+      context =
+        Map.merge(context, %{
+          london: london_address,
+          leeds: leeds_address
+        })
+
+      {:ok, context}
+    end
+
+    test "aggregates needs list by addresses", %{london: london, leeds: leeds} do
+      IO.inspect(london: london, leeds: leeds)
+    end
+  end
 end
