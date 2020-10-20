@@ -2,6 +2,7 @@ defmodule Ferry.Profiles.Project do
   use Ecto.Schema
   import Ecto.Changeset
   alias Ferry.Profiles.Group
+  alias Ferry.Locations.Address
 
   # alias Ferry.Locations.Address
 
@@ -12,6 +13,7 @@ defmodule Ferry.Profiles.Project do
     field :description, :string
 
     belongs_to :group, Group
+    has_many :addresses, Address, foreign_key: :project_id
 
     timestamps()
   end
@@ -23,12 +25,5 @@ defmodule Ferry.Profiles.Project do
     |> validate_required([:name])
     |> validate_length(:name, min: 1, max: 255)
     |> unique_constraint(:name)
-  end
-
-  @doc false
-  def address_changeset(project, attrs) do
-    project
-    |> cast(attrs, [])
-    |> cast_assoc(:address, required: true, with: &Ferry.Locations.Address.full_changeset/2)
   end
 end

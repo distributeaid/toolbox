@@ -8,6 +8,7 @@ defmodule FerryApi.Schema.ProjectType do
     field :name, non_null(:string)
     field :description, non_null(:string)
     field :group, non_null(:group)
+    field :addresses, list_of(:address)
   end
 
   payload_object(:project_payload, :project)

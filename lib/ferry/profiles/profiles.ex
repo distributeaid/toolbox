@@ -10,6 +10,7 @@ defmodule Ferry.Profiles do
   # Group
   # ==============================================================================
   alias Ferry.Profiles.Group
+  alias Ferry.Locations.Address
 
   @doc """
   Returns the list of groups.
@@ -239,6 +240,7 @@ defmodule Ferry.Profiles do
     Project
     |> Repo.get(id)
     |> Repo.preload(:group)
+    |> Repo.preload(:addresses)
   end
 
   @doc """
@@ -319,5 +321,34 @@ defmodule Ferry.Profiles do
   @spec delete_project(Ferry.Profiles.Project.t()) :: Project.t()
   def delete_project(%Project{} = project) do
     Repo.delete(project)
+  end
+
+  @doc """
+  Adds an address to a project
+  """
+  @spec add_address_to_project(Project.t(), Address.t()) ::
+          {:ok, Project.t()} | {:error, Ecto.Changeset.t() | String.t()}
+  def add_address_to_project(
+        %Project{group: %{id: group_id}} = project,
+        %Address{group: %{id: group_id}} = address
+      ) do
+    with {:ok, _} <- Ferry.Locations.update_address(address, %{project_id: project.id}) do
+      {:ok, get_project(project.id)}
+    end
+  end
+
+  def add_address_to_project(_, _) do
+    {:error, "address does not belong to the project's group"}
+  end
+
+  @doc """
+  Removes an address from a project
+  """
+  @spec remove_address_from_project(Project.t(), Address.t()) ::
+          {:ok, Project.t()} | {:error, Ecto.Changeset.t()}
+  def remove_address_from_project(%Project{} = project, %Address{} = address) do
+    with {:ok, _} <- Ferry.Locations.update_address(address, %{project_id: nil}) do
+      {:ok, get_project(project.id)}
+    end
   end
 end
