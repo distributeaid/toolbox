@@ -142,4 +142,58 @@ defmodule Ferry.ApiClient.Address do
     }
     """)
   end
+
+  @doc """
+  GraphQL mutation that adds an existing address to a given
+  project.
+
+  The mutation returns the project and its current list of addresses
+  """
+  @spec add_address_to_project(Plug.Conn.t(), String.t(), String.t()) :: map()
+  def add_address_to_project(conn, project, address) do
+    graphql(conn, """
+    mutation {
+      addAddressToProject(project: "#{project}", address: "#{address}") {
+        successful,
+        messages {
+          field,
+          message
+        },
+        result {
+          id,
+          addresses {
+            id
+          }
+        }
+      }
+    }
+    """)
+  end
+
+  @doc """
+  GraphQL mutation that removes an existing address from a given
+  project.
+
+  The mutation returns the project and its current list of addresses
+  """
+  @spec remove_address_from_project(Plug.Conn.t(), String.t(), String.t()) :: map()
+  def remove_address_from_project(conn, project, address) do
+    graphql(conn, """
+    mutation {
+      removeAddressFromProject(project: "#{project}", address: "#{address}") {
+        successful,
+        messages {
+          field,
+          message
+        },
+        result {
+          id,
+          addresses {
+            id
+          }
+        }
+      }
+    }
+    """)
+  end
 end

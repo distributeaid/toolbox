@@ -68,10 +68,29 @@ defmodule FerryApi.Schema.Address do
       middleware(Middleware.RequireUser)
       resolve(&delete_addresses/3)
     end
+
+    @desc "Adds an existing address to a project"
+    field :add_address_to_project, type: :project_payload do
+      arg(:project, non_null(:id))
+      arg(:address, non_null(:id))
+      middleware(Middleware.RequireUser)
+      resolve(&add_address_to_project/3)
+      middleware(&build_payload/2)
+    end
+
+    @desc "Removes an existing address from a project"
+    field :remove_address_from_project, type: :project_payload do
+      arg(:project, non_null(:id))
+      arg(:address, non_null(:id))
+      middleware(Middleware.RequireUser)
+      resolve(&remove_address_from_project/3)
+      middleware(&build_payload/2)
+    end
   end
 
   @group_not_found "group not found"
   @address_not_found "address not found"
+  @project_not_found "project not found"
 
   @doc """
   Graphql resolver that returns the total number of addresses
@@ -144,7 +163,7 @@ defmodule FerryApi.Schema.Address do
   Graphql resolver that deletes an existing address
   """
   @spec delete_address(any, %{id: String.t()}, any) ::
-          {:error, String.t() | Ecto.Changeset.t()} | {:ok, Ferry.Profiles.Project.t()}
+          {:error, String.t() | Ecto.Changeset.t()} | {:ok, Ferry.Locations.Address.t()}
   def delete_address(_parent, %{id: id}, _resolution) do
     case Ferry.Locations.get_address(id) do
       nil -> {:error, @address_not_found}
@@ -158,5 +177,49 @@ defmodule FerryApi.Schema.Address do
   @spec delete_addresses(any, map(), any) :: {:ok, boolean()}
   def delete_addresses(_parent, _, _resolution) do
     {:ok, Ferry.Locations.delete_addresses()}
+  end
+
+  @doc """
+  Graphql resolver that adds an existing address
+  to an existing project.
+  """
+  @spec add_address_to_project(any(), %{project: String.t(), address: String.t()}, any()) ::
+          {:error, String.t() | Ecto.Changeset.t()} | {:ok, Ferry.Profiles.Project.t()}
+  def add_address_to_project(_, %{project: project, address: address}, _) do
+    case Ferry.Locations.get_address(address) do
+      nil ->
+        {:error, @address_not_found}
+
+      address ->
+        case Ferry.Profiles.get_project(project) do
+          nil ->
+            {:error, @project_not_found}
+
+          project ->
+            Ferry.Profiles.add_address_to_project(project, address)
+        end
+    end
+  end
+
+  @doc """
+  Graphql resolver that removes an existing address
+  from an existing project.
+  """
+  @spec remove_address_from_project(any(), %{project: String.t(), address: String.t()}, any()) ::
+          {:error, String.t() | Ecto.Changeset.t()} | {:ok, Ferry.Profiles.Project.t()}
+  def remove_address_from_project(_, %{project: project, address: address}, _) do
+    case Ferry.Locations.get_address(address) do
+      nil ->
+        {:error, @address_not_found}
+
+      address ->
+        case Ferry.Profiles.get_project(project) do
+          nil ->
+            {:error, @project_not_found}
+
+          project ->
+            Ferry.Profiles.remove_address_from_project(project, address)
+        end
+    end
   end
 end
