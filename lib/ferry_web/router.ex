@@ -53,7 +53,7 @@ defmodule FerryWeb.Router do
   if Application.get_env(:ferry, :dashboard, "disable") do
     scope "/" do
       pipe_through :browser
-      live_dashboard "/dashboard", metrics: FerryWeb.Telemetry
+      live_dashboard "/dashboard", metrics: FerryWeb.Telemetry, ecto_repos: [Ferry.Repo]
     end
 
     Logger.warn("Phoenix Live Dashboard is enabled")
