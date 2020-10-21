@@ -119,6 +119,7 @@ defmodule Ferry.Mixfile do
       {:telemetry_poller, "~> 0.4"},
       {:telemetry_metrics_prometheus, "~> 0.6"},
       {:phoenix_live_dashboard, "~> 0.1"},
+      {:ecto_psql_extras, "~> 0.2", override: true},
 
       # dialyzer
       {:dialyxir, "~> 1.0.0", only: [:dev], runtime: false}
