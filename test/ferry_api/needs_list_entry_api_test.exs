@@ -50,6 +50,38 @@ defmodule Ferry.NeedsListEntryApiTest do
           }
         }
       } = get_needs_list(conn, needs)
+
+      # try to create the same entry again. It
+      # still should create it. Let the administrator
+      # fix this in the UI.
+      %{
+        "data" => %{
+          "createNeedsListEntry" => %{
+            "successful" => true,
+            "messages" => [],
+            "result" => %{
+              "id" => _,
+              "amount" => 1,
+              "item" => %{"id" => ^item},
+              "list" => %{"id" => ^needs}
+            }
+          }
+        }
+      } =
+        create_needs_list_entry(conn, %{
+          list: needs,
+          item: item,
+          amount: 1
+        })
+
+      %{
+        "data" => %{
+          "needsList" => %{
+            "id" => ^needs,
+            "entries" => [_, _, _]
+          }
+        }
+      } = get_needs_list(conn, needs)
     end
 
     test "deletes needs list entries", %{conn: conn, needs: needs, entry: entry} do

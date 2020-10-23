@@ -83,6 +83,7 @@ defmodule Ferry.Locations do
   def get_address(id) do
     Address
     |> preload(:group)
+    |> preload(:project)
     |> Repo.get(id)
   end
 
@@ -127,11 +128,14 @@ defmodule Ferry.Locations do
           map()
         ) :: {:ok, Address.t()} | {:error, Changeset.t()}
   def create_address(%Group{} = group, attrs) do
-    %Address{}
-    |> Address.changeset(attrs)
-    |> Changeset.put_change(:group_id, group.id)
-    #    |> geocode_address()
-    |> Repo.insert()
+    with {:ok, address} <-
+           %Address{}
+           |> Address.changeset(attrs)
+           |> Changeset.put_change(:group_id, group.id)
+           #    |> geocode_address()
+           |> Repo.insert() do
+      {:ok, get_address(address.id)}
+    end
   end
 
   @doc """
