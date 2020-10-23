@@ -37,26 +37,28 @@
   }
 }
 
-.bg-mfd-cobalt-0 {
-  background-color: #3968DA;
+.bg-da-dark-gray {
+  background-color: #828282;
 }
 
-.bg-mfd-purple-2 {
-  background-color: #9D7AFF;
+.sidebar-container {
+  position: relative;
+  min-height: 80vh;
 }
 
-.bg-mfd-pink-1 {
-  background-color: #ED2E69;
+.sidebar {
+  background-color: white;
+  height: 100%;
+  width: 40vw;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateX(40vw);
+  transition: transform 250ms ease-in-out;
+  border-left: 1px solid black;
 }
 
-.text-mfd-pink-1 {
-  color: #ED2E69;
-}
-
-.hover\:text-mfd-pink-1:hover {
-  color: #ED2E69;
-}
-
-.h-donation-frame {
-  min-height: 660px;
+.sidebar--open {
+  transform: translateX(0);
 }

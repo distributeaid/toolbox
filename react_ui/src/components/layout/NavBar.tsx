@@ -2,8 +2,6 @@ import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
-import { DonateButton } from '../DonateButton'
-
 export const NavBar: React.FC = () => {
   const { t } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -18,7 +16,7 @@ export const NavBar: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-50">
-      <nav className="flex flex-row items-center justify-between flex-wrap flex-shrink-0 w-full max-w-7xl mx-auto rounded-b bg-black font-heading text-gray-100 p-2 lg:py-4 lg:px-2">
+      <nav className="flex flex-row items-center justify-between flex-wrap flex-shrink-0 w-full mx-auto bg-da-dark-gray font-heading text-white p-2">
         <button
           onClick={toggleMenu}
           data-cy="toggle-menu"
@@ -42,55 +40,30 @@ export const NavBar: React.FC = () => {
           className="flex items-center flex-shrink-0 lg:ml-4 lg:mr-9 flex-grow lg:flex-grow-0"
           href="https://example.com">
           <img
-            src="http://www.fillmurray.com/136/40"
+            src="http://www.fillmurray.com/40/40"
             alt="Distribute Aid logo"
           />
         </a>
 
-        <DonateButton
-          onClick={hideMenu}
-          className="sm:hidden lg:mr-2 self-end lg:mt-0"
-        />
-
         <div
           className={`w-full ${
             menuOpen ? 'block' : 'hidden'
-          } ml-3 lg:ml-8 flex-grow lg:flex lg:items-center lg:w-auto flex-shrink-0`}>
+          } lg:ml-8 flex-grow lg:flex lg:items-center lg:w-auto flex-shrink-0`}>
           <div className="text-sm pb-4 lg:pb-0 lg:flex-grow flex-shrink-0">
             <HeaderNavLink onClick={hideMenu} to="http://example.com">
-              {t('navBar.aboutLink')}
-            </HeaderNavLink>
-
-            <HeaderNavLink onClick={hideMenu} to="http://example.com">
-              Placeholder
-            </HeaderNavLink>
-
-            <HeaderNavLink onClick={hideMenu} to="http://example.com">
-              Placeholder
-            </HeaderNavLink>
-
-            <HeaderNavLink onClick={hideMenu} to="http://example.com">
-              Placeholder
-            </HeaderNavLink>
-
-            <HeaderNavLink onClick={hideMenu} to="http://example.com">
-              Placeholder
-            </HeaderNavLink>
-
-            <HeaderNavLink onClick={hideMenu} to="http://example.com">
-              {t('navBar.resourcesLink')}
-            </HeaderNavLink>
-
-            <HeaderNavLink onClick={hideMenu} to="http://example.com">
-              {t('navBar.faqLink')}
+              Distribute Aid Toolbox
             </HeaderNavLink>
           </div>
         </div>
 
-        <DonateButton
-          onClick={hideMenu}
-          className="hidden sm:block lg:mr-2 self-end lg:mt-0"
-        />
+        <a
+          href="/account"
+          rel="noopener noreferrer"
+          target="_blank"
+          className="
+            'font-mono block text-base sm:text-lg leading-none hover:border-transparent px-4 py-2 sm:px-6 sm:py-3">
+          {t('navBar.accountLink')}
+        </a>
       </nav>
     </header>
   )
@@ -101,7 +74,7 @@ const HeaderNavLink: React.FC<{
   to: string
 }> = ({ to, children, onClick, ...rest }) => {
   const className =
-    'block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1'
+    'block text-xl mt-4 lg:inline-block lg:mt-0 cursor-pointer mr-12'
   if (to.startsWith('http')) {
     return (
       <a href={to} className={className} onClick={onClick} {...rest}>
@@ -114,7 +87,7 @@ const HeaderNavLink: React.FC<{
     <NavLink
       onClick={onClick}
       to={to}
-      activeClassName="text-mfd-pink-1"
+      activeClassName="fix-me"
       className={className}
       {...rest}>
       {children}
