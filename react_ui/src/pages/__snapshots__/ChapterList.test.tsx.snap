@@ -25,7 +25,7 @@ exports[`loads the chapter list 1`] = `
       </svg>
     </div>
     <div
-      class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
+      class="sidebar-container w-full overflow-hidden"
     >
       <div
         class="md:w-7/12 pt-16 sm:pt-32"
@@ -409,7 +409,7 @@ exports[`loads the chapter list 1`] = `
         </p>
       </div>
       <div
-        class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
+        class="sidebar-container w-full overflow-hidden"
       >
         <div
           class="flex flex-col justify-center py-6 pb-12 sm:py-12"
@@ -420,8 +420,8 @@ exports[`loads the chapter list 1`] = `
             chapter.faqHeader
           </h2>
           <a
-            class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
-            href="https://masksfordocs.com/faq"
+            class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button sm:w-auto"
+            href="https://example.com/faq"
             rel="noopener noreferrer"
             target="_blank"
           >

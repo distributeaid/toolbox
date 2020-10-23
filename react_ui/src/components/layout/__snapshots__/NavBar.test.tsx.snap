@@ -6,7 +6,7 @@ exports[`shows the nav bar 1`] = `
     class="sticky top-0 z-50"
   >
     <nav
-      class="flex flex-row items-center justify-between flex-wrap flex-shrink-0 w-full max-w-7xl mx-auto rounded-b bg-black font-heading text-gray-100 p-2 lg:py-4 lg:px-2"
+      class="flex flex-row items-center justify-between flex-wrap flex-shrink-0 w-full mx-auto bg-da-dark-gray font-heading text-white p-2"
     >
       <button
         class="lg:hidden flex items-center px-3 py-2 focus:outline-none"
@@ -34,74 +34,30 @@ exports[`shows the nav bar 1`] = `
       >
         <img
           alt="Distribute Aid logo"
-          src="http://www.fillmurray.com/136/40"
+          src="http://www.fillmurray.com/40/40"
         />
       </a>
-      <a
-        class="font-mono bg-mfd-pink-1 block text-base sm:text-lg font-bold leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white px-4 py-2 sm:px-6 sm:py-3 sm:hidden lg:mr-2 self-end lg:mt-0"
-        href="https://masksfordocs.com/donate"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        navBar.donateLink
-      </a>
       <div
-        class="w-full hidden ml-3 lg:ml-8 flex-grow lg:flex lg:items-center lg:w-auto flex-shrink-0"
+        class="w-full hidden lg:ml-8 flex-grow lg:flex lg:items-center lg:w-auto flex-shrink-0"
       >
         <div
           class="text-sm pb-4 lg:pb-0 lg:flex-grow flex-shrink-0"
         >
           <a
-            class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
+            class="block text-xl mt-4 lg:inline-block lg:mt-0 cursor-pointer mr-12"
             href="http://example.com"
           >
-            navBar.aboutLink
-          </a>
-          <a
-            class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
-            href="http://example.com"
-          >
-            Placeholder
-          </a>
-          <a
-            class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
-            href="http://example.com"
-          >
-            Placeholder
-          </a>
-          <a
-            class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
-            href="http://example.com"
-          >
-            Placeholder
-          </a>
-          <a
-            class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
-            href="http://example.com"
-          >
-            Placeholder
-          </a>
-          <a
-            class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
-            href="http://example.com"
-          >
-            navBar.resourcesLink
-          </a>
-          <a
-            class="block font-medium mt-4 lg:inline-block lg:mt-0 active:text-pink-400 cursor-pointer mr-12 hover:text-mfd-pink-1"
-            href="http://example.com"
-          >
-            navBar.faqLink
+            Distribute Aid Toolbox
           </a>
         </div>
       </div>
       <a
-        class="font-mono bg-mfd-pink-1 block text-base sm:text-lg font-bold leading-none rounded hover:border-transparent hover:text-mfd-pink-1 hover:bg-white px-4 py-2 sm:px-6 sm:py-3 hidden sm:block lg:mr-2 self-end lg:mt-0"
-        href="https://masksfordocs.com/donate"
+        class=" 'font-mono block text-base sm:text-lg leading-none hover:border-transparent px-4 py-2 sm:px-6 sm:py-3"
+        href="/account"
         rel="noopener noreferrer"
         target="_blank"
       >
-        navBar.donateLink
+        navBar.accountLink
       </a>
     </nav>
   </header>

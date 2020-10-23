@@ -1,17 +1,32 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next'
+import React, { useState } from 'react'
 
+import { classnames } from '../components/classnames'
 import { ContentContainer } from '../components/ContentContainer'
 
 export const Home: React.FC = () => {
-  const { t } = useTranslation()
+  const [isOpen, setOpen] = useState(false)
+  let sideBarDummyContents = ''
+  for (let i = 0; i < 300; i++) sideBarDummyContents += i + ' '
 
   return (
     <ContentContainer>
-      <div className="grid grid-cols-1 gap-4 m-16">
-        <h1 className="font-bold text-3xl mb-6">{t('home.pageTitle')}</h1>
+      <div>
+        <h1 className="font-bold text-3xl m-6">Shipments</h1>
 
-        <p>{t('home.subhead')}</p>
+        <button
+          className="m-6"
+          onClick={() => (isOpen ? setOpen(false) : setOpen(true))}>
+          {isOpen ? 'Close' : 'Open'}
+        </button>
+      </div>
+
+      <div
+        className={classnames(
+          'sidebar z-40 p-6',
+          isOpen && 'sidebar--open',
+          'sidebar--closed' && !isOpen
+        )}>
+        {sideBarDummyContents}
       </div>
     </ContentContainer>
   )
