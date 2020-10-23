@@ -88,7 +88,9 @@ defmodule FerryApi.Schema.NeedsList do
         {:error, @project_not_found}
 
       project ->
-        {:ok, Aid.get_current_needs_list(project)}
+        with :not_found <- Aid.get_current_needs_list(project) do
+          {:error, @needs_list_not_found}
+        end
     end
   end
 
