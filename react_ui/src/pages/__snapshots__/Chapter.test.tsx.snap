@@ -25,7 +25,7 @@ exports[`loads the chapter details and renders the page 1`] = `
       </svg>
     </div>
     <div
-      class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
+      class="sidebar-container w-full overflow-hidden"
     >
       <div
         class="pb-2 sm:pb-16"
@@ -82,7 +82,7 @@ exports[`loads the chapter details and renders the page 1`] = `
       class="border-gray-400 border-t border-b w-full"
     >
       <div
-        class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
+        class="sidebar-container w-full overflow-hidden"
       >
         <div
           class="sm:flex py-6 sm:py-12"
@@ -97,7 +97,7 @@ exports[`loads the chapter details and renders the page 1`] = `
             class="sm:w-5/12 sm:px-12 z-30"
           >
             <a
-              class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 w-full mb-8"
+              class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button w-full mb-8"
               href="request form link"
               rel="noopener noreferrer"
               target="_blank"
@@ -105,7 +105,7 @@ exports[`loads the chapter details and renders the page 1`] = `
               chapter.requestSuppliesLink
             </a>
             <a
-              class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-pink-1 w-full mb-8"
+              class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button w-full mb-8"
               href="donation form link"
               rel="noopener noreferrer"
               target="_blank"
@@ -113,7 +113,7 @@ exports[`loads the chapter details and renders the page 1`] = `
               chapter.donateSuppliesLink
             </a>
             <a
-              class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-purple-2 w-full"
+              class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button w-full"
               href="volunteer form link"
               rel="noopener noreferrer"
               target="_blank"
@@ -140,7 +140,7 @@ exports[`loads the chapter details and renders the page 1`] = `
       </div>
     </div>
     <div
-      class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
+      class="sidebar-container w-full overflow-hidden"
     >
       <div
         class="flex flex-col justify-center py-6 pb-12 sm:py-12"
@@ -151,8 +151,8 @@ exports[`loads the chapter details and renders the page 1`] = `
           chapter.faqHeader
         </h2>
         <a
-          class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
-          href="https://masksfordocs.com/faq"
+          class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button sm:w-auto"
+          href="https://example.com/faq"
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -202,7 +202,7 @@ exports[`shows a loading message when loading 1`] = `
       </svg>
     </div>
     <div
-      class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
+      class="sidebar-container w-full overflow-hidden"
     >
       <div
         class="pb-2 sm:pb-16"
@@ -232,7 +232,7 @@ exports[`shows a loading message when loading 1`] = `
       </div>
     </div>
     <div
-      class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
+      class="sidebar-container w-full overflow-hidden"
     >
       <div
         class="flex flex-col justify-center py-6 pb-12 sm:py-12"
@@ -243,8 +243,8 @@ exports[`shows a loading message when loading 1`] = `
           chapter.faqHeader
         </h2>
         <a
-          class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
-          href="https://masksfordocs.com/faq"
+          class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button sm:w-auto"
+          href="https://example.com/faq"
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -281,7 +281,7 @@ exports[`shows an error message when chapter not found 1`] = `
       </svg>
     </div>
     <div
-      class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
+      class="sidebar-container w-full overflow-hidden"
     >
       <div
         class="pb-2 sm:pb-16"
@@ -315,7 +315,7 @@ exports[`shows an error message when chapter not found 1`] = `
       </h3>
     </div>
     <div
-      class="container w-full max-w-6xl p-6 px-12 md:mx-auto overflow-hidden"
+      class="sidebar-container w-full overflow-hidden"
     >
       <div
         class="flex flex-col justify-center py-6 pb-12 sm:py-12"
@@ -326,8 +326,8 @@ exports[`shows an error message when chapter not found 1`] = `
           chapter.faqHeader
         </h2>
         <a
-          class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button bg-mfd-cobalt-0 sm:w-auto"
-          href="https://masksfordocs.com/faq"
+          class="inline-block mx-auto px-4 py-4 rounded font-mono font-bold text-xl sm:text-2xl text-center text-white shadow-button sm:w-auto"
+          href="https://example.com/faq"
           rel="noopener noreferrer"
           target="_blank"
         >

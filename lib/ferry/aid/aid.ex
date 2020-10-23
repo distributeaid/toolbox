@@ -93,10 +93,45 @@ defmodule Ferry.Aid do
   @doc """
   Return a needs list, given its id
   """
-  @spec get_needs_list!(integer()) :: {:ok, NeedsList.t()} | :not_found
-  def get_needs_list(id) do
+  @spec get_needs_list!(integer() | String.t()) :: {:ok, NeedsList.t()} | :not_found
+  def get_needs_list(id) when is_binary(id) do
+    id
+    |> String.to_integer()
+    |> get_needs_list()
+  end
+
+  def get_needs_list(id) when is_integer(id) do
     case NeedsList
          |> Repo.get(id)
+         |> Repo.preload(project: :group)
+         |> Repo.preload(:list)
+         |> Repo.preload(
+           entries: [
+             item: [:mods, :category],
+             mod_values: [mod_value: [:mod]],
+             list: [:needs_list, :available_list, :manifest_list]
+           ]
+         ) do
+      nil ->
+        :not_found
+
+      needs_list ->
+        {:ok, needs_list}
+    end
+  end
+
+  @doc """
+  Returns the needs list for a given project and a given date
+  """
+  @spec get_needs_list(Ferry.Profiles.Project.t(), Date.t()) :: {:ok, %NeedsList{}} | :not_found
+  def get_needs_list(%Project{} = project, %Date{} = on) do
+    case from([needs_list, proj] in needs_list_query(),
+           where:
+             proj.id == ^project.id and
+               needs_list.from <= ^on and
+               needs_list.to >= ^on
+         )
+         |> Repo.one()
          |> Repo.preload(project: :group)
          |> Repo.preload(
            entries: [
@@ -114,18 +149,11 @@ defmodule Ferry.Aid do
     end
   end
 
-  @spec get_needs_list(Ferry.Profiles.Project.t(), Date.t()) :: any
-  def get_needs_list(%Project{} = project, %Date{} = on) do
-    query =
-      from [needs_list, proj] in needs_list_query(),
-        where:
-          proj.id == ^project.id and
-            needs_list.from <= ^on and
-            needs_list.to >= ^on
+  @doc """
+  Return the needs list for the given project and the current date
 
-    Repo.one(query)
-  end
-
+  """
+  @spec get_current_needs_list(Project.t()) :: {:ok, NeedsList.t()} | :not_found
   def get_current_needs_list(%Project{} = project) do
     # TODO: probably want to choose 'today' in the user's local timezone instead of utc
     get_needs_list(project, Timex.today())
@@ -488,5 +516,90 @@ defmodule Ferry.Aid do
            |> Repo.delete_all() do
       :ok
     end
+  end
+
+  @doc """
+  Given a list of addresses, this function builds the aggregated needs
+  of all projects related to any of those addresses, for the current date.
+
+  It is required that each address provided in the list has its project
+  preloaded.
+  """
+  @spec get_current_needs_list_by_addresses([Address.t()]) :: {:ok, NeedsList.t()}
+  def get_current_needs_list_by_addresses(addresses) do
+    {:ok,
+     addresses
+     |> Enum.map(fn %Address{project: project} -> project end)
+     |> resolve_aggregate_needs_lists(fn project ->
+       get_current_needs_list(project)
+     end)}
+  end
+
+  # Generic function that performs the aggregation of all
+  # needs lists found for the given projects. It uses the specified
+  # resolver function in order to convert a project to
+  # into a needs list. If the resolver function does not return
+  # any needs list, then the project will simply be ignored
+  defp resolve_aggregate_needs_lists(projects, resolver_fn) do
+    Enum.reduce(projects, %NeedsList{entries: []}, fn
+      %Project{id: _} = project, acc_needs_list ->
+        case resolver_fn.(project) do
+          :not_found ->
+            acc_needs_list
+
+          {:ok, needs_list} ->
+            aggregated_needs_list(needs_list, acc_needs_list)
+        end
+
+      # if the given project is not a valid project
+      # then simply skip it
+      _, acc_needs_list ->
+        acc_needs_list
+    end)
+  end
+
+  @doc """
+  Aggregates the given `source` needs list, into the `target`
+  needs list
+  """
+  @spec aggregated_needs_list(NeedsList.t(), NeedsList.t()) :: NeedsList.t()
+  def aggregated_needs_list(
+        %NeedsList{entries: source_entries},
+        target
+      ) do
+    Enum.reduce(source_entries, target, fn entry, target ->
+      aggregated_needs_entry(entry, target)
+    end)
+  end
+
+  # Aggregates the given entry in the given needs list. If the
+  # entry matches an existing one, then increment the count. Otherwise
+  # add the entry to the list
+  defp aggregated_needs_entry(entry, %NeedsList{entries: entries} = target) do
+    {entries, found} =
+      Enum.map_reduce(entries, false, fn
+        existing, true ->
+          {existing, true}
+
+        existing, false ->
+          case Entry.eq?(existing, entry) do
+            true ->
+              {%{existing | amount: existing.amount + entry.amount}, true}
+
+            false ->
+              {existing, false}
+          end
+      end)
+
+    entries =
+      case found do
+        true ->
+          entries
+
+        false ->
+          [entry | entries]
+      end
+
+    %{target | entries: entries}
   end
 end

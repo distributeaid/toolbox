@@ -337,7 +337,7 @@ defmodule Ferry.Profiles do
     end
   end
 
-  def add_address_to_project(_, _) do
+  def add_address_to_project(_project, _address) do
     {:error, "address does not belong to the project's group"}
   end
 
