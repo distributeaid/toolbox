@@ -19,6 +19,7 @@
     "signOut": "Log Out"
   },
   "navBar": {
+    "accountLink": "My Account",
     "donateLink": "Donate",
     "aboutLink": "About Us",
     "newsLink": "News",
