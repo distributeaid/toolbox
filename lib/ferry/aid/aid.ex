@@ -18,7 +18,29 @@ defmodule Ferry.Aid do
 
   alias Ferry.Aid.AidList
   alias Ferry.Aid.NeedsList
+  alias Ferry.Aid.AvailableList
+  alias Ferry.Aid.Entry
+  alias Ferry.Aid.EntryModValue
+  alias Ferry.AidTaxonomy.Item
+  alias Ferry.AidTaxonomy.ModValue
   alias Ferry.Profiles.Project
+  alias Ferry.Locations.Address
+
+  @doc """
+  Return the aid list for the given id
+
+  """
+  @spec get_aid_list(String.t()) :: {:ok, AidList.t()} | :not_found
+  def get_aid_list(id) do
+    case AidList
+         |> Repo.get(id) do
+      nil ->
+        :not_found
+
+      list ->
+        {:ok, list}
+    end
+  end
 
   # Needs List
   # ================================================================================
@@ -76,7 +98,14 @@ defmodule Ferry.Aid do
     case NeedsList
          |> Repo.get(id)
          |> Repo.preload(project: :group)
-         |> Repo.preload(:entries) do
+         |> Repo.preload(
+           entries: [
+             item: [:mods, :category],
+             mod_values: [mod_value: [:mod]],
+             list: [:needs_list, :available_list, :manifest_list]
+           ]
+         )
+         |> Repo.preload(:list) do
       nil ->
         :not_found
 
@@ -85,6 +114,7 @@ defmodule Ferry.Aid do
     end
   end
 
+  @spec get_needs_list(Ferry.Profiles.Project.t(), Date.t()) :: any
   def get_needs_list(%Project{} = project, %Date{} = on) do
     query =
       from [needs_list, proj] in needs_list_query(),
@@ -191,5 +221,272 @@ defmodule Ferry.Aid do
       end
 
     Repo.exists?(query)
+  end
+
+  @doc """
+  Returns an available list given its id
+  """
+  @spec get_available_list(integer()) :: {:ok, AvailableList.t()} | :not_found
+  def get_available_list(id) do
+    case AvailableList
+         |> Repo.get(id)
+         |> Repo.preload(at: [:project, :group])
+         |> Repo.preload(
+           entries: [
+             item: [:mods, :category],
+             mod_values: [mod_value: [:mod]],
+             list: [:needs_list, :available_list, :manifest_list]
+           ]
+         )
+         |> Repo.preload(:list) do
+      nil ->
+        :not_found
+
+      available_list ->
+        {:ok, available_list}
+    end
+  end
+
+  @doc """
+  Returns all available lists for a given address
+  """
+  @spec get_available_lists(Address.t()) :: [AvailableList.t()]
+  def get_available_lists(address) do
+    address_id = address.id
+
+    from(available_list in AvailableList,
+      where: available_list.address_id == ^address_id
+    )
+    |> Repo.all()
+    |> Repo.preload(at: [:project, :group])
+    |> Repo.preload(
+      entries: [
+        item: [:mods, :category],
+        mod_values: [mod_value: [:mod]],
+        list: [:needs_list, :available_list, :manifest_list]
+      ]
+    )
+    |> Repo.preload(:list)
+  end
+
+  @doc """
+  Creates a new available list for the given address
+  """
+  @spec create_available_list(Address.t(), map()) ::
+          {:ok, AvailableList.t()} | {:error, Ecto.Changeset.t()}
+  def create_available_list(address, attrs \\ %{}) do
+    attrs =
+      attrs
+      |> Map.put(:address_id, address.id)
+
+    with {:ok, available_list} <-
+           %AvailableList{}
+           |> AvailableList.create_changeset(attrs)
+           |> Changeset.put_assoc(:list, %AidList{entries: []})
+           |> Repo.insert() do
+      get_available_list(available_list.id)
+    end
+  end
+
+  @doc """
+  Deletes an available list.
+
+  If the list has entries, they will also be deleted
+  """
+  @spec delete_available_list(AvailableList.t()) ::
+          {:ok, AvailableList.t()} | {:error, Ecto.Changeset.t()}
+  def delete_available_list(%AvailableList{} = list) do
+    list
+    |> Repo.delete()
+  end
+
+  @doc """
+  Counts all entries in the database
+  """
+  @spec count_entries() :: integer()
+  def count_entries() do
+    Entry
+    |> Repo.aggregate(:count, :id)
+  end
+
+  @doc """
+  Returns all entries for a list. A list can be either
+  a needs list, available list or a manifest list
+  """
+  @spec get_entries(NeedsList.t() | AvailableList.t()) :: [Entry.t()]
+  def get_entries(%NeedsList{} = needs) do
+    with {:ok, list} <- aid_list_for(needs) do
+      get_entries(list)
+    end
+  end
+
+  def get_entries(%AvailableList{} = available) do
+    with {:ok, list} <- aid_list_for(available) do
+      get_entries(list)
+    end
+  end
+
+  def get_entries(%AidList{} = list) do
+    list_id = list.id
+
+    Entry
+    |> where(list_id: ^list_id)
+    |> Repo.all()
+    |> Repo.preload(item: [:mods, :category])
+    |> Repo.preload(mod_values: [mod_value: [:mod]])
+    |> Repo.preload(list: [:needs_list, :available_list, :manifest_list])
+  end
+
+  @doc """
+  Fetch a list entry given its id.any()
+
+  This function offers some flexibility in the way mod_values are preloaded, via opts:
+
+  *  setting `item_preload` to `with_mod_values` will preload the entry's item mods, and for
+     each mod, it will also preload all mod_values. Otherwise, only the mod is pre-loaded.
+
+  """
+  @spec get_entry(String.t(), Keyword.t()) :: {:ok, Entry.t()} | :not_found
+  def get_entry(id, opts \\ []) do
+    # Choose whether we want to preload all mod_values for each
+    # mod associated to the entry via its item mod_values
+    item_preload =
+      case opts[:item_preload] do
+        :with_mod_values ->
+          [mods: [:values], category: []]
+
+        _ ->
+          [:mods, :category]
+      end
+
+    case Entry
+         |> Repo.get(id)
+         |> Repo.preload(item: item_preload)
+         |> Repo.preload(list: [:needs_list, :available_list, :manifest_list])
+         |> Repo.preload(mod_values: [mod_value: [:mod]]) do
+      nil ->
+        :not_found
+
+      entry ->
+        {:ok, entry}
+    end
+  end
+
+  @doc """
+  Creates a new entry for the given item and the given
+  list. A list can be either a needs list, an availability list
+  or a manifest list
+  """
+  @spec create_entry(AidList.t() | NeedsList.t() | AvailableList.t(), Item.t(), map()) ::
+          {:ok, Entry.t()} | {:error, Ecto.Changeset.t()}
+  def create_entry(%AidList{} = list, %Item{} = item, attrs) do
+    attrs =
+      attrs
+      |> Map.put(:item_id, item.id)
+      |> Map.put(:list_id, list.id)
+
+    with {:ok, entry} <-
+           %Entry{}
+           |> Entry.create_changeset(attrs)
+           |> Repo.insert() do
+      get_entry(entry.id)
+    end
+  end
+
+  def create_entry(%NeedsList{} = list, %Item{} = item, attrs) do
+    with {:ok, list} <- aid_list_for(list) do
+      create_entry(list, item, attrs)
+    end
+  end
+
+  def create_entry(%AvailableList{} = list, %Item{} = item, attrs) do
+    with {:ok, list} <- aid_list_for(list) do
+      create_entry(list, item, attrs)
+    end
+  end
+
+  @doc """
+  Updates a list entry.
+
+  """
+  @spec update_entry(Entry.t(), map()) :: {:ok, Entry.t()} | {:error, Ecto.Changeset.t()}
+  def update_entry(entry, attrs) do
+    with {:ok, entry} <-
+           entry
+           |> Entry.update_changeset(attrs)
+           |> Repo.update() do
+      get_entry(entry.id)
+    end
+  end
+
+  # Find the aid list for the given concrete list
+  defp aid_list_for(%NeedsList{id: id}) do
+    case Repo.get_by(AidList, needs_list_id: id) do
+      nil ->
+        :not_found
+
+      list ->
+        {:ok, list}
+    end
+  end
+
+  defp aid_list_for(%AvailableList{id: id}) do
+    case Repo.get_by(AidList, available_list_id: id) do
+      nil ->
+        :not_found
+
+      list ->
+        {:ok, list}
+    end
+  end
+
+  @doc """
+  Delete a list entry
+  """
+  @spec delete_entry(Entry.t()) :: {:ok, Entry.t()} | {:error, Ecto.Changeset}
+  def delete_entry(entry) do
+    entry
+    |> Entry.delete_changeset()
+    |> Repo.delete()
+  end
+
+  @doc """
+  Counts all mod values associated to existing list entries
+
+  """
+  @spec count_entry_mod_values() :: integer()
+  def count_entry_mod_values() do
+    EntryModValue
+    |> Repo.aggregate(:count, :id)
+  end
+
+  @doc """
+  Adds the given mod value to the given list entry
+  """
+  @spec add_mod_value_to_entry(ModValue.t(), Entry.t()) :: :ok | {:error, Ecto.Changeset.t()}
+  def add_mod_value_to_entry(%ModValue{} = mod_value, %Entry{} = entry) do
+    with {:ok, _} <-
+           %EntryModValue{}
+           |> EntryModValue.changeset(%{entry_id: entry.id, mod_value_id: mod_value.id})
+           |> Repo.insert() do
+      :ok
+    end
+  end
+
+  @doc """
+  Removes the given mod_value from the given list entry
+  """
+  @spec remove_mod_value_from_entry(ModValue.t(), Entry.t()) :: :ok | {:error, Ecto.Changeset.t()}
+  def remove_mod_value_from_entry(%ModValue{} = mod_value, %Entry{} = entry) do
+    mod_value_id = mod_value.id
+    entry_id = entry.id
+
+    with {_, nil} <-
+           from(v in EntryModValue,
+             where: v.mod_value_id == ^mod_value_id and v.entry_id == ^entry_id
+           )
+           |> Repo.delete_all() do
+      :ok
+    end
   end
 end

@@ -39,8 +39,28 @@ defmodule FerryApi.Schema do
   import_types(FerryApi.Schema.PackageType)
   import_types(FerryApi.Schema.Package)
 
+  import_types(FerryApi.Schema.ListType)
+  import_types(FerryApi.Schema.EntryType)
+
   import_types(FerryApi.Schema.NeedsListType)
   import_types(FerryApi.Schema.NeedsList)
+
+  import_types(FerryApi.Schema.ListEntryModValueType)
+  import_types(FerryApi.Schema.ListEntryModValue)
+
+  import_types(FerryApi.Schema.NeedsListEntryType)
+  import_types(FerryApi.Schema.NeedsListEntry)
+
+  import_types(FerryApi.Schema.AvailableListType)
+  import_types(FerryApi.Schema.AvailableList)
+
+  import_types(FerryApi.Schema.AvailableListEntryType)
+  import_types(FerryApi.Schema.AvailableListEntry)
+
+  import_types(FerryApi.Schema.ListEntryModValue)
+
+  import_types(FerryApi.Schema.AvailableListEntryModValue)
+  import_types(FerryApi.Schema.NeedsListEntryModValue)
 
   # Queries
   # ------------------------------------------------------------
@@ -57,7 +77,10 @@ defmodule FerryApi.Schema do
     import_fields(:item_queries)
     import_fields(:shipment_queries)
     import_fields(:package_queries)
-    import_fields(:needs_lists_queries)
+    import_fields(:needs_list_queries)
+    import_fields(:needs_list_entry_queries)
+    import_fields(:available_list_queries)
+    import_fields(:available_list_entry_queries)
   end
 
   # Mutuations
@@ -73,7 +96,12 @@ defmodule FerryApi.Schema do
     import_fields(:item_mutations)
     import_fields(:shipment_mutations)
     import_fields(:package_mutations)
-    import_fields(:needs_lists_mutations)
+    import_fields(:needs_list_mutations)
+    import_fields(:needs_list_entry_mutations)
+    import_fields(:needs_list_entry_mod_value_mutations)
+    import_fields(:available_list_mutations)
+    import_fields(:available_list_entry_mutations)
+    import_fields(:available_list_entry_mod_value_mutations)
   end
 
   @sources [

@@ -1,63 +1,16 @@
 defmodule Ferry.NeedsListApiTest do
   use FerryWeb.ConnCase, async: true
-  import Ferry.ApiClient.{Group, Project, NeedsList}
+  import Ferry.ApiClient.NeedsList
 
-  setup %{conn: conn} = context do
+  setup context do
     insert(:user)
     |> mock_sign_in
 
-    %{
-      "data" => %{
-        "createGroup" => %{
-          "successful" => true,
-          "result" => %{
-            "id" => group
-          }
-        }
-      }
-    } = create_simple_group(conn, %{name: "a group"})
-
-    %{
-      "data" => %{
-        "createProject" => %{
-          "successful" => true,
-          "result" => %{
-            "id" => project
-          }
-        }
-      }
-    } =
-      create_project(conn, %{
-        group: group,
-        name: "a project",
-        description: "a project"
-      })
-
-    %{
-      "data" => %{
-        "createNeedsList" => %{
-          "successful" => true,
-          "result" => %{
-            "id" => needs_list
-          }
-        }
-      }
-    } =
-      create_needs_list(conn, %{
-        project: project,
-        from: DateTime.utc_now() |> DateTime.add(-1 * 24 * 3600, :second),
-        to: DateTime.utc_now() |> DateTime.add(2 * 24 * 3600, :second)
-      })
-
-    {:ok,
-     Map.merge(context, %{
-       needs_list: needs_list,
-       project: project
-     })}
+    Ferry.Fixture.NeedsListWithEntry.setup(context)
   end
 
   describe "needs list graphql api" do
-    test "needs lists should not overlap", %{conn: conn, project: project, needs_list: needs_list} do
+    test "needs lists should not overlap", %{conn: conn, project: project, needs: needs_list} do
       %{
         "data" => %{
           "createNeedsList" => %{
@@ -111,7 +64,7 @@ defmodule Ferry.NeedsListApiTest do
     test "returns all needs lists for a project", %{
       conn: conn,
       project: project,
-      needs_list: needs_list
+      needs: needs_list
     } do
       %{
         "data" => %{
@@ -130,7 +83,7 @@ defmodule Ferry.NeedsListApiTest do
     test "returns current's needs list for a project", %{
       conn: conn,
       project: project,
-      needs_list: needs_list
+      needs: needs_list
     } do
       %{
         "data" => %{
@@ -160,7 +113,7 @@ defmodule Ferry.NeedsListApiTest do
         })
     end
 
-    test "fetches a single needs list", %{conn: conn, needs_list: id} do
+    test "fetches a single needs list", %{conn: conn, needs: id} do
       %{
         "data" => %{
           "needsList" => %{"id" => ^id, "from" => _, "to" => _, "project" => %{}}

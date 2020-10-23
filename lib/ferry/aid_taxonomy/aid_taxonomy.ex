@@ -217,10 +217,13 @@ defmodule Ferry.AidTaxonomy do
   def create_item(%Category{} = category, attrs \\ %{}) do
     mods = get_item_mods(attrs)
 
-    Ecto.build_assoc(category, :items)
-    |> Item.changeset(attrs)
-    |> Changeset.put_assoc(:mods, mods)
-    |> Repo.insert()
+    with {:ok, item} <-
+           Ecto.build_assoc(category, :items)
+           |> Item.changeset(attrs)
+           |> Changeset.put_assoc(:mods, mods)
+           |> Repo.insert() do
+      {:ok, get_item(item.id)}
+    end
   end
 
   # NOTE: Can't change the Category (Item.changeset doesn't cast `:category_id`).

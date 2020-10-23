@@ -2,6 +2,8 @@ defmodule Ferry.Aid.AidList do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t() :: %__MODULE__{}
+
   alias Ferry.Aid.Entry
   alias Ferry.Aid.AvailableList
   alias Ferry.Aid.NeedsList

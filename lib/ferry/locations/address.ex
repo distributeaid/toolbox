@@ -46,6 +46,10 @@ defmodule Ferry.Locations.Address do
     :needs_appointment
   ]
 
+  @optional_fields [
+    :project_id
+  ]
+
   @address_types [
     "industrial",
     "residential"
@@ -54,7 +58,7 @@ defmodule Ferry.Locations.Address do
   @doc false
   def changeset(address, attrs) do
     address
-    |> cast(attrs, @required_fields)
+    |> cast(attrs, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
     |> validate_inclusion(:type, @address_types)
     |> validate_length(:label, min: 1, max: 255)

@@ -6,7 +6,7 @@ defmodule FerryApi.Schema.NeedsList do
   alias Ferry.Profiles
   alias Ferry.Aid
 
-  object :needs_lists_queries do
+  object :needs_list_queries do
     @desc "Returns a single needs list"
     field :needs_list, :needs_list do
       arg(:id, non_null(:id))
@@ -34,7 +34,7 @@ defmodule FerryApi.Schema.NeedsList do
     field :to, non_null(:datetime)
   end
 
-  object :needs_lists_mutations do
+  object :needs_list_mutations do
     @desc "Create a needs list"
     field :create_needs_list, type: :needs_list_payload do
       arg(:needs_list_input, non_null(:needs_list_input))
@@ -173,7 +173,7 @@ defmodule FerryApi.Schema.NeedsList do
 
   """
   @spec delete_needs_list(any(), %{id: String.t()}, any()) ::
-          {:ok, [map()]} | {:error, term()}
+          {:ok, map()} | {:error, term()}
   def delete_needs_list(_, %{id: id}, _) do
     case Aid.get_needs_list(id) do
       :not_found ->
