@@ -6,14 +6,18 @@ defmodule Ferry.AidTest do
   alias Timex
 
   alias Ferry.Locations
+  alias Ferry.Profiles
   alias Ferry.Aid
   alias Ferry.AidTaxonomy
+  alias Ferry.AidTaxonomy.{Item, Mod, ModValue}
   alias Ferry.Aid.AidList
   # alias Ferry.Aid.AvailableList
   alias Ferry.Aid.Entry
   #  alias Ferry.Aid.ManifestList
   #  alias Ferry.Aid.ModValue
   alias Ferry.Aid.NeedsList
+  alias Ferry.Profiles.Project
+  alias Ferry.Locations.Address
 
   # Needs List
   # ================================================================================
@@ -138,32 +142,35 @@ defmodule Ferry.AidTest do
       to = ~D[2000-01-01]
       list = insert(:needs_list, %{project: project, from: from, to: to})
 
-      assert Aid.get_needs_list(project, from) == list
-      assert Aid.get_needs_list(project, to) == list
+      {:ok, list} = Aid.get_needs_list(list.id)
+
+      assert {:ok, list} == Aid.get_needs_list(project, from)
+      assert {:ok, list} == Aid.get_needs_list(project, to)
 
       # other project lists covering that day are ignored
       _another_list = insert(:needs_list, %{from: from, to: to})
-      assert Aid.get_needs_list(project, from) == list
+      assert {:ok, list} == Aid.get_needs_list(project, from)
 
       # returns nil if there isn't a list
-      assert Aid.get_needs_list(project, ~D[1900-01-01]) == nil
+      assert :not_found == Aid.get_needs_list(project, ~D[1900-01-01])
     end
 
     test "get_current_needs_list/1 returns the project's needs list for today" do
       project = insert(:project)
 
       # returns nil if there isn't a list covering today
-      assert Aid.get_current_needs_list(project) == nil
+      assert :not_found == Aid.get_current_needs_list(project)
 
       # returns the needs list covering today
       from = Timex.today() |> Timex.shift(weeks: -1)
       to = Timex.today() |> Timex.shift(weeks: 1)
       list = insert(:needs_list, %{project: project, from: from, to: to})
-      assert Aid.get_current_needs_list(project) == list
-
+      {:ok, list} = Aid.get_needs_list(list.id)
+      assert {:ok, list} == Aid.get_current_needs_list(project)
       # other project lists covering today are ignored
       _another_list = insert(:needs_list, %{from: from, to: to})
-      assert Aid.get_current_needs_list(project) == list
+
+      assert {:ok, list} == Aid.get_current_needs_list(project)
     end
 
     test "create_needs_list/2 with valid data creates a needs list & related aid list" do
@@ -555,6 +562,104 @@ defmodule Ferry.AidTest do
     end
   end
 
+  describe "aggregated_needs_list/2" do
+    test "creates a new entry when aggregating on an empty list" do
+      entries = [
+        %Entry{
+          item: %Item{id: "1"},
+          mod_values: []
+        }
+      ]
+
+      source = %NeedsList{
+        entries: entries
+      }
+
+      target = %NeedsList{entries: []}
+
+      needs = Aid.aggregated_needs_list(source, target)
+      assert entries == needs.entries
+    end
+
+    test "increments amount when aggregating the same entry and mod values" do
+      entries = [
+        %Entry{
+          amount: 1,
+          item: %Item{id: "1", mods: []},
+          mod_values: []
+        }
+      ]
+
+      source = %NeedsList{
+        entries: entries
+      }
+
+      target = %NeedsList{entries: entries}
+
+      needs = Aid.aggregated_needs_list(source, target)
+      [entry] = needs.entries
+      assert 2 == entry.amount
+    end
+
+    test "is able to compare entries" do
+      color = %Mod{name: "color"}
+
+      entry_with_color = %Entry{
+        amount: 1,
+        item: %Item{id: "1", mods: [color]},
+        mod_values: []
+      }
+
+      entry_without_color = %Entry{
+        amount: 1,
+        item: %Item{id: "1", mods: []},
+        mod_values: []
+      }
+
+      source = %NeedsList{
+        entries: [entry_with_color]
+      }
+
+      target = %NeedsList{entries: [entry_without_color]}
+
+      needs = Aid.aggregated_needs_list(source, target)
+      assert [entry_with_color, entry_without_color] == needs.entries
+    end
+
+    test "ignores the order entry mods and values" do
+      color = %Mod{id: "1", name: "color"}
+      size = %Mod{id: "2", name: "size"}
+
+      red = %ModValue{id: "1", mod: color, value: "red"}
+      small = %ModValue{id: "2", mod: size, value: "small"}
+
+      entry_with_size_and_color = %Entry{
+        amount: 1,
+        item: %Item{id: "1", mods: [size, color]},
+        mod_values: [red, small]
+      }
+
+      entry_with_color_and_size = %Entry{
+        amount: 1,
+        item: %Item{id: "1", mods: [color, size]},
+        mod_values: [small, red]
+      }
+
+      source = %NeedsList{
+        entries: [entry_with_size_and_color]
+      }
+
+      target = %NeedsList{entries: [entry_with_color_and_size]}
+
+      needs = Aid.aggregated_needs_list(source, target)
+      assert 1 = length(needs.entries)
+      [entry] = needs.entries
+      assert 2 == entry.amount
+      assert 2 == length(entry.item.mods)
+      assert 2 == length(entry.mod_values)
+    end
+  end
+
   describe "needs list by addresses" do
     setup context do
       project_london = insert(:project)
@@ -592,7 +697,13 @@ defmodule Ferry.AidTest do
           needs_appointment: false
         })
 
-      # TODO associate addresses to projects
+      {:ok, _} = Profiles.add_address_to_project(project_leeds, leeds_address)
+      {:ok, _} = Profiles.add_address_to_project(project_london, london_address)
+
+      # Reload the addresses, so that they include their relation
+      # to the project
+      %Address{project: %Project{}} = leeds_address = Locations.get_address(leeds_address.id)
+      %Address{project: %Project{}} = london_address = Locations.get_address(london_address.id)
 
       {:ok, clothes} =
         AidTaxonomy.create_category(%{
@@ -674,7 +785,14 @@ defmodule Ferry.AidTest do
     end
 
     test "aggregates needs list by addresses", %{london: london, leeds: leeds} do
-      IO.inspect(london: london, leeds: leeds)
+      {:ok, needs} = Aid.get_current_needs_list_by_addresses([london, leeds])
+      assert 5 == length(needs.entries)
+
+      {:ok, needs} = Aid.get_current_needs_list_by_addresses([london])
+      assert 4 == length(needs.entries)
+
+      {:ok, needs} = Aid.get_current_needs_list_by_addresses([leeds])
+      assert 1 == length(needs.entries)
     end
   end
 end

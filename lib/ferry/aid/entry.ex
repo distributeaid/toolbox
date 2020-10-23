@@ -47,5 +47,20 @@ defmodule Ferry.Aid.Entry do
     |> cast(%{}, [])
   end
 
+  @doc """
+  Compares two entries. Returns true if both entries
+  have the same item, mods and mod values
+  """
+  @spec eq?(t(), t()) :: true | false
+  def eq?(one, another) do
+    one.item.id == another.item.id &&
+      one.item.mods |> Enum.map(&id_from_struct/1) |> Enum.sort() ==
+        another.item.mods |> Enum.map(&id_from_struct/1) |> Enum.sort() &&
+      one.mod_values |> Enum.map(&id_from_struct/1) |> Enum.sort() ==
+        another.mod_values |> Enum.map(&id_from_struct/1) |> Enum.sort()
+  end
+
+  defp id_from_struct(%{id: id}), do: id
+
   # TODO: handle moving entries between lists in a separate changeset since that could get tricky, as the new list may have th same item w/ the same mod values already
 end
