@@ -53,7 +53,8 @@ defmodule Ferry.Aid do
   #
   # Includes any needs list that overlaps with the duration (inclusive), even if
   # they begin or end outside of it.
-  def list_needs_lists(%Project{} = project, %Date{} = from, %Date{} = to) do
+  @spec get_needs_lists(Project.t(), Date.t(), Date.t()) :: {:ok, [NeedsList.t()]}
+  def get_needs_lists(%Project{} = project, %Date{} = from, %Date{} = to) do
     query =
       from [needs_list, proj] in needs_list_query(),
         where:
@@ -61,27 +62,27 @@ defmodule Ferry.Aid do
             needs_list.from <= ^to and
             needs_list.to >= ^from
 
-    Repo.all(query)
+    {:ok, Repo.all(query)}
   end
 
-  def list_needs_lists(%Project{} = project, %Date{} = from) do
+  def get_needs_lists(%Project{} = project, %Date{} = from) do
     # TODO: probably want 5 months > end of month
     #       OR make from inclusive and to exclusive, ie [from, to)
     to = Timex.shift(from, months: 6)
-    list_needs_lists(project, from, to)
+    get_needs_lists(project, from, to)
   end
 
-  def list_needs_lists(%Project{} = project) do
-    list_needs_lists(project, Timex.today())
+  def get_needs_lists(%Project{} = project) do
+    get_needs_lists(project, Timex.today())
   end
 
   # TODO: useful to have project independent list_ functions?
-  #       EX: list_needs_lists(%Date{} = from, %Date{} = to)
-  #           list_needs_lists(%Date{} = on)
+  #       EX: get_needs_lists(%Date{} = from, %Date{} = to)
+  #           get_needs_lists(%Date{} = on)
   #           list_current_needs_lists()
   #
   # TODO: or generalized ones with optional search parameters?
-  #       EX: list_needs_lists(%{project, from, to, contains item, above/below amount, etc})
+  #       EX: get_needs_lists(%{project, from, to, contains item, above/below amount, etc})
 
   # ------------------------------------------------------------
 
@@ -226,7 +227,8 @@ defmodule Ferry.Aid do
       order_by: needs_list.from,
       preload: [
         project: {project, group: group},
-        entries: entries
+        entries: {entries, mod_values: [mod_value: [:mod]], item: [:mods, :category]},
+        list: [:needs_list, :available_list, :manifest_list]
       ]
   end
 
@@ -535,6 +537,25 @@ defmodule Ferry.Aid do
      end)}
   end
 
+  @doc """
+  Given a list of addresses, this function builds the aggregated needs
+  of all projects related to any of those addresses, for the given
+  date range.
+
+  It is required that each address provided in the list has its project
+  preloaded.
+  """
+  @spec get_needs_list_by_addresses([Address.t()], Date.t(), Date.t()) ::
+          {:ok, NeedsList.t()}
+  def get_needs_list_by_addresses(addresses, from, to) do
+    {:ok,
+     addresses
+     |> Enum.map(fn %Address{project: project} -> project end)
+     |> resolve_aggregate_needs_lists(fn project ->
+       get_needs_lists(project, from, to)
+     end)}
+  end
+
   # Generic function that performs the aggregation of all
   # needs lists found for the given projects. It uses the specified
   # resolver function in order to convert a project to
@@ -547,8 +568,13 @@ defmodule Ferry.Aid do
           :not_found ->
             acc_needs_list
 
-          {:ok, needs_list} ->
+          {:ok, %NeedsList{} = needs_list} ->
             aggregated_needs_list(needs_list, acc_needs_list)
+
+          {:ok, needs_lists} when is_list(needs_lists) ->
+            needs_lists
+            |> List.flatten()
+            |> Enum.reduce(acc_needs_list, &aggregated_needs_list(&1, &2))
         end
 
       # if the given project is not a valid project

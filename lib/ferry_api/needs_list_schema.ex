@@ -27,10 +27,18 @@ defmodule FerryApi.Schema.NeedsList do
       resolve(&project_current_needs_list/3)
     end
 
-    @desc "Returns current's needs list for a list of addresses"
+    @desc "Returns an aggregated current's needs list for a list of addresses"
     field :current_needs_list_by_addresses, :needs_list do
       arg(:addresses, list_of(:id))
       resolve(&current_needs_list_by_addresses/3)
+    end
+
+    @desc "Returns an aggregated needs list for a list of addresses and a date range"
+    field :needs_list_by_addresses, :needs_list do
+      arg(:addresses, list_of(:id))
+      arg(:from, non_null(:datetime))
+      arg(:to, non_null(:datetime))
+      resolve(&needs_list_by_addresses/3)
     end
   end
 
@@ -113,7 +121,7 @@ defmodule FerryApi.Schema.NeedsList do
         {:error, @project_not_found}
 
       project ->
-        {:ok, Aid.list_needs_lists(project, DateTime.to_date(from), DateTime.to_date(to))}
+        Aid.get_needs_lists(project, DateTime.to_date(from), DateTime.to_date(to))
     end
   end
 
@@ -128,6 +136,23 @@ defmodule FerryApi.Schema.NeedsList do
     |> Enum.map(&Ferry.Locations.get_address(&1))
     |> Enum.filter(fn addr -> addr != nil end)
     |> Aid.get_current_needs_list_by_addresses()
+  end
+
+  @doc """
+  Resolver that returns an aggregated needs list for all addresses found for the given
+  ids. If an id can't be resolve to a valid address, it will be ignored.
+  """
+  @spec needs_list_by_addresses(
+          any(),
+          %{addresses: [String.t()], from: DateTime.t(), to: DateTime.t()},
+          any()
+        ) ::
+          {:ok, map()} | {:error, term()}
+  def needs_list_by_addresses(_, %{addresses: ids, from: from, to: to}, _) do
+    ids
+    |> Enum.map(&Ferry.Locations.get_address(&1))
+    |> Enum.filter(fn addr -> addr != nil end)
+    |> Aid.get_needs_list_by_addresses(DateTime.to_date(from), DateTime.to_date(to))
   end
 
   @doc """
