@@ -22,7 +22,10 @@ defmodule Ferry.NeedsListByAddresses do
             "entries" => entries
           }
         }
-      } = get_current_needs_list_by_addresses(conn, [london.address.id, leeds.address.id])
+      } =
+        get_current_needs_list_by_addresses(conn, %{
+          addresses: [london.address.id, leeds.address.id]
+        })
 
       assert_entry(
         %{
@@ -32,6 +35,41 @@ defmodule Ferry.NeedsListByAddresses do
         },
         entries
       )
+
+      %{
+        "data" => %{
+          "needsListByAddresses" => %{
+            "entries" => entries
+          }
+        }
+      } =
+        get_needs_list_by_addresses(conn, %{
+          addresses: [london.address.id, leeds.address.id],
+          from: DateTime.utc_now() |> DateTime.add(-24 * 3600, :second),
+          to: DateTime.utc_now() |> DateTime.add(24 * 3600, :second)
+        })
+
+      assert_entry(
+        %{
+          amount: 8,
+          item: "shirt",
+          mods: %{size: "large", color: "red"}
+        },
+        entries
+      )
+
+      %{
+        "data" => %{
+          "needsListByAddresses" => %{
+            "entries" => []
+          }
+        }
+      } =
+        get_needs_list_by_addresses(conn, %{
+          addresses: [london.address.id, leeds.address.id],
+          from: DateTime.utc_now() |> DateTime.add(-48 * 3600, :second),
+          to: DateTime.utc_now() |> DateTime.add(-24 * 3600, :second)
+        })
     end
   end
 end

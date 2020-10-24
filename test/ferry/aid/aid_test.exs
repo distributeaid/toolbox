@@ -18,54 +18,72 @@ defmodule Ferry.AidTest do
   # TODO: verify that list_* and get_* include entries
 
   describe "needs list" do
-    test "list_needs_lists/3 returns all needs lists for a project that overlap a duration" do
+    test "get_needs_lists/3 returns all needs lists for a project that overlap a duration" do
       project = insert(:project)
       from = Timex.today() |> Timex.shift(years: -2)
       to = Timex.today() |> Timex.shift(years: 2)
 
       # none
-      assert Aid.list_needs_lists(project, from, to) == []
+      assert Aid.get_needs_lists(project, from, to) == {:ok, []}
 
       # 1
       list1 = insert(:needs_list, %{project: project})
-      assert Aid.list_needs_lists(project, from, to) == [list1]
+      {:ok, list1} = Aid.get_needs_list(list1.id)
+
+      assert Aid.get_needs_lists(project, from, to) == {:ok, [list1]}
 
       # many
       list2 = insert(:needs_list_after, %{project: project, to: list1.to})
-      assert Aid.list_needs_lists(project, from, to) == [list1, list2]
+      {:ok, list2} = Aid.get_needs_list(list2.id)
+      assert Aid.get_needs_lists(project, from, to) == {:ok, [list1, list2]}
 
       # ordered by from date
       last_list = insert(:needs_list_after, %{project: project, to: list2.to})
-      first_list = insert(:needs_list_before, %{project: project, from: list2.from})
+      {:ok, last_list} = Aid.get_needs_list(last_list.id)
 
-      assert Aid.list_needs_lists(project, from, to) == [
-               first_list,
-               list1,
-               list2,
-               last_list
-             ]
+      first_list = insert(:needs_list_before, %{project: project, from: list2.from})
+      {:ok, first_list} = Aid.get_needs_list(first_list.id)
+
+      assert Aid.get_needs_lists(project, from, to) ==
+               {:ok,
+                [
+                  first_list,
+                  list1,
+                  list2,
+                  last_list
+                ]}
 
       # includes lists that overlap with the duration (inclusive)
       start_overlap_list = insert(:needs_list_start_overlap, %{project: project, from: from})
+      {:ok, start_overlap_list} = Aid.get_needs_list(start_overlap_list.id)
+
       end_overlap_list = insert(:needs_list_end_overlap, %{project: project, to: to})
-      lists = Aid.list_needs_lists(project, from, to)
+      {:ok, end_overlap_list} = Aid.get_needs_list(end_overlap_list.id)
+
+      {:ok, lists} = Aid.get_needs_lists(project, from, to)
+
       assert start_overlap_list in lists
       assert end_overlap_list in lists
 
       # doesn't include lists that fall outside the duration
       before_list = insert(:needs_list_before, %{project: project, from: from})
+      {:ok, before_list} = Aid.get_needs_list(before_list.id)
+
       after_list = insert(:needs_list_after, %{project: project, to: to})
-      lists = Aid.list_needs_lists(project, from, to)
+      {:ok, after_list} = Aid.get_needs_list(after_list.id)
+
+      {:ok, lists} = Aid.get_needs_lists(project, from, to)
       refute Enum.any?(lists, &(&1.id == before_list.id))
       refute Enum.any?(lists, &(&1.id == after_list.id))
 
       # doesn't include needs lists from other projects
       other_project_list = insert(:needs_list)
-      lists = Aid.list_needs_lists(project, from, to)
+      {:ok, other_project_list} = Aid.get_needs_list(other_project_list.id)
+      {:ok, lists} = Aid.get_needs_lists(project, from, to)
       refute Enum.any?(lists, &(&1.id == other_project_list.id))
     end
 
-    test "list_needs_lists/2 returns all needs lists for a project that overlap within 6 months of the given date" do
+    test "get_needs_lists/2 returns all needs lists for a project that overlap within 6 months of the given date" do
       project = insert(:project)
       # |> without_assoc(:address)
       from = Timex.today() |> Timex.shift(months: 1)
@@ -73,6 +91,7 @@ defmodule Ferry.AidTest do
 
       _before_list = insert(:needs_list_before, %{project: project, from: from})
       start_overlap_list = insert(:needs_list_start_overlap, %{project: project, from: from})
+      {:ok, start_overlap_list} = Aid.get_needs_list(start_overlap_list.id)
 
       within_list =
         insert(:needs_list, %{
@@ -81,23 +100,30 @@ defmodule Ferry.AidTest do
           to: to |> Timex.shift(months: 2)
         })
 
+      {:ok, within_list} = Aid.get_needs_list(within_list.id)
+
       end_overlap_list = insert(:needs_list_end_overlap, %{project: project, to: to})
+      {:ok, end_overlap_list} = Aid.get_needs_list(end_overlap_list.id)
+
       _after_list = insert(:needs_list_after, %{project: project, to: to})
 
-      assert Aid.list_needs_lists(project, from) == [
-               start_overlap_list,
-               within_list,
-               end_overlap_list
-             ]
+      assert Aid.get_needs_lists(project, from) ==
+               {:ok,
+                [
+                  start_overlap_list,
+                  within_list,
+                  end_overlap_list
+                ]}
     end
 
-    test "list_needs_lists/2 returns all needs lists for a project that overlap within 6 months of today" do
+    test "get_needs_lists/2 returns all needs lists for a project that overlap within 6 months of today" do
       project = insert(:project)
       from = Timex.today()
       to = from |> Timex.shift(months: 6)
 
       _before_list = insert(:needs_list_before, %{project: project, from: from})
       start_overlap_list = insert(:needs_list_start_overlap, %{project: project, from: from})
+      {:ok, start_overlap_list} = Aid.get_needs_list(start_overlap_list.id)
 
       within_list =
         insert(:needs_list, %{
@@ -106,18 +132,24 @@ defmodule Ferry.AidTest do
           to: from |> Timex.shift(months: 2)
         })
 
+      {:ok, within_list} = Aid.get_needs_list(within_list.id)
+
       end_overlap_list = insert(:needs_list_end_overlap, %{project: project, to: to})
+      {:ok, end_overlap_list} = Aid.get_needs_list(end_overlap_list.id)
       _after_list = insert(:needs_list_after, %{project: project, to: to})
 
-      assert Aid.list_needs_lists(project, from) == [
-               start_overlap_list,
-               within_list,
-               end_overlap_list
-             ]
+      assert Aid.get_needs_lists(project, from) ==
+               {:ok,
+                [
+                  start_overlap_list,
+                  within_list,
+                  end_overlap_list
+                ]}
     end
 
     test "get_needs_list!/1 returns the requested needs list" do
       list = insert(:needs_list)
+      {:ok, list} = Aid.get_needs_list(list.id)
 
       assert Aid.get_needs_list!(list.id) == list
     end
