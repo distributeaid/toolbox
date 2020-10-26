@@ -68,6 +68,20 @@ defmodule FerryApi.Schema.NeedsList do
       arg(:to, non_null(:datetime))
       resolve(&needs_list_by_postal_codes/3)
     end
+
+    @desc "Returns an aggregated current's needs list for a list of cities"
+    field :current_needs_list_by_cities, :needs_list do
+      arg(:cities, list_of(:string))
+      resolve(&current_needs_list_by_cities/3)
+    end
+
+    @desc "Returns an aggregated needs list for a list of cities and a date range"
+    field :needs_list_by_cities, :needs_list do
+      arg(:cities, list_of(:string))
+      arg(:from, non_null(:datetime))
+      arg(:to, non_null(:datetime))
+      resolve(&needs_list_by_cities/3)
+    end
   end
 
   input_object :needs_list_input do
@@ -240,6 +254,34 @@ defmodule FerryApi.Schema.NeedsList do
   def needs_list_by_postal_codes(_, %{postal_codes: codes, from: from, to: to}, _) do
     codes
     |> Ferry.Locations.get_addresses_by_postal_codes()
+    |> Aid.get_needs_list_by_addresses(DateTime.to_date(from), DateTime.to_date(to))
+  end
+
+  @doc """
+  Resolver that returns an aggregated needs list for all addresses found for the given
+  cities.
+  """
+  @spec current_needs_list_by_cities(any(), %{cities: [String.t()]}, any()) ::
+          {:ok, map()} | {:error, term()}
+  def current_needs_list_by_cities(_, %{cities: cities}, _) do
+    cities
+    |> Ferry.Locations.get_addresses_by_cities()
+    |> Aid.get_current_needs_list_by_addresses()
+  end
+
+  @doc """
+  Resolver that returns an aggregated needs list for all addresses found for the given
+  cities.
+  """
+  @spec needs_list_by_cities(
+          any(),
+          %{cities: [String.t()], from: DateTime.t(), to: DateTime.t()},
+          any()
+        ) ::
+          {:ok, map()} | {:error, term()}
+  def needs_list_by_cities(_, %{cities: cities, from: from, to: to}, _) do
+    cities
+    |> Ferry.Locations.get_addresses_by_cities()
     |> Aid.get_needs_list_by_addresses(DateTime.to_date(from), DateTime.to_date(to))
   end
 
