@@ -80,6 +80,17 @@ defmodule Ferry.Locations do
   end
 
   @doc """
+  Gets all the addresses that match any of the given cities
+  """
+  @spec get_addresses_by_cities([String.t()]) :: [Address.t()]
+  def get_addresses_by_cities(cities) do
+    from(a in Address, where: a.city in ^cities)
+    |> Repo.all()
+    |> Repo.preload(:project)
+    |> Repo.preload(:group)
+  end
+
+  @doc """
   Gets a single address.
 
   ## Examples
