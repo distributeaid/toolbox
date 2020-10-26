@@ -69,6 +69,17 @@ defmodule Ferry.Locations do
   end
 
   @doc """
+  Gets all the addresses that match any of the given postal codes
+  """
+  @spec get_addresses_by_postal_codes([String.t()]) :: [Address.t()]
+  def get_addresses_by_postal_codes(codes) do
+    from(a in Address, where: a.postal_code in ^codes)
+    |> Repo.all()
+    |> Repo.preload(:project)
+    |> Repo.preload(:group)
+  end
+
+  @doc """
   Gets a single address.
 
   ## Examples
