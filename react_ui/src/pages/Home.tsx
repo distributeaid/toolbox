@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useMediaQuery } from 'react-responsive'
 
 import { classnames } from '../components/classnames'
 import { ContentContainer } from '../components/ContentContainer'
@@ -8,58 +9,119 @@ export const Home: React.FC = () => {
     null
   )
 
+  const isMobile = useMediaQuery({ maxWidth: 768 })
+
   return (
-    <ContentContainer>
-      <div onClick={() => setSelectedShipment(null)}>
-        <h1 className="font-bold text-3xl m-6">Shipments</h1>
+    <>
+      {isMobile && (
+        <ContentContainer>
+          <h1 className="font-bold text-3xl m-3">Shipments</h1>
 
-        <table className="table-fixed m-6">
-          <thead>
-            <tr>
-              <th className="w-1/12 font-normal text-left py-2">ID</th>
-              <th className="w-1/12 font-normal text-left py-2">Status</th>
-              <th className="w-3/12 font-normal text-left py-2">Manifest</th>
-              <th className="w-1/12 font-normal text-left py-2">Destination</th>
-              <th className="w-1/12 font-normal text-left py-2">Pickup date</th>
-              <th className="w-1/12 font-normal text-left py-2">
-                Arrival date
-              </th>
-              <th className="w-1/12 font-normal text-left py-2">
-                Organized By
-              </th>
-            </tr>
-          </thead>
+          {FAKE_SHIPMENTS.map((shipment) => (
+            <div className="shadow-md border border-gray-100 m-3 rounded text-xs">
+              <div className="m-2 mb-0">{shipment.id}</div>
 
-          <tbody>
-            {FAKE_SHIPMENTS.map((shipment) => (
-              <tr
-                className="border-t hover:bg-gray-100 cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setSelectedShipment(shipment)
-                }}>
-                <td className="py-2">{shipment.id}</td>
-                <td className="py-2">{shipment.status}</td>
-                <td className="py-2">{shipment.manifest}</td>
-                <td className="py-2">{shipment.destination}</td>
-                <td className="py-2">{shipment.pickUpDate}</td>
-                <td className="py-2">{shipment.arrivalDate}</td>
-                <td className="py-2">{shipment.originator}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+              <div className="text-base font-bold m-2">{shipment.manifest}</div>
 
-      <div
-        className={classnames(
-          'sidebar z-40 p-6',
-          !!selectedShipment && 'sidebar--open',
-          'sidebar--closed' && !selectedShipment
-        )}>
-        <SidebarContents shipment={selectedShipment} />
-      </div>
-    </ContentContainer>
+              <hr />
+
+              <div className="flex flex-row justify-between m-2">
+                <div className="w-1/4">
+                  <div className="font-bold">Status</div>
+                  {shipment.status}
+                </div>
+
+                <div className="w-1/4">
+                  <div className="font-bold">Next steps</div>
+                </div>
+
+                <div className="w-1/4">
+                  <div className="font-bold">Pickup date</div>
+                  {shipment.pickUpDate}
+                </div>
+              </div>
+
+              <div className="flex flex-row justify-between m-2">
+                <div className="w-1/4">
+                  <div className="font-bold">Origin</div>
+                  {shipment.originator}
+                </div>
+
+                <div className="w-1/4">
+                  <div className="font-bold">Destination</div>
+                  {shipment.destination}
+                </div>
+
+                <div className="w-1/4">
+                  <div className="font-bold">Arrival date</div>
+                  {shipment.arrivalDate}
+                </div>
+              </div>
+            </div>
+          ))}
+        </ContentContainer>
+      )}
+
+      {!isMobile && (
+        <ContentContainer>
+          <div onClick={() => setSelectedShipment(null)}>
+            <h1 className="font-bold text-3xl m-6">Shipments</h1>
+
+            <table className="table-fixed m-6">
+              <thead>
+                <tr>
+                  <th className="w-1/12 font-normal text-left py-2">ID</th>
+                  <th className="w-1/12 font-normal text-left py-2">Status</th>
+                  <th className="w-3/12 font-normal text-left py-2">
+                    Manifest
+                  </th>
+                  <th className="w-1/12 font-normal text-left py-2">
+                    Destination
+                  </th>
+                  <th className="w-1/12 font-normal text-left py-2">
+                    Pickup date
+                  </th>
+                  <th className="w-1/12 font-normal text-left py-2">
+                    Arrival date
+                  </th>
+                  <th className="w-1/12 font-normal text-left py-2">
+                    Organized By
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {FAKE_SHIPMENTS.map((shipment) => (
+                  <tr
+                    className="border-t hover:bg-gray-100 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setSelectedShipment(shipment)
+                    }}>
+                    <td className="py-2">{shipment.id}</td>
+                    <td className="py-2">{shipment.status}</td>
+                    <td className="py-2">{shipment.manifest}</td>
+                    <td className="py-2">{shipment.destination}</td>
+                    <td className="py-2">{shipment.pickUpDate}</td>
+                    <td className="py-2">{shipment.arrivalDate}</td>
+                    <td className="py-2">{shipment.originator}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div
+            className={classnames(
+              'sidebar z-40 p-6',
+              !!selectedShipment && 'sidebar--open',
+              'sidebar--closed' && !selectedShipment
+            )}>
+            <SidebarContents shipment={selectedShipment} />
+          </div>
+        </ContentContainer>
+      )}
+    </>
   )
 }
 
