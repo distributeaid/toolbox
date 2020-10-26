@@ -50,14 +50,15 @@ defmodule Ferry.Profiles do
     Repo.get!(query, id)
   end
 
+  @doc """
+  Returns a group, given its id
+  """
+  @spec get_group(String.t()) :: Group.t() | nil
   def get_group(id) do
-    query = group_query(preload: [])
-    Repo.get(query, id)
-  end
-
-  def get_group(id, preload: preload) do
-    query = group_query(preload: preload)
-    Repo.get(query, id)
+    Group
+    |> preload(addresses: [:project])
+    |> preload(:projects)
+    |> Repo.get(id)
   end
 
   def get_group_by_slug(slug) do
