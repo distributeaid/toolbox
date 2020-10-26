@@ -54,6 +54,20 @@ defmodule FerryApi.Schema.NeedsList do
       arg(:to, non_null(:datetime))
       resolve(&needs_list_by_groups/3)
     end
+
+    @desc "Returns an aggregated current's needs list for a list of postal codes"
+    field :current_needs_list_by_postal_codes, :needs_list do
+      arg(:postal_codes, list_of(:string))
+      resolve(&current_needs_list_by_postal_codes/3)
+    end
+
+    @desc "Returns an aggregated needs list for a list of postal codes and a date range"
+    field :needs_list_by_postal_codes, :needs_list do
+      arg(:postal_codes, list_of(:string))
+      arg(:from, non_null(:datetime))
+      arg(:to, non_null(:datetime))
+      resolve(&needs_list_by_postal_codes/3)
+    end
   end
 
   input_object :needs_list_input do
@@ -198,6 +212,34 @@ defmodule FerryApi.Schema.NeedsList do
     |> Enum.map(&Ferry.Profiles.get_group(&1))
     |> Enum.filter(fn group -> group != nil end)
     |> Enum.flat_map(fn group -> group.addresses end)
+    |> Aid.get_needs_list_by_addresses(DateTime.to_date(from), DateTime.to_date(to))
+  end
+
+  @doc """
+  Resolver that returns an aggregated needs list for all addresses found for the given
+  postal codes.
+  """
+  @spec current_needs_list_by_postal_codes(any(), %{postal_codes: [String.t()]}, any()) ::
+          {:ok, map()} | {:error, term()}
+  def current_needs_list_by_postal_codes(_, %{postal_codes: codes}, _) do
+    codes
+    |> Ferry.Locations.get_addresses_by_postal_codes()
+    |> Aid.get_current_needs_list_by_addresses()
+  end
+
+  @doc """
+  Resolver that returns an aggregated needs list for all addresses found for the given
+  postal codes.
+  """
+  @spec needs_list_by_postal_codes(
+          any(),
+          %{postal_codes: [String.t()], from: DateTime.t(), to: DateTime.t()},
+          any()
+        ) ::
+          {:ok, map()} | {:error, term()}
+  def needs_list_by_postal_codes(_, %{postal_codes: codes, from: from, to: to}, _) do
+    codes
+    |> Ferry.Locations.get_addresses_by_postal_codes()
     |> Aid.get_needs_list_by_addresses(DateTime.to_date(from), DateTime.to_date(to))
   end
 

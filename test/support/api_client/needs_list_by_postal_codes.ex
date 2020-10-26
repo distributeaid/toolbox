@@ -1,22 +1,22 @@
-defmodule Ferry.ApiClient.NeedsListByGroups do
+defmodule Ferry.ApiClient.NeedsListByPostalCodes do
   @moduledoc """
   Helper module that provides with a convenience GraphQL client api
-  for dealing with Needs Lists by Groups in tests
+  for dealing with Needs Lists by postal codes in tests
   """
 
   import Ferry.ApiClient.GraphCase
 
   @doc """
   Run a GraphQL query that returns an aggregated needs list
-  for a list of group ids. The needs list is returned for the current date
+  for a list of postal codes. The needs list is returned for the current date
   """
-  @spec get_current_needs_list_by_groups(Plug.Conn.t(), map()) :: map()
-  def get_current_needs_list_by_groups(conn, attrs) do
-    ids = Enum.join(attrs.groups, ",")
+  @spec get_current_needs_list_by_postal_codes(Plug.Conn.t(), map()) :: map()
+  def get_current_needs_list_by_postal_codes(conn, attrs) do
+    codes = attrs.postal_codes |> Enum.map(fn code -> "\"#{code}\"" end) |> Enum.join(",")
 
     graphql(conn, """
     {
-      currentNeedsListByGroups(groups: [#{ids}]) {
+      currentNeedsListByPostalCodes(postalCodes: [#{codes}]) {
         entries {
           amount,
           item {
@@ -41,18 +41,18 @@ defmodule Ferry.ApiClient.NeedsListByGroups do
 
   @doc """
   Run a GraphQL query that returns an aggregated needs list
-  for a list of group ids and a date range
+  for a list of postal codes and a date range
   """
-  @spec get_needs_list_by_groups(Plug.Conn.t(), map()) :: map()
-  def get_needs_list_by_groups(conn, attrs) do
-    ids = Enum.join(attrs.groups, ",")
+  @spec get_needs_list_by_postal_codes(Plug.Conn.t(), map()) :: map()
+  def get_needs_list_by_postal_codes(conn, attrs) do
+    codes = attrs.postal_codes |> Enum.map(fn code -> "\"#{code}\"" end) |> Enum.join(",")
 
     from = DateTime.to_iso8601(attrs.from)
     to = DateTime.to_iso8601(attrs.to)
 
     graphql(conn, """
     {
-      needsListByGroups(groups: [#{ids}], from: "#{from}", to: "#{to}") {
+      needsListByPostalCodes(postalCodes: [#{codes}], from: "#{from}", to: "#{to}") {
         entries {
           amount,
           item {
