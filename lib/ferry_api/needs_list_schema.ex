@@ -40,6 +40,20 @@ defmodule FerryApi.Schema.NeedsList do
       arg(:to, non_null(:datetime))
       resolve(&needs_list_by_addresses/3)
     end
+
+    @desc "Returns an aggregated current's needs list for a list of groups"
+    field :current_needs_list_by_groups, :needs_list do
+      arg(:groups, list_of(:id))
+      resolve(&current_needs_list_by_groups/3)
+    end
+
+    @desc "Returns an aggregated needs list for a list of groups and a date range"
+    field :needs_list_by_groups, :needs_list do
+      arg(:groups, list_of(:id))
+      arg(:from, non_null(:datetime))
+      arg(:to, non_null(:datetime))
+      resolve(&needs_list_by_groups/3)
+    end
   end
 
   input_object :needs_list_input do
@@ -152,6 +166,38 @@ defmodule FerryApi.Schema.NeedsList do
     ids
     |> Enum.map(&Ferry.Locations.get_address(&1))
     |> Enum.filter(fn addr -> addr != nil end)
+    |> Aid.get_needs_list_by_addresses(DateTime.to_date(from), DateTime.to_date(to))
+  end
+
+  @doc """
+  Resolver that returns an aggregated needs list for all groups found for the given
+  ids. If an id can't be resolve to a valid group, it will be ignored.
+  """
+  @spec current_needs_list_by_groups(any(), %{groups: [String.t()]}, any()) ::
+          {:ok, map()} | {:error, term()}
+  def current_needs_list_by_groups(_, %{groups: ids}, _) do
+    ids
+    |> Enum.map(&Ferry.Profiles.get_group(&1))
+    |> Enum.filter(fn group -> group != nil end)
+    |> Enum.flat_map(fn group -> group.addresses end)
+    |> Aid.get_current_needs_list_by_addresses()
+  end
+
+  @doc """
+  Resolver that returns an aggregated needs list for all groups found for the given
+  ids. If an id can't be resolve to a valid group, it will be ignored.
+  """
+  @spec needs_list_by_groups(
+          any(),
+          %{groups: [String.t()], from: DateTime.t(), to: DateTime.t()},
+          any()
+        ) ::
+          {:ok, map()} | {:error, term()}
+  def needs_list_by_groups(_, %{groups: ids, from: from, to: to}, _) do
+    ids
+    |> Enum.map(&Ferry.Profiles.get_group(&1))
+    |> Enum.filter(fn group -> group != nil end)
+    |> Enum.flat_map(fn group -> group.addresses end)
     |> Aid.get_needs_list_by_addresses(DateTime.to_date(from), DateTime.to_date(to))
   end
 

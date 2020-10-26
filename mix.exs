@@ -56,7 +56,7 @@ defmodule Ferry.Mixfile do
       {:phoenix_pubsub, "~> 2.0"},
       {:ecto_sql, "~> 3.0", override: true},
       {:phoenix_ecto, "~> 4.1"},
-      {:postgrex, ">= 0.0.0"},
+      {:postgrex, ">= 0.15.6"},
       {:phoenix_html, "~> 2.13"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.18"},
