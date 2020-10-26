@@ -91,6 +91,17 @@ defmodule Ferry.Locations do
   end
 
   @doc """
+  Gets all the addresses that match any of the given countries
+  """
+  @spec get_addresses_by_countries([String.t()]) :: [Address.t()]
+  def get_addresses_by_countries(countries) do
+    from(a in Address, where: a.country_code in ^countries)
+    |> Repo.all()
+    |> Repo.preload(:project)
+    |> Repo.preload(:group)
+  end
+
+  @doc """
   Gets a single address.
 
   ## Examples
