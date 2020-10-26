@@ -96,7 +96,7 @@ defmodule FerryApi.Schema.Group do
   end
 
   def get_group(_parent, %{id: id}, _resolution) do
-    case Profiles.get_group(id, preload: [:addresses]) do
+    case Profiles.get_group(id) do
       nil -> {:error, message: "Group not found.", id: id}
       group -> {:ok, group}
     end
