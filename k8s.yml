@@ -73,11 +73,12 @@ spec:
               value: "{{VERSION}}"
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: db 
 spec:
   replicas: 1
+  serviceName: db
   selector:
     matchLabels:
       app: db 
