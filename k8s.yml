@@ -87,9 +87,9 @@ spec:
         app: db 
     spec:
       volumes:
-        - name: db
+        - name: data
           persistentVolumeClaim:
-            claimName: db-pv-claim
+            claimName: data 
       containers:
         - name: db 
           image: postgres:11.2
@@ -100,12 +100,12 @@ spec:
               protocol: TCP
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: db
+              name: data
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: db-pv-claim
+  name: data 
   labels:
     app: db
 spec:
