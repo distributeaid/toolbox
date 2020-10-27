@@ -99,6 +99,9 @@ spec:
             - name: http
               containerPort: 5432
               protocol: TCP
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: data
