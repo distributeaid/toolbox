@@ -87,7 +87,7 @@ spec:
         app: db 
     spec:
       volumes:
-      - name: db
+        - name: db
           persistentVolumeClaim:
             claimName: db-pv-claim
       containers:
