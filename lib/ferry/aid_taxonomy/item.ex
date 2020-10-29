@@ -5,6 +5,7 @@ defmodule Ferry.AidTaxonomy.Item do
   alias Ferry.AidTaxonomy.Category
   alias Ferry.AidTaxonomy.Mod
   alias Ferry.AidTaxonomy.ItemMod
+  alias Ferry.Utils
 
   @type t :: %__MODULE__{}
 
@@ -32,5 +33,6 @@ defmodule Ferry.AidTaxonomy.Item do
       name: "aid__items_category_id_name_index",
       message: "already exists"
     )
+    |> Utils.put_normalized_name()
   end
 end

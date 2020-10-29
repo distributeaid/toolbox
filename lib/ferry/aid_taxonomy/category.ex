@@ -5,6 +5,7 @@ defmodule Ferry.AidTaxonomy.Category do
   @type t :: %__MODULE__{}
 
   alias Ferry.AidTaxonomy.Item
+  alias Ferry.Utils
 
   schema "aid__item_categories" do
     field :name, :string
@@ -22,5 +23,6 @@ defmodule Ferry.AidTaxonomy.Category do
     |> validate_length(:name, min: 2, max: 32)
     |> foreign_key_constraint(:entries, name: "aid__list_entries_item_id_fkey")
     |> unique_constraint(:name, message: "already exists")
+    |> Utils.put_normalized_name()
   end
 end

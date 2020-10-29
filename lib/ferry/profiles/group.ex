@@ -7,6 +7,7 @@ defmodule Ferry.Profiles.Group do
   alias Ferry.Profiles.Group.Logo
   alias Ferry.Profiles.Project
   alias Ferry.Locations.Address
+  alias Ferry.Utils
 
   @type t :: %__MODULE__{}
 
@@ -71,6 +72,7 @@ defmodule Ferry.Profiles.Group do
     |> unique_constraint(:name)
     # Just set the type for now, while there's only one valid type.
     |> put_change(:type, "M4D_CHAPTER")
+    |> Utils.put_normalized_name()
     |> validate_inclusion(:type, @group_types)
   end
 
