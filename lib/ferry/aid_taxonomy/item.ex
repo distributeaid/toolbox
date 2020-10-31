@@ -11,6 +11,7 @@ defmodule Ferry.AidTaxonomy.Item do
 
   schema "aid__items" do
     field :name, :string
+    field :slug, :string
 
     belongs_to :category, Category, foreign_key: :category_id, on_replace: :update
 
@@ -33,6 +34,7 @@ defmodule Ferry.AidTaxonomy.Item do
       name: "aid__items_category_id_name_index",
       message: "already exists"
     )
-    |> Utils.put_normalized_name()
+    |> Utils.put_slug()
+    |> unique_constraint(:slug)
   end
 end
