@@ -206,6 +206,7 @@ defmodule Ferry.AidTaxonomyTest do
       attrs = params_for(:aid_item, %{name: "SAME", category: category2})
       assert {:ok, %Item{} = item2} = AidTaxonomy.create_item(category2, attrs)
       assert item1.name == item2.name
+      assert item2.slug == "same"
       assert item1.category != item2.category
 
       # doesn't need mods...
@@ -371,10 +372,11 @@ defmodule Ferry.AidTaxonomyTest do
 
     test "create_mod/1 with valid data creates a mod" do
       # integer mod
-      attrs = params_for(:aid_mod, %{type: "integer", description: "test"})
+      attrs = params_for(:aid_mod, %{name: "Mod Name", type: "integer", description: "test"})
 
       assert {:ok, %Mod{} = mod} = AidTaxonomy.create_mod(attrs)
       assert mod.name == attrs.name
+      assert mod.slug == "mod-name"
       assert mod.description == attrs.description
       assert mod.type == attrs.type
     end

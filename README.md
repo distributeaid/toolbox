@@ -202,7 +202,7 @@ Our docker container names are:
 
 ## Common Mix Commands
 
-**Pheonix:**
+**Phoenix:**
 
 - https://hexdocs.pm/phoenix/phoenix_mix_tasks.html#content
 - You can also lookup each individual task in the mix section of the left side

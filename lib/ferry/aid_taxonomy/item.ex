@@ -5,11 +5,13 @@ defmodule Ferry.AidTaxonomy.Item do
   alias Ferry.AidTaxonomy.Category
   alias Ferry.AidTaxonomy.Mod
   alias Ferry.AidTaxonomy.ItemMod
+  alias Ferry.Utils
 
   @type t :: %__MODULE__{}
 
   schema "aid__items" do
     field :name, :string
+    field :slug, :string
 
     belongs_to :category, Category, foreign_key: :category_id, on_replace: :update
 
@@ -32,5 +34,7 @@ defmodule Ferry.AidTaxonomy.Item do
       name: "aid__items_category_id_name_index",
       message: "already exists"
     )
+    |> Utils.put_slug()
+    |> unique_constraint(:slug)
   end
 end
