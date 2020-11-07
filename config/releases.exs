@@ -48,3 +48,9 @@ config :ferry, :chat,
 config :arc,
   storage: Arc.Storage.S3,
   bucket: {:system, "AWS_S3_BUCKET"}
+
+config :ferry, Ferry.Token,
+  signer_alg: "RS256",
+  audience: System.get_env("AUTH_AUDIENCE"),
+  issuer: System.get_env("AUTH_ISSUER"),
+  key: System.get_env("AUTH_SECRET")
