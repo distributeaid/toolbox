@@ -21,6 +21,7 @@ defmodule FerryApi.Schema.Shipment do
     @desc "Get a single shipment"
     field :shipment, :shipment do
       arg(:id, non_null(:id))
+      middleware(Middleware.RequireUser)
       resolve(&get_shipment/3)
     end
   end

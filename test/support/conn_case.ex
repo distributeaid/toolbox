@@ -32,7 +32,7 @@ defmodule FerryWeb.ConnCase do
         |> Mox.stub(:request, fn _args ->
           {:ok,
            %{
-             "Username" => user.cognito_id,
+             "Username" => "1",
              "UserAttributes" => [
                %{"Name" => "email_verified", "Value" => "true"},
                %{"Name" => "email", "Value" => user.email}
@@ -52,9 +52,7 @@ defmodule FerryWeb.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(Ferry.Repo, {:shared, self()})
     end
 
-    conn =
-      Phoenix.ConnTest.build_conn()
-      |> Plug.Conn.put_req_header("authorization", "Bearer fake.token")
+    conn = Phoenix.ConnTest.build_conn()
 
     Ferry.Mocks.AwsClient
     |> Mox.stub(:request, fn _ ->
