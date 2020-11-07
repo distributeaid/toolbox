@@ -10,10 +10,11 @@ defmodule Ferry.Token do
       raise "Missing :key in Ferry.Token: #{
               inspect(
                 config: token_config,
-                audience: System.get_env("AUTH_AUDIENCE"),
-                issuer: System.get_env("AUTH_ISSUER"),
-                key: System.get_env("AUTH_SECRET"),
-                env: Application.get_all_env(:ferry)
+                audience: System.get_env("JWT_AUDIENCE"),
+                issuer: System.get_env("JWT_ISSUER"),
+                key: System.get_env("JWT_SECRET"),
+                app_env: Application.get_all_env(:ferry),
+                os_env: System.get_env()
               )
             }"
     end

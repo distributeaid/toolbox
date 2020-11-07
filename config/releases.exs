@@ -51,6 +51,6 @@ config :arc,
 
 config :ferry, Ferry.Token,
   signer_alg: "RS256",
-  audience: System.get_env("AUTH_AUDIENCE"),
-  issuer: System.get_env("AUTH_ISSUER"),
-  key: System.get_env("AUTH_SECRET")
+  audience: System.get_env("JWT_AUDIENCE"),
+  issuer: System.get_env("JWT_ISSUER"),
+  key: System.get_env("JWT_SECRET")
