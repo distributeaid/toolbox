@@ -51,6 +51,6 @@ config :arc,
 
 config :ferry, Ferry.Token,
   signer_alg: "RS256",
-  audience: System.get_env("AUTH_AUDIENCE"),
-  issuer: System.get_env("AUTH_ISSUER"),
-  key: System.get_env("AUTH_SECRET")
+  audience: {:system, "AUTH_AUDIENCE"},
+  issuer: {:system, "AUTH_ISSUER"},
+  key: {:system, "AUTH_SECRET"}
