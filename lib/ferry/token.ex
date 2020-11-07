@@ -7,7 +7,15 @@ defmodule Ferry.Token do
     pem = token_config[:key]
 
     if pem == "" or pem == nil do
-      raise "Missing :key in Ferry.Token: #{inspect(token_config)}"
+      raise "Missing :key in Ferry.Token: #{
+              inspect(
+                config: token_config,
+                audience: System.get_env("AUTH_AUDIENCE"),
+                issuer: System.get_env("AUTH_ISSUER"),
+                key: System.get_env("AUTH_SECRET"),
+                env: Application.get_all_env(:ferry)
+              )
+            }"
     end
 
     Application.put_env(
