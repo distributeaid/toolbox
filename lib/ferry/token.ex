@@ -2,7 +2,13 @@ defmodule Ferry.Token do
   use Joken.Config
 
   def setup() do
-    pem = Application.get_env(:ferry, Ferry.Token)[:key]
+    token_config = Application.get_env(:ferry, Ferry.Token)
+
+    pem = token_config[:key]
+
+    if pem == "" or pem == nil do
+      raise "Missing :key in Ferry.Token: #{inspect(token_config)}"
+    end
 
     Application.put_env(
       :joken,

@@ -17,12 +17,6 @@ config :ferry, FerryWeb.Endpoint,
   pubsub_server: Ferry.PubSub,
   live_view: [signing_salt: "w5u8sooV1GpBhBDnW/kFF8Hvd3cYnEP6+Alc9BjC1o3mAymHFwJSoiRCjZbFBnS8"]
 
-config :ferry, Ferry.Token,
-  signer_alg: "RS256",
-  audience: System.get_env("AUTH_AUDIENCE"),
-  issuer: System.get_env("AUTH_ISSUER"),
-  key: System.get_env("AUTH_SECRET")
-
 # Configures Arq
 config :arc,
   storage: Arc.Storage.Local
@@ -38,22 +32,6 @@ config :phoenix, :json_library, Jason
 # Configure modules which can be overridden in test.exs by mocks for testing.
 config :ferry, :geocoder, Ferry.Locations.Geocoder.Nominatim
 config :ferry, :aws_client, Ferry.AwsClient
-
-config :ferry, :jwt,
-  keyId: "12599b51-11b7-4c45-8f8a-a2bd1a6c5745",
-  privateKey: """
-  -----BEGIN EC PRIVATE KEY-----
-  MHcCAQEEICZqujJqPxmKWeyxq4D7bLqOHDKOEM+6jTJcPCQ9hSryoAoGCCqGSM49
-  AwEHoUQDQgAEDCz8s7nGPQyWZY0jkrL5VzKbE9EWLkNwOWoI98nOVU42SYw0ooqX
-  IYNPX2oZSKmvkF17xXd+ThXLsi9it8nplg==
-  -----END EC PRIVATE KEY-----
-  """,
-  publicKey: """
-  -----BEGIN PUBLIC KEY-----
-  MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDCz8s7nGPQyWZY0jkrL5VzKbE9EW
-  LkNwOWoI98nOVU42SYw0ooqXIYNPX2oZSKmvkF17xXd+ThXLsi9it8nplg==
-  -----END PUBLIC KEY-----
-  """
 
 config :ferry, :chat,
   apiKey: "da2-mex4f66y3rd6pd7zhocoyaallm",
