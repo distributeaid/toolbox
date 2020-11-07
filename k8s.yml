@@ -85,12 +85,12 @@ spec:
   template:
     metadata:
       labels:
-        app: db 
+        app: db
     spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: data 
+            claimName: data
       containers:
         - name: db 
           image: postgres:11.2

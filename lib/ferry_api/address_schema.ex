@@ -133,7 +133,8 @@ defmodule FerryApi.Schema.Address do
           any,
           %{address_input: map()},
           any
-        ) :: {:error, Ecto.Changeset.t()} | {:ok, Ferry.Locations.Address.t()}
+        ) ::
+          {:error, Ecto.Changeset.t()} | {:error, String.t()} | {:ok, Ferry.Locations.Address.t()}
   def create_address(_parent, %{address_input: address_attrs}, _resolution) do
     case Ferry.Profiles.get_group(address_attrs.group) do
       nil ->

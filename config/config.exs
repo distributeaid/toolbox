@@ -17,13 +17,11 @@ config :ferry, FerryWeb.Endpoint,
   pubsub_server: Ferry.PubSub,
   live_view: [signing_salt: "w5u8sooV1GpBhBDnW/kFF8Hvd3cYnEP6+Alc9BjC1o3mAymHFwJSoiRCjZbFBnS8"]
 
-# Configures Guardian
-# NOTE: The `secret_key` is a default value for dev / testing environments.  It
-#       MUST be overridden in prod.secret.exs before depolying the app to a
-#       production environment.
-config :ferry, Ferry.Auth.Guardian,
-  issuer: "ferry",
-  secret_key: "super-secret"
+config :ferry, Ferry.Token,
+  signer_alg: "RS256",
+  audience: System.get_env("AUTH_AUDIENCE"),
+  issuer: System.get_env("AUTH_ISSUER"),
+  key: System.get_env("AUTH_SECRET")
 
 # Configures Arq
 config :arc,

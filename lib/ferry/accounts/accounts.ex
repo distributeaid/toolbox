@@ -3,12 +3,10 @@ defmodule Ferry.Accounts do
   The Accounts context.
   """
 
-  import Ecto
   import Ecto.Query, warn: false
   alias Ferry.Repo
 
   alias Ferry.Accounts.User
-  alias Ferry.Profiles.Group
 
   @doc """
   Returns the list of users.
@@ -41,18 +39,9 @@ defmodule Ferry.Accounts do
 
   @doc """
   Creates a user.
-
-  ## Examples
-
-      iex> create_user(%Group{}, %{field: value})
-      {:ok, %User{}}
-
-      iex> create_user(%Group{} %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
   """
-  def create_user(%Group{} = group, attrs \\ %{}) do
-    build_assoc(group, :users)
+  def create_user(attrs \\ %{}) do
+    %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
   end
@@ -103,5 +92,41 @@ defmodule Ferry.Accounts do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  @doc """
+  Find a user by his/her email
+  """
+  @spec get_user_by_email(String.t()) :: {:ok, User.t()} | :not_found
+  def get_user_by_email(email) do
+    case User |> Repo.get_by(email: email) do
+      nil ->
+        :not_found
+
+      user ->
+        {:ok, user}
+    end
+  end
+
+  @doc """
+  Inserts or updates a user, based on the given set of claims.
+
+  This function is used when resolving a JWT token that is issued
+  by an external authentication service
+  """
+  @spec insert_or_update_user(map()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
+  def insert_or_update_user(%{"email" => email} = attrs) do
+    user =
+      case get_user_by_email(email) do
+        {:ok, user} ->
+          user
+
+        :not_found ->
+          %User{}
+      end
+
+    user
+    |> User.changeset(attrs)
+    |> Repo.insert_or_update()
   end
 end

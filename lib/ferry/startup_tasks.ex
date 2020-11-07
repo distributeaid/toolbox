@@ -4,5 +4,6 @@ defmodule Ferry.StartupTasks do
     path = Application.app_dir(:ferry, "priv/repo/migrations")
     # Run the Ecto.Migrator
     Ecto.Migrator.run(Ferry.Repo, path, :up, all: true)
+    Ferry.Token.setup()
   end
 end
