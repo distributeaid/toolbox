@@ -27,6 +27,16 @@ defmodule FerryWeb.ConnCase do
       # The default endpoint for testing
       @endpoint FerryWeb.Endpoint
 
+      defp auth(conn, token) when is_binary(token) do
+        conn
+        |> put_req_header("authorization", "Bearer #{token}")
+      end
+
+      defp auth(conn, claims) when is_map(claims) do
+        {:ok, token, _} = claims |> Map.take([:email]) |> Ferry.Token.encode_token()
+        auth(conn, token)
+      end
+
       defp mock_sign_in(user) do
         Ferry.Mocks.AwsClient
         |> Mox.stub(:request, fn _args ->

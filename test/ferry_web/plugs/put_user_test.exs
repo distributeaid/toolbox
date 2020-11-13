@@ -82,7 +82,7 @@ defmodule FerryWeb.PutUserPlugTest do
     end
 
     test "inserts a new user if no user with that email is found", %{conn: conn} do
-      assert [] == Accounts.list_users()
+      assert [] == Accounts.get_users()
 
       token =
         %{id: "1", email: "foo@bar.com"}
@@ -94,13 +94,13 @@ defmodule FerryWeb.PutUserPlugTest do
 
       refute conn.status
 
-      [user] = Accounts.list_users()
+      [user] = Accounts.get_users()
       assert "foo@bar.com" == user.email
     end
 
     test "updates the existing user", %{conn: conn} do
       assert {:ok, user} = Accounts.create_user(%{email: "foo@bar.com"})
-      assert [user] == Accounts.list_users()
+      assert [user] == Accounts.get_users()
 
       token =
         %{id: "1", email: "foo@bar.com"}
@@ -112,7 +112,7 @@ defmodule FerryWeb.PutUserPlugTest do
 
       refute conn.status
 
-      [user] = Accounts.list_users()
+      [user] = Accounts.get_users()
       assert "foo@bar.com" == user.email
     end
   end
