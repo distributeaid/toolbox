@@ -3,7 +3,7 @@ defmodule Ferry.UserGroupApiTest do
   import Ferry.ApiClient.User
 
   describe "distributeaid admin" do
-    test "can set the role for any existing user in any group",
+    test "can set or delete the role for any existing user in any group",
          %{conn: conn} = context do
       # setup the distribute aid group and admin user
       {:ok, %{distributeaid: %{user: admin}}} = Ferry.Fixture.DistributeAid.setup(context)
@@ -45,11 +45,40 @@ defmodule Ferry.UserGroupApiTest do
 
       assert "admin" == role
       assert "group" == group["name"]
+
+      # Now delete that role
+      %{
+        "data" => %{
+          "deleteUserRole" => %{
+            "successful" => true,
+            "messages" => [],
+            "result" => %{
+              "email" => "user@group",
+              "groups" => []
+            }
+          }
+        }
+      } =
+        delete_user_role(conn, %{
+          user: user.id,
+          group: group["id"],
+          role: "admin"
+        })
+
+      # For consistent, fetch that user and verify it no longer
+      # belongs to that group
+      %{
+        "data" => %{
+          "user" => %{
+            "groups" => []
+          }
+        }
+      } = get_user(conn, user.id)
     end
   end
 
   describe "group admin" do
-    test "can set the role of existing users in that group",
+    test "can set and delete the role of existing users in that group",
          %{conn: conn} = context do
       # Sets up some aid group and its admin user
       {:ok, %{user: admin, group: group}} =
@@ -91,6 +120,35 @@ defmodule Ferry.UserGroupApiTest do
 
       assert "admin" == role
       assert "group" == group["name"]
+
+      # Now delete that role
+      %{
+        "data" => %{
+          "deleteUserRole" => %{
+            "successful" => true,
+            "messages" => [],
+            "result" => %{
+              "email" => "member@group",
+              "groups" => []
+            }
+          }
+        }
+      } =
+        delete_user_role(conn, %{
+          user: member.id,
+          group: group["id"],
+          role: "admin"
+        })
+
+      # For consistent, fetch that user and verify it no longer
+      # belongs to that group
+      %{
+        "data" => %{
+          "user" => %{
+            "groups" => []
+          }
+        }
+      } = get_user(conn, member.id)
     end
 
     #    test "cannot set the role of existing users in other groups", %{conn: conn} = context do

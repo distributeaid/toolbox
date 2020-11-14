@@ -52,8 +52,8 @@ defmodule Ferry.ApiClient.User do
       user(id: "#{id}") {
         id,
         email,
-        roles {
-          groups {
+        groups {
+          group {
             id
             name
           },
@@ -73,6 +73,33 @@ defmodule Ferry.ApiClient.User do
     graphql(conn, """
       mutation {
         setUserRole(user: "#{attrs.user}", group: "#{attrs.group}", role: "#{attrs.role}") {
+          successful,
+          messages { field, message },
+          result {
+            id,
+            email,
+            groups {
+              group {
+                id,
+                name
+              },
+              role
+            }
+          }
+        }
+      }
+    """)
+  end
+
+  @doc """
+  Run a GraphQL mutation that deletes a role
+  for a given user in a group
+  """
+  @spec set_user_role(Plug.Conn.t(), map()) :: map()
+  def delete_user_role(conn, attrs) do
+    graphql(conn, """
+      mutation {
+        deleteUserRole(user: "#{attrs.user}", group: "#{attrs.group}", role: "#{attrs.role}") {
           successful,
           messages { field, message },
           result {

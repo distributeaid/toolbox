@@ -132,7 +132,7 @@ defmodule Ferry.Accounts do
   def delete_user_role(user, group, role) do
     with {_, nil} <-
            from(ug in UserGroup,
-             where: ug.user == ^user.id and ug.group == ^group.id and ug.role == ^role
+             where: ug.user_id == ^user.id and ug.group_id == ^group.id and ug.role == ^role
            )
            |> Repo.delete_all() do
       get_user(user.id)
