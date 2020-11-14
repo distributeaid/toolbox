@@ -7,79 +7,65 @@ defmodule Ferry.Accounts do
   alias Ferry.Repo
 
   alias Ferry.Accounts.User
+  alias Ferry.Accounts.UserGroup
 
   @doc """
-  Returns the list of users.
-
-  ## Examples
-
-      iex> list_users()
-      [%User{}, ...]
-
+  Counts all the users in the system
   """
-  def list_users do
-    Repo.all(User)
+  @spec count_users() :: integer()
+  def count_users() do
+    User
+    |> Repo.aggregate(:count, :id)
   end
 
   @doc """
-  Gets a single user.
-
-  Raises `Ecto.NoResultsError` if the User does not exist.
-
-  ## Examples
-
-      iex> get_user!(123)
-      %User{}
-
-      iex> get_user!(456)
-      ** (Ecto.NoResultsError)
-
+  Returns the list of users.
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  @spec get_users() :: [User.t()]
+  def get_users do
+    Repo.all(User) |> Repo.preload(groups: [:group])
+  end
+
+  @doc """
+  Gets a single user by his/her id
+  """
+  @spec get_user(integer() | String.t()) :: {:ok, User.t()} | :not_found
+  def get_user(id) do
+    case Repo.get(User, id) |> Repo.preload(groups: [:group]) do
+      nil ->
+        :not_found
+
+      user ->
+        {:ok, user}
+    end
+  end
+
+  @doc """
+  Find a user by his/her email
+  """
+  @spec get_user_by_email(String.t()) :: {:ok, User.t()} | :not_found
+  def get_user_by_email(email) do
+    case User |> Repo.get_by(email: email) |> Repo.preload(groups: [:group]) do
+      nil ->
+        :not_found
+
+      user ->
+        {:ok, user}
+    end
+  end
 
   @doc """
   Creates a user.
   """
+  @spec create_user(map()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
   def create_user(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
-    |> Repo.insert()
+    with {:ok, user} <-
+           %User{}
+           |> User.changeset(attrs)
+           |> Repo.insert() do
+      get_user(user.id)
+    end
   end
-
-  # @doc """
-  # Updates a user.
-
-  # ## Examples
-
-  #     iex> update_user(user, %{field: new_value})
-  #     {:ok, %User{}}
-
-  #     iex> update_user(user, %{field: bad_value})
-  #     {:error, %Ecto.Changeset{}}
-
-  # """
-  def update_user(%User{} = user, attrs) do
-    user
-    |> User.changeset(attrs)
-    |> Repo.update()
-  end
-
-  # @doc """
-  # Deletes a User.
-
-  # ## Examples
-
-  #     iex> delete_user(user)
-  #     {:ok, %User{}}
-
-  #     iex> delete_user(user)
-  #     {:error, %Ecto.Changeset{}}
-
-  # """
-  # # TODO: should only be able to delete a user by deleting a group and having it cascade
-  # def delete_user(%User{} = user) do
-  #   Repo.delete(user)
-  # end
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
@@ -92,20 +78,6 @@ defmodule Ferry.Accounts do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
-  end
-
-  @doc """
-  Find a user by his/her email
-  """
-  @spec get_user_by_email(String.t()) :: {:ok, User.t()} | :not_found
-  def get_user_by_email(email) do
-    case User |> Repo.get_by(email: email) do
-      nil ->
-        :not_found
-
-      user ->
-        {:ok, user}
-    end
   end
 
   @doc """
@@ -125,8 +97,45 @@ defmodule Ferry.Accounts do
           %User{}
       end
 
-    user
-    |> User.changeset(attrs)
-    |> Repo.insert_or_update()
+    with {:ok, user} <-
+           user
+           |> User.changeset(attrs)
+           |> Repo.insert_or_update() do
+      get_user(user.id)
+    end
+  end
+
+  @doc """
+  Sets a role for a user in a group
+
+  """
+  @spec set_user_role(User.t(), Group.t(), String.t()) ::
+          {:ok, User.t()} | {:error, Ecto.Changeset.t()}
+  def set_user_role(user, group, role) do
+    with {:ok, _} <-
+           %UserGroup{}
+           |> UserGroup.changeset(%{user_id: user.id, group_id: group.id, role: role})
+           |> Repo.insert(
+             on_conflict: {:replace, [:role]},
+             conflict_target: [:user_id, :group_id]
+           ) do
+      get_user(user.id)
+    end
+  end
+
+  @doc """
+  Deletes a role for a user from a group
+
+  """
+  @spec delete_user_role(User.t(), Group.t(), String.t()) ::
+          {:ok, User.t()} | {:error, Ecto.Changeset.t()}
+  def delete_user_role(user, group, role) do
+    with {_, nil} <-
+           from(ug in UserGroup,
+             where: ug.user_id == ^user.id and ug.group_id == ^group.id and ug.role == ^role
+           )
+           |> Repo.delete_all() do
+      get_user(user.id)
+    end
   end
 end

@@ -36,4 +36,12 @@ defmodule Ferry.Token do
   def verify_token(token) do
     Ferry.Token.verify_and_validate(token)
   end
+
+  def encode_token(%_{} = struct) do
+    struct |> Map.from_struct() |> Map.drop([:__meta__]) |> Ferry.Token.encode_token()
+  end
+
+  def encode_token(map) do
+    Ferry.Token.encode_and_sign(map)
+  end
 end
