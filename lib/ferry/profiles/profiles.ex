@@ -64,7 +64,7 @@ defmodule Ferry.Profiles do
   @doc """
   Return a single group, given its slug
   """
-  @spec get_group_by_slug(String.t()) :: {:ok, Group.t()} :: :not_found
+  @spec get_group_by_slug(String.t()) :: {:ok, Group.t()} | :not_found
   def get_group_by_slug(slug) do
     case group_query(preload: [:addresses]) |> Repo.get_by(slug: slug) do
       nil ->
