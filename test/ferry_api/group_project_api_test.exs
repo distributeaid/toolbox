@@ -79,6 +79,8 @@ defmodule Ferry.GroupProjectApiTest do
     %{
       "data" => %{
         "groups" => [
+          # built-in group
+          %{"name" => "DistributeAid"},
           %{
             "name" => "first group",
             "projects" => [

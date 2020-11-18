@@ -95,7 +95,7 @@ defmodule Ferry.ApiClient.User do
   Run a GraphQL mutation that deletes a role
   for a given user in a group
   """
-  @spec set_user_role(Plug.Conn.t(), map()) :: map()
+  @spec delete_user_role(Plug.Conn.t(), map()) :: map()
   def delete_user_role(conn, attrs) do
     graphql(conn, """
       mutation {

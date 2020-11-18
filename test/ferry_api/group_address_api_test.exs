@@ -1,6 +1,7 @@
 defmodule Ferry.GroupAddressApiTest do
   use FerryWeb.ConnCase, async: true
-  import Ferry.ApiClient.{Group, Address}
+  import Ferry.ApiClient.Group
+  import Ferry.ApiClient.Address
 
   test "fetch a group and its addresses", %{conn: conn} do
     insert(:user)
@@ -76,6 +77,9 @@ defmodule Ferry.GroupAddressApiTest do
     %{
       "data" => %{
         "groups" => [
+          %{
+            "name" => "DistributeAid"
+          },
           %{
             "name" => "first group",
             "addresses" => [

@@ -1,7 +1,7 @@
 defmodule FerryApi.Schema.User do
   use Absinthe.Schema.Notation
   import AbsintheErrorPayload.Payload
-  alias FerryApi.Middleware.RequireUser
+  alias FerryApi.Middleware.{RequireUser, RequireDaOrGroupAdmin}
   alias Ferry.Accounts
   alias Ferry.Profiles
 
@@ -36,6 +36,7 @@ defmodule FerryApi.Schema.User do
       arg(:group, non_null(:id))
       arg(:role, non_null(:string))
       middleware(RequireUser)
+      middleware(RequireDaOrGroupAdmin)
       resolve(&set_user_role/3)
       middleware(&build_payload/2)
     end
@@ -96,7 +97,10 @@ defmodule FerryApi.Schema.User do
   """
   @spec set_user_role(any(), %{user: String.t(), group: String.t(), role: String.t()}, any()) ::
           {:ok, map()} | {:error, String.t()}
-  def set_user_role(_, %{user: user, group: group, role: role}, _resolution) do
+  def set_user_role(_, %{user: user, group: group, role: role}, %{context: %{user: _current_user}}) do
+    # with :ok <-
+    #        FerryApi.Auth.da_admin?(current_user) ||
+    #          FerryApi.Auth.group_admin?(group, current_user) do
     case Accounts.get_user(user) do
       :not_found ->
         {:error, @user_not_found}
@@ -110,6 +114,8 @@ defmodule FerryApi.Schema.User do
             Accounts.set_user_role(user, group, role)
         end
     end
+
+    # end
   end
 
   @doc """

@@ -11,17 +11,17 @@ defmodule Ferry.ProfilesTest do
     alias Ferry.Profiles.Group
 
     test "list_groups/0 returns all groups" do
-      # no groups
-      assert Profiles.list_groups() == [],
-             "returns an empty list if no groups have been created"
+      # no groups a part from the default distribute aid
+      # group
+      [%{name: "DistributeAid"}] = Profiles.list_groups()
 
-      # 1 group
-      group1 = insert(:group)
-      assert Profiles.list_groups() == [group1]
+      # 1 extra group
+      insert(:group, %{name: "group1"})
+      [_, %{name: "group1"}] = Profiles.list_groups()
 
       # multiple groups
-      group2 = insert(:group, %{name: "A Second Group"})
-      assert Profiles.list_groups() == [group1, group2]
+      insert(:group, %{name: "group2"})
+      [_, %{name: "group1"}, %{name: "group2"}] = Profiles.list_groups()
     end
 
     test "get_group!/1 returns the group with given id" do
