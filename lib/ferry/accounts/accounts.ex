@@ -2,7 +2,6 @@ defmodule Ferry.Accounts do
   @moduledoc """
   The Accounts context.
   """
-
   import Ecto.Query, warn: false
   alias Ferry.Repo
 
@@ -137,5 +136,16 @@ defmodule Ferry.Accounts do
            |> Repo.delete_all() do
       get_user(user.id)
     end
+  end
+
+  @doc """
+  Returns whether the given user has the given role in the given
+  group
+  """
+  @spec has_role?(User.t(), String.t(), String.t()) :: boolean()
+  def has_role?(user, group_id, role) do
+    Enum.count(user.groups, fn group ->
+      "#{group.group.id}" == "#{group_id}" && group.role == role
+    end) == 1
   end
 end

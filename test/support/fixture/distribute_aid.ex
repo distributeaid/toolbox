@@ -5,7 +5,7 @@ defmodule Ferry.Fixture.DistributeAid do
 
   def setup(context) do
     {:ok, %{group: group, user: user}} =
-      Ferry.Fixture.GroupUserRole.setup(context, %{
+      Ferry.Fixture.UserRole.setup(context, %{
         group: "distributeaid",
         user: "admin@distributeaid.org",
         role: "admin"

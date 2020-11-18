@@ -96,6 +96,7 @@ defmodule FerryApi.Schema.Group do
   end
 
   def get_group(_parent, %{id: id}, _resolution) do
+    # TODO: return either :not_found or {:ok, group}
     case Profiles.get_group(id) do
       nil -> {:error, message: "Group not found.", id: id}
       group -> {:ok, group}
@@ -103,9 +104,8 @@ defmodule FerryApi.Schema.Group do
   end
 
   def get_group_by_slug(_parent, %{slug: slug}, _resolution) do
-    case Profiles.get_group_by_slug(slug) do
-      nil -> {:error, message: "Group not found.", slug: slug}
-      group -> {:ok, group}
+    with :not_found <- Profiles.get_group_by_slug(slug) do
+      {:error, message: "Group not found.", slug: slug}
     end
   end
 

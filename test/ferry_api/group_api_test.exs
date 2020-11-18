@@ -11,19 +11,19 @@ defmodule Ferry.GroupApiTest do
 
   test "count groups - none", %{conn: conn} do
     %{"data" => %{"countGroups" => count}} = count_groups(conn)
-    assert count == 0
+    assert count == 1
   end
 
   test "count groups - many", %{conn: conn} do
     insert_list(3, :group)
     %{"data" => %{"countGroups" => count}} = count_groups(conn)
-    assert count == 3
+    assert count == 4
   end
 
   # Query - Get All Groups
   # ------------------------------------------------------------
   test "get all groups - none", %{conn: conn} do
-    assert get_groups(conn) == %{"data" => %{"groups" => []}}
+    %{"data" => %{"groups" => [%{"name" => "DistributeAid"}]}} = get_groups(conn)
   end
 
   test "get all groups - one", %{conn: conn} do
@@ -50,7 +50,7 @@ defmodule Ferry.GroupApiTest do
 
     %{
       "data" => %{
-        "groups" => ^expected_groups
+        "groups" => [_ | ^expected_groups]
       }
     } = get_groups(conn)
   end
@@ -79,7 +79,7 @@ defmodule Ferry.GroupApiTest do
 
     %{
       "data" => %{
-        "groups" => ^expected_groups
+        "groups" => [_ | ^expected_groups]
       }
     } = get_groups(conn)
   end
