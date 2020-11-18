@@ -19,4 +19,9 @@ defmodule FerryApi.Middleware.RequireGroupAdmin do
         |> Absinthe.Resolution.put_result({:error, "unauthorized"})
     end
   end
+
+  def call(resolution, _opts) do
+    resolution
+    |> Absinthe.Resolution.put_result({:error, "unauthorized"})
+  end
 end
