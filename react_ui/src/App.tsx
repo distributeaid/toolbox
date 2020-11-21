@@ -2,16 +2,14 @@ import './App.css'
 import '@aws-amplify/ui/dist/style.css'
 
 import { ApolloProvider } from '@apollo/client'
+import { useAuth0 } from '@auth0/auth0-react'
 import React, { Suspense } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import { client } from './apollo/client'
 import PrivateRoute from './auth/PrivateRoute'
-import { RedirectAfterAuth } from './auth/RedirectAfterAuth'
-import { useAuthState } from './auth/useAuthState'
 import { Footer } from './components/layout/Footer'
 import { NavBar } from './components/layout/NavBar'
-import AuthenticatorWrapper from './pages/Authenticator'
 import { Chapter } from './pages/Chapter'
 import { ChapterEdit } from './pages/ChapterEdit'
 import { ChapterList } from './pages/ChapterList'
@@ -21,7 +19,11 @@ import StyleGuide from './pages/StyleGuide'
 import ScrollToTop from './util/scrollToTop'
 
 const App: React.FunctionComponent = () => {
-  const { authState, setAuthState } = useAuthState()
+  const { isAuthenticated, isLoading } = useAuth0()
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <ApolloProvider client={client}>
@@ -31,13 +33,7 @@ const App: React.FunctionComponent = () => {
           <NavBar />
 
           <main className="flex-grow">
-            {authState === 'authenticated' && <RedirectAfterAuth />}
-
             <Switch>
-              <Route path="/sign-in">
-                <AuthenticatorWrapper setAuthState={setAuthState} />
-              </Route>
-
               <Route exact path="/chapters">
                 <ChapterList />
               </Route>
@@ -47,7 +43,7 @@ const App: React.FunctionComponent = () => {
               </Route>
 
               <PrivateRoute
-                authState={authState}
+                isAuthenticated={isAuthenticated}
                 exact
                 path="/chapters/new"
                 render={() => <ChapterNew />}
@@ -60,7 +56,7 @@ const App: React.FunctionComponent = () => {
               />
 
               <PrivateRoute
-                authState={authState}
+                isAuthenticated={isAuthenticated}
                 exact
                 path="/:slug/edit"
                 render={({ match }) => <ChapterEdit slug={match.params.slug} />}
