@@ -2,6 +2,79 @@ defmodule Ferry.UserGroupApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.User
 
+  describe "anonymous user" do
+    setup context do
+      # Setup a standard group and user
+      # so that we can test the access that anonymous 
+      # users have on them
+      Ferry.Fixture.GroupUserRole.setup(context, %{
+        group: "group",
+        user: "user@group",
+        role: "member"
+      })
+    end
+
+    test "can count users", %{conn: conn} do
+      # assert we can count users even if we are
+      # no authenticated
+      assert %{"data" => %{"countUsers" => 1}} == count_users(conn)
+    end
+
+    test "are not authorized to list users", %{conn: conn} do
+      %{
+        "errors" => [
+          %{"message" => "unauthorized"}
+        ]
+      } = get_users(conn)
+    end
+
+    test "are not authorized to fetch a single user", %{conn: conn, user: user} do
+      %{
+        "errors" => [
+          %{"message" => "unauthorized"}
+        ]
+      } = get_user(conn, user.id)
+    end
+
+    test "are not authorized to set or delete a user role", %{
+      conn: conn,
+      user: user,
+      group: group
+    } do
+      %{
+        "data" => %{
+          "setUserRole" => %{
+            "successful" => false,
+            "messages" => [
+              %{"message" => "unauthorized"}
+            ]
+          }
+        }
+      } =
+        set_user_role(conn, %{
+          user: user.id,
+          group: group.id,
+          role: "admin"
+        })
+
+      %{
+        "data" => %{
+          "deleteUserRole" => %{
+            "successful" => false,
+            "messages" => [
+              %{"message" => "unauthorized"}
+            ]
+          }
+        }
+      } =
+        delete_user_role(conn, %{
+          user: user.id,
+          group: group.id,
+          role: "admin"
+        })
+    end
+  end
+
   describe "distributeaid admin" do
     test "can set or delete the role for any existing user in any group",
          %{conn: conn} = context do

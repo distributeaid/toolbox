@@ -3,11 +3,9 @@ defmodule Ferry.GroupApiTest do
   import Ferry.ApiClient.Group
   alias Ferry.Profiles
 
-  # GROUPS
-  # ================================================================================
-
-  # Query - Count Groups
-  # ------------------------------------------------------------
+  setup context do
+    Ferry.Fixture.DistributeAid.setup(context, auth: true)
+  end
 
   test "count groups - none", %{conn: conn} do
     %{"data" => %{"countGroups" => count}} = count_groups(conn)
@@ -20,8 +18,6 @@ defmodule Ferry.GroupApiTest do
     assert count == 4
   end
 
-  # Query - Get All Groups
-  # ------------------------------------------------------------
   test "get all groups - none", %{conn: conn} do
     %{"data" => %{"groups" => [%{"name" => "DistributeAid"}]}} = get_groups(conn)
   end

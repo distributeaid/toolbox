@@ -2,10 +2,11 @@ defmodule Ferry.ModModValueApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Mod, ModValue}
 
-  test "can't delete a mod that has mod values", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
+  setup context do
+    Ferry.Fixture.DistributeAid.setup(context, auth: true)
+  end
 
+  test "can't delete a mod that has mod values", %{conn: conn} do
     %{
       "data" => %{
         "createMod" => %{

@@ -2,15 +2,16 @@ defmodule Ferry.ItemApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Category, Item}
 
+  setup context do
+    Ferry.Fixture.DistributeAid.setup(context, auth: true)
+  end
+
   test "count items where there are none", %{conn: conn} do
     assert count_items(conn) ==
              %{"data" => %{"countItems" => 0}}
   end
 
   test "create one item", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
-
     %{
       "data" => %{
         "createCategory" => %{
@@ -78,9 +79,6 @@ defmodule Ferry.ItemApiTest do
   end
 
   test "create item with invalid data", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
-
     %{
       "data" => %{
         "createCategory" => %{
@@ -106,9 +104,6 @@ defmodule Ferry.ItemApiTest do
   end
 
   test "fetch a item that does not exist", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
-
     %{
       "data" => %{
         "createCategory" => %{
@@ -132,9 +127,6 @@ defmodule Ferry.ItemApiTest do
   end
 
   test "update a item that does not exist", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
-
     %{
       "data" => %{
         "updateItem" => %{
@@ -154,9 +146,6 @@ defmodule Ferry.ItemApiTest do
   end
 
   test "update existing item", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
-
     %{
       "data" => %{
         "createCategory" => %{
@@ -198,9 +187,6 @@ defmodule Ferry.ItemApiTest do
   end
 
   test "update item with invalid data", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
-
     %{
       "data" => %{
         "createCategory" => %{
@@ -246,9 +232,6 @@ defmodule Ferry.ItemApiTest do
   end
 
   test "delete a item that does not exist", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
-
     %{
       "data" => %{
         "deleteItem" => %{
@@ -264,9 +247,6 @@ defmodule Ferry.ItemApiTest do
   end
 
   test "delete a item", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
-
     %{
       "data" => %{
         "createCategory" => %{

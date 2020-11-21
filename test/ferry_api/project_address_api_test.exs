@@ -3,8 +3,7 @@ defmodule Ferry.ProjectAddressApiTest do
   import Ferry.ApiClient.Address
 
   setup context do
-    insert(:user)
-    |> mock_sign_in
+    {:ok, context} = Ferry.Fixture.DistributeAid.setup(context, auth: true)
 
     Ferry.Fixture.GroupProjectAddress.setup(context)
   end

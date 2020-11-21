@@ -3,10 +3,11 @@ defmodule Ferry.GroupAddressApiTest do
   import Ferry.ApiClient.Group
   import Ferry.ApiClient.Address
 
-  test "fetch a group and its addresses", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
+  setup context do
+    Ferry.Fixture.DistributeAid.setup(context, auth: true)
+  end
 
+  test "fetch a group and its addresses", %{conn: conn} do
     # create a group
     group_attrs = params_for(:group) |> with_address()
     group_attrs = %{group_attrs | name: "first group"}

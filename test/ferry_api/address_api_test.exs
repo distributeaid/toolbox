@@ -2,6 +2,10 @@ defmodule Ferry.AddressApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Group, Address}
 
+  setup context do
+    Ferry.Fixture.DistributeAid.setup(context, auth: true)
+  end
+
   test "count addresses where there are none", %{conn: conn} do
     assert count_addresses(conn) ==
              %{"data" => %{"countAddresses" => 0}}

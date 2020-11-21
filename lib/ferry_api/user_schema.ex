@@ -13,18 +13,21 @@ defmodule FerryApi.Schema.User do
 
     @desc "Get all users"
     field :users, list_of(:user) do
+      middleware(RequireUser)
       resolve(&get_users/3)
     end
 
     @desc "Get a user"
     field :user, :user do
       arg(:id, non_null(:id))
+      middleware(RequireUser)
       resolve(&get_user/3)
     end
 
     @desc "Get a user by email"
     field :user_by_email, :user do
       arg(:email, non_null(:string))
+      middleware(RequireUser)
       resolve(&get_user_by_email/3)
     end
   end
