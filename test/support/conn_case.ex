@@ -27,12 +27,22 @@ defmodule FerryWeb.ConnCase do
       # The default endpoint for testing
       @endpoint FerryWeb.Endpoint
 
+      defp auth(conn, token) when is_binary(token) do
+        conn
+        |> put_req_header("authorization", "Bearer #{token}")
+      end
+
+      defp auth(conn, claims) when is_map(claims) do
+        {:ok, token, _} = claims |> Map.take([:email]) |> Ferry.Token.encode_token()
+        auth(conn, token)
+      end
+
       defp mock_sign_in(user) do
         Ferry.Mocks.AwsClient
         |> Mox.stub(:request, fn _args ->
           {:ok,
            %{
-             "Username" => user.cognito_id,
+             "Username" => "1",
              "UserAttributes" => [
                %{"Name" => "email_verified", "Value" => "true"},
                %{"Name" => "email", "Value" => user.email}
@@ -52,9 +62,7 @@ defmodule FerryWeb.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(Ferry.Repo, {:shared, self()})
     end
 
-    conn =
-      Phoenix.ConnTest.build_conn()
-      |> Plug.Conn.put_req_header("authorization", "Bearer fake.token")
+    conn = Phoenix.ConnTest.build_conn()
 
     Ferry.Mocks.AwsClient
     |> Mox.stub(:request, fn _ ->

@@ -3,7 +3,6 @@ defmodule Ferry.Profiles.Group do
   use Arc.Ecto.Schema
   import Ecto.Changeset
 
-  alias Ferry.Accounts.User
   alias Ferry.Profiles.Group.Logo
   alias Ferry.Profiles.Project
   alias Ferry.Locations.Address
@@ -36,8 +35,6 @@ defmodule Ferry.Profiles.Group do
     field :donation_form_results, Ferry.EctoType.URL
 
     # relations
-    # on_delete set in database via migration
-    has_one :users, User
     # on_delete set in database via migration
     has_many :projects, Project
 

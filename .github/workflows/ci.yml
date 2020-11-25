@@ -37,26 +37,17 @@ jobs:
          run: mix deps.get
        - name: Compile and test
          run: mix test
-       - name: Publish Docker
-         uses: pedro-gutierrez/docker-action@v10
-         with:
-           password: ${{ secrets.DOCKER_PASSWORD }}
-           tag: latest
        - name: Deploy
-         uses: pedro-gutierrez/apply-action@v7
+         uses: pedro-gutierrez/deploy-action@v17
          with:
+           docker_tag: latest
+           docker_password: ${{ secrets.DOCKER_PASSWORD }}
            kubeconfig: ${{ secrets.KUBE_CONFIG }}
-           password: ${{ secrets.DOCKER_PASSWORD }}
+           secrets_name: "secrets"
+           secrets: ${{ secrets.STAGING_SECRETS }}
        - name: If errors, notify 
          if: failure()
          uses: pedro-gutierrez/slack-action@v6
          with:
            slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
            status: failed
-       #- name: If success, notify
-       #  if: success()
-       #  uses: pedro-gutierrez/slack-action@v6
-       #  with:
-       #    slack_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-       #    status: success
-

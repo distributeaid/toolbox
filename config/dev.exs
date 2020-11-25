@@ -46,6 +46,12 @@ config :ferry, Ferry.Repo,
   port: System.get_env("POSTGRES_PORT"),
   pool: Ecto.Adapters.SQL.Sandbox
 
+config :ferry, Ferry.Token,
+  signer_alg: "RS256",
+  audience: System.get_env("AUTH_AUDIENCE"),
+  issuer: System.get_env("AUTH_ISSUER"),
+  key: System.get_env("AUTH_SECRET")
+
 config :ferry, FerryWeb.Tracer,
   disabled?: true,
   env: "dev"

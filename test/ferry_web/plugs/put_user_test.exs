@@ -1,117 +1,119 @@
 defmodule FerryWeb.PutUserPlugTest do
   use FerryWeb.ConnCase
-  import Mox
 
   alias FerryWeb.Plugs.PutUser
+  alias Ferry.Accounts
 
-  describe "no valid user" do
-    test "no authorization token", %{conn: conn} do
-      conn =
-        conn
-        |> put_req_header("authorization", "")
-        |> PutUser.put_user(%{})
-
-      %{private: %{absinthe: %{context: context}}} = conn
-
-      assert %{user: nil} = context
-    end
-
-    test "no bearer token", %{conn: conn} do
-      conn =
-        conn
-        |> put_req_header("authorization", "not a bearer")
-        |> PutUser.put_user(%{})
-
-      %{private: %{absinthe: %{context: context}}} = conn
-
-      assert %{user: nil} = context
-    end
-
-    test "when Cognito rejects token", %{conn: conn} do
-      Ferry.Mocks.AwsClient
-      |> expect(:request, fn _args ->
-        {:not_ok, "something bad happened"}
-      end)
-
-      conn =
-        conn
-        |> put_req_header("authorization", "Bearer asdf")
-        |> PutUser.put_user(%{})
-
-      %{private: %{absinthe: %{context: context}}} = conn
-
-      assert %{user: nil} = context
-    end
+  defp with_token(conn, token) do
+    conn
+    |> put_req_header("authorization", token)
+    |> PutUser.call(%{})
   end
 
-  describe "valid user" do
-    test "an existing user", %{conn: conn} do
-      insert(:user)
-      |> mock_sign_in()
+  defp with_bearer_token(conn, token) do
+    with_token(conn, "Bearer #{token}")
+  end
+
+  defp as_token(claims) do
+    {:ok, token, ^claims} = Ferry.Token.encode_and_sign(claims)
+    token
+  end
+
+  describe "PutUser plug" do
+    test "accepts requests with no authorization header", %{conn: conn} do
+      conn =
+        conn
+        |> PutUser.call(%{})
+
+      refute conn.status
+    end
+
+    test "returns a 401 if authorization header is present but has no value", %{conn: conn} do
+      conn =
+        conn
+        |> with_token("")
+
+      assert 401 == conn.status
+    end
+
+    test "returns a 401 if the token is not a bearer token", %{conn: conn} do
+      conn =
+        conn
+        |> with_token("not a bearer")
+
+      assert 401 == conn.status
+    end
+
+    test "returns a 401 if the token is forged", %{conn: conn} do
+      token =
+        %{id: "1", email: "foo@bar.com"}
+        |> as_token()
+        |> String.replace("a", "A")
 
       conn =
         conn
-        |> put_req_header("authorization", "Bearer asdf")
-        |> PutUser.put_user(%{})
+        |> with_bearer_token(token)
 
-      %{private: %{absinthe: %{context: context}}} = conn
-
-      assert %{user: user} = context
+      assert 401 == conn.status
     end
 
-    test "a user is created when no user with the resulting cognito_id", %{conn: conn} do
-      Ferry.Mocks.AwsClient
-      |> expect(:request, fn _args ->
-        {:ok,
-         %{
-           "Username" => "new-user-cognito-id",
-           "UserAttributes" => [
-             %{"Name" => "email_verified", "Value" => "true"},
-             %{"Name" => "email", "Value" => "new-user@example.com"}
-           ]
-         }}
-      end)
+    test "returns a 401 if the token expired", %{conn: conn} do
+      token =
+        %{id: "1", email: "foo@bar.com", exp: 0}
+        |> as_token()
 
       conn =
         conn
-        |> put_req_header("authorization", "Bearer asdf")
-        |> PutUser.put_user(%{})
+        |> with_bearer_token(token)
 
-      new_user =
-        Ferry.Accounts.User
-        |> Ferry.Repo.get_by(cognito_id: "new-user-cognito-id")
-
-      assert %{email: "new-user@example.com"} = new_user
-
-      %{private: %{absinthe: %{context: context}}} = conn
-
-      assert %{user: new_user} = context
+      assert 401 == conn.status
     end
 
-    test "user is updated if cognito returns a different email address", %{conn: conn} do
-      user = insert(:user, email: "original@example.com")
+    test "returns a 401 if no email is present in claims", %{conn: conn} do
+      token =
+        %{id: "1"}
+        |> as_token()
 
-      Ferry.Mocks.AwsClient
-      |> expect(:request, fn _args ->
-        {:ok,
-         %{
-           "Username" => user.cognito_id,
-           "UserAttributes" => [
-             %{"Name" => "email_verified", "Value" => "true"},
-             %{"Name" => "email", "Value" => "something-different@example.com"}
-           ]
-         }}
-      end)
+      conn =
+        conn
+        |> with_bearer_token(token)
 
-      conn
-      |> put_req_header("authorization", "Bearer asdf")
-      |> PutUser.put_user(%{})
+      assert 401 == conn.status
+    end
 
-      user =
-        Ferry.Accounts.User
-        |> Ferry.Repo.get_by(cognito_id: user.cognito_id)
+    test "inserts a new user if no user with that email is found", %{conn: conn} do
+      assert [] == Accounts.get_users()
 
-      assert %{email: "something-different@example.com"} = user
+      token =
+        %{id: "1", email: "foo@bar.com"}
+        |> as_token()
+
+      conn =
+        conn
+        |> with_bearer_token(token)
+
+      refute conn.status
+
+      [user] = Accounts.get_users()
+      assert "foo@bar.com" == user.email
+    end
+
+    test "updates the existing user", %{conn: conn} do
+      assert {:ok, user} = Accounts.create_user(%{email: "foo@bar.com"})
+      assert [user] == Accounts.get_users()
+
+      token =
+        %{id: "1", email: "foo@bar.com"}
+        |> as_token()
+
+      conn =
+        conn
+        |> with_bearer_token(token)
+
+      refute conn.status
+
+      [user] = Accounts.get_users()
+      assert "foo@bar.com" == user.email
     end
   end
 end

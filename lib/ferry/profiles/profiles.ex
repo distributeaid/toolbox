@@ -61,9 +61,18 @@ defmodule Ferry.Profiles do
     |> Repo.get(id)
   end
 
+  @doc """
+  Return a single group, given its slug
+  """
+  @spec get_group_by_slug(String.t()) :: {:ok, Group.t()} | :not_found
   def get_group_by_slug(slug) do
-    query = group_query(preload: [:addresses])
-    Repo.get_by(query, slug: slug)
+    case group_query(preload: [:addresses]) |> Repo.get_by(slug: slug) do
+      nil ->
+        :not_found
+
+      group ->
+        {:ok, group}
+    end
   end
 
   @doc """
@@ -161,6 +170,35 @@ defmodule Ferry.Profiles do
       end
 
     query
+  end
+
+  @spec setup_distributeaid() :: :ok
+  @doc """
+  Sets up the Distribute aid group. This is a well known
+  group that we need in order to check
+  for privileged access in account management.
+  """
+  def setup_distributeaid() do
+    with {:ok, group} <-
+           create_group(%{
+             name: "DistributeAid",
+             slug: "distributeaid",
+             type: "M4D_CHAPTER",
+             leader: "",
+             description: "DistributeAid",
+             donation_link: "https://request.example.com",
+             slack_channel_name: "",
+             request_form: "https://request.example.com",
+             request_form_results: "https://request.example.com/results",
+             volunteer_form: "https://volunteer.example.com",
+             volunteer_form_results: "https://volunteer.example.com/results",
+             donation_form: "https://donation.example.com",
+             donation_form_results: "https://donation.example.com/results"
+           }) do
+      Ecto.Adapters.SQL.query(Repo, "UPDATE groups SET id = 0 WHERE id = $1", [group.id])
+    end
+
+    :ok
   end
 
   # Project

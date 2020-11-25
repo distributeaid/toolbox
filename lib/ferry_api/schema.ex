@@ -1,9 +1,6 @@
 defmodule FerryApi.Schema do
   use Absinthe.Schema
 
-  # Types
-  # ------------------------------------------------------------
-
   import_types(Absinthe.Plug.Types)
   import_types(Absinthe.Type.Custom)
   import_types(AbsintheErrorPayload.ValidationMessageTypes)
@@ -62,6 +59,10 @@ defmodule FerryApi.Schema do
   import_types(FerryApi.Schema.AvailableListEntryModValue)
   import_types(FerryApi.Schema.NeedsListEntryModValue)
 
+  import_types(FerryApi.Schema.UserType)
+
+  import_types(FerryApi.Schema.User)
+
   # Queries
   # ------------------------------------------------------------
 
@@ -81,6 +82,7 @@ defmodule FerryApi.Schema do
     import_fields(:needs_list_entry_queries)
     import_fields(:available_list_queries)
     import_fields(:available_list_entry_queries)
+    import_fields(:user_queries)
   end
 
   # Mutuations
@@ -102,6 +104,7 @@ defmodule FerryApi.Schema do
     import_fields(:available_list_mutations)
     import_fields(:available_list_entry_mutations)
     import_fields(:available_list_entry_mod_value_mutations)
+    import_fields(:user_mutations)
   end
 
   @sources [

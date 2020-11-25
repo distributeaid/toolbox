@@ -97,7 +97,6 @@ defmodule Ferry.Mixfile do
       {:bcrypt_elixir, "~> 2.2.0"},
       {:comeonin, "~> 5.3"},
       {:elixir_make, "~> 0.6"},
-      {:guardian, "~> 2.1"},
 
       # testing
       {:credo, "~> 1.4.0", only: [:dev, :test], runtime: false},

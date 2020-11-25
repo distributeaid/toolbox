@@ -19,6 +19,8 @@ defmodule FerryWeb.Router do
       json_decoder: Jason
     )
 
+    plug(FerryWeb.Plugs.PutUser)
+
     # if Application.get_env(:ferry, :auth, "enable") == "enable" do
     #   plug(:put_user)
     # else
