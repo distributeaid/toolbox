@@ -6,23 +6,21 @@ import {
   RouteProps,
 } from 'react-router-dom'
 
-import { AuthenticationState } from './types'
-
 interface PrivateRouteProps extends RouteProps {
-  authState: AuthenticationState
+  isAuthenticated: boolean
   // NOTE: make render required for this Route
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   render: (props: RouteComponentProps<any>) => React.ReactNode
 }
 
 const PrivateRoute = (props: PrivateRouteProps) => {
-  const { render, authState, ...rest } = props
+  const { render, isAuthenticated, ...rest } = props
 
   return (
     <Route
       {...rest}
       render={(routeProps) =>
-        authState === 'authenticated' ? (
+        isAuthenticated ? (
           render(routeProps)
         ) : (
           <Redirect

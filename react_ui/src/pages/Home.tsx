@@ -17,8 +17,10 @@ export const Home: React.FC = () => {
         <ContentContainer>
           <h1 className="font-bold text-3xl m-3">Shipments</h1>
 
-          {FAKE_SHIPMENTS.map((shipment) => (
-            <div className="shadow-md border border-gray-100 m-3 rounded text-xs">
+          {FAKE_SHIPMENTS.map((shipment, i) => (
+            <div
+              key={`shipment-${i}`}
+              className="shadow-md border border-gray-100 m-3 rounded text-xs">
               <div className="m-2 mb-0">{shipment.id}</div>
 
               <div className="text-base font-bold m-2">{shipment.manifest}</div>
@@ -91,8 +93,9 @@ export const Home: React.FC = () => {
               </thead>
 
               <tbody>
-                {FAKE_SHIPMENTS.map((shipment) => (
+                {FAKE_SHIPMENTS.map((shipment, i) => (
                   <tr
+                    key={`shipment-${i}`}
                     className="border-t hover:bg-gray-100 cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation()
