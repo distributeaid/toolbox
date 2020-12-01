@@ -111,7 +111,7 @@ defmodule FerryApi.Schema.User do
   """
   @spec set_user_role(any(), %{user: String.t(), group: String.t(), role: String.t()}, any()) ::
           {:ok, map()} | {:error, String.t()}
-  def set_user_role(_, %{user: user, group: group, role: role}, %{context: %{user: user}}) do
+  def set_user_role(_, %{user: user, group: group, role: role}, _resolution) do
     case Accounts.get_user(user) do
       :not_found ->
         {:error, @user_not_found}
