@@ -2,6 +2,10 @@ defmodule Ferry.ProjectApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Group, Project}
 
+  setup context do
+    Ferry.Fixture.DistributeAid.setup(context, auth: true)
+  end
+
   test "count projects where there are none", %{conn: conn} do
     assert count_projects(conn) ==
              %{"data" => %{"countProjects" => 0}}

@@ -3,9 +3,7 @@ defmodule Ferry.AvailableListEntryModValueApiTest do
   import Ferry.ApiClient.{AvailableListEntryModValue}
 
   setup context do
-    insert(:user)
-    |> mock_sign_in
-
+    {:ok, context} = Ferry.Fixture.DistributeAid.setup(context, auth: true)
     {:ok, context} = Ferry.Fixture.AvailableListWithEntry.setup(context)
     {:ok, context} = Ferry.Fixture.ModWithModValues.setup(context)
     Ferry.Fixture.ItemWithMod.setup(context)

@@ -2,6 +2,10 @@ defmodule Ferry.ModApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.Mod
 
+  setup context do
+    Ferry.Fixture.DistributeAid.setup(context, auth: true)
+  end
+
   test "count mods where there are none", %{conn: conn} do
     assert count_mods(conn) ==
              %{"data" => %{"countMods" => 0}}
