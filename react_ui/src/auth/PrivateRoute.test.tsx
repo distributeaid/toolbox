@@ -41,7 +41,7 @@ it('allows authenticated users to see private routes', () => {
   const { container } = renderUI('authenticated')
   expect(container).toMatchInlineSnapshot(`
     <div>
-      Secret stuff
+      Sign in
     </div>
   `)
 })

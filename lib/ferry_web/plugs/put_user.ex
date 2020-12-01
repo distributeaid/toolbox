@@ -23,7 +23,17 @@ defmodule FerryWeb.Plugs.PutUser do
 
   defp build_context(["Bearer " <> token]) do
     with {:ok, user} <- authenticate(token) do
-      {:ok, %{user: user}}
+      # deconstruct a list of all the groups
+      # the user belongs to
+      user_groups = Enum.map(user.groups, fn ug -> ug.group end)
+
+      # check whether or not this is a da amin
+      da_admin =
+        Enum.find(user.groups, nil, fn ug ->
+          ug.role == "admin" and ug.group.id == 0
+        end) != nil
+
+      {:ok, %{user: user, user_groups: user_groups, da_admin: da_admin}}
     end
   end
 

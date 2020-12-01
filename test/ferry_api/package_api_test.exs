@@ -3,9 +3,7 @@ defmodule Ferry.PackageApiTest do
   import Ferry.ApiClient.Package
 
   setup context do
-    insert(:user)
-    |> mock_sign_in
-
+    {:ok, context} = Ferry.Fixture.DistributeAid.setup(context, auth: true)
     Ferry.Fixture.ShipmentWithPackage.setup(context)
   end
 

@@ -5,9 +5,7 @@ import {
   HttpLink,
   InMemoryCache,
 } from '@apollo/client'
-import { CognitoUserSession } from 'amazon-cognito-identity-js'
-
-import { Auth } from '../amplify'
+import { useAuth0 } from '@auth0/auth0-react'
 
 const httpLink = new HttpLink({
   uri: '/api',
@@ -16,16 +14,18 @@ const httpLink = new HttpLink({
 })
 
 const authLink = new ApolloLink((operation, forward) => {
-  return fromPromise(
-    Auth.currentSession()
-      .then((session: CognitoUserSession) => {
-        const token = session.getAccessToken().getJwtToken()
+  const { getAccessTokenSilently } = useAuth0()
 
+  return fromPromise(
+    getAccessTokenSilently()
+      .then((token: string) => {
         operation.setContext({
           headers: {
             authorization: token ? `Bearer ${token}` : '',
           },
         })
+
+        console.log(token)
 
         return operation
       })

@@ -8,24 +8,21 @@ defmodule FerryApi.Schema.User do
   object :user_queries do
     @desc "Get the number of users"
     field :count_users, :integer do
+      middleware(RequireUser)
       resolve(&count_users/3)
     end
 
     @desc "Get all users"
     field :users, list_of(:user) do
+      middleware(RequireUser)
       resolve(&get_users/3)
     end
 
     @desc "Get a user"
     field :user, :user do
       arg(:id, non_null(:id))
+      middleware(RequireUser)
       resolve(&get_user/3)
-    end
-
-    @desc "Get a user by email"
-    field :user_by_email, :user do
-      arg(:email, non_null(:string))
-      resolve(&get_user_by_email/3)
     end
   end
 
@@ -47,6 +44,7 @@ defmodule FerryApi.Schema.User do
       arg(:group, non_null(:id))
       arg(:role, non_null(:string))
       middleware(RequireUser)
+      middleware(RequireDaOrGroupAdmin)
       resolve(&delete_user_role/3)
       middleware(&build_payload/2)
     end
@@ -54,41 +52,57 @@ defmodule FerryApi.Schema.User do
 
   @user_not_found "User not found"
   @group_not_found "Group not found"
+  @unauthorized "unauthorized"
 
   @doc """
   Counts all users in the system
   """
   @spec count_users(any(), any(), any()) :: {:ok, integer()}
-  def count_users(_parent, _args, _resolution) do
+  def count_users(_parent, _args, %{context: %{da_admin: true}}) do
     {:ok, Accounts.count_users()}
+  end
+
+  def count_users(_parent, _args, %{context: %{user_groups: groups}}) do
+    {:ok, Accounts.count_users_from_groups(groups)}
   end
 
   @doc """
   Get all users in the system
   """
   @spec get_users(any(), any(), any()) :: {:ok, [Ferry.Accounts.User.t()]}
-  def get_users(_parent, _args, _resolution) do
+  def get_users(_parent, _args, %{context: %{da_admin: true}}) do
     {:ok, Accounts.get_users()}
+  end
+
+  def get_users(_parent, _args, %{context: %{user_groups: groups}}) do
+    {:ok, Accounts.get_users_in_groups(groups)}
   end
 
   @doc """
   Get a single user by his/her id
   """
   @spec get_user(any(), %{id: String.t()}, any()) :: {:ok, map()} | {:error, String.t()}
-  def get_user(_parent, %{id: id}, _resolution) do
+  def get_user(_parent, %{id: id}, %{context: %{da_admin: true}}) do
     with :not_found <- Accounts.get_user(id) do
       {:error, @user_not_found}
     end
   end
 
-  @doc """
-  Get a single user by his/her email
-  """
-  @spec get_user_by_email(any(), %{email: String.t()}, any()) ::
-          {:ok, map()} | {:error, String.t()}
-  def get_user_by_email(_parent, %{email: email}, _resolution) do
-    with :not_found <- Accounts.get_user_by_email(email) do
-      {:error, @user_not_found}
+  def get_user(_parent, %{id: id}, %{context: %{user_groups: groups}}) do
+    case Accounts.get_user(id) do
+      :not_found ->
+        {:error, @user_not_found}
+
+      {:ok, user} ->
+        # since we are not a DA admin, we need to apply some
+        # access control
+        case Ferry.Accounts.user_in_some_group?(user, groups) do
+          true ->
+            {:ok, user}
+
+          false ->
+            {:error, @unauthorized}
+        end
     end
   end
 
@@ -97,10 +111,7 @@ defmodule FerryApi.Schema.User do
   """
   @spec set_user_role(any(), %{user: String.t(), group: String.t(), role: String.t()}, any()) ::
           {:ok, map()} | {:error, String.t()}
-  def set_user_role(_, %{user: user, group: group, role: role}, %{context: %{user: _current_user}}) do
-    # with :ok <-
-    #        FerryApi.Auth.da_admin?(current_user) ||
-    #          FerryApi.Auth.group_admin?(group, current_user) do
+  def set_user_role(_, %{user: user, group: group, role: role}, _resolution) do
     case Accounts.get_user(user) do
       :not_found ->
         {:error, @user_not_found}

@@ -1,6 +1,19 @@
+import { useAuth0 } from '@auth0/auth0-react'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
+
+function SessionButton() {
+  const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0()
+
+  return isAuthenticated ?
+    <button onClick={() => {
+      logout({ returnTo: window.location.origin })
+    }}>Log out {user.given_name}</button>
+       : (
+    <button onClick={loginWithRedirect}>Log in</button>
+  )
+}
 
 export const NavBar: React.FC = () => {
   const { t } = useTranslation()
@@ -55,6 +68,8 @@ export const NavBar: React.FC = () => {
             </HeaderNavLink>
           </div>
         </div>
+
+        <SessionButton />
 
         <a
           href="/account"

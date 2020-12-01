@@ -2,10 +2,11 @@ defmodule Ferry.GroupProjectApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Group, Project}
 
-  test "fetch a group and its projects", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
+  setup context do
+    Ferry.Fixture.DistributeAid.setup(context, auth: true)
+  end
 
+  test "fetch a group and its projects", %{conn: conn} do
     # create a group
     group_attrs = params_for(:group) |> with_address()
     group_attrs = %{group_attrs | name: "first group"}
