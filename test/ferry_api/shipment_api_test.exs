@@ -2,9 +2,8 @@ defmodule Ferry.ShipmentApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Group, Address, Shipment}
 
-  setup %{conn: conn} = context do
-    insert(:user)
-    |> mock_sign_in
+  setup context do
+    {:ok, %{conn: conn} = context} = Ferry.Fixture.DistributeAid.setup(context, auth: true)
 
     %{
       "data" => %{

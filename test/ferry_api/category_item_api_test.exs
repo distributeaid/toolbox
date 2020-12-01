@@ -2,6 +2,10 @@ defmodule Ferry.CategoryItemApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Category, Item}
 
+  setup context do
+    Ferry.Fixture.DistributeAid.setup(context, auth: true)
+  end
+
   test "fetch a category and its items", %{conn: conn} do
     insert(:user)
     |> mock_sign_in

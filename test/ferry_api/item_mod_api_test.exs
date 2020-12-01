@@ -2,10 +2,11 @@ defmodule Ferry.ItemModApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.{Category, Item, Mod}
 
-  test "add/remove a mod to/from an existing item", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
+  setup context do
+    Ferry.Fixture.DistributeAid.setup(context, auth: true)
+  end
 
+  test "add/remove a mod to/from an existing item", %{conn: conn} do
     # create the category
     %{
       "data" => %{
@@ -118,9 +119,6 @@ defmodule Ferry.ItemModApiTest do
   end
 
   test "can't delete a mod that has items", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
-
     # create the category
     %{
       "data" => %{
@@ -198,9 +196,6 @@ defmodule Ferry.ItemModApiTest do
   end
 
   test "can delete an item even if it has mods", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
-
     # create the category
     %{
       "data" => %{

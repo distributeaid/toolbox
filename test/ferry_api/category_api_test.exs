@@ -2,6 +2,10 @@ defmodule Ferry.CategoryApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.Category
 
+  setup context do
+    Ferry.Fixture.DistributeAid.setup(context, auth: true)
+  end
+
   test "count categories where there are none", %{conn: conn} do
     assert count_categories(conn) ==
              %{"data" => %{"countCategories" => 0}}
