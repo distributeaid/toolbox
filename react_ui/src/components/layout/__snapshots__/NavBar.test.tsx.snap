@@ -51,6 +51,9 @@ exports[`shows the nav bar 1`] = `
           </a>
         </div>
       </div>
+      <button>
+        Log in
+      </button>
       <a
         class=" 'font-mono block text-base sm:text-lg leading-none hover:border-transparent px-4 py-2 sm:px-6 sm:py-3"
         href="/account"
