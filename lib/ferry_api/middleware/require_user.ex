@@ -12,8 +12,6 @@ defmodule FerryApi.Middleware.RequireUser do
 
   def call(resolution, _opts) do
     resolution
-    # TODO uncomment this once all tests have proper
-    # user fixtures
-    # |> Absinthe.Resolution.put_result({:error, "unauthorized"})
+    |> Absinthe.Resolution.put_result({:error, "unauthorized"})
   end
 end

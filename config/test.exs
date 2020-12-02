@@ -18,7 +18,9 @@ config :ferry, Ferry.Repo,
   database: System.get_env("POSTGRES_DB"),
   hostname: System.get_env("DB_HOSTNAME_TEST"),
   port: System.get_env("POSTGRES_PORT"),
-  pool: Ecto.Adapters.SQL.Sandbox
+  pool: Ecto.Adapters.SQL.Sandbox,
+  queue_target: 5000,
+  pool_size: 20
 
 # Reduce the # of password hashing rounds to speed up the test suite.
 config :bcrypt_elixir, log_rounds: 4

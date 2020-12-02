@@ -18,11 +18,55 @@ defmodule Ferry.Accounts do
   end
 
   @doc """
+  Counts all the users that belong to any
+  of the given groups
+  """
+  @spec count_users_from_groups([Group.t()]) :: integer()
+  def count_users_from_groups(groups) do
+    groups
+    |> users_in_group_query()
+    |> Repo.aggregate(:count, :id)
+  end
+
+  @doc """
   Returns the list of users.
   """
   @spec get_users() :: [User.t()]
   def get_users do
     Repo.all(User) |> Repo.preload(groups: [:group])
+  end
+
+  @doc """
+  Returns the list of users that belong to any of the
+  specified groups
+  """
+  @spec get_users_in_groups([Group.t()]) :: [User.t()]
+  def get_users_in_groups(groups) do
+    groups
+    |> users_in_group_query()
+    |> Repo.all()
+    |> Repo.preload(groups: [:group])
+  end
+
+  defp users_in_group_query(groups) do
+    group_ids = Enum.map(groups, fn g -> g.id end)
+
+    from(u in User,
+      distinct: true,
+      join: ug in UserGroup,
+      on: ug.user_id == u.id,
+      where: ug.group_id in ^group_ids
+    )
+  end
+
+  @doc """
+  Returns wether the given user belongs to at least
+  one of the given groups
+  """
+  @spec user_in_some_group?(User.t(), [Group.t()]) :: true | false
+  def user_in_some_group?(user, groups) do
+    user_groups = Enum.map(user.groups, fn ug -> ug.group end)
+    length(user_groups -- user_groups -- groups) != 0
   end
 
   @doc """
