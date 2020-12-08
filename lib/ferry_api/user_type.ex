@@ -5,6 +5,7 @@ defmodule FerryApi.Schema.UserType do
   object :user_group do
     field :id, non_null(:id)
     field :group, non_null(:group)
+    field :user, non_null(:user)
     field :role, non_null(:string)
   end
 

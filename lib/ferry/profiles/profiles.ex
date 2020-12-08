@@ -60,7 +60,7 @@ defmodule Ferry.Profiles do
       |> Repo.get(id)
       |> Repo.preload(:projects)
       |> Repo.preload(addresses: [:project])
-      |> Repo.preload(:users)
+      |> Repo.preload(users: [:user])
 
     case query do
       nil ->
@@ -76,7 +76,14 @@ defmodule Ferry.Profiles do
   """
   @spec get_group_by_slug(String.t()) :: {:ok, Group.t()} | :not_found
   def get_group_by_slug(slug) do
-    case group_query(preload: [:projects, :addresses, :users]) |> Repo.get_by(slug: slug) do
+    query =
+      Group
+      |> Repo.get_by(slug: slug)
+      |> Repo.preload(:projects)
+      |> Repo.preload(addresses: [:project])
+      |> Repo.preload(users: [:user])
+
+    case query do
       nil ->
         :not_found
 

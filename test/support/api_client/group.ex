@@ -53,7 +53,13 @@ defmodule Ferry.ApiClient.Group do
       group(id: "#{id}") {
         id,
         name,
-        description
+        description,
+        users {
+          user {
+            id
+          },
+          role
+        }
       }
     }
     """)

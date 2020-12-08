@@ -83,8 +83,6 @@ defmodule FerryApi.Schema.Group do
   @group_not_found "group not found"
   @unauthorized "unauthorized"
 
-  # Resolvers
-  # ------------------------------------------------------------
   def count_groups(_parent, _args, _resolution) do
     {:ok, length(Profiles.list_groups())}
   end
@@ -105,10 +103,15 @@ defmodule FerryApi.Schema.Group do
     end
   end
 
-  def create_group(_parent, %{group_input: group_attrs}, _resolution) do
+  def create_group(_parent, %{group_input: group_attrs}, %{context: %{user: user}}) do
     case Profiles.create_group(group_attrs) do
       {:ok, group} ->
-        {:ok, %{group | addresses: []}}
+        # Set the current user as the admin of the group
+        # TODO We should probably do this in the same database transaction that creates
+        # the group.
+        with {:ok, _} <- Ferry.Accounts.set_user_role(user, group, "admin") do
+          Profiles.get_group(group.id)
+        end
 
       {:error, changeset} ->
         {:error, changeset}

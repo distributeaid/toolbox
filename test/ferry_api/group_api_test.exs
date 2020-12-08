@@ -41,6 +41,31 @@ defmodule Ferry.GroupApiTest do
       )
     end
 
+    test "can create a group, and they become the admin", %{conn: conn, user: user} do
+      %{
+        "data" => %{
+          "createGroup" => %{
+            "successful" => true,
+            "result" => %{
+              "id" => group
+            }
+          }
+        }
+      } = create_simple_group(conn, %{name: "group2"})
+
+      %{
+        "data" => %{
+          "group" => %{
+            "name" => "group2",
+            "users" => [member]
+          }
+        }
+      } = get_group(conn, group)
+
+      assert "admin" == member["role"]
+      assert "#{user.id}" == member["user"]["id"]
+    end
+
     test "gets a proper error when creating a group with invalid data", %{conn: conn} do
       %{
         "data" => %{

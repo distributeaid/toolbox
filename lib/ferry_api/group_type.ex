@@ -43,14 +43,11 @@ defmodule FerryApi.Schema.GroupType do
     field :donation_form, :string
     field :donation_form_results, :string
 
-    # Relations
-    # ------------------------------------------------------------
-
     # TODO
-    # field :users, list_of(:user), resolve: dataloader(Group)
     # field :roles
     field :projects, list_of(:project), resolve: dataloader(Repo)
     field :addresses, list_of(:address), resolve: dataloader(Repo)
+    field :users, list_of(:user_group)
   end
 
   payload_object(:group_payload, :group)
