@@ -209,6 +209,17 @@ defmodule Ferry.Profiles do
     :ok
   end
 
+  @doc """
+  Returns whether the given user is a member of the given
+  group
+  """
+  @spec is_member?(Group.t(), User.t()) :: true | false
+  def is_member?(%Group{} = group, user) do
+    Enum.find(group.users, nil, fn member ->
+      member.user.id == user.id
+    end) != nil
+  end
+
   # Project
   # ==============================================================================
 

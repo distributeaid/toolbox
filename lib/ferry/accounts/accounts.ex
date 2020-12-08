@@ -193,4 +193,14 @@ defmodule Ferry.Accounts do
       "#{group.group.id}" == "#{group_id}" && group.role == role
     end) == 1
   end
+
+  @doc """
+  Returns whether the given user has any role in the given group
+  """
+  @spec has_role?(User.t(), String.t()) :: boolean()
+  def has_role?(user, group_id) do
+    Enum.count(user.groups, fn group ->
+      "#{group.group.id}" == "#{group_id}"
+    end) != 0
+  end
 end

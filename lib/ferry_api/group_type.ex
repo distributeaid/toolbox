@@ -47,7 +47,11 @@ defmodule FerryApi.Schema.GroupType do
     # field :roles
     field :projects, list_of(:project), resolve: dataloader(Repo)
     field :addresses, list_of(:address), resolve: dataloader(Repo)
-    field :users, list_of(:user_group)
+
+    field :users, list_of(:user_group) do
+      middleware(FerryApi.Middleware.RequireDaOrGroupMember)
+      middleware(Absinthe.Middleware.MapGet, :users)
+    end
   end
 
   payload_object(:group_payload, :group)

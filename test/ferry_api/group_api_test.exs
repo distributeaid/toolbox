@@ -115,6 +115,23 @@ defmodule Ferry.GroupApiTest do
       })
     end
 
+    test "cannot see members of a group", %{conn: conn, group: group} do
+      %{
+        "data" => %{
+          "group" => %{
+            "name" => "group",
+            "users" => nil
+          }
+        },
+        "errors" => [
+          %{
+            "message" => "unauthorized",
+            "path" => ["group", "users"]
+          }
+        ]
+      } = get_group(conn, group.id)
+    end
+
     test "cannot create groups", %{conn: conn} do
       %{
         "data" => %{
@@ -158,6 +175,27 @@ defmodule Ferry.GroupApiTest do
   describe "distribute aid admin" do
     setup context do
       Ferry.Fixture.DistributeAid.setup(context, auth: true)
+    end
+
+    test "can see members of other groups", %{conn: conn} = context do
+      {:ok, %{group: group, user: user}} =
+        Ferry.Fixture.GroupUserRole.setup(context, %{
+          group: "group",
+          user: "user@group",
+          role: "member"
+        })
+
+      %{
+        "data" => %{
+          "group" => %{
+            "name" => "group",
+            "users" => [member]
+          }
+        }
+      } = get_group(conn, group.id)
+
+      assert "member" == member["role"]
+      assert "#{user.id}" == member["user"]["id"]
     end
 
     test "can create a group", %{conn: conn} do
@@ -243,6 +281,45 @@ defmodule Ferry.GroupApiTest do
         },
         auth: true
       )
+    end
+
+    test "can see members of groups where she/he belongs", %{conn: conn, group: group, user: user} do
+      %{
+        "data" => %{
+          "group" => %{
+            "name" => "group",
+            "users" => [member]
+          }
+        }
+      } = get_group(conn, group.id)
+
+      assert "admin" == member["role"]
+      assert "#{user.id}" == member["user"]["id"]
+    end
+
+    test "cannot see members from groups where she/he does not belong", %{conn: conn} = context do
+      {:ok, %{group: group2}} =
+        Ferry.Fixture.Group.setup(
+          context,
+          %{
+            group: "group2"
+          }
+        )
+
+      %{
+        "data" => %{
+          "group" => %{
+            "name" => "group2",
+            "users" => nil
+          }
+        },
+        "errors" => [
+          %{
+            "message" => "unauthorized",
+            "path" => ["group", "users"]
+          }
+        ]
+      } = get_group(conn, group2.id)
     end
 
     test "can create a group", %{conn: conn} do
