@@ -123,10 +123,10 @@ defmodule FerryApi.Schema.Project do
         ) :: {:error, Ecto.Changeset.t()} | {:ok, Ferry.Profiles.Project.t()}
   def create_project(_parent, %{project_input: project_attrs}, _resolution) do
     case Ferry.Profiles.get_group(project_attrs.group) do
-      nil ->
+      :not_found ->
         {:error, @group_not_found}
 
-      group ->
+      {:ok, group} ->
         Ferry.Profiles.create_project(group, project_attrs)
     end
   end

@@ -10,6 +10,19 @@ defmodule FerryApi.Middleware.RequireGroupAdmin do
   @behaviour Absinthe.Middleware
 
   def call(%{arguments: %{group: group}, context: %{user: user}} = resolution, _opts) do
+    check_for_group_admin(group, user, resolution)
+  end
+
+  def call(%{arguments: %{id: group}, context: %{user: user}} = resolution, _opts) do
+    check_for_group_admin(group, user, resolution)
+  end
+
+  def call(resolution, _opts) do
+    resolution
+    |> Absinthe.Resolution.put_result({:error, "unauthorized"})
+  end
+
+  defp check_for_group_admin(group, user, resolution) do
     case Ferry.Accounts.has_role?(user, group, "admin") do
       true ->
         resolution
@@ -18,10 +31,5 @@ defmodule FerryApi.Middleware.RequireGroupAdmin do
         resolution
         |> Absinthe.Resolution.put_result({:error, "unauthorized"})
     end
-  end
-
-  def call(resolution, _opts) do
-    resolution
-    |> Absinthe.Resolution.put_result({:error, "unauthorized"})
   end
 end

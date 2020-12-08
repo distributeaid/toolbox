@@ -213,15 +213,15 @@ defmodule FerryApi.Schema.NeedsList do
 
   @doc """
   Resolver that returns an aggregated needs list for all groups found for the given
-  ids. If an id can't be resolve to a valid group, it will be ignored.
+  ids. If an id can't be resolved to a valid group, it will be ignored.
   """
   @spec current_needs_list_by_groups(any(), %{groups: [String.t()]}, any()) ::
           {:ok, map()} | {:error, term()}
   def current_needs_list_by_groups(_, %{groups: ids}, _) do
     ids
     |> Enum.map(&Ferry.Profiles.get_group(&1))
-    |> Enum.filter(fn group -> group != nil end)
-    |> Enum.flat_map(fn group -> group.addresses end)
+    |> Enum.filter(fn group -> group != :not_found end)
+    |> Enum.flat_map(fn {:ok, group} -> group.addresses end)
     |> Aid.get_current_needs_list_by_addresses()
   end
 
@@ -238,8 +238,8 @@ defmodule FerryApi.Schema.NeedsList do
   def needs_list_by_groups(_, %{groups: ids, from: from, to: to}, _) do
     ids
     |> Enum.map(&Ferry.Profiles.get_group(&1))
-    |> Enum.filter(fn group -> group != nil end)
-    |> Enum.flat_map(fn group -> group.addresses end)
+    |> Enum.filter(fn group -> group != :not_found end)
+    |> Enum.flat_map(fn {:ok, group} -> group.addresses end)
     |> Aid.get_needs_list_by_addresses(DateTime.to_date(from), DateTime.to_date(to))
   end
 

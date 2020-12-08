@@ -53,12 +53,22 @@ defmodule Ferry.Profiles do
   @doc """
   Returns a group, given its id
   """
-  @spec get_group(String.t()) :: Group.t() | nil
+  @spec get_group(String.t()) :: {:ok, Group.t()} | :not_found
   def get_group(id) do
-    Group
-    |> preload(addresses: [:project])
-    |> preload(:projects)
-    |> Repo.get(id)
+    query =
+      Group
+      |> Repo.get(id)
+      |> Repo.preload(:projects)
+      |> Repo.preload(addresses: [:project])
+      |> Repo.preload(users: [:user])
+
+    case query do
+      nil ->
+        :not_found
+
+      group ->
+        {:ok, group}
+    end
   end
 
   @doc """
@@ -66,7 +76,14 @@ defmodule Ferry.Profiles do
   """
   @spec get_group_by_slug(String.t()) :: {:ok, Group.t()} | :not_found
   def get_group_by_slug(slug) do
-    case group_query(preload: [:addresses]) |> Repo.get_by(slug: slug) do
+    query =
+      Group
+      |> Repo.get_by(slug: slug)
+      |> Repo.preload(:projects)
+      |> Repo.preload(addresses: [:project])
+      |> Repo.preload(users: [:user])
+
+    case query do
       nil ->
         :not_found
 
@@ -125,18 +142,9 @@ defmodule Ferry.Profiles do
 
   """
   def delete_group(%Group{} = group) do
-    Repo.delete(group)
-  end
-
-  @doc """
-  Deletes all groups
-  """
-  @spec delete_groups() :: boolean()
-  def delete_groups() do
-    Group
-    |> Repo.delete_all()
-
-    true
+    group
+    |> Group.delete_changeset()
+    |> Repo.delete()
   end
 
   @doc """
@@ -199,6 +207,17 @@ defmodule Ferry.Profiles do
     end
 
     :ok
+  end
+
+  @doc """
+  Returns whether the given user is a member of the given
+  group
+  """
+  @spec is_member?(Group.t(), User.t()) :: true | false
+  def is_member?(%Group{} = group, user) do
+    Enum.find(group.users, nil, fn member ->
+      member.user.id == user.id
+    end) != nil
   end
 
   # Project
