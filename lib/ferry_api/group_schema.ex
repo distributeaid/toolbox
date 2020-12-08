@@ -66,27 +66,23 @@ defmodule FerryApi.Schema.Group do
     field :update_group, type: :group_payload do
       arg(:id, non_null(:id))
       arg(:group_input, non_null(:group_input))
-      middleware(Middleware.RequireUser)
+      middleware(Middleware.RequireDaOrGroupAdmin)
       resolve(&update_group/3)
       middleware(&build_payload/2)
     end
 
     @desc "Delete a group"
-    field :delete_group, type: :group do
+    field :delete_group, type: :group_payload do
       arg(:id, non_null(:id))
-      middleware(Middleware.RequireUser)
+      middleware(Middleware.RequireDaOrGroupAdmin)
       resolve(&delete_group/3)
-    end
-
-    @desc "Delete all groups"
-    field :delete_groups, type: :boolean do
-      middleware(Middleware.RequireUser)
-      resolve(&delete_groups/3)
+      middleware(&build_payload/2)
     end
   end
 
-  # Resolvers
-  # ------------------------------------------------------------
+  @group_not_found "group not found"
+  @unauthorized "unauthorized"
+
   def count_groups(_parent, _args, _resolution) do
     {:ok, length(Profiles.list_groups())}
   end
@@ -96,23 +92,26 @@ defmodule FerryApi.Schema.Group do
   end
 
   def get_group(_parent, %{id: id}, _resolution) do
-    # TODO: return either :not_found or {:ok, group}
-    case Profiles.get_group(id) do
-      nil -> {:error, message: "Group not found.", id: id}
-      group -> {:ok, group}
+    with :not_found <- Profiles.get_group(id) do
+      {:error, @group_not_found}
     end
   end
 
   def get_group_by_slug(_parent, %{slug: slug}, _resolution) do
     with :not_found <- Profiles.get_group_by_slug(slug) do
-      {:error, message: "Group not found.", slug: slug}
+      {:error, @group_not_found}
     end
   end
 
-  def create_group(_parent, %{group_input: group_attrs}, _resolution) do
+  def create_group(_parent, %{group_input: group_attrs}, %{context: %{user: user}}) do
     case Profiles.create_group(group_attrs) do
       {:ok, group} ->
-        {:ok, %{group | addresses: []}}
+        # Set the current user as the admin of the group
+        # TODO We should probably do this in the same database transaction that creates
+        # the group.
+        with {:ok, _} <- Ferry.Accounts.set_user_role(user, group, "admin") do
+          Profiles.get_group(group.id)
+        end
 
       {:error, changeset} ->
         {:error, changeset}
@@ -120,23 +119,26 @@ defmodule FerryApi.Schema.Group do
   end
 
   def update_group(_parent, %{id: id, group_input: group_attrs}, _resolution) do
-    id
-    |> Profiles.get_group()
-    |> Profiles.update_group(group_attrs)
+    case Profiles.get_group(id) do
+      :not_found ->
+        {:error, @group_not_found}
+
+      {:ok, group} ->
+        Profiles.update_group(group, group_attrs)
+    end
   end
 
   def delete_group(_parent, %{id: id}, _resolution) do
-    group = Profiles.get_group!(id)
-    Profiles.delete_group(group)
+    case Profiles.get_group(id) do
+      :not_found ->
+        {:error, @group_not_found}
 
-    # TODO: should also delete `group.location` address in a transaction
-  end
+      {:ok, %{id: 0}} ->
+        # We can't really delete the Distribute Aid default group
+        {:error, @unauthorized}
 
-  @doc """
-  Graphql resolver that deletes all groups
-  """
-  @spec delete_groups(any, map(), any) :: {:ok, boolean()}
-  def delete_groups(_parent, _, _resolution) do
-    {:ok, Ferry.Profiles.delete_groups()}
+      {:ok, group} ->
+        Profiles.delete_group(group)
+    end
   end
 end

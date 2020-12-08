@@ -118,10 +118,10 @@ defmodule FerryApi.Schema.User do
 
       {:ok, user} ->
         case Profiles.get_group(group) do
-          nil ->
+          :not_found ->
             {:error, @group_not_found}
 
-          group ->
+          {:ok, group} ->
             Accounts.set_user_role(user, group, role)
         end
     end
@@ -141,10 +141,10 @@ defmodule FerryApi.Schema.User do
 
       {:ok, user} ->
         case Profiles.get_group(group) do
-          nil ->
+          :not_found ->
             {:error, @group_not_found}
 
-          group ->
+          {:ok, group} ->
             Accounts.delete_user_role(user, group, role)
         end
     end

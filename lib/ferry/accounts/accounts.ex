@@ -7,6 +7,7 @@ defmodule Ferry.Accounts do
 
   alias Ferry.Accounts.User
   alias Ferry.Accounts.UserGroup
+  alias Ferry.Profiles.Group
 
   @doc """
   Counts all the users in the system
@@ -191,5 +192,15 @@ defmodule Ferry.Accounts do
     Enum.count(user.groups, fn group ->
       "#{group.group.id}" == "#{group_id}" && group.role == role
     end) == 1
+  end
+
+  @doc """
+  Returns whether the given user has any role in the given group
+  """
+  @spec has_role?(User.t(), String.t()) :: boolean()
+  def has_role?(user, group_id) do
+    Enum.count(user.groups, fn group ->
+      "#{group.group.id}" == "#{group_id}"
+    end) != 0
   end
 end
