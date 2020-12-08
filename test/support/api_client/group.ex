@@ -247,16 +247,22 @@ defmodule Ferry.ApiClient.Group do
         updateGroup(
           id: "#{updates.id}",
           groupInput: {
-            name: "#{updates.name}",
-            slug: "#{updates.slug}",
-            description: "#{updates.description}",
-            slackChannelName: "#{updates.slack_channel_name}",
-            requestForm: "#{updates.request_form}",
-            requestFormResults: "#{updates.request_form_results}",
-            volunteerForm: "#{updates.volunteer_form}",
-            volunteerFormResults: "#{updates.volunteer_form_results}",
-            donationForm: "#{updates.donation_form}",
-            donationFormResults: "#{updates.donation_form_results}"
+            name: "#{updates[:name] || "new name"}",
+            slug: "#{updates[:slug] || "new-slug"}",
+            description: "#{updates[:description] || "new description"}",
+            slackChannelName: "#{updates[:slack_channel_name] || "new-slack-channel"}",
+            requestForm: "#{updates[:request_form] || "https://form.local/request"}",
+            requestFormResults: "#{
+      updates[:request_form_results] || "https://forms.local/request/results"
+    }",
+            volunteerForm: "#{updates[:volunteer_form] || "https://forms.local/volunteer"}",
+            volunteerFormResults: "#{
+      updates[:volunteer_form_results] || "https://forms.local/volunteer/results"
+    }",
+            donationForm: "#{updates[:donation_form] || "https://forms.local/donation"}",
+            donationFormResults: "#{
+      updates[:donation_form_results] || "https://forms.local/donation/results"
+    }"
           }
         ) {
           successful
@@ -283,7 +289,15 @@ defmodule Ferry.ApiClient.Group do
     graphql(conn, """
       mutation {
         deleteGroup(id: "#{id}") {
-          id
+          successful,
+          messages {
+            field,
+            message
+          },
+          result {
+            id,
+            name
+          }
         }
       }
     """)

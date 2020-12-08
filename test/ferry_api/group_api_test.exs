@@ -1,240 +1,306 @@
 defmodule Ferry.GroupApiTest do
   use FerryWeb.ConnCase, async: true
   import Ferry.ApiClient.Group
-  alias Ferry.Profiles
 
-  setup context do
-    Ferry.Fixture.DistributeAid.setup(context, auth: true)
-  end
+  describe "any user" do
+    test "can count groups", %{conn: conn} do
+      %{"data" => %{"countGroups" => count}} = count_groups(conn)
+      # The default distribute aid group
+      assert count == 1
+    end
 
-  test "count groups - none", %{conn: conn} do
-    %{"data" => %{"countGroups" => count}} = count_groups(conn)
-    assert count == 1
-  end
+    test "can get all groups", %{conn: conn} do
+      %{"data" => %{"groups" => [%{"name" => "DistributeAid"}]}} = get_groups(conn)
+    end
 
-  test "count groups - many", %{conn: conn} do
-    insert_list(3, :group)
-    %{"data" => %{"countGroups" => count}} = count_groups(conn)
-    assert count == 4
-  end
+    test "can fetch a single group", %{conn: conn} do
+      %{"data" => %{"group" => %{"name" => "DistributeAid"}}} = get_group(conn, 0)
+    end
 
-  test "get all groups - none", %{conn: conn} do
-    %{"data" => %{"groups" => [%{"name" => "DistributeAid"}]}} = get_groups(conn)
-  end
-
-  test "get all groups - one", %{conn: conn} do
-    group = insert(:group) |> with_address()
-
-    expected_groups =
-      Enum.map([group], fn group ->
-        %{
-          "id" => "#{group.id}",
-          "description" => group.description,
-          "name" => group.name,
-          "addresses" =>
-            Enum.map(group.addresses, fn address ->
-              %{
-                "id" => "#{address.id}",
-                "label" => address.label,
-                "postal_code" => address.postal_code,
-                "province" => address.province,
-                "country_code" => address.country_code
-              }
-            end)
-        }
-      end)
-
-    %{
-      "data" => %{
-        "groups" => [_ | ^expected_groups]
-      }
-    } = get_groups(conn)
-  end
-
-  test "get all groups - many", %{conn: conn} do
-    groups = insert_pair(:group) |> with_address()
-
-    expected_groups =
-      Enum.map(groups, fn group ->
-        %{
-          "id" => "#{group.id}",
-          "description" => group.description,
-          "name" => group.name,
-          "addresses" =>
-            Enum.map(group.addresses, fn address ->
-              %{
-                "id" => "#{address.id}",
-                "label" => address.label,
-                "postal_code" => address.postal_code,
-                "province" => address.province,
-                "country_code" => address.country_code
-              }
-            end)
-        }
-      end)
-
-    %{
-      "data" => %{
-        "groups" => [_ | ^expected_groups]
-      }
-    } = get_groups(conn)
-  end
-
-  # Query - Get A Group
-  # ------------------------------------------------------------
-  test "get a group - found", %{conn: conn} do
-    group = insert(:group) |> with_address()
-
-    group_params = %{
-      "id" => Integer.to_string(group.id),
-      "name" => group.name,
-      "description" => group.description
-    }
-
-    assert get_group(conn, group.id) == %{"data" => %{"group" => group_params}}
-  end
-
-  test "get a group - no group", %{conn: conn} do
-    assert(
-      get_group(conn, 161) == %{
-        "data" => %{"group" => nil},
+    test "gets a proper error when trying to fetch a non existing group", %{conn: conn} do
+      %{
         "errors" => [
           %{
-            "id" => "161",
-            "locations" => [%{"column" => 3, "line" => 2}],
-            "message" => "Group not found.",
-            "path" => ["group"]
+            "message" => "group not found"
           }
         ]
-      }
-    )
+      } = get_group(conn, 161)
+    end
   end
 
-  # Mutation - Create A Group
-  # ------------------------------------------------------------
-  test "create a group - success", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
+  describe "any authenticated user" do
+    setup context do
+      Ferry.Fixture.GroupUserRole.setup(
+        context,
+        %{
+          group: "group",
+          user: "user@group",
+          role: "admin"
+        },
+        auth: true
+      )
+    end
 
-    group_attrs = params_for(:group) |> with_address()
-
-    %{
-      "data" => %{
-        "createGroup" => %{
-          "successful" => successful,
-          "messages" => messages,
-          "result" => %{
-            "id" => id,
-            "name" => name,
-            "slackChannelName" => slack_channel_name,
-            "slug" => slug,
-            "type" => type,
-            "addresses" => []
+    test "gets a proper error when creating a group with invalid data", %{conn: conn} do
+      %{
+        "data" => %{
+          "createGroup" => %{
+            "successful" => false,
+            "messages" => [
+              %{
+                "field" => "name",
+                "message" => "can't be blank"
+              },
+              %{
+                "field" => "slug",
+                "message" => "can't be blank"
+              }
+            ]
           }
         }
-      }
-    } = create_group(conn, group_attrs)
+      } = create_invalid_group(conn, params_for(:invalid_group))
+    end
 
-    assert successful
-    assert messages == []
-    assert id
-    assert slug == group_attrs.slug
-    assert name == group_attrs.name
-    assert type == group_attrs.type
-    assert slack_channel_name == group_attrs.slack_channel_name
-  end
-
-  test "create a group - error", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
-
-    group_attrs = params_for(:invalid_group)
-
-    %{
-      "data" => %{
-        "createGroup" => %{
-          "successful" => successful,
-          "messages" => [
-            %{
-              "field" => field,
-              "message" => "can't be blank"
-            },
-            %{
-              "field" => "slug",
-              "message" => "can't be blank"
-            }
-          ],
-          "result" => result
+    test "gets a proper error when updating a group with invalid data", %{
+      conn: conn,
+      group: group
+    } do
+      %{
+        "data" => %{
+          "updateGroup" => %{
+            "successful" => false,
+            "messages" => [
+              %{
+                "field" => "name",
+                "message" => "can't be blank"
+              }
+            ]
+          }
         }
-      }
-    } = create_invalid_group(conn, group_attrs)
-
-    refute successful
-    assert field == "name"
-    assert result == nil
+      } = update_group(conn, %{id: group.id, name: ""})
+    end
   end
 
-  # Mutation - Update A Group
-  # ------------------------------------------------------------
-  test "update a group - success", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
+  describe "anonymous user" do
+    setup context do
+      Ferry.Fixture.GroupUserRole.setup(context, %{
+        group: "group",
+        user: "user@group",
+        role: "member"
+      })
+    end
 
-    group = insert(:group) |> with_address()
-    updates = params_for(:group) |> with_address()
-    updates = Map.put(updates, :id, group.id)
-
-    %{
-      "data" => %{
-        "updateGroup" => %{
-          "messages" => [],
-          "result" => %{"description" => description, "id" => id, "name" => _name},
-          "successful" => true
+    test "cannot create groups", %{conn: conn} do
+      %{
+        "data" => %{
+          "createGroup" => %{
+            "successful" => false,
+            "messages" => [
+              %{"message" => "unauthorized"}
+            ]
+          }
         }
-      }
-    } = update_group(conn, updates)
+      } = create_simple_group(conn, %{name: "group"})
+    end
 
-    assert id == Integer.to_string(group.id)
-    assert description == updates.description
-  end
-
-  test "update a group - error", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
-
-    group = insert(:group) |> with_address()
-    updates = params_for(:group) |> with_address()
-    updates = Map.merge(updates, %{name: "", id: group.id})
-
-    %{
-      "data" => %{
-        "updateGroup" => %{
-          "successful" => successful,
-          "messages" => [
-            %{
-              "field" => field,
-              "message" => "can't be blank"
-            }
-          ],
-          "result" => result
+    test "cannot update a group", %{conn: conn, group: group} do
+      %{
+        "data" => %{
+          "updateGroup" => %{
+            "successful" => false,
+            "messages" => [
+              %{"message" => "unauthorized"}
+            ]
+          }
         }
-      }
-    } = update_group(conn, updates)
+      } = update_group(conn, %{id: group.id})
+    end
 
-    refute successful
-    assert field == "name"
-    assert result == nil
+    test "cannot delete a group", %{conn: conn, group: group} do
+      %{
+        "data" => %{
+          "deleteGroup" => %{
+            "successful" => false,
+            "messages" => [
+              %{"message" => "unauthorized"}
+            ]
+          }
+        }
+      } = delete_group(conn, group.id)
+    end
   end
 
-  # Delete A Group
-  # ------------------------------------------------------------
-  test "delete a group - success", %{conn: conn} do
-    insert(:user)
-    |> mock_sign_in
+  describe "distribute aid admin" do
+    setup context do
+      Ferry.Fixture.DistributeAid.setup(context, auth: true)
+    end
 
-    group = insert(:group)
-    delete_group(conn, group.id)
+    test "can create a group", %{conn: conn} do
+      %{
+        "data" => %{
+          "createGroup" => %{
+            "successful" => true
+          }
+        }
+      } = create_simple_group(conn, %{name: "group"})
+    end
 
-    assert Profiles.get_group(group.id) == nil
+    test "can update a group", %{conn: conn} do
+      %{
+        "data" => %{
+          "updateGroup" => %{
+            "successful" => true
+          }
+        }
+      } = update_group(conn, %{id: 0})
+    end
+
+    test "can delete any standard group", %{conn: conn} = context do
+      {:ok, %{group: group}} =
+        Ferry.Fixture.Group.setup(
+          context,
+          %{
+            group: "group"
+          }
+        )
+
+      %{
+        "data" => %{
+          "deleteGroup" => %{
+            "successful" => true
+          }
+        }
+      } = delete_group(conn, group.id)
+    end
+
+    test "cannot delete a group that has members", %{conn: conn} = context do
+      {:ok, %{group: group}} =
+        Ferry.Fixture.GroupUserRole.setup(context, %{
+          group: "group",
+          user: "user@group",
+          role: "member"
+        })
+
+      %{
+        "data" => %{
+          "deleteGroup" => %{
+            "successful" => false,
+            "messages" => [
+              %{"message" => "group has users"}
+            ]
+          }
+        }
+      } = delete_group(conn, group.id)
+    end
+
+    test "cannot delete the distribute aid group", %{conn: conn} do
+      %{
+        "data" => %{
+          "deleteGroup" => %{
+            "successful" => false,
+            "messages" => [
+              %{"message" => "unauthorized"}
+            ]
+          }
+        }
+      } = delete_group(conn, 0)
+    end
+  end
+
+  describe "group admin" do
+    setup context do
+      Ferry.Fixture.GroupUserRole.setup(
+        context,
+        %{
+          group: "group",
+          user: "admin@group",
+          role: "admin"
+        },
+        auth: true
+      )
+    end
+
+    test "can create a group", %{conn: conn} do
+      %{
+        "data" => %{
+          "createGroup" => %{
+            "successful" => true
+          }
+        }
+      } = create_simple_group(conn, %{name: "group2"})
+    end
+
+    test "can update a group she/he belongs to", %{conn: conn, group: group} do
+      %{
+        "data" => %{
+          "updateGroup" => %{
+            "successful" => true
+          }
+        }
+      } = update_group(conn, %{id: group.id})
+    end
+
+    test "cannot update a group she/he does not belong to", %{conn: conn} = context do
+      {:ok, %{group: group2}} =
+        Ferry.Fixture.Group.setup(
+          context,
+          %{
+            group: "group2"
+          }
+        )
+
+      %{
+        "data" => %{
+          "updateGroup" => %{
+            "successful" => false,
+            "messages" => [
+              %{"message" => "unauthorized"}
+            ]
+          }
+        }
+      } = update_group(conn, %{id: group2.id})
+    end
+
+    test "cannot delete a group she/he does not belong to", %{conn: conn} = context do
+      {:ok, %{group: group2}} =
+        Ferry.Fixture.Group.setup(
+          context,
+          %{
+            group: "group2"
+          }
+        )
+
+      %{
+        "data" => %{
+          "deleteGroup" => %{
+            "successful" => false,
+            "messages" => [
+              %{"message" => "unauthorized"}
+            ]
+          }
+        }
+      } = delete_group(conn, group2.id)
+    end
+
+    test "cannot delete a group where she/he belongs that has members",
+         %{conn: conn, group: group} = context do
+      {:ok, _} =
+        Ferry.Fixture.UserRole.setup(context, %{
+          group: group.name,
+          user: "member@group",
+          role: "member"
+        })
+
+      %{
+        "data" => %{
+          "deleteGroup" => %{
+            "successful" => false,
+            "messages" => [
+              %{"message" => "group has users"}
+            ]
+          }
+        }
+      } = delete_group(conn, group.id)
+    end
   end
 end

@@ -6,6 +6,7 @@ defmodule Ferry.Profiles.Group do
   alias Ferry.Profiles.Group.Logo
   alias Ferry.Profiles.Project
   alias Ferry.Locations.Address
+  alias Ferry.Accounts.UserGroup
 
   @type t :: %__MODULE__{}
 
@@ -39,6 +40,7 @@ defmodule Ferry.Profiles.Group do
     has_many :projects, Project
 
     has_many :addresses, Address
+    has_many :users, UserGroup, foreign_key: :group_id
 
     timestamps()
   end
@@ -75,5 +77,14 @@ defmodule Ferry.Profiles.Group do
   def logo_changeset(group, attrs) do
     group
     |> cast_attachments(attrs, [:logo])
+  end
+
+  def delete_changeset(group) do
+    group
+    |> cast(%{}, [])
+    |> foreign_key_constraint(:users,
+      name: "user_groups_group_id_fkey",
+      message: "group has users"
+    )
   end
 end
