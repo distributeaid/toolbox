@@ -6,6 +6,14 @@ Distribute Aid platform.
 [![pipeline status](https://gitlab.com/masksfordocs/toolbox/badges/master/pipeline.svg)](https://gitlab.com/masksfordocs/toolbox/commits/master)
 [![coverage report](https://gitlab.com/masksfordocs/toolbox/badges/master/coverage.svg)](https://gitlab.com/masksfordocs/toolbox/commits/master)
 
+## Live Demo
+
+The current CI/CD pipeline at `.github/workflows/ci.yml` implements the bare minimum steps that compiles, tests, packages and deploys new toolbox docker image into
+a Kubernetes cluster freely hosted by [Okteto Cloud](https://cloud.okteto.com)
+
+This [live demo](https://toolbox-staging-distributeaid.cloud.okteto.net/api/graphiql) gets 
+updated with every commit to the `saga` branch.
+
 ## Contributing
 
 Read our
@@ -30,6 +38,7 @@ Distribute Aid:
 - Facebook: https://facebook.com/DistributeAidDotOrg
 - Patreon: https://patreon.com/distributeaid
 
+
 Elixir (programming language):
 
 - Official website: https://elixir-lang.org/
@@ -48,6 +57,7 @@ Phoenix (webserver framework):
 Ecto (database framework & ORM):
 
 - Docs: https://hexdocs.pm/ecto/Ecto.html
+
 
 ## Up & Running
 
