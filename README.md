@@ -78,7 +78,7 @@ more info about how we use Docker.
 **Clone The Project**
 
 ```
-git clone git@gitlab.com:masksfordocs/toolbox.git
+git clone git@github.com:distributeaid/toolbox.git
 cd toolbox/
 ```
 
