@@ -3,8 +3,8 @@ on:
   push:
     branches:
       - saga
-  schedule: 
-    - cron:  '0 2 * * *'
+  #schedule: 
+  #- cron:  '0 2 * * *'
 jobs:
    ci:
      runs-on: ubuntu-latest
